@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="UltimasVendas" pageWidth="992" pageHeight="595" orientation="Landscape" columnWidth="932" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="963a5bbb-41f0-464c-a3bb-46af9ec8bc30">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="TITULO_RELATORIO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="PERIODO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="cst0302r1s1Path" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="cst0302r1s2Path" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT AA80NA, AA80NOME, AA80BAIRRO, AA601NOME, AB80.AB80CUVDA, STATUS, 0 AS DIAS  FROM AB80 AB80 INNER JOIN AA80 ON AA80ID = AB80ENT INNER JOIN AA601 ON AA601ID = AA80MUNICIPIO LEFT JOIN AA80AUX ON AA80AUXFK = AA80ID LEFT JOIN AB80 AB80REP0 ON AB80REP0.AB80ID = AB80.AB80CREP0 LEFT JOIN AB80 AB80REP1 ON AB80REP1.AB80ID = AB80.AB80CREP1 LEFT JOIN AB80 AB80REP2 ON AB80REP2.AB80ID = AB80.AB80CREP2 LEFT JOIN AB80 AB80REP3 ON AB80REP3.AB80ID = AB80.AB80CREP3 LEFT JOIN AB80 AB80REP4 ON AB80REP4.AB80ID = AB80.AB80CREP4 WHERE AB80.AB80CLI = 1 AND ((AB80REP0.AB80CODIGO BETWEEN '0400001001' AND '0500008001' ) OR (AB80REP1.AB80CODIGO BETWEEN '0400001001' AND '0500008001' ) OR (AB80REP2.AB80CODIGO BETWEEN '0400001001' AND '0500008001' ) OR (AB80REP3.AB80CODIGO BETWEEN '0400001001' AND '0500008001' ) OR (AB80REP4.AB80CODIGO BETWEEN '0400001001' AND '0500008001' ))  AND (AB80.AB80CODIGO BETWEEN '0100001005' AND '9000001000' ) AND AB80.AB80EMPRESA  = 1322578 AND AB80.AB80CUVDA <= '2013/05/24' ORDER BY AA80NA]]>
+	</queryString>
+	<field name="ab80cuvda" class="java.sql.Date"/>
+	<field name="dias" class="java.lang.Integer"/>
+	<field name="abe01na" class="java.lang.String"/>
+	<field name="abe01nome" class="java.lang.String"/>
+	<field name="diasSemVenda" class="java.lang.Integer"/>
+	<field name="ultimaVenda" class="java.util.Date"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="abe0101bairro" class="java.lang.String"/>
+	<field name="abe0101fone1" class="java.lang.String"/>
+	<field name="aag0201nome" class="java.lang.String"/>
+	<field name="abe0101ddd1" class="java.lang.String"/>
+	<field name="codRep" class="java.lang.String"/>
+	<field name="primeiraVenda" class="java.util.Date"/>
+	<field name="diasPrimeiraVenda" class="java.lang.Integer"/>
+	<field name="naRep" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="12" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-11" x="216" y="0" width="69" height="12" uuid="1fc0ee82-fbb5-4eac-94cb-a9892cad5eaf"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-13" x="285" y="0" width="188" height="12" uuid="95b926f6-850f-49e8-b30d-82b81c9df796"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Razão Social]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-14" x="473" y="0" width="67" height="12" uuid="7a010637-79cc-49a1-943f-1e34dfb17e34"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Bairro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-15" x="540" y="0" width="48" height="12" uuid="06b6c745-44d3-4326-a0ac-9a3a88549a8c"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Cidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-17" x="862" y="0" width="70" height="12" uuid="893d2e39-42ea-445e-ad9c-b45bca50f670"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Dias Última Venda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-19" x="588" y="0" width="69" height="12" uuid="076b0e9d-78c3-4f5a-ba6d-1a29987d426f"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fone]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-20" x="0" y="0" width="66" height="12" uuid="13700b86-a959-4200-a19e-f4915bc89147"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Representante]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="657" y="0" width="64" height="12" uuid="6cf1cd2d-46fc-4a4a-a397-9c3247908914"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Primeira Venda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="721" y="0" width="81" height="12" uuid="e8093987-1f27-45b5-b100-15b399b09f37"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Dias Primeira Venda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-16" x="802" y="0" width="60" height="12" uuid="64c6f5f9-f854-48be-8d17-a889b51ab452"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Última Venda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="66" y="0" width="150" height="12" uuid="826f4db2-acfd-4b3b-a2d2-d74945d3392b"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[naRep]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="540" y="0" width="48" height="13" uuid="947efdd5-79ff-4604-81fd-5742eb2c152b"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{aag0201nome}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-3" x="0" y="0" width="66" height="13" uuid="5fca0f0e-666e-4404-b5d9-b02cc00e5eee"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codRep}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-4" x="216" y="0" width="69" height="13" uuid="03056e47-1254-4e90-8fab-f4d25cdc171e"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abe01na}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="textField-5" x="285" y="0" width="188" height="13" uuid="7714bfa2-1ff7-46a6-836d-9ca823483e3f"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abe01nome}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-6" x="862" y="0" width="70" height="13" uuid="744b450d-6f2c-4f2b-bbba-367ecce47b90"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{diasSemVenda}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement key="textField-7" x="802" y="0" width="60" height="13" uuid="2d6f2f68-d502-4745-b18a-8d5f1f1cde29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ultimaVenda}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="textField-9" x="473" y="0" width="67" height="13" uuid="42d65486-f4cc-4161-99fb-b82a3e384445"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abe0101bairro}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="721" y="0" width="81" height="13" uuid="8eefa563-8586-4c95-b6b7-43467f522fe9"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{diasPrimeiraVenda}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement key="textField-2" x="588" y="0" width="69" height="13" uuid="2f401e82-0a5f-42bb-84bc-49fe24aa86fc"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["(" + $F{abe0101ddd1} +")" + $F{abe0101fone1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="657" y="0" width="64" height="13" uuid="efb043ac-8117-4e64-9535-10537c67adc0"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{primeiraVenda}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="66" y="0" width="150" height="13" uuid="d9cde09b-0085-4f02-a7db-8df7c40aa1be"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naRep}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

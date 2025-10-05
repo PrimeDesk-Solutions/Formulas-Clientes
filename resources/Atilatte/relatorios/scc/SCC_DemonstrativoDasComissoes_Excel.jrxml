@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SITE_DemonstrativoDasComissoes " language="groovy" pageWidth="1133" pageHeight="595" orientation="Landscape" columnWidth="1093" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="38d77958-c500-44d3-a837-58351d7925bd">
+	<property name="ireport.zoom" value="1.464100000000001"/>
+	<property name="ireport.x" value="949"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="dtIni" class="java.lang.String"/>
+	<field name="descrTipoDoc" class="java.lang.String"/>
+	<field name="numDoc" class="java.lang.Integer"/>
+	<field name="parcela" class="java.lang.String"/>
+	<field name="quita" class="java.lang.Integer"/>
+	<field name="dtEmissao" class="java.util.Date"/>
+	<field name="codEntidade" class="java.lang.String"/>
+	<field name="naEntidade" class="java.lang.String"/>
+	<field name="vencimento" class="java.util.Date"/>
+	<field name="dtCalculo" class="java.util.Date"/>
+	<field name="credito" class="java.util.Date"/>
+	<field name="codRep" class="java.lang.String"/>
+	<field name="naRep" class="java.lang.String"/>
+	<field name="bcComissao" class="java.math.BigDecimal"/>
+	<field name="taxa" class="java.math.BigDecimal"/>
+	<field name="comissao" class="java.math.BigDecimal"/>
+	<field name="codTipoDoc" class="java.lang.String"/>
+	<field name="dtInicio" class="java.lang.String"/>
+	<field name="dtFim" class="java.lang.String"/>
+	<variable name="datasCredito" class="java.lang.String" resetType="Group" resetGroup="rep">
+		<variableExpression><![CDATA[$F{dtInicio} + $F{dtFim}]]></variableExpression>
+	</variable>
+	<variable name="totalBaseCalculo" class="java.math.BigDecimal" resetType="Group" resetGroup="rep" calculation="Sum">
+		<variableExpression><![CDATA[$F{bcComissao}]]></variableExpression>
+	</variable>
+	<variable name="totalComissao" class="java.math.BigDecimal" resetType="Group" resetGroup="rep" calculation="Sum">
+		<variableExpression><![CDATA[$F{comissao}]]></variableExpression>
+	</variable>
+	<group name="rep">
+		<groupExpression><![CDATA[$F{codRep}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<staticText>
+				<reportElement x="293" y="0" width="61" height="13" uuid="102ce339-321d-46f8-a517-1b5d2f69416d"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COD TIPO DOC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="353" y="0" width="84" height="13" uuid="d2b3f890-6588-41ab-8491-49ffe0c26b8a"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DESCR TIPO DOC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="110" height="13" uuid="0017bd67-7362-4a9a-9a69-35436fce2ea7"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COD REPRESENTANTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="109" y="0" width="184" height="13" uuid="aa009cbc-d2d8-4822-bed3-4c927c903570"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPRESENTANTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="437" y="0" width="56" height="13" uuid="066ee916-b4e7-4c45-ac3a-2ae24bf53b76"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NÚMERO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="493" y="0" width="49" height="13" uuid="102b0389-5061-4b6e-8a31-d307a465d79c"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PARCELA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="542" y="0" width="29" height="13" uuid="cab8673c-beb5-47e1-b8d6-d7af3178c48e"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[QUITA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="571" y="0" width="40" height="13" uuid="b7e6777a-9820-4066-ae62-ef3a8dbaf278"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EMISSÃO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="611" y="0" width="79" height="13" uuid="14cd5c9e-df0f-4c9f-af27-7e83e53cddf9"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COD ENTIDADE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="690" y="0" width="79" height="13" uuid="d97ba0dd-f5c1-4254-8d7f-fff648d71f17"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOME ENTIDADE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="769" y="0" width="57" height="13" uuid="53971553-de13-4197-ac43-d292fcc1d65b"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VENCIMENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="826" y="0" width="53" height="13" uuid="0551021a-c950-43ed-a511-724b3cdb1be0"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PAGAMENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="879" y="0" width="45" height="13" uuid="8620903e-450b-4342-a0c2-ac1ad09b54d2"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CRÉDITO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="924" y="0" width="65" height="13" uuid="2abe33cc-e3c9-46d8-97ae-63322d063849"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BASE CÁLCULO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="989" y="0" width="34" height="13" uuid="a8c2a61a-84de-457d-a1c7-d49ea18bbc77"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TAXA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1023" y="0" width="70" height="13" uuid="f69e334d-20f8-464f-b166-3a8854960ee0"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COMISSÃO]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="37" height="0" uuid="556d529f-666e-4724-9952-c984c81643f5"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[tipoDoc]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="110" height="20" uuid="9f8aeeba-a9d8-45b7-8eac-df36c04f0a55"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codRep}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="0" width="183" height="20" uuid="865c7daa-d229-4e02-a082-27cb2fad4d64"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naRep}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0000">
+				<reportElement x="437" y="0" width="56" height="20" uuid="047753cc-25ff-4be8-8a65-399cffddf061"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numDoc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="353" y="0" width="84" height="20" uuid="79f53598-768a-4cd5-bb29-ad055c6b2257"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descrTipoDoc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="493" y="0" width="49" height="20" uuid="f92759b6-b419-4741-8db7-6b0e4686a03a"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{parcela}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="542" y="0" width="33" height="20" uuid="0fad718d-0903-42b4-ba41-762d66605e41"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quita}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="575" y="0" width="40" height="20" uuid="49d93aa5-2c42-47c7-a3b6-edef3b6d2543"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtEmissao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="615" y="0" width="75" height="20" uuid="9f4d9e15-96d5-473d-b63e-d893e2b0be82"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codEntidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="690" y="0" width="79" height="20" uuid="2fb87c26-4a97-4d0a-a78f-5e3fcf5a3dc2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naEntidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="293" y="0" width="60" height="20" uuid="f19ac091-1fc4-494e-ab09-31b82e07f6c1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codTipoDoc}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="769" y="0" width="57" height="20" uuid="bb0c8e08-bd42-4d95-b661-6056217f4f34"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vencimento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="826" y="0" width="53" height="20" uuid="b88234fa-b2ea-4131-95a7-63ca56b6151c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtCalculo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="879" y="0" width="45" height="20" uuid="43fa2ad9-db6f-4345-8530-9fd62cc9b8df"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{credito}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="924" y="0" width="65" height="20" uuid="0fc146a3-3c57-4600-a05c-70b790943122"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{bcComissao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="989" y="0" width="34" height="20" uuid="57510c42-c0f7-4eac-99ed-2543f826734a"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{taxa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1023" y="0" width="70" height="20" uuid="8eb2fe9e-e861-4b5b-9657-2ad664affc6b"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{comissao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

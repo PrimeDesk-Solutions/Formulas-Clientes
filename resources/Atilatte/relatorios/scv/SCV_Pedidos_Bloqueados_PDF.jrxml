@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCV_Pedidos_Bloqueados" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a56adc80-8461-4b06-b7eb-d8a5b56c4606">
+	<property name="ireport.zoom" value="1.464100000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="titulo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<field name="numDoc" class="java.lang.Integer"/>
+	<field name="codEntidade" class="java.lang.String"/>
+	<field name="naEntidade" class="java.lang.String"/>
+	<field name="naRep0" class="java.lang.String"/>
+	<field name="naRep1" class="java.lang.String"/>
+	<field name="naRep2" class="java.lang.String"/>
+	<field name="codRedesp" class="java.lang.String"/>
+	<field name="naRedesp" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="totDoc" class="java.math.BigDecimal"/>
+	<field name="pesoBruto" class="java.math.BigDecimal"/>
+	<field name="codRep0" class="java.lang.String"/>
+	<field name="codRep1" class="java.lang.String"/>
+	<field name="codRep2" class="java.lang.String"/>
+	<field name="dataEmissao" class="java.util.Date"/>
+	<field name="field16" class="java.lang.String"/>
+	<field name="field17" class="java.lang.String"/>
+	<field name="field18" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="213" height="13" uuid="370e1163-1afa-4209-a6ee-cefd7cd0bb6e"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{titulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="327" y="0" width="204" height="13" uuid="7f74e5ca-481c-4a61-ab7d-99e6a7fea325"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="16" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="39" height="13" uuid="836b973d-ef92-407e-9dce-ede67f7c2d02"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Nº Doc.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="79" y="0" width="195" height="13" uuid="d36f37d1-cb71-4f7f-a8d7-1cb618797b41"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="508" y="0" width="145" height="13" uuid="48044014-b6d7-4e94-9bba-4857b1e811cd"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Redespacho]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="736" y="0" width="66" height="13" uuid="5eddfcab-7b91-4854-ad89-bba0bc5b0e89"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="653" y="0" width="44" height="13" uuid="25cd78bd-fa0f-490e-8b1d-b546d717f6fc"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Tot. Doc.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="697" y="0" width="39" height="13" uuid="397c86f2-cd62-43d6-88a8-d7d42554a7ce"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Peso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="274" y="0" width="102" height="13" uuid="c7ca0bc1-a260-4a0a-ae07-7b8927a1596a"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[REP 0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="376" y="0" width="61" height="13" uuid="c6cc8e46-0c4b-46a3-8d9c-e77bc2fa26aa"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[REP 1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="437" y="0" width="71" height="13" uuid="23188a8f-4009-439c-acbc-c0200dc39cb1"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[REP 2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="39" y="0" width="40" height="13" uuid="24e934d9-6a96-44b6-bd53-0ef09a4bb158"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Data]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="15" width="802" height="1" uuid="92002172-1d8b-4da9-850a-20189ba91c57"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="39" height="13" uuid="dc0384be-563c-4d69-b0f4-cbf49c7870be"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numDoc}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="79" y="0" width="60" height="13" uuid="1b60280d-2047-48e1-b31a-e9abbd7417d9"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codEntidade}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="139" y="0" width="135" height="13" uuid="facb0499-3392-44be-979c-8ee5fcea24b2"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naEntidade}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="0" width="102" height="13" uuid="75a0caa7-b67e-4c96-9d57-f14a773fa921"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naRep0}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="437" y="0" width="71" height="13" uuid="174d4cc8-7382-45f6-87c3-a5a9c40ac73a"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naRep2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="508" y="0" width="48" height="13" uuid="c14d6064-7e87-482e-b549-4fbed5460fc9"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codRedesp}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="556" y="0" width="97" height="13" uuid="f7bb45c4-1b97-4085-a8f2-1a4bef088a06"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naRedesp}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="736" y="0" width="66" height="13" uuid="4ac2d72c-1a4c-4265-acdc-a33d34230778"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="653" y="0" width="44" height="13" uuid="7d956610-0214-4b9f-9ce5-3ec08afbcd6e"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totDoc}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="697" y="0" width="39" height="13" uuid="5ebdb25f-86ef-4431-8109-2baad4965ef8"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pesoBruto}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="376" y="0" width="61" height="13" uuid="59b81e21-6af3-4ef4-9e12-f40d2a154478"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naRep1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="39" y="0" width="40" height="13" uuid="ea17cea3-dc9e-49ab-8f2c-03062a4de0a8"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dataEmissao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="freteAgregadoMensal" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e6fefead-ff02-4ebc-acc1-6c8b4371a730">
+	<property name="ireport.zoom" value="2.3579476910000037"/>
+	<property name="ireport.x" value="719"/>
+	<property name="ireport.y" value="132"/>
+	<parameter name="periodo" class="java.lang.String"/>
+	<field name="semanaDia" class="java.lang.String"/>
+	<field name="motorista" class="java.lang.String"/>
+	<field name="veiculo" class="java.lang.String"/>
+	<field name="percentualNota5" class="java.math.BigDecimal"/>
+	<field name="nomeMotorista" class="java.lang.String"/>
+	<field name="semana" class="java.lang.String"/>
+	<field name="totDoc" class="java.lang.String"/>
+	<field name="valorSemanaMotorista" class="java.lang.String"/>
+	<field name="vlrFrete" class="java.math.BigDecimal"/>
+	<field name="vlrDescarga" class="java.math.BigDecimal"/>
+	<field name="vlrColeta" class="java.math.BigDecimal"/>
+	<field name="vlrPedagio" class="java.math.BigDecimal"/>
+	<field name="totalFreteMotorista" class="java.math.BigDecimal"/>
+	<field name="capacidadeVeiculo" class="java.lang.Integer"/>
+	<variable name="totalFreteMotorista" class="java.math.BigDecimal" resetType="Group" resetGroup="motoristas" calculation="Sum">
+		<variableExpression><![CDATA[$F{vlrFrete}]]></variableExpression>
+	</variable>
+	<variable name="totalDescargaMotorista" class="java.math.BigDecimal" resetType="Group" resetGroup="motoristas" calculation="Sum">
+		<variableExpression><![CDATA[$F{vlrDescarga}]]></variableExpression>
+	</variable>
+	<variable name="totalColetasMotorista" class="java.math.BigDecimal" resetType="Group" resetGroup="motoristas" calculation="Sum">
+		<variableExpression><![CDATA[$F{vlrColeta}]]></variableExpression>
+	</variable>
+	<variable name="totalPedagioMotorista" class="java.math.BigDecimal" resetType="Group" resetGroup="motoristas" calculation="Sum">
+		<variableExpression><![CDATA[$F{vlrPedagio}]]></variableExpression>
+	</variable>
+	<variable name="totalReceber" class="java.math.BigDecimal" resetType="Group" resetGroup="motoristas" calculation="Sum">
+		<variableExpression><![CDATA[$F{vlrFrete} + $F{vlrDescarga} + $F{vlrColeta} + $F{vlrPedagio}]]></variableExpression>
+	</variable>
+	<variable name="variable1" class="java.lang.String"/>
+	<group name="motoristas" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{nomeMotorista}]]></groupExpression>
+		<groupHeader>
+			<band height="34">
+				<staticText>
+					<reportElement mode="Opaque" x="2" y="1" width="66" height="13" forecolor="#101010" uuid="e255dac6-dff7-483e-84fb-1bddb14e8de5"/>
+					<textElement>
+						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Motorista:  ]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="68" y="21" width="151" height="13" uuid="1770b27d-2cde-4b1d-aa77-d5457360266c"/>
+					<textElement>
+						<font fontName="SansSerif" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{veiculo}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="2" y="21" width="66" height="13" forecolor="#101010" uuid="ec339aa9-7c6a-4189-85ac-14970d37565a"/>
+					<textElement>
+						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Modelo Veiculo]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="68" y="1" width="151" height="13" uuid="93f93950-3952-4f2b-aeba-6162fa2c890d"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nomeMotorista}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="231" y="1" width="87" height="13" forecolor="#101010" uuid="7d634d97-090b-459c-adb5-a88d1bd858e6"/>
+					<textElement>
+						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Capacidade Veículo:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="318" y="1" width="100" height="13" uuid="f1c44c4e-6005-4046-a937-38c020b4737b"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{capacidadeVeiculo}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="55">
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="275" y="12" width="90" height="13" uuid="89cc4b3a-1776-476d-907d-03031dcf2445"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalFreteMotorista}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="275" y="11" width="280" height="1" uuid="4f3d7f30-1a9e-4f3f-81b9-99701589fb5d"/>
+				</line>
+				<staticText>
+					<reportElement x="184" y="10" width="91" height="13" isPrintWhenDetailOverflows="true" forecolor="#101010" uuid="30403fb7-b439-41ec-8b98-51216a1c4fe2"/>
+					<textElement>
+						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Total Motorista: ]]></text>
+				</staticText>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="365" y="12" width="69" height="13" uuid="13111a58-cf2f-4226-8a86-2a4363342063"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalDescargaMotorista}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="434" y="12" width="61" height="13" uuid="04a114fc-3058-4458-a1c6-5f94251de641"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalColetasMotorista}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="494" y="12" width="61" height="13" uuid="470a3836-e472-4c26-997b-c3a8893dfef4"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalPedagioMotorista}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤ #,##0.00">
+					<reportElement x="478" y="42" width="77" height="13" uuid="bb2ba1f2-a3e9-45d6-ba79-c22288f77527"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalReceber}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="408" y="42" width="70" height="13" isPrintWhenDetailOverflows="true" forecolor="#101010" uuid="eab4d612-9016-4b13-bdb6-3cb11109f53b"/>
+					<textElement>
+						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Total a receber: ]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="semana">
+		<groupExpression><![CDATA[$F{semana}]]></groupExpression>
+		<groupHeader>
+			<band height="13">
+				<textField>
+					<reportElement x="184" y="0" width="91" height="13" isPrintWhenDetailOverflows="true" uuid="a15ccb74-20eb-4f26-a899-16e3192411a2"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{semana}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="275" y="0" width="90" height="13" uuid="847a678f-9ce8-4b9b-9831-e0a62e36c5e5"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{vlrFrete}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
+					<reportElement x="365" y="0" width="69" height="13" uuid="61a876de-b56d-4a1e-8a16-90785fcce22b"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{vlrDescarga}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
+					<reportElement x="434" y="0" width="60" height="13" uuid="a66a1619-64ee-47af-9e23-430cf691ad92"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{vlrColeta}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
+					<reportElement x="494" y="0" width="61" height="13" uuid="becbf192-ff1b-4a93-b631-0cd1d545707e"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{vlrPedagio}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="24" splitType="Stretch">
+			<staticText>
+				<reportElement x="184" y="0" width="201" height="24" uuid="70a1228a-f1f2-40a8-8fe5-b774255006f4"/>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Relatório Frete Agregados]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="400" y="0" width="155" height="20" uuid="f189c844-477a-4061-b6f7-8970938d9acd"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{periodo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="18" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="17" width="555" height="1" uuid="c7b1504b-ae7d-436b-9239-7e2b524b6ba7"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="0" width="146" height="17" forecolor="#101010" uuid="936bb642-cfe5-48ea-90ea-489928438259"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Semana]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="275" y="0" width="90" height="17" forecolor="#101010" uuid="630c94df-39bc-48a6-a27e-f14ba005c3b2"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Valor Semana]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="365" y="0" width="69" height="17" forecolor="#101010" uuid="2f31749c-a2fa-4f2a-b46f-42f949231aad"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Descargas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="494" y="0" width="61" height="17" forecolor="#101010" uuid="b76af2a8-ef62-4102-8642-41283a297608"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Pedagios]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="434" y="0" width="61" height="17" forecolor="#101010" uuid="11564c7c-47d9-4c3b-b8f2-1b58ffed59b7"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Coletas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="184" y="1" width="91" height="17" isPrintWhenDetailOverflows="true" forecolor="#101010" uuid="06e0f587-276a-4158-a9b7-86268d76ab3b"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Semana]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

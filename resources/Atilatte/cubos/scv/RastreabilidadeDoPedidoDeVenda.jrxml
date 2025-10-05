@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RastreabilidadeDoPedidoDeVenda" language="groovy" pageWidth="3061" pageHeight="842" columnWidth="3021" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a3be82dd-5c28-4472-99c6-8c73de2cb59f">
+	<property name="ireport.zoom" value="0.9982500000000005"/>
+	<property name="ireport.x" value="1813"/>
+	<property name="ireport.y" value="0"/>
+	<field name="codCliente" class="java.lang.String"/>
+	<field name="naCliente" class="java.lang.String"/>
+	<field name="numPedido" class="java.lang.Integer"/>
+	<field name="dataEmissPedido" class="java.util.Date"/>
+	<field name="numNota" class="java.lang.Integer"/>
+	<field name="tipoDocNota" class="java.lang.String"/>
+	<field name="dataEmissNota" class="java.util.Date"/>
+	<field name="numDocFinanc" class="java.lang.Integer"/>
+	<field name="tipoDocFinanc" class="java.lang.String"/>
+	<field name="dtEmissaoFinanc" class="java.util.Date"/>
+	<field name="dataVencReal" class="java.util.Date"/>
+	<field name="dataPagamento" class="java.util.Date"/>
+	<field name="descrPcdNota" class="java.lang.String"/>
+	<field name="cancDataNota" class="java.util.Date"/>
+	<field name="codigoPcdPedido" class="java.lang.String"/>
+	<field name="codPcdNota" class="java.lang.String"/>
+	<field name="serieNota" class="java.lang.String"/>
+	<field name="obsCancNota" class="java.lang.String"/>
+	<field name="descrPcdPedido" class="java.lang.String"/>
+	<field name="tipoDocPed" class="java.lang.String"/>
+	<field name="totalPedido" class="java.math.BigDecimal"/>
+	<field name="totalDocNota" class="java.math.BigDecimal"/>
+	<field name="valorFinanceiro" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="100" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="121" height="20" uuid="d0fe6315-c1c3-4c4c-af1c-7b0ba56f1ee6"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Codigo Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="121" y="0" width="182" height="20" uuid="1aa1435b-68f8-42f4-bc0d-136b1c715ee6"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome Cliente ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="303" y="0" width="100" height="20" uuid="375a4b9a-9a5b-4a78-a3f1-dc5e5be1c1db"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Num Pedido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="403" y="0" width="100" height="20" uuid="9cee3ef9-62da-4eea-9005-23bdaec5c957"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Emiss Pedido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="503" y="0" width="100" height="20" uuid="018feb0a-dfc5-41b6-9571-8f4a76ac6e5b"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Numero Nota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="603" y="0" width="100" height="20" uuid="3a125c55-d395-473a-9dba-23bfc44ec18d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Doc Nota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="703" y="0" width="100" height="20" uuid="36306888-2847-461c-bbac-b1f6f76836e8"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Emiss Nota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="803" y="0" width="100" height="20" uuid="4d09458d-5708-4728-af39-d6d3fc039893"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[numDocFinanc]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="903" y="0" width="100" height="20" uuid="d83f323d-c9e7-48a2-b92c-b8e207ed2c7c"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Doc Financ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1003" y="0" width="100" height="20" uuid="cad93b7b-6904-4442-a032-0323b8bd2ebd"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Emiss Financ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1103" y="0" width="100" height="20" uuid="ea53b8b9-f378-43a8-bdab-74196dd244e7"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Vencimento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1203" y="0" width="100" height="20" uuid="898c2334-1392-4fa9-b5cd-7afa8239682a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Pagamento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1403" y="0" width="292" height="20" uuid="99d55d09-8229-4003-8ee6-d9ff614017a6"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descr PCD Nota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1695" y="0" width="128" height="20" uuid="7cae892c-48e7-4179-b2b8-98b0383331be"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Cancelamento Nota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1823" y="0" width="100" height="20" uuid="44dacfdd-0ad7-4a49-b249-cdbd54c8b324"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cód. PCD Pedido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1303" y="0" width="100" height="20" uuid="a7cfdfc4-7fbc-4b04-b7d8-a0161b824d91"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[codPcdNota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2305" y="0" width="100" height="20" uuid="ac5071c2-473c-43b2-af1f-78b57bace7aa"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Série Nota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2405" y="0" width="260" height="20" uuid="0168c018-29fa-4260-ab23-f1458a4c67a8"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Obs Cancelamento Nota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1923" y="0" width="282" height="20" uuid="781e7957-5e6b-45ab-a898-adc3e83d3782"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descrição PCD Pedido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2205" y="0" width="100" height="20" uuid="b896245a-3149-46ac-805d-13d090814103"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Doc Pedido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2665" y="0" width="134" height="20" uuid="d717e1a5-fbd0-4751-b566-c563b6d14ce5"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Pedido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2799" y="0" width="100" height="20" uuid="7ce471c5-f4b8-40d2-be4e-e949abc7e1db"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Nota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2899" y="0" width="122" height="20" uuid="807ac0ee-67ef-48a3-8947-5d5a88c8a943"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[valorFinanceiro]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="121" height="20" uuid="5a24b42e-d404-439b-80b6-e487392d4732"/>
+				<textFieldExpression><![CDATA[$F{codCliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="121" y="0" width="182" height="20" uuid="ea0930c0-65ff-4fdd-875a-fb3948dc96ac"/>
+				<textFieldExpression><![CDATA[$F{naCliente}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="303" y="0" width="100" height="20" uuid="35d2d601-ecef-4e74-aece-cafe9ab04d14"/>
+				<textFieldExpression><![CDATA[$F{numPedido}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="403" y="0" width="100" height="20" uuid="af9e5b7e-cd21-4ca1-a3f6-341b3ac686cf"/>
+				<textFieldExpression><![CDATA[$F{dataEmissPedido}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="503" y="0" width="100" height="20" uuid="172101bd-9cfb-4db9-adce-bbebbe171354"/>
+				<textFieldExpression><![CDATA[$F{numNota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="603" y="0" width="100" height="20" uuid="e02a7af7-7f1b-4585-9bb2-cbbdd5197fd1"/>
+				<textFieldExpression><![CDATA[$F{tipoDocNota}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="703" y="0" width="100" height="20" uuid="5556eb84-74fa-4960-b261-dea5e8b8c4fe"/>
+				<textFieldExpression><![CDATA[$F{dataEmissNota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="803" y="0" width="100" height="20" uuid="074732f6-6bcc-4842-b1ce-a920181b500b"/>
+				<textFieldExpression><![CDATA[$F{numDocFinanc}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="903" y="0" width="100" height="20" uuid="5f35f5c2-42b3-4c9a-9455-462b1bc93d72"/>
+				<textFieldExpression><![CDATA[$F{tipoDocFinanc}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="1003" y="0" width="100" height="20" uuid="62abc3a8-93a4-4017-a8a5-285f356433c6"/>
+				<textFieldExpression><![CDATA[$F{dtEmissaoFinanc}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="1103" y="0" width="100" height="20" uuid="8077151e-15b7-4d03-9430-8f8dd90c788a"/>
+				<textFieldExpression><![CDATA[$F{dataVencReal}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1203" y="0" width="100" height="20" uuid="7b7994bd-27bf-407b-a3a0-380c7b886b23"/>
+				<textFieldExpression><![CDATA[$F{dataPagamento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1403" y="0" width="292" height="20" uuid="77bd2ccd-68dd-474b-8a15-d1afccc932be"/>
+				<textFieldExpression><![CDATA[$F{descrPcdNota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1695" y="0" width="128" height="20" uuid="2f4919f9-92b8-4999-af74-da604b6cdafd"/>
+				<textFieldExpression><![CDATA[$F{cancDataNota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1823" y="0" width="100" height="20" uuid="4ac1adf0-5bfc-410b-9607-5a03e409f073"/>
+				<textFieldExpression><![CDATA[$F{codigoPcdPedido}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1303" y="0" width="100" height="20" uuid="b9e56ee6-a989-4d4c-99a1-47c07b43d091"/>
+				<textFieldExpression><![CDATA[$F{codPcdNota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1923" y="0" width="282" height="20" uuid="c8f014d7-93c8-42d3-b813-686c9884240a"/>
+				<textFieldExpression><![CDATA[$F{descrPcdPedido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2305" y="0" width="100" height="20" uuid="15c81e24-1687-4fce-b076-249d49065f02"/>
+				<textFieldExpression><![CDATA[$F{serieNota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="2405" y="0" width="260" height="20" uuid="b6b89a26-8bf2-4799-b9bf-7481040cefd8"/>
+				<textFieldExpression><![CDATA[$F{obsCancNota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="2205" y="0" width="100" height="20" uuid="fb8e10ec-970b-4145-a0a7-5a33291f4218"/>
+				<textFieldExpression><![CDATA[$F{tipoDocPed}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2665" y="0" width="134" height="20" uuid="fa6c024c-21d3-4dfa-8337-5f9c1af82c95"/>
+				<textFieldExpression><![CDATA[$F{totalPedido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2799" y="0" width="100" height="20" uuid="e1008e9a-2aaa-47c1-8cae-4e8a5b90345e"/>
+				<textFieldExpression><![CDATA[$F{totalDocNota}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2899" y="0" width="122" height="20" uuid="617d3692-786e-42ea-b744-3dc9528beea8"/>
+				<textFieldExpression><![CDATA[$F{valorFinanceiro}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

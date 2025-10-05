@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF Resumo Anual por Entidade" language="groovy" pageWidth="1587" pageHeight="595" orientation="Landscape" columnWidth="1547" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c2614e2e-0f4b-4a35-86dc-f8cf9cf6c5c6">
+	<property name="ireport.zoom" value="1.0000000000000036"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="totalizar" class="java.lang.Boolean"/>
+	<parameter name="title" class="java.lang.String"/>
+	<parameter name="campoFiltro" class="java.lang.String"/>
+	<field name="abe01codigo" class="java.lang.String"/>
+	<field name="abe01na" class="java.lang.String"/>
+	<field name="valor1" class="java.math.BigDecimal"/>
+	<field name="valor2" class="java.math.BigDecimal"/>
+	<field name="valor3" class="java.math.BigDecimal"/>
+	<field name="valor4" class="java.math.BigDecimal"/>
+	<field name="valor5" class="java.math.BigDecimal"/>
+	<field name="valor6" class="java.math.BigDecimal"/>
+	<field name="valor7" class="java.math.BigDecimal"/>
+	<field name="valor8" class="java.math.BigDecimal"/>
+	<field name="valor9" class="java.math.BigDecimal"/>
+	<field name="valor10" class="java.math.BigDecimal"/>
+	<field name="valor11" class="java.math.BigDecimal"/>
+	<field name="valor12" class="java.math.BigDecimal"/>
+	<field name="total" class="java.math.BigDecimal"/>
+	<variable name="total1" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor1}]]></variableExpression>
+	</variable>
+	<variable name="total2" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor2}]]></variableExpression>
+	</variable>
+	<variable name="total3" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor3}]]></variableExpression>
+	</variable>
+	<variable name="total4" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor4}]]></variableExpression>
+	</variable>
+	<variable name="total5" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor5}]]></variableExpression>
+	</variable>
+	<variable name="total6" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor6}]]></variableExpression>
+	</variable>
+	<variable name="total7" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor7}]]></variableExpression>
+	</variable>
+	<variable name="total8" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor8}]]></variableExpression>
+	</variable>
+	<variable name="total9" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor9}]]></variableExpression>
+	</variable>
+	<variable name="total10" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor10}]]></variableExpression>
+	</variable>
+	<variable name="total11" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor11}]]></variableExpression>
+	</variable>
+	<variable name="total12" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor12}]]></variableExpression>
+	</variable>
+	<variable name="totGeral" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+	</variable>
+	<group name="geral">
+		<groupHeader>
+			<band/>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="093e3c62-e2f4-4637-a25c-8c1f51f21cf0"/>
+				<text><![CDATA[Codigo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="272" y="0" width="100" height="20" uuid="478e98d1-bb6b-49a2-b926-98da7c044a24"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Janeiro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="372" y="0" width="100" height="20" uuid="c43eed2f-fb29-4395-9a9c-4c2dad9c4192"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Fevereiro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="472" y="0" width="100" height="20" uuid="0249770c-811a-4ec8-b503-ec7adfd40dea"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Março ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="572" y="0" width="100" height="20" uuid="fef42169-9c91-4f8a-978f-950c409371b5"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Abril]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="672" y="0" width="100" height="20" uuid="3fdd39bf-3547-4c82-9fd5-fd05884a012d"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Maio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="772" y="0" width="100" height="20" uuid="906f4c27-1f98-483d-b5e8-c6b9eefcbe03"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Junho]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="872" y="0" width="100" height="20" uuid="88de21fa-fec4-4d05-af68-0a3baa41d0fd"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Julho]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="972" y="0" width="100" height="20" uuid="0d90ead1-8fe5-4d76-8b40-89a94a755018"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Agosto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1072" y="0" width="100" height="20" uuid="653c5ad8-6583-45b5-bd22-03153bb12c6a"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Setembro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1172" y="0" width="100" height="20" uuid="226f4012-1aa2-465c-8b0d-b46c7840988b"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Outubro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1272" y="0" width="100" height="20" uuid="e1846065-1247-4cd0-99da-b2be665642c2"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Novembro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1372" y="0" width="90" height="20" uuid="367ba40e-c539-4fb3-a64a-a700c6cbc97c"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Dezembro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1462" y="0" width="85" height="20" uuid="7d6a6a54-0eef-47d9-b9a6-fd5f9abcf922"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="172" height="20" uuid="8dca3596-bdb7-4ef0-b277-fc104531f23b"/>
+				<text><![CDATA[Entidade]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="92f75aed-1cec-4842-94fc-babe1ca75ebd"/>
+				<textFieldExpression><![CDATA[$F{abe01codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="172" height="20" uuid="7fc6f362-ab03-4295-ad2a-073d84187a60"/>
+				<textFieldExpression><![CDATA[$F{abe01na}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0">
+				<reportElement x="272" y="0" width="100" height="20" uuid="3d63c580-1abb-4e81-8c07-614dd3e99ff6"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{valor1} == null ? 0 : $F{valor1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0">
+				<reportElement x="372" y="0" width="100" height="20" uuid="45f5bd55-aa7a-4bbc-a5f8-5ad2dd9c6d73"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{valor2} == null ? 0 : $F{valor2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0">
+				<reportElement x="472" y="0" width="100" height="20" uuid="bee2875e-fd4d-426b-ae75-da734578f5e5"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{valor3} == null ? 0 : $F{valor3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0">
+				<reportElement x="572" y="0" width="100" height="20" uuid="e4a3e806-8eb8-42e3-b0b0-52f35b50c3b9"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{valor4} == null ? 0 : $F{valor4}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0">
+				<reportElement x="672" y="0" width="100" height="20" uuid="67265686-b4c5-48ed-926f-1c903c01134c"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{valor5} == null ? 0 : $F{valor5}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;(###0)">
+				<reportElement x="772" y="0" width="100" height="20" uuid="5706ce7c-0668-4cf4-8faf-04c7d53c5940"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{valor6} == null ? 0 : $F{valor6}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0">
+				<reportElement x="872" y="0" width="100" height="20" uuid="06a77ac2-48d5-4b30-8690-5b6a5ae404c6"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{valor7} == null ? 0 : $F{valor7}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(-#,##0.00)">
+				<reportElement x="972" y="0" width="100" height="20" uuid="e9d615e7-29e9-4983-981d-65566a353174"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{valor8} == null ? 0 : $F{valor8}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00">
+				<reportElement x="1072" y="0" width="100" height="20" uuid="3c4a92da-4532-4799-b323-dcd046682c65"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{valor9} == null ? 0 : $F{valor9}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0">
+				<reportElement x="1172" y="0" width="100" height="20" uuid="c4663bcd-c79c-4761-8787-e9883d31149f"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{valor10} == null ? 0 : $F{valor10}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0">
+				<reportElement x="1272" y="0" width="100" height="20" uuid="d969860f-4a6a-467e-a3a8-8c9b4c1d9500"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{valor11} == null ? 0 : $F{valor11}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0">
+				<reportElement x="1372" y="0" width="90" height="20" uuid="4f61bae6-1cf6-496f-bfc2-4ad059cee01a"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{valor12} == null ? 0 : $F{valor12}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1462" y="0" width="85" height="20" uuid="b215dd7f-c6f6-48fb-82a2-ef7e63fc053b"/>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SPP_FichaEngenhariaProdutos_Excel" language="groovy" pageWidth="3118" pageHeight="595" orientation="Landscape" columnWidth="3078" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="03ce7cc0-e37d-4d3e-9980-eac8721a1f8e">
+	<property name="ireport.zoom" value="1.0000000000000009"/>
+	<property name="ireport.x" value="1431"/>
+	<property name="ireport.y" value="0"/>
+	<field name="codProdComp" class="java.lang.String"/>
+	<field name="descrProdComp" class="java.lang.String"/>
+	<field name="umuComp" class="java.lang.String"/>
+	<field name="umvComp" class="java.lang.String"/>
+	<field name="formula" class="java.lang.String"/>
+	<field name="quantidade" class="java.lang.Integer"/>
+	<field name="dtFormula" class="java.util.Date"/>
+	<field name="dtRevisao" class="java.util.Date"/>
+	<field name="codItemComponente" class="java.lang.String"/>
+	<field name="naItemComponente" class="java.lang.String"/>
+	<field name="codProcesso" class="java.lang.String"/>
+	<field name="descrProcesso" class="java.lang.String"/>
+	<field name="umuComponente" class="java.lang.String"/>
+	<field name="perda" class="java.math.BigDecimal"/>
+	<field name="qtdFinal" class="java.math.BigDecimal"/>
+	<field name="percentual" class="java.math.BigDecimal"/>
+	<field name="valorItem" class="java.math.BigDecimal"/>
+	<field name="totalItem" class="java.math.BigDecimal"/>
+	<field name="codAtiv" class="java.lang.String"/>
+	<field name="descrAtiv" class="java.lang.String"/>
+	<field name="procProdutivo" class="java.lang.String"/>
+	<field name="descrProcProdutivo" class="java.lang.String"/>
+	<field name="tempo" class="java.lang.String"/>
+	<field name="tempoSetup" class="java.lang.String"/>
+	<field name="mpsComp" class="java.lang.String"/>
+	<field name="mpsComponente" class="java.lang.String"/>
+	<field name="seq" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="102" y="0" width="100" height="20" uuid="0d8762d8-87b5-48dc-9d95-1b7b3ca729aa"/>
+				<text><![CDATA[Codigo Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="202" y="0" width="308" height="20" uuid="078b1887-da85-4f84-9c99-7142340de261"/>
+				<text><![CDATA[Descrição Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="510" y="0" width="100" height="20" uuid="56ddda56-9f28-4178-8324-6af8b6e31f7d"/>
+				<text><![CDATA[Unidade Uso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="610" y="0" width="100" height="20" uuid="f0c2c81f-d8d9-4c46-848a-e35b9cd22140"/>
+				<text><![CDATA[Unidade Venda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="710" y="0" width="100" height="20" uuid="f860746c-c9aa-410a-9f0a-a7415f2960ce"/>
+				<text><![CDATA[Formula]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="810" y="0" width="100" height="20" uuid="19932b6c-69f5-4542-9481-363cde5473d7"/>
+				<text><![CDATA[Data Criação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="910" y="0" width="100" height="20" uuid="0555915d-64cd-4706-98f7-b95097a48553"/>
+				<text><![CDATA[Data Revisão
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1010" y="0" width="100" height="20" uuid="6421a5c5-52a6-4268-8f9e-58536809dba8"/>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1228" y="0" width="100" height="20" uuid="9be933dc-48cd-4304-8772-f65bd6aa6067"/>
+				<text><![CDATA[Cod Componente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1328" y="0" width="312" height="20" uuid="98b6a6d9-f705-4a22-a1f3-65fe94067850"/>
+				<text><![CDATA[NA Componente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1640" y="0" width="100" height="20" uuid="5a9b41ba-8d5e-488c-bca5-d21e6c5128eb"/>
+				<text><![CDATA[Unidade ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1803" y="0" width="100" height="20" uuid="0de7fa3b-162c-490a-9ef3-dbb31b2d7f34"/>
+				<text><![CDATA[Perda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1902" y="0" width="100" height="20" uuid="cb4a6ed4-8c32-4955-b2a9-8c8b356aa6d6"/>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2102" y="0" width="100" height="20" uuid="effa6e1a-1ce6-4b5f-92bd-3e5e2dc420fe"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2002" y="0" width="100" height="20" uuid="af424e24-fd12-48ff-bfb1-fc2b329cc027"/>
+				<text><![CDATA[Preço Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2202" y="0" width="100" height="20" uuid="5e693fd0-c0b6-43ca-b320-6bf146eed41d"/>
+				<text><![CDATA[Cod Atividade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2302" y="0" width="293" height="20" uuid="1a1c9504-70ea-48b7-9f02-93810ffeb54a"/>
+				<text><![CDATA[descrAtiv]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2595" y="0" width="144" height="20" uuid="a26964de-592e-4ae7-9285-2f9cd43848a2"/>
+				<text><![CDATA[Cod Processo Produtivo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2739" y="0" width="100" height="20" uuid="b35e3f8e-fa6f-456a-996e-c0dcf837e985"/>
+				<text><![CDATA[Tempo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2839" y="0" width="238" height="20" uuid="a22b86da-49db-4bc2-bf0c-0b96fa2a6ad6"/>
+				<text><![CDATA[Tempo Setup]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="0" width="100" height="20" uuid="69ee3a15-9a8b-4861-bc2d-4a17ee9d034f"/>
+				<text><![CDATA[Tipo Comp]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1110" y="0" width="118" height="20" uuid="c44db87b-2b27-44c7-9715-139794b48416"/>
+				<text><![CDATA[Tipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1740" y="0" width="63" height="20" uuid="db50bc93-15ed-4bb1-aee6-fe612e9e55b2"/>
+				<text><![CDATA[Seq]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="102" y="0" width="100" height="20" uuid="3dbf6aa8-1e4d-452c-868c-4c6947914702"/>
+				<textFieldExpression><![CDATA[$F{codProdComp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="202" y="0" width="308" height="20" uuid="bda1a6ad-9185-4c86-bbee-f872746a7bbb"/>
+				<textFieldExpression><![CDATA[$F{descrProdComp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="510" y="0" width="100" height="20" uuid="30443594-dc77-4c93-aa56-a230eef077cc"/>
+				<textFieldExpression><![CDATA[$F{umuComp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="610" y="0" width="100" height="20" uuid="0c332de4-c94f-48eb-8e62-e10f0e231a8b"/>
+				<textFieldExpression><![CDATA[$F{umvComp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="710" y="0" width="100" height="20" uuid="20352853-d05b-4775-9f9b-1f50083683d3"/>
+				<textFieldExpression><![CDATA[$F{formula}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="810" y="0" width="100" height="20" uuid="f5f501ae-2c4a-48af-b36b-ff2a2d0153e5"/>
+				<textFieldExpression><![CDATA[$F{dtFormula} != null ? $F{dtFormula} : " "]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="910" y="0" width="100" height="20" uuid="22c40862-6124-49da-87ed-7b7f815375e7"/>
+				<textFieldExpression><![CDATA[$F{dtRevisao} != null ? $F{dtRevisao} : " "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1010" y="0" width="100" height="20" uuid="7cf0a19f-4dc8-495b-9e5c-20a097504b47"/>
+				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1228" y="0" width="100" height="20" uuid="df789a9d-7328-4514-9feb-a20a939ed8d7"/>
+				<textFieldExpression><![CDATA[$F{codItemComponente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1328" y="0" width="312" height="20" uuid="36f5c0d3-95ad-48fb-990b-7aadc917406b"/>
+				<textFieldExpression><![CDATA[$F{naItemComponente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1640" y="0" width="100" height="20" uuid="0451c46f-e883-409e-82ff-ba7cd8a4124f"/>
+				<textFieldExpression><![CDATA[$F{umuComponente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1803" y="0" width="100" height="20" uuid="cb224c51-f950-4316-8264-cce3f0396198"/>
+				<textFieldExpression><![CDATA[$F{perda}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00000;-###0.00000">
+				<reportElement x="1902" y="0" width="100" height="20" uuid="67371f0f-8449-414f-9aaf-cf956f52a5d9"/>
+				<textFieldExpression><![CDATA[$F{qtdFinal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00000;-###0.00000">
+				<reportElement x="2102" y="0" width="100" height="20" uuid="0aadc74c-a3c6-49c3-b7dc-03b78f617f9b"/>
+				<textFieldExpression><![CDATA[$F{totalItem}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00000;-###0.00000">
+				<reportElement x="2002" y="0" width="100" height="20" uuid="51414cba-c2b8-43dd-8172-5838afd31855"/>
+				<textFieldExpression><![CDATA[$F{valorItem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2202" y="0" width="100" height="20" uuid="c15c33ac-1a26-4607-a14d-1755f580d895"/>
+				<textFieldExpression><![CDATA[$F{codAtiv} != null ? $F{codAtiv} : " "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2302" y="0" width="293" height="20" uuid="46944a8b-a8ba-4dac-980f-52f1edf5abad"/>
+				<textFieldExpression><![CDATA[$F{descrAtiv} != null ? $F{descrAtiv} : " "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2595" y="0" width="144" height="20" uuid="58ed4f50-2ece-4a77-a963-c108491f5630"/>
+				<textFieldExpression><![CDATA[$F{descrProcProdutivo} != null ? $F{descrProcProdutivo} : " "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2739" y="0" width="100" height="20" uuid="f2f01ca0-e53b-4ae5-9c76-c5850c943e05"/>
+				<textFieldExpression><![CDATA[$F{tempo} != null ? $F{tempo} : " "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2839" y="0" width="238" height="20" uuid="843bed24-9cf6-43aa-a760-341a612c2fb9"/>
+				<textFieldExpression><![CDATA[$F{tempoSetup} != null ? $F{tempoSetup} : " "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="102" height="20" uuid="c96b5dbc-b162-41c5-aa62-7bb05e4d1170"/>
+				<textFieldExpression><![CDATA[$F{mpsComp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1110" y="0" width="118" height="20" uuid="e0d02597-b03f-42d7-8e16-1fdd38f9d111"/>
+				<textFieldExpression><![CDATA[$F{mpsComponente}]]></textFieldExpression>
+			</textField>
+			<textField pattern="000">
+				<reportElement x="1740" y="0" width="63" height="20" uuid="fe41cf8c-2e73-4c71-b48f-f87462be6ec5"/>
+				<textFieldExpression><![CDATA[$F{seq}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LancamentoEstoqueMarcelo" language="groovy" pageWidth="1502" pageHeight="842" columnWidth="1462" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9daf0bef-33cf-48ef-8ac4-aeb561d1914c">
+	<property name="ireport.zoom" value="0.75"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="MPS" class="java.lang.String"/>
+	<field name="codItem" class="java.lang.String"/>
+	<field name="item" class="java.lang.String"/>
+	<field name="UMU" class="java.lang.String"/>
+	<field name="codMov" class="java.lang.String"/>
+	<field name="descrMov" class="java.lang.String"/>
+	<field name="tipoDoc" class="java.lang.String"/>
+	<field name="numDoc" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="local" class="java.lang.String"/>
+	<field name="lote" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="01bc2da4-f719-4387-90cb-25f11be738f8"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MPS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="180" height="20" uuid="ba53cc1c-dae7-47e9-88f5-749f0736f46d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código Item ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="0" width="203" height="20" uuid="5b016492-6aac-429b-b797-8099fb6b2bfb"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="483" y="0" width="100" height="20" uuid="9c110bc0-9c63-4f05-a516-00e6ab72d546"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[UMU]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="583" y="0" width="100" height="20" uuid="fd03a5b9-e6b5-49c3-a04e-b7a49dc71989"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cód. Movimentação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="683" y="0" width="166" height="20" uuid="835b576a-7461-40bd-b8f5-5279024f22ff"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descr Movimentação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="849" y="0" width="100" height="20" uuid="eabda1a9-8aad-484f-b976-b05032008299"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="949" y="0" width="83" height="20" uuid="050a113b-2174-438a-b257-74dcc57b0e16"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1032" y="0" width="164" height="20" uuid="3a223a14-b1b5-49c0-adff-3527b0b646f0"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1196" y="0" width="172" height="20" uuid="fbc246bd-5b5c-4e42-865e-77885e655192"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Local]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1368" y="0" width="94" height="20" uuid="3577c252-bb5d-40af-94d5-cb9a8fdf6985"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lote]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="c64316b1-c546-488a-9faa-77ef6b5b9c9d"/>
+				<textFieldExpression><![CDATA[$F{MPS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="180" height="20" uuid="1b68d279-1d2f-4b48-90b9-844635eea658"/>
+				<textFieldExpression><![CDATA[$F{codItem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="0" width="203" height="20" uuid="063128fb-4ad3-49a6-849b-27861a9278de"/>
+				<textFieldExpression><![CDATA[$F{item}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="483" y="0" width="100" height="20" uuid="d8ced4da-a947-4592-b0b8-11cb92b815ca"/>
+				<textFieldExpression><![CDATA[$F{UMU}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="583" y="0" width="100" height="20" uuid="33125ebc-4d14-46b2-93c3-8a632d506a85"/>
+				<textFieldExpression><![CDATA[$F{codMov}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="683" y="0" width="166" height="20" uuid="fd508297-84f3-47f9-a8e3-5e26c5e775f4"/>
+				<textFieldExpression><![CDATA[$F{descrMov}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="849" y="0" width="100" height="20" uuid="298bf749-a7d4-475b-916d-da820f5172a3"/>
+				<textFieldExpression><![CDATA[$F{tipoDoc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="949" y="0" width="83" height="20" uuid="709907ab-800a-4ab2-af75-99b89d0c0cc8"/>
+				<textFieldExpression><![CDATA[$F{numDoc}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1032" y="0" width="164" height="20" uuid="06573bc2-fb9d-4bec-875c-3187d4ce5098"/>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1196" y="0" width="172" height="20" uuid="926ce34c-2f12-4093-b4f5-a6df850e70f6"/>
+				<textFieldExpression><![CDATA[$F{local}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1368" y="0" width="94" height="20" uuid="f6c3a2dc-2080-4631-baed-60050dc633fe"/>
+				<textFieldExpression><![CDATA[$F{lote}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

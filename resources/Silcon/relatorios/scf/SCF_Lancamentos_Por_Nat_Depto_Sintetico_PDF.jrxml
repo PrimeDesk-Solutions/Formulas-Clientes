@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF_Lancamentos_Por_Depto_Nat_Analitico_PDF" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="61fdf3e8-4ad2-4d83-8c71-3307f90fa785">
+	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="titulo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<field name="codDepto" class="java.lang.String"/>
+	<field name="nomeDepto" class="java.lang.String"/>
+	<field name="dtLcto" class="java.util.Date"/>
+	<field name="codCC" class="java.lang.String"/>
+	<field name="nomeCC" class="java.lang.String"/>
+	<field name="historico" class="java.lang.String"/>
+	<field name="movimentacao" class="java.lang.String"/>
+	<field name="codNatureza" class="java.lang.String"/>
+	<field name="descrNat" class="java.lang.String"/>
+	<field name="valor" class="java.math.BigDecimal"/>
+	<variable name="tot_natureza" class="java.math.BigDecimal" resetType="Group" resetGroup="natureza" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+	</variable>
+	<variable name="tot_departamento" class="java.math.BigDecimal" resetType="Group" resetGroup="departamento" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+	</variable>
+	<group name="natureza">
+		<groupExpression><![CDATA[$F{codNatureza}]]></groupExpression>
+		<groupHeader>
+			<band height="13">
+				<textField>
+					<reportElement x="0" y="0" width="43" height="13" uuid="c85d5cd1-928a-4e62-ad43-f1b0bee8c240"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{codNatureza}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="43" y="0" width="241" height="13" uuid="b7b9f63a-6a16-40e8-8132-769097d3436d"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{descrNat}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="15">
+				<textField>
+					<reportElement x="377" y="2" width="126" height="13" uuid="dcd83d3e-7a09-4c11-b3c3-7f73fe34aa8d"/>
+					<textElement>
+						<font size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total Natureza " + $F{codNatureza}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="503" y="2" width="51" height="13" uuid="f0cf1bb0-f607-4f73-a9be-4fb9743e3af0"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_natureza}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="379" y="1" width="177" height="1" uuid="1662404f-1da0-44d5-b5b1-60cfb2724c1a"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="departamento">
+		<groupExpression><![CDATA[$F{codDepto}]]></groupExpression>
+		<groupHeader>
+			<band height="13">
+				<textField>
+					<reportElement x="100" y="0" width="54" height="13" uuid="499b2599-19d7-4f2e-9d68-fafcf8a21156"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{codDepto}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="154" y="0" width="218" height="13" uuid="b32eafa2-3976-4e7e-872c-58bdbae84896"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nomeDepto}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="455" y="0" width="100" height="13" uuid="64b75d0d-b7f8-4040-ae18-47a231e2b531"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="15">
+				<textField>
+					<reportElement x="377" y="2" width="126" height="13" uuid="4dc455b2-fb59-4b7c-b802-da7e03bfc23d"/>
+					<textElement>
+						<font size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total Departamento " + $F{codDepto}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="503" y="2" width="51" height="13" uuid="dfce0550-78d5-4509-8f65-7fefd45b67a5"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_natureza}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="377" y="1" width="177" height="1" uuid="b4ab0ccc-1560-4107-a5fb-a2cb4fc5087a"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="267" height="13" uuid="84aba128-2a00-4d11-b8fe-9fcc313e5a3e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{titulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="284" y="0" width="186" height="13" uuid="4b293b83-99af-4ab6-af88-8afcbe10c91c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="16" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="13" uuid="69838148-9a3c-4fa1-b284-647916acd73b"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[C.CUSTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="136" height="13" uuid="7e9e8df0-9008-43af-8750-de9ce137cc0d"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[NATUREZAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="236" y="0" width="183" height="13" uuid="9e3a6def-decb-4eca-b4cd-2d3efc5588a5"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[LANÇAMENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="476" y="0" width="79" height="13" uuid="d17c4716-c2ec-4e6f-9cc4-35cbab8c85a9"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[VALOR]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="15" width="555" height="1" uuid="b909fe37-4d33-4957-8155-b4c75ee58d36"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

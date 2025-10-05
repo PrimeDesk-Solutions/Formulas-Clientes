@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PickingListCubo" language="groovy" pageWidth="1559" pageHeight="842" columnWidth="1519" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f33a137d-b43c-437a-addd-eddda42ac832">
+	<property name="ireport.zoom" value="0.7513148009015781"/>
+	<property name="ireport.x" value="455"/>
+	<property name="ireport.y" value="0"/>
+	<field name="coditem" class="java.lang.String"/>
+	<field name="nomecliente" class="java.lang.String"/>
+	<field name="numdoc" class="java.lang.Integer"/>
+	<field name="codcliente" class="java.lang.String"/>
+	<field name="naitem" class="java.lang.String"/>
+	<field name="descrOper" class="java.lang.String"/>
+	<field name="descrTipoOper" class="java.lang.String"/>
+	<field name="serie " class="java.lang.String"/>
+	<field name="eaa01esdata" class="java.util.Date"/>
+	<field name="OrdemSeparacao" class="java.math.BigDecimal"/>
+	<field name="qtdOriginal" class="java.math.BigDecimal"/>
+	<field name="Volume" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="200" y="0" width="177" height="20" uuid="f5c551eb-82ef-418d-b604-d68c2d703b64"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cod. Cliente ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="377" y="0" width="159" height="20" uuid="51c3cb06-ee0c-4c1c-ae08-eea7e92d25c3"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome Cliente ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="536" y="0" width="100" height="20" uuid="51d555e1-bd0a-4522-a0a0-ddb6d804bb81"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="636" y="0" width="100" height="20" uuid="7d92fb18-e15d-44c0-83b3-de8955e6d1fb"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cód. Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="0009611e-c272-4000-afbb-e03fc0799cf5"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Operação ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="20" uuid="da7b3db6-2b47-4dd2-9762-2906660749dc"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Operação ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="736" y="0" width="272" height="20" uuid="3f51808b-92eb-439d-86d1-d08e1670e742"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1008" y="0" width="100" height="20" uuid="40621f93-f5cc-4bc1-9143-10c5d2bcfac6"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Série]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1108" y="0" width="100" height="20" uuid="4dac9174-4b89-41a6-b437-1bc8b36edf20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Entrada/Saída]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1208" y="0" width="100" height="20" uuid="6237d08f-022a-491b-b199-edcdc9ac710d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ordem Separação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1308" y="0" width="100" height="20" uuid="43aeceba-3294-4bd8-9159-0d1fee3ae662"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[QTd. SCE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1408" y="0" width="108" height="20" uuid="eab4fcd0-4615-4a7a-9bf4-c3d271f96bb3"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Volume]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="200" y="0" width="177" height="20" uuid="a70cadde-7415-48e3-ac04-bbae5319b0a6"/>
+				<textFieldExpression><![CDATA[$F{codcliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="377" y="0" width="159" height="20" uuid="36db5aef-90d0-4572-b831-bc93a77be2d7"/>
+				<textFieldExpression><![CDATA[$F{nomecliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="6865596d-d14e-45f1-aa59-3d7b2d59a8f9"/>
+				<textFieldExpression><![CDATA[$F{descrOper}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="100" height="20" uuid="572241bc-b1d3-478f-8d03-57c4e2ec8efc"/>
+				<textFieldExpression><![CDATA[$F{descrTipoOper}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1408" y="0" width="108" height="20" uuid="6999d321-942b-419a-b245-bbba48e9582d"/>
+				<textFieldExpression><![CDATA[$F{Volume}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="536" y="0" width="100" height="20" uuid="e46ce517-cfac-4461-9725-1741924fa436"/>
+				<textFieldExpression><![CDATA[$F{numdoc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="636" y="0" width="100" height="20" uuid="e92e5bc5-fed5-41dc-8826-4edf13b6829d"/>
+				<textFieldExpression><![CDATA[$F{coditem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="736" y="0" width="272" height="20" uuid="ac3a0161-41b1-4f6d-94a6-389cac1f603b"/>
+				<textFieldExpression><![CDATA[$F{naitem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1008" y="0" width="100" height="20" uuid="76fa760e-92fd-4f41-9b5b-c18e46d99fea"/>
+				<textFieldExpression><![CDATA[$F{serie }]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="1108" y="0" width="100" height="20" uuid="1ee6adc4-1f1b-4044-bb7c-09a44d126a74"/>
+				<textFieldExpression><![CDATA[$F{eaa01esdata}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1208" y="0" width="100" height="20" uuid="5c71d0b2-24f3-48ef-b3e6-53f0095d184b"/>
+				<textFieldExpression><![CDATA[$F{OrdemSeparacao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1308" y="0" width="100" height="20" uuid="20da8374-0f51-441a-a97b-f44207ca7fdb"/>
+				<textFieldExpression><![CDATA[$F{qtdOriginal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

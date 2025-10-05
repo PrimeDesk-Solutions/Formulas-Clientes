@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ProducaoResumoOrdensDeProducao" language="groovy" pageWidth="1899" pageHeight="842" columnWidth="1859" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8ca94cce-ff93-4cb3-9640-2452e787693b">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="2144"/>
+	<property name="ireport.y" value="0"/>
+	<field name="numOrdem" class="java.lang.Integer"/>
+	<field name="codigoProdFinal" class="java.lang.String"/>
+	<field name="naProdFinal" class="java.lang.String"/>
+	<field name="numPlano" class="java.lang.Integer"/>
+	<field name="descrPlano" class="java.lang.String"/>
+	<field name="dataPlano" class="java.util.Date"/>
+	<field name="dataEntrega" class="java.util.Date"/>
+	<field name="lote" class="java.lang.String"/>
+	<field name="serie" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="codComp" class="java.lang.String"/>
+	<field name="naComp" class="java.lang.String"/>
+	<field name="loteComp" class="java.lang.String"/>
+	<field name="serieComp" class="java.lang.String"/>
+	<field name="bab01ctdtf" class="java.util.Date"/>
+	<field name="bab0101qtp" class="java.lang.String"/>
+	<field name="bab0101qta" class="java.lang.String"/>
+	<field name="TOTALPLANEJADO" class="java.lang.String"/>
+	<field name="CUSTOREAL" class="java.lang.String"/>
+	<field name="QtdPlanejadaOrdem" class="java.lang.String"/>
+	<field name="prodQtconcluida" class="java.lang.String"/>
+	<field name="prodUnitPlane" class="java.lang.String"/>
+	<field name="prodUnitReal" class="java.lang.String"/>
+	<field name="unitario" class="java.lang.String"/>
+	<field name="RealUnit" class="java.lang.String"/>
+	<field name="validadeComp" class="java.util.Date"/>
+	<field name="dataFim" class="java.util.Date"/>
+	<field name="qtdPlanejada" class="java.math.BigDecimal"/>
+	<field name="qtdAplic" class="java.math.BigDecimal"/>
+	<field name="custoComp" class="java.math.BigDecimal"/>
+	<field name="qtdProduzirAcab" class="java.math.BigDecimal"/>
+	<field name="qtdProduzidaAcab" class="java.math.BigDecimal"/>
+	<field name="custoProdutoFinal" class="java.math.BigDecimal"/>
+	<field name="field1" class="java.lang.String"/>
+	<field name="dataInicio" class="java.util.Date"/>
+	<field name="fabricComp" class="java.util.Date"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="3ad49e9c-fc42-4c58-97be-8fbdec765626"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número OP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="136" height="20" uuid="698c0f30-a5eb-4020-acba-d17732c6ffb0"/>
+				<textElement>
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Código Produto Final	]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="236" y="0" width="172" height="20" uuid="0b3b0ed9-4e1e-45d1-b99e-df76f9a9892e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NA Produto Final]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="408" y="0" width="100" height="20" uuid="e9bc20a7-b300-4d1d-9100-728d92964be6"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número Plano]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="508" y="0" width="224" height="20" uuid="2c108de8-77b4-475e-ae2d-8dcce8ca3cd0"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descrição Plano]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="732" y="0" width="100" height="20" uuid="f23d4e8c-4bd8-4b7e-83bd-80a7a6a2e022"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Plano]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="832" y="0" width="100" height="20" uuid="a97ded6f-0c2d-431a-9325-4c124f9a45cb"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Entrega]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1132" y="0" width="100" height="20" uuid="610a0b38-5cd7-4eec-9065-c28c3ab02361"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lote]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1232" y="0" width="100" height="20" uuid="ab2d159e-4d2c-4c90-950c-156cc7ab690c"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Série ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1332" y="0" width="199" height="20" uuid="d552f446-5348-4b73-8bc4-177db34ddcbd"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1531" y="0" width="156" height="20" uuid="f37e8e70-4c4d-4b6f-bcbc-c2538651c062"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qtd Planejada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1687" y="0" width="172" height="20" uuid="3741a145-3e25-46f9-a4da-d075fe5d79c8"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qtd Real]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="932" y="0" width="100" height="20" uuid="deca5d9a-6fb8-4609-926c-482f0060ac64"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Inicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1032" y="0" width="100" height="20" uuid="94bb0b16-c544-4770-a130-578190bad499"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Fim]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="5a5dcb2e-b0a3-49fe-910b-8c0230c57cf2"/>
+				<textFieldExpression><![CDATA[$F{numOrdem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="136" height="20" uuid="005cc3b3-03c2-4296-a38c-654399f89ff2"/>
+				<textFieldExpression><![CDATA[$F{codigoProdFinal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="236" y="0" width="172" height="20" uuid="40300685-08a4-4e31-8b9e-524e9264c1dd"/>
+				<textFieldExpression><![CDATA[$F{naProdFinal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="408" y="0" width="100" height="20" uuid="cb2effb5-cc7c-44ad-a287-89816e8c4498"/>
+				<textFieldExpression><![CDATA[$F{numPlano}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="508" y="0" width="224" height="20" uuid="c360cbd8-ca2b-48c7-897b-3b272faf3b82"/>
+				<textFieldExpression><![CDATA[$F{descrPlano}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="732" y="0" width="100" height="20" uuid="da5a68d8-db5f-40bf-9322-07577ba90dac"/>
+				<textFieldExpression><![CDATA[$F{dataPlano}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="832" y="0" width="100" height="20" uuid="57f54d0a-882b-4dec-bb46-a39db9aa2b51"/>
+				<textFieldExpression><![CDATA[$F{dataEntrega}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1132" y="0" width="100" height="20" uuid="2ec47a94-df61-411b-b459-f34308f8b177"/>
+				<textFieldExpression><![CDATA[$F{lote}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1232" y="0" width="100" height="20" uuid="2f69bb4b-8438-4d00-8267-524bb5d63b9e"/>
+				<textFieldExpression><![CDATA[$F{serie}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1332" y="0" width="199" height="20" uuid="11a7b82e-edb7-4127-94b9-3b21e9e15d9e"/>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
+				<reportElement x="1531" y="0" width="156" height="20" uuid="65f37955-4d6d-40df-924d-cc0349706294"/>
+				<textFieldExpression><![CDATA[$F{qtdProduzirAcab}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
+				<reportElement x="1687" y="0" width="172" height="20" uuid="9436a2dd-c0c2-4756-b8ea-77cae40fb11c"/>
+				<textFieldExpression><![CDATA[$F{qtdProduzidaAcab}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="932" y="0" width="100" height="20" uuid="4556c5eb-3dbd-40da-afd3-4d0a392feed3"/>
+				<textFieldExpression><![CDATA[$F{dataInicio}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="1032" y="0" width="100" height="20" uuid="ba3b9d4c-7038-476c-99b7-7f84a5f9e101"/>
+				<textFieldExpression><![CDATA[$F{dataFim}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

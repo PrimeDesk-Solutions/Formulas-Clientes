@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCE_ConsumoEstoqueLote_s1" language="groovy" pageWidth="1700" pageHeight="555" orientation="Landscape" columnWidth="1700" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="6bab8e3c-58a6-4adf-a4c8-98663a46bd07">
+	<property name="ireport.zoom" value="1.0000000000000009"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="codItem" class="java.lang.String"/>
+	<field name="naItem" class="java.lang.String"/>
+	<field name="loteItem" class="java.lang.String"/>
+	<field name="qtdPedido" class="java.math.BigDecimal"/>
+	<field name="qtdLote" class="java.math.BigDecimal"/>
+	<field name="saldoEntregar" class="java.math.BigDecimal"/>
+	<field name="saldoFinalLote" class="java.math.BigDecimal"/>
+	<field name="numPed" class="java.lang.String"/>
+	<field name="loteFaturamento" class="java.lang.String"/>
+	<field name="codEntidade" class="java.lang.String"/>
+	<field name="naEntidade" class="java.lang.String"/>
+	<field name="vidaUtilEntidade" class="java.lang.String"/>
+	<field name="field6" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="13" uuid="f947fdd4-e158-4b5b-a903-866d5c767695"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Nº Pedido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="667" y="0" width="145" height="13" uuid="f923d4a7-909c-4ffe-82ea-e7f79a5855b4"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Codigo Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="812" y="0" width="264" height="13" uuid="b46dfe05-1d47-4cf8-9730-123156f5e3a7"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Descr. Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1076" y="0" width="224" height="13" uuid="b5437bb1-3b59-413d-a91f-076de1c08026"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Lote]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1300" y="0" width="100" height="13" uuid="7a59ddf9-28b3-4a76-85f2-d572e56e7fd4"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Qtd. Pedido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1400" y="0" width="100" height="13" uuid="17353ce9-25fa-4e9b-b9e7-8a1fd93b2f60"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Saldo Diponível (Lote)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1500" y="0" width="100" height="13" uuid="77397c17-e077-4ab3-adea-664b57628061"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Saldo Pedido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1600" y="0" width="100" height="13" uuid="64c35025-34cd-440b-8dd5-da53630fd201"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Saldo Final (Lote)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="13" uuid="ee1a3220-e9a4-4558-b77e-88d64abe86fe"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Lote Faturamento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="100" height="13" uuid="56cf5219-b164-4f47-9721-c880217b3c7c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Cod. Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="0" width="267" height="13" uuid="35e3cef3-9c5e-440f-9c2f-db29da54992a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Nome Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="567" y="0" width="100" height="13" uuid="7a15982b-c412-4f00-9f78-4b2d6a72caa0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[% Vida Útil]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="667" y="0" width="145" height="13" isRemoveLineWhenBlank="true" uuid="47133af5-4a10-4a22-bb7e-cf6c1ae33eb0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codItem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="812" y="0" width="264" height="13" uuid="c4a3e4a7-1084-40ec-9308-9384de257d87"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naItem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1076" y="0" width="224" height="13" uuid="d5c4c5e2-e63a-482f-a870-f4568049a101"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{loteItem}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="1300" y="0" width="100" height="13" uuid="7708d1f8-c99d-423b-a883-812453844b5b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtdPedido}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="1400" y="0" width="100" height="13" uuid="dcbdde42-164d-4842-b2dc-0a44c54c0a8f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtdLote}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="1500" y="0" width="100" height="13" uuid="c8941233-d65d-41a8-91ac-182f2235c555"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{saldoEntregar}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="1600" y="0" width="100" height="13" uuid="15701670-3b0e-4a79-8c83-54a525b964e7"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{saldoFinalLote}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="100" height="13" uuid="3a7e0657-2037-410e-85f1-cdb2b4e44a33"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numPed}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="100" height="13" uuid="4736b6fb-1637-40e6-bc4b-a8eb9626f4fc"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{loteFaturamento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="100" height="13" uuid="a737dc30-6f57-4bfb-8c98-b2cea88f8e0e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codEntidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="300" y="0" width="267" height="13" uuid="eb30b509-4fc6-499b-ae98-f285cb1528ea"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naEntidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="567" y="0" width="100" height="13" uuid="322a8c4a-09b8-4313-a873-c41f3b16aeb9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vidaUtilEntidade}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

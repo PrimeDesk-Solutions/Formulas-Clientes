@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCV_PedidoCompraEPI" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9f47a439-e439-4843-9084-72674d45fc8b">
+	<property name="ireport.zoom" value="1.000000000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<field name="abm01na" class="java.lang.String"/>
+	<field name="qtd" class="java.math.BigDecimal"/>
+	<field name="dtEntrega" class="java.util.Date"/>
+	<field name="field2" class="java.lang.String"/>
+	<field name="abe01na" class="java.lang.String"/>
+	<field name="certificado" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="103" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="100" uuid="c1d282dc-6404-49af-a2ef-2ce48f5e93c6"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="194" y="0" width="608" height="31" uuid="889766c7-d01d-41cc-bc4e-99586a37ff02"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="194" y="31" width="249" height="69" uuid="2c1571ce-1cab-4f60-9b1f-480962b2fbeb"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="443" y="31" width="182" height="69" uuid="6c2f75e9-0103-4525-a826-79156730be93"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Transparent" x="201" y="0" width="114" height="31" uuid="e70e1adc-e3c1-4120-8e9d-70389fa74dec"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph lineSpacing="Double"/>
+				</textElement>
+				<text><![CDATA[NOME DA EMPRESA: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="315" y="0" width="220" height="31" uuid="d924ab5d-5d02-41d7-80ca-9ca0e1b3f0fd">
+					<printWhenExpression><![CDATA[1 == 2]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="201" y="31" width="85" height="31" uuid="7422b366-1683-4c85-b1bc-e68427dcb224"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph lineSpacing="Double"/>
+				</textElement>
+				<text><![CDATA[COLABORADOR:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="449" y="31" width="139" height="31" uuid="63a48db9-65e0-4063-aa38-568fa4d5e5da"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph lineSpacing="Double"/>
+				</textElement>
+				<text><![CDATA[FUNÇÃO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="629" y="31" width="139" height="31" uuid="79ffee84-19b7-4b5d-8b80-741efa33962e"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph lineSpacing="Double"/>
+				</textElement>
+				<text><![CDATA[SETOR:]]></text>
+			</staticText>
+			<image>
+				<reportElement x="41" y="5" width="191" height="88" uuid="61c01344-cc6d-449c-baf7-e6e5b894dce8"/>
+				<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Atilatte\\relatorios\\scv\\marca-atilatte.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="284" y="31" width="146" height="31" uuid="24e10d19-c6f9-4b50-a103-c4446e4196b4"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{abe01na}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="131" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="128" backcolor="#CCCCCC" uuid="073ba43d-b179-431b-9f5c-6ef87f538764"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Transparent" x="6" y="1" width="791" height="91" uuid="f3e99b94-b91a-4524-ac96-c6d1337c87be"/>
+				<text><![CDATA[	”Declaro para os devidos fins, que ficarei responsável por todos os materiais e equipamentos de proteção individual – EPI – recebidos neste ato, assim como fui treinado, obrigo-me também a usá-los corretamente para a finalidade a que se destinam, responsabilizando-me ainda por sua guarda e conservação, comunicando ao responsável em segurança do trabalho qualquer alteração que torne impróprio o seu uso, conforme o que determina a NR-6, portaria 3.214 da CLT”.
+	”Estou ciente ainda, do artigo 158, parágrafo único, da Seção IV do Capítulo V do título II da CLT, que diz, a recusa injustificada do uso do EPI constitui ato faltoso de minha parte”.
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="297" y="108" width="133" height="20" uuid="432691e5-5199-4956-b21c-81a61edfbb64"/>
+				<text><![CDATA[Assinatura do Colaborador:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="430" y="120" width="367" height="1" uuid="4e531707-bf67-46a7-8b25-46b1b5a46bb9"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="256" height="26" backcolor="#CCCCCC" uuid="7aa9819a-ad26-481e-b4ae-f203581bee78"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="256" y="0" width="41" height="26" backcolor="#CCCCCC" uuid="e265566d-cbd2-43b9-8fa2-886feaee5163"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="0" width="256" height="26" uuid="593c44e3-48bd-4a00-bb01-3e3c6dddf01e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<paragraph lineSpacing="Double"/>
+				</textElement>
+				<text><![CDATA[DESCRIÇÃO DO EPI]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="297" y="0" width="90" height="26" backcolor="#CCCCCC" uuid="04123eea-da63-4a9b-8780-90a1ed181a79"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="387" y="0" width="97" height="26" backcolor="#CCCCCC" uuid="9356d0bc-d43f-4085-a136-81c02223e547"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="625" y="0" width="177" height="26" backcolor="#CCCCCC" uuid="949c880e-c16f-4a35-ad97-ee323cafaee0"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Transparent" x="256" y="0" width="41" height="26" uuid="6397917a-09cc-4f60-9356-5dce5579db7d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<paragraph lineSpacing="Double"/>
+				</textElement>
+				<text><![CDATA[QTDE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="297" y="0" width="90" height="26" uuid="553768b0-6951-421b-8dd7-ccc1101bfd49"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<paragraph lineSpacing="Double"/>
+				</textElement>
+				<text><![CDATA[C.A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="387" y="0" width="97" height="26" uuid="b5cc525d-7613-4181-b0fc-b2456df28044"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<paragraph lineSpacing="Double"/>
+				</textElement>
+				<text><![CDATA[DATA ENTREGA]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="484" y="0" width="141" height="26" backcolor="#CCCCCC" uuid="65ed94b1-4b7b-4580-8407-b8851182ea0d"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Transparent" x="625" y="0" width="177" height="26" uuid="41530766-8677-4fb0-af2b-fb3bbcc98639"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<paragraph lineSpacing="Double"/>
+				</textElement>
+				<text><![CDATA[ASSINATURA FUNCIONÁRIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="484" y="0" width="141" height="26" uuid="9fe8ebcb-fa4d-4f7e-9988-e1703ebc22e6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<paragraph lineSpacing="Double"/>
+				</textElement>
+				<text><![CDATA[Responsável Entrega]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="256" height="23" uuid="7b99bc6f-de45-40d4-9f86-d68b6d26d4e3"/>
+			</rectangle>
+			<textField>
+				<reportElement mode="Transparent" x="4" y="0" width="256" height="23" uuid="4a2b4e3a-a75a-462c-96bd-2236f5cd80ee"/>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA[$F{abm01na}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="256" y="0" width="41" height="23" uuid="01e5407a-e224-4691-8ceb-3093dab94f8d"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="297" y="0" width="90" height="23" uuid="d8e42cac-0022-46d7-a60f-e289bc15542a"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="387" y="0" width="97" height="23" uuid="12cbd710-5e7c-4611-aec3-44d47068682e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="625" y="0" width="177" height="23" uuid="f148e265-d1db-46ae-b145-265acd025faf"/>
+			</rectangle>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="256" y="0" width="41" height="23" uuid="1da5b5f0-d0eb-430e-95c4-b1dd4a7b1614"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{qtd}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="387" y="0" width="97" height="23" uuid="77e27452-80a0-479c-b6ea-4535b02622f9"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{dtEntrega}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="484" y="0" width="141" height="23" uuid="52c0dd42-0e23-4612-b805-fc195d67260f"/>
+			</rectangle>
+			<textField>
+				<reportElement mode="Transparent" x="297" y="0" width="90" height="23" uuid="5ab83d01-64c3-472d-8bb5-f032db3a74d5"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{certificado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

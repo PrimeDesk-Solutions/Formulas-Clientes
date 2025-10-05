@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CUBO_SRF_PedidosEmitidos" language="groovy" pageWidth="2834" pageHeight="595" orientation="Landscape" columnWidth="2794" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="527b282d-8019-47fd-8ec5-207632b7d20b">
+	<property name="ireport.zoom" value="1.7715610000000015"/>
+	<property name="ireport.x" value="115"/>
+	<property name="ireport.y" value="0"/>
+	<field name="numPed" class="java.lang.Integer"/>
+	<field name="totDocPedido" class="java.math.BigDecimal"/>
+	<field name="pesoLiquidoPed" class="java.math.BigDecimal"/>
+	<field name="pesoBrutoPed" class="java.math.BigDecimal"/>
+	<field name="codEntPed" class="java.lang.String"/>
+	<field name="naEntPed" class="java.lang.String"/>
+	<field name="dataEmissaoPed" class="java.util.Date"/>
+	<field name="periodoPed" class="java.lang.String"/>
+	<field name="dataentradaSaida" class="java.util.Date"/>
+	<field name="tipoDocPed" class="java.lang.String"/>
+	<field name="descrTipoDocPed" class="java.lang.String"/>
+	<field name="codigoDespPed" class="java.lang.String"/>
+	<field name="naDespPed" class="java.lang.String"/>
+	<field name="naRedesPed" class="java.lang.String"/>
+	<field name="cidade" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="prazo" class="java.lang.Integer"/>
+	<field name="field4" class="java.lang.String"/>
+	<field name="field5" class="java.lang.String"/>
+	<field name="situacao" class="java.lang.String"/>
+	<field name="dtEntrega" class="java.util.Date"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="d21a3d07-aaa7-41f0-add6-734d213a2379"/>
+				<text><![CDATA[Numero Pedido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="203" y="0" width="100" height="20" uuid="f13efdd2-7ba6-4b54-9e65-3adb1ac004d8"/>
+				<text><![CDATA[Total Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="303" y="0" width="100" height="20" uuid="ef22ceba-06c5-4f09-83e9-66171a488297"/>
+				<text><![CDATA[Peso Liquido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="403" y="0" width="100" height="20" uuid="dd203f2a-c68d-48d8-9a2f-0fa4b73cb978"/>
+				<text><![CDATA[Peso Bruto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="503" y="0" width="100" height="20" uuid="00fbdf9f-170a-4235-9cfa-9bee1f595586"/>
+				<text><![CDATA[Cod. Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="603" y="0" width="302" height="20" uuid="b5da25c2-8db2-42d2-b7a5-6d0d53d81438"/>
+				<text><![CDATA[Nome Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="905" y="0" width="100" height="20" uuid="fdecc192-4659-4eca-9211-cb86f8159960"/>
+				<text><![CDATA[Data Emissão]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1005" y="0" width="100" height="20" uuid="36abca9b-95cd-4c9d-831a-e14262763d90"/>
+				<text><![CDATA[Periodo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1105" y="0" width="100" height="20" uuid="c2fe9ea0-11b1-43b6-98d4-4a2e8d815d3b"/>
+				<text><![CDATA[Entrada/Saida]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1205" y="0" width="100" height="20" uuid="02ccf6a7-b550-4541-b0d7-9d46cb308b02"/>
+				<text><![CDATA[Tipo Doc.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1305" y="0" width="175" height="20" uuid="3667880b-11e9-4bfe-8383-bc7df597bf04"/>
+				<text><![CDATA[Descr. Tipo Doc]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1480" y="0" width="100" height="20" uuid="327c2901-c171-48a5-8a8a-3cc67ad58d57"/>
+				<text><![CDATA[Doc Descpacho]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1580" y="0" width="213" height="20" uuid="268519b5-06fa-472b-b087-d4614e6c1608"/>
+				<text><![CDATA[Despacho]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1793" y="0" width="303" height="20" uuid="e8cdce80-e493-4c38-bc43-89acbde10f9f"/>
+				<text><![CDATA[Redespacho]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2096" y="0" width="100" height="20" uuid="ff30c121-833b-414e-a282-16a9d0240859"/>
+				<text><![CDATA[Cidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2196" y="0" width="100" height="20" uuid="c611454c-9551-409b-836e-83915e9839d1"/>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2296" y="0" width="100" height="20" uuid="d38af89d-2696-476a-8f97-1d007ca74160"/>
+				<text><![CDATA[Prazo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2396" y="0" width="212" height="20" uuid="31b4ff29-45cb-4a27-af12-30cfd1a983c5"/>
+				<text><![CDATA[Situação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="103" height="20" uuid="1ef820bb-f039-4f97-b817-80bc34ef85b8"/>
+				<text><![CDATA[Data Entrega]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="100" height="20" uuid="b2e007a2-c73c-4e8a-a9cf-f3021d6dd7a2"/>
+				<textFieldExpression><![CDATA[$F{numPed}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="203" y="0" width="100" height="20" uuid="b3dd6175-7c30-480f-8626-ef04187e54b9"/>
+				<textFieldExpression><![CDATA[$F{totDocPedido}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="303" y="0" width="100" height="20" uuid="12b4bc5f-09b1-4b31-81f1-3d15c5d18a05"/>
+				<textFieldExpression><![CDATA[$F{pesoLiquidoPed}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="403" y="0" width="100" height="20" uuid="48ed0d89-361e-4f5c-9235-bfe97d763dd8"/>
+				<textFieldExpression><![CDATA[$F{pesoBrutoPed}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="503" y="0" width="100" height="20" uuid="21a86ebd-6c78-4f81-a5a9-a2d5cdf88111"/>
+				<textFieldExpression><![CDATA[$F{codEntPed}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="603" y="0" width="302" height="20" uuid="89934f33-7c7e-4801-8c21-680a3979e6c1"/>
+				<textFieldExpression><![CDATA[$F{naEntPed}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="905" y="0" width="100" height="20" uuid="82156569-2d66-4ca6-b514-79c9d9f6c1b4"/>
+				<textFieldExpression><![CDATA[$F{dataEmissaoPed}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1005" y="0" width="100" height="20" uuid="efff370e-5e48-466a-b929-a894c2d2c39e"/>
+				<textFieldExpression><![CDATA[$F{periodoPed}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="1105" y="0" width="100" height="20" uuid="06fa7b35-e07c-459e-a621-8281213db535"/>
+				<textFieldExpression><![CDATA[$F{dataentradaSaida}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1205" y="0" width="100" height="20" uuid="02cd724d-c713-4541-bbd5-f646abd0640d"/>
+				<textFieldExpression><![CDATA[$F{tipoDocPed}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1305" y="0" width="175" height="20" uuid="5690b8e3-61b0-49ef-a1d2-2074c9c2d784"/>
+				<textFieldExpression><![CDATA[$F{descrTipoDocPed}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1480" y="0" width="100" height="20" uuid="18d1df9d-b491-47cc-b7a4-2e60ec06b531"/>
+				<textFieldExpression><![CDATA[$F{codigoDespPed}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1580" y="0" width="213" height="20" uuid="0935320f-2e9a-45ae-b3a7-c483211edcd9"/>
+				<textFieldExpression><![CDATA[$F{naDespPed}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1793" y="0" width="303" height="20" uuid="cc245e24-38c8-4528-b5f5-90638da90e9f"/>
+				<textFieldExpression><![CDATA[$F{naRedesPed}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="2096" y="0" width="100" height="20" uuid="c2729350-abb6-401b-ba79-c04eb258b5c5"/>
+				<textFieldExpression><![CDATA[$F{cidade}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="2196" y="0" width="100" height="20" uuid="bc303b1c-4ac2-4fe1-bec0-f0bb3ae4455a"/>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="2296" y="0" width="100" height="20" uuid="46404f2d-9527-4e72-b45d-46a1decd2f7c"/>
+				<textFieldExpression><![CDATA[$F{prazo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2396" y="0" width="212" height="20" uuid="ee730461-47b5-4ae4-9168-f9ce134b36ec"/>
+				<textFieldExpression><![CDATA[$F{situacao}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="100" y="0" width="103" height="20" uuid="8fff1ad1-3436-4177-8554-fd8049d778da"/>
+				<textFieldExpression><![CDATA[$F{dtEntrega}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

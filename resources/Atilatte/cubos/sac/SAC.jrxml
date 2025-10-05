@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SAC" language="groovy" pageWidth="2267" pageHeight="842" columnWidth="2227" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9855290d-2170-45b2-b978-4be6a45073b0">
+	<property name="ireport.zoom" value="1.100000000000002"/>
+	<property name="ireport.x" value="1631"/>
+	<property name="ireport.y" value="0"/>
+	<field name="numAtendimento" class="java.lang.Integer"/>
+	<field name="dataAtendimento" class="java.util.Date"/>
+	<field name="dataEncerramento" class="java.util.Date"/>
+	<field name="codItem" class="java.lang.String"/>
+	<field name="naItem" class="java.lang.String"/>
+	<field name="codEntidade" class="java.lang.String"/>
+	<field name="naEntidade" class="java.lang.String"/>
+	<field name="codReclamacao" class="java.lang.String"/>
+	<field name="descrReclamacao" class="java.lang.String"/>
+	<field name="tipoAtend" class="java.lang.String"/>
+	<field name="responsavel" class="java.lang.String"/>
+	<field name="contato" class="java.lang.String"/>
+	<field name="lote" class="java.lang.String"/>
+	<field name="validade" class="java.util.Date"/>
+	<field name="dataFabricacao" class="java.util.Date"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="f8064535-8327-4364-b2f3-ffe94b5f66c8"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número Atendimento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="20" uuid="ab996dbc-08f9-49b8-ae09-8ca79f8130eb"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Atendimento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="100" height="20" uuid="22b8d42b-4806-4a0a-9f8e-663930ad56bd"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Encerramento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="0" width="100" height="20" uuid="52b5fab6-d40d-4c9f-a76a-7ed74f29d5bc"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="0" width="292" height="20" uuid="9d89c078-7a52-4f15-8c62-fc0074221818"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descrição Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="992" y="0" width="100" height="20" uuid="9867bd8d-24d5-4d9d-abf2-aadf3a8b883c"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1092" y="0" width="100" height="20" uuid="3f1e60dd-6efe-47f4-8a31-d22a24917764"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1192" y="0" width="100" height="20" uuid="d019bb0f-5518-429b-a351-cccd3b624a54"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código Reclamação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="692" y="0" width="100" height="20" uuid="f78c3985-5b6f-4baf-a299-a1ea371b551a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Atend.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="792" y="0" width="100" height="20" uuid="933b2067-da52-4cab-b6cc-27f6393a85a2"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Responsável]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="892" y="0" width="100" height="20" uuid="519d8572-c4ed-49ab-9984-27cff8170a49"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Contato]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1292" y="0" width="368" height="20" uuid="d7aa3003-8cfa-4cae-9990-33ceda375530"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descrição Reclamação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1660" y="0" width="132" height="20" uuid="5ab125b1-4ada-46af-9411-7e1475249027"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lote]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1792" y="0" width="152" height="20" uuid="2be73673-4564-4b03-bfdd-ec12cf974517"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Validade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1944" y="0" width="283" height="20" uuid="369cb3f4-9b9d-484e-b44b-fdff0e43c12e"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Fabricação]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="100" height="20" uuid="1986674c-b7f1-4aae-85ce-b925863f993d"/>
+				<textFieldExpression><![CDATA[$F{numAtendimento}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="100" y="0" width="100" height="20" uuid="7592da44-2a28-43fa-91e8-14b1c7c9dea5"/>
+				<textFieldExpression><![CDATA[$F{dataAtendimento}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="200" y="0" width="100" height="20" uuid="1af16252-b310-4fd8-8a77-130655e03fd0"/>
+				<textFieldExpression><![CDATA[$F{dataEncerramento}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="300" y="0" width="100" height="20" uuid="d930965d-1b2b-4677-aaa4-d7fd3f8ee009"/>
+				<textFieldExpression><![CDATA[$F{codItem}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="400" y="0" width="292" height="20" uuid="daa94bc3-6b31-4f22-afa8-f2ccbd1d84bb"/>
+				<textFieldExpression><![CDATA[$F{naItem}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="992" y="0" width="100" height="20" uuid="c6181b3e-9c8c-46cc-b626-ef2fc4f11a84"/>
+				<textFieldExpression><![CDATA[$F{codEntidade}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1092" y="0" width="100" height="20" uuid="6364903b-5d3d-4a40-a366-0c2877705361"/>
+				<textFieldExpression><![CDATA[$F{naEntidade}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1192" y="0" width="100" height="20" uuid="119fadf9-2293-4c2a-a3ba-09b9281bafdb"/>
+				<textFieldExpression><![CDATA[$F{codReclamacao}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="692" y="0" width="100" height="20" uuid="355ea8b8-6444-4297-8ba3-4bb0d64a2183"/>
+				<textFieldExpression><![CDATA[$F{tipoAtend}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="792" y="0" width="100" height="20" uuid="3dc51cd0-ef7d-43c6-b03a-dcd58493517a"/>
+				<textFieldExpression><![CDATA[$F{responsavel}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="892" y="0" width="100" height="20" uuid="75253bd3-7d13-4d34-8ff6-c3f8322456a1"/>
+				<textFieldExpression><![CDATA[$F{contato}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1292" y="0" width="368" height="20" uuid="c47ee76a-4ee3-4939-9b36-4866aa4b607a"/>
+				<textFieldExpression><![CDATA[$F{descrReclamacao}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1660" y="0" width="132" height="20" uuid="73e652e6-f973-46d5-a0fe-7f95fb2230cf"/>
+				<textFieldExpression><![CDATA[$F{lote}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="1792" y="0" width="152" height="20" uuid="90e03990-5bf0-45ce-b9a2-21e5f962ee08"/>
+				<textFieldExpression><![CDATA[$F{validade}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="1944" y="0" width="283" height="20" uuid="67503585-7317-4eff-94b1-abc5567836d3"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dataFabricacao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

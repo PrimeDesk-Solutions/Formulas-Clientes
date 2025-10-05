@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SLM_LotesProcessados(PDF)" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28152799-987a-4aff-8794-301c6c64a1c1">
+	<property name="ireport.zoom" value="2.1435888100000016"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="44"/>
+	<parameter name="SUBREPORT_DIR1" class="java.lang.Object"/>
+	<field name="nomeLote" class="java.lang.String"/>
+	<field name="statusLote" class="java.lang.String"/>
+	<field name="key" class="java.lang.String"/>
+	<field name="DsSub1" class="java.lang.Object"/>
+	<field name="dataInicioColeta" class="java.util.Date"/>
+	<field name="dataFimColeta" class="java.util.Date"/>
+	<field name="horaInicioColeta" class="java.lang.String"/>
+	<field name="horaFimColeta" class="java.lang.String"/>
+	<field name="userColeta" class="java.lang.String"/>
+	<field name="qtdCaixaLote" class="java.math.BigDecimal"/>
+	<field name="pesoBrutoLote" class="java.math.BigDecimal"/>
+	<field name="m3Lote" class="java.math.BigDecimal"/>
+	<field name="capacidadeKgVeiculo" class="java.math.BigDecimal"/>
+	<field name="capacidadeM3Veiculo" class="java.math.BigDecimal"/>
+	<group name="lote">
+		<groupExpression><![CDATA[$F{nomeLote}]]></groupExpression>
+		<groupHeader>
+			<band height="107">
+				<staticText>
+					<reportElement x="139" y="10" width="49" height="13" uuid="6b84e640-881b-4485-8980-3b11d23bfa5c"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Status Lote:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="188" y="10" width="233" height="13" uuid="59f25997-9298-4afb-b537-d1ea1a321850"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{statusLote}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="29" y="10" width="100" height="13" uuid="b66ac740-873d-4f57-95a0-e4a0540a7bf3"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nomeLote}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="10" width="29" height="13" uuid="09f2cedb-b32b-490b-907a-384e398d31b5"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Lote:]]></text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement x="60" y="31" width="54" height="13" uuid="66fd6371-ef78-4279-b432-fb983d56fa53"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dataInicioColeta}]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement x="60" y="46" width="54" height="13" uuid="826dec5b-e236-4253-8319-7258a9cd3c3f"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dataFimColeta}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="114" y="31" width="100" height="13" uuid="bfe7c438-dcdb-408f-9b1e-454da75688b5"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{horaInicioColeta}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="31" width="60" height="13" uuid="f059c96d-a631-4989-9f38-6c26f8376b1a"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Início Coleta:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="46" width="60" height="13" uuid="2e10f1d8-96c2-43f8-80f3-ef42b9a491af"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Final Coleta:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="274" y="31" width="100" height="13" uuid="49f68165-e40f-4575-8474-bd40d45d5959"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{userColeta}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="214" y="31" width="60" height="13" uuid="42ef7b63-1ad3-412c-bc39-9408da73ec40"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Usuário Coleta:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="114" y="46" width="100" height="13" uuid="09d91706-62f1-437e-9a04-66945e8fb973"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{horaFimColeta}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="214" y="46" width="43" height="13" uuid="6a29fcb5-7e16-48c7-a5ca-224e9f0e898a"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Qtd. Caixa:]]></text>
+				</staticText>
+				<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+					<reportElement x="257" y="46" width="51" height="13" uuid="7616163c-f8c4-4a4d-a157-d8a9eb5eaa85"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{qtdCaixaLote}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="431" y="31" width="49" height="13" uuid="de84638a-fdd9-41b2-b088-2096bfcadc05"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{pesoBrutoLote}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="431" y="44" width="49" height="15" uuid="19d194dd-6eb1-4efc-bde8-c58895f37e35"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{m3Lote}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="378" y="31" width="53" height="13" uuid="54ecf2c5-e306-4d23-8f40-7e3b4737acfc"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Peso Bruto:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="378" y="46" width="53" height="13" uuid="91c625f6-8868-4d9b-8384-96a6bee40139"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[M3: ]]></text>
+				</staticText>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="98" y="70" width="74" height="13" uuid="560c0469-4748-4962-8ae4-98ac24ee41ef"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{capacidadeKgVeiculo}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="98" y="85" width="74" height="13" uuid="1e215593-56dc-4f00-84f5-1833432c27ae"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{capacidadeM3Veiculo}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="85" width="98" height="13" uuid="30c58f0d-cc7c-4d41-952b-11cf95c641c9"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Capacidade Veículo (M3): ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="70" width="98" height="13" uuid="afae5ed8-aa08-4090-8d85-83fcebebc12c"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Capacidade Veículo (KG):]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="22" uuid="939e1c2b-c0d0-46c7-962b-7b75685814b8"/>
+				<dataSourceExpression><![CDATA[$F{DsSub1}]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR1}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

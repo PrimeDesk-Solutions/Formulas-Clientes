@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCE_ConsumoEstoqueLote_s1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="6bab8e3c-58a6-4adf-a4c8-98663a46bd07">
+	<property name="ireport.zoom" value="1.9487171000000043"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="titulo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="periodo" class="java.lang.String"/>
+	<field name="codItem" class="java.lang.String"/>
+	<field name="naItem" class="java.lang.String"/>
+	<field name="loteItem" class="java.lang.String"/>
+	<field name="qtdPedido" class="java.math.BigDecimal"/>
+	<field name="qtdLote" class="java.math.BigDecimal"/>
+	<field name="saldoEntregar" class="java.math.BigDecimal"/>
+	<field name="saldoFinalLote" class="java.math.BigDecimal"/>
+	<field name="numPed" class="java.lang.String"/>
+	<field name="loteFaturamento" class="java.lang.String"/>
+	<field name="codEntidade" class="java.lang.String"/>
+	<field name="naEntidade" class="java.lang.String"/>
+	<field name="vidaUtilEntidade" class="java.lang.String"/>
+	<field name="field6" class="java.lang.String"/>
+	<field name="qtdConsumidaLote" class="java.math.BigDecimal"/>
+	<variable name="qtdUtilizadaLote" class="java.math.BigDecimal" resetType="Group" resetGroup="lote" calculation="Sum">
+		<variableExpression><![CDATA[$F{qtdConsumidaLote}]]></variableExpression>
+	</variable>
+	<variable name="qtdMaxSaldo" class="java.math.BigDecimal" resetType="Group" resetGroup="lote" calculation="Highest">
+		<variableExpression><![CDATA[$F{qtdLote}]]></variableExpression>
+	</variable>
+	<variable name="saldoFinalLote" class="java.math.BigDecimal" resetType="Group" resetGroup="lote">
+		<variableExpression><![CDATA[$V{qtdMaxSaldo} - $V{qtdUtilizadaLote}]]></variableExpression>
+	</variable>
+	<group name="lote">
+		<groupExpression><![CDATA[$F{naItem}+$F{loteItem}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band height="13">
+				<textField>
+					<reportElement x="2" y="0" width="56" height="13" isRemoveLineWhenBlank="true" uuid="47133af5-4a10-4a22-bb7e-cf6c1ae33eb0"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{codItem}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="69" y="0" width="193" height="13" uuid="c4a3e4a7-1084-40ec-9308-9384de257d87"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{naItem}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="262" y="0" width="72" height="13" uuid="d5c4c5e2-e63a-482f-a870-f4568049a101"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{loteItem}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="432" y="0" width="76" height="13" uuid="a7bad166-7fa6-4e3d-afd2-bf77b0985919"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{qtdUtilizadaLote}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="334" y="0" width="98" height="13" uuid="6fe0d08e-17a5-4d14-b1d8-852b0c2d376e"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{qtdMaxSaldo}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="508" y="0" width="87" height="13" uuid="074c9c80-5067-4765-8751-61e43371d5ca"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{saldoFinalLote}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement x="2" y="32" width="56" height="13" uuid="14a41829-4ec7-48f5-b23c-dc19d1cdc5df"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Codigo Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="69" y="33" width="193" height="13" uuid="35a1fe62-0b4b-4e83-bbc5-fcc92372989c"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Descrição Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="262" y="32" width="72" height="13" uuid="6cfc47e7-f5a2-43cf-8f43-a926111ec06b"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Lote Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="334" y="32" width="98" height="13" uuid="76afca2b-489d-470f-89bf-66a3821c2b11"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Qtd Inicial Lote]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="432" y="32" width="76" height="13" uuid="1a0ece52-1a25-40b7-a322-ff742e7cd258"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Qtd Utilizada Lote]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="508" y="32" width="87" height="13" uuid="97f72279-4b0e-4386-9bad-d77f7bb9e544"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Saldo Final Lote]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="45" width="595" height="1" uuid="2bde94dd-f933-4e33-9e62-2c70d1c3e7ab"/>
+			</line>
+			<textField>
+				<reportElement x="3" y="0" width="198" height="13" uuid="1d27a6dc-e7e4-4ca2-b5e2-0189377bc9d0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{titulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="265" y="0" width="165" height="13" uuid="ee8d9f88-c27f-46d4-9165-5db037b90546"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

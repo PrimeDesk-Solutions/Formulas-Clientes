@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="teste" pageWidth="283" pageHeight="283" orientation="Landscape" columnWidth="283" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="64a79403-aad3-4c87-a7db-4e59e860613c">
+	<property name="ireport.scriptlethandling" value="2"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="2.7272727272727333"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="191"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="nomeEmpresa" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="enderecoEmpresa" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="bairroEmpresa" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="CNPJ" class="java.lang.String"/>
+	<parameter name="IE" class="java.lang.String"/>
+	<field name="tipo" class="java.lang.String"/>
+	<field name="numFolha" class="java.lang.Integer"/>
+	<field name="totalFolha" class="java.lang.Integer"/>
+	<field name="entidade" class="java.lang.String"/>
+	<field name="endereco" class="java.lang.String"/>
+	<field name="numero" class="java.lang.String"/>
+	<field name="bairro" class="java.lang.String"/>
+	<field name="municipio" class="java.lang.String"/>
+	<field name="uf" class="java.lang.String"/>
+	<field name="cep" class="java.lang.String"/>
+	<field name="nf" class="java.lang.Integer"/>
+	<field name="operacao" class="java.lang.String"/>
+	<field name="despacho" class="java.lang.String"/>
+	<field name="redespacho" class="java.lang.String"/>
+	<field name="item" class="java.lang.String"/>
+	<variable name="paginas" class="java.lang.String">
+		<variableExpression><![CDATA[$F{numFolha}+" / "+$F{totalFolha}]]></variableExpression>
+	</variable>
+	<variable name="paginasMista" class="java.lang.String">
+		<variableExpression><![CDATA["1/1"]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="198" splitType="Stretch">
+			<rectangle radius="4">
+				<reportElement key="rectangle-1" mode="Opaque" x="3" y="4" width="275" height="193" uuid="d094605d-5bbf-4294-8d8d-dc10f9360785"/>
+			</rectangle>
+			<line>
+				<reportElement key="line-4" x="12" y="121" width="260" height="1" uuid="1ba4dd9e-a0e5-49b9-9e79-35642c085d8e"/>
+			</line>
+			<line>
+				<reportElement key="line-5" x="12" y="149" width="260" height="1" uuid="6160c77b-40e5-411b-98e4-00a41bd99fa8"/>
+			</line>
+			<line>
+				<reportElement key="line-6" x="110" y="121" width="1" height="26" uuid="4b81dd60-5673-4b0c-91a6-0eb040df4ffa"/>
+			</line>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-6" x="4" y="52" width="275" height="63" uuid="6af63dfb-8bbc-4366-960c-9c7a3c64cc03"/>
+				<textElement textAlignment="Center">
+					<font size="45" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nf}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-1" x="4" y="3" width="275" height="22" uuid="4a8d5088-5149-4591-b139-2a5cd2408ff3"/>
+				<textElement textAlignment="Center">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Nota Fiscal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" x="12" y="122" width="98" height="14" uuid="efbe1ee5-1ea9-4abb-a5ed-ae49da5b756e"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[DESPACHO:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-8" x="12" y="135" width="97" height="13" uuid="dc3e9163-01b5-4a3c-83b1-dd9b67dee221"/>
+				<textElement>
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{despacho}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-3" x="112" y="121" width="104" height="15" uuid="8ec3b244-2425-4f5f-8c27-934d92a696d2"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[REDESPACHO:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-9" x="112" y="135" width="104" height="13" uuid="fb9434e3-cbae-480d-9a5a-1cb67ec99788"/>
+				<textElement>
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{redespacho}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="12" y="151" width="260" height="25" uuid="22811de7-062d-4bb9-8d38-63c7d766f3f3"/>
+				<textElement>
+					<font size="15" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{entidade}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-4" x="12" y="170" width="260" height="13" uuid="61b2d7fa-c323-45ef-bc0c-c942fa163b7d"/>
+				<textElement textAlignment="Justified">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{endereco} + " " + $F{numero} + " " + $F{bairro}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-5" x="12" y="180" width="260" height="14" uuid="fcb1720a-4094-4e15-95c8-87016c7399ef"/>
+				<textElement textAlignment="Justified">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{municipio} + " - " + $F{uf}+ " " + "CEP: " +$F{cep}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

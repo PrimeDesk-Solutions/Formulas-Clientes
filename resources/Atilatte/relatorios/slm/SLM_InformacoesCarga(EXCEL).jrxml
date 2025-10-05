@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SLM_InformacoesCarga " language="groovy" pageWidth="2551" pageHeight="842" columnWidth="2511" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7f266d05-91eb-405f-bb0c-ccf0638fd480">
+	<property name="ireport.zoom" value="1.3310000000000006"/>
+	<property name="ireport.x" value="2644"/>
+	<property name="ireport.y" value="0"/>
+	<field name="numCarga" class="java.lang.Integer"/>
+	<field name="codVeiculo" class="java.lang.String"/>
+	<field name="nomeVeiculo" class="java.lang.String"/>
+	<field name="codMotorista" class="java.lang.String"/>
+	<field name="nomeMotorista" class="java.lang.String"/>
+	<field name="dataCko" class="java.util.Date"/>
+	<field name="horaCko" class="java.lang.String"/>
+	<field name="userCko" class="java.lang.String"/>
+	<field name="dataCki" class="java.util.Date"/>
+	<field name="horaCki" class="java.lang.String"/>
+	<field name="numDoc" class="java.lang.Integer"/>
+	<field name="dtEmissaoNota" class="java.util.Date"/>
+	<field name="codEntidade" class="java.lang.String"/>
+	<field name="naEntidade" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="13" uuid="3724cb51-26ba-4de6-aced-73b8c9cd53b7"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número Carga]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="13" uuid="c2db1d48-b24c-452d-8482-612d22698184"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código Veículo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="318" height="13" uuid="fb81039d-4de4-470e-a359-6f514b20c0fa"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome Veículo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="518" y="0" width="156" height="13" uuid="cc5eb5de-0ee0-4904-913b-ce055441c62f"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código Motorista]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="674" y="0" width="351" height="13" uuid="8cf5e852-1c59-495e-bd9b-6b52f0c2889e"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome Motorista]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1025" y="0" width="100" height="13" uuid="7b0d9775-aba6-4ecb-ba84-613031a5d09e"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Check-out]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1125" y="0" width="100" height="13" uuid="6da42687-c72b-4332-8eee-10e95c141d68"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hora Check-out]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1225" y="0" width="208" height="13" uuid="80b1de73-86c9-47ae-8e37-e65bc6b94f25"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[User Check-out]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1433" y="0" width="116" height="13" uuid="91694838-4188-4dbe-8b64-a5a0b86061aa"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Check-in]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1549" y="0" width="100" height="13" uuid="9fa6fcda-4023-4043-89d3-a768f1bff33a"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hora Check-in]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1649" y="0" width="110" height="13" uuid="dcf97f9f-7f84-423c-a7fe-86b48f79d8eb"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1759" y="0" width="100" height="13" uuid="42eb5071-1104-4199-beb5-e7715f9db78e"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dt. Emissão Nota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1859" y="0" width="157" height="13" uuid="437d6cc4-2020-41b8-b025-bd69ad407d85"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2016" y="0" width="328" height="13" uuid="b267aeed-08c3-456c-a6c2-6636d75e83ec"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2344" y="0" width="167" height="13" uuid="3605c1c6-d7bd-4068-a6cc-dbc4717cf489"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status de Entrega]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="100" height="13" uuid="a47cc5ee-3e3a-49b9-9ea8-a33047cf24da"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numCarga}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="0" width="100" height="13" uuid="69a89340-470b-40d3-8b8c-38d15f771995"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codVeiculo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="200" y="0" width="318" height="13" uuid="489d4a84-dfb0-4ace-81b7-5d699e57cde9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeVeiculo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="518" y="0" width="156" height="13" uuid="292b9602-2ed1-4015-a2c6-52e1e99f8967"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codMotorista}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="674" y="0" width="351" height="13" uuid="dd13bf01-dc12-4780-aca5-70e53cb30d52"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeMotorista}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="1025" y="0" width="100" height="13" uuid="dd7f532e-62b9-41d0-ac1c-05521797105c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dataCko}]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH.mm" isBlankWhenNull="true">
+				<reportElement x="1125" y="0" width="100" height="13" uuid="d56c4477-a229-4aff-a311-9ec7fd648c84"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{horaCko}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1225" y="0" width="208" height="13" uuid="cba41be7-a6b4-4e73-82fe-ef046136b1cf"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{userCko}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="1433" y="0" width="116" height="13" uuid="2074ecc6-e5ec-49c4-abf1-aa0a6ff90745"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dataCki}]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH.mm" isBlankWhenNull="true">
+				<reportElement x="1549" y="0" width="100" height="13" uuid="ddc833ca-deb5-402f-b513-295093ce4b3f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{horaCki}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="1649" y="0" width="110" height="13" uuid="4eaacf92-c90c-4fe7-90d0-b94553daa35d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numDoc}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="1759" y="0" width="100" height="13" uuid="82f3e401-be2c-4184-9ca1-1a544b45e547"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtEmissaoNota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1859" y="0" width="157" height="13" uuid="b45d7146-be62-4b79-b8b4-653f6770af72"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codEntidade}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="2016" y="0" width="328" height="13" uuid="6e0a97aa-e31c-4a9e-ba0c-e7459a3ef944"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naEntidade}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="2344" y="0" width="167" height="13" uuid="563c7c8f-627c-4533-b4ca-f85c63063a09"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

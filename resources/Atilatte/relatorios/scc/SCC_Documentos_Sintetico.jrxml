@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SITE_DemonstrativoDasComissoes " language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="38d77958-c500-44d3-a837-58351d7925bd">
+	<property name="ireport.zoom" value="1.3636363636363658"/>
+	<property name="ireport.x" value="116"/>
+	<property name="ireport.y" value="33"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="dtIni" class="java.lang.String"/>
+	<parameter name="titulo" class="java.lang.String"/>
+	<field name="descrTipoDoc" class="java.lang.String"/>
+	<field name="numDoc" class="java.lang.Integer"/>
+	<field name="parcela" class="java.lang.String"/>
+	<field name="quita" class="java.lang.Integer"/>
+	<field name="dtEmissao" class="java.util.Date"/>
+	<field name="codEntidade" class="java.lang.String"/>
+	<field name="naEntidade" class="java.lang.String"/>
+	<field name="vencimento" class="java.util.Date"/>
+	<field name="dtCalculo" class="java.util.Date"/>
+	<field name="credito" class="java.util.Date"/>
+	<field name="codRep" class="java.lang.String"/>
+	<field name="naRep" class="java.lang.String"/>
+	<field name="bcComissao" class="java.math.BigDecimal"/>
+	<field name="taxa" class="java.math.BigDecimal"/>
+	<field name="comissao" class="java.math.BigDecimal"/>
+	<field name="codTipoDoc" class="java.lang.String"/>
+	<field name="dtInicio" class="java.lang.String"/>
+	<field name="dtFim" class="java.lang.String"/>
+	<field name="ufEntidade" class="java.lang.String"/>
+	<field name="municipioEntidade" class="java.lang.String"/>
+	<field name="valorDoc" class="java.math.BigDecimal"/>
+	<variable name="totalBaseCalculo" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{bcComissao}]]></variableExpression>
+	</variable>
+	<variable name="totalComissao" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{comissao}]]></variableExpression>
+	</variable>
+	<variable name="totalGeralDoc" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorDoc}]]></variableExpression>
+	</variable>
+	<group name="rep">
+		<groupHeader>
+			<band height="40">
+				<staticText>
+					<reportElement x="1" y="0" width="61" height="20" uuid="0017bd67-7362-4a9a-9a69-35436fce2ea7"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Representante]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="1" y="26" width="78" height="13" uuid="79b1c517-497e-49d1-ac34-56ca0a894cb5"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[REPRESENTANTE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="418" y="26" width="78" height="13" uuid="2abe33cc-e3c9-46d8-97ae-63322d063849"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[BASE CÁLCULO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="496" y="26" width="59" height="13" uuid="f69e334d-20f8-464f-b166-3a8854960ee0"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[COMISSÃO]]></text>
+				</staticText>
+				<line>
+					<reportElement x="1" y="39" width="554" height="1" uuid="1c319469-1e55-49d6-b421-3f62c4316dbf"/>
+				</line>
+				<staticText>
+					<reportElement x="358" y="26" width="60" height="12" uuid="14baff6e-c52c-4032-83ec-1311048fe5ce"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[VALOR DOC]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="24">
+				<staticText>
+					<reportElement x="294" y="4" width="48" height="12" uuid="2ddd2870-c957-428d-9baf-dd6ca8de2640"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Total Geral: ]]></text>
+				</staticText>
+				<line>
+					<reportElement x="310" y="3" width="237" height="1" uuid="7ca1517a-4a8d-4265-ac4e-b211fd442cc8"/>
+				</line>
+				<textField>
+					<reportElement x="418" y="4" width="78" height="20" uuid="215d2276-de19-4521-9234-6dbb91177388"/>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalBaseCalculo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="496" y="4" width="59" height="20" uuid="5beb3502-adbf-407b-97d7-58960b23ba6b"/>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalComissao}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="358" y="3" width="60" height="20" uuid="3fcb5c23-c9ea-4a75-a2a0-00c0359ab0f4"/>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalGeralDoc}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="370" y="0" width="100" height="20" uuid="cb6041e2-cbd6-437b-80ee-882c9a4688f4"/>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="37" height="0" uuid="556d529f-666e-4724-9952-c984c81643f5"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[tipoDoc]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="1" y="0" width="112" height="20" uuid="9f8aeeba-a9d8-45b7-8eac-df36c04f0a55"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codRep}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="496" y="0" width="59" height="20" uuid="8eb2fe9e-e861-4b5b-9657-2ad664affc6b"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{comissao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="418" y="0" width="78" height="20" uuid="0fc146a3-3c57-4600-a05c-70b790943122"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{bcComissao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="358" y="0" width="60" height="20" uuid="76bf8299-5419-426d-b774-adfad4df87ef"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorDoc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="113" y="0" width="197" height="20" uuid="865c7daa-d229-4e02-a082-27cb2fad4d64"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naRep}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

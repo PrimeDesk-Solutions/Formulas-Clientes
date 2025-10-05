@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCV_PedidosAbertosPorRepresentante" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6e3fbb21-78fe-488a-b905-4c34b36001c4">
+	<property name="ireport.zoom" value="1.610510000000001"/>
+	<property name="ireport.x" value="108"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="titulo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<field name="numDoc" class="java.lang.Integer"/>
+	<field name="dtPedido" class="java.util.Date"/>
+	<field name="totDoc" class="java.math.BigDecimal"/>
+	<field name="coRep" class="java.lang.String"/>
+	<field name="naRep" class="java.lang.String"/>
+	<field name="codEntidade" class="java.lang.String"/>
+	<field name="naEntidade" class="java.lang.String"/>
+	<field name="regiao" class="java.lang.String"/>
+	<field name="field2" class="java.lang.String"/>
+	<variable name="totalDoc" class="java.math.BigDecimal" resetType="Group" resetGroup="representante" calculation="Sum">
+		<variableExpression><![CDATA[$F{totDoc}]]></variableExpression>
+	</variable>
+	<variable name="variable2" class="java.lang.String"/>
+	<group name="representante">
+		<groupExpression><![CDATA[$F{coRep}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<staticText>
+				<reportElement x="247" y="0" width="53" height="13" uuid="6d09581a-b4c2-42ef-809e-d7612f7e19c7"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="0" width="50" height="13" uuid="cb844eb6-2940-4f13-ab74-866d4b2525c9"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Data]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="350" y="0" width="75" height="13" uuid="67677e01-e9a7-4f43-bc51-e4d7f5ea8e6d"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Cod Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="425" y="0" width="184" height="13" uuid="5d2c3fca-86f9-4042-9d5c-0b5004b2f668"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Nome Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="609" y="0" width="118" height="13" uuid="f987c0b4-ca82-4c48-807c-6155cf10f102"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Região]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="727" y="0" width="75" height="13" uuid="1c1b6e7a-f9fc-4e1e-a82b-a54df25e64bd"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Total Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="93" height="13" uuid="50c7586e-db3e-410f-a683-97b582ca18a8"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Cod. Representante]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="93" y="0" width="154" height="13" uuid="9a267974-8101-4530-a792-f4b4dd034734"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Representante]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="93" height="13" uuid="7ba50c16-ca1e-4d6d-957a-37cfb8f4dfab"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{coRep}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="93" y="0" width="154" height="13" uuid="9fd2cc58-c518-4fb1-9ad2-56ff673a599a"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naRep}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="247" y="0" width="53" height="13" uuid="3ac12007-995e-4efc-a91b-ec8de8801a63"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numDoc}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="300" y="0" width="50" height="13" uuid="bd4239bd-ad3b-4747-9187-d8b7dd07a4c6"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtPedido}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="727" y="0" width="75" height="13" uuid="581040af-74d1-4cb5-963d-ba03a4783501"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totDoc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="350" y="0" width="75" height="13" uuid="326f432f-e01c-426b-9de1-9ed0265b3709"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codEntidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="425" y="0" width="184" height="13" uuid="7766c1de-12a3-4b95-9c8d-0e9dfb640ba0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naEntidade}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="609" y="0" width="118" height="13" uuid="481b5d90-e746-4cb5-a8f3-baad5112133b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{regiao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="etiquetaApp" language="groovy" pageWidth="283" pageHeight="283" columnWidth="283" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="0005c64b-bbcd-448b-bf4d-eaba1e9d4e2e">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="2.1435888100000016"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="paramSegunda" class="java.lang.Boolean"/>
+	<parameter name="paramTerca" class="java.lang.Boolean"/>
+	<parameter name="paramQuarta" class="java.lang.Boolean"/>
+	<parameter name="paramQuinta" class="java.lang.Boolean"/>
+	<parameter name="paramSexta" class="java.lang.Boolean"/>
+	<parameter name="paramSabado" class="java.lang.Boolean"/>
+	<parameter name="paramDomingo" class="java.lang.Boolean"/>
+	<field name="abm0101taraemb" class="java.math.BigDecimal"/>
+	<field name="ba10entrega" class="java.util.Date"/>
+	<field name="cs20lote" class="java.lang.String"/>
+	<field name="cs20serie" class="java.lang.Integer"/>
+	<field name="abm01codigo" class="java.lang.String"/>
+	<field name="abm01na" class="java.lang.String"/>
+	<field name="abm70qt" class="java.math.BigDecimal"/>
+	<field name="abm70lote" class="java.lang.String"/>
+	<field name="abm14validdias" class="java.lang.Integer"/>
+	<field name="abm70num" class="java.lang.Integer"/>
+	<field name="abm01gtin" class="java.lang.String"/>
+	<field name="imgqrcode" class="java.lang.Object"/>
+	<field name="codbarsam" class="java.lang.String"/>
+	<field name="abm0101cvdnf" class="java.lang.Integer"/>
+	<field name="abm0101taracaixa" class="java.math.BigDecimal"/>
+	<field name="abm01pesobruto" class="java.math.BigDecimal"/>
+	<field name="cs20peso" class="java.math.BigDecimal"/>
+	<field name="abm01pesoliq" class="java.math.BigDecimal"/>
+	<field name="bab01dte" class="java.util.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="abm70peso" class="java.lang.String"/>
+	<field name="pesoBruto" class="java.math.BigDecimal"/>
+	<field name="pesoLiquido" class="java.math.BigDecimal"/>
+	<field name="taraTotal" class="java.math.BigDecimal"/>
+	<field name="taraEmb" class="java.math.BigDecimal"/>
+	<field name="taraCaixa" class="java.math.BigDecimal"/>
+	<field name="imgDataMatrix" class="java.lang.Object"/>
+	<field name="fraseArmazenagem" class="java.lang.String"/>
+	<field name="dtValidadeAjustado" class="java.util.Date"/>
+	<field name="dtFabricacao" class="java.util.Date"/>
+	<field name="codigoDataMatrix" class="java.lang.String"/>
+	<field name="codBarDun14" class="java.lang.String"/>
+	<variable name="taraemb" class="java.math.BigDecimal" resetType="None">
+		<variableExpression><![CDATA[$F{abm0101cvdnf} * $F{abm0101taraemb}]]></variableExpression>
+	</variable>
+	<variable name="taracaixa" class="java.math.BigDecimal" resetType="None">
+		<variableExpression><![CDATA[$F{abm0101taracaixa}]]></variableExpression>
+	</variable>
+	<variable name="taratotal" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{abm0101cvdnf} * $F{abm0101taraemb} + $F{abm0101taracaixa}]]></variableExpression>
+	</variable>
+	<variable name="pesoliquido" class="java.math.BigDecimal" resetType="None">
+		<variableExpression><![CDATA[($F{abm0101cvdnf} * $F{abm01pesobruto}) - ($F{abm0101cvdnf} * $F{abm0101taraemb}) + ($F{abm0101cvdnf} * $F{abm0101taracaixa})]]></variableExpression>
+	</variable>
+	<variable name="Bar1" class="java.lang.String" resetType="None">
+		<variableExpression><![CDATA[$F{codbarsam}]]></variableExpression>
+	</variable>
+	<variable name="pesobruto" class="java.math.BigDecimal" resetType="None">
+		<variableExpression><![CDATA[$F{abm01pesobruto} * $F{abm70qt}]]></variableExpression>
+	</variable>
+	<group name="Grupo" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{abm01codigo}]]></groupExpression>
+		<groupHeader>
+			<band splitType="Stretch"/>
+		</groupHeader>
+		<groupFooter>
+			<band splitType="Stretch"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Prevent"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="201" splitType="Stretch">
+			<rectangle>
+				<reportElement key="rectangle-1" x="4" y="8" width="276" height="193" uuid="ed9ea237-43c6-4d52-a356-653cc0646591"/>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-2" x="227" y="121" width="53" height="42" uuid="4195ffc8-af46-46a0-ba31-35813873aedd"/>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-3" x="4" y="81" width="276" height="19" uuid="d69c84a3-0877-4967-b631-b10864b89406"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-7" x="6" y="101" width="79" height="10" uuid="226397cd-6f64-469f-a1e0-867f102c80c2"/>
+				<textElement verticalAlignment="Top">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[TARA DA EMBALAGEM:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-8" x="6" y="111" width="57" height="10" uuid="a8bd1989-e99e-49d8-af0f-7f81df9d97f5"/>
+				<textElement verticalAlignment="Top">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[TARA DA CAIXA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="6" y="122" width="47" height="9" uuid="95d50e89-7e62-42fa-a7f4-702702eea185"/>
+				<textElement verticalAlignment="Top">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[TARA TOTAL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-10" x="155" y="100" width="56" height="10" uuid="c118729a-bbf7-487d-aeae-7dd164be5694"/>
+				<textElement verticalAlignment="Top">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[PESO BRUTO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-11" x="155" y="110" width="56" height="11" uuid="935ebd9f-f561-4471-8ffb-258e435ce501"/>
+				<textElement verticalAlignment="Top">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[PESO LIQUIDO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-12" x="118" y="101" width="22" height="10" uuid="d81ad47a-e430-4067-ae96-a8f04327d579"/>
+				<textElement verticalAlignment="Top">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[KG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-13" x="97" y="111" width="14" height="10" uuid="131183c8-92cf-4051-8c02-1d4f734be495"/>
+				<textElement verticalAlignment="Top">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[KG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-14" x="241" y="100" width="15" height="10" uuid="a503f27b-09c5-4446-9dbb-ec5c172e1997"/>
+				<textElement verticalAlignment="Top">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[KG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-15" x="91" y="122" width="14" height="9" uuid="b73a5fac-62c3-41b8-9787-08a150eaec13"/>
+				<textElement verticalAlignment="Top">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[KG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-16" x="241" y="110" width="14" height="11" uuid="c47ddd0c-a8fe-4c79-9d90-6b37fae4e7b9"/>
+				<textElement verticalAlignment="Top">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[KG]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement key="rectangle-2" x="4" y="8" width="86" height="73" uuid="d62965d8-d97c-4327-a97d-c71954687720"/>
+			</rectangle>
+			<line>
+				<reportElement x="4" y="136" width="223" height="1" uuid="09dd3b2a-2d56-4b51-8690-016841ac2bb6"/>
+			</line>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-1" x="4" y="9" width="58" height="13" uuid="da08651d-63db-4d69-8bd6-67b7f5849bac"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abm01codigo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0000">
+				<reportElement x="211" y="100" width="30" height="10" uuid="27a45f9d-08e0-4688-9fb2-aa92c79d08ea"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pesoBruto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0000">
+				<reportElement x="211" y="110" width="30" height="11" uuid="53472493-af77-4a23-a425-29ddf409bf06"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pesoLiquido}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0000">
+				<reportElement x="55" y="122" width="35" height="9" uuid="46bfc837-ec2a-4e87-884b-d3975feb7f1b"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{taraTotal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0000">
+				<reportElement x="65" y="111" width="30" height="10" uuid="dccfefee-8d51-4430-950e-56eb64216496"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{taraCaixa}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0000">
+				<reportElement x="87" y="101" width="30" height="10" uuid="a758b01d-87f6-432a-8c09-383743359311"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{taraEmb}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="FillFrame" hAlign="Center" vAlign="Middle">
+				<reportElement x="233" y="122" width="40" height="40" uuid="fb27f399-e569-4b69-b3ac-9f15432cf497"/>
+				<imageExpression><![CDATA[$F{imgDataMatrix}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="4" y="81" width="129" height="18" uuid="01e3778e-30b7-444f-9c70-f899369d5bb3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fraseArmazenagem}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="262" y="85" width="13" height="11" backcolor="#000000" uuid="74f58c91-caf1-43cc-aae6-94cdcf97f03d">
+					<printWhenExpression><![CDATA[$P{paramDomingo}]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="244" y="85" width="13" height="11" backcolor="#000000" uuid="aebe18dc-8477-4e84-a46c-ef3055c4f219">
+					<printWhenExpression><![CDATA[$P{paramSabado}]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="225" y="85" width="13" height="11" backcolor="#000000" uuid="690155e1-0353-46b3-ab16-ceadc4ebaf27">
+					<printWhenExpression><![CDATA[$P{paramSexta}]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="167" y="85" width="13" height="11" backcolor="#000000" uuid="91c50a7e-1a07-42f9-a953-61e220429c13">
+					<printWhenExpression><![CDATA[$P{paramTerca}]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="147" y="85" width="13" height="11" backcolor="#000000" uuid="c6cb9c94-2d3f-4960-b9ef-bee60fb42ddb">
+					<printWhenExpression><![CDATA[$P{paramSegunda}]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="206" y="85" width="13" height="11" backcolor="#000000" uuid="680862c8-87ad-43d1-a8d4-49f26a21f44a">
+					<printWhenExpression><![CDATA[$P{paramQuinta}]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="186" y="85" width="13" height="11" backcolor="#000000" uuid="78f77029-a613-48ac-8dd7-3f967fc5a93f">
+					<printWhenExpression><![CDATA[$P{paramQuarta}]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<textField pattern="##0.0000" isBlankWhenNull="false">
+				<reportElement key="textField-3" x="211" y="64" width="61" height="16" uuid="6ee59068-6824-4df1-98f0-c4eec32f3a76"/>
+				<textElement>
+					<font size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abm70qt}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-2" x="181" y="46" width="38" height="19" uuid="20f6caf1-dbd3-41b2-8eef-e7ae304d3ce2"/>
+				<textElement verticalAlignment="Top">
+					<font size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[LOTE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-3" x="92" y="52" width="42" height="13" uuid="b098eb23-cac6-4c74-889d-f024299e0c86"/>
+				<textElement verticalAlignment="Top">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[DATA FAB: ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="219" y="46" width="55" height="19" uuid="df19fb8f-9550-42dd-998b-3afd8186f714"/>
+				<textElement>
+					<font size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abm70lote}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-4" x="92" y="67" width="42" height="12" uuid="234adb97-97d0-4f7e-a786-88dc2ff339e7"/>
+				<textElement verticalAlignment="Top">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[DATA VAL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-1" x="181" y="64" width="30" height="16" uuid="4dc77a4f-a9da-4d9f-9a27-1b139fc24c9e"/>
+				<textElement verticalAlignment="Top">
+					<font size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[QTD:]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement x="6" y="138" width="221" height="18" uuid="cbe91c49-6b5b-446f-9233-722cf6162ebd"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="EAN128" drawText="false" checksumRequired="false">
+					<jr:codeExpression><![CDATA[$F{codbarsam}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="91" y="18" width="190" height="19" uuid="f0b8d89c-f408-4034-bdcb-cfc861bbf03b"/>
+				<textElement verticalAlignment="Top">
+					<font size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abm01na}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-1" x="91" y="35" width="190" height="13" uuid="28d0b88f-8ac2-4fac-b30f-a9115d592539"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abm01codigo}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement mode="Opaque" x="6" y="10" width="81" height="70" uuid="7585526e-1c80-4da2-96c2-e12293f46a62"/>
+				<imageExpression><![CDATA[$F{imgqrcode}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="6" y="155" width="219" height="9" uuid="d7c929cd-bef5-49c6-8d04-547f101b5892"/>
+				<textElement>
+					<font size="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codbarsam}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="134" y="67" width="46" height="12" uuid="cc311e05-9e4c-46a4-a7d3-dc497e8de685"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtValidadeAjustado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="134" y="52" width="46" height="13" uuid="426551f1-cf36-4746-8c75-135ec47db24a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtFabricacao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="177" y="8" width="100" height="10" uuid="2214005f-2637-43c1-b3b4-bc72838ca0c0"/>
+				<textElement textAlignment="Right">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abm70num}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="6" y="166" width="221" height="16" uuid="2e922759-981f-4512-8dbe-8d5e1e8f1827"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false">
+					<jr:codeExpression><![CDATA[$F{codBarDun14}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField>
+				<reportElement x="6" y="181" width="221" height="13" uuid="f4ea7848-4036-4a00-9170-7e184d1ddcac"/>
+				<textElement>
+					<font size="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codBarDun14}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
