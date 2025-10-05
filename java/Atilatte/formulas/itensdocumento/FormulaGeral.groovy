@@ -1,4 +1,3 @@
-//Teste
 package Atilatte.formulas.itensdocumento;
 
 import java.time.Month;
