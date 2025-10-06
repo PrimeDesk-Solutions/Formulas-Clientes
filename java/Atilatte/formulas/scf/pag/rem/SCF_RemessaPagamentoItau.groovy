@@ -246,7 +246,7 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                     txt.print(StringUtils.extractNumbers(aac10.aac10ni), 15, "0", true);                                                                        //021-035
                     txt.print(aac10.aac10rs, 40, true, true);                                                                                                         //036-075
                     txt.print(abe01.abe01ti, 1);                                                                                                                                          //076-076
-                    txt.print(StringUtils.extractNumbers(abe01.abe01ni), 15, );                                                                         //077-091
+                    txt.print(StringUtils.extractNumbers(abe01.abe01ni), 15);                                                                         //077-091
                     txt.print(abe01.abe01nome, 40)                                                                                                                                         //092-131
                     txt.print(StringUtils.space(1));                                                                                                                                      //132-132
                     txt.print(StringUtils.space(15));                                                                                                                                     //133-147
@@ -270,7 +270,7 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                     txt.print(StringUtils.extractNumbers(aac10.aac10ni), 15, "0", true);                                                                        //021-035
                     txt.print(aac10.aac10rs, 40, true, true);                                                                                                         //036-075
                     txt.print(abe01.abe01ti, 1);                                                                                                                                          //076-076
-                    txt.print(StringUtils.extractNumbers(abe01.abe01ni), 15, );                                                                         //077-091
+                    txt.print(StringUtils.extractNumbers(abe01.abe01ni), 15);                                                                         //077-091
                     txt.print(abe01.abe01nome, 40);                                                                                                                                         //092-131
                     txt.print(tmAbe01.getString("chave_pix"), 77, "0", true);                                                                               //132-208
                     txt.print(StringUtils.space(32));                                                                                                                                     //188-240
