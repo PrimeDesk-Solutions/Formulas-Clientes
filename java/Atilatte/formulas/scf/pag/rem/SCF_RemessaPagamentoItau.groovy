@@ -196,7 +196,8 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                 txt.print(++qtdDetalheLote, 5);                                                                                                                                          //009-013
                 txt.print("J");                                                                                                                                                                  //014-014
                 txt.print("000");                                                                                                                                                               //015-017
-                txt.print(daa01.daa01codBarras, 44);                                                                                                                                    //018-061
+                String codBarras = verificarCodigoDeBarras(daa01.daa01codBarras)
+                txt.print(codBarras, 44);                                                                                                                                    //018-061
                 txt.print(abe01.abe01nome, 30, true, true);                                                                                                         //062-091
                 txt.print(daa01.daa01dtVctoN.format(PATTERN_DDMMYYYY));                                                                                                                         //092-099
                 txt.print(daa01.daa01valor.multiply(new BigDecimal(100)).intValue(), 15);                                                                                           //100-114
@@ -245,7 +246,7 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                     txt.print(StringUtils.extractNumbers(aac10.aac10ni), 15, "0", true);                                                                        //021-035
                     txt.print(aac10.aac10rs, 40, true, true);                                                                                                         //036-075
                     txt.print(abe01.abe01ti, 1);                                                                                                                                          //076-076
-                    txt.print(StringUtils.extractNumbers(abe01.abe01ni), 15, '0', true);                                                                         //077-091
+                    txt.print(StringUtils.extractNumbers(abe01.abe01ni), 15, );                                                                         //077-091
                     txt.print(abe01.abe01nome, 40)                                                                                                                                         //092-131
                     txt.print(StringUtils.space(1));                                                                                                                                      //132-132
                     txt.print(StringUtils.space(15));                                                                                                                                     //133-147
@@ -269,7 +270,7 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                     txt.print(StringUtils.extractNumbers(aac10.aac10ni), 15, "0", true);                                                                        //021-035
                     txt.print(aac10.aac10rs, 40, true, true);                                                                                                         //036-075
                     txt.print(abe01.abe01ti, 1);                                                                                                                                          //076-076
-                    txt.print(StringUtils.extractNumbers(abe01.abe01ni), 15, '0', true);                                                                         //077-091
+                    txt.print(StringUtils.extractNumbers(abe01.abe01ni), 15, );                                                                         //077-091
                     txt.print(abe01.abe01nome, 40);                                                                                                                                         //092-131
                     txt.print(tmAbe01.getString("chave_pix"), 77, "0", true);                                                                               //132-208
                     txt.print(StringUtils.space(32));                                                                                                                                     //188-240
@@ -386,6 +387,29 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
 
                 txt.newLine();
                 contador++;
+
+                /**
+                 * DETALHE - SEGMENTO J-52
+                 */
+                txt.print("341");                                                                                                                                                             //001-003
+                txt.print(numLote, 4);                                                                                                                                                //004-007
+                txt.print("3");                                                                                                                                                               //008-008
+                txt.print(++qtdDetalheLote, 5);                                                                                                                                       //009-013
+                txt.print("J");                                                                                                                                                               //014-014
+                txt.print("000");                                                                                                                                                             //015-017
+                txt.print("52");                                                                                                                                                              //018-019
+                txt.print(aac10.aac10ti == 0 ? "2" : "1");                                                                                                                                    //020-020
+                txt.print(StringUtils.extractNumbers(aac10.aac10ni), 15, "0", true);                                                                        //021-035
+                txt.print(aac10.aac10rs, 40, true, true);                                                                                                         //036-075
+                txt.print(abe01.abe01ti, 1);                                                                                                                                          //076-076
+                txt.print(StringUtils.extractNumbers(abe01.abe01ni), 15);                                                                         //077-091
+                txt.print(abe01.abe01nome, 40)                                                                                                                                         //092-131
+                txt.print(StringUtils.space(1));                                                                                                                                      //132-132
+                txt.print(StringUtils.space(15));                                                                                                                                     //133-147
+                txt.print(StringUtils.space(40));                                                                                                                                     //148-187
+                txt.print(StringUtils.space(53));                                                                                                                                     //188-240
+                txt.newLine();
+                contador++;
             }
         }
 
@@ -423,6 +447,21 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
         txt.print(StringUtils.space(171));                                                                                   //060-230
         txt.print(StringUtils.space(10));                                                                                    //231-240
         txt.newLine();
+
+    }
+    private String verificarCodigoDeBarras(String codBarras){
+        String codAlterado;
+
+        if(codBarras.length() == 44) return codBarras;
+
+        String codBanco = codBarras.substring(0, 3);
+        String codMoeda = codBarras.substring(3,4);
+        String codLivre = codBarras.substring(4, 9) + codBarras.substring(10,20) + codBarras.substring(21,31);
+        String DAC = codBarras.substring(32,33);
+        String fatorVencimento = codBarras.substring(33, 37);
+        String valorTitulo = codBarras.substring(37, 47);
+
+        return codAlterado = codBanco + codMoeda + DAC + fatorVencimento + valorTitulo + codLivre;
 
     }
 }
