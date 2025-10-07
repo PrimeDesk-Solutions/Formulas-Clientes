@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CST_Movimento_Caixa" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dc45b810-02d2-4ea5-85c9-a061714e9360">
-	<property name="ireport.zoom" value="1.464100000000001"/>
+	<property name="ireport.zoom" value="1.771561000000003"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="periodo" class="java.lang.String"/>
@@ -88,7 +88,7 @@
 	<title>
 		<band height="67" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="0" width="96" height="60" uuid="6cb6951a-ddda-4b6b-996c-d3f69eaa547c"/>
+				<reportElement x="0" y="0" width="96" height="66" uuid="6cb6951a-ddda-4b6b-996c-d3f69eaa547c"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="99" y="7" width="258" height="30" uuid="43ed6060-af1a-48e2-b335-652c009b2c62"/>
@@ -107,6 +107,10 @@
 				<reportElement x="99" y="37" width="459" height="29" uuid="d7c58546-f0b4-435c-af56-8cb52e64c899"/>
 				<textFieldExpression><![CDATA[$P{periodo}]]></textFieldExpression>
 			</textField>
+			<image>
+				<reportElement x="0" y="0" width="96" height="66" uuid="a4363f72-4aa3-4a4b-b97a-c8387b64c4ba"/>
+				<imageExpression><![CDATA["C:\\SAM-Servidor\\src\\main\\resources\\Silcon\\relatorios\\srf\\Logo Silcon.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
