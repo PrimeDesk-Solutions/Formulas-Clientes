@@ -105,7 +105,6 @@ public class CST_Movimento_Caixa extends RelatorioBase {
                     "ORDER BY abb11codigo, abf10codigo, dab10data ";
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroLctoIni, parametroDtLctoFin, parametroDepto, parametroNaturezas);
-
     }
 
     private void agruparValores(TableMap dado, TableMap dadoAux){
@@ -125,8 +124,6 @@ public class CST_Movimento_Caixa extends RelatorioBase {
             dadoAux.put("totalDebito", somaDebito);
             dadoAux.put("totalCredito", somaCredito);
             dadoAux.put("saldo", somaDebito + somaCredito);
-
-
         }
     }
 }
