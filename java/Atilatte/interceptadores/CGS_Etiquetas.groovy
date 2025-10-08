@@ -165,7 +165,7 @@ public class CGS_Etiquetas implements ORMInterceptor<sam.model.entities.ab.Abm70
 				def taraTotal = taraEmb + taraCaixa;
 
 				// TableMap com os campos livres da tabela
-				TableMap mapJson = new TableMap()
+				TableMap mapJson = tabela.abm70json != null ? tabela.abm70json : new TableMap()
 
 				mapJson.put("peso_bruto", tabela.abm70qt);
 
