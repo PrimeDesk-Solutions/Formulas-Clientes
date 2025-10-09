@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.HashMap;
 
-public class CGS_InformacoesDeidItens extends RelatorioBase {
+public class CGS_InformacoesDeItens extends RelatorioBase {
     @Override
     public String getNomeTarefa() {
         return "CGS - Informações De Itens";
