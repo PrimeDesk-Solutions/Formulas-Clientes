@@ -3,7 +3,8 @@ package Silcon.servlets
 import br.com.multiorm.ColumnType
 import br.com.multiorm.criteria.criterion.Criterion
 import br.com.multiorm.criteria.criterion.Criterions
-import br.com.multiorm.criteria.join.Joins;
+import br.com.multiorm.criteria.join.Joins
+import com.fasterxml.jackson.core.type.TypeReference;
 import sam.dto.samdev.DashboardMetadata
 import sam.dto.samdev.DashboardMetadata.TipoDashboard
 import sam.model.entities.ab.Abe01
@@ -15,6 +16,7 @@ import sam.core.criteria.ClientCriteriaConvert
 import br.com.multitec.utils.criteria.client.ClientCriterion;
 import br.com.multitec.utils.criteria.client.ClientCriterions;
 import sam.dto.scf.SCF0123MostrarDto
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.LocalDate
 
@@ -59,19 +61,27 @@ public class SCF0123_Servlet extends ServletBase {
         LocalDate dataFinalVcto = LocalDate.parse(httpServletRequest.getParameter("dataFinalVcto"));
         Integer valueRdoReal = Integer.parseInt(httpServletRequest.getParameter("valueRdoReal"));
         Integer valueRdoPrevisao = Integer.parseInt(httpServletRequest.getParameter("valueRdoPrevisao"));
+        String idsAbe01 = httpServletRequest.getParameter("idsAbe01");
+        String idsAah01 = httpServletRequest.getParameter("idsAah01");
+        ObjectMapper mapper = new ObjectMapper();
 
 
         Criterion critAah01;
         if (valueChkTipoDoc == 1) {
-            if (codTipoDocIni != null && codTipoDocFin != null) {
-                critAah01 = Criterions.between("aah01codigo", codTipoDocIni, codTipoDocFin);
-            } else if (codTipoDocIni != null) {
-                critAah01 = Criterions.ge("aah01codigo", codTipoDocIni);
-            } else if (codTipoDocFin != null) {
-                critAah01 = Criterions.le("aah01codigo", codTipoDocFin);
-            } else {
-                critAah01 = Criterions.isTrue();
+            if(idsAah01 != null && idsAah01.replace('"', "") != codTipoDocIni){
+                critAah01 = Criterions.in("aah01id", mapper.readValue(idsAah01, new TypeReference<List<Long>>() {}));
+            }else{
+                if (codTipoDocIni != null && codTipoDocFin != null) {
+                    critAah01 = Criterions.between("aah01codigo", codTipoDocIni, codTipoDocFin);
+                } else if (codTipoDocIni != null) {
+                    critAah01 = Criterions.ge("aah01codigo", codTipoDocIni);
+                } else if (codTipoDocFin != null) {
+                    critAah01 = Criterions.le("aah01codigo", codTipoDocFin);
+                } else {
+                    critAah01 = Criterions.isTrue();
+                }
             }
+
         } else {
             critAah01 = Criterions.isTrue();
         }
@@ -109,14 +119,18 @@ public class SCF0123_Servlet extends ServletBase {
 
         Criterion critAbe01;
         if(valueChkEntidade == 1){
-            if(codEntidadeIni != null && codEntidadeFin != null){
-                critAbe01 = Criterions.between("abe01.abe01codigo", codEntidadeIni, codEntidadeFin);
-            }else if(codEntidadeIni != null){
-                critAbe01 = Criterions.ge("abe01.abe01codigo", codEntidadeIni);
-            }else if(codEntidadeFin != null){
-                critAbe01 = Criterions.le("abe01.abe01codigo", codEntidadeFin);
+            if(idsAbe01 != null && idsAbe01.replace('"', "") != codEntidadeIni ){
+                critAbe01 = Criterions.in("abe01.abe01id", mapper.readValue(idsAbe01, new TypeReference<List<Long>>() {}))
             }else{
-                critAbe01 = Criterions.isTrue();
+                if(codEntidadeIni != null && codEntidadeFin != null){
+                    critAbe01 = Criterions.between("abe01.abe01codigo", codEntidadeIni, codEntidadeFin);
+                }else if(codEntidadeIni != null){
+                    critAbe01 = Criterions.ge("abe01.abe01codigo", codEntidadeIni);
+                }else if(codEntidadeFin != null){
+                    critAbe01 = Criterions.le("abe01.abe01codigo", codEntidadeFin);
+                }else{
+                    critAbe01 = Criterions.isTrue();
+                }
             }
         }else{
             critAbe01 = Criterions.isTrue();
