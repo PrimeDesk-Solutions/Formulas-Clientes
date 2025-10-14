@@ -927,16 +927,22 @@ public class PedidoDeAmostraGratisGeral extends FormulaBase {
         /*
             DIFAL = (Aliquota interna RJ−Alıiquota interestadual) × Base de Calculo
          */
-        if(!dentroEstado){
-            BigDecimal icmsInterestadual = jsonEaa0103.getBigDecimal_Zero("icms");
+        if(eaa0102.eaa0102consFinal == 1){
+            if(!dentroEstado){
+                BigDecimal icmsInterestadual = jsonEaa0103.getBigDecimal_Zero("icms");
 
-            BigDecimal icmsInterno = (eaa0103.eaa0103totDoc * (jsonAag02Ent.getBigDecimal_Zero("txicminterna") / 100)).round(2);
+                BigDecimal icmsInterno = (eaa0103.eaa0103totDoc * (jsonAag02Ent.getBigDecimal_Zero("txicminterna") / 100)).round(2);
 
-            BigDecimal difal = (icmsInterno - icmsInterestadual).round(2);
+                BigDecimal difal = (icmsInterno - icmsInterestadual).round(2);
 
-            jsonEaa0103.put("vlr_difal", difal + jsonEaa0103.getBigDecimal_Zero("vlr_icms_fcp_"));
-
+                jsonEaa0103.put("vlr_difal", difal + jsonEaa0103.getBigDecimal_Zero("vlr_icms_fcp_"));
+                jsonEaa0103.put("aliq_icms_inter", jsonAag02Ent.getBigDecimal_Zero("txicminterna"))
+            }
+        }else{
+            jsonEaa0103.put("vlr_difal", new BigDecimal(0));
+            jsonEaa0103.put("aliq_icms_inter", new BigDecimal(0));
         }
+
     }
 
     private void calcularCargaTributaria(){
