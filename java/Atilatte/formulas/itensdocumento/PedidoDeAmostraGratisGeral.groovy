@@ -359,6 +359,9 @@ public class PedidoDeAmostraGratisGeral extends FormulaBase {
                 // Troca o primeiro digito do CFOP, caso fora do estado
                 trocarPrimeiroDigitoCFOP(dentroEstado, aaj15_cfop.aaj15codigo);
 
+                // Fundo de Combate a pobreza
+                calcularFundoDeCombatePobreza();
+
                 //Total do Documento sem ST
                 //Total Doc = Total Item + IPI + Frete + Seguro + Outras Despesas + ICMS ST - Desconto incond
                 eaa0103.eaa0103totDoc = (eaa0103.eaa0103total +
@@ -436,6 +439,9 @@ public class PedidoDeAmostraGratisGeral extends FormulaBase {
                 // Calcula ICMS ST dos Itens
                 calcularIcmsST();
 
+                // Fundo de Combate a pobreza
+                calcularFundoDeCombatePobreza();
+
                 // CFOP
                 definirCFOP();
 
@@ -466,7 +472,7 @@ public class PedidoDeAmostraGratisGeral extends FormulaBase {
                 eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
 
                 // Calcula Difal dos Itens
-                calcularDifal(dentroEstado);
+                calcularDifal(dentroEstado)
 
                 // Preenche os SPEDs dos Itens
                 preencherSPED();
@@ -537,8 +543,11 @@ public class PedidoDeAmostraGratisGeral extends FormulaBase {
                 //Verifica se o PCD gera financeiro e cria valor no campo Total Financ.
                 eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc
 
+                // Fundo de Combate a pobreza
+                calcularFundoDeCombatePobreza();
+
                 // Calcula Difal dos Itens
-                calcularDifal(dentroEstado);
+                calcularDifal(dentroEstado)
 
                 // Preenche os SPEDs dos Itens
                 preencherSPED();
@@ -907,7 +916,13 @@ public class PedidoDeAmostraGratisGeral extends FormulaBase {
             }
         }
     }
-
+    private calcularFundoDeCombatePobreza(){
+        if(jsonAbm1001_UF_Item.getBigDecimal_Zero("_fcp") > 0 ){
+            jsonEaa0103.put("bc_fcp", jsonEaa0103.getBigDecimal_Zero("bc_icms_st"));
+            jsonEaa0103.put("icms_fcp_", jsonAbm1001_UF_Item.getBigDecimal_Zero("_fcp"));
+            jsonEaa0103.put("vlr_icms_fcp_", (jsonEaa0103.getBigDecimal_Zero("bc_fcp") * jsonEaa0103.getBigDecimal_Zero("icms_fcp_") / 100).round(2));
+        }
+    }
     private calcularDifal(def dentroEstado){
         /*
             DIFAL = (Aliquota interna RJ−Alıiquota interestadual) × Base de Calculo
@@ -919,7 +934,7 @@ public class PedidoDeAmostraGratisGeral extends FormulaBase {
 
             BigDecimal difal = (icmsInterno - icmsInterestadual).round(2);
 
-            jsonEaa0103.put("vlr_difal", difal);
+            jsonEaa0103.put("vlr_difal", difal + jsonEaa0103.getBigDecimal_Zero("vlr_icms_fcp_"));
 
         }
     }
