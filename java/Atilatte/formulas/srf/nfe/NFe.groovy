@@ -400,27 +400,27 @@ class NFe extends FormulaBase {
 
 			String ie = eaa01.eaa0102DadosGerais != null && eaa01.eaa0102DadosGerais.eaa0102contribIcms == 0 ? null : NFeUtils.formatarIE(despacho.abe01ie);
 			//if(ie != null && !ie.equals("ISENTO")) {
-				StringBuilder endereco = new StringBuilder();
-				if(endDespPrincipal.abe0101endereco != null) endereco.append(endDespPrincipal.abe0101endereco);
-				if(endDespPrincipal.abe0101numero != null) endereco.append("," + endDespPrincipal.abe0101numero);
-				if(endDespPrincipal.abe0101bairro != null) endereco.append("-" + endDespPrincipal.abe0101bairro);
-				if(endDespPrincipal.abe0101complem != null) endereco.append("-" + endDespPrincipal.abe0101complem);
-				transporta.addNode("xEnder", endereco.toString().trim(), false, 60);
+			StringBuilder endereco = new StringBuilder();
+			if(endDespPrincipal.abe0101endereco != null) endereco.append(endDespPrincipal.abe0101endereco);
+			if(endDespPrincipal.abe0101numero != null) endereco.append("," + endDespPrincipal.abe0101numero);
+			if(endDespPrincipal.abe0101bairro != null) endereco.append("-" + endDespPrincipal.abe0101bairro);
+			if(endDespPrincipal.abe0101complem != null) endereco.append("-" + endDespPrincipal.abe0101complem);
+			transporta.addNode("xEnder", endereco.toString().trim(), false, 60);
 
-				if(endDespPrincipal.abe0101municipio == null) {
-					transporta.addNode("xMun", null, false);
-					transporta.addNode("UF", null, false);
+			if(endDespPrincipal.abe0101municipio == null) {
+				transporta.addNode("xMun", null, false);
+				transporta.addNode("UF", null, false);
+			}else {
+				Aag02 aag02 = getAcessoAoBanco().buscarRegistroUnicoById("Aag02", endDespPrincipal.abe0101municipio.aag0201uf.aag02id);
+				if(aag02.aag02uf.equals("EX")) {
+					transporta.addNode("xMun", "EXTERIOR", false);
+					transporta.addNode("UF", "EX", false);
 				}else {
-					Aag02 aag02 = getAcessoAoBanco().buscarRegistroUnicoById("Aag02", endDespPrincipal.abe0101municipio.aag0201uf.aag02id);
-					if(aag02.aag02uf.equals("EX")) {
-						transporta.addNode("xMun", "EXTERIOR", false);
-						transporta.addNode("UF", "EX", false);
-					}else {
-						transporta.addNode("xMun", endDespPrincipal.abe0101municipio.aag0201nome, false, 60);
-						Aag02 uf = getAcessoAoBanco().buscarRegistroUnicoById("Aag02", endDespPrincipal.abe0101municipio.aag0201uf.aag02id);
-						transporta.addNode("UF", uf.aag02uf, false);
-					}
+					transporta.addNode("xMun", endDespPrincipal.abe0101municipio.aag0201nome, false, 60);
+					Aag02 uf = getAcessoAoBanco().buscarRegistroUnicoById("Aag02", endDespPrincipal.abe0101municipio.aag0201uf.aag02id);
+					transporta.addNode("UF", uf.aag02uf, false);
 				}
+			}
 			//}
 		}
 
@@ -1586,7 +1586,7 @@ class NFe extends FormulaBase {
 					if(idDest == 2 && eaa01.eaa0102DadosGerais.eaa0102contribIcms == 0 && indIEDest == 9 && !temISS){
 						ICMSUFDest = imposto.addNode("ICMSUFDest");
 						ICMSUFDest.addNode("vBCUFDest", getCampo("245a.03-NA03","vBCUFDest") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245a.03-NA03","vBCUFDest")), 2, false), true);
-						ICMSUFDest.addNode("vBCFCPUFDest", getCampo("245a.04-NA04","vBCFCPUFDest") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245a.04-NA04","vBCFCPUFDest")), 2, true), false);
+						ICMSUFDest.addNode("vBCFCPUFDest", getCampo("245a.04-NA04","vBCFCPUFDest") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245a.04-NA04","vBCFCPUFDest")), 2, false), false);
 						ICMSUFDest.addNode("pFCPUFDest", getCampo("245a.05-NA05","pFCPUFDest") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245a.05-NA05","pFCPUFDest")), 2, false), true);
 						ICMSUFDest.addNode("pICMSUFDest", getCampo("245a.07-NA07","pICMSUFDest") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245a.07-NA07","pICMSUFDest")), 2, false), true);
 						ICMSUFDest.addNode("pICMSInter", getCampo("245a.09-NA09","pICMSInter") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245a.09-NA09","pICMSInter")), 2, false), true);
@@ -2034,4 +2034,3 @@ class NFe extends FormulaBase {
 		return getAcessoAoBanco().obterBigDecimal(sql, criarParametroSql("eaa01id", eaa01id));
 	}
 }
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjgifQ==

@@ -938,6 +938,7 @@ public class PedidoDeAmostraGratisGeral extends FormulaBase {
                 jsonEaa0103.put("bc_difal", eaa0103.eaa0103total);
                 jsonEaa0103.put("aliq_icms_inter", jsonAag02Ent.getBigDecimal_Zero("txicminterna"));
                 jsonEaa0103.put("vlr_difal", difal + jsonEaa0103.getBigDecimal_Zero("vlr_icms_fcp_"));
+                jsonEaa0103.put("icms_inter_part", 100);
             }
         }else{
             jsonEaa0103.put("bc_difal", new BigDecimal(0));

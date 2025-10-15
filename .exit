@@ -1,0 +1,125 @@
+[33mcommit 579ef3732354cb44b3564a2bcf6abd9c375b4bab[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Wed Oct 15 09:28:14 2025 -0300
+
+    Alterado formula PedidoDeAmostraGratisGeral.groovy
+
+[33mcommit 1762dcd8273aaf88731ec700e8bb523cfb73bc6e[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Tue Oct 14 16:23:14 2025 -0300
+
+    Atilatte: Alteração calculo DIFAL na formula Pedido De Mostra Grátis; Silcon: Arquivo impressão Boleto
+
+[33mcommit d5c0fbe5585aae60423fde4befd3b3c0ae0c6a6a[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Tue Oct 14 15:05:26 2025 -0300
+
+    Alteração formula financeiro Silcon (Formula Nosso número e Remessa)
+
+[33mcommit 9c4f371f0dff98c9c5d4a259c6fa1b82fe004c3b[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Tue Oct 14 14:40:31 2025 -0300
+
+    Alterado formula PedidoDeAmostraGratisGeral.groovy
+
+[33mcommit 473080462067d681f75209abd4d25330e2138395[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Tue Oct 14 13:32:13 2025 -0300
+
+    Alterado cálculo DIFAL
+
+[33mcommit b2d2a06c5be9d98a8bae17da7ce82981c2954d2a[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Tue Oct 14 10:14:21 2025 -0300
+
+    Desenvolvido Formula NFCe.groovy
+
+[33mcommit b22ded6e92745d847317e0bf37c47b4f6e9070a1[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Tue Oct 14 09:26:17 2025 -0300
+
+    Alterado formulas de parcelamento devido a nova atualização do SAM 4 4.01.326
+
+[33mcommit 496ee4902d0ce67bbbf7728ab4b31cc91c728e51[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Tue Oct 14 07:31:59 2025 -0300
+
+    Desenvolvido relatório customizado CST_Documentos_Ordenados_Por_Valor.groovy
+
+[33mcommit 617ca589b3470f3917d09c99ca3e89d11fcb3777[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Sun Oct 12 22:13:28 2025 -0300
+
+    Desenvolvimento arquivos parte bancária
+
+[33mcommit 9c3ecd2dc61e2d820d44d1142c0c5e277c418811[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Fri Oct 10 10:42:13 2025 -0300
+
+    Alteração Servlet SCF0123_Servlet.groovy
+
+[33mcommit fbcbe91f5671e4a5f8252623fea91ad5930c01c9[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Thu Oct 9 17:35:25 2025 -0300
+
+    Commit servlet Silcon
+
+[33mcommit 88912ae858cd8a87ac5350df6cfc3ee4a5588540[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Wed Oct 8 15:21:54 2025 -0300
+
+    Alterado Interceptador de Etiquetas
+
+[33mcommit f14fe31b0666ec8c2ceb95f9642e7beb11fb1e85[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Tue Oct 7 11:02:08 2025 -0300
+
+    Inserido logo da empresa no jasper CST_Movimento_Caixa
+
+[33mcommit 2b5fb22e89e441a4c398a8c9fd91306bffabaf2d[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Tue Oct 7 10:57:53 2025 -0300
+
+    Enviando os arquivos .jasper
+
+[33mcommit 5da19e420abce87c0348471699fdb05fd859fb3e[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Tue Oct 7 10:27:54 2025 -0300
+
+    Removido linhas em branco relatório customizado CST - Movimento Caixa
+
+[33mcommit 200e4b7f12990ad1508dfc1cbdce6c13ed5eed1e[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Tue Oct 7 10:25:41 2025 -0300
+
+    Desenvolvido relatório customizado CST - Movimento Caixa
+
+[33mcommit 28c35a54022c70628f4eaaa039c0d0f9855c861e[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Tue Oct 7 10:20:55 2025 -0300
+
+    Desenvolvido Relatório Custoizado CST - Movimento Caixa
+
+[33mcommit cbb0369a6e7a25cae688a9967c4ce6bee0a57846[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Mon Oct 6 12:39:16 2025 -0300
+
+    Removido linhas com erros
+
+[33mcommit 4fc69b0023f3343879f56fd354483a50203ef1ce[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Mon Oct 6 12:23:54 2025 -0300
+
+    Alterado formula de remessa de cobrança itaú
+
+[33mcommit e83701ce72fb71c73016038ef3b06aca94d85855[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Sun Oct 5 13:06:02 2025 -0300
+
+    Retirado comentário teste
+
+[33mcommit 2ae84e58fc7aaf0bab1d9f333e7ef014631a8888[m
+Author: Leonardo Ledo <leonardoledo169@gmail.com>
+Date:   Sun Oct 5 12:47:06 2025 -0300
+
+    teste
