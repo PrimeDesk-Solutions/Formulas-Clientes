@@ -1,4 +1,4 @@
-package Silcon.formulas.scf.rem.cob
+package Silcon.formulas.scf.cob.rem
 
 import br.com.multiorm.ColumnType
 import br.com.multiorm.criteria.criterion.Criterions
