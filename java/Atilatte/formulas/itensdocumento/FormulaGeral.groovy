@@ -362,7 +362,6 @@ public class FormulaGeral extends FormulaBase {
                 calcularICMS(dentroEstado, grupo);
 
                 // Calcula ICMS ST dos Itens
-
                 calcularIcmsST();
 
                 // Calcula Fundo de combate a pobreza
@@ -622,7 +621,6 @@ public class FormulaGeral extends FormulaBase {
         return grupo;
 
     }
-
     private void definirPrecoUnitarioItem(){
         if(abb01.abb01operAutor != "SRF"){
             if(eaa01.eaa01tp != null){
@@ -1011,7 +1009,6 @@ public class FormulaGeral extends FormulaBase {
         }
 
     }
-
     private calcularFundoDeCombatePobreza(){
         if(jsonAbm1001_UF_Item.getBigDecimal_Zero("_fcp") > 0 ){
             jsonEaa0103.put("bc_fcp", jsonEaa0103.getBigDecimal_Zero("bc_icms_st"));
@@ -1019,6 +1016,31 @@ public class FormulaGeral extends FormulaBase {
             jsonEaa0103.put("vlr_icms_fcp_", (jsonEaa0103.getBigDecimal_Zero("bc_fcp") * jsonEaa0103.getBigDecimal_Zero("icms_fcp_") / 100).round(2));
         }
     }
+    private calcularDifal(def dentroEstado){
+        /*
+            DIFAL = (Aliquota interna RJ−Alıiquota interestadual) × Base de Calculo
+         */
+        if((eaa0102.eaa0102consFinal == 1 && eaa0102.eaa0102contribIcms == 0) || (eaa0102.eaa0102consFinal == 0 && eaa0102.eaa0102contribIcms == 0 )){
+            if(!dentroEstado){
+                BigDecimal icmsInterestadual = jsonEaa0103.getBigDecimal_Zero("icms");
+
+                BigDecimal icmsInterno = (eaa0103.eaa0103totDoc * (jsonAag02Ent.getBigDecimal_Zero("txicminterna") / 100)).round(2);
+
+                BigDecimal difal = (icmsInterno - icmsInterestadual).round(2);
+
+                jsonEaa0103.put("bc_difal", eaa0103.eaa0103total);
+                jsonEaa0103.put("aliq_icms_inter", jsonAag02Ent.getBigDecimal_Zero("txicminterna"));
+                jsonEaa0103.put("vlr_difal", difal + jsonEaa0103.getBigDecimal_Zero("vlr_icms_fcp_"));
+                jsonEaa0103.put("icms_inter_part", 100);
+            }
+        }else{
+            jsonEaa0103.put("bc_difal", new BigDecimal(0));
+            jsonEaa0103.put("aliq_icms_inter", new BigDecimal(0));
+            jsonEaa0103.put("vlr_difal", new BigDecimal(0));
+        }
+
+    }
+
     private calcularReducaoStBeneficiada(){
         // Calculo de redução da base de ICMS solicitado pela Deyse 31/03/2025
         def vlrReducaoST = new BigDecimal(0);
@@ -1132,65 +1154,6 @@ public class FormulaGeral extends FormulaBase {
                 }
             }
 
-        }
-    }
-    private calcularDifal(def dentroEstado){
-
-        if(!dentroEstado){
-            if(ufEnt.aag02uf == 'RJ'){
-                if(jsonEaa0103.getBigDecimal_Zero("bc_fcp") > 0 && jsonEaa0103.getBigDecimal_Zero("vlr_icms_fcp_") > 0 && jsonEaa0103.getBigDecimal_Zero("icms_st") > 0){
-                    // Aliquota fundo combate a pobreza (Rio de Janeiro)
-                    jsonEaa0103.put("icms_fcp_",2);
-
-                    //Calculo Fundo de Combate a Pobreza
-                    jsonEaa0103.put("vlr_fcp_difal_", jsonEaa0103.getBigDecimal_Zero("venda_liquida") * jsonEaa0103.getBigDecimal_Zero("icms_st_rep_ded") / 100);
-                }else{
-                    // Aliquota fundo combate a pobreza (Rio de Janeiro)
-                    jsonEaa0103.put("icms_fcp_",0.000000);
-
-                    //Calculo Fundo de Combate a Pobreza
-                    jsonEaa0103.put("vlr_fcp_difal_",0.000000);
-                }
-            }
-
-            if(ufEnt.aag02uf == 'AL'){
-                // Aliquota fundo combate a pobreza (Alagoas)
-                jsonEaa0103.put("icms_fcp_", 1);
-
-                //Calculo Fundo de Combate a Pobreza
-                jsonEaa0103.put("vlr_fcp_difal_", jsonEaa0103.getBigDecimal_Zero("bc_icms_dest") * jsonEaa0103.getBigDecimal_Zero("icms_st_rep_ded") / 100);
-            }
-
-            if(abe01.abe01contribIcms == 0){
-                //Diferencial de Alíquota
-                def difDestino = 0
-                def difOrigem = 0
-                // Bc de ICMS Destino
-                jsonEaa0103.put("bc_icms_dest", jsonEaa0103.getBigDecimal_Zero("bc_icms"));
-
-                // Aliquota de ICMS Destino
-                jsonEaa0103.put("_icms_dest", jsonAag02Ent.getBigDecimal_Zero("txicminterna"));
-
-                // Teste ICMS Part
-                jsonEaa0103.put("icms_inter_part",100);
-
-                // Diferencial de Aliquota
-                def difAliq = jsonEaa0103.getBigDecimal_Zero("_icms_dest") - jsonEaa0103.getBigDecimal_Zero("_icms");
-
-                if(difAliq < 0 ){
-                    difAliq = (difAliq * -1);
-                }
-
-                difDestino = jsonEaa0103.getBigDecimal_Zero("bc_icms_dest");
-                jsonEaa0103.put("_dif_dest", 100);
-
-                // Valor Diferencial Origem
-                jsonEaa0103.put("vlr_icms_origem", 0.000000 );
-
-                // Valor diferencial aliquota destino
-                jsonEaa0103.put("vlr_icms_dest", jsonEaa0103.getBigDecimal_Zero("bc_icms_dest") * (difAliq / 100));
-
-            }
         }
     }
 

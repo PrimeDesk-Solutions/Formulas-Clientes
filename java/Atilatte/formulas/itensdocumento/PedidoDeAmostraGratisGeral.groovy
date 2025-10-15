@@ -927,7 +927,7 @@ public class PedidoDeAmostraGratisGeral extends FormulaBase {
         /*
             DIFAL = (Aliquota interna RJ−Alıiquota interestadual) × Base de Calculo
          */
-        if(eaa0102.eaa0102consFinal == 1){
+        if((eaa0102.eaa0102consFinal == 1 && eaa0102.eaa0102contribIcms == 0) || (eaa0102.eaa0102consFinal == 0 && eaa0102.eaa0102contribIcms == 0 )){
             if(!dentroEstado){
                 BigDecimal icmsInterestadual = jsonEaa0103.getBigDecimal_Zero("icms");
 
