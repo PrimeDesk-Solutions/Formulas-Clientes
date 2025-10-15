@@ -38,26 +38,27 @@ public class SCF_Historico_Lancamento_Nat extends RelatorioBase {
 		String idNaturezaIni = getString("naturezaIni");
 		String idNaturezaFin = getString("naturezaFin");
 		LocalDate[] dataPeriodo = getIntervaloDatas("periodo");
-		
+		Integer impressao = getInteger("impressao");
+
 		params.put("TITULO_RELATORIO", "SCF - Histórico Lançamentos Por Natureza");
 		params.put("EMPRESA", getVariaveis().getAac10().getAac10na());
 		params.put("PERIODO", "Período: " + dataPeriodo[0].format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString() + " à " + dataPeriodo[1].format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
 
 		String estrutura = getSession().createCriteria(Aba01.class)
-		.addFields("aba01conteudo")
-		.addWhere(Criterions.eq("aba01aplic", "ABF10"))
-		.addWhere(Criterions.eq("aba01param", "ESTRNATUREZA"))
-		.addWhere(getSamWhere().getCritPadrao(Aba01.class))
-		.get(ColumnType.STRING);
+				.addFields("aba01conteudo")
+				.addWhere(Criterions.eq("aba01aplic", "ABF10"))
+				.addWhere(Criterions.eq("aba01param", "ESTRNATUREZA"))
+				.addWhere(getSamWhere().getCritPadrao(Aba01.class))
+				.get(ColumnType.STRING);
 
 		List<Integer> grupos = new ArrayList<>();
 		getEstrutura(estrutura, grupos, 0);
-		
+
 		int tamanhoTotal = grupos.get(grupos.size() - 1);
 		params.put("TAMANHO_NAT", tamanhoTotal);
-		
+
 		List<TableMap> lancamentos = buscarLancamentosPorNatureza(dataPeriodo, idContaCorrente, idNaturezaIni,idNaturezaFin);
-		
+
 		for (int i = lancamentos.size(); i > 0 ; i--) {
 			int index = i - 1;
 			if(index < 0) continue;
@@ -65,24 +66,24 @@ public class SCF_Historico_Lancamento_Nat extends RelatorioBase {
 			int indexOfAbf10 = grupos.indexOf(abf10codigo.length());
 			String abf10codigoPai = null;
 			if(abf10codigo.length() > grupos.get(0)) {
-					int indexWhileGrupo = indexOfAbf10;
-					int indexWhileList = index;
-					while (abf10codigoPai == null || abf10codigoPai.length() > grupos.get(0)) {
-						indexWhileGrupo = indexWhileGrupo - 1;
-						abf10codigoPai = StringUtils.ajustString(abf10codigo, grupos.get(indexWhileGrupo));
-						TableMap tm = null;
-						if(index > 0) tm = lancamentos.get(index - 1);
-						if(tm != null && (indexWhileGrupo == 0 || tm.getString("abf10codigo").length() == grupos.get(0) || tm.getString("abf10codigo").substring(0, grupos.get(indexWhileGrupo)).equalsIgnoreCase(abf10codigoPai))) continue;
-						TableMap abf10Pai = getSession().createQuery(" SELECT abf10codigo, abf10nome FROM Abf10 WHERE abf10codigo LIKE :abf10codigoPai " + getSamWhere().getWherePadrao("AND", Abf10.class)).setParameter("abf10codigoPai", abf10codigoPai).getUniqueTableMap();
-						if (abf10Pai == null) interromper("A Natureza " + abf10codigo + " não corresponde a estrutura informada no parametro TAMANHO_NAT");
-						int indexOf = lancamentos.indexOf(lancamentos.get(indexWhileList));
-						lancamentos.add(indexOf, abf10Pai);
+				int indexWhileGrupo = indexOfAbf10;
+				int indexWhileList = index;
+				while (abf10codigoPai == null || abf10codigoPai.length() > grupos.get(0)) {
+					indexWhileGrupo = indexWhileGrupo - 1;
+					abf10codigoPai = StringUtils.ajustString(abf10codigo, grupos.get(indexWhileGrupo));
+					TableMap tm = null;
+					if(index > 0) tm = lancamentos.get(index - 1);
+					if(tm != null && (indexWhileGrupo == 0 || tm.getString("abf10codigo").length() == grupos.get(0) || tm.getString("abf10codigo").substring(0, grupos.get(indexWhileGrupo)).equalsIgnoreCase(abf10codigoPai))) continue;
+					TableMap abf10Pai = getSession().createQuery(" SELECT abf10codigo, abf10nome FROM Abf10 WHERE abf10codigo LIKE :abf10codigoPai " + getSamWhere().getWherePadrao("AND", Abf10.class)).setParameter("abf10codigoPai", abf10codigoPai).getUniqueTableMap();
+					if (abf10Pai == null) interromper("A Natureza " + abf10codigo + " não corresponde a estrutura informada no parametro TAMANHO_NAT");
+					int indexOf = lancamentos.indexOf(lancamentos.get(indexWhileList));
+					lancamentos.add(indexOf, abf10Pai);
 				}
 				if(index == 0) i++;
 			}
 		}
-		
-		
+
+
 
 		List<TableMap> dados = new ArrayList<>();
 		for (lcto in lancamentos) {
@@ -94,22 +95,22 @@ public class SCF_Historico_Lancamento_Nat extends RelatorioBase {
 			tm.put("dab01nome", lcto.getString("dab01nome"));
 			tm.put("dab10historico", lcto.getString("dab10historico"));
 			if (lcto.getString("abf10codigo").length() ==  tamanhoTotal) tm.put("es", lcto.getInteger("dab10mov").equals(0) ? "E" : "S");
-			
+
 			BigDecimal valor = lcto.getBigDecimal("dab10011valor");
 			if(lcto.getInteger("dab10mov") == 1) {
 				valor = valor.multiply(new BigDecimal(-1));
 			}
 			tm.put("valor", valor);
-			
+
 			if(lcto.getString("abf10codigo").length() > grupos.get(0)) {
 				int indexOf = grupos.indexOf(lcto.getString("abf10codigo").length()) - 1;
 				tm.put("pai", lcto.getString("abf10codigo").substring(0, grupos.get(indexOf)));
 			}
-			
+
 			dados.add(tm);
 		}
-		
-		for(TableMap dado : dados) {			
+
+		for(TableMap dado : dados) {
 			if(dado.getString("pai") != null && dado.getString("abf10codigo").length() == tamanhoTotal) {
 				TableMap pai = dados.stream().filter({ d -> d.getString("abf10codigo").equalsIgnoreCase(dado.getString("pai"))}).findFirst().get();
 				BigDecimal valor = pai.getBigDecimal("valor") == null ? BigDecimal.ZERO : pai.getBigDecimal("valor");
@@ -118,7 +119,7 @@ public class SCF_Historico_Lancamento_Nat extends RelatorioBase {
 				if(pai.getString("pai") != null && pai.getString("pai").length() > 0) somandoNosPais(dados, dado, pai.getString("pai"));
 			}
 		}
-		
+
 		if(impressao == 1) return gerarXLSX("SCF_Historico_Lancamento_Nat", dados)
 
 		return gerarPDF("SCF_Historico_Lancamento_Nat", dados)
@@ -160,7 +161,7 @@ public class SCF_Historico_Lancamento_Nat extends RelatorioBase {
 		List<TableMap> receberDadosRelatorio = getAcessoAoBanco().buscarListaDeTableMap(sql, paramCC, paramNaturezaIni,paramNaturezaFin)
 		return receberDadosRelatorio
 	}
-	
+
 	private void getEstrutura(String estrutura, List<Integer> grupos, int tamanhoTotal) {
 		tamanhoTotal = tamanhoTotal + StringUtils.substringBeforeFirst(estrutura, "|").length();
 		grupos.add(Integer.valueOf(tamanhoTotal));
@@ -173,5 +174,4 @@ public class SCF_Historico_Lancamento_Nat extends RelatorioBase {
 		}
 	}
 }
-//meta-sis-eyJkZXNjciI6IlNDRiAtIEhpc3TDs3JpY28gTGFuw6dhbWVudG8gTmF0dXJlemEiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlNDRiAtIEhpc3TDs3JpY28gTGFuw6dhbWVudG8gTmF0dXJlemEiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
