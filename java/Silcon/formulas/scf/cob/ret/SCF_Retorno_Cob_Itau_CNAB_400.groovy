@@ -25,6 +25,7 @@ class SCF_Retorno_Cob_Itau_CNAB_400 extends FormulaBase {
         TextFileLeitura txt = new TextFileLeitura(get("registros"))
         SCFService scfService = instanciarService(SCFService.class);
 
+
         txt.nextLine() //Pula o Header
         def linha = 1
         while(txt.nextLine()) {

@@ -245,7 +245,7 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                     txt.print(aac10.aac10ti == 0 ? "2" : "1");                                                                                                                                    //020-020
                     txt.print(StringUtils.extractNumbers(aac10.aac10ni), 15, "0", true);                                                                        //021-035
                     txt.print(aac10.aac10rs, 40, true, true);                                                                                                         //036-075
-                    txt.print(abe01.abe01ti, 1);                                                                                                                                          //076-076
+                    txt.print(abe01.abe01ti == 0 ? "2" : "1" , 1);                                                                                                                                 //076-076
                     txt.print(StringUtils.extractNumbers(abe01.abe01ni), 15);                                                                         //077-091
                     txt.print(abe01.abe01nome, 40)                                                                                                                                         //092-131
                     txt.print(StringUtils.space(1));                                                                                                                                      //132-132
