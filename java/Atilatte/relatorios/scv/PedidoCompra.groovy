@@ -6,7 +6,7 @@ import java.time.LocalDate
 import sam.server.samdev.relatorio.DadosParaDownload
 import sam.server.samdev.relatorio.RelatorioBase
 
-class SCV_Pedidos extends RelatorioBase {
+class PedidoCompra extends RelatorioBase {
 
 	@Override
 	public String getNomeTarefa() {

@@ -32,6 +32,7 @@ public class SCE_ItensForaDosNiveisDeEstoque extends RelatorioBase {
 	}
 	@Override
 	public Map<String, Object> criarValoresIniciais() {
+		//TESTE
 		Map<String, Object> filtrosDefault = new HashMap()
 		LocalDate data = MDate.date()
 		filtrosDefault.put("dataSaldo", data)
@@ -159,8 +160,8 @@ public class SCE_ItensForaDosNiveisDeEstoque extends RelatorioBase {
 		String whereInativo = "and abm01di is null ";
 		String whereMovEst = !movEst.contains(-1) ? "and abm11movEst in (:movEst) " : "";
 		String whereDatas = dtPedidos != null && dtEntrega != null ? "and (abb01data between :dtPedidosIni and :dtPedidosFin or eaa0103dtEntrega between :dtEntregaIni and :dtEntregaFin) " :
-							dtPedidos != null && dtEntrega == null ? "and abb01data between :dtPedidosIni and :dtPedidosFin " :
-							dtPedidos == null && dtEntrega != null ? "eaa0103dtEntrega between :dtEntregaIni and :dtEntregaFin " : "";
+				dtPedidos != null && dtEntrega == null ? "and abb01data between :dtPedidosIni and :dtPedidosFin " :
+						dtPedidos == null && dtEntrega != null ? "eaa0103dtEntrega between :dtEntregaIni and :dtEntregaFin " : "";
 		String whereAtendimento = atendimentos != null && atendimentos.size() > 0 ? "and eaa01scvatend in (:atendimentos) " : "and eaa01scvatend in (0,1) "
 
 
@@ -175,28 +176,28 @@ public class SCE_ItensForaDosNiveisDeEstoque extends RelatorioBase {
 		Parametro parametroAtendimento = atendimentos != null && atendimentos.size() > 0 ? Parametro.criar("atendimentos", atendimentos) : Parametro.criar("atendimentos", [0,1])
 
 		String sql = "select abm01tipo,abm01id, abm01codigo as codItem, case when abm01tipo = 0 then 'M' else 'P' end as mps, abm01na as naItem, abm0101estMax, "+
-						"abm0101estMin, abm0101estSeg, abm0101ptoPed,aam06codigo,eaa01esmov as mov, COALESCE(SUM(eaa0103qtUso),0) - COALESCE(SUM(eaa01032qtUso),0) as qtd "+
-						"from abm01 "+
-						"left join eaa0103 on eaa0103item = abm01id "+
-						"left join eaa01032 on eaa01032itemscv = eaa0103id "+
-						"left join eaa01 on eaa01id = eaa0103doc "+
-						"left join abb01 on abb01id = eaa01central "+
-						"left join abm0101 on abm0101item = abm01id "+
-						"left join abm11 on abm11id = abm0101estoque "+
-						"left join aam06 on aam06id = abm01umu "+
-						whereGrupo+
-						whereClasDoc +
-						whereTipo+
-						whereEmpresa+
-						whereItens+
-						whereInativo+
-						whereMovEst+
-						whereDatas +
-						whereAtendimento +
-						"group by abm01tipo, abm01id, abm01codigo,mps, abm01na, abm0101estMax," +
-						"abm0101estMin, abm0101estSeg, abm0101ptoPed,aam06codigo, eaa01esmov "+
-						"order by abm01tipo, abm01codigo"
-		
+				"abm0101estMin, abm0101estSeg, abm0101ptoPed,aam06codigo,eaa01esmov as mov, COALESCE(SUM(eaa0103qtUso),0) - COALESCE(SUM(eaa01032qtUso),0) as qtd "+
+				"from abm01 "+
+				"left join eaa0103 on eaa0103item = abm01id "+
+				"left join eaa01032 on eaa01032itemscv = eaa0103id "+
+				"left join eaa01 on eaa01id = eaa0103doc "+
+				"left join abb01 on abb01id = eaa01central "+
+				"left join abm0101 on abm0101item = abm01id "+
+				"left join abm11 on abm11id = abm0101estoque "+
+				"left join aam06 on aam06id = abm01umu "+
+				whereGrupo+
+				whereClasDoc +
+				whereTipo+
+				whereEmpresa+
+				whereItens+
+				whereInativo+
+				whereMovEst+
+				whereDatas +
+				whereAtendimento +
+				"group by abm01tipo, abm01id, abm01codigo,mps, abm01na, abm0101estMax," +
+				"abm0101estMin, abm0101estSeg, abm0101ptoPed,aam06codigo, eaa01esmov "+
+				"order by abm01tipo, abm01codigo"
+
 		return getAcessoAoBanco().buscarListaDeTableMap(sql,parametroTipo,parametroEmpresa, parametroItens, parametroMOvEst, parametroDataPedidoIni,parametroDataPedidoFin,parametroDataEntregaIni,parametroDataEntregaFin, parametroAtendimento )
 
 	}
@@ -224,21 +225,21 @@ public class SCE_ItensForaDosNiveisDeEstoque extends RelatorioBase {
 		Parametro parametroMovEst = !movEst.contains(-1) ? Parametro.criar("movEst", movEst) : null;
 
 		String sql = "select abm01tipo,abm01id, abm01codigo as codItem, case when abm01tipo = 0 then 'M' else 'P' end as mps, abm01na as naItem, abm0101estMax, "+
-					"abm0101estMin, abm0101estSeg, abm0101ptoPed,aam06codigo "+
-					"from abm01 "+
-					"left join abm0101 on abm0101item = abm01id "+
-					"left join abm11 on abm11id = abm0101estoque "+
-					"left join aam06 on aam06id = abm01umu "+
-					whereGrupo+
-					whereTipo+
-					whereEmpresa+
-					whereItens+
-					whereItensAux +
-					whereInativo+
-					whereMovEst+
-					"group by abm01tipo, abm01id, abm01codigo,mps, abm01na, abm0101estMax," +
-					"abm0101estMin, abm0101estSeg, abm0101ptoPed,aam06codigo "+
-					"order by abm01tipo, abm01codigo"
+				"abm0101estMin, abm0101estSeg, abm0101ptoPed,aam06codigo "+
+				"from abm01 "+
+				"left join abm0101 on abm0101item = abm01id "+
+				"left join abm11 on abm11id = abm0101estoque "+
+				"left join aam06 on aam06id = abm01umu "+
+				whereGrupo+
+				whereTipo+
+				whereEmpresa+
+				whereItens+
+				whereItensAux +
+				whereInativo+
+				whereMovEst+
+				"group by abm01tipo, abm01id, abm01codigo,mps, abm01na, abm0101estMax," +
+				"abm0101estMin, abm0101estSeg, abm0101ptoPed,aam06codigo "+
+				"order by abm01tipo, abm01codigo"
 
 		return getAcessoAoBanco().buscarListaDeTableMap(sql,parametroTipo,parametroEmpresa, parametroItens,parametroItensAux, parametroMovEst )
 
@@ -263,18 +264,18 @@ public class SCE_ItensForaDosNiveisDeEstoque extends RelatorioBase {
 
 
 		String sql = "select coalesce(sum(bcc01qtps),0) as qtd "+
-					"from bcc01 "+
-					"inner join abm01 on abm01id = bcc01item "+
-					"inner join abm0101 on abm0101item = abm01id "+
-					"inner join aam06 on aam06id = abm01umu "+
-					"where abm01id = :abm01id "+
-					"and bcc01data <= :data " +
-					whereStatus +
-					whereLocal +
-					whereLoteIni +
-					whereLoteFin +
-					whereSerieIni +
-					whereSerieFin;
+				"from bcc01 "+
+				"inner join abm01 on abm01id = bcc01item "+
+				"inner join abm0101 on abm0101item = abm01id "+
+				"inner join aam06 on aam06id = abm01umu "+
+				"where abm01id = :abm01id "+
+				"and bcc01data <= :data " +
+				whereStatus +
+				whereLocal +
+				whereLoteIni +
+				whereLoteFin +
+				whereSerieIni +
+				whereSerieFin;
 
 		return getAcessoAoBanco().obterBigDecimal(sql,paramItem, paramData, paramLoteIni, paramLoteFin, paramSerieIni, paramSerieFin,parametroStatus, parametroLocal);
 	}
@@ -299,5 +300,4 @@ public class SCE_ItensForaDosNiveisDeEstoque extends RelatorioBase {
 		return 0
 	}
 }
-//meta-sis-eyJkZXNjciI6IlNDRSAtIEl0ZW5zIEZvcmEgZG9zIE5pdmVpcyBkZSBFc3RvcXVlIiwidGlwbyI6InJlbGF0b3JpbyJ9
 //meta-sis-eyJkZXNjciI6IlNDRSAtIEl0ZW5zIEZvcmEgZG9zIE5pdmVpcyBkZSBFc3RvcXVlIiwidGlwbyI6InJlbGF0b3JpbyJ9
