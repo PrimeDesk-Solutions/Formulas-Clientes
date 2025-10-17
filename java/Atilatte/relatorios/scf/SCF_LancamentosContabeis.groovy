@@ -11,10 +11,10 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.HashMap;
 
-public class SCF_LancamentosContabilPorNatureza extends RelatorioBase {
+public class SCF_LancamentosContabeis extends RelatorioBase {
     @Override
     public String getNomeTarefa() {
-        return "SCF - Lançamentos Contábil Por Natureza";
+        return "SCF - Lançamentos Contábeis";
     }
     @Override
     public Map<String, Object> criarValoresIniciais() {
@@ -31,26 +31,24 @@ public class SCF_LancamentosContabilPorNatureza extends RelatorioBase {
         List<Long> tipoDoc = getListLong("tipo");
         List<Long> plf = getListLong("plf");
         List<Long> contasCorrentes = getListLong("contaCorrente");
-        String codNatIni = getString("naturezaIni");
-        String codNatFin = getString("naturezaFin");
         List<Long> entidades = getListLong("entidade");
         LocalDate[] dataEmissao = getIntervaloDatas("dataEmissao");
         Integer impressao = getInteger("impressao");
         Long idEmpresa = obterEmpresaAtiva().getAac10id();
 
-        List<TableMap> dados = buscarLancamentos(numDocIni,numDocFin,tipoDoc,plf,codNatIni,codNatFin,entidades,dataEmissao,idEmpresa,contasCorrentes);
+        List<TableMap> dados = buscarLancamentos(numDocIni,numDocFin,tipoDoc,plf,entidades,dataEmissao,idEmpresa,contasCorrentes);
 
         params.put("empresa", obterEmpresaAtiva().getAac10codigo() +"-"+obterEmpresaAtiva().getAac10na());
         params.put("titulo", "SCF - Lançamentos Contábil Por Natureza");
 
-        if(impressao == 1 ) return gerarXLSX("SCF_LancamentosContabilPorNatureza_Excel", dados);
+        if(impressao == 1 ) return gerarXLSX("SCF_Lancamentos_Contabeis_Excel", dados);
 
-        return gerarPDF("SCF_LancamentosPorNatureza_PDF", dados);
+        return gerarPDF("SCF_Lancamentos_Contabeis_PDF", dados);
 
 
 
     }
-    private List<TableMap> buscarLancamentos(Integer numDocIni,Integer numDocFin,List<Long> tipoDoc,List<Long> plf, String codNatIni,String codNatFin,List<Long> entidades, LocalDate[] dataEmissao,Long idEmpresa,List<Long> contasCorrentes){
+    private List<TableMap> buscarLancamentos(Integer numDocIni,Integer numDocFin,List<Long> tipoDoc,List<Long> plf,List<Long> entidades, LocalDate[] dataEmissao,Long idEmpresa,List<Long> contasCorrentes){
 
         // Data Inicial - Final
         LocalDate dataIni = null;
@@ -65,7 +63,6 @@ public class SCF_LancamentosContabilPorNatureza extends RelatorioBase {
         String whereContas = contasCorrentes != null && contasCorrentes.size() > 0 ? "AND dab01id IN (:contasCorrentes)" : "";
         String whereTipoDoc = tipoDoc != null && tipoDoc.size() > 0 ? "AND aah01id IN (:tipoDoc)" : "";
         String wherePlf = plf != null && plf.size() > 0 ? "AND dab10plf IN (:plf) " : "";
-        String whereNatureza = codNatIni != null && codNatFin != null ? "AND abf10codigo BETWEEN :codNatIni AND :codNatFin "  : codNatIni != null && codNatFin == null ? "AND abf10codigo >= :codNatIni " : codNatIni == null && codNatFin != null ? "AND abf10codigo <= :codNatFin " : "";
         String whereEntidade = entidades != null && entidades.size() > 0 ? "AND abe01id IN (:entidades)" : "";
         String whereDataEmissao = dataIni != null && dataFin != null ? "AND abb01data BETWEEN :dataIni AND :dataFin " : "";
 
@@ -75,16 +72,14 @@ public class SCF_LancamentosContabilPorNatureza extends RelatorioBase {
         Parametro parametroContas = contasCorrentes != null && contasCorrentes.size() > 0 ? Parametro.criar("contasCorrentes",contasCorrentes) : null;
         Parametro parametroTipoDoc = tipoDoc != null && tipoDoc.size() > 0 ? Parametro.criar("tipoDoc",tipoDoc) : null;
         Parametro parametroPlf = plf != null && plf.size() > 0 ? Parametro.criar("plf",plf) : null;
-        Parametro parametroNaturezaIni= codNatIni != null ? Parametro.criar("codNatIni",codNatIni) : null;
-        Parametro parametroNaturezaFin= codNatFin != null ? Parametro.criar("codNatFin",codNatFin) : null;
         Parametro parametroEntidade = entidades != null && entidades.size() > 0 ? Parametro.criar("entidades",entidades) : null;
         Parametro parametroDataIni = dataIni != null ? Parametro.criar("dataIni",dataIni) : null;
         Parametro parametroDataFin = dataFin != null ? Parametro.criar("dataFin",dataFin) : null;
 
-        String sql = "SELECT DISTINCT dab01codigo AS codCC, dab01nome AS nomeCC, abf10codigo AS codNatureza,abf10nome AS nomeNatureza, " +
+        String sql = "SELECT DISTINCT dab01codigo AS codCC, dab01nome AS nomeCC, " +
                 " dab10data AS dtLancamento,abe01codigo AS codEnt, abe01na AS naEnt, aah01codigo AS codTipoDoc, aah01nome AS descrTipoDoc, " +
                 " abb01num AS numDoc, abb01parcela AS parcela, abb01quita AS quita, " +
-                " CASE WHEN dab10mov = 0 THEN '0-Entrada' ELSE '1-Saída' END AS movimentacao, dab10011valor AS valorDoc, dab10valor AS valorPago, " +
+                " CASE WHEN dab10mov = 0 THEN '0-Entrada' ELSE '1-Saída' END AS movimentacao, daa01valor AS valorDoc, dab10valor AS valorPago, " +
                 " contaDeb.abc10codigo AS codContaDeb, contaDeb.abc10nome AS nomeContaDeb, " +
                 " contaCred.abc10codigo AS codContaCred, contaCred.abc10nome AS nomeContaCred, abb01data "+
                 " FROM dab10 " +
@@ -92,8 +87,8 @@ public class SCF_LancamentosContabilPorNatureza extends RelatorioBase {
                 " LEFT JOIN dab01 ON dab01id = dab1002cc " +
                 " LEFT JOIN dab1001 ON dab1001lct = dab10id "+
                 " INNER JOIN dab10011 ON dab10011depto = dab1001id " +
-                " INNER JOIN abf10 ON abf10id = dab10011nat " +
                 " INNER JOIN abb01 ON abb01id = dab10central " +
+                " INNER JOIN daa01 ON daa01central = abb01id "+
                 " LEFT JOIN ebb05 ON ebb05central = abb01id " +
                 " LEFT JOIN abc10 AS contaDeb ON contaDeb.abc10id = ebb05deb " +
                 " LEFT JOIN abc10 AS contaCred ON contaCred.abc10id = ebb05cred "+
@@ -102,14 +97,13 @@ public class SCF_LancamentosContabilPorNatureza extends RelatorioBase {
                 whereNumDoc+
                 whereTipoDoc+
                 wherePlf+
-                whereNatureza+
                 whereEntidade+
                 whereDataEmissao+
                 whereEmpresa+
                 whereContas+
-                "ORDER BY abb01num,aah01codigo, abf10codigo,abb01parcela, abb01data";
+                "ORDER BY abb01num,aah01codigo,abb01parcela, abb01data";
 
-        return getAcessoAoBanco().buscarListaDeTableMap(sql,parametroNumDocIni,parametroNumDocFin,parametroEmpresa,parametroContas,parametroTipoDoc,parametroPlf,parametroNaturezaIni,parametroNaturezaFin,parametroEntidade,parametroDataIni,parametroDataFin);
+        return getAcessoAoBanco().buscarListaDeTableMap(sql,parametroNumDocIni,parametroNumDocFin,parametroEmpresa,parametroContas,parametroTipoDoc,parametroPlf,parametroEntidade,parametroDataIni,parametroDataFin);
 
     }
 }
