@@ -32,7 +32,6 @@ public class SCE_ItensForaDosNiveisDeEstoque extends RelatorioBase {
 	}
 	@Override
 	public Map<String, Object> criarValoresIniciais() {
-		//TESTE
 		Map<String, Object> filtrosDefault = new HashMap()
 		LocalDate data = MDate.date()
 		filtrosDefault.put("dataSaldo", data)
@@ -152,17 +151,17 @@ public class SCE_ItensForaDosNiveisDeEstoque extends RelatorioBase {
 		if(itemNaoMovEst) movEst.add(0);
 		if(itemMovEstoque) movEst.add(1);
 
-		String whereGrupo = "where abm01grupo = 0 ";
-		String whereClasDoc = "and eaa01clasdoc = 0 ";
-		String whereTipo = tipos != null && !tipos.contains(-1) ? "and abm01tipo in (:tipos) " : null;
-		String whereEmpresa = "and abm01gc = :empresa ";
-		String whereItens = itens != null && itens.size() > 0 ? "and abm01id in (:itens) " : "";
-		String whereInativo = "and abm01di is null ";
-		String whereMovEst = !movEst.contains(-1) ? "and abm11movEst in (:movEst) " : "";
-		String whereDatas = dtPedidos != null && dtEntrega != null ? "and (abb01data between :dtPedidosIni and :dtPedidosFin or eaa0103dtEntrega between :dtEntregaIni and :dtEntregaFin) " :
-				dtPedidos != null && dtEntrega == null ? "and abb01data between :dtPedidosIni and :dtPedidosFin " :
-						dtPedidos == null && dtEntrega != null ? "eaa0103dtEntrega between :dtEntregaIni and :dtEntregaFin " : "";
-		String whereAtendimento = atendimentos != null && atendimentos.size() > 0 ? "and eaa01scvatend in (:atendimentos) " : "and eaa01scvatend in (0,1) "
+		String whereGrupo = "WHERE abm01grupo = 0 ";
+		String whereClasDoc = "AND eaa01clasdoc = 0 ";
+		String whereTipo = tipos != null && !tipos.contains(-1) ? "AND abm01tipo IN (:tipos) " : null;
+		String whereEmpresa = "AND abm01gc = :empresa ";
+		String whereItens = itens != null && itens.size() > 0 ? "AND abm01id IN (:itens) " : "";
+		String whereInativo = "AND abm01di IS NULL ";
+		String whereMovEst = !movEst.contains(-1) ? "AND abm11movEst IN (:movEst) " : "";
+		String whereDatas = dtPedidos != null && dtEntrega != null ? "AND (abb01data BETWEEN :dtPedidosIni AND :dtPedidosFin OR eaa0103dtEntrega BETWEEN :dtEntregaIni AND :dtEntregaFin) " :
+				dtPedidos != null && dtEntrega == null ? "AND abb01data BETWEEN :dtPedidosIni AND :dtPedidosFin " :
+						dtPedidos == null && dtEntrega != null ? "eaa0103dtEntrega BETWEEN :dtEntregaIni AND :dtEntregaFin " : "";
+		String whereAtendimento = atendimentos != null && atendimentos.size() > 0 ? "AND eaa01scvatend IN (:atendimentos) " : "AND eaa01scvatend IN (0,1) "
 
 
 		Parametro parametroTipo = tipos != null && !tipos.contains(-1) ? Parametro.criar("tipos", tipos) : null;
@@ -175,16 +174,16 @@ public class SCE_ItensForaDosNiveisDeEstoque extends RelatorioBase {
 		Parametro parametroDataEntregaFin = dtEntrega != null ? Parametro.criar("dtEntregaFin", dtEntrega[1]) : null;
 		Parametro parametroAtendimento = atendimentos != null && atendimentos.size() > 0 ? Parametro.criar("atendimentos", atendimentos) : Parametro.criar("atendimentos", [0,1])
 
-		String sql = "select abm01tipo,abm01id, abm01codigo as codItem, case when abm01tipo = 0 then 'M' else 'P' end as mps, abm01na as naItem, abm0101estMax, "+
-				"abm0101estMin, abm0101estSeg, abm0101ptoPed,aam06codigo,eaa01esmov as mov, COALESCE(SUM(eaa0103qtUso),0) - COALESCE(SUM(eaa01032qtUso),0) as qtd "+
-				"from abm01 "+
-				"left join eaa0103 on eaa0103item = abm01id "+
-				"left join eaa01032 on eaa01032itemscv = eaa0103id "+
-				"left join eaa01 on eaa01id = eaa0103doc "+
-				"left join abb01 on abb01id = eaa01central "+
-				"left join abm0101 on abm0101item = abm01id "+
-				"left join abm11 on abm11id = abm0101estoque "+
-				"left join aam06 on aam06id = abm01umu "+
+		String sql = "SELECT abm01tipo,abm01id, abm01codigo AS codItem, CASE WHEN abm01tipo = 0 THEN 'M' ELSE 'P' END AS mps, abm01na AS naItem, abm0101estMax, "+
+				"abm0101estMin, abm0101estSeg, abm0101ptoPed,aam06codigo,eaa01esmov AS mov, COALESCE(SUM(eaa0103qtUso),0) - COALESCE(SUM(eaa01032qtUso),0) AS qtd "+
+				"FROM abm01 "+
+				"LEFT JOIN eaa0103 ON eaa0103item = abm01id "+
+				"LEFT JOIN eaa01032 ON eaa01032itemscv = eaa0103id "+
+				"LEFT JOIN eaa01 ON eaa01id = eaa0103doc AND eaa01cancdata IS NULL "+
+				"LEFT JOIN abb01 ON abb01id = eaa01central "+
+				"LEFT JOIN abm0101 ON abm0101item = abm01id "+
+				"LEFT JOIN abm11 ON abm11id = abm0101estoque "+
+				"LEFT JOIN aam06 ON aam06id = abm01umu "+
 				whereGrupo+
 				whereClasDoc +
 				whereTipo+
@@ -194,9 +193,9 @@ public class SCE_ItensForaDosNiveisDeEstoque extends RelatorioBase {
 				whereMovEst+
 				whereDatas +
 				whereAtendimento +
-				"group by abm01tipo, abm01id, abm01codigo,mps, abm01na, abm0101estMax," +
+				"GROUP BY abm01tipo, abm01id, abm01codigo,mps, abm01na, abm0101estMax," +
 				"abm0101estMin, abm0101estSeg, abm0101ptoPed,aam06codigo, eaa01esmov "+
-				"order by abm01tipo, abm01codigo"
+				"ORDER BY abm01tipo, abm01codigo"
 
 		return getAcessoAoBanco().buscarListaDeTableMap(sql,parametroTipo,parametroEmpresa, parametroItens, parametroMOvEst, parametroDataPedidoIni,parametroDataPedidoFin,parametroDataEntregaIni,parametroDataEntregaFin, parametroAtendimento )
 
@@ -209,13 +208,13 @@ public class SCE_ItensForaDosNiveisDeEstoque extends RelatorioBase {
 		if(itemNaoMovEst) movEst.add(0);
 		if(itemMovEstoque) movEst.add(1);
 
-		String whereGrupo = "where abm01grupo = 0 ";
-		String whereTipo = tipos != null && !tipos.contains(-1) ? "and abm01tipo in (:tipos) " : null;
-		String whereEmpresa = "and abm01gc = :empresa ";
-		String whereItens = itens != null && itens.size() > 0 ? "and abm01id in (:itens) " : "";
-		String whereItensAux = "and abm01id not in (:idItensAux) ";
-		String whereInativo = "and abm01di is null ";
-		String whereMovEst = !movEst.contains(-1) ? "and abm11movEst in (:movEst) " : "";
+		String whereGrupo = "WHERE abm01grupo = 0 ";
+		String whereTipo = tipos != null && !tipos.contains(-1) ? "AND abm01tipo IN (:tipos) " : null;
+		String whereEmpresa = "AND abm01gc = :empresa ";
+		String whereItens = itens != null && itens.size() > 0 ? "AND abm01id IN (:itens) " : "";
+		String whereItensAux = "AND abm01id NOT IN (:idItensAux) ";
+		String whereInativo = "AND abm01di IS NULL ";
+		String whereMovEst = !movEst.contains(-1) ? "AND abm11movEst IN (:movEst) " : "";
 
 
 		Parametro parametroTipo = tipos != null && !tipos.contains(-1) ? Parametro.criar("tipos", tipos) : null;
@@ -224,12 +223,12 @@ public class SCE_ItensForaDosNiveisDeEstoque extends RelatorioBase {
 		Parametro parametroItensAux = Parametro.criar("idItensAux", idItensAux);
 		Parametro parametroMovEst = !movEst.contains(-1) ? Parametro.criar("movEst", movEst) : null;
 
-		String sql = "select abm01tipo,abm01id, abm01codigo as codItem, case when abm01tipo = 0 then 'M' else 'P' end as mps, abm01na as naItem, abm0101estMax, "+
+		String sql = "SELECT abm01tipo,abm01id, abm01codigo AS codItem, CASE WHEN abm01tipo = 0 THEN 'M' ELSE 'P' END AS mps, abm01na AS naItem, abm0101estMax, "+
 				"abm0101estMin, abm0101estSeg, abm0101ptoPed,aam06codigo "+
-				"from abm01 "+
-				"left join abm0101 on abm0101item = abm01id "+
-				"left join abm11 on abm11id = abm0101estoque "+
-				"left join aam06 on aam06id = abm01umu "+
+				"FROM abm01 "+
+				"LEFT JOIN abm0101 ON abm0101item = abm01id "+
+				"LEFT JOIN abm11 ON abm11id = abm0101estoque "+
+				"LEFT JOIN aam06 ON aam06id = abm01umu "+
 				whereGrupo+
 				whereTipo+
 				whereEmpresa+
@@ -237,21 +236,21 @@ public class SCE_ItensForaDosNiveisDeEstoque extends RelatorioBase {
 				whereItensAux +
 				whereInativo+
 				whereMovEst+
-				"group by abm01tipo, abm01id, abm01codigo,mps, abm01na, abm0101estMax," +
+				"GROUP BY abm01tipo, abm01id, abm01codigo,mps, abm01na, abm0101estMax," +
 				"abm0101estMin, abm0101estSeg, abm0101ptoPed,aam06codigo "+
-				"order by abm01tipo, abm01codigo"
+				"ORDER BY abm01tipo, abm01codigo"
 
 		return getAcessoAoBanco().buscarListaDeTableMap(sql,parametroTipo,parametroEmpresa, parametroItens,parametroItensAux, parametroMovEst )
 
 	}
 
 	private BigDecimal buscarSaldoItem(Long abm01id, LocalDate data,List<Long> idsStatus,List<Long> idsLocal, String loteIni, String loteFin, String serieIni, String serieFin){
-		String whereStatus = idsStatus != null && idsStatus.size() > 0 ? "and bcc01status in (:idsStatus) " : "";
-		String whereLocal = idsLocal != null && idsLocal.size() > 0 ? "and bcc01ctrl0 in (:idsLocal) " : "";
-		String whereLoteIni = loteIni != null && !loteIni.isEmpty() ? " and bcc01lote >= :loteIni " : "";
-		String whereLoteFin = loteFin != null && !loteFin.isEmpty() ? " and bcc01lote <= :loteFin " : "";
-		String whereSerieIni = serieIni != null && !serieIni.isEmpty() ? " and bcc01serie >= :serieIni " : "";
-		String whereSerieFin = serieFin != null && !serieFin.isEmpty() ? " and bcc01serie <= :loteFin " : "";
+		String whereStatus = idsStatus != null && idsStatus.size() > 0 ? "AND bcc01status IN (:idsStatus) " : "";
+		String whereLocal = idsLocal != null && idsLocal.size() > 0 ? "AND bcc01ctrl0 IN (:idsLocal) " : "";
+		String whereLoteIni = loteIni != null && !loteIni.isEmpty() ? " AND bcc01lote >= :loteIni " : "";
+		String whereLoteFin = loteFin != null && !loteFin.isEmpty() ? " AND bcc01lote <= :loteFin " : "";
+		String whereSerieIni = serieIni != null && !serieIni.isEmpty() ? " AND bcc01serie >= :serieIni " : "";
+		String whereSerieFin = serieFin != null && !serieFin.isEmpty() ? " AND bcc01serie <= :loteFin " : "";
 
 		Parametro paramItem = Parametro.criar("abm01id",abm01id);
 		Parametro paramData = Parametro.criar("data",data);
@@ -263,13 +262,13 @@ public class SCE_ItensForaDosNiveisDeEstoque extends RelatorioBase {
 		Parametro parametroLocal = idsLocal != null && idsLocal.size() > 0 ? Parametro.criar("idsLocal", idsLocal) : null;
 
 
-		String sql = "select coalesce(sum(bcc01qtps),0) as qtd "+
-				"from bcc01 "+
-				"inner join abm01 on abm01id = bcc01item "+
-				"inner join abm0101 on abm0101item = abm01id "+
-				"inner join aam06 on aam06id = abm01umu "+
-				"where abm01id = :abm01id "+
-				"and bcc01data <= :data " +
+		String sql = "SELECT COALESCE(sum(bcc01qtps),0) AS qtd "+
+				"FROM bcc01 "+
+				"INNER JOIN abm01 ON abm01id = bcc01item "+
+				"INNER JOIN abm0101 ON abm0101item = abm01id "+
+				"INNER JOIN aam06 ON aam06id = abm01umu "+
+				"WHERE abm01id = :abm01id "+
+				"AND bcc01data <= :data " +
 				whereStatus +
 				whereLocal +
 				whereLoteIni +
