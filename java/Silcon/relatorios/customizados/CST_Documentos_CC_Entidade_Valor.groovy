@@ -85,7 +85,7 @@ public class CST_Documentos_CC_Entidade_Valor extends RelatorioBase {
         }
 
 
-        return gerarXLSX("CCST_Documentos_CC_Enitdade_Valor_Excel", dados);
+        return gerarXLSX("CST_Documentos_CC_Enitdade_Valor_Excel", dados);
     }
 
     private obterDadosRelatorio(List<Long> Emprs, Integer classe, Integer tp, List<Long> tipoDoc, Integer numeroInicial, Integer numeroFinal, List<Long> entidade, List<Long> departamento, List<Long> naturezas, LocalDate[] dataVenc, Integer opcVcto, LocalDate[] dataEmissao, Integer tipoData, LocalDate[] dtPgtoBaixa, List<Long> port, List<Long> oper, Integer ordem) {
