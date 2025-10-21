@@ -114,3 +114,4 @@ public class SCF_LancamentosContabilPorNatureza extends RelatorioBase {
     }
 }
 //meta-sis-eyJkZXNjciI6IlNDRiAtIExhbsOnYW1lbnRvcyBQb3IgTmF0dXJlemEiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
+//meta-sis-eyJkZXNjciI6IlNDRiAtIExhbsOnYW1lbnRvcyBDb250w6FiaWwgUG9yIE5hdHVyZXphIiwidGlwbyI6InJlbGF0b3JpbyJ9

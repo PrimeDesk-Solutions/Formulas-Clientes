@@ -1,0 +1,78 @@
+<html>
+	<template>
+		<div class = "row">
+			<div class = "col-md-12 col-12">
+				<div class = "row">
+					<div class = "col-md-4 col-12">
+						<fieldset>
+							<legend>&nbsp; Documento &nbsp;</legend>
+							Inicial:<m-input label="" placeholder = "000000001" v-model="filtros.numeroInicial" />
+							Final:<m-input label=""  placeholder = "999999999" v-model="filtros.numeroFinal" />
+						</fieldset>
+					</div>
+					
+					<div class = "col-md-4 col-12">
+						<fieldset>
+							<legend>&nbsp; Data Emissão &nbsp;</legend>
+							<m-date-interval v-model="filtros.dataEmissao" :required='false' />
+						</fieldset>
+					</div>
+					<div class = "col-md-12 col-12">
+						<fieldset>				
+							<legend>&nbsp; Entidade &nbsp;</legend>
+							<m-select label="" v-model="filtros.entidades" :request = "requestEnt" :multiple="true" />
+						</fieldset>
+					</div>
+					<div class = "col-md-12 col-12">
+						<fieldset>				
+							<legend>&nbsp; Transportadora &nbsp;</legend>
+							<m-select label="" v-model="filtros.transportadoras" :request = "requestTransp" :multiple="true" />
+						</fieldset>
+					</div>
+					<div class = "col-md-12 col-12">
+						<fieldset>				
+							<legend>&nbsp; Redespacho &nbsp;</legend>
+						     <m-select label="" v-model="filtros.redespachos" :request = "requestTransp" :multiple="true" />
+						</fieldset>
+					</div>
+					<div class="col-12">
+						<m-check v-model="filtros.imprimirDescrItem" label="Imprimir Descrição Item"  />
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestEnt :{
+					table: 'Abe01',
+					columns: 'abe01codigo, abe01na'
+				},
+				requestTransp: {
+					table: 'Abe01',
+					columns: 'abe01codigo, abe01na',
+					where: {abe01trans: 1}
+				},
+				
+				},
+				
+			onLoad: function () {
+				
+			},
+			methods: {}
+		}
+	</script>
+	<style>
+		.datas{
+			display:flex;
+		}
+		.entidade{
+			width:75%;
+		}
+		fieldset{
+			height:100%;
+		}
+	</style>
+</html>

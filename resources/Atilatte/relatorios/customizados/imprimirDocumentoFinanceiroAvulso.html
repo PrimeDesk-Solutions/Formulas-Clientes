@@ -1,0 +1,29 @@
+<html>
+	<template>
+		<div class = "docFinanc">
+			<fieldset class="fieldsetSam">
+				<legend>&nbsp; Documento Financeiro &nbsp;</legend>
+				<m-select label="" :multiple="false" v-model="filtros.documento" :request="requestDocFinanc" :required="true"/>
+			</fieldset>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestDocFinanc:{
+					table: 'Daa01',
+					columns: 'abb01num',
+					data:{
+						join:{
+							inner: 'daa01central'
+							//inner: 'abb01tipo'
+						}
+					}
+					
+				}
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+</html>

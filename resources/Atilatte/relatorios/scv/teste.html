@@ -1,0 +1,95 @@
+<html>
+	<template>
+		<div class="q-gutter-y-md">
+			<div class="row q-gutter-y-md">
+				<div class="col-md-12 col-12">
+					<fieldset>
+										
+						<div class="row q-gutter-y-md">							
+							<div class="col-3 col-md-2">
+								<fieldset>
+									<legend>&nbsp; Número &nbsp;</legend>
+										<legend>&nbsp; Inicial/Final &nbsp;</legend>
+										<m-input label="" v-model="filtros.numeroInicial" type="integer" required="true" />
+					
+										<m-input label="" v-model="filtros.numeroFinal" type="integer" required="true"/>
+								</fieldset>
+							</div>
+							
+							<div class="col-6 col-md-8">			
+								<div class="row">
+									<div class="col-md-12 col-12">	
+										<fieldset>
+											<legend>&nbsp; Tipo de Documento &nbsp;</legend>
+											<m-select label="" v-model="filtros.tipos" :multiple="true" :request="requestTipo" />
+										</fieldset>	
+									</div>
+								
+									<div class="col-md-12 col-12">	
+									<fieldset>
+										<legend>&nbsp; Entidade &nbsp;</legend>
+										<m-select label="" v-model="filtros.entidades" :multiple="true" :request="requestEntidade" />
+									</fieldset>		
+									</div>
+								</div>						
+							</div>
+						</div>
+					<div class="row q-gutter-y-md">
+						<div class="col-md-4 col-4">
+							<fieldset>
+								<legend>&nbsp; Emissão &nbsp;</legend>
+								<m-date-interval v-model="filtros.emissao" />
+							</fieldset>
+						</div>
+						<div class="col-md-4 col-4">
+							<fieldset>
+								<legend>&nbsp; data de Entrega &nbsp;</legend>
+								<m-date-interval v-model="filtros.entrega" />
+							</fieldset>
+						</div>
+						<div class="col-md-3 col-3">
+							<fieldset>
+								<legend>&nbsp; Atendimento &nbsp;</legend>
+								<m-check v-model="filtros.atendimento" option="0" label="Não Atendido" />
+								<div class="row q-gutter-y-md">
+									<m-check v-model="filtros.atendimento2" option="1" label="Atendido Parcialmente" />&nbsp;&nbsp;
+									<m-check v-model="filtros.liquido" label="Liquido" />
+								</div>
+								<m-check v-model="filtros.atendimento3" option="2" label="Atendido Totalmente" />
+							</fieldset>
+						</div>
+						<div class="col-md-1 col-1">
+<!--							<fieldset>-->
+<!--								<legend>&nbsp; imprimir&nbsp;</legend>-->
+<!--								<m-radio class="radioOrdem" label=' PDF' option="0" name="impressao" v-model='filtros.impressao' />-->
+<!--								<m-radio class="radioOrdem" label=' XLS' option="1" name="impressao" v-model='filtros.impressao' />-->
+<!--							</fieldset>-->
+						</div>
+					</div>
+				</fieldset>
+				</div>
+			</div>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestTipo: {
+					table: 'Aah01',
+					columns: 'aah01codigo, aah01nome'
+				},
+				requestEntidade: {
+					table: 'Abe01',
+					columns: 'abe01codigo, abe01na',
+				}
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+	<style>
+		fieldset {
+			height: 100%;
+		}		
+	</style>
+</html>

@@ -1,0 +1,220 @@
+<html>
+	<template>
+		<div class = "row">
+			<div class = "col-md-12 col-12">
+				<fieldset>
+					<legend>
+						&nbsp; Operação: &nbsp;
+						<m-radio class="radioOrdem" label=' Recebimento' option="0" name="pedido" v-model='filtros.resumoOperacao' style="display: inline" />
+						&nbsp;
+						<m-radio class="radioOrdem" label=' Faturamento' option="1" name="pedido" v-model='filtros.resumoOperacao' style="display: inline" /> 
+						&nbsp;
+					</legend>
+					<div class = "row">
+						<div class = "col-md-2 col-12">
+							<fieldset style = "height:183px">
+								<legend>&nbsp; Número &nbsp;</legend>
+								Inicial <m-input v-model="filtros.numeroInicial"/>
+								Final <m-input v-model="filtros.numeroFinal"/>
+							</fieldset>
+						</div>
+						<div class = "col-md-10 col-12">
+							<fieldset>
+								<legend>&nbsp; Documento &nbsp;</legend>
+								<fieldset>
+									<legend>&nbsp; Tipo &nbsp;</legend>
+									<m-select label="" :multiple="true" v-model="filtros.tipo" :request="requestTipo"/>
+								</fieldset>
+								<fieldset>
+									<legend>&nbsp; PCD &nbsp;</legend>
+									<m-select  :multiple="true" :request="requestPcd" v-model="filtros.pcd" />
+								</fieldset>
+							</fieldset>
+						</div>
+						
+						<div class = "col-md-6 col-12">
+							<fieldset>
+								<legend>&nbsp; Data Emissao &nbsp; </legend>
+								<m-date-interval v-model="filtros.dataEmissao" :required='false' />
+							</fieldset>
+						</div>
+						<div class = "col-md-6 col-12">
+							<fieldset>
+								<legend>&nbsp; Data Entrada/Saída &nbsp; </legend>
+								<m-date-interval v-model="filtros.dataEntradaSaida" :required='false' />
+							</fieldset>
+						</div>
+					</div>
+					<div class = "row">
+						<div class = "col-md-12 col-12">
+							<div class = "row">
+								<div class = "col-md-8 col-12">
+									<fieldset>
+										<legend>&nbsp; Entidades &nbsp;</legend>
+										<m-select label="" :multiple="true" v-model="filtros.entidade" :request="requestEntidade" />								
+									</fieldset>
+								</div>
+								<div class = "col-md-4">
+									<fieldset style = "height:73px">
+										<legend>&nbsp; Impressão: &nbsp;</legend>
+										<m-radio class="radioOrdem" label=' PDF' option="0" name="impressao" v-model='filtros.impressao' style="display: inline" />
+										<m-radio class="radioOrdem" label=' Excel' option="1" name="impressap" v-model='filtros.impressao' style="display: inline" /> 
+									</fieldset>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+					<div class = "row">
+						<div class = "col-md-12 col-12">
+							<fieldset>
+								<legend>&nbsp; Campos Livres (Escolha apenas 3 campos, 1 por campo) &nbsp;</legend>
+								<div class="col-1">
+									<m-check v-model="filtros.chkDevolucao" label="Considerar Devolução"  />
+								</div>
+								1º Campo
+								<div class = "row">
+									<div class="col-1">
+										<m-check v-model="filtros.total1" label="Totalizar"  />
+									</div>
+									<div class = "col-6">
+										<m-select :multiple="false" v-model="filtros.campoFixo1" :options="opcoes"  />
+									</div>
+									<div class="col-5">
+										<m-select :multiple="false" v-model="filtros.campoLivre1" :request="requestCampos"  />
+									</div>
+								</div>
+								2º Campo
+								<div class = "row">
+									<div class="col-1">
+										<m-check v-model="filtros.total2" label="Totalizar"  />
+									</div>
+									<div class = "col-6">
+										<m-select :multiple="false" v-model="filtros.campoFixo2" :options="opcoes"  />
+									</div>
+									<div class="col-5">
+										<m-select :multiple="false" v-model="filtros.campoLivre2" :request="requestCampos"  />
+									</div>
+								</div>
+								3º Campo
+								<div class = "row">
+									<div class="col-1">
+										<m-check v-model="filtros.total3" label="Totalizar"  />
+									</div>
+									<div class = "col-6">
+										<m-select :multiple="false" v-model="filtros.campoFixo3" :options="opcoes"  />
+									</div>
+									<div class="col-5">
+										<m-select :multiple="false" v-model="filtros.campoLivre3" :request="requestCampos"  />
+									</div>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				opcoesOperacao:[
+					{value:0, label:"Documento de Entrada"},
+					{value:1, label:"Documento de Saída"},
+					{value:2, label:"Pedido de Compra"},
+					{value:3, label:"Pedido de Venda"}
+				],
+				opcoesTipoOperacao:[
+					{value:0, label:"Compra"},
+					{value:1, label:"Venda"},
+					{value:2, label:"Pedido"},
+					{value:3, label:"Devolução de Compra"},
+					{value:4, label:"Devolução de Venda"},
+					{value:5, label:"Remessa"},
+					{value:6, label:"Retorno"},
+					{value:7, label:"Outras"},
+					{value:99, label:"Todos"}
+				],
+				requestEntidade: {
+					table: 'Abe01',
+					columns: 'abe01codigo, abe01na',
+				},
+				opcoesRamo:[
+					{value:"academia", label:"Academia"},
+					{value:"agropecuaria", label:"Agropecuaria"}
+				],
+				requestTipo: {
+					table: 'Aah01',
+					columns: 'aah01codigo, aah01nome',
+					where: {aah01di: null}
+				},
+				requestPcd:{
+					table: 'Abd01',
+					columns: 'abd01codigo, abd01descr',
+				},
+				requestEstados:{
+					table: 'aag02',
+					columns: 'aag02uf,aag02nome'
+				},
+				requestMunicipios:{
+					table: 'aag0201',
+					columns: 'aag02uf,aag0201nome',
+					data:{
+						join:{
+							inner:"aag0201uf"
+						}
+					}
+				},
+				requestRepresentantes:{
+					table: 'Abe01',
+					columns: 'abe01codigo, abe01na',
+					where:{
+						abe01rep:1
+					}
+				},
+				requestTransportadora:{
+					table: 'Abe01',
+					columns: 'abe01codigo, abe01na',
+					where:{
+						abe01trans:1
+					}
+				},
+				requestItens: {
+					table: 'Abm01',
+					columns: 'abm01codigo, abm01na',
+				},
+				requestCampos:{
+					table: 'aba6001',
+					columns: 'aah02descr',
+					iniFimColumn:"aah02nome",
+					data:{
+						join:{
+							left:"aba6001cpoVlr",
+							inner:"aba6001alin"
+						},
+						where: {
+							aba60codigo: '5000'
+						}
+					}
+				},
+				opcoes: [
+		            {value: 'Qtde. de Uso', label: 'Qtde. de Uso', option: 'Qtde. de Uso'},
+		            {value: 'Qtde. Comercial', label: 'Qtde. Comercial', option: 'Qtde. Comercial'},
+		            {value: 'Preço Unitário', label: 'Preço Unitário', option: 'Preço Unitário'},
+		            {value: 'Total do Item', label: 'Total do Item', option: 'Total do Item'},
+		            {value: 'Total Documento', label: 'Total Documento', option: 'Total Documento'},
+		            {value: 'Total Financeiro', label: 'Total Financeiro', option: 'Total Financeiro'}
+		        ],
+		       	 opcoesResumo : [
+		        		 {value: 0, label: 'Documento', option: 'Documento'},
+		        		 {value: 1, label: 'Itens', option: 'Itens'},
+		        		 {value: 2, label: 'Entdidades', option: 'Entidades'},
+		        		 {value: 3, label: 'Estados', option: 'Estados'}
+		        		 
+				]
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+</html>

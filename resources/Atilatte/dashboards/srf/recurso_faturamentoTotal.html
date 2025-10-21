@@ -1,0 +1,101 @@
+<html>
+	<template>
+		<div class="flex column q-mt-md w-100">
+			<div class="flex justify-end items-center w-100">
+				<div class="multitec-pin" style="background: linear-gradient(60deg,#4dd0e1,#26c6da);">
+					<q-icon name="attach_money" style="font-size: 2em;"/>
+				</div>
+				<div class="flex column">
+					<div class="text-grey">Faturamento Do Mês</div>
+					<div class="text-grey text-h6">{{faturamento}}</div>
+				</div>
+			</div>
+			<div class="q-mt-sm">
+				<q-separator/>
+			</div>
+			<div>
+				 <apexchart type="area" height="120" :options="chartOptions" :series="series"></apexchart>
+			</div>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+			   series: [{
+           		name: 'faturamento',
+	            data: ${faturamento},  
+	          }],
+	          chartOptions: {
+        	  	legend: {
+        		    show: true
+        	  	},
+        	  	dataLabels: {
+        	  	    enabled: false
+        	  	},
+	            chart: {
+	              height: 120,
+	              type: 'area',
+            	  toolbar: {
+            	     show: false
+            	  }
+	            },
+	            dataLabels: {
+	              enabled: false
+	            },
+	            stroke: {
+	              curve: 'smooth'
+	            },
+	            colors: ['#26c6da'],
+	            xaxis: {
+	              type: 'datetime',
+	              categories: ["2023-01-01","2023-02-01","2023-03-01","2023-04-01","2023-05-01","2023-06-01","2023-07-01","2023-08-01","2023-09-01","2023-10-01","2023-11-01","2023-12-01"],
+	              labels: {
+	                  show: false,
+	              }
+	            },
+	            yaxis: {
+	              labels: {
+	                  show: false,
+	              }
+	            },
+	            grid: {
+	                show: false
+	            },
+           	  tooltip: {
+           	
+	              y: {
+	                formatter: function (val) {
+	                	 var formatter = new Intl.NumberFormat('pt-BR', {
+	  							style: 'currency',
+	  							currency: 'BRL',
+								// These options are needed to round to whole numbers if that's what you want.
+								minimumFractionDigits: 2, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+								maximumFractionDigits: 2, // (causes 2500.99 to be printed as $2,501)
+						  });
+	                  	return formatter.format(val)
+	                }
+	              }
+	            }
+	          }
+			}
+		}
+	</script>
+	<style>
+		.multitec-pin{
+			color: #FFF;
+			border-radius: 5px;
+		    background-color: #999;
+		    padding: 15px;
+		    position: fixed;
+		    top: -10px;
+		    left: 10px;
+		    width: 56px;
+		    height: 56px;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    -webkit-box-shadow: 0 12px 20px -10px rgba(0,188,212,.28), 0 4px 20px 0 rgba(0,0,0,.12), 0 7px 8px -5px rgba(0,188,212,.2);
+    		box-shadow: 0 12px 20px -10px rgba(0,188,212,.28), 0 4px 20px 0 rgba(0,0,0,.12), 0 7px 8px -5px rgba(0,188,212,.2);
+		}
+	</style>
+</html>

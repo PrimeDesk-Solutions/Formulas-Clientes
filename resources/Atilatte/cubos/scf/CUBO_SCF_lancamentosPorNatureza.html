@@ -1,0 +1,46 @@
+<html>
+	<template>
+		<div class="main">
+			<div class="numDoc">
+				<fieldset>
+					<legend>&nbsp; Natureza &nbsp;</legend>
+					<m-select label="" v-model="filtros.natureza" :request = "requestNat" :multiple="true" />
+				</fieldset>
+				<fieldset>
+					<legend>&nbsp; Contas Correntes &nbsp;</legend>
+					<m-select label="" v-model="filtros.contaCorrente" :request = "requestContaCorrente" :multiple="true" />
+				</fieldset>
+				<fieldset>
+					<legend>&nbsp; Código Lançamento &nbsp;</legend>
+					<m-select label="" v-model="filtros.lancamento" :request = "requestLancamento" :multiple="true" />
+				</fieldset>
+				<div class="data">
+					<fieldset>
+						<legend>&nbsp; Data Emissao &nbsp; </legend>
+						<m-date-interval v-model="filtros.datas" :required='false' />
+					</fieldset>
+				</div>
+			</div>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestNat:{
+					table: 'Abf10',
+					columns: 'abf10codigo,abf10nome'
+				},
+				requestContaCorrente:{
+					table: 'Dab01',
+					columns: 'dab01codigo,dab01nome'
+				},
+				requestLancamento:{
+					table: 'Abf20',
+					columns: 'abf20codigo,abf20descr'
+				}
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+</html>

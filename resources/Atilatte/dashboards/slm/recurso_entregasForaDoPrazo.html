@@ -1,0 +1,93 @@
+<html>
+	<template>
+		<div class="flex column q-mt-md w-100">
+			<div class="flex justify-end items-center w-100">
+				<div class="multitec-pin" style="background: linear-gradient(60deg,#FFF300,#FF9E00);">
+					<q-icon name="warning" style="font-size: 2em;"/>
+				</div>
+				<div >
+					<div class = "noPrazo" style = "margin-right: 10px">
+						<div class="text-grey">Entregas Fora do Prazo</div>
+						<div class="text-grey text-h6">{{ totalEntregas }}</div>
+					</div>
+				</div>
+
+				<div >
+					<div class="text-grey">% Fora Prazo</div>
+					<div class="text-grey text-h6">{{ foraPrazo }}</div>
+				</div>
+			</div>
+			<div class="q-mt-sm">
+				<q-separator/>
+			</div>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+			   series: [{
+           		name: 'saldos',
+	            data: [75, 48, 18, 91, 154, 122, 110]
+	          }],
+	          chartOptions: {
+        	  	legend: {
+        		    show: false
+        	  	},
+        	  	dataLabels: {
+        	  	    enabled: false
+        	  	},
+	            chart: {
+	              height: 120,
+	              type: 'area',
+            	  toolbar: {
+            	     show: false
+            	  }
+	            },
+	            dataLabels: {
+	              enabled: false
+	            },
+	            stroke: {
+	              curve: 'smooth'
+	            },
+                colors: ['#66bb6a'],
+	            xaxis: {
+	              type: 'datetime',
+	              categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"],
+	              labels: {
+	                  show: false,
+	              }
+	            },
+	            yaxis: {
+	              labels: {
+	                  show: false,
+	              }
+	            },
+	            grid: {
+	                show: false
+	            },
+	            tooltip: {
+	                enabled: false,
+	            }
+	          }
+			}
+		}
+	</script>
+	<style>
+		.multitec-pin{
+			color: #FFF;
+			border-radius: 5px;
+		    background-color: #999;
+		    padding: 15px;
+		    position: fixed;
+		    top: -10px;
+		    left: 10px;
+		    width: 56px;
+		    height: 56px;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    -webkit-box-shadow: 0 12px 20px -10px rgba(0,188,212,.28), 0 4px 20px 0 rgba(0,0,0,.12), 0 7px 8px -5px rgba(0,188,212,.2);
+    		box-shadow: 0 12px 20px -10px rgba(0,188,212,.28), 0 4px 20px 0 rgba(0,0,0,.12), 0 7px 8px -5px rgba(0,188,212,.2);
+		}
+	</style>
+</html>

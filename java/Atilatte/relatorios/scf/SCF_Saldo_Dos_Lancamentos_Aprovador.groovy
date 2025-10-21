@@ -213,3 +213,4 @@ public class SCF_Saldo_Dos_Lancamentos_Aprovador extends RelatorioBase {
     }
 
 }
+//meta-sis-eyJkZXNjciI6IlNDRiAtIFNhbGRvIGRvcyBMYW7Dp2FtZW50b3MoQXByb3ZhZG9yKSIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

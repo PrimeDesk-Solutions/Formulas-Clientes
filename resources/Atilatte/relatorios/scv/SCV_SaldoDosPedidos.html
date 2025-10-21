@@ -1,0 +1,144 @@
+<html>
+	<template>
+		<fieldset>
+				<legend>
+					&nbsp; Operação: &nbsp;
+					<m-radio class="radioOrdem" label=' Entrada' option="0" name="operacao" v-model='filtros.resumoOperacao' style="display: inline" />
+					&nbsp;
+					<m-radio class="radioOrdem" label=' Saída' option="1" name="operacao" v-model='filtros.resumoOperacao' style="display: inline" /> 
+					&nbsp;
+				</legend>
+		<div class = "row">
+			<div class = "col-md-12">
+				<div class = "row">
+					<div class = "col-md-6">
+						<fieldset style = "height:155px">
+							<legend>&nbsp; Tipo &nbsp;</legend>
+							<m-select label="" :multiple="true" v-model="filtros.tipo" :request="requestTipo"/>
+						</fieldset>	
+					</div>
+					<div class = "col-md-2">
+						<fieldset>
+							<legend>&nbsp; Numero Documento &nbsp;</legend>
+							Inicial <m-input v-model="filtros.numeroInicial" />
+							Final <m-input v-model="filtros.numeroFinal" />
+						</fieldset>	
+					</div>
+					<div class = "col-md-2">
+						<fieldset>
+							<legend>&nbsp; Data Emissão &nbsp;</legend>
+							Inicial <m-date label="" v-model="filtros.emissaoIni"/>
+							Final <m-date label="" v-model="filtros.emissaoFin"/>
+						</fieldset>
+					</div>
+					<div class = "col-md-2">
+						<fieldset>
+							<legend>&nbsp; Entrada/Saída &nbsp;</legend>
+							Inicial <m-date label="" v-model="filtros.dataEntSaiIni"/>
+							Final <m-date label="" v-model="filtros.dataEntSaiFin"/>
+						</fieldset>
+					</div>
+				</div>
+				<div class = "row">
+					<m-panel-check-mpms v-model="filtros.mps" :showServico="false" selectRef="selectItemIni" style="padding-bottom: 5px;" />
+				</div>
+				<div class = "row">
+					<div class = "col-md-6">
+						<fieldset>
+							<legend>&nbsp; Itens &nbsp;</legend>
+							<m-select ref="selectItemIni" v-model="filtros.itens" :multiple="true" :request="requestItens"  />
+						</fieldset>
+					</div>
+					<div class = "col-md-6">
+						<fieldset>
+							<legend>&nbsp; Entidade &nbsp;</legend>
+							<m-select label="" v-model="filtros.entidades" :multiple="true" :request="requestEntidade" />
+						</fieldset>
+					</div>
+				</div>
+				<div class = "row">
+					<div class = "col-md-6">
+						<fieldset>
+							<legend>&nbsp; Representante &nbsp;</legend>
+							<m-select label="" v-model="filtros.representantes" :multiple="true" :request="requestRepresentante" />
+						</fieldset>
+					</div>
+					<div class = "col-md-6">
+						<fieldset>
+							<legend>&nbsp;PCD &nbsp;</legend>
+							<m-select label="" v-model="filtros.pcd" :multiple="true" :request="requestPCD" />
+						</fieldset>
+					</div>
+				</div>
+				<fieldset>
+					<legend>&nbsp;Atendimento &nbsp;</legend>
+					<div class = "row">
+						<div class = "col-md-4">
+							<div class = "row">
+								<div class = "col-md-12">
+									<m-check v-model="filtros.naoAtend" option="0" label="Não Atendidos " />
+								</div>
+								
+							</div>
+							<div class = "row ">
+								<div class = "col-md-12">
+									<m-check v-model="filtros.parcialAtend" option="1" label="Parcialmente Atendido "  />
+								</div>
+							</div>
+							<div class = "row ">
+								<div class = "col-md-12">
+									<m-check v-model="filtros.totalAtend" option="2" label="Totalmente Atendido "  />
+								</div>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+				<div class = "col-md-3 col-12">
+					<fieldset style = "height:73px">
+						<legend>&nbsp; Impressão: &nbsp;</legend>
+						<m-radio class="radioOrdem" label=' PDF' option="0" name="impressao" v-model='filtros.impressao' style="display: inline" />
+						<m-radio class="radioOrdem" label=' Excel' option="1" name="impressap" v-model='filtros.impressao' style="display: inline" /> 
+					</fieldset>
+				</div>
+				<div class = "row ">
+					<div class = "col-md-12">
+						<m-check v-model="filtros.resumoItens" option="2" label="Detalhar por Item"  />
+					</div>
+				</div>
+			</div>
+		</div>
+		</fieldset>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestTipo: {
+					table: 'Aah01',
+					columns: 'aah01codigo, aah01nome',
+					where: {aah01di: null}
+				},
+				requestItens : {
+					table : 'Abm01',
+					columns : 'abm01codigo, abm01na'
+				},
+				requestEntidade: {
+					table: 'Abe01',
+					columns: 'abe01codigo, abe01na',
+				},
+				requestRepresentante: {
+					table: 'Abe01',
+					columns: 'abe01codigo, abe01na',
+					where:{
+						abe01rep: 1
+					}
+				},
+				requestPCD:{
+					table: 'Abd01',
+					columns: 'abd01codigo,abd01descr'
+				},
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+</html>

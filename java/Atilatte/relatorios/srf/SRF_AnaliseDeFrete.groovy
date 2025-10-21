@@ -97,7 +97,8 @@ public class SRF_AnaliseDeFrete extends RelatorioBase {
         if(campoLivre3 != null && campoFixo3 != null) interromper("Selecione apenas 1 valor por campo!")
 
 
-        List<TableMap> documentos = buscarDocumentos(numDocIni, numDocFin, idsTipoDoc, idsPcd,resumoOperacao, dtEmissao, dtEntradaSaida, idsEntidades,idEmpresa,idsTransps);
+        List<TableMap> documentos = buscarDocumentos(numDocIni, numDocFin, idsTipoDoc, idsPcd,resumoOperacao, dtEmissao, dtEntradaSaida, idsEntidades,
+                optionResumo,idsItens,idEmpresa,idsTransps,optionTransp);
         def totalGeral1 = 0;
         def totalGeral2 = 0;
         def totalGeral3 = 0;
@@ -221,7 +222,7 @@ public class SRF_AnaliseDeFrete extends RelatorioBase {
 
 
     private buscarDocumentos(Integer numDocIni, Integer numDocFin,List<Long>idsTipoDoc,List<Long> idsPcd,Integer resumoOperacao, LocalDate[] dtEmissao,
-                             LocalDate[] dtEntradaSaida,List<Long> idsEntidades,Long idEmpresa,List<Long> idTransp){
+                             LocalDate[] dtEntradaSaida,List<Long> idsEntidades,Integer optionResumo,List<Long>idsItens,Long idEmpresa,List<Long> idTransp,Integer optionTransp){
         //Data Emissao
         LocalDate dtEmissIni = null;
         LocalDate dtEmissFin = null;
@@ -238,6 +239,14 @@ public class SRF_AnaliseDeFrete extends RelatorioBase {
             dtEntradaSaidaFin = dtEntradaSaida[1];
         }
 
+        //Data Nascimento
+        LocalDate dtNascIni = null;
+        LocalDate dtNascFin = null;
+        if (dtNascimento != null) {
+            dtNascIni = dtNascimento[0];
+            dtNascFin = dtNascimento[1];
+        }
+
         String whereNumIni = numDocIni != null ? "and abb01num >= :numDocIni " : "";
         String whereNumFin = numDocFin != null ? "and abb01num <= :numDocFin " : "";
         String whereTipoDoc = idsTipoDoc != null && idsTipoDoc.size() > 0 ? "and aah01id in (:idsTipoDoc) " : "";
@@ -245,8 +254,9 @@ public class SRF_AnaliseDeFrete extends RelatorioBase {
         String whereDtEmissao = dtEmissIni != null && dtEmissFin != null ? "and abb01data between :dtEmissIni and :dtEmissFin " : "";
         String whereDtEntradaSaida = dtEntradaSaidaIni != null && dtEntradaSaidaFin != null ? "and eaa01esdata between :dtEntradaSaidaIni and :dtEntradaSaidaFin " : "";
         String whereEntidade = idsEntidades != null && idsEntidades.size() > 0 ? "and ent.abe01id in (:idsEntidades) " : "";
-        String whereTransp = idTransp != null && idTransp.size() > 0 ? "and (desp.abe01id in (:idTransp) or redesp.abe01id in (:idTransp)) " : "";
-        String whereES = resumoOperacao == 1 ? " and eaa01esMov = 1 " : " and eaa01esMov = 0 ";
+        String whereTransp = (idTransp != null && idTransp.size() > 0)? "and (desp.abe01id in (:idTransp) or redesp.abe01id in (:idTransp)) " : "";
+        String whereES = resumoOperacao == 1 ? " and eaa01esMov = 1 " : " and eaa01esMov = 0";
+        String whereItens = idsItens != null && idsItens.size() > 0 ? "and abm01id in (:idsItens) " : "";
         String whereEmpresa = "AND eaa01gc = :idEmpresa ";
 
         Parametro parametroNumIni = numDocIni != null ? Parametro.criar("numDocIni", numDocIni) : null;
@@ -259,6 +269,7 @@ public class SRF_AnaliseDeFrete extends RelatorioBase {
         Parametro parametroDtEntradaSaidaFin = dtEntradaSaida != null && dtEntradaSaida.size() > 0 ? Parametro.criar("dtEntradaSaidaFin", dtEntradaSaida[1]) : null;
         Parametro parametroEntidade = idsEntidades != null && idsEntidades.size() > 0 ? Parametro.criar("idsEntidades", idsEntidades) : null;
         Parametro parametroTransp = idTransp != null && idTransp.size() > 0 ? Parametro.criar("idTransp", idTransp) : null;
+        Parametro parametroItens = idsItens != null && idsItens.size() > 0 ? Parametro.criar("idsItens",idsItens) : null;
         Parametro parametroEmpresa = Parametro.criar("idEmpresa",idEmpresa);
 
         String orderBy = "order by abb01num "
@@ -270,7 +281,6 @@ public class SRF_AnaliseDeFrete extends RelatorioBase {
                 "sum(eaa0103total) as eaa0103total, sum(eaa0103totdoc) as eaa0103totdoc, sum(eaa0103totfinanc) as eaa0103totfinanc, sum(bfc01carvalor) as freteDesp, cast(eaa01json ->> 'valor_frete_redesp' as numeric(18,6)) as freteRedesp "+
                 "from eaa01 "+
                 "inner join abb01 on abb01id = eaa01central "+
-                "INNER JOIN abd01 ON abd01id = eaa01pcd "+
                 "inner join abe01 as ent on ent.abe01id = abb01ent "+
                 "inner join eaa0102 on eaa0102doc = eaa01id "+
                 "inner join abe01 as desp on desp.abe01id = eaa0102despacho "+
@@ -300,6 +310,7 @@ public class SRF_AnaliseDeFrete extends RelatorioBase {
                 whereDtEntradaSaida+
                 whereEntidade+
                 whereES+
+                whereItens+
                 whereTransp+
                 "group by aag02uf,aag0201nome,aah20placa,eaa01id,abb01num,abb01data, eaa01esdata, ent.abe01codigo, ent.abe01na,aah20codigo,aah20nome, "+
                 "eaa01rep0,aah01codigo,abe30nome,abe40nome,eaa01json, desp.abe01codigo, desp.abe01na, desp.abe01id, redesp.abe01codigo, redesp.abe01na, redesp.abe01id " + orderBy ;

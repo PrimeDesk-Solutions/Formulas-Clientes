@@ -1,0 +1,35 @@
+<html>
+	<template>
+		<div class = "documento">
+			
+			<div class = "documento">
+			<div class = "numero">
+				<fieldset>
+					<legend>&nbsp; Número &nbsp;</legend>
+					Inicial: <m-input label="" v-model="filtros.numeroInicial" />
+					Final: <m-input label="" v-model="filtros.numeroFinal" />	
+				</fieldset>		
+			</div>
+			<div class = "DataLancamento">
+				<fieldset>
+					<legend>&nbsp; Data Lançamento &nbsp;</legend>
+					Inicial:<m-date id="datas" :required = "false" v-model="filtros.dataInicial" />
+					Final<m-date id="datas" :required = "false" v-model="filtros.dataFinal" />
+				</fieldset>
+			</div>		
+		</div>
+	</template>
+
+	<style>
+		.documento{
+			display:flex;
+			margin:auto;
+		}
+		.numero, .DataLancamento{
+			width:50%;
+		}
+		.dataEmissao{
+			width:50%;
+		}
+	</style>
+</html>

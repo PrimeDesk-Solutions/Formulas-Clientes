@@ -443,3 +443,4 @@ public class SRF_Documentos_Por_Entidades extends RelatorioBase {
 // Relatório Alterado 24/10/2024
 //meta-sis-eyJkZXNjciI6IlNSRiBEb2N1bWVudG9zIFBvciBFbnRpZGFkZXMiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlNSRiBEb2N1bWVudG9zIFBvciBFbnRpZGFkZXMiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
+//meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MgUG9yIEVudGlkYWRlcyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

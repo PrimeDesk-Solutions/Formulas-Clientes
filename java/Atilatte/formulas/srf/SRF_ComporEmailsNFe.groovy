@@ -1,4 +1,4 @@
-package Atilatte.formulas.srf.nfe
+package Atilatte.formulas.srf
 import br.com.multitec.utils.ValidacaoException
 import br.com.multiorm.criteria.criterion.Criterions
 import br.com.multiorm.criteria.join.Joins
@@ -52,9 +52,9 @@ class SRF_ComporEmailsNFe extends FormulaBase {
 
 		Abb01 abb01 = getSession().get(Abb01.class, "abb01id, abb01tipo, abb01ent, abb01num, abb01data", eaa01.eaa01central.abb01id);
 
-		Abe01 abe01 = getSession().get(Abe01.class, "abe01id,abe01na, abe01nome, abe01ni", abb01.abb01ent.abe01id);
+		Abe01 abe01 = getSession().get(Abe01.class, "abe01id, abe01nome, abe01ni", abb01.abb01ent.abe01id);
 
-		String assunto = obterEmpresaAtiva().getAac10na() + " - Arq. Digital Ref. a Nota Fiscal: " + abb01.abb01num + " - " + abe01.abe01na;
+		String assunto = getVariaveis().getAac10().getAac10na() + " - Arq. Digital Ref. a Nota Fiscal: " + abb01.abb01num + " - " + abe01.abe01na;
 
 		String corpo = comporCorpoMsg(aaa16, eaa01, abe01, abb01, eaa0114id);
 
@@ -62,7 +62,7 @@ class SRF_ComporEmailsNFe extends FormulaBase {
 
 		if(eaa0102.eaa0102eMail == null) return;
 
-		if(aaa16.getAaa16tipo().equals("2") || aaa16.getAaa16tipo().equals("1")) {
+		if(aaa16.getAaa16tipo().equals(Aaa16.TIPO_CANCELAMENTO_NFE) || aaa16.getAaa16tipo().equals(Aaa16.TIPO_CCE)) {
 			//E-mail de CANCELAMENTO ou CARTA DE CORREÇÃO
 			EmailNFeDto email = new EmailNFeDto();
 			email.assunto = assunto;
@@ -128,7 +128,7 @@ class SRF_ComporEmailsNFe extends FormulaBase {
 				emails.add(emailRep);
 			}
 
-			//E-mail para TRANSPORTADORA
+			//E-mail para TRANSPORTADORA - Despacho
 			String emailDestinoTransp = obterEmailTransportadoraDespacho(eaa0102);
 			if(emailDestinoTransp != null) {
 				EmailNFeDto emailTransp = new EmailNFeDto();
@@ -142,6 +142,21 @@ class SRF_ComporEmailsNFe extends FormulaBase {
 
 				emails.add(emailTransp);
 			}
+
+			//E-mail para TRANSPORTADORA - Redespacho
+			String emailDestinoRedesp = obterEmailTransportadoraRedespacho(eaa0102);
+			if(emailDestinoRedesp != null) {
+				EmailNFeDto emailRedesp = new EmailNFeDto();
+				emailRedesp.assunto = assunto;
+				emailRedesp.corpo = corpo;
+				emailRedesp.addEmailDestinoPara(emailDestinoRedesp);
+				emailRedesp.enviarXML = true;
+				emailRedesp.enviarDanfe = false;
+				emailRedesp.enviarBoleto = false;
+				emailRedesp.emailRemetente = 2;
+
+				emails.add(emailRedesp);
+			}
 		}
 
 		put("emails", emails);
@@ -149,7 +164,7 @@ class SRF_ComporEmailsNFe extends FormulaBase {
 
 	private String comporCorpoMsg(Aaa16 aaa16, Eaa01 eaa01, Abe01 abe01, Abb01 abb01, Long eaa0114id) {
 		StringBuilder strCorpo = new StringBuilder("");
-		if(aaa16.getAaa16tipo().equals("2")) {
+		if(aaa16.getAaa16tipo().equals(Aaa16.TIPO_CANCELAMENTO_NFE)) {
 			Aae11 aae11 = getSession().get(Aae11.class, "aae11id, aae11descr", eaa01.getEaa01cancMotivo().getIdValue());
 			strCorpo.append("<html>");
 			strCorpo.append("<body>Esta mensagem refere-se a Cancelamento de Nota Fiscal Eletr&ocirc;nica Nacional de n&uacute;mero <b>" + abb01.getAbb01num() + "</b> emitida para:");
@@ -161,7 +176,7 @@ class SRF_ComporEmailsNFe extends FormulaBase {
 			strCorpo.append("<br>Protocolo: " + aaa16.getAaa16retProt());
 			strCorpo.append("<p>Este e-mail foi enviado automaticamente pelo SAM (Sistemas Administrativos Multitec) da MULTITEC SISTEMAS");
 			strCorpo.append("<p>Acesse o site: <a href='http://www.multitecsistemas.com.br'>www.multitecsistemas.com.br</a>");
-		}else if(aaa16.getAaa16tipo().equals("1")) {
+		}else if(aaa16.getAaa16tipo().equals(Aaa16.TIPO_CCE)) {
 			Eaa0114 eaa0114 = session.get(Eaa0114.class, "eaa0114id, eaa0114correcao", eaa0114id);
 
 			strCorpo.append("<html>");
@@ -243,4 +258,23 @@ class SRF_ComporEmailsNFe extends FormulaBase {
 		return email;
 	}
 
+	private String obterEmailTransportadoraRedespacho(Eaa0102 eaa0102) {
+		String email = null;
+
+		if(eaa0102.eaa0102redespacho != null) {
+			Abe0101 abe0101 = session.createCriteria(Abe0101.class)
+					.addFields("abe0101id, abe0101eMail")
+					.addJoin(Joins.join("abe0101ent"))
+					.addWhere(Criterions.eq("abe0101ent", eaa0102.eaa0102redespacho.abe01id))
+					.addWhere(Criterions.eq("abe0101principal", Abe0101.SIM))
+					.setMaxResults(1)
+					.get();
+
+			if(abe0101 != null && abe0101.abe0101eMail != null) email = abe0101.abe0101eMail;
+		}
+
+		return email;
+	}
+
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiOTIifQ==

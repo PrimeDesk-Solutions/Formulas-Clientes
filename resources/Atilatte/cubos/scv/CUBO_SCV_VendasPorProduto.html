@@ -1,0 +1,91 @@
+<html>
+	<template>
+		<div class = "main">
+			<div class = "numDoc">
+				<fieldset>
+					<legend>&nbsp; Número Documento &nbsp; </legend>
+					Inicial:<m-input label="" v-model="filtros.numeroInicial" />
+					Final:<m-input label="" v-model="filtros.numeroFinal" />
+				</fieldset>
+			</div>
+
+			<div class = "tipoDoc">
+				<fieldset>				
+					<legend>&nbsp;Tipo Documento &nbsp;</legend>
+					<m-select label="" v-model="filtros.tipoDoc" :request = "requestTipoDoc" :multiple="true" />
+					
+				</fieldset>
+			</div>
+
+			<div class = "datas">
+				<div class = "dataEmissao">
+				<fieldset>
+					<legend>&nbsp; Data Emissao &nbsp; </legend>
+					<m-date-interval v-model="filtros.dataEmissao" :required='false' />
+				</fieldset>
+				</div>
+				<div class = "dataEntradaSaida">
+					<fieldset>
+						<legend>&nbsp; Data Entrada/Saída &nbsp; </legend>
+						<m-date-interval v-model="filtros.dataEntradaSaida" :required='false' />
+					</fieldset>
+				</div>
+			</div>
+			<div class="Representante">
+				<fieldset>				
+					<legend>&nbsp; Representante &nbsp;</legend>
+					<m-select label="" v-model="filtros.rep" :request = "requestRep" :multiple="true" />
+				</fieldset>
+			</div>
+			<div class="clientes">
+				<fieldset>				
+					<legend>&nbsp; Entidade &nbsp;</legend>
+					<m-select label="" v-model="filtros.entidade" :request = "requestEnt" :multiple="true" />
+				</fieldset>
+			</div>
+			<div class="itens">
+				<fieldset>				
+					<legend>&nbsp; Item &nbsp;</legend>
+					<m-select label="" v-model="filtros.itens" :request = "requestItem" :multiple="false" />
+				</fieldset>
+			</div>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestTipoDoc:{
+					table:'Aah01',
+					columns:'aah01codigo,aah01nome'
+				},
+				requestRep:{
+					table:'Abe01',
+					columns:'abe01codigo, abe01na',
+					where:{
+						abe01rep:1
+					}
+				},
+				requestEnt:{
+					table:'Abe01',
+					columns:'abe01codigo, abe01na'
+				},
+				requestItem:{
+					table:'Abm01',
+					columns:'abm01codigo, abm01na',
+					where:{
+						abm01tipo: 1
+					}
+				}
+				
+					
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+	<style>
+		.numDoc{
+			width:15%;
+		}
+	</style>
+</html>

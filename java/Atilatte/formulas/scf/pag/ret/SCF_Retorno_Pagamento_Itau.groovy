@@ -355,3 +355,4 @@ class SCF_Retorno_Pagamento_Itau extends FormulaBase {
 
 }
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNDUifQ==
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNDUifQ==

@@ -1,0 +1,144 @@
+<html>
+	<template>
+		<div class="q-gutter-y-md">
+			<div class="row">
+				<div class="col-md-12 col-12">
+					<fieldset>
+						<legend>
+							&nbsp; Detalhamento:
+								<m-radio class="radioDetalhamento" label=" Analítico" option="0" name="detalhamento" v-model="filtros.detalhamento" inline="true" style="display: inline"/>
+												
+							&nbsp;
+								<m-radio class="radioDetalhamento" label=" Sintético" option="1" name="detalhamento" v-model="filtros.detalhamento" inline="true" style="display: inline"/>	
+							&nbsp;
+						</legend>
+						<div class="row">
+							<div class="col-md-12 col-12">
+								<m-select label="Contas Contábeis" v-model="filtros.contas" multiple="true" :request="abc10" />
+							</div>
+						</div>	
+						<div class="row">
+							<div class="col-md-4 col-12">
+								<fieldset>
+									<legend> &nbsp; Período &nbsp;</legend>
+									<div class="row">
+										<div class="col-md-6 col-6">
+											<m-input type="monthYear" label="Inicial" v-model="filtros.dataInicial">
+										</div>
+										<div class="col-md-6 col-6">
+											<m-input type="monthYear" label="Final" v-model="filtros.dataFinal">
+										</div>
+									</div>
+								</fieldset>
+							</div>
+							<div class="col-md-5 col-12">
+								<fieldset>
+									<legend>&nbsp; Diário Contábil &nbsp;</legend>
+										<div class="row">
+											<div class="col-md-6 col-12">
+												<m-check class="checkAnexarBalanceteDiario" label="Anexar balancete ao diário" v-model="filtros.anexarBalanceteAoDiario" @change="onAnexarBalanceteAoDiarioChange"/>
+											</div>
+											<div class="col-md-6 col-12">
+												<m-input type="integer" v-model="filtros.pagina" label="Última página utilizada" required="true"/>
+											</div>
+										</div>
+								</fieldset>
+							</div>
+							<div class="col-md-3 col-12">
+								<fieldset>
+									<legend> &nbsp; Origem dos Valores &nbsp;</legend>
+									<div class="row">
+										<m-radio class="radioOrigemValores" label=" Saldos correntes" option="0" name="origemValores" v-model="filtros.origemValores" inline="true" style="display: inline"/>
+									</div>
+									<div class="row">
+										<m-radio class="radioOrigemValores" label=" Saldos de encerramento" option="1" name="origemValores" v-model="filtros.origemValores" inline="true" style="display: inline"/>
+									</div>
+								</fieldset>
+							</div>
+						</div>
+						<div class="row q-gutter-y-md">
+							<div class="col-md-3 col-12">
+								<fieldset>
+									<legend>&nbsp; Códigos da empresa nas contas &nbsp;</legend>
+									<div v-for="cod in filtros.mapCodigos">
+										<m-check :label="cod.codigo" :option="cod.codigo" inline="true" v-model="filtros.codigos" multiple="true"/>
+									</div>
+								</fieldset>
+							</div>
+							<div class="col-md-3 col-12">
+								<m-check class="checkMovimentacaoMes" label="Movimentação do mês" v-model="filtros.movimentacaoMes"/>
+							</div>
+							<div class="col-md-3 col-12">
+								<m-check class="checkOrdemAlfabeticaContas" label="Ordem alfabética de contas" v-model="filtros.ordemAlfabeticaContas"/>
+							</div>
+							<div class="col-md-3 col-12">
+								<m-check class="checkSaltarPaginaGrau1Conta" label="Saltar página pelo grau 1 da conta" v-model="filtros.saltarPaginaGrau1Conta"/>
+							</div>
+						</div>			
+					</fieldset>
+                    <div class = "row">
+                    	<div class = "col-md-4 col-12">
+						 <fieldset style = "height:73px">
+							<legend>&nbsp; Impressão: &nbsp;</legend>
+							<m-radio class="radioOrdem" label=' PDF' option="0" name="impressao" v-model='filtros.impressao' style="display: inline" />
+							<m-radio class="radioOrdem" label=' Excel' option="1" name="impressap" v-model='filtros.impressao' style="display: inline" /> 
+						</fieldset>
+                    	</div>
+                    </div>
+				</div>
+			</div>	
+			<div class="atualizar-contas">
+				{{filtros.atualizarCtas}}
+			</div>
+		</div>
+	</template>
+	
+	<script>
+		const classe = {
+			data: {
+				abc10: {
+					table: 'abc10',
+					columns: 'abc10codigo, abc10nome'
+				}
+			},
+			onLoad: function () {
+				
+			},
+			methods: {
+				onAnexarBalanceteAoDiarioChange: function () {
+					this.filtros.pagina = this.filtros.anexarBalanceteAoDiario ? this.filtros.ultimaPagina : 0;
+				}
+			}
+		}
+	</script>
+	
+	<style>
+		.checkAnexarBalanceteDiario{
+			margin-left: 15px;
+		}
+		
+		.radioDetalhamento{
+			margin-top: 0px;
+			margin-bottom: 13px;
+			margin-left: 5px;
+		}
+		
+		.checkMovimentacaoMes{
+			margin-left: 0px;
+		}
+		
+		.checkOrdemAlfabeticaContas{
+			margin-left: 0px;
+		}
+		
+		.checkSaltarPaginaGrau1Conta{
+			margin-left: 0px;
+		}
+		
+		.atualizar-contas {
+			font-style: italic;
+			color: red;
+		}
+		
+	</style>
+</html>

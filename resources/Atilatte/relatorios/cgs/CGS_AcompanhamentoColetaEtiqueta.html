@@ -1,0 +1,132 @@
+<html>
+	<template>
+		<div class="q-gutter-y-md">
+		
+			<div class="row">
+			
+				<div class="col-md-12 col-12">
+					
+					<div class="row">
+						<div class="col-12 col-md-4">
+							<fieldset>
+								<legend>&nbsp; Número Etiqueta &nbsp;</legend>
+								<div class="row">
+									<div class="col-6">
+										<m-input label="" v-model="filtros.numeroEtiquetaInicial" :required='true' />
+									</div>
+		
+									<div class="col-6">
+										<m-input label="" v-model="filtros.numeroEtiquetaFinal" :required='true' />
+									</div>
+								</div>
+							</fieldset>
+						</div>
+						
+						<div class="col-12 col-md-4">
+							<fieldset>
+								<legend>&nbsp; Data Criação &nbsp;</legend>
+								<m-date-interval v-model="filtros.data" :required="false"/>
+							</fieldset>
+						</div>
+								
+						<div class="col-12 col-md-4">
+							<fieldset>
+								<legend>&nbsp; Impressão Etiqueta &nbsp;</legend>
+								<div class="row">
+									<div class="col-6">
+										<m-radio class="radioImprimir" label='Não Impressas' option="0" name="imprimir" v-model='filtros.impressaoEtiqueta'/>
+									</div>
+									<div class="col-6">
+										<m-radio class="radioImprimir" label='Reimprimir' option="1" name="imprimir" v-model='filtros.impressaoEtiqueta'/>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+						
+					</div>
+				
+				</div>
+				
+			</div>
+			
+			<div class="row">
+			
+				<div class="col-12 col-md-4">
+					<fieldset class="h-100">
+						<legend>&nbsp; Itens &nbsp;</legend>
+						<label><m-panel-check-mpms v-model="filtros.mpm" selectRef="selectItemIni, selectItemFim" :showServico="false" /></label>
+						<m-select label="Inicial" ref="selectItemIni" :multiple="false" :request="requestItens" v-model="filtros.itemIni" />
+						<m-select label="Final" ref="selectItemFim" :multiple="false" :request="requestItens" v-model="filtros.itemFim" />
+					</fieldset>
+				</div>
+				
+				<div class="col-12 col-md-8">
+				
+					<fieldset>
+						<legend>&nbsp; Documento &nbsp;</legend>
+					<div class="row">
+						<div class="col-12 col-md-6">
+							<fieldset>
+								<legend>&nbsp; Tipo &nbsp;</legend>
+								<m-select label="" :multiple="false" v-model="filtros.tipoDocumento" :request="requestTipoDoc" />
+							</fieldset>
+						</div>
+						
+						<div class="col-12 col-md-6">
+							<fieldset>
+								<legend>&nbsp; Número &nbsp;</legend>
+								<div class="row">
+									<div class="col-6">
+										<m-input label="" v-model="filtros.numeroDocumentoInicial" :required='true' />
+									</div>
+		
+									<div class="col-6">
+										<m-input label="" v-model="filtros.numeroDocumentoFinal" :required='true' />
+									</div>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+					</fieldset>
+					
+				</div>
+			
+			</div>
+			<div class = "row">
+				<div class = "col-md-8 col-12">
+					<fieldset>
+						<legend>&nbsp; Imprimir em &nbsp;</legend>
+						<m-radio v-model="filtros.impressao" option="0" label=" PDF" style = "display:inline" />
+						<m-radio v-model="filtros.impressao" option="1" label=" XLS" style = "display:inline" />
+					</fieldset>
+				</div>
+			</div>
+			
+		</div>
+	</template>
+	<script>
+	  const classe = {
+			data: {	
+				requestItens : {
+					table : 'Abm01',
+					columns : 'abm01codigo, abm01na',
+					iniFimColumn : 'abm01codigo',
+				},
+				requestTipoDoc: {
+					table: 'Aah01',
+					columns: 'aah01codigo, aah01nome',
+				}
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+	<style>
+		fieldset{
+			height:100%;
+		}
+		.radioImprimir label {
+			padding-left: 5px;
+		}
+	</style>
+</html>

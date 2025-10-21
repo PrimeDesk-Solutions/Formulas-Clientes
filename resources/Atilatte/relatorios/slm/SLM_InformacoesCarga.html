@@ -1,0 +1,80 @@
+<html>
+	<template>
+		<div class = "col-md-12 col-12">
+			<div class  = "row">
+				<div class = "col-md-2 col-12">
+					<fieldset class = "h-100">
+						<legend>&nbsp; Número Carga &nbsp;</legend>
+						Inicial <m-input v-model="filtros.numCargaIni"/>
+						Final <m-input v-model="filtros.numCargaFin"/>
+					</fieldset>
+				</div>
+				<div class = "col-md-10 col-12">
+					<fieldset>
+						<legend>&nbsp; Motorista/Veiculo &nbsp;</legend>
+						<div class = "col-md-12 col-12">
+							<fieldset>
+								<legend>&nbsp; Motorista &nbsp;</legend>
+								<m-select label="" :multiple="true" v-model="filtros.motorista" :request="requestMotorista" />	
+							</fieldset>
+						</div>
+						<div class = "col-md-12 col-12">
+							<fieldset>
+								<legend>&nbsp; Veículo &nbsp;</legend>
+								<m-select label="" :multiple="true" v-model="filtros.veiculo" :request="requestVeiculo" />	
+							</fieldset>
+						</div>
+					</fieldset>
+				</div>
+				<div class = "col-md-4 col-12">
+					<fieldset>
+						<legend>&nbsp; Data Check-out &nbsp; </legend>
+						<m-date-interval v-model="filtros.dataCheckout" :required='false' />
+					</fieldset>
+				</div>
+				<div class = "col-md-4 col-12">
+					<fieldset>
+						<legend>&nbsp; Data Check-in &nbsp; </legend>
+						<m-date-interval v-model="filtros.dataCheckin" :required='false' />
+					</fieldset>
+				</div>
+				<div class = "col-md-4 col-12">
+					<fieldset>
+						<legend>&nbsp;Status Carga &nbsp;</legend>
+						<m-select :multiple="true" v-model="filtros.statusCarga" :options="opcoes"  />
+					</fieldset>
+				</div>
+				<div class = "col-md-3">
+					<fieldset style = "height:73px">
+						<legend>&nbsp; Impressão: &nbsp;</legend>
+						<m-radio class="radioOrdem" label=' PDF' option="0" name="impressao" v-model='filtros.impressao' style="display: inline" />
+						<m-radio class="radioOrdem" label=' Excel' option="1" name="impressap" v-model='filtros.impressao' style="display: inline" /> 
+					</fieldset>
+				</div>
+			</div>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestMotorista : {
+					table : 'Aah21',
+					columns : 'aah21codigo, aah21nome'
+				},
+				requestVeiculo : {
+					table : 'Aah20',
+					columns : 'aah20codigo, aah20nome'
+				},
+				opcoes: [
+		            {value: 0, label: '0 - Não Efetuada', option: '0 - Não Efetuada'},
+		            {value: 1, label: '1 - Efetuada', option: '1 - Efetuada'},
+		            {value: 2, label: '2 - Reentrega', option: '2 - Reentrega'},
+		            {value: 3, label: '3 - Devolvido', option: '3 - Devolvido'},
+		 
+		        ] 
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+</html>

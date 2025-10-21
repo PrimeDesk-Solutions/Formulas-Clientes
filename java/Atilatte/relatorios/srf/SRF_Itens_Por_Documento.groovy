@@ -459,3 +459,4 @@ public class SRF_Itens_Por_Documento extends RelatorioBase {
 }
 // Formula corrigida 24/10/2024
 //meta-sis-eyJkZXNjciI6IlNSRiBJdGVucyBQb3IgRG9jdW1lbnRvIiwidGlwbyI6InJlbGF0b3JpbyJ9
+//meta-sis-eyJkZXNjciI6IlNSRiAtIEl0ZW5zIFBvciBEb2N1bWVudG8iLCJ0aXBvIjoicmVsYXRvcmlvIn0=

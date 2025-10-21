@@ -1,0 +1,138 @@
+<html>
+	<template>
+		<div class = "main">
+			<div class="clientes">
+				<fieldset>				
+					<legend>&nbsp; Entidade &nbsp;</legend>
+					<m-select label="" v-model="filtros.entidade" :request = "requestEnt" :multiple="true" />
+				</fieldset>
+			</div>
+			<div class = "documento">
+				<div class = "operacao">
+					<fieldset>
+						<legend>&nbsp; Operação &nbsp; </legend>
+						<m-select label="" v-model="filtros.operacao" :options="opcoesOperacao" :showClearButton="false" :required="true" />
+					</fieldset>
+				</div>
+				<div class = "tipoOper">
+					<fieldset>
+					<legend>&nbsp; Tipo da Operação &nbsp; </legend>
+					<m-select label="" v-model="filtros.tipoOperacao" :options="opcoesTipoOperacao" :showClearButton="false" :required="true" />
+					</fieldset>
+				</div>
+				<div class = "situacao">
+					<fieldset>				
+						<legend>&nbsp;Situação Documento &nbsp;</legend>
+						<m-select label="" v-model="filtros.situacaoDoc" :options="opcoesAtendimento" :showClearButton="false" :required="true" />
+					</fieldset>
+				</div>
+			</div>
+
+
+			<div class = "documentosPCD">
+				<div class = "numPCD">
+					<fieldset>				
+						<legend>&nbsp;PCD Documento &nbsp;</legend>
+						<m-select label="" v-model="filtros.pcd" :request = "requestPCD" :multiple="true" />
+					</fieldset>
+				</div>
+			
+
+				<div class = "tipoDoc">
+					<fieldset>				
+						<legend>&nbsp;Tipo Documento &nbsp;</legend>
+						<m-select label="" v-model="filtros.tipoDoc" :request = "requestTipoDoc" :multiple="true" />
+					</fieldset>
+				</div>
+			</div>
+			<div class = "datas">
+				<div class = "dataEmissao">
+					<fieldset>
+						<legend>&nbsp; Data Emissao &nbsp; </legend>
+						<m-date-interval v-model="filtros.dataEmissao" :required='false' />
+					</fieldset>
+				</div>
+				<div class = "dataEntradaSaida">
+					<fieldset>
+						<legend>&nbsp; Data Entrada/Saída &nbsp; </legend>
+						<m-date-interval v-model="filtros.dataEntradaSaida" :required='false' />
+					</fieldset>
+				</div>
+				<div class = "dataEntrega">
+					<fieldset>
+						<legend>&nbsp; Data Entrega &nbsp; </legend>
+						<m-date-interval v-model="filtros.dataEntrega" :required='false' />
+					</fieldset>
+				</div>
+
+			</div>
+		</div>
+
+		
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestEnt:{
+					table:'Abe01',
+					columns:'abe01codigo,abe01na'	
+				},
+				opcoesOperacao:[
+					{value:0, label:"Documento de Entrada"},
+					{value:1, label:"Documento de Saída"},
+					{value:2, label:"Pedido de Compra"},
+					{value:3, label:"Pedido de Venda"}
+				],
+				opcoesTipoOperacao:[
+					{value: 0, label:"Compra"},
+					{value: 1, label:"Venda"},
+					{value: 2, label:"Pedido"},
+					{value: 3, label:"Devolução de Compra"},
+					{value: 4, label:"Devolução de Venda"},
+					{value: 5, label:"Remessa"},
+					{value: 6, label:"Retorno"},
+					{value: 7, label:"Outras"},
+					{value:99, label:"Todas"}
+				], 
+				requestPCD:{
+					table:'Abd01',
+					columns:'abd01codigo,abd01descr'
+				},
+				requestTipoDoc:{
+					table:'Aah01',
+					columns:'aah01codigo,aah01nome'
+				},
+				opcoesAtendimento:[
+					{value:0, label:"0-Não Atendido"},
+					{value:1, label:"1-Parcialmente Atendido"},
+					{value:2, label:"2-Totalmente Atendido"}
+				]
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+	<style>
+		.documento{
+			display: flex;
+		}
+		.operacao, .tipoOper{
+			width:25%;
+		}
+		.situacao{
+			width:50%;
+		}
+		.documentosPCD{
+			display:flex;
+		}
+		.numPCD, .tipoDoc{
+			width:50%;
+		}
+		.dataEmissao, .dataEntradaSaida, .dataEntrega {
+			width:50%;
+		}
+		.datas{
+			display:flex;
+		}
+	</style>
+</html>

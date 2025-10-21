@@ -140,6 +140,7 @@ class SRF_Documentos_Por_Cfop extends RelatorioBase {
 		String whereResumoOper = resumoOperacao == 0 ? "AND eaa01esmov = 0 " : "AND eaa01esmov = 1 ";
 		String whereCfops = cfops != null && cfops.size() > 0 ? "AND aaj15id IN (:cfops) " : "";
 		String wherePcd = pcd != null && pcd.size() > 0 ? "AND abd01id IN (:pcd) " : "";
+		String whereEmpresa = "AND eaa01gc = :idEmpresa ";
 
 		String campo1 = camposLivre1 != null ? "SUM(CAST(eaa0103json ->> '"+camposLivre1+"'"+" as NUMERIC(18,2))) AS " + camposLivre1 + ",  " : "";
 		String campo2 = camposLivre2 != null ? "SUM(CAST(eaa0103json ->> '"+camposLivre2+"'"+" as NUMERIC(18,2))) AS " + camposLivre2 + ", " : "";
@@ -158,6 +159,7 @@ class SRF_Documentos_Por_Cfop extends RelatorioBase {
 		Parametro parametroDataEntSaidaFin = dtEntSaidaFin != null ? Parametro.criar("dtEntSaidaFin",dtEntSaidaFin) : null;
 		Parametro parametroCfops = cfops != null && cfops.size() > 0 ? Parametro.criar("cfops",cfops) : null;
 		Parametro parametroPcd = pcd != null && pcd.size() > 0 ? Parametro.criar("pcd",pcd) : null;
+		Parametro parametroEmpresa = Parametro.criar("idEmpresa", obterEmpresaAtiva().getAac10id());
 
 		String sql = "SELECT "+campo1+ campo2+ campo3 + campo4 + campo5 + campo6 + "abb01num AS numDoc, abb01data AS dtEmissao, aah01codigo AS codTipoDoc, eaa01esdata AS esData,eaa01id, " +
 				"abe01codigo AS codEnt, abe01id,abe01na AS naEnt, abe01ie AS cnpj,aaj15codigo AS codCFOP, aaj15descr AS descrCFOP,aaj15id, " +
@@ -183,12 +185,13 @@ class SRF_Documentos_Por_Cfop extends RelatorioBase {
 				whereResumoOper+
 				whereCfops+
 				wherePcd+
+				whereEmpresa +
 				"GROUP BY abb01num, abb01data, aah01codigo, eaa01esdata,abe01id,eaa01id, " +
 				"abe01codigo, abe01na, abe01ie,aaj15codigo,aaj15descr,aaj15id " +
 				"ORDER by aaj15codigo,abb01num,abb01data,abe01codigo  ";
 
 		return getAcessoAoBanco().buscarListaDeTableMap(sql,parametroTipoDoc,parametroNumIni,parametroNumFin,parametroDataEmissaoIni,parametroDataEmissaoFin,parametroDataEntSaidaIni,parametroDataEntSaidaFin,
-				parametroCfops,parametroPcd)
+				parametroCfops,parametroPcd, parametroEmpresa)
 
 	}
 
@@ -240,3 +243,4 @@ class SRF_Documentos_Por_Cfop extends RelatorioBase {
 
 	}
 }
+//meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MgcG9yIENGT1AiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

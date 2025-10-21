@@ -1,0 +1,130 @@
+<html>
+	<template>
+		<div class="main">
+		
+			<div class="operacoes">
+				<fieldset class = "fieldsetHora" >
+					<legend>&nbsp; Hora &nbsp; </legend>
+						<input type = "time" v-model="filtros.hora"></input>
+				</fieldset>
+				<div class="operacao">
+					<fieldset>
+						<legend>&nbsp; Operação &nbsp; </legend>
+						<m-select label="" v-model="filtros.operacao" :options="opcoesOperacao" :showClearButton="false" :required="true" />
+					</fieldset>
+				</div>
+				<div class="tipoOper">
+					<fieldset>
+						<legend>&nbsp;Tipo Operação &nbsp; </legend>
+						<m-select label="" v-model="filtros.tipoOperacao" :options="opcoesTipoOperacao" :showClearButton="false" :required="true" />
+					</fieldset>
+				</div>
+				
+<!--				<div class="dtEntradaSaida">-->
+<!--					<fieldset>-->
+<!--						<legend>&nbsp; Data Entrada/Saída &nbsp; </legend>-->
+<!--						<m-date-interval v-model="filtros.dataEntradaSaida" :required='false' />-->
+<!--					</fieldset>-->
+<!--				</div>-->
+				<div class="dataEntrega">
+					<fieldset>
+						<legend>&nbsp; Data Entrega &nbsp; </legend>
+						<m-date-interval v-model="filtros.dataEntrega" :required='false' />
+					</fieldset>
+				</div>
+			</div>
+			<div class="cliente">
+				<fieldset>				
+					<legend>&nbsp; Cliente &nbsp;</legend>
+					<m-select label="" v-model="filtros.entidade" :request = "requestEnt" :multiple="true" />
+				</fieldset>
+			</div>
+			<div class="situacaoDoc">
+				
+				<div class="dtEmissao">
+					<fieldset>
+						<legend>&nbsp; Data Emissao &nbsp; </legend>
+						<m-date-interval v-model="filtros.dataEmissao" :required='false' />
+					</fieldset>
+				</div>
+			</div>
+			<div class="documento">
+				<div class="pcd">
+					<fieldset>				
+						<legend>&nbsp;PCD &nbsp;</legend>
+						<m-select label="" v-model="filtros.pcd" :request = "requestPCD" :multiple="true" />
+					</fieldset>
+				</div>
+				<div class= "tipoDoc">
+					<fieldset>				
+						<legend>&nbsp;Tipo Documento &nbsp;</legend>
+						<m-select label="" v-model="filtros.tipoDoc" :request = "requestTipoDoc" :multiple="true" />
+					</fieldset>
+				</div>
+			</div>
+			<div class="itens">
+				<fieldset>				
+					<legend>&nbsp;Itens &nbsp;</legend>
+					<m-select label="" v-model="filtros.itens" :request = "requestItens" :multiple="true" />
+				</fieldset>
+			</div>
+			
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestEnt:{
+					table:'Abe01',
+					columns:'abe01codigo,abe01na'
+					
+				},
+				opcoesOperacao:[
+					{value:0, label:"Documento de Entrada"},
+					{value:1, label:"Documento de Saída"},
+				],
+				opcoesTipoOperacao:[
+					{value:0, label:"Documento SCV"},
+					{value:1, label:"Documento SRF"}
+				],
+				requestPCD:{
+					table:'Abd01',
+					columns:'abd01codigo, abd01descr'
+				},
+				requestTipoDoc:{
+					table:'Aah01',
+					columns:'aah01codigo,aah01nome'
+				},
+				requestItens:{
+					table:'Abm01',
+					columns:'abm01codigo,abm01na'
+				},
+				opcoesAtendimento:[
+					{value:0, label:"0-Não Atendido"},
+					{value:1, label:"1-Parcialmente Atendido"},
+					{value:2, label:"2-Totalmente Atendido"},
+				],
+				opcoesCancelados:[
+					{value:0, label:"Não"},
+					{value:1, label:"Sim"},
+					{value:2, label:"Ambas"}
+					
+				]
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+	<style>
+		.operacoes{
+			display:flex;
+		}
+		.situacaoDoc{
+			display:flex;
+		}
+		.dtEmissao{
+			width:100%;
+		}
+	</style>
+
+</html>

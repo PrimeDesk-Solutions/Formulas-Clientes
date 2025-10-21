@@ -31,7 +31,7 @@ public class SCE_RelatorioEstoqueSIF extends RelatorioBase {
     @Override
     public DadosParaDownload executar() {
 
-        if(obterUsuarioLogado().getAab10id() != 1331927) interromper("Relatorio em manutenção")
+        //if(obterUsuarioLogado().getAab10id() != 1331927) interromper("Relatorio em manutenção")
         List<Integer> mps = getListInteger("mps");
         List<Long> itens = getListLong("itens");
         LocalDate[] periodo = getIntervaloDatas("periodo");
@@ -90,7 +90,7 @@ public class SCE_RelatorioEstoqueSIF extends RelatorioBase {
             List<Long> listIdsSaidas = buscarIdsSaidasItens(idItem,periodo, tipoDoc);
             TableMap saidaItem = buscarSaidasItens(idItem,periodo, tipoDoc) == null ? new TableMap() : buscarSaidasItens(idItem,periodo, tipoDoc);
             BigDecimal vendasFrascos= saidaItem.getBigDecimal_Zero("qtdVendida");
-            BigDecimal devolucoes = buscarDevolucoesItens(listIdsSaidas);
+            BigDecimal devolucoes = listIdsSaidas != null && listIdsSaidas.size() > 0 ? buscarDevolucoesItens(listIdsSaidas) : new BigDecimal(0);
             BigDecimal estoqueFinalFrasco = buscarEstoqueFinal(idItem, periodo, status, local);
             BigDecimal inventarioFrasco = buscarInventarioItem(idItem,periodo, pleInvent, statusInvent, localInvent)
             BigDecimal transfFrasco = buscarTransferenciaItem(idItem,periodo, pleTransf, statusTransf, localTransf)

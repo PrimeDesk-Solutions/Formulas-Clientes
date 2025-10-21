@@ -245,3 +245,4 @@ class SCF_ExtratoContabil extends RelatorioBase {
 		return getAcessoAoBanco().obterString(sql,p1)
 	}
 }
+//meta-sis-eyJkZXNjciI6IlNDRiAtIEV4dHJhdG8gQ29udGFiaWwiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

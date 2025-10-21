@@ -216,3 +216,4 @@ public class SCF_Tesouraria_Lancamentos_Futuro extends RelatorioBase {
         return getAcessoAoBanco().buscarListaDeTableMap(sql, pararamEmpresa, pararamDtLancamentoIni, pararamDtLancamentoFin, pararamDtVctonIni, pararamDtVctonFin, pararamDtVctorIni, pararamDtVctorFin, pararamNaturezas, pararamEntidades, parametroTipoDoc)
     }
 }
+//meta-sis-eyJkZXNjciI6IlNDRiAtIFRlc291cmFyaWEgTGFuw6dhbWVudG9zIEZ1dHVyb3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

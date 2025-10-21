@@ -1,0 +1,47 @@
+<html>
+	<template>
+		<div class = "row">
+			<div class = "col-md-12">
+				<div class = "row">
+					<div class = "col-md-4">
+						<fieldset>
+							<legend>&nbsp; Representante &nbsp; </legend>
+							Inicial<m-select label="" v-model="filtros.representanteIni" :request = "requestRep" :multiple="false" />
+							Final<m-select label="" v-model="filtros.representanteFin" :request = "requestRep" :multiple="false" />
+						</fieldset>
+					</div>
+				</div>
+				<div class = "row">
+					<div class = "col-md-2">
+						<fieldset>
+							<legend>&nbsp; Data Emissão &nbsp; </legend>
+							<div class = "row">
+								<m-date v-model="filtros.dataCalculo" :required='false' />
+							</div>
+						</fieldset>
+					</div>
+				</div>
+			</div>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestRep:{
+					table: 'Abe01',
+					columns: 'abe01codigo, abe01na',
+					iniFimColumn: 'abe01codigo',
+					data:{
+						customWhere: null
+					}
+					
+				},
+			},
+			onLoad: function () {
+				this.requestRep.data.customWhere = ' abe01id in ('+this.idRepresentantes.toString()+')'
+				
+			},
+			methods: {}
+		}
+	</script>
+</html>

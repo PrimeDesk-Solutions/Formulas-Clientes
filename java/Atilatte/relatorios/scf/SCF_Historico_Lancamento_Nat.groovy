@@ -175,3 +175,4 @@ public class SCF_Historico_Lancamento_Nat extends RelatorioBase {
 	}
 }
 //meta-sis-eyJkZXNjciI6IlNDRiAtIEhpc3TDs3JpY28gTGFuw6dhbWVudG8gTmF0dXJlemEiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
+//meta-sis-eyJkZXNjciI6IlNDRiAtIEhpc3TDs3JpY28gTGFuw6dhbWVudG8gTmF0dXJlemEiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

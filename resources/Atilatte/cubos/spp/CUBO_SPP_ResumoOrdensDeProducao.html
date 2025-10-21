@@ -1,0 +1,93 @@
+<html>
+	<template>
+		<div class = "col-md-12 col-12">
+			<div class = "row">
+				<div class = "col-md-2 col-12">
+					<fieldset>
+						<legend>&nbsp; Número Documento &nbsp;</legend>
+						Inicial: <m-input label="" v-model="filtros.numeroInicial" />
+						Final: <m-input label="" v-model="filtros.numeroFinal" />	
+					</fieldset>	
+				</div>
+				<div class = "col-md-10 col-12">
+					<fieldset>
+						<legend>&nbsp; Tipo Documento &nbsp;</legend>
+						<m-select label="" v-model="filtros.tipoDoc" :request = "requestTipo" :multiple="true" />
+					</fieldset>
+				</fieldset>
+				<div class = "col-md-10 col-12">
+					<fieldset>
+						<legend>&nbsp; Data &nbsp;</legend>
+						<m-date-interval :required = "false" v-model="filtros.data" />
+					</fieldset>
+				</div>
+			</div>
+			<div class = "col-md-12 col-12">
+				<div class = "row">
+					<div class = "col-md-12 col-12">
+						<fieldset>
+							<legend>&nbsp; Produto Acabado &nbsp;</legend>
+							<m-select label="" v-model="filtros.prodAcabado" :request = "requestProdAcab" :multiple="true" />
+						</fieldset>
+					</div>
+					<div class = "col-md-12 col-12">
+						<fieldset>
+							<legend>&nbsp; Componentes &nbsp;</legend>
+							<m-select label="" v-model="filtros.componentes" :request = "requestComp" :multiple="true" />
+						</fieldset>
+					</div>
+					<div class="col-md-6 col-2">
+						<fieldset>
+							<legend>&nbsp; Imprimir:  &nbsp;</legend>
+							<m-radio v-model="filtros.impressao" option="0" label=" Envase"  />
+							<m-radio v-model="filtros.impressao" option="1" label=" Fabricação" />
+							<m-radio v-model="filtros.impressao" option="2" label=" Ambos" />
+						</fieldset>
+					</div>		
+					<div class="col-12" style = "margin-top: 5px">
+						<m-check v-model="filtros.exibirComponente" label="Exibir Componentes"  />
+					</div>
+				</div>
+			</div>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestTipo:{
+					table:'Aah01',
+					columns: 'aah01codigo, aah01nome'
+				},
+				requestProdAcab:{
+					table:'Abm01',
+					columns:'abm01codigo, abm01na',
+					where:{abm01tipo:1}
+				},
+				requestComp:{
+					table:'Abm01',
+					columns:'abm01codigo, abm01na',
+					data:{
+						customWhere:'abm01tipo <> 2'
+					
+					}
+				}
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+	<style>
+		.documento{
+			display:flex;
+		}
+		.numDoc{
+			width:35%;
+		}
+		.tipoDoc{
+			width:55%
+		}
+		.dataEmissao:{
+			width:10%;
+		}
+	</style>
+</html>

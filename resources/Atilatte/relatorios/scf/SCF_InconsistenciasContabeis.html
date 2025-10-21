@@ -1,0 +1,50 @@
+<html>
+	<template>
+		<div class = "row">
+			<div class = "col-md-12 col-12">
+				<div class = "row">
+					<div class = "col-md-6 col-12">
+						<fieldset>
+							<legend>&nbsp; Período &nbsp; </legend>
+							<m-date-interval v-model="filtros.periodo" :required='false' />
+						</fieldset>
+					</div>
+					<div class = "col-md-6 col-12">
+						<fieldset>
+							<legend>&nbsp; Conta Corrente &nbsp;</legend>
+							<m-select label="" :multiple="true" v-model="filtros.contaCorrente" :request="rqCc" />								
+						</fieldset>
+						</fieldset>
+					</div>
+					<div class = "col-md-4 col-12">
+						<fieldset>
+							<legend>&nbsp; Visualizar: &nbsp;</legend>
+							<m-radio class="radioOrdem" label=' Sem Inconsistências' option="0" name="visualizar" v-model='filtros.visualizacao' />
+							<m-radio class="radioOrdem" label=' Com inconsistêcias' option="1" name="visualizar" v-model='filtros.visualizacao'/> 
+							<m-radio class="radioOrdem" label=' Ambos' option="2" name="visualizar" v-model='filtros.visualizacao' /> 
+						</fieldset>
+					</div>
+<!--					<div class = "col-md-3">-->
+<!--						<fieldset>-->
+<!--							<legend>&nbsp; Impressão: &nbsp;</legend>-->
+<!--							<m-radio class="radioOrdem" label=' PDF' option="0" name="impressao" v-model='filtros.impressao' style="display: inline" />-->
+<!--							<m-radio class="radioOrdem" label=' Excel' option="1" name="impressao" v-model='filtros.impressao' style="display: inline" /> -->
+<!--						</fieldset>-->
+<!--					</div>-->
+				</div>
+			</div>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				rqCc : {
+					table : 'Dab01',
+					columns : 'dab01codigo, dab01nome'
+				},
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+</html>

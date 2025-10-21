@@ -17,7 +17,7 @@ import java.util.HashMap;
 public class SRF_Resumo_Documentos extends RelatorioBase {
     @Override
     public String getNomeTarefa() {
-        return "SRF Resumo Documentos ";
+        return "SRF - Resumo Documentos ";
     }
 
     @Override
@@ -579,3 +579,4 @@ public class SRF_Resumo_Documentos extends RelatorioBase {
 
 }
 //meta-sis-eyJkZXNjciI6IlNSRiBSZXN1bW8gRG9jdW1lbnRvcyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
+//meta-sis-eyJkZXNjciI6IlNSRiAtIFJlc3VtbyBEb2N1bWVudG9zICIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

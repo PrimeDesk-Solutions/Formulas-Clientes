@@ -260,42 +260,42 @@
 	</columnHeader>
 	<detail>
 		<band height="13" splitType="Stretch">
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="72" y="0" width="22" height="13" uuid="1e2ea378-9565-4fc3-a687-ab4f0ddd190c"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{aah01codigo}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="94" y="0" width="40" height="13" uuid="cecf70ad-710b-4727-bdbe-860e6d2b3399"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{abb01num}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="134" y="0" width="42" height="13" uuid="19f4a0ca-20e6-466c-9598-0471895dcc2b"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{abb01data}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="176" y="0" width="60" height="13" uuid="825f815f-a5d6-4979-bbd5-f8d7643e9b5e"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{eaa01esdata}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="236" y="0" width="55" height="13" uuid="1d9ea9de-3700-4616-866d-bcebe93ad182"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{abe30nome}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="291" y="0" width="57" height="13" uuid="ba2c17b4-f030-4413-8e58-81434dc97d6b"/>
 				<textElement>
 					<font size="8"/>

@@ -1,0 +1,123 @@
+<html>
+	<template>
+		<div class = "row">
+			<div class = "col-md-12 col-12">
+				<div class = "row">
+					<div class = "col-md-4 col-12">
+						<fieldset>
+							<legend>&nbsp; Documento &nbsp;</legend>
+							Inicial:<m-input label="" placeholder = "000000001" v-model="filtros.numeroInicial" />
+							Final:<m-input label=""  placeholder = "999999999" v-model="filtros.numeroFinal" />
+						</fieldset>
+					</div>
+					<div class = "col-md-4 col-12">
+						<fieldset>				
+							<legend>&nbsp; Entidade &nbsp;</legend>
+							Inicial:<m-select label="" v-model="filtros.entIni" :request = "requestEnt" :multiple="false" />
+							Final:<m-select label="" v-model="filtros.entFin" :request = "requestEnt" :multiple="false" />
+						</fieldset>
+					</div>
+					<div class = "col-md-4 col-12">
+						<fieldset>				
+							<legend>&nbsp; Capa de Lote &nbsp;</legend>
+							Inicial:<m-select label="" v-model="filtros.capaLoteIni" :request = "requestCapaLote" :multiple="false" />
+							Final:<m-select label="" v-model="filtros.capaLoteFin" :request = "requestCapaLote" :multiple="false" />
+						</fieldset>
+					</div>
+					<div class = "col-md-4 col-12">
+						<fieldset>
+							<legend>&nbsp; Data &nbsp;</legend>
+							<m-date-interval v-model="filtros.dataEmissao" :required='false' />
+						</fieldset>
+					</div>
+					<div class = "col-md-8 col-12">
+						<fieldset>				
+							<legend>&nbsp; Despacho &nbsp;</legend>
+							<m-select label="" v-model="filtros.despacho" :request = "requestTransp" :multiple="true" />
+						</fieldset>
+					</div>
+					<div class = "col-md-12 col-12">
+						<fieldset>				
+							<legend>&nbsp; Redespacho &nbsp;</legend>
+						     <m-select label="" v-model="filtros.redespacho" :request = "requestTransp" :multiple="true" />
+						</fieldset>
+					</div>
+					<div class="col-md-6 col-6">
+						<fieldset>
+							<legend>&nbsp; Itens &nbsp;</legend>
+							<label><m-panel-check-mpms v-model="filtros.mps" selectRef="selectItem" :showServico = "false" :showMercadoria = "false" /></label>
+							<m-select ref="selectItem" :multiple="true" :request="requestItens" v-model="filtros.itens" />
+						</fieldset>
+					</div>
+					<div class = "col-md-6 col-12">	
+						<fieldset>
+							<legend>&nbsp; Categoria &nbsp;</legend>
+							<m-select label="" :multiple="true" v-model="filtros.categoria" :request="requestCriterios" />
+						</fieldset>
+					</div>
+					<div class="col-12">
+						<m-check v-model="filtros.imprimirDescrItem" label="Imprimir Descrição Item"  />
+					</div>
+					
+					
+				</div>
+			</div>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestEnt :{
+					table: 'Abe01',
+					columns: 'abe01codigo, abe01na'
+				},
+				requestTransp: {
+					table: 'Abe01',
+					columns: 'abe01codigo, abe01na',
+					where: {abe01trans: 1}
+				},
+				requestCapaLote :{
+					table: 'Bfb01',
+					columns: 'bfb01lote',
+					data:{
+						customWhere: null
+					},
+				},
+				requestItens: {
+					table: 'Abm01',
+					columns: 'abm01codigo, abm01na',
+				},
+				requestCriterios:{
+					table: 'Aba3001',
+					columns: 'aba3001descr',
+					where: {
+						aba3001criterio: 39116359
+					}
+				}
+				
+				},
+				
+			onLoad: function () {
+				let ids = this.listIds.toString();
+				if(ids != null){
+					this.requestCapaLote.data.customWhere = 'bfb01id in ('+ids+') '	
+				}else{
+					this.requestCapaLote.data.customWhere = null;
+				}
+				
+			},
+			methods: {}
+		}
+	</script>
+	<style>
+		.datas{
+			display:flex;
+		}
+		.entidade{
+			width:75%;
+		}
+		fieldset{
+			height:100%;
+		}
+	</style>
+</html>

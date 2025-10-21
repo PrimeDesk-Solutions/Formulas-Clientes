@@ -398,3 +398,4 @@ class SRF_Resumo_Por_Itens extends RelatorioBase {
     }
 }
 //meta-sis-eyJkZXNjciI6IlNSRiAtIFJlc3VtbyBQb3IgSXRlbnMiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
+//meta-sis-eyJkZXNjciI6IlNSRiAtIFJlc3VtbyBQb3IgSXRlbnMiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

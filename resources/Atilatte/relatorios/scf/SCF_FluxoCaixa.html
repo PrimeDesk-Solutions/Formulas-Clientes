@@ -1,0 +1,98 @@
+<html>
+<template>
+	<div class="q-gutter-y-md">
+		<div class="row">
+			<fieldset style="width: 100%">
+				<legend>&nbsp; Exportar &nbsp;</legend>
+				<m-radio v-model="filtros.exportar" option="0" label="PDF (.pdf)" />
+				<m-radio v-model="filtros.exportar" option="1" label="Excel (.xls)" />
+			</fieldset>
+			<div class="col-md-12 col-12">
+				<fieldset class="fieldsetSam">
+					<legend>&nbsp; Empresas &nbsp;</legend>
+					<m-select v-model="filtros.emps" :multiple="true" placeholder="Empresa Ativa" :request="rqEmps"
+						@change="gcs" />
+				</fieldset>
+			</div>
+			<div class="col-md-6 col-12">
+				<fieldset class="fieldsetSam">
+					<legend>&nbsp; Contas Correntes &nbsp;</legend>
+					<div class="col-12">
+						<m-select v-model="filtros.ccs" :multiple="true" :request="rqCc" :adicionaWherePadrao="false" />
+					</div>
+				</fieldset>
+			</div>
+			<div class="col-md-3 col-12">
+				<fieldset>
+					<legend>&nbsp; Vencimento &nbsp;</legend>
+					<div class="col-12">
+						<m-date-interval v-model="filtros.periodo" :required="true" />
+					</div>
+				</fieldset>
+			</div>
+			<div class="col-md-3 col-12">
+				<fieldset>
+					<legend>&nbsp; Saldo Inicial&nbsp;</legend>
+					<div class="col-12">
+						<m-input v-model="filtros.saldoIni" />
+					</div>
+				</fieldset>
+			</div>
+			<div class="col-md-6 col-12">
+				<fieldset class="fieldsetSam">
+					<legend>&nbsp; Entidade &nbsp;</legend>
+					<m-select v-model="filtros.ents" :multiple="true" :request="rqEnts" :adicionaWherePadrao="false" />
+				</fieldset>
+			</div>
+			<div class="col-md-6 col-12">
+				<fieldset class="fieldsetSam">
+					<legend>&nbsp; Tipo Documento &nbsp;</legend>
+					<m-select v-model="filtros.tipoDoc" :multiple="true" :request="rqTipoDoc" :adicionaWherePadrao="false" />
+				</fieldset>
+			</div>
+			<div>
+				<m-check class="check" label="Sintético" v-model="filtros.sintetico"/>
+			</div>
+		</div>
+	</div>
+</template>
+<script>
+	const classe = {
+		data : {
+			rqEmps : {
+				table : 'Aac01',
+				columns : 'aac01codigo, aac01nome'
+			},
+			rqTipoDoc:{
+				table: 'Aah01',
+				columns: 'aah01codigo, aah01nome'
+			},
+			rqCc : {
+				table : 'Dab01',
+				columns : 'dab01codigo, dab01nome',
+				data : {
+					customWhere : null,
+				}
+			},
+			rqEnts : {
+				table : 'Abe01',
+				columns : 'abe01codigo, abe01na',
+				data: {
+					where: {abc10codigo: 0}
+				}
+			},
+		},
+		onLoad : function() {
+		},
+		methods : {
+			gcs : function() {
+				this.rqCc.data.customWhere = this.filtros.emps.length == 0 ? null
+						: ' dab01gc IN (' + this.filtros.emps.join(',') + ') ';
+
+				this.rqEnts.data.customWhere = this.filtros.emps.length == 0 ? null
+						: ' abe01gc IN (' + this.filtros.emps.join(',') + ') ';
+			}
+		}
+	}
+</script>
+</html>

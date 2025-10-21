@@ -414,3 +414,4 @@ class SRF_Itens_Por_Transportadoras extends RelatorioBase {
 }
 //meta-sis-eyJkZXNjciI6IlNSRiAtIFJlc3VtbyBQb3IgSXRlbSAtIExDUiIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
 //meta-sis-eyJkZXNjciI6IlNSRiBJdGVucyBQb3IgVHJhbnNwb3J0YWRvcmFzIiwidGlwbyI6InJlbGF0b3JpbyJ9
+//meta-sis-eyJkZXNjciI6IlNSRiAtIEl0ZW5zIFBvciBUcmFuc3BvcnRhZG9yYSIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

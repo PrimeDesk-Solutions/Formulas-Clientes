@@ -69,3 +69,4 @@ public class SCF_Servlet_Documentos_Nao_Aprovados extends ServletBase {
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idEmpresa", obterEmpresaAtiva().getAac10id()));
     }
 }
+//meta-sis-eyJkZXNjciI6IlNDRiAtIERvY3VtZW50b3MgTsOjbyBBcHJvdmFkb3MiLCJ0aXBvIjoic2VydmxldCIsInciOjEyLCJoIjoxMiwicmVzaXplIjoidHJ1ZSIsInRpcG9kYXNoYm9hcmQiOiJjb21wb25lbnRlIn0=

@@ -1,0 +1,66 @@
+<html>
+	<template>
+		<div class = "row">
+			<div class = "col-md-12 col-12">
+				<div class = "row">
+					<div class="col-md-6 col-12">
+						<fieldset class="h-100">
+							<legend>&nbsp; Itens &nbsp;</legend>
+							<label><m-panel-check-mpms v-model="filtros.mps" selectRef="selectItemIni, selectItemFim" :showServico="false" /></label>
+							<m-select ref="selectItemIni" :multiple="true" :request="requestItens" v-model="filtros.itens" />
+						</fieldset>
+					</div>
+					<div class="col-md-6 col-12">
+						<fieldset class="h-100">
+							<legend>&nbsp; Departamento Saída &nbsp;</legend>
+							<m-select :multiple="true" :request="requestDepartamento" v-model="filtros.departamento" />
+						</fieldset>
+					</div>
+				</div>
+				<div class = "row">
+					<div class="col-md-6 col-12">
+						<fieldset>
+							<legend>&nbsp; PLE Origem(Saída) &nbsp;</legend>
+							<m-select label="" :multiple="true" v-model="filtros.ple" :request="requestPle" />
+						</fieldset>
+					</div>
+					<div class="col-md-6 col-12">
+						<fieldset class="fieldsetSam">
+							<legend>&nbsp; Data &nbsp;</legend>
+							<m-date-interval label="" v-model="filtros.data" :required="true" />
+						</fieldset>
+					</div>
+				</div>
+				<div class = "row">
+					<div class="col-md-3 col-12">
+						<fieldset>
+							<legend>&nbsp; Lote &nbsp;</legend>
+							Inicial: <m-input v-model="filtros.loteIni" />
+							Final: <m-input v-model="filtros.loteFin" />
+						</fieldset>
+					</div>
+				</div>
+			</div>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestItens : {
+					table : 'Abm01',
+					columns : 'abm01codigo, abm01na'
+				},
+				requestPle : {
+					table : 'Abm20',
+					columns : 'abm20codigo, abm20descr',
+				},
+				requestDepartamento : {
+					table : 'Abb11',
+					columns : 'abb11codigo, abb11nome',
+				},
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+</html>

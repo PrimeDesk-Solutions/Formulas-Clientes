@@ -1,0 +1,68 @@
+<html>
+	<template>
+		<div class = "row">
+			<div class = "col-md-12 col-12">
+				<div class = "row">
+					<div class="col-md-6 col-12">
+						<fieldset>
+							<legend>&nbsp; Tipo Documento &nbsp;</legend>
+							<m-select label="" :multiple="true" v-model="filtros.tipo" :request="requestTipo" />
+						</fieldset>
+					</div>
+					<div class="col-md-6 col-12">
+						<fieldset>
+							<legend>&nbsp; Entidades &nbsp;</legend>
+							<m-select label="" :multiple="true" v-model="filtros.entidade" :request="requestEntidade" />
+						</fieldset>
+					</div>
+					<div class="col-md-6 col-12">
+						<fieldset>
+							<legend>&nbsp; Status &nbsp;</legend>
+							<m-select label="" :multiple="true" v-model="filtros.status" :request="requestStatus" />
+						</fieldset>
+					</div>
+					<div class="col-md-6 col-12">
+						<fieldset>
+							<legend>&nbsp; Local &nbsp;</legend>
+							<m-select label="" :multiple="true" v-model="filtros.local" :request="requestLocal" />
+						</fieldset>
+					</div>
+					<div class="col-md-4 col-12">
+						<fieldset style = "height: 75px">
+							<legend>&nbsp; Impressão: &nbsp;</legend>
+							<m-radio class="radioOrdem" label=' PDF' option="0" name="impressao" v-model='filtros.impressao' style="display: inline" />
+							<m-radio class="radioOrdem" label=' Excel' option="1" name="impressao" v-model='filtros.impressao' style="display: inline" /> 
+						</fieldset>
+					</div>
+				</div>
+			</div>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestTipo : {
+					table : 'Aah01',
+					columns : 'aah01codigo, aah01nome',
+					where : {
+						aah01di : null
+					}
+				},
+				requestStatus : {
+					table : 'aam04',
+					columns : 'aam04codigo'
+				},
+				requestLocal : {
+					table : 'abm15',
+					columns : 'abm15nome'
+				},
+				requestEntidade : {
+					table : 'Abe01',
+					columns : 'abe01codigo, abe01na',
+				}
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+</html>

@@ -1,0 +1,27 @@
+<html>
+	<template>
+		<div class="flex column">
+			<div>
+				<div  style="background: linear-gradient(60deg,#f76e2a,#f76e2a);">
+	              <div class="text-h5 q-ml-md text-white">
+	              <q-icon name="local_shipping" style="font-size: 2em;"/>
+	              SRF - Lotes a Faturar
+	              </div>
+	            </div>
+				<q-markup-table flat bordered>
+			      <tbody>
+			        <tr v-for="msg in mensagens">
+			          <td class="text-left">{{ msg }}</td>
+			        </tr>
+		        </tbody>
+	           </q-markup-table>
+			</div>		
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+			}
+		}
+	</script>
+</html>

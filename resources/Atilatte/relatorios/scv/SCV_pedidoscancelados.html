@@ -1,0 +1,112 @@
+<html>
+	<template>
+		<div class="q-gutter-y-md">
+			<div class="row q-gutter-y-md">
+				<div class="col-md-12 col-12">
+					<fieldset>
+						<legend>
+							&nbsp; Pedido: &nbsp;
+							<m-radio class="radioOrdem" label=' Compra' option="0" name="pedido" v-model='filtros.pedido' style="display: inline" />
+							&nbsp;
+							<m-radio class="radioOrdem" label=' Venda' option="1" name="pedido" v-model='filtros.pedido' style="display: inline" /> 
+							&nbsp;
+						</legend>
+						<div class="row">
+							<div class="col-md-6 col-12">
+								<fieldset>
+									<legend>&nbsp; Tipo &nbsp;</legend>
+									<m-select label="" v-model="filtros.idsTipo" :multiple="true" :request="requestTipo" />
+								</fieldset>
+							</div>
+			
+							<div class="col-md-4 col-12">
+								<fieldset>
+									<legend>&nbsp; Emissão &nbsp;</legend>
+									<m-date-interval label="" v-model="filtros.dtEmissao" />
+								</fieldset>
+							</div>
+			
+							<div class="col-md-2 col-12">
+								<fieldset>
+									<legend>&nbsp; Número &nbsp;</legend>
+									<div class="row">
+										<div class="col-6">
+											<m-input label="" v-model="filtros.numInicial" :required='true' />
+										</div>
+			
+										<div class="col-6">
+											<m-input label="" v-model="filtros.numFinal" :required='true' />
+										</div>
+									</div>
+								</fieldset>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-8 col-12">
+								<fieldset>
+									<legend>&nbsp; Entidade &nbsp;</legend>
+									<m-select v-model="filtros.idsEntidades" :multiple="true" :request="requestEntidades" />
+								</fieldset>
+							</div>
+						
+							<div class="col-md-4 col-12">
+								<fieldset>
+									<legend>&nbsp; Data de Cancelamento &nbsp;</legend>
+									<m-date-interval v-model="filtros.dtCanc" />
+								</fieldset>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-md-6 col-12">
+								<fieldset>
+									<legend>&nbsp; Representante &nbsp;</legend>
+									<m-select v-model="filtros.representante" :multiple="true" :request="requestRepresentantes" />
+								</fieldset>
+							</div>
+							
+							<div class="col-md-6 col-12">
+								<fieldset>
+									<legend>&nbsp; Motivo de Cancelamento &nbsp;</legend>
+									<m-select v-model="filtros.cancelamento" :multiple="true" :request="requestCancelamento" />	
+								</fieldset>
+							</div>
+						</div>
+								
+						<div class="row">
+							<div class="col-md-2 col-12">
+								<m-check class="check" label="Imprimir Itens" v-model="filtros.imprimirItens" />
+							</div>
+						</div>						
+					</fieldset>
+				</div>
+			</div>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data : {
+				requestTipo : {
+					table : 'aah01',
+					columns : 'aah01codigo, aah01nome'
+				},
+				requestEntidades : {
+					table : 'Abe01',
+					columns : 'abe01codigo, abe01nome',
+				},
+				requestRepresentantes : {
+					table : 'Abe01',
+					columns : 'abe01codigo, abe01nome',
+				},
+				requestCancelamento : {
+					table : 'aae11',
+					columns : 'aae11codigo, aae11descr',
+				}
+	
+			},
+			onLoad : function() {
+			},
+			methods : {}
+		}
+	</script> 
+</html>

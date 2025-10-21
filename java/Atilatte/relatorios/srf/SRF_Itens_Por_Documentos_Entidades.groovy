@@ -378,3 +378,4 @@ public class SRF_Itens_Por_Documentos_Entidades extends RelatorioBase {
 
 }
 //meta-sis-eyJkZXNjciI6IlNSRiBJdGVucyBQb3IgRG9jdW1lbnRvcyBlIEVudGlkYWRlcyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
+//meta-sis-eyJkZXNjciI6IlNSRiAtIEl0ZW5zIFBvciBEb2N1bWVudG9zIGUgRW50aWRhZGVzIiwidGlwbyI6InJlbGF0b3JpbyJ9

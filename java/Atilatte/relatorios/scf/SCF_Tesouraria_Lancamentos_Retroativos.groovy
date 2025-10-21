@@ -301,3 +301,4 @@ public class SCF_Tesouraria_Lancamentos_Retroativos extends RelatorioBase {
 
 
 }
+//meta-sis-eyJkZXNjciI6IlNDRiAtIFRlc291cmFyaWEgTGFuw6dhbWVudG9zIFJldHJvYXRpdm9zIiwidGlwbyI6InJlbGF0b3JpbyJ9

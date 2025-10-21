@@ -1,0 +1,111 @@
+<html>
+	<template>
+		<div class = "row">
+			<div class = "col-md-12 col-12">
+				<div class = "row">
+					<div class="col-md-12 col-12">
+						<fieldset>
+							<legend>
+								<m-panel-check-mpms v-model="filtros.mps" :showServico="false" selectRef="selectItem" style="padding-bottom: 5px;" />
+							</legend>
+							<m-select ref="selectItem" :multiple="true" :request="requestItens" v-model="filtros.itens" />
+						</fieldset>
+					</div>
+					<div class = "col-md-6 col-12">
+						<fieldset>
+							<legend>&nbsp; Despacho &nbsp;</legend>
+							Inicial: <m-select label="" :multiple="false" v-model="filtros.despachoIni" :request="requestDespacho" />	
+							Final: <m-select label="" :multiple="false" v-model="filtros.despachoFin" :request="requestDespacho" />
+						</fieldset>
+					</div>
+					<div class = "col-md-6 col-12">
+						<fieldset>
+							<legend>&nbsp; Redespacho &nbsp;</legend>
+							Inicial: <m-select label="" :multiple="false" v-model="filtros.redespachoIni" :request="requestRedespacho" />	
+							Final: <m-select label="" :multiple="false" v-model="filtros.redespachoFin" :request="requestRedespacho" />
+						</fieldset>
+					</div>
+				</div>
+				<div class = "row">
+					<div class = "col-md-4 col-12">
+						<fieldset style = "height:183px">
+							<legend>&nbsp; Número Nota &nbsp;</legend>
+							Inicial <m-input v-model="filtros.numNotaIni"/>
+							Final <m-input v-model="filtros.numNotaFin"/>
+						</fieldset>
+					</div>
+					<div class = "col-md-4 col-12">
+						<fieldset style = "height:183px">
+							<legend>&nbsp; Número Romaneio &nbsp;</legend>
+							Inicial <m-input v-model="filtros.numRomIni"/>
+							Final <m-input v-model="filtros.numRomFin"/>
+						</fieldset>
+					</div>
+					<div class = "col-md-4 col-12">
+						<fieldset style = "height:183px">
+							<legend>&nbsp; Número Etiqueta &nbsp;</legend>
+							Inicial <m-input v-model="filtros.numEtiquetaIni"/>
+							Final <m-input v-model="filtros.numEtiquetaFin"/>
+						</fieldset>
+					</div>
+					<div class = "col-md-4 col-12">
+						<fieldset style = "height:183px">
+							<legend>&nbsp; Número carga &nbsp;</legend>
+							Inicial <m-input v-model="filtros.numCargaIni"/>
+							Final <m-input v-model="filtros.numCargaFin"/>
+						</fieldset>
+					</div>
+				</div>
+				<div class = "row">
+					<div class = "col-md-6 col-12">
+						<fieldset>
+							<legend>&nbsp; Data Coleta &nbsp; </legend>
+							<m-date-interval v-model="filtros.dataColeta" :required='false' />
+						</fieldset>
+					</div>
+					<div class = "col-md-6 col-12">
+						<fieldset>
+							<legend>&nbsp; Data Criação &nbsp; </legend>
+							<m-date-interval v-model="filtros.dataCriacao" :required='false' />
+						</fieldset>
+					</div>
+				</div>
+				<div class = "row">
+					<div class = "col-md-4 col-12">
+						<fieldset style = "height:183px">
+							<legend>&nbsp; Lote Etiqueta &nbsp;</legend>
+							Inicial <m-input v-model="filtros.loteIni"/>
+							Final <m-input v-model="filtros.loteFin"/>
+						</fieldset>
+					</div>
+				</div>
+			</div>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestItens : {
+					table : 'Abm01',
+					columns : 'abm01codigo, abm01na'
+				},
+				requestDespacho: {
+					table: 'Abe01',
+					columns: 'abe01codigo, abe01na',
+					iniFimColumn:"abe01codigo",
+					where:{
+						abe01for: 1
+					}
+				},
+				requestRedespacho: {
+					table: 'Abe01',
+					columns: 'abe01codigo, abe01na',
+					iniFimColumn:"abe01codigo",
+					abe01trans: 1
+				}
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+</html>

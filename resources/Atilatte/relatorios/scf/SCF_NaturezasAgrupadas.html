@@ -1,0 +1,80 @@
+<html>
+	<template>
+		
+		<div class="row">
+			<div class="col-6">
+				<fieldset>
+					<legend>Conta Corrente</legend>
+				<m-select v-model="filtros.contas" :multiple="true" :request="requestConta" />
+				</fieldset>
+			</div>
+			<div class="col-6">
+				<fieldset>
+					<legend>Agrupamento</legend>
+					<m-select v-model="filtros.agrupamento" :multiple="true" :request="requestAgrupamento" />
+				</fieldset>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-6">
+				<fieldset> 
+					<legend>Período</legend>
+					<m-date-interval v-model="filtros.periodo" :required="true" :disabled="filtros.classe == 2 || filtros.classe == 3"/>
+				</fieldset>
+			</div>
+			<div class="col-3">
+				<fieldset>
+					<legend>Classe</legend>
+					<m-radio v-model="filtros.classe" label=" Sintético" option="0" name="classe" />
+					<m-radio v-model="filtros.classe" label=" Analítico" option="1" name="classe" />
+					<m-radio v-model="filtros.classe" label=" Sintético anual - ano:" option="2"  name="classe" /> 
+					<m-input v-model="filtros.ano" type="integer" class="campoAno" :disabled="filtros.classe != 2" :required="filtros.classe == 2" />
+					<m-radio v-model="filtros.classe" label=" Gráfico anual" option="3" name="classe" />
+					<m-input v-model="filtros.ano" type="integer" class="campoAno2" :disabled="filtros.classe != 3" :required="filtros.classe == 3" />
+				</fieldset>
+			</div>
+			<div class="col-2">
+				<fieldset>
+					<legend>Saldo Anterior</legend>
+					<m-input type="decimal" v-model="filtros.saldoAnterior" />
+				</fieldset>
+			</div>
+			<div class="col-1">
+				<fieldset>
+					<legend>Imprimir </legend>
+					<m-radio v-model="filtros.imprimir" label=" XLS" option="0" name="imprimir" />
+					<m-radio v-model="filtros.imprimir" label=" PDF" option="1" name="imprimir" />					
+				</fieldset>
+			</div>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestConta:{
+					table: "dab01" ,
+					columns: "dab01codigo, dab01nome" 
+				},
+				requestAgrupamento:{
+					table:"abf11",
+					columns:"abf11codigo, abf11nome"
+				}
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+	<style>
+		.campoAno{
+			max-width:90px;
+			margin-left: 160px;
+			margin-top: -30px;
+		}
+		.campoAno2{
+			max-width:90px;
+			margin-left: 160px;
+			margin-top: -20px;
+		}
+	
+	</style>
+</html>

@@ -1,0 +1,78 @@
+<html>
+	<template>
+		<div class = "documento">
+			
+			<div class = "operacao">
+				<fieldset>
+					<legend>&nbsp; Operação &nbsp; </legend>
+					<m-select label="" v-model="filtros.operacao" :options="opcoesOperacao" :showClearButton="false" :required="false" />
+				</fieldset>
+				
+			</div>
+
+			<div class = "tipoOper">
+				<fieldset>
+					<legend>&nbsp;Tipo Operação &nbsp; </legend>
+					<m-select label="" v-model="filtros.tipoOperacao" :options="opcoesTipoOperacao" :showClearButton="false" :required="false" />
+				</fieldset>
+				
+			</div>
+			
+			<div class = "dataEmissao">
+				<fieldset>
+					<legend>&nbsp; Data Emissao &nbsp; </legend>
+					<m-date-interval v-model="filtros.dataEmissao" :required='false' />
+				</fieldset>
+			</div>
+
+		</div>
+
+		<div class="clientes">
+				<fieldset>				
+					<legend>&nbsp; Entidade &nbsp;</legend>
+					<m-select label="" v-model="filtros.entidade" :request = "requestEnt" :multiple="false" />
+				</fieldset>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				opcoesOperacao:[
+					{value:0, label:"Documento de Entrada"},
+					{value:1, label:"Documento de Saída"},
+					{value:2, label:"Pedido de Compra"},
+					{value:3, label:"Pedido de Venda"}
+				],
+				opcoesTipoOperacao:[
+					{value: 0, label:"Compra"},
+					{value: 1, label:"Venda"},
+					{value: 2, label:"Pedido"},
+					{value: 3, label:"Devolução de Compra"},
+					{value: 4, label:"Devolução de Venda"},
+					{value: 5, label:"Remessa"},
+					{value: 6, label:"Retorno"},
+					{value: 7, label:"Outras"},
+					{value:99, label:"Todas"}
+				],
+				requestEnt:{
+					table:'Abe01',
+					columns:'abe01codigo,abe01na'	
+				},
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+
+	<style>
+		.documento{
+			display:flex;
+		}
+		.operacao, .tipoOper{
+			width:25%;
+		}
+		.dataEmissao{
+			width:50%;
+		}
+	</style>
+</html>

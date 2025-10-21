@@ -1,0 +1,63 @@
+<html>
+<template>
+	<div class="q-gutter-y-md">
+		<div class="row">
+			<div class="col-md-12 col-12">
+				<fieldset class="fieldsetSam">
+					<legend>&nbsp; Contas Correntes &nbsp;</legend>
+					<div class="col-12">
+						<m-select v-model="filtros.contaCorrente" :multiple="true" :request="requestContaCorrente" />
+					</div>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+	<div class="row q-gutter-y-md">
+		<div class="col-md-12 col-12">
+			<fieldset>
+				<legend>Período</legend>
+				<div class="row">
+					<div class="col-6">
+						<m-input type="monthYear" v-model="filtros.dtIni" :required='true' /><!-- required(campo obrigatório) -->
+					</div>
+					<div class="col-6">
+						<m-input type="monthYear" v-model="filtros.dtFim" :required='true' />
+					</div>
+				</div>
+			</fieldset>
+		</div>
+	</div>
+	<div class="col-md-12 col-12">
+		<m-check class="check" label="Considerar contas inativas"
+			v-model="filtros.isContaInativa" />
+	</div>
+</template>
+<script>
+	const classe = {
+		data : {
+			requestContaCorrente : {
+				table : 'Dab01',
+				columns : 'dab01codigo,dab01nome'
+
+			}
+		},
+		onLoad : function() {
+		},
+		methods : {}
+	}
+</script>
+<style>
+.teste {
+	color: #00F;
+}
+
+.check {
+	margin-top: 0px;
+	margin-bottom: 15px;
+}
+
+.fieldsetSam {
+	margin-bottom: 10px;
+}
+</style>
+</html>

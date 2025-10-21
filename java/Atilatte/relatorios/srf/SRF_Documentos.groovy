@@ -1,4 +1,4 @@
-package Atilatte.relatorios.srf
+package Atilatte.relatorios.srf;
 
 
 import java.time.LocalDate
@@ -229,7 +229,7 @@ class SRF_Documentos extends RelatorioBase {
 
 
         def sql = " SELECT eaa01id, eaa0103id, abd01codigo, abd01descr,abb01num, abb01data,eaa01id, eaa01esdata, aah01codigo, abe01codigo, abe30nome, abe40nome, abe01ni, " +
-                    "eaa0103qtUso as eaa0103qtuso, eaa0103qtComl as eaa0103qtcoml,  eaa0103unit as eaa0103unit," +
+                    "eaa0103qtUso as eaa0103qtuso, eaa0103qtComl as eaa0103qtcoml,  eaa0103unit as eaa0103unit, " +
                     "eaa0103total as eaa0103total, eaa0103totDoc as eaa0103totdoc, eaa0103totFinanc as eaa0103totfinanc, eaa0103json,  " + entidade +
                     "FROM eaa0103 " +
                     "INNER JOIN eaa01 ON eaa01id = eaa0103doc " +
@@ -428,4 +428,6 @@ class SRF_Documentos extends RelatorioBase {
         return "SRF - Documentos";
     }
 }
+//meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
+//meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

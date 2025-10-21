@@ -1,0 +1,55 @@
+<html>
+	<template>
+		<div class = "main">
+			<div class="numDoc">
+				<fieldset>
+					<legend>&nbsp; Número &nbsp;</legend>
+						Inicial: <m-input label="" v-model="filtros.numeroInicial" />
+						Final: <m-input label="" v-model="filtros.numeroFinal" />
+				</fieldset>
+			</div>
+
+			<div class = "despacho">
+				<fieldset>				
+					<legend>&nbsp; Despacho &nbsp;</legend>
+					Inicial:<m-select label="" v-model="filtros.codDespachoIni" :request = "requestTransp" :multiple="false" />
+					Final:<m-select label="" v-model="filtros.codDespachoFin" :request = "requestTransp" :multiple="false" />
+				</fieldset>
+			</div>
+			<div class="data">
+				<fieldset>
+					<legend>&nbsp; Data Emissao &nbsp; </legend>
+					Inicial: <m-date v-model="filtros.dataEmissaoIni" :required='false' />
+					Final: <m-date v-model="filtros.dataEmissaoFin" :required='false' />
+				</fieldset>
+			</div>
+			
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestTransp: {
+					table: 'Abe01',
+					columns: 'abe01codigo, abe01na',
+					iniFimColumn : 'abe01codigo',
+					where: {abe01trans: 1}
+				}
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+	<style>
+		.main{
+			display:flex;
+		}
+		.numDoc, .data{
+			width:15%;
+		}
+		.despacho{
+			width:70%;
+		}
+		
+	</style>
+</html>

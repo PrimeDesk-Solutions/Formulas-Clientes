@@ -1,0 +1,122 @@
+<html>
+	<template>
+		<div class = "row">
+			<div class = "col-md-12 col-12">
+				<fieldset>
+					<legend>
+						&nbsp; Pedido: &nbsp;
+						<m-radio class="radioOrdem" label=' Compra' option="0" name="pedido" v-model='filtros.pedido' style="display: inline" />
+						&nbsp;
+						<m-radio class="radioOrdem" label=' Venda' option="1" name="pedido" v-model='filtros.pedido' style="display: inline" /> 
+						&nbsp;
+					</legend>
+					<div class = "row">
+						<div class = "col-md-6 col-12">
+							<fieldset>
+									<legend>&nbsp; Tipo Documento &nbsp;</legend>
+									<m-select label="" v-model="filtros.idsTipo" :multiple="true" :request="requestTipo" />
+							</fieldset>
+						</div>
+						<div class = "col-md-4 col-12">
+							<fieldset>
+								<legend>&nbsp; Data Emissão &nbsp;</legend>
+								<m-date-interval label="" v-model="filtros.dtEmissao" />
+							</fieldset>
+						</div>
+						<div class = "col-md-2">
+							<fieldset>
+								<legend>&nbsp; Número &nbsp;</legend>
+								<div class = "row">
+									<div class = "col-6">
+										<m-input label="" v-model="filtros.numInicial" :required='true' />
+									</div>
+									<div class = "col-6">
+										<m-input label="" v-model="filtros.numFinal" :required='true' />
+									</div>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+					<div class = "row">
+						<div class = "col-md-8 col-12">
+							<fieldset>
+								<legend>&nbsp;Produto&nbsp;</legend>
+								<div class = "row">
+									<div class = "col-12">
+										<m-panel-check-mpms v-model="filtros.mpms" :showServico="false" selectRef="selectItemIni" style="padding-bottom: 5px;" />
+									</div>
+									<div class = "col-12">
+										<m-select ref="selectItemIni" v-model="filtros.itens" :multiple="true" :request="requestItens"  />
+									</div>
+								</div>
+							</fieldset>
+						</div>
+						<div class = "col-md-4">
+							<fieldset style = "height:100px">
+								<legend>&nbsp;Entrega Prevista &nbsp;</legend>
+									<m-date-interval label="" v-model="filtros.dtEntregaPrevista" />
+							</fieldset>
+						</div>
+					</div>
+					<div class = "row">
+						<div class = "col-md-6 col-12">
+							<fieldset>
+								<legend>&nbsp; Representante &nbsp;</legend>
+								<m-select label="" v-model="filtros.representantes" :multiple="true" :request="requestRepresentante" />
+							</fieldset>
+						</div>
+						<div class = "col-md-6 col-12">
+							<fieldset>
+								<legend>&nbsp;PCD &nbsp;</legend>
+								<m-select label="" v-model="filtros.pcd" :multiple="true" :request="requestPCD" />
+							</fieldset>
+						</div>
+					</div>
+					<div class = "row">
+						<div class = "col-md-4">
+							<fieldset style = "height:100px">
+								<legend>&nbsp;Detalhamento &nbsp;</legend>
+								<m-radio class="radioOrdem" label=' Sintético' option="0" name="detalhamento" v-model='filtros.detalha' />
+								<m-radio class="radioOrdem" label=' Analítico' option="1" name="detalhamento" v-model='filtros.detalha'/>
+							</fieldset>
+						</div>
+						<div class = "col-md-4">
+							<fieldset>
+								<legend>&nbsp;Considerar como Dt. Entrega Real  &nbsp;</legend>
+								<m-radio class="radioOrdem" label=' Data Entrada/Saída' option="0" name="entregaReal" v-model='filtros.realEntrega'/>
+								<m-radio class="radioOrdem" label=' Data Emissão' option="1" name="entregaReal" v-model='filtros.realEntrega'/>
+							</fieldset>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestTipo : {
+					table : 'aah01',
+					columns : 'aah01codigo, aah01nome'
+				},
+				requestItens : {
+					table : 'Abm01',
+					columns : 'abm01codigo, abm01na'
+				},
+				requestRepresentante: {
+					table: 'Abe01',
+					columns: 'abe01codigo, abe01na',
+					where:{
+						abe01rep: 1
+					}
+				},
+				requestPCD:{
+					table: 'Abd01',
+					columns: 'abd01codigo,abd01descr'
+				}
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+</html>

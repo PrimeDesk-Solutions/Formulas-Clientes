@@ -140,42 +140,42 @@ public class SCF_SaldoDosLancamentosDetalhado extends RelatorioBase {
     }
     private  BigDecimal buscarSaldoAnterior (Long idContaCorrente, LocalDate[] dataPeriodo, Integer conciliacao,BigDecimal saldoInicial)  {
 
-        String wherePeriodoData = dataPeriodo != null && dataPeriodo.size() > 0 ? " where dab10.dab10data < '" + dataPeriodo[0] + "'": "";
-        String whereIdsContaCorrente = " and dab01.dab01id = :idContaCorrente "
+		String wherePeriodoData = dataPeriodo != null && dataPeriodo.size() > 0 ? " where dab10.dab10data < '" + dataPeriodo[0] + "'": "";
+		String whereIdsContaCorrente = " and dab01.dab01id = :idContaCorrente "
 
-        Parametro parametroCC = Parametro.criar("idContaCorrente", idContaCorrente);
+		Parametro parametroCC = Parametro.criar("idContaCorrente", idContaCorrente);
 
-        String sql = " select abb01num,  Dab01.dab01id, Dab01.dab01codigo, Dab01.dab01nome, Dab10.dab10id, Dab10.dab10data, Dab10.dab10cc, Dab10.dab10mov, Dab10.dab10historico, Dab10.dab10valor, dab1002dtconc, " +
-                "abe01codigo, abe01na, abb01parcela, abb01quita "+
-                " from Dab10 Dab10" +
-                " left join abb01 on abb01id = Dab10.dab10central "+
-                " LEFT join abe01 on abe01id = abb01ent " +
-                " left join dab1002 on dab1002lct = dab10id "+
-                " left join Dab01 Dab01 on Dab01.dab01id = dab1002cc " +
-                wherePeriodoData +
-                whereIdsContaCorrente +
-                getSamWhere().getWherePadrao(" AND ", Dab10.class) +
-                " order by Dab01.dab01codigo,Dab10.dab10data, dab10id "
-
-
-        List<TableMap> lancamentos = getAcessoAoBanco().buscarListaDeTableMap(sql, parametroCC);
-
-        BigDecimal saldo = saldoInicial;
-
-        for(lancamento in lancamentos){
-            if(lancamento.getInteger("dab10mov").equals(0)){
-                saldo += lancamento.getBigDecimal("dab10valor")
-            }else{
-                saldo -= lancamento.getBigDecimal("dab10valor")
-            }
-
-        }
+		String sql = " select abb01num,  Dab01.dab01id, Dab01.dab01codigo, Dab01.dab01nome, Dab10.dab10id, Dab10.dab10data, Dab10.dab10cc, Dab10.dab10mov, Dab10.dab10historico, Dab10.dab10valor, dab1002dtconc, " +
+				"abe01codigo, abe01na, abb01parcela, abb01quita "+
+				" from Dab10 Dab10" +
+				" left join abb01 on abb01id = Dab10.dab10central "+
+				" LEFT join abe01 on abe01id = abb01ent " +
+				" left join dab1002 on dab1002lct = dab10id "+
+			     " left join Dab01 Dab01 on Dab01.dab01id = dab1002cc " +
+				wherePeriodoData +
+				whereIdsContaCorrente +
+				getSamWhere().getWherePadrao(" AND ", Dab10.class) +
+				" order by Dab01.dab01codigo,Dab10.dab10data, dab10id "
 
 
-        return saldo;
-    }
+		List<TableMap> lancamentos = getAcessoAoBanco().buscarListaDeTableMap(sql, parametroCC);
+
+		BigDecimal saldo = saldoInicial;
+
+		for(lancamento in lancamentos){
+			if(lancamento.getInteger("dab10mov").equals(0)){
+				saldo += lancamento.getBigDecimal("dab10valor")
+			}else{
+				saldo -= lancamento.getBigDecimal("dab10valor")
+			}
+
+		}
 
 
+		return saldo;
+	}
+
+    
 
     private BigDecimal buscarSaldoInicial(Long idConta, LocalDate[] data) {
         String field = Fields.numMeses("dab0101mes", "dab0101ano").toString();
@@ -208,3 +208,4 @@ public class SCF_SaldoDosLancamentosDetalhado extends RelatorioBase {
     }
 
 }
+//meta-sis-eyJkZXNjciI6IlNDRiAtIFNhbGRvIGRvcyBMYW7Dp2FtZW50b3MgKERldGFsaGFkb3MpIiwidGlwbyI6InJlbGF0b3JpbyJ9

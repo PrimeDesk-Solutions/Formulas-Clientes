@@ -1,0 +1,166 @@
+<html>
+	<template>
+		<div class = "row">
+			<div class = "col-md-12 col-12">
+				<fieldset>
+					<legend>
+						&nbsp; Operação: &nbsp;
+						<m-radio class="radioOrdem" label=' Recebimento' option="0" name="pedido" v-model='filtros.resumoOperacao' style="display: inline" />
+						&nbsp;
+						<m-radio class="radioOrdem" label=' Faturamento' option="1" name="pedido" v-model='filtros.resumoOperacao' style="display: inline" /> 
+						&nbsp;
+					</legend>
+					<div class = "row">
+						<div class = "col-md-2 col-12">
+							<fieldset style = "height:183px">
+								<legend>&nbsp; Número &nbsp;</legend>
+								Inicial <m-input v-model="filtros.numeroInicial"/>
+								Final <m-input v-model="filtros.numeroFinal"/>
+							</fieldset>
+						</div>
+						<div class = "col-md-10 col-12">
+							<fieldset>
+								<legend>&nbsp; Documento &nbsp;</legend>
+								<fieldset>
+									<legend>&nbsp; Tipo &nbsp;</legend>
+									<m-select label="" :multiple="true" v-model="filtros.tipo" :request="requestTipo"/>
+								</fieldset>
+								<fieldset>
+									<legend>&nbsp; Tipo &nbsp;</legend>
+									<m-select label="" :multiple="true" v-model="filtros.tipo" :request="requestTipo"/>
+								</fieldset>
+							</fieldset>
+						</div>
+						<div class = "col-md-12 col-12">
+							<fieldset>
+								<legend>&nbsp; Entidades &nbsp;</legend>
+								<m-select label="" :multiple="true" v-model="filtros.entidade" :request="requestEntidade" />								
+							</fieldset>
+						</div>
+						<div class = "col-md-12 col-12">
+							<fieldset>
+								<legend>&nbsp; Representantes &nbsp;</legend>
+								<m-select label="" :multiple="true" v-model="filtros.representantes" :request="requestRepresentantes" />								
+							</fieldset>
+						</div>
+						<div class = "col-md-6 col-12">
+							<fieldset>
+								<legend>&nbsp; Municípios &nbsp;</legend>
+								<m-select label="" :multiple="true" v-model="filtros.municipios" :request="requestMunicipios" />								
+							</fieldset>
+						</div>
+						<div class = "col-md-6 col-12">
+							<fieldset>
+								<legend>&nbsp; Valor do Relatório &nbsp;</legend>
+								<div class = "row">
+									<div class="col-2">
+										<m-check v-model="filtros.totalizar" label="Totalizar"  />
+									</div>
+									<div class="col-2">
+										<m-check v-model="filtros.liquido" label="Liquido"  />
+									</div>
+									<div class = "col-4">
+										<m-select :multiple="false" v-model="filtros.campoFixo" :options="opcoes"  />
+									</div>
+									<div class="col-4">
+										<m-select :multiple="false" v-model="filtros.campoLivre" :request="requestCampos"  />
+									</div>
+								</div>
+							</fieldset>
+						</div>
+						<div class = "col-md-12 col-12">
+							<div class = "row">
+								<div class = "col-md-1">
+									<fieldset>
+										<legend>&nbsp; Ano &nbsp;</legend>
+										<m-input v-model="filtros.ano"/>
+									</fieldset>
+								</div>
+								<div class = "col-md-4 col-12">
+									<fieldset>
+										<legend>&nbsp; Resumir por &nbsp; </legend>
+										<m-select label="" v-model="filtros.resumo" :options="opcoesResumo" :showClearButton="false" :required="true" />
+									</fieldset>
+								</div>
+								<div class = "col-md-3">
+									<fieldset style = "height:73px">
+										<legend>&nbsp; Impressão: &nbsp;</legend>
+										<m-radio class="radioOrdem" label=' PDF' option="0" name="impressao" v-model='filtros.impressao' style="display: inline" />
+										<m-radio class="radioOrdem" label=' Excel' option="1" name="impressap" v-model='filtros.impressao' style="display: inline" /> 
+									</fieldset>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+				</fieldset>
+			</div>
+		</div>
+	
+		
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestEntidade: {
+					table: 'Abe01',
+					columns: 'abe01codigo, abe01na'
+				},
+				requestTipo: {
+					table: 'Aah01',
+					columns: 'aah01codigo, aah01nome',
+					where: {aah01di: null}
+				},
+				requestPcd:{
+					table: 'Abd01',
+					columns: 'abd01codigo, abd01descr',
+				},
+				requestRepresentantes:{
+					table: 'Abe01',
+					columns: 'abe01codigo, abe01na',
+					where:{
+						abe01rep:1
+					}
+				},
+				requestMunicipios:{
+					table: 'aag0201',
+					columns: 'aag02uf,aag0201nome',
+					data:{
+						join:{
+							inner:"aag0201uf"
+						}
+					}
+				},
+				opcoes: [
+		            {value: 'Qtde. de Uso', label: 'Qtde. de Uso', option: 'Qtde. de Uso'},
+		            {value: 'Qtde. Comercial', label: 'Qtde. Comercial', option: 'Qtde. Comercial'},
+		            {value: 'Preço Unitário', label: 'Preço Unitário', option: 'Preço Unitário'},
+		            {value: 'Total do Item', label: 'Total do Item', option: 'Total do Item'},
+		            {value: 'Total Documento', label: 'Total Documento', option: 'Total Documento'},
+		            {value: 'Total Financeiro', label: 'Total Financeiro', option: 'Total Financeiro'}
+		        ],
+		        requestCampos:{
+					table: 'aba6001',
+					columns: 'aah02descr',
+					iniFimColumn:"aah02nome",
+					data:{
+						join:{
+							left:"aba6001cpoVlr",
+							inner:"aba6001alin"
+						},
+						where: {
+							aba60codigo: '5000'
+						}
+					}
+				},
+				 opcoesResumo : [
+		        		 {value: 0, label: 'Entidades', option: 'Entidades'},
+		        		 {value: 1, label: 'Itens', option: 'Itens'}
+		        		 
+				]
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+</html>

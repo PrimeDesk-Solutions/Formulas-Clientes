@@ -1,0 +1,92 @@
+<html>
+	<template>
+		<div class="q-gutter-y-md">
+			<div class="row q-gutter-y-md">
+				<div class="col-md-12 col-12">
+					<fieldset>
+						<div class="row q-gutter-y-md">
+							<div class="col-12 col-md-2">
+								<fieldset>
+									<legend>&nbsp; Número &nbsp;</legend>
+										<legend>&nbsp; Inicial/Final &nbsp;</legend>
+										<m-input label="" v-model="filtros.numeroInicial" />
+					
+										<m-input label="" v-model="filtros.numeroFinal" />
+								</fieldset>
+							</div>
+							
+							<div class="col-12 col-md-10">			
+								<div class="row">			
+									<div class="col-md-12 col-12">	
+										<fieldset>
+											<legend>&nbsp; Emissão &nbsp;</legend>
+											<m-date-interval v-model="filtros.emissao" />
+										</fieldset>		
+									</div>
+									<div class = "col-md-12 col-12">
+										<fieldset>				
+											<legend>&nbsp; Capa de Lote &nbsp;</legend>
+											<m-select label="" v-model="filtros.capaLote" :request = "requestCapaLote" :multiple="true" />
+										</fieldset>
+									</div>
+								</div>						
+							</div>
+						</div>
+						
+						<div class="row q-gutter-y-md">
+							<div class="col-md-12 col-12">
+								<fieldset>
+								
+									<legend>&nbsp; Despacho &nbsp;</legend>
+									<m-select label="" v-model="filtros.despacho" :multiple="true" :request="requestTransp" />
+
+									<legend>&nbsp; Redespacho &nbsp;</legend>
+									<m-select label="" v-model="filtros.redespacho" :multiple="true" :request="requestTransp" />
+								</fieldset>
+							</div>
+						</div>
+						<div class = "col-md-4">
+									<fieldset style = "height:73px">
+										<legend>&nbsp; Impressão: &nbsp;</legend>
+										<m-radio class="radioOrdem" label=' PDF' option="0" name="impressao" v-model='filtros.impressao' style="display: inline" />
+										<m-radio class="radioOrdem" label=' Excel' option="1" name="impressao" v-model='filtros.impressao' style="display: inline" /> 
+									</fieldset>
+								</div>
+					</fieldset>
+				</div>
+			</div>
+		</div>
+	</template>
+	<script>
+	  const classe = {
+			data: {
+				requestTipo: {
+					table: 'Aah01',
+					columns: 'aah01codigo, aah01nome'
+				},
+				requestTransp: {
+					table: 'Abe01',
+					columns: 'abe01codigo, abe01na',
+					where: {abe01trans: 1}
+				},
+				requestCapaLote :{
+					table: 'Bfb01',
+					columns: 'bfb01lote',
+					data:{
+						customWhere: null
+					},
+				},
+			},
+			onLoad: function () {
+				//this.requestCapaLote.data.customWhere = 'bfb01id in ('+this.listIds.toString()+') '	
+				//console.log(this.filtros)
+			},
+			methods: {}
+		}
+	</script>
+	<style>
+		fieldset{
+			height:100%;
+		}
+	</style>
+</html>

@@ -2034,3 +2034,4 @@ class NFe extends FormulaBase {
 		return getAcessoAoBanco().obterBigDecimal(sql, criarParametroSql("eaa01id", eaa01id));
 	}
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjgifQ==
