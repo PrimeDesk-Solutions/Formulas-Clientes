@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_DocumentosPorItens" language="groovy" pageWidth="1360" pageHeight="595" orientation="Landscape" columnWidth="1320" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="096b9e1f-9fbf-40a7-b3ae-a6b790a9cdd1">
+	<property name="ireport.zoom" value="1.9487171000000065"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="title" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="periodo" class="java.lang.String"/>
+	<parameter name="totalizar1" class="java.lang.Boolean"/>
+	<parameter name="totalizar2" class="java.lang.Boolean"/>
+	<parameter name="totalizar3" class="java.lang.Boolean"/>
+	<field name="abe01codigo" class="java.lang.String"/>
+	<field name="abe01na" class="java.lang.String"/>
+	<field name="dsDocs" class="java.lang.Object"/>
+	<field name="numPed" class="java.lang.String"/>
+	<field name="nomeCampo1" class="java.lang.String"/>
+	<field name="nomeCampo2" class="java.lang.String"/>
+	<field name="nomeCampo3" class="java.lang.String"/>
+	<field name="abb01num" class="java.lang.Integer"/>
+	<field name="abb01data" class="java.util.Date"/>
+	<field name="eaa01esdata" class="java.util.Date"/>
+	<field name="aaj15codigo" class="java.lang.String"/>
+	<field name="codEnt" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="municipio" class="java.lang.String"/>
+	<field name="placa" class="java.lang.String"/>
+	<field name="naEnt" class="java.lang.String"/>
+	<field name="valorCampo1" class="java.math.BigDecimal"/>
+	<field name="valorCampo2" class="java.math.BigDecimal"/>
+	<field name="valorCampo3" class="java.math.BigDecimal"/>
+	<field name="aah01codigo" class="java.lang.String"/>
+	<field name="codRedespacho" class="java.lang.String"/>
+	<field name="codDespacho" class="java.lang.String"/>
+	<field name="nomeDespacho" class="java.lang.String"/>
+	<field name="nomeRedespacho" class="java.lang.String"/>
+	<field name="numCarga" class="java.lang.String"/>
+	<variable name="total1" class="java.math.BigDecimal" resetType="Group" resetGroup="abe01codigo" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorCampo1}]]></variableExpression>
+	</variable>
+	<variable name="total2" class="java.math.BigDecimal" resetType="Group" resetGroup="abe01codigo" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorCampo2}]]></variableExpression>
+	</variable>
+	<variable name="total3" class="java.math.BigDecimal" resetType="Group" resetGroup="abe01codigo" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorCampo3}]]></variableExpression>
+	</variable>
+	<variable name="totalGeral1" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorCampo1}]]></variableExpression>
+	</variable>
+	<variable name="totalGeral2" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorCampo2}]]></variableExpression>
+	</variable>
+	<variable name="totalGeral3" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorCampo3}]]></variableExpression>
+	</variable>
+	<group name="geral">
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="abe01codigo">
+		<groupExpression><![CDATA[$F{abe01codigo}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="27" height="13" uuid="accd53e3-3c12-4c6f-ba05-7e05a11a59a3"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[TIPO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="77" y="0" width="60" height="13" uuid="d3564d58-12a2-42d9-996c-2e34a17ac2d0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[EMISSÃO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="137" y="0" width="51" height="13" uuid="464a2ae9-1565-4c7f-a5a2-2fb0fc076d0d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ENT/SAÍDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="218" y="0" width="48" height="13" uuid="4bf84e74-7256-43ef-8202-45e09d9dc052"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[COD ENT]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1019" y="0" width="100" height="13" uuid="5d5b052a-115f-4e91-98f4-405d39698305"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeCampo1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1119" y="0" width="100" height="13" uuid="0525c75d-cac6-48e9-a99f-28f2f778931f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeCampo2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1219" y="0" width="101" height="13" uuid="08cc244c-cc10-48f5-93fd-bbf186596dac"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeCampo3}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="879" y="0" width="40" height="13" uuid="2820fd2e-5ed2-41e8-b267-1d021000cfd5"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ESTADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="919" y="0" width="51" height="13" uuid="a88e40fa-13f3-4e23-a7ab-2c45ef19c8f9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[MUNICIPIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="188" y="0" width="30" height="13" uuid="8fc27fc0-d21b-45ce-8b70-3f2a59703a84"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CFOP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="27" y="0" width="50" height="13" uuid="08bd41c4-5a2f-4994-b4e0-bc0ab2de26e6"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NUMERO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="266" y="0" width="153" height="13" uuid="4d85255c-fa6f-44c6-a33c-9e1543be9f2e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ENTIDADE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="970" y="0" width="49" height="13" uuid="ae2d0538-3db2-46bc-9b1c-86bd2f25f3b3"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[PLACA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="419" y="0" width="95" height="13" uuid="e86fd935-de28-42b3-8efa-c3da37430076"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DESPACHO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="514" y="0" width="100" height="13" uuid="9c2e93cf-5f22-41ff-91a0-fe048355556a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NOMEDESPACHO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="699" y="0" width="99" height="13" uuid="ddabce8f-a356-464d-99b7-02fc6e1e74fa"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NOMEREDESPACHO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="614" y="0" width="85" height="13" uuid="24e49415-19dd-48f9-80cc-d5e6042da12d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[REDESPACHO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="798" y="0" width="81" height="13" uuid="7222a29d-823c-4125-aa6b-a014d802f54a"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[NÚM CARGA]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="79" splitType="Stretch">
+			<textField pattern="00000" isBlankWhenNull="true">
+				<reportElement x="27" y="0" width="50" height="13" uuid="31b92117-1480-4861-a1bb-cc7c75379557"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abb01num}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="77" y="0" width="60" height="13" uuid="220f2353-cda3-49e6-bb92-b8d598be99e1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abb01data}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="27" height="13" uuid="2e332a5c-92d3-407f-92dc-24fccdddc97b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{aah01codigo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="137" y="0" width="51" height="13" uuid="d82449ae-aae3-47d1-8ac0-19bc9e3893fa"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{eaa01esdata}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="188" y="0" width="30" height="13" uuid="a320281a-5b5b-4068-bf53-6043dccfb062"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{aaj15codigo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="218" y="0" width="48" height="13" uuid="77451852-a516-41c6-b747-43f7e604b39a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codEnt}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="266" y="0" width="153" height="13" uuid="16450db2-859b-4018-b584-16bcdf3119b8"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naEnt}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="879" y="0" width="40" height="13" uuid="17585c9c-3636-4c40-be26-673274db2555"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="919" y="0" width="51" height="13" uuid="60817d91-8725-416d-ab4c-d3a16950bd3c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{municipio}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="970" y="0" width="49" height="13" uuid="b6d2ee3e-f374-4b7b-9fd3-7d83749f8251"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{placa}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
+				<reportElement x="1019" y="0" width="100" height="13" uuid="e1114622-ee12-4bb0-84c1-1f7ccd073fef"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorCampo1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
+				<reportElement x="1119" y="0" width="100" height="13" uuid="f9bf3285-7b2e-40a6-b824-c3d63adbf972"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorCampo2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
+				<reportElement x="1219" y="0" width="101" height="13" uuid="66bf32af-34ea-44fb-ab5b-ba770b412739"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorCampo3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
+				<reportElement x="614" y="0" width="85" height="13" uuid="c52209c4-27d7-41eb-bbca-96339860bc8b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codRedespacho}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="419" y="0" width="95" height="13" uuid="83f08346-fef3-4657-9f7d-5ca295b2b23a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codDespacho}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="514" y="0" width="100" height="13" uuid="88ec60d8-7ab2-4227-8a59-294bc9acffe6"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeDespacho}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="699" y="0" width="99" height="13" uuid="86551b7d-f443-4fa5-ace4-bf4e8154a3cd"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeRedespacho}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="798" y="0" width="81" height="13" uuid="383af455-da67-4302-95d5-92ee80ceff00"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numCarga}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
