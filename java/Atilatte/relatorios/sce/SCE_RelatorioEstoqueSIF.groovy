@@ -50,7 +50,6 @@ public class SCE_RelatorioEstoqueSIF extends RelatorioBase {
 
         List<TableMap> dados = buscarDadosRelatorioItem(itens, periodo, status, local, tipoDoc, pleInvent,statusInvent,localInvent, pleTransf,statusTransf,localTransf,impressaoQuilo, dtDevolucao  )
 
-
         params.put("empresa", obterEmpresaAtiva().getAac10codigo() +"-"+ obterEmpresaAtiva().getAac10na());
         params.put("periodo", "Periodo " + periodo[0].format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString() + " à " + periodo[1].format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString())
 
@@ -70,27 +69,47 @@ public class SCE_RelatorioEstoqueSIF extends RelatorioBase {
             }
         }
 
-
     }
 
     private List<TableMap> buscarDadosRelatorioItem(List<Long> itens, LocalDate[] periodo, List<Long> status, List<Long> local, List<Long> tipoDoc, List<Long> pleInvent, List<Long> statusInvent, List<Long> localInvent, List<Long> pleTransf, List<Long> statusTransf, List<Long> localTransf, Boolean impressaoQuilo, LocalDate[] dtDevolucao ){
 
         List<TableMap> listItens = buscarItensRelatorio(itens);
-
+        List<Long> listIdsItens = buscarIDsItens(itens);
+        List<TableMap> devolucoesSemEstoque = buscarDevolucoesSemEstoque(listIdsItens, periodo, tipoDoc);
+        List<TableMap> devolucoesComEstoque = buscarDevolucoesComEstoque(listIdsItens, periodo, tipoDoc);
 
 
         for(item in listItens){
             def fatorQuilo = item.getBigDecimal("fatorQuilo");
-
             if(fatorQuilo == null) interromper("Não foi informado fator de conversão de quilo no item " + item.getString("abm01codigo"));
+            Long idItem = item.getLong("abm01id");
+            BigDecimal devSemEstoque = BigDecimal.ZERO;
+            BigDecimal devComEstoque = BigDecimal.ZERO;
 
-            Long idItem = item.getLong("abm01id")
+
+            // Compoe devoluções sem estoque do item
+            devolucoesSemEstoque.forEach(
+                    devolucao ->{
+                        if(devolucao.getLong("id") == idItem){
+                            devSemEstoque = devolucao.getBigDecimal_Zero("qtd");
+                        }
+                    }
+            );
+
+            // Compoe devoluções sem estoque do item
+            devolucoesComEstoque.forEach(
+                    devolucao ->{
+                        if(devolucao.getLong("id") == idItem){
+                            devComEstoque = devolucao.getBigDecimal_Zero("qtd");
+                        }
+                    }
+            )
+
+
             BigDecimal saldoInicial = buscarSaldoInicial(idItem, periodo, status, local );
             BigDecimal qtdProdFrasco = buscarProducaoItem(idItem, periodo);
-            List<Long> listIdsSaidas = buscarIdsSaidasItens(idItem,periodo, tipoDoc);
             TableMap saidaItem = buscarSaidasItens(idItem,periodo, tipoDoc) == null ? new TableMap() : buscarSaidasItens(idItem,periodo, tipoDoc);
             BigDecimal vendasFrascos= saidaItem.getBigDecimal_Zero("qtdVendida");
-            BigDecimal devolucoes = listIdsSaidas != null && listIdsSaidas.size() > 0 ? buscarDevolucoesItens(listIdsSaidas) : new BigDecimal(0);
             BigDecimal estoqueFinalFrasco = buscarEstoqueFinal(idItem, periodo, status, local);
             BigDecimal inventarioFrasco = buscarInventarioItem(idItem,periodo, pleInvent, statusInvent, localInvent)
             BigDecimal transfFrasco = buscarTransferenciaItem(idItem,periodo, pleTransf, statusTransf, localTransf)
@@ -99,18 +118,20 @@ public class SCE_RelatorioEstoqueSIF extends RelatorioBase {
             item.put("saldoInicial", saldoInicial);
             item.put("qtdProdFrasco", qtdProdFrasco);
             item.put("vendasFrascos", vendasFrascos);
-            item.put("devFrasco", devolucoes);
             item.put("estoqueFinalFrasco", estoqueFinalFrasco);
             item.put("inventarioFrasco", inventarioFrasco );
             item.put("transfFrasco", transfFrasco );
+            item.put("devSemEstoqueFrasco", devSemEstoque);
+            item.put("devComEstoqueFrasco", devComEstoque);
 
             if(impressaoQuilo){
                 item.put("qtdProdQuilo", qtdProdFrasco * fatorQuilo);
                 item.put("vendasQuilo", vendasFrascos * fatorQuilo);
-                item.put("devQuilo", devolucoes * fatorQuilo);
                 item.put("estoqueFinalQuilo", estoqueFinalFrasco * fatorQuilo);
                 item.put("inventarioQuilo", inventarioFrasco * fatorQuilo);
                 item.put("transfQuilo", transfFrasco * fatorQuilo );
+                item.put("devSemEstoqueQuilo", devSemEstoque * fatorQuilo );
+                item.put("devComEstoqueQuilo", devComEstoque * fatorQuilo );
             }
 
         }
@@ -135,6 +156,23 @@ public class SCE_RelatorioEstoqueSIF extends RelatorioBase {
 
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroItem);
+    }
+    private List<Long> buscarIDsItens(List<Long> itens){
+
+        String whereItem = itens != null && itens.size() > 0 ? "AND abm01id IN (:itens) " : "";
+        Parametro parametroItem = itens != null && itens.size() > 0 ? Parametro.criar("itens", itens) : null;
+
+        String sql = "SELECT abm01id "+
+                        "FROM abm01 " +
+                        "INNER JOIN abm0101 ON abm0101item = abm01id " +
+                        "INNER JOIN abm0102 ON abm0102item = abm01id " +
+                        "INNER JOIN aba3001 ON aba3001id = abm0102criterio " +
+                        "INNER JOIN aba30 ON aba3001criterio = aba30id " +
+                        "WHERE aba30nome = 'SIF' " +
+                        whereItem +
+                        "ORDER BY abm01codigo"
+
+        return getAcessoAoBanco().obterListaDeLong(sql, parametroItem);
     }
 
     private BigDecimal buscarSaldoInicial(Long idItem, LocalDate[] periodo, List<Long> status, List<Long> local){
@@ -188,8 +226,8 @@ public class SCE_RelatorioEstoqueSIF extends RelatorioBase {
     }
 
     private BigDecimal buscarProducaoItem(Long idItem, LocalDate[] periodo){
-        String whereItem = "where abm01id = :idItem ";
-        String whereData = "and bab0104data between :dtInicial and :dtFinal ";
+        String whereItem = " WHERE abm01id = :idItem ";
+        String whereData = " AND bab0104data BETWEEN :dtInicial AND :dtFinal ";
 
         Parametro parametroItem = Parametro.criar("idItem",idItem);
         Parametro parametroDtIni = Parametro.criar("dtInicial",periodo[0]);
@@ -209,10 +247,10 @@ public class SCE_RelatorioEstoqueSIF extends RelatorioBase {
     }
 
     private TableMap buscarSaidasItens(Long idItem, LocalDate[] periodo, List<Long> tipoDoc){
-        String whereItem = "WHERE eaa0103item = :idItem "
-        String whereData = "and abb01data between :dtInicial and :dtFinal ";
-        String whereTipoDoc = tipoDoc != null && tipoDoc.size() > 0 ? "and abb01tipo in (:tipoDoc) "  : "";
-        String whereCancData = "and eaa01cancdata is null ";
+        String whereItem = " WHERE eaa0103item = :idItem "
+        String whereData = " AND abb01data between :dtInicial AND :dtFinal ";
+        String whereTipoDoc = tipoDoc != null && tipoDoc.size() > 0 ? "AND abb01tipo IN (:tipoDoc) "  : "";
+        String whereCancData = " AND eaa01cancdata IS NULL ";
 
         Parametro parametroItem = Parametro.criar("idItem",idItem);
         Parametro parametroDtIni = Parametro.criar("dtInicial",periodo[0]);
@@ -220,71 +258,82 @@ public class SCE_RelatorioEstoqueSIF extends RelatorioBase {
         Parametro parametroTipoDoc = tipoDoc != null && tipoDoc.size() > 0 ? Parametro.criar("tipoDoc", tipoDoc) : null;
 
         String sql = "SELECT SUM(eaa0103qtComl) AS qtdVendida " +
-                "FROM eaa0103 AS eaa0103 " +
-                "INNER JOIN eaa01 ON eaa01id = eaa0103doc " +
-                "INNER JOIN abd01 on eaa01pcd = abd01id " +
-                "INNER JOIN abb01 ON abb01id = eaa01central " +
+                " FROM eaa0103 AS eaa0103 " +
+                " INNER JOIN eaa01 ON eaa01id = eaa0103doc " +
+                " INNER JOIN abd01 on eaa01pcd = abd01id " +
+                " INNER JOIN abb01 ON abb01id = eaa01central " +
                 whereItem +
                 whereData +
                 whereTipoDoc +
                 whereCancData +
-                "AND eaa01esmov = 1 " +
-                "and abd01isce = 1 " +
-                "and eaa01isce = 1 " +
-                "AND eaa01clasdoc = 1 ";
+                " AND eaa01esmov = 1 " +
+                " AND abd01isce = 1 " +
+                " AND eaa01isce = 1 " +
+                " AND eaa01clasdoc = 1 ";
 
 
         return getAcessoAoBanco().buscarUnicoTableMap(sql, parametroItem, parametroDtIni, parametroDtFin, parametroTipoDoc);
     }
+    private List<TableMap> buscarDevolucoesSemEstoque(List<Long> idsItem, LocalDate[] periodo, List<Long> tiposDoc){
+        String whereItem = " WHERE eaa0103item IN (:idsItem) ";
+        String wherePeriodo = periodo != null ? "AND abb01data BETWEEN :dataInicial AND :dataFinal " : "";
+        String whereMovEstoque = "AND abd01isce = 0 AND eaa01isce = 0 ";
+        String whereQtComl =  " AND (eaa01033qtComl > 0 OR eaa01033qtUso > 0) "
+        String whereTipoDoc = tiposDoc != null && tiposDoc.size() > 0 ? "AND abb01tipo IN (:tiposDoc) " : "";
 
-    private List<Long> buscarIdsSaidasItens(Long idItem, LocalDate[] periodo, List<Long> tipoDoc){
-        String whereItem = "WHERE eaa0103item = :idItem "
-        String whereData = "and abb01data between :dtInicial and :dtFinal ";
-        String whereTipoDoc = tipoDoc != null && tipoDoc.size() > 0 ? "and abb01tipo in (:tipoDoc) "  : "";
-        String whereCancData = "and eaa01cancdata is null ";
-
-        Parametro parametroItem = Parametro.criar("idItem",idItem);
-        Parametro parametroDtIni = Parametro.criar("dtInicial",periodo[0]);
-        Parametro parametroDtFin = Parametro.criar("dtFinal",periodo[1]);
-        Parametro parametroTipoDoc = tipoDoc != null && tipoDoc.size() > 0 ? Parametro.criar("tipoDoc", tipoDoc) : null;
-
-        String sql = "SELECT eaa0103id " +
-                "FROM eaa0103 AS eaa0103 " +
-                "INNER JOIN eaa01 ON eaa01id = eaa0103doc " +
-                "INNER JOIN abd01 on eaa01pcd = abd01id " +
-                "INNER JOIN abb01 ON abb01id = eaa01central " +
+        String sql = " SELECT eaa0103item AS id, SUM(eaa01033qtComl) AS qtd  "+
+                " FROM eaa01033 "+
+                " INNER JOIN eaa0103 on eaa0103id = eaa01033item  "+
+                " INNER JOIN eaa01 ON eaa01id = eaa0103doc "+
+                " INNER JOIN abb01 ON abb01id = eaa01central "+
+                " INNER JOIN abd01 ON abd01id = eaa01pcd "+
                 whereItem +
-                whereData +
+                wherePeriodo +
+                whereMovEstoque +
+                whereQtComl +
                 whereTipoDoc +
-                whereCancData +
-                "AND eaa01esmov = 1 " +
-                "and abd01isce = 1 " +
-                "and eaa01isce = 1 " +
-                "AND eaa01clasdoc = 1 ";
+                "GROUP BY eaa0103item ";
 
+        Parametro parametroItens = Parametro.criar("idsItem", idsItem);
+        Parametro parametroPeriodoInicial = periodo != null ? Parametro.criar("dataInicial", periodo[0]) : null;
+        Parametro parametroPeriodoFinal = periodo != null ? Parametro.criar("dataFinal", periodo[1]) : null;
+        Parametro parametroTipoDoc = tiposDoc != null && tiposDoc.size() > 0 ? Parametro.criar("tiposDoc", tiposDoc) : null;
 
-        return getAcessoAoBanco().obterListaDeLong(sql, parametroItem, parametroDtIni, parametroDtFin, parametroTipoDoc);
+        return getAcessoAoBanco().buscarListaDeTableMap(sql,parametroItens, parametroPeriodoInicial, parametroPeriodoFinal, parametroTipoDoc);
     }
+    private List<TableMap> buscarDevolucoesComEstoque(List<Long> idsItem, LocalDate[] periodo, List<Long> tiposDoc){
+        String whereItem = " WHERE eaa0103item IN (:idsItem) ";
+        String wherePeriodo = periodo != null ? "AND abb01data BETWEEN :dataInicial AND :dataFinal " : "";
+        String whereMovEstoque = "AND abd01isce = 1 AND eaa01isce = 1 ";
+        String whereQtComl =  " AND (eaa01033qtComl > 0 OR eaa01033qtUso > 0) "
+        String whereTipoDoc = tiposDoc != null && tiposDoc.size() > 0 ? "AND abb01tipo IN (:tiposDoc) " : "";
 
-    private BigDecimal buscarDevolucoesItens(List<Long> idsItem){
-        def whereItem = " where eaa01033itemdoc in (:item) "
-
-        def sql = " select SUM(eaa0103qtComl)  "+
-                " from eaa01033 "+
-                " inner join eaa0103 on eaa0103id = eaa01033item  "+
+        String sql = " SELECT eaa0103item AS id, SUM(eaa01033qtComl) AS qtd  "+
+                " FROM eaa01033 "+
+                " INNER JOIN eaa0103 on eaa0103id = eaa01033item  "+
+                " INNER JOIN eaa01 ON eaa01id = eaa0103doc "+
+                " INNER JOIN abb01 ON abb01id = eaa01central "+
+                " INNER JOIN abd01 ON abd01id = eaa01pcd "+
                 whereItem +
-                " and (eaa01033qtComl > 0 or eaa01033qtUso > 0) ";
+                wherePeriodo +
+                whereMovEstoque +
+                whereQtComl +
+                whereTipoDoc +
+                "GROUP BY eaa0103item ";
 
-        def p1 = criarParametroSql("item", idsItem)
-        return getAcessoAoBanco().obterBigDecimal(sql,p1)
+        Parametro parametroItens = Parametro.criar("idsItem", idsItem);
+        Parametro parametroPeriodoInicial = periodo != null ? Parametro.criar("dataInicial", periodo[0]) : null;
+        Parametro parametroPeriodoFinal = periodo != null ? Parametro.criar("dataFinal", periodo[1]) : null;
+        Parametro parametroTipoDoc = tiposDoc != null && tiposDoc.size() > 0 ? Parametro.criar("tiposDoc", tiposDoc) : null;
+
+        return getAcessoAoBanco().buscarListaDeTableMap(sql,parametroItens, parametroPeriodoInicial, parametroPeriodoFinal, parametroTipoDoc);
     }
-
     private BigDecimal buscarInventarioItem(Long idItem, LocalDate[] periodo, List<Long> pleInvent, List<Long> statusInvent, List<Long> localInvent){
-        String wherePLE = pleInvent != null && pleInvent.size() > 0 ? "AND bcc01ple in (:pleInvent) " : "";
-        String whereItem =  "and bcc01item = :idItem ";
-        String wherePeriodo = "and bcc01data between :dtInicial and :dtFinal ";
-        String whereStatus = "and bcc01status in (:statusInvent) ";
-        String whereLocal = "and bcc01ctrl0 in (:localInvent) ";
+        String wherePLE = pleInvent != null && pleInvent.size() > 0 ? " AND bcc01ple IN (:pleInvent) " : "";
+        String whereItem =  " AND bcc01item = :idItem ";
+        String wherePeriodo = " AND bcc01data BETWEEN :dtInicial  AND :dtFinal ";
+        String whereStatus = " AND bcc01status IN (:statusInvent) ";
+        String whereLocal = " AND bcc01ctrl0 IN (:localInvent) ";
 
         Parametro parametroPLE = pleInvent != null && pleInvent.size() > 0 ? Parametro.criar("pleInvent", pleInvent) : null;
         Parametro parametroItem = Parametro.criar("idItem", idItem);
@@ -295,8 +344,8 @@ public class SCE_RelatorioEstoqueSIF extends RelatorioBase {
 
 
         String sql = "SELECT SUM(bcc01qtps) as inventario " +
-                "FROM bcc01 " +
-                "WHERE TRUE "+
+                " FROM bcc01 " +
+                " WHERE TRUE "+
                 wherePLE+
                 whereItem+
                 wherePeriodo+
@@ -305,13 +354,12 @@ public class SCE_RelatorioEstoqueSIF extends RelatorioBase {
 
         return getAcessoAoBanco().obterBigDecimal(sql, parametroPLE, parametroItem, parametroDtIni, parametroDtFin, parametroStatus, parametroLocal );
     }
-
     private BigDecimal buscarTransferenciaItem(Long idItem, LocalDate[] periodo, List<Long> pleInvent, List<Long> statusTransf, List<Long> localTransf){
-        String wherePLE = pleInvent != null && pleInvent.size() > 0 ? "AND bcc01ple in (:pleInvent) " : "";
-        String whereItem =  "and bcc01item = :idItem ";
-        String wherePeriodo = "and bcc01data between :dtInicial and :dtFinal ";
-        String whereStatus = "and bcc01status in (:statusTransf) ";
-        String whereLocal = "and bcc01ctrl0 in (:localTransf) ";
+        String wherePLE = pleInvent != null && pleInvent.size() > 0 ? " AND bcc01ple in (:pleInvent) " : "";
+        String whereItem =  " AND bcc01item = :idItem ";
+        String wherePeriodo = " AND bcc01data between :dtInicial AND :dtFinal ";
+        String whereStatus = " AND bcc01status IN (:statusTransf) ";
+        String whereLocal = " AND bcc01ctrl0 IN (:localTransf) ";
 
         Parametro parametroPLE = pleInvent != null && pleInvent.size() > 0 ? Parametro.criar("pleInvent", pleInvent) : null;
         Parametro parametroItem = Parametro.criar("idItem", idItem);
@@ -321,8 +369,8 @@ public class SCE_RelatorioEstoqueSIF extends RelatorioBase {
         Parametro parametroLocal = Parametro.criar("localTransf", localTransf)
 
         String sql = "SELECT SUM(bcc01qtps) as transferencia " +
-                "FROM bcc01 " +
-                "WHERE TRUE "+
+                " FROM bcc01 " +
+                " WHERE TRUE "+
                 wherePLE+
                 whereItem+
                 whereStatus +
@@ -330,8 +378,6 @@ public class SCE_RelatorioEstoqueSIF extends RelatorioBase {
                 wherePeriodo
 
         return getAcessoAoBanco().obterBigDecimal(sql, parametroPLE, parametroItem, parametroDtIni, parametroDtFin, parametroStatus, parametroLocal );
-
-
     }
 }
 //meta-sis-eyJkZXNjciI6IlNDRSAtIFJlbGF0b3JpbyBFc3RvcXVlIChTSUYpIiwidGlwbyI6InJlbGF0b3JpbyJ9
