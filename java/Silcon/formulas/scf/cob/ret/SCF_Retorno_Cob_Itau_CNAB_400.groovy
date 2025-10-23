@@ -112,14 +112,14 @@ class SCF_Retorno_Cob_Itau_CNAB_400 extends FormulaBase {
                     }
                     
                     // Taxa Bancária
-                    BigDecimal txBanco = new BigDecimal(txt.getSubString(175, 188));
+                    //BigDecimal txBanco = new BigDecimal(txt.getSubString(175, 188));
 
 
                     jsons.put("multa", vlrMulta)
                     if(vlrMulta == 0) jsons.put("juros", new BigDecimal(0));
                     jsons.put("desconto", vlrDesconto/100)
                     jsons.put("dt_limite_desc", dtLimiteDesc)
-                    jsons.put("tx_bancaria", txBanco/100);
+                    //jsons.put("tx_bancaria", txBanco/100);
 
                     daa01.daa01json = jsons
 
@@ -144,10 +144,87 @@ class SCF_Retorno_Cob_Itau_CNAB_400 extends FormulaBase {
 
     private String buscarDescricaoOcorrencia(String codigoOcorrencia) {
         switch(codigoOcorrencia) {
-            case "02": return "Entrada confirmada";
-            case "03": return "Entrada rejeitada";
-            case "06": return "Liquidação normal";
-            case "10": return "Baixado conforme instruções da Agência";
+            case "02": return "ENTRADA CONFIRMADA COM POSSIBILIDADE DE MENSAGEM (NOTA 20 - TABELA 10)";
+            case "03": return "ENTRADA REJEITADA (NOTA 20 - TABELA 1)";
+            case "04": return "ALTERAÇÃO DE DADOS - NOVA ENTRADA OU ALTERAÇÃO/EXCLUSÃO DE DADOS ACATADA";
+            case "05": return "ALTERAÇÃO DE DADOS - BAIXA";
+            case "06": return "LIQUIDAÇÃO NORMAL";
+            case "07": return "LIQUIDAÇÃO PARCIAL - COBRANÇA INTELIGENTE (B2B)";
+            case "08": return "LIQUIDAÇÃO EM CARTÓRIO";
+            case "09": return "BAIXA SIMPLES";
+            case "10": return "BAIXA POR TER SIDO LIQUIDADO";
+            case "11": return "EM SER (SÓ NO RETORNO MENSAL)";
+            case "12": return "ABATIMENTO CONCEDIDO";
+            case "13": return "ABATIMENTO CANCELADO";
+            case "14": return "VENCIMENTO ALTERADO";
+            case "15": return "BAIXAS REJEITADAS (NOTA 20 - TABELA 4)";
+            case "16": return "INSTRUÇÕES REJEITADAS (NOTA 20 - TABELA 3)";
+            case "17": return "ALTERAÇÃO/EXCLUSÃO DE DADOS REJEITADOS (NOTA 20 - TABELA 2)";
+            case "18": return "COBRANÇA CONTRATUAL - INSTRUÇÕES/ALTERAÇÕES REJEITADAS/PENDENTES (NOTA 20 - TABELA 5)";
+            case "19": return "CONFIRMA RECEBIMENTO DE INSTRUÇÃO DE PROTESTO";
+            case "20": return "CONFIRMA RECEBIMENTO DE INSTRUÇÃO DE SUSTAÇÃO DE PROTESTO /TARIFA";
+            case "21": return "CONFIRMA RECEBIMENTO DE INSTRUÇÃO DE NÃO PROTESTAR";
+            case "23": return "TÍTULO ENVIADO A CARTÓRIO/TARIFA";
+            case "24": return "INSTRUÇÃO DE PROTESTO REJEITADA / SUSTADA / PENDENTE (NOTA 20 - TABELA 7)";
+            case "25": return "ALEGAÇÕES DO PAGADOR (NOTA 20 - TABELA 6)";
+            case "26": return "TARIFA DE AVISO DE COBRANÇA";
+            case "27": return "TARIFA DE EXTRATO POSIÇÃO (B40X)";
+            case "28": return "TARIFA DE RELAÇÃO DAS LIQUIDAÇÕES";
+            case "29": return "TARIFA DE MANUTENÇÃO DE TÍTULOS VENCIDOS";
+            case "30": return "DÉBITO MENSAL DE TARIFAS (PARA ENTRADAS E BAIXAS)";
+            case "32": return "BAIXA POR TER SIDO PROTESTADO";
+            case "33": return "CUSTAS DE PROTESTO";
+            case "34": return "CUSTAS DE SUSTAÇÃO";
+            case "35": return "CUSTAS DE CARTÓRIO DISTRIBUIDOR";
+            case "36": return "CUSTAS DE EDITAL";
+            case "37": return "TARIFA DE EMISSÃO DE BOLETO/TARIFA DE ENVIO DE DUPLICATA";
+            case "38": return "TARIFA DE INSTRUÇÃO";
+            case "39": return "TARIFA DE OCORRÊNCIAS";
+            case "40": return "TARIFA MENSAL DE EMISSÃO DE BOLETO/TARIFA MENSAL DE ENVIO DE DUPLICATA";
+            case "41": return "DÉBITO MENSAL DE TARIFAS - EXTRATO DE POSIÇÃO (B4EP/B4OX)";
+            case "42": return "DÉBITO MENSAL DE TARIFAS - OUTRAS INSTRUÇÕES";
+            case "43": return "DÉBITO MENSAL DE TARIFAS - MANUTENÇÃO DE TÍTULOS VENCIDOS";
+            case "44": return "DÉBITO MENSAL DE TARIFAS - OUTRAS OCORRÊNCIAS";
+            case "45": return "DÉBITO MENSAL DE TARIFAS - PROTESTO";
+            case "46": return "DÉBITO MENSAL DE TARIFAS - SUSTAÇÃO DE PROTESTO";
+            case "47": return "BAIXA COM TRANSFERÊNCIA PARA DESCONTO";
+            case "48": return "CUSTAS DE SUSTAÇÃO JUDICIAL";
+            case "51": return "TARIFA MENSAL REF A ENTRADAS BANCOS CORRESPONDENTES NA CARTEIRA";
+            case "52": return "TARIFA MENSAL BAIXAS NA CARTEIRA";
+            case "53": return "TARIFA MENSAL BAIXAS EM BANCOS CORRESPONDENTES NA CARTEIRA";
+            case "54": return "TARIFA MENSAL DE LIQUIDAÇÕES NA CARTEIRA";
+            case "55": return "TARIFA MENSAL DE LIQUIDAÇÕES EM BANCOS CORRESPONDENTES NA CARTEIRA";
+            case "56": return "CUSTAS DE IRREGULARIDADE";
+            case "57": return "INSTRUÇÃO CANCELADA (NOTA 20 - TABELA 8)";
+            case "59": return "BAIXA POR CRÉDITO EM C/C ATRAVÉS DO SISPAG";
+            case "60": return "ENTRADA REJEITADA CARNÊ (NOTA 20 - TABELA 1)";
+            case "61": return "TARIFA EMISSÃO AVISO DE MOVIMENTAÇÃO DE TÍTULOS (2154)";
+            case "62": return "DÉBITO MENSAL DE TARIFA - AVISO DE MOVIMENTAÇÃO DE TÍTULOS (2154)";
+            case "63": return "TÍTULO SUSTADO JUDICIALMENTE";
+            case "64": return "ENTRADA CONFIRMADA COM RATEIO DE CRÉDITO";
+            case "65": return "PAGAMENTO COM CHEQUE - AGUARDANDO COMPENSAÇÃO";
+            case "69": return "CHEQUE DEVOLVIDO (NOTA 20 - TABELA 9)";
+            case "71": return "ENTRADA REGISTRADA, AGUARDANDO AVALIAÇÃO";
+            case "72": return "BAIXA POR CRÉDITO EM C/C ATRAVÉS DO SISPAG SEM TÍTULO CORRESPONDENTE";
+            case "73": return "CONFIRMAÇÃO DE ENTRADA NA COBRANÇA SIMPLES - ENTRADA NÃO ACEITA NA COBRANÇA CONTRATUAL";
+            case "74": return "INSTRUÇÃO DE NEGATIVAÇÃO EXPRESSA REJEITADA (NOTA 20 - TABELA 11)";
+            case "75": return "CONFIRMAÇÃO DE RECEBIMENTO DE INSTRUÇÃO DE ENTRADA EM NEGATIVAÇÃO EXPRESSA";
+            case "76": return "CHEQUE COMPENSADO";
+            case "77": return "CONFIRMAÇÃO DE RECEBIMENTO DE INSTRUÇÃO DE EXCLUSÃO DE ENTRADA EM NEGATIVAÇÃO EXPRESSA";
+            case "78": return "CONFIRMAÇÃO DE RECEBIMENTO DE INSTRUÇÃO DE CANCELAMENTO DE NEGATIVAÇÃO EXPRESSA";
+            case "79": return "NEGATIVAÇÃO EXPRESSA INFORMACIONAL (NOTA 20 - TABELA 12)";
+            case "80": return "CONFIRMAÇÃO DE ENTRADA EM NEGATIVAÇÃO EXPRESSA - TARIFA";
+            case "82": return "CONFIRMAÇÃO DO CANCELAMENTO DE NEGATIVAÇÃO EXPRESSA - TARIFA";
+            case "83": return "CONFIRMAÇÃO DE EXCLUSÃO DE ENTRADA EM NEGATIVAÇÃO EXPRESSA POR LIQUIDAÇÃO - TARIFA";
+            case "85": return "TARIFA POR BOLETO (ATÉ 03 ENVIOS) COBRANÇA ATIVA ELETRÔNICA";
+            case "86": return "TARIFA EMAIL COBRANÇA ATIVA ELETRÔNICA";
+            case "87": return "TARIFA SMS COBRANÇA ATIVA ELETRÔNICA";
+            case "88": return "TARIFA MENSAL POR BOLETO (ATÉ 03 ENVIOS) COBRANÇA ATIVA ELETRÔNICA";
+            case "89": return "TARIFA MENSAL EMAIL COBRANÇA ATIVA ELETRÔNICA";
+            case "90": return "TARIFA MENSAL SMS COBRANÇA ATIVA ELETRÔNICA";
+            case "91": return "TARIFA MENSAL DE EXCLUSÃO DE ENTRADA DE NEGATIVAÇÃO EXPRESSA";
+            case "92": return "TARIFA MENSAL DE CANCELAMENTO DE NEGATIVAÇÃO EXPRESSA";
+            case "93": return "TARIFA MENSAL DE EXCLUSÃO DE ENTRADA DE NEGATIVAÇÃO EXPRESSA POR LIQUIDAÇÃO";
             default: return null;
         }
     }
