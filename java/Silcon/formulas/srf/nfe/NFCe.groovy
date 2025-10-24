@@ -669,7 +669,7 @@ class NFCe extends FormulaBase {
 
         if (modelo.equals("65")) {
             /** infNFeSupl - */
-            String tpAmb = isProducao ? 1 : 2;
+            String tpAmb = isProducao ? "1" : "2";
             String urlConsulta
             String urlqrCode
             if (tpAmb == "1") {

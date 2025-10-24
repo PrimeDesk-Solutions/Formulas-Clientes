@@ -330,7 +330,7 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
                         aaj10_cstIcms.aaj10codigo == '041' || aaj10_cstIcms.aaj10codigo == '241' || aaj10_cstIcms.aaj10codigo == '090') {
                     jsonEaa0103.put("icms_isento", eaa0103.eaa0103totDoc);
                     jsonEaa0103.put("bc_icms", new BigDecimal(0));
-                    jsonEaa0103.put("_reduc_bc_icms", new BigDecimal(0));
+                    jsonEaa0103.put("aliq_reduc_bc_icms", new BigDecimal(0));
                     jsonEaa0103.put("aliq_icms", new BigDecimal(0));
                     jsonEaa0103.put("icms", new BigDecimal(0));
                     jsonEaa0103.put("icms_outras", new BigDecimal(0));
@@ -419,7 +419,7 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
                 throw new ValidacaoException("Necessário preencher o CST de ICMS no cadastro do item " + abm01.abm01codigo + " ou no cadastro do PCD " + abd01.abd01codigo)
             }
 
-            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cstIcms));
+            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cst));
         }
     }
 
@@ -438,9 +438,9 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
             if (contribICMS) jsonEaa0103.put("bc_icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") + jsonEaa0103.getBigDecimal_Zero("ipi")).round(2));
 
             // Calculo da Redução
-            if (jsonAbm1001_UF_Item.getBigDecimal_Zero("_reduc_bc_icms") > 0) {
-                jsonEaa0103.put("_reduc_bc_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("_reduc_bc_icms"));
-                vlrReducao = (jsonEaa0103.getBigDecimal_Zero("bc_icms") * (jsonAbm1001_UF_Item.getBigDecimal_Zero("_reduc_bc_icms") / 100)).round(2);
+            if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_reduc_bc_icms") > 0) {
+                jsonEaa0103.put("aliq_reduc_bc_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_reduc_bc_icms"));
+                vlrReducao = (jsonEaa0103.getBigDecimal_Zero("bc_icms") * (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_reduc_bc_icms") / 100)).round(2);
                 jsonEaa0103.put("bc_icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") - vlrReducao).round(2));
             }
 
