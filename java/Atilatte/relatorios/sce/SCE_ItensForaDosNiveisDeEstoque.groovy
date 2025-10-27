@@ -78,8 +78,18 @@ public class SCE_ItensForaDosNiveisDeEstoque extends RelatorioBase {
 		if(parcialAtendido) atendimentos.add(1);
 
 		List<TableMap> dados = buscarDadosRelatorio(mps, itens, loteIni, loteFin, serieIni, serieFin, dataSaldo, detalhamento,naoImprimirSaldoZero, idsStatus, idsLocal, itemMovEstoque, itemNaoMovEst, dtPedidos, dtEntrega,atendimentos  );
+		String titulo = "";
+		if(detalhamento == 0){
+			titulo = "SCE - Itens Acima do Estoque Máximo";
+		}else if(detalhamento == 1){
+			titulo = "SCE - Itens Abaixo do Estoque Mínimo";
+		}else if(detalhamento == 2){
+			titulo = "SCE - Itens Entre o Ponto de Pedido e Estoque Mínimo";
+		}else{
+			titulo = "SCE - Itens Fora dos Níveis de Estoque";
+		}
 
-		params.put("titulo", "SCE - Itens Fora dos Níveis de Estoque");
+		params.put("titulo", titulo);
 		params.put("periodo", "Data Saldo: " + dataSaldo.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
 		params.put("empresa", obterEmpresaAtiva().getAac10codigo() + "-" + obterEmpresaAtiva().getAac10na() );
 

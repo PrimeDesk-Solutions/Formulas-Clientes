@@ -84,43 +84,44 @@ public class SCV_SaldoDosPedidos extends RelatorioBase {
 		if(parcialAtend) atendimentos.add(1);
 		if(totalAtend) atendimentos.add(2);
 
-		Query sql = getSession().createQuery("select aah01codigo,abb01num,abb01data, ent.abe01codigo as codEntidade,ent.abe01na as naEntidade,eaa0103seq, " +
-				"case when abm01tipo = 0 then 'M' "+
-				"when abm01tipo = 1 then 'P' "+
-				"when abm01tipo = 2 then 'MER' "+
-				"else 'S' "+
-				"end as MPS, abm01codigo as codItem, abm01na as naItem,eaa0103dtEntrega as dtEntrega, "+
-				"cast(eaa0103json ->> 'umv' as character varying(3)) as umv,SUM(eaa0103qtuso) as qtdUsoPedido, SUM(eaa01032qtUso) as qtdUsoEntregue, eaa0103pcnum as pedCliente, "+
-				"desp.abe01codigo as codDesp, desp.abe01na as naDesp,redesp.abe01codigo as codRedesp, redesp.abe01na as naRedesp, eaa01scvatend " +
-				"from eaa01 "+
-				"inner join abb01 on eaa01central = abb01id "+
-				"inner join abd01 on eaa01pcd = abd01id "+
-				"inner join eaa0103 on eaa01id = eaa0103doc "+
-				"left join eaa01032 on eaa0103id = eaa01032itemscv "+
-				"inner join abm01 on eaa0103item = abm01id "+
-				"inner join aah01 on abb01tipo = aah01id "+
-				"inner join abe01 as ent on abb01ent = ent.abe01id "+
-				"inner join aam06 on abm01umu = aam06id "+
-				"left join eaa0102 on eaa0102doc = eaa01id "+
-				"left join abe01 as desp on desp.abe01id = eaa0102despacho "+
-				"left join abe01 as redesp on redesp.abe01id = eaa0102redespacho "+
-				"left join abe0101 on abe0101ent = ent.abe01id and abe0101principal = 1 "+
-				"left join aag0201 on aag0201id = abe0101municipio "+
-				"left join aag02 on aag02id = aag0201uf "+
-				"where abb01num between :numIni and :numFin "+
-				(idsTipoDoc != null && idsTipoDoc.size() > 0 ? "and aah01id in (:idsTipoDoc) " : "")+
-				(dtEmissIni != null && dtEmissFin != null ? "and abb01data between :dtEmissIni and :dtEmissFin " : "")+
-				(dtEntradaIni != null && dtEntradaFin != null ? "and eaa01esdata between :dtEntradaIni and :dtEntradaFin " : "")+
-				(idItens != null && idItens.size() > 0 ? "and abm01id in (:idItens) " : "")+
-				(idEntidades != null ? "and ENT.abe01id in (:idEntidades) " : "")+
-				(idRepresentantes != null ? "and (eaa01rep0 in (:idRepresentantes) or eaa01rep1 in (:idRepresentantes) or eaa01rep2 in (:idRepresentantes) or eaa01rep3 in (:idRepresentantes) or eaa01rep4 in (:idRepresentantes)) " : "")+
-				(idPcd != null ? "and abd01id in (:idPcd) " : "")+
-				(atendimentos != null && atendimentos.size() > 0 ? "and eaa01scvatend in (:atendimentos) " : "")+
-				( resumoOperacao == 0 ? "and abd01es = 0 " :  "and abd01es = 1 " ) + 
-				"and abd01aplic = 0 "+
-				"and eaa01gc = :idEmpresa "+
-				"group by aah01codigo,abb01num,abb01data, ent.abe01codigo,ent.abe01na,eaa0103seq,MPS, abm01codigo, abm01na,eaa0103dtEntrega, cast(eaa0103json ->> 'umv' as character varying(3)), eaa0103pcnum,desp.abe01codigo, desp.abe01na,redesp.abe01codigo, redesp.abe01na, eaa01scvatend "+
-				"order by abb01data,abb01num ");
+		Query sql = getSession().createQuery("SELECT aah01codigo,abb01num,abb01data, ent.abe01codigo as codEntidade,ent.abe01na as naEntidade,eaa0103seq, " +
+				"CASE WHEN abm01tipo = 0 THEN 'M' "+
+				"WHEN abm01tipo = 1 THEN 'P' "+
+				"WHEN abm01tipo = 2 THEN 'MER' "+
+				"ELSE 'S' "+
+				"END AS MPS, abm01codigo AS codItem, abm01na AS naItem,eaa0103dtEntrega AS dtEntrega, "+
+				"CAST(eaa0103json ->> 'umv' AS CHARACTER VARYING(3)) AS umv,SUM(eaa0103qtuso) AS qtdUsoPedido, SUM(eaa01032qtUso) AS qtdUsoEntregue, eaa0103pcnum AS pedCliente, "+
+				"desp.abe01codigo AS codDesp, desp.abe01na AS naDesp,redesp.abe01codigo AS codRedesp, redesp.abe01na AS naRedesp, eaa01scvatend " +
+				"FROM eaa01 "+
+				"INNER JOIN abb01 ON eaa01central = abb01id "+
+				"INNER JOIN abd01 ON eaa01pcd = abd01id "+
+				"INNER JOIN eaa0103 ON eaa01id = eaa0103doc "+
+				"LEFT JOIN eaa01032 ON eaa0103id = eaa01032itemscv "+
+				"INNER JOIN abm01 ON eaa0103item = abm01id "+
+				"INNER JOIN aah01 ON abb01tipo = aah01id "+
+				"INNER JOIN abe01 AS ent ON abb01ent = ent.abe01id "+
+				"INNER JOIN aam06 ON abm01umu = aam06id "+
+				"LEFT JOIN eaa0102 ON eaa0102doc = eaa01id "+
+				"LEFT JOIN abe01 AS desp ON desp.abe01id = eaa0102despacho "+
+				"LEFT JOIN abe01 AS redesp ON redesp.abe01id = eaa0102redespacho "+
+				"LEFT JOIN abe0101 ON abe0101ent = ent.abe01id AND abe0101principal = 1 "+
+				"LEFT JOIN aag0201 ON aag0201id = abe0101municipio "+
+				"LEFT JOIN aag02 ON aag02id = aag0201uf "+
+				"WHERE abb01num BETWEEN :numIni AND :numFin "+
+				(idsTipoDoc != null && idsTipoDoc.size() > 0 ? "AND aah01id IN (:idsTipoDoc) " : "")+
+				(dtEmissIni != null && dtEmissFin != null ? "AND abb01data BETWEEN :dtEmissIni AND :dtEmissFin " : "")+
+				(dtEntradaIni != null && dtEntradaFin != null ? "AND eaa01esdata BETWEEN :dtEntradaIni AND :dtEntradaFin " : "")+
+				(idItens != null && idItens.size() > 0 ? "AND abm01id IN (:idItens) " : "")+
+				(idEntidades != null ? "AND ENT.abe01id IN (:idEntidades) " : "")+
+				(idRepresentantes != null ? "AND (eaa01rep0 IN (:idRepresentantes) OR eaa01rep1 IN (:idRepresentantes) OR eaa01rep2 IN (:idRepresentantes) OR eaa01rep3 IN (:idRepresentantes) OR eaa01rep4 IN (:idRepresentantes)) " : "")+
+				(idPcd != null ? "AND abd01id IN (:idPcd) " : "")+
+				(atendimentos != null && atendimentos.size() > 0 ? "AND eaa01scvatend IN (:atendimentos) " : "")+
+				( resumoOperacao == 0 ? "AND abd01es = 0 " :  "AND abd01es = 1 " ) +
+				"AND eaa01cancData IS NULL "+
+				"AND abd01aplic = 0 "+
+				"AND eaa01gc = :idEmpresa "+
+				"GROUP BY aah01codigo,abb01num,abb01data, ent.abe01codigo,ent.abe01na,eaa0103seq,MPS, abm01codigo, abm01na,eaa0103dtEntrega, cast(eaa0103json ->> 'umv' as character varying(3)), eaa0103pcnum,desp.abe01codigo, desp.abe01na,redesp.abe01codigo, redesp.abe01na, eaa01scvatend "+
+				"ORDER BY abb01data,abb01num ");
 
 
 		if(numIni != null && numFin != null){
@@ -164,8 +165,6 @@ public class SCV_SaldoDosPedidos extends RelatorioBase {
 		for(TableMap pedidos : tmPedidos){
 
 			if(pedidos.getDate("dtEntrega") != null){
-				
-			
 				//Recupera a data atual
 				LocalDate dtAtual = LocalDate.now();
 	
@@ -180,12 +179,11 @@ public class SCV_SaldoDosPedidos extends RelatorioBase {
 				//Define a data de entrega como localdate para calcular diferença de dias
 				LocalDate dataEntrega = LocalDate.parse(txtDataentrega, formato);
 	
-				//if(dtAtual > dataEntrega ){
-				//Calcula a diferença de dias da data atual e a data de entrega
+
 				Long diferencaEmDias = ChronoUnit.DAYS.between(dtAtual, dataEntrega);
 	
 				pedidos.put("calculoDias",diferencaEmDias);
-				//}
+
 	
 				//Define o valor entregue para zero, caso não entrege
 				if(pedidos.getBigDecimal_Zero("qtdUsoEntregue") == null){
@@ -231,40 +229,41 @@ public class SCV_SaldoDosPedidos extends RelatorioBase {
 		if(parcialAtend) atendimentos.add(1);
 		if(totalAtend) atendimentos.add(2);
 
-		Query sql = getSession().createQuery("select aah01codigo,abb01num,abb01data, ent.abe01codigo as codEntidade,ent.abe01na as naEntidade, " +
-				"eaa0103dtEntrega as dtEntrega,SUM(eaa0103totDoc) as totDoc, SUM(CAST(eaa0103json ->> 'peso_bruto' as numeric(18,2))) as pesoBruto, SUM(CAST(eaa0103json ->> 'peso_liquido' as numeric(18,6))) as pesoLiquido, "+
-				"SUM(eaa0103qtUso) as qtdUsoPedido, SUM(eaa01032qtUso) as qtdUsoEntregue, eaa0103pcnum as pedCliente, "+
-				"desp.abe01codigo as codDesp, desp.abe01na as naDesp,redesp.abe01codigo as codRedesp, redesp.abe01na as naRedesp, aag02uf as uf, aag0201nome as municipio,eaa01scvatend " +
-				"from eaa01 "+
-				"inner join abb01 on eaa01central = abb01id "+
-				"inner join abd01 on eaa01pcd = abd01id "+
-				"inner join eaa0103 on eaa01id = eaa0103doc "+
-				"left join eaa01032 on eaa0103id = eaa01032itemscv "+
-				"inner join abm01 on eaa0103item = abm01id "+
-				"inner join aah01 on abb01tipo = aah01id "+
-				"inner join abe01 as ent on abb01ent = ent.abe01id "+
-				"inner join aam06 on abm01umu = aam06id "+
-				"left join eaa0102 on eaa0102doc = eaa01id "+
-				"left join abe01 as desp on desp.abe01id = eaa0102despacho "+
-				"left join abe01 as redesp on redesp.abe01id = eaa0102redespacho "+
-				"left join abe0101 on abe0101ent = ent.abe01id and abe0101principal = 1 "+
-				"left join aag0201 on aag0201id = abe0101municipio "+
-				"left join aag02 on aag02id = aag0201uf "+
-				"where abb01num between :numIni and :numFin "+
-				(idsTipoDoc != null && idsTipoDoc.size() > 0 ? "and aah01id in (:idsTipoDoc) " : "")+
-				(dtEmissIni != null && dtEmissFin != null ? "and abb01data between :dtEmissIni and :dtEmissFin " : "")+
-				(dtEntradaIni != null && dtEntradaFin != null ? "and eaa01esdata between :dtEntradaIni and :dtEntradaFin " : "")+
-				(idItens != null && idItens.size() > 0 ? "and abm01id in (:idItens) " : "")+
-				(idEntidades != null ? "and ent.abe01id in (:idEntidades) " : "")+
-				(idRepresentantes != null ? "and (eaa01rep0 in (:idRepresentantes) or eaa01rep1 in (:idRepresentantes) or eaa01rep2 in (:idRepresentantes) or eaa01rep3 in (:idRepresentantes) or eaa01rep4 in (:idRepresentantes)) " : "")+
-				(idPcd != null ? "and abd01id in (:idPcd) " : "")+
-				(atendimentos != null && atendimentos.size() > 0 ? "and eaa01scvatend in (:atendimentos) " : "")+
-				( resumoOperacao == 0 ? "and abd01es = 0 " :  "and abd01es = 1 " ) + 
-				"and abd01aplic = 0 "+
-				"and eaa01gc = :idEmpresa "+
-				"group by aah01codigo,abb01num,abb01data, ent.abe01codigo,ent.abe01na,eaa0103dtEntrega, eaa0103pcnum,eaa01scvatend, "+
+		Query sql = getSession().createQuery("SELECT aah01codigo,abb01num,abb01data, ent.abe01codigo AS codEntidade,ent.abe01na AS naEntidade, " +
+				"eaa0103dtEntrega AS dtEntrega,SUM(eaa0103totDoc) AS totDoc, SUM(CAST(eaa0103json ->> 'peso_bruto' AS NUMERIC(18,2))) AS pesoBruto, SUM(CAST(eaa0103json ->> 'peso_liquido' AS NUMERIC(18,6))) AS pesoLiquido, "+
+				"SUM(eaa0103qtUso) AS qtdUsoPedido, SUM(eaa01032qtUso) AS qtdUsoEntregue, eaa0103pcnum AS pedCliente, "+
+				"desp.abe01codigo AS codDesp, desp.abe01na AS naDesp,redesp.abe01codigo AS codRedesp, redesp.abe01na AS naRedesp, aag02uf AS uf, aag0201nome AS municipio,eaa01scvatend " +
+				"FROM eaa01 "+
+				"INNER JOIN abb01 ON eaa01central = abb01id "+
+				"INNER JOIN abd01 ON eaa01pcd = abd01id "+
+				"INNER JOIN eaa0103 ON eaa01id = eaa0103doc "+
+				"LEFT JOIN eaa01032 ON eaa0103id = eaa01032itemscv "+
+				"INNER JOIN abm01 ON eaa0103item = abm01id "+
+				"INNER JOIN aah01 ON abb01tipo = aah01id "+
+				"INNER JOIN abe01 as ent ON abb01ent = ent.abe01id "+
+				"INNER JOIN aam06 ON abm01umu = aam06id "+
+				"LEFT JOIN eaa0102 ON eaa0102doc = eaa01id "+
+				"LEFT JOIN abe01 AS desp ON desp.abe01id = eaa0102despacho "+
+				"LEFT JOIN abe01 AS redesp ON redesp.abe01id = eaa0102redespacho "+
+				"LEFT JOIN abe0101 ON abe0101ent = ent.abe01id and abe0101principal = 1 "+
+				"LEFT JOIN aag0201 ON aag0201id = abe0101municipio "+
+				"LEFT JOIN aag02 ON aag02id = aag0201uf "+
+				"WHERE abb01num BETWEEN :numIni AND :numFin "+
+				(idsTipoDoc != null && idsTipoDoc.size() > 0 ? "AND aah01id IN (:idsTipoDoc) " : "")+
+				(dtEmissIni != null && dtEmissFin != null ? "AND abb01data BETWEEN :dtEmissIni AND :dtEmissFin " : "")+
+				(dtEntradaIni != null && dtEntradaFin != null ? "AND eaa01esdata BETWEEN :dtEntradaIni AND :dtEntradaFin " : "")+
+				(idItens != null && idItens.size() > 0 ? "AND abm01id IN (:idItens) " : "")+
+				(idEntidades != null ? "AND ent.abe01id IN (:idEntidades) " : "")+
+				(idRepresentantes != null ? "AND (eaa01rep0 IN (:idRepresentantes) or eaa01rep1 IN (:idRepresentantes) or eaa01rep2 IN (:idRepresentantes) or eaa01rep3 IN (:idRepresentantes) or eaa01rep4 IN (:idRepresentantes)) " : "")+
+				(idPcd != null ? "AND abd01id IN (:idPcd) " : "")+
+				(atendimentos != null && atendimentos.size() > 0 ? "AND eaa01scvatend IN (:atendimentos) " : "")+
+				( resumoOperacao == 0 ? "AND abd01es = 0 " :  "AND abd01es = 1 " ) +
+				"AND abd01aplic = 0 "+
+				"AND eaa01gc = :idEmpresa "+
+				"AND eaa01cancData IS NULL "+
+				"GROUP BY aah01codigo,abb01num,abb01data, ent.abe01codigo,ent.abe01na,eaa0103dtEntrega, eaa0103pcnum,eaa01scvatend, "+
 				"desp.abe01codigo, desp.abe01na,redesp.abe01codigo, redesp.abe01na, aag02uf, aag0201nome "+
-				"order by abb01data,abb01num ");
+				"ORDER BY abb01data,abb01num ");
 
 		if(numIni != null && numFin != null){
 			sql.setParameter("numIni",numIni);
@@ -302,13 +301,10 @@ public class SCV_SaldoDosPedidos extends RelatorioBase {
 		List<TableMap> tmPedidos = sql.getListTableMap();
 		List<TableMap> tmDados = new ArrayList();
 
-
-
 		for(TableMap pedidos : tmPedidos){
 
 			if(pedidos.getDate("dtEntrega") != null){
-				
-			
+
 				//Recupera a data atual
 				LocalDate dtAtual = LocalDate.now();
 	
@@ -323,13 +319,11 @@ public class SCV_SaldoDosPedidos extends RelatorioBase {
 				//Define a data de entrega como localdate para calcular diferença de dias
 				LocalDate dataEntrega = LocalDate.parse(txtDataentrega, formato);
 	
-				//if(dtAtual > dataEntrega ){
 				//Calcula a diferença de dias da data atual e a data de entrega
 				Long diferencaEmDias = ChronoUnit.DAYS.between(dtAtual, dataEntrega);
 	
 				pedidos.put("calculoDias",diferencaEmDias);
-				//}
-	
+
 				//Define o valor entregue para zero, caso não entrege
 				if(pedidos.getBigDecimal_Zero("qtdUsoEntregue") == null){
 					pedidos.put("entregue",0)
