@@ -452,9 +452,6 @@ public class FormulaGeral extends FormulaBase {
                 // Define o CFOP dos Itens
                 definirCFOP()
 
-                //Difal
-                calcularDifal(dentroEstado);
-
                 // TOTAL DO DOCUMENTO
                 eaa0103.eaa0103totDoc = eaa0103.eaa0103total +
                         jsonEaa0103.getBigDecimal_Zero("ipi") +
@@ -466,6 +463,9 @@ public class FormulaGeral extends FormulaBase {
                         jsonEaa0103.getBigDecimal_Zero("desconto");
 
                 eaa0103.eaa0103totDoc = round(eaa0103.eaa0103totDoc, 2);
+
+                //Difal
+                calcularDifal(dentroEstado);
 
                 // Calculo para Zona Franca Manaus
                 tratarCalculoZonaFrancaManaus();
@@ -1413,4 +1413,3 @@ public class FormulaGeral extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
