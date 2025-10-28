@@ -120,7 +120,7 @@ class SCV_SRF_PreGravar extends FormulaBase {
 
 			// Bloqueia o pedido caso não atinja o peso mínimo do município da transportadora
 			if (pesoBruto < pesoMinimo){
-				if(eaa01.eaa0107s.size() == 0){
+				if(eaa01.eaa0107s == null || eaa01.eaa0107s.size() == 0){
 					Eaa0107 eaa0107 = new Eaa0107();
 					eaa0107.eaa0107msg = "Pedido bloqueado por não atingir peso mínimo da transportadora."
 					eaa0107.eaa0107user = obterUsuarioLogado();
