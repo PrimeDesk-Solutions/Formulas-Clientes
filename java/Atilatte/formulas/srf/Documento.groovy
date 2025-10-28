@@ -360,9 +360,9 @@ class Documento extends FormulaBase {
 				municipioEntidade = formatarString(municipioEntidade.toUpperCase());
 
 				// Busca campos livres do repositório da Transportadora
-				String sql = "select aba2001json from aba2001 "+
-						"inner join aba20 on aba2001rd = aba20id "+
-						"where REPLACE(UPPER(aba20descr), ' ','') like '%"+descrRepositorio+"%'"
+				String sql = " SELECT aba20id, aba2001json FROM aba2001 "+
+						     " INNER JOIN aba20 ON aba2001rd = aba20id "+
+						     " WHERE REPLACE(UPPER(aba20descr), ' ','') LIKE '%"+descrRepositorio+"%'"
 
 
 				List<TableMap> listRepositorios = getAcessoAoBanco().buscarListaDeTableMap(sql);
@@ -372,9 +372,11 @@ class Documento extends FormulaBase {
 				if(listRepositorios.size() > 0){
 
 					for(repositorio in listRepositorios){
-						String municipioRepositorio = formatarString((repositorio.getTableMap("aba2001json").getString("municipio")).toUpperCase());
-						if(municipioRepositorio == municipioEntidade){
-							jsonRepositorio = repositorio.getTableMap("aba2001json");
+						if(repositorio.getTableMap("aba2001json") != null){
+							String municipioRepositorio = formatarString((repositorio.getTableMap("aba2001json").getString("municipio")).toUpperCase());
+							if(municipioRepositorio == municipioEntidade){
+								jsonRepositorio = repositorio.getTableMap("aba2001json");
+							}
 						}
 					}
 
