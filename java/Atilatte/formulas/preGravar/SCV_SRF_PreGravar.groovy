@@ -95,7 +95,7 @@ class SCV_SRF_PreGravar extends FormulaBase {
 			municipioEntidade = formatarString(municipioEntidade.toUpperCase());
 
 			// Busca campos livres do repositório da Transportadora
-			String sql = " SELECT aba2001json FROM aba2001 "+
+			String sql = " SELECT aba20id, aba2001json FROM aba2001 "+
 					     " INNER JOIN aba20 ON aba2001rd = aba20id "+
 					     " WHERE REPLACE(UPPER(aba20descr), ' ','') LIKE '%"+descrRepositorio+"%'"
 
@@ -106,9 +106,11 @@ class SCV_SRF_PreGravar extends FormulaBase {
 			TableMap jsonRepositorio = new TableMap();
 
 			for(tmRepositorio in listTmRepositorio  ){
-				String municipioRepositorio = formatarString((tmRepositorio.getTableMap("aba2001json").getString("municipio")).toUpperCase());
-				if(municipioRepositorio == municipioEntidade){
-					jsonRepositorio = tmRepositorio.getTableMap("aba2001json");
+				if(tmRepositorio.getTableMap("aba2001json") != null){
+					String municipioRepositorio = formatarString((tmRepositorio.getTableMap("aba2001json").getString("municipio")).toUpperCase());
+					if(municipioRepositorio == municipioEntidade){
+						jsonRepositorio = tmRepositorio.getTableMap("aba2001json");
+					}
 				}
 			}
 
