@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_NFCe_S1" language="groovy" pageWidth="566" pageHeight="802" columnWidth="566" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="1b4a6970-c5c0-4eaf-b4a1-1cb655ad71a1">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="1027"/>
+	<property name="ireport.y" value="0"/>
+	<field name="codItem" class="java.lang.String"/>
+	<field name="naItem" class="java.lang.String"/>
+	<field name="umu" class="java.lang.String"/>
+	<field name="qtdItem" class="java.math.BigDecimal"/>
+	<field name="unitItem" class="java.math.BigDecimal"/>
+	<field name="totItem" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="62" height="13" uuid="cdce8bbf-071b-4bf8-b4c4-9b0e60e453dc"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codItem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="62" y="0" width="185" height="13" uuid="36567ace-2742-4966-b4b1-c5a67496cb9e"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naItem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="398" y="0" width="21" height="13" uuid="79e87e1b-18f6-4a2e-9c7f-0433f68d5246"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{umu}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="358" y="0" width="29" height="13" uuid="69295075-77e8-48ad-aba0-68d26554acbe"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtdItem}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="420" y="0" width="52" height="13" uuid="787f3fb2-dd67-4583-9e81-90bfad0ed8fe"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unitItem}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="515" y="0" width="39" height="13" uuid="0e9dafd6-7a81-4f77-8704-9507903cd05e"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totItem}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
