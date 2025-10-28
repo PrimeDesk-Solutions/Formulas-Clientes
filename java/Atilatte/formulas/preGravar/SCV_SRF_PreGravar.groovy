@@ -47,13 +47,12 @@ class SCV_SRF_PreGravar extends FormulaBase {
 	@Override
 	public void executar() {
 		eaa01 = get("eaa01");
-		//gravarInconsistencias(eaa01)
+		gravarInconsistencias(eaa01)
 		verificaItensRepetidos(eaa01)
 		validarQuantidadeItem(eaa01);
 		definirDataPrimeiraUltimaCompra(eaa01);
 		alterarPoliticaSeguranca(eaa01);
 		alterarOrdecaoItensDocumento(eaa01);
-
 
 		put("gravar", gravar);
 	}
@@ -96,10 +95,9 @@ class SCV_SRF_PreGravar extends FormulaBase {
 			municipioEntidade = formatarString(municipioEntidade.toUpperCase());
 
 			// Busca campos livres do repositório da Transportadora
-			String sql = "SELECT aba2001json FROM aba2001 "+
-						"INNER JOIN aba20 ON aba2001rd = aba20id "+
-						"WHERE REPLACE(UPPER(aba20descr), ' ','') LIKE '%"+descrRepositorio+"%'"
-
+			String sql = " SELECT aba2001json FROM aba2001 "+
+					     " INNER JOIN aba20 ON aba2001rd = aba20id "+
+					     " WHERE REPLACE(UPPER(aba20descr), ' ','') LIKE '%"+descrRepositorio+"%'"
 
 			List<TableMap> listTmRepositorio = getAcessoAoBanco().buscarListaDeTableMap(sql);
 
@@ -114,11 +112,11 @@ class SCV_SRF_PreGravar extends FormulaBase {
 				}
 			}
 
-			if (jsonRepositorio.size() == 0) throw new ValidacaoException("Municío "+municipioEntidade+" não encontrado no repositório de dados " + descrRepositorio)
+			if (jsonRepositorio.size() == 0) throw new ValidacaoException("Município "+municipioEntidade+" não encontrado no repositório de dados " + descrRepositorio)
 
 			BigDecimal pesoMinimo = jsonRepositorio.getBigDecimal_Zero("peso_min");
 
-			if(pesoMinimo == 0) throw new ValidacaoException("Não foi informado o valor do frete mímino no municíopio do repositório de dados da transportadora " + codRedespacho + " - " + nomeRedespacho);
+			if(pesoMinimo == 0) throw new ValidacaoException("Não foi informado o valor do frete mímino no município " + municipioEntidade + " do repositório de dados da transportadora " + codRedespacho + " - " + nomeRedespacho);
 
 			// Bloqueia o pedido caso não atinja o peso mínimo do município da transportadora
 			if (pesoBruto < pesoMinimo){
@@ -131,7 +129,6 @@ class SCV_SRF_PreGravar extends FormulaBase {
 					eaa01.eaa01bloqueado = 1
 				}
 			}
-
 		}
 	}
 	private String formatarString(String municipio){
