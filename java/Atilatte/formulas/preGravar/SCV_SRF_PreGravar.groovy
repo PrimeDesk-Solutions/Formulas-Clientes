@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 class SCV_SRF_PreGravar extends FormulaBase {
-	
+
 	private Eaa01 eaa01;
 	private Abb01 abb01;
 	private Abe01 abe01;
@@ -38,12 +38,12 @@ class SCV_SRF_PreGravar extends FormulaBase {
 
 	TableMap jsonAbe02;
 
-	
+
 	@Override
 	public FormulaTipo obterTipoFormula() {
 		return FormulaTipo.SCV_SRF_PRE_GRAVACAO;
 	}
-	
+
 	@Override
 	public void executar() {
 		eaa01 = get("eaa01");
@@ -96,8 +96,8 @@ class SCV_SRF_PreGravar extends FormulaBase {
 
 			// Busca campos livres do repositório da Transportadora
 			String sql = " SELECT aba20id, aba2001json FROM aba2001 "+
-					     " INNER JOIN aba20 ON aba2001rd = aba20id "+
-					     " WHERE REPLACE(UPPER(aba20descr), ' ','') LIKE '%"+descrRepositorio+"%'"
+					" INNER JOIN aba20 ON aba2001rd = aba20id "+
+					" WHERE REPLACE(UPPER(aba20descr), ' ','') LIKE '%"+descrRepositorio+"%'"
 
 			List<TableMap> listTmRepositorio = getAcessoAoBanco().buscarListaDeTableMap(sql);
 
@@ -106,8 +106,9 @@ class SCV_SRF_PreGravar extends FormulaBase {
 			TableMap jsonRepositorio = new TableMap();
 
 			for(tmRepositorio in listTmRepositorio  ){
-				if(tmRepositorio.getTableMap("aba2001json") != null){
-					String municipioRepositorio = formatarString((tmRepositorio.getTableMap("aba2001json").getString("municipio")).toUpperCase());
+				String municipioRepositorio = tmRepositorio.getTableMap("aba2001json").getString("municipio");
+				if(tmRepositorio.getTableMap("aba2001json") != null && municipioRepositorio != null){
+					municipioRepositorio = formatarString(municipioRepositorio.toUpperCase());
 					if(municipioRepositorio == municipioEntidade){
 						jsonRepositorio = tmRepositorio.getTableMap("aba2001json");
 					}
@@ -343,12 +344,12 @@ class SCV_SRF_PreGravar extends FormulaBase {
 		if(jsonAbe02.size() == 0){
 			getSession().connection.prepareStatement("UPDATE abe02 SET abe02json = '{}' WHERE abe02ent = " + abe01.abe01id).execute();
 		}
-		
+
 		// Define a data da primeira venda do cliente
 		if(jsonAbe02.get("primeira_venda") == null){
-			
+
 			String data = '"'+txtData.replace("-","") + '"'
-			
+
 			String sql = "UPDATE abe02 SET abe02json = jsonb_set(abe02json, '{primeira_venda}', '"+data+"', true) WHERE abe02ent = " + abe01.abe01id;
 
 			getSession().connection.prepareStatement(sql).execute()
@@ -356,9 +357,9 @@ class SCV_SRF_PreGravar extends FormulaBase {
 
 		// Define a data da ultima venda do cliente
 		if(abb01.abb01data == dataAtual){
-			
+
 			String data = '"'+txtData.replace("-","") + '"'
-			
+
 			String sql = "UPDATE abe02 SET abe02json = jsonb_set(abe02json, '{ultima_venda}', '"+data+"', true) WHERE abe02ent = " + abe01.abe01id;
 
 			getSession().connection.prepareStatement(sql).execute()
@@ -372,12 +373,12 @@ class SCV_SRF_PreGravar extends FormulaBase {
 
 		// Entidade
 		abe01 = getSession().get(Abe01.class, abb01.abb01ent.abe01id);
-		
+
 		if(eaa01.eaa01clasDoc == 1){
 			if(abb01.abb01operAutor == "SRF1003"){
-				
+
 				def politicaEnt = abe01.abe01psUso;
-	
+
 				// Define a Politica da entidade sendo a politica do documento
 				eaa01.setEaa01psUso(politicaEnt);
 			}

@@ -372,8 +372,9 @@ class Documento extends FormulaBase {
 				if(listRepositorios.size() > 0){
 
 					for(repositorio in listRepositorios){
-						if(repositorio.getTableMap("aba2001json") != null){
-							String municipioRepositorio = formatarString((repositorio.getTableMap("aba2001json").getString("municipio")).toUpperCase());
+						String municipioRepositorio = repositorio.getTableMap("aba2001json").getString("municipio");
+						if(repositorio.getTableMap("aba2001json") != null && municipioRepositorio != null){
+							municipioRepositorio = formatarString(municipioRepositorio.toUpperCase());
 							if(municipioRepositorio == municipioEntidade){
 								jsonRepositorio = repositorio.getTableMap("aba2001json");
 							}
