@@ -297,15 +297,15 @@ public class Doc_Padrao_Saida extends FormulaBase {
 
             // Total do Documento = Total do item
             eaa0103.eaa0103totDoc = (eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("acrescimo_inc_") +
-                                                            jsonEaa0103.getBigDecimal_Zero("frete_dest") -
-                                                            jsonEaa0103.getBigDecimal_Zero("desconto")).round(2);
+                    jsonEaa0103.getBigDecimal_Zero("frete_dest") -
+                    jsonEaa0103.getBigDecimal_Zero("desconto")).round(2);
 
             // Calcula ICMS Itens
             calcularICMS(contribICMS);
 
             // ICMS Isento
             if (eaa0103.eaa0103cstIcms.aaj10codigo == '040' || eaa0103.eaa0103cstIcms.aaj10codigo == '240' ||
-                eaa0103.eaa0103cstIcms.aaj10codigo == '041' || eaa0103.eaa0103cstIcms.aaj10codigo == '241' || eaa0103.eaa0103cstIcms.aaj10codigo == '090') {
+                    eaa0103.eaa0103cstIcms.aaj10codigo == '041' || eaa0103.eaa0103cstIcms.aaj10codigo == '241' || eaa0103.eaa0103cstIcms.aaj10codigo == '090') {
 
                 jsonEaa0103.put("icms_isento", eaa0103.eaa0103totDoc);
                 jsonEaa0103.put("bc_icms", new BigDecimal(0));
@@ -334,13 +334,13 @@ public class Doc_Padrao_Saida extends FormulaBase {
     // Trocar CFOP (Dentro ou fora do estado)
     private void definirCFOP(Boolean dentroEstado) {
         String cfop = "";
-        
+
         // Atribui o CFOP 5102
         if (dentroEstado) {
             if (eaa0103.eaa0103cstIcms != null) {
 
                 if (eaa0103.eaa0103cstIcms.aaj10codigo == "000" || eaa0103.eaa0103cstIcms.aaj10codigo == "040" || eaa0103.eaa0103cstIcms.aaj10codigo == "041" || eaa0103.eaa0103cstIcms.aaj10codigo == "090" || eaa0103.eaa0103cstIcms.aaj10codigo == "200" ||
-                    eaa0103.eaa0103cstIcms.aaj10codigo == "240" || eaa0103.eaa0103cstIcms.aaj10codigo == "241") {
+                        eaa0103.eaa0103cstIcms.aaj10codigo == "240" || eaa0103.eaa0103cstIcms.aaj10codigo == "241") {
 
                     cfop = "5102";
 
@@ -368,14 +368,14 @@ public class Doc_Padrao_Saida extends FormulaBase {
 
                 if (ivaST > 0) {
                     jsonEaa0103.put("bc_icms_ret", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                                                    jsonEaa0103.getBigDecimal_Zero("seguro") +
-                                                    jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
-                                                    jsonEaa0103.getBigDecimal_Zero("ipi"));
+                            jsonEaa0103.getBigDecimal_Zero("seguro") +
+                            jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
+                            jsonEaa0103.getBigDecimal_Zero("ipi"));
 
                     jsonEaa0103.put("bc_icms_ret", (jsonEaa0103.getBigDecimal_Zero("bc_icms_ret") * ((ivaST / 100)) + 1).round(2));
 
                     jsonEaa0103.put("vlr_icms_ret", (jsonEaa0103.getBigDecimal_Zero("bc_icms_ret") *
-                                                    (jsonEaa0103.getBigDecimal_Zero("icms_ret") / 100)) - jsonEaa0103.getBigDecimal_Zero("icms_sped").round(2));
+                            (jsonEaa0103.getBigDecimal_Zero("icms_ret") / 100)) - jsonEaa0103.getBigDecimal_Zero("icms_sped").round(2));
 
                 } else {
                     jsonEaa0103.put("bc_icms_ret", new BigDecimal(0));
@@ -411,10 +411,10 @@ public class Doc_Padrao_Saida extends FormulaBase {
         if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
             // BC ICMS
             jsonEaa0103.put("bc_icms", eaa0103.eaa0103total +
-                                        jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                                        jsonEaa0103.getBigDecimal_Zero("seguro") +
-                                        jsonEaa0103.getBigDecimal_Zero("outras_despesas") -
-                                        jsonEaa0103.getBigDecimal_Zero("desconto"));
+                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
+                    jsonEaa0103.getBigDecimal_Zero("seguro") +
+                    jsonEaa0103.getBigDecimal_Zero("outras_despesas") -
+                    jsonEaa0103.getBigDecimal_Zero("desconto"));
 
             jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms").round(2));
 
@@ -538,7 +538,7 @@ public class Doc_Padrao_Saida extends FormulaBase {
                     jsonEaa0103.put("aliq_ecf", "II");
 
                 } else if (jsonAbm0101.getBigDecimal_Zero("aliq_iss") > 0) {
-                           jsonEaa0103.put("aliq_ecf", "FF");
+                    jsonEaa0103.put("aliq_ecf", "FF");
 
                 } else {
                     jsonEaa0103.put("aliq_ecf", "NN");
@@ -587,7 +587,7 @@ public class Doc_Padrao_Saida extends FormulaBase {
 
             if (dentroEstado) {
                 if (cstICMS == "000" || cstICMS == "040" || cstICMS == "041" ||
-                    cstICMS == "090" || cstICMS == "200" || cstICMS == "240" || cstICMS == "241") {
+                        cstICMS == "090" || cstICMS == "200" || cstICMS == "240" || cstICMS == "241") {
 
                     cfop = "5102";
                     eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
@@ -691,7 +691,6 @@ public class Doc_Padrao_Saida extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

@@ -150,9 +150,9 @@ class NFCe extends FormulaBase {
 
         Aaj03 aaj03 = getSession().get(Aaj03.class, eaa01.eaa01sitDoc.aaj03id)
 
-        selecionarAlinhamento("0002")
+        selecionarAlinhamento("0007")
 
-        if (getAlinhamento().size() == 0) throw new ValidacaoException("O alinhamento 0002 para NFe não foi encontrado.");
+        if (getAlinhamento().size() == 0) throw new ValidacaoException("O alinhamento 0007 para NFCe não foi encontrado.");
 
         comporFilhosDocumento();
 
@@ -387,106 +387,106 @@ class NFCe extends FormulaBase {
             retTrib.addNode("vBCRetPrev", getCampo("354-W29", "vBCRetPrev") == null ? null : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("354-W29", "vBCRetPrev")), 2, true), false);
             retTrib.addNode("vRetPrev", getCampo("355-W30", "vRetPrev") == null ? null : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("355-W30", "vRetPrev")), 2, true), false);
         }
+        if(!modelo.equals("65")){
+            /** transp - Informações do transporte da NF-e (X01) */
+            ElementXml transp = infNfe.addNode("transp");
+            transp.addNode("modFrete", eaa0102.eaa0102frete == null ? 9 : eaa0102.eaa0102frete, true);
 
-        /** transp - Informações do transporte da NF-e (X01) */
-        ElementXml transp = infNfe.addNode("transp");
-        transp.addNode("modFrete", eaa0102.eaa0102frete == null ? 9 : eaa0102.eaa0102frete, true);
+            Abe01 despacho = eaa0102.eaa0102despacho;
+            Abe0101 endDespPrincipal = despacho != null ? getAcessoAoBanco().buscarRegistroUnicoByCriterion("Abe0101", Criterions.eq("abe0101ent", despacho.abe01id), Criterions.eq("abe0101principal", 1)) : null;
+            if (despacho != null) {
 
-        Abe01 despacho = eaa0102.eaa0102despacho;
-        Abe0101 endDespPrincipal = despacho != null ? getAcessoAoBanco().buscarRegistroUnicoByCriterion("Abe0101", Criterions.eq("abe0101ent", despacho.abe01id), Criterions.eq("abe0101principal", 1)) : null;
-        if (despacho != null) {
+                /** transporta - Transportador (X03) */
+                ElementXml transporta = transp.addNode("transporta");
+                if (despacho.abe01ti == 1) {
+                    transporta.addNode("CPF", despacho.abe01ni == null ? null : StringUtils.extractNumbers(despacho.abe01ni), false);
+                } else if (despacho.abe01ti == 0) {
+                    transporta.addNode("CNPJ", despacho.abe01ni == null ? null : StringUtils.extractNumbers(despacho.abe01ni), false);
+                }
+                transporta.addNode("xNome", despacho.abe01nome, false, 60);
+                transporta.addNode("IE", eaa0102.eaa0102contribIcms == 0 ? null : NFeUtils.formatarIE(despacho.abe01ie), false);
 
-            /** transporta - Transportador (X03) */
-            ElementXml transporta = transp.addNode("transporta");
-            if (despacho.abe01ti == 1) {
-                transporta.addNode("CPF", despacho.abe01ni == null ? null : StringUtils.extractNumbers(despacho.abe01ni), false);
-            } else if (despacho.abe01ti == 0) {
-                transporta.addNode("CNPJ", despacho.abe01ni == null ? null : StringUtils.extractNumbers(despacho.abe01ni), false);
-            }
-            transporta.addNode("xNome", despacho.abe01nome, false, 60);
-            transporta.addNode("IE", eaa0102.eaa0102contribIcms == 0 ? null : NFeUtils.formatarIE(despacho.abe01ie), false);
+                String ie = eaa01.eaa0102DadosGerais != null && eaa01.eaa0102DadosGerais.eaa0102contribIcms == 0 ? null : NFeUtils.formatarIE(despacho.abe01ie);
+                if (ie != null && !ie.equals("ISENTO")) {
+                    StringBuilder endereco = new StringBuilder();
+                    if (endDespPrincipal.abe0101endereco != null) endereco.append(endDespPrincipal.abe0101endereco);
+                    if (endDespPrincipal.abe0101numero != null) endereco.append("," + endDespPrincipal.abe0101numero);
+                    if (endDespPrincipal.abe0101bairro != null) endereco.append("-" + endDespPrincipal.abe0101bairro);
+                    if (endDespPrincipal.abe0101complem != null) endereco.append("-" + endDespPrincipal.abe0101complem);
+                    transporta.addNode("xEnder", endereco.toString().trim(), false, 60);
 
-            String ie = eaa01.eaa0102DadosGerais != null && eaa01.eaa0102DadosGerais.eaa0102contribIcms == 0 ? null : NFeUtils.formatarIE(despacho.abe01ie);
-            if (ie != null && !ie.equals("ISENTO")) {
-                StringBuilder endereco = new StringBuilder();
-                if (endDespPrincipal.abe0101endereco != null) endereco.append(endDespPrincipal.abe0101endereco);
-                if (endDespPrincipal.abe0101numero != null) endereco.append("," + endDespPrincipal.abe0101numero);
-                if (endDespPrincipal.abe0101bairro != null) endereco.append("-" + endDespPrincipal.abe0101bairro);
-                if (endDespPrincipal.abe0101complem != null) endereco.append("-" + endDespPrincipal.abe0101complem);
-                transporta.addNode("xEnder", endereco.toString().trim(), false, 60);
-
-                if (endDespPrincipal.abe0101municipio == null) {
-                    transporta.addNode("xMun", null, false);
-                    transporta.addNode("UF", null, false);
-                } else {
-                    Aag02 aag02 = getAcessoAoBanco().buscarRegistroUnicoById("Aag02", endDespPrincipal.abe0101municipio.aag0201uf.aag02id);
-                    if (aag02.aag02uf.equals("EX")) {
-                        transporta.addNode("xMun", "EXTERIOR", false);
-                        transporta.addNode("UF", "EX", false);
+                    if (endDespPrincipal.abe0101municipio == null) {
+                        transporta.addNode("xMun", null, false);
+                        transporta.addNode("UF", null, false);
                     } else {
-                        transporta.addNode("xMun", endDespPrincipal.abe0101municipio.aag0201nome, false, 60);
-                        Aag02 uf = getAcessoAoBanco().buscarRegistroUnicoById("Aag02", endDespPrincipal.abe0101municipio.aag0201uf.aag02id);
-                        transporta.addNode("UF", uf.aag02uf, false);
+                        Aag02 aag02 = getAcessoAoBanco().buscarRegistroUnicoById("Aag02", endDespPrincipal.abe0101municipio.aag0201uf.aag02id);
+                        if (aag02.aag02uf.equals("EX")) {
+                            transporta.addNode("xMun", "EXTERIOR", false);
+                            transporta.addNode("UF", "EX", false);
+                        } else {
+                            transporta.addNode("xMun", endDespPrincipal.abe0101municipio.aag0201nome, false, 60);
+                            Aag02 uf = getAcessoAoBanco().buscarRegistroUnicoById("Aag02", endDespPrincipal.abe0101municipio.aag0201uf.aag02id);
+                            transporta.addNode("UF", uf.aag02uf, false);
+                        }
                     }
                 }
             }
-        }
 
-        /** retTransp - Retenção do ICMS do transporte (X11) */
-        if (getCampo("370-X15", "vICMSRet") != null && jsonEaa01.getBigDecimal_Zero(getCampo("370-X15", "vICMSRet")).compareTo(new BigDecimal(0)) != 0) {
-            ElementXml retTransp = transp.addNode("retTransp");
-            retTransp.addNode("vServ", getCampo("367-X12", "vServ") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("367-X12", "vServ")), 2, false), true);
-            retTransp.addNode("vBCRet", getCampo("368-X13", "vBCRet") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("368-X13", "vBCRet")), 2, false), true);
-            retTransp.addNode("pICMSRet", getCampo("369-X14", "pICMSRet") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("369-X14", "pICMSRet")), 2, false), true);
-            retTransp.addNode("vICMSRet", getCampo("370-X15", "vICMSRet") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("370-X15", "vICMSRet")), 2, false), true);
-            retTransp.addNode("CFOP", null, false);
-            retTransp.addNode("cMunFG", null, false);
-        }
 
-        /** veicTransp - Veículo (X18) */
-        if (idDest != 2) {
-            Aah20 veiculo1 = eaa0102.eaa0102veiculo;
-            if (veiculo1 != null) {
-                ElementXml veicTransp = transp.addNode("veicTransp");
-                veicTransp.addNode("placa", veiculo1.aah20placa, true);
-                veicTransp.addNode("UF", veiculo1.aah20ufPlaca, true);
-                veicTransp.addNode("RNTC", veiculo1.aah20rntrc, false, 20);
+
+            /** retTransp - Retenção do ICMS do transporte (X11) */
+            if (getCampo("370-X15", "vICMSRet") != null && jsonEaa01.getBigDecimal_Zero(getCampo("370-X15", "vICMSRet")).compareTo(new BigDecimal(0)) != 0) {
+                ElementXml retTransp = transp.addNode("retTransp");
+                retTransp.addNode("vServ", getCampo("367-X12", "vServ") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("367-X12", "vServ")), 2, false), true);
+                retTransp.addNode("vBCRet", getCampo("368-X13", "vBCRet") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("368-X13", "vBCRet")), 2, false), true);
+                retTransp.addNode("pICMSRet", getCampo("369-X14", "pICMSRet") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("369-X14", "pICMSRet")), 2, false), true);
+                retTransp.addNode("vICMSRet", getCampo("370-X15", "vICMSRet") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("370-X15", "vICMSRet")), 2, false), true);
+                retTransp.addNode("CFOP", null, false);
+                retTransp.addNode("cMunFG", null, false);
             }
 
-            /** reboque - Reboque (X22) */
-            Aah20 reboque1 = eaa0102.eaa0102reboque1;
-            if (reboque1 != null) {
-                ElementXml reboque = transp.addNode("reboque");
-                reboque.addNode("placa", reboque1.aah20placa, true);
-                reboque.addNode("UF", reboque1.aah20ufPlaca, true);
-                reboque.addNode("RNTC", reboque1.aah20rntrc, false, 20);
-                reboque.addNode("vagao", null, false);
-                reboque.addNode("balsa", null, false);
+            /** veicTransp - Veículo (X18) */
+            if (idDest != 2) {
+                Aah20 veiculo1 = eaa0102.eaa0102veiculo;
+                if (veiculo1 != null) {
+                    ElementXml veicTransp = transp.addNode("veicTransp");
+                    veicTransp.addNode("placa", veiculo1.aah20placa, true);
+                    veicTransp.addNode("UF", veiculo1.aah20ufPlaca, true);
+                    veicTransp.addNode("RNTC", veiculo1.aah20rntrc, false, 20);
+                }
 
-                Aah20 reboque2 = eaa0102.eaa0102reboque2;
-                if (reboque2 != null) {
-                    reboque = transp.addNode("reboque");
-                    reboque.addNode("placa", reboque2.aah20placa, true);
-                    reboque.addNode("UF", reboque2.aah20ufPlaca, true);
-                    reboque.addNode("RNTC", reboque2.aah20rntrc, false, 20);
+                /** reboque - Reboque (X22) */
+                Aah20 reboque1 = eaa0102.eaa0102reboque1;
+                if (reboque1 != null) {
+                    ElementXml reboque = transp.addNode("reboque");
+                    reboque.addNode("placa", reboque1.aah20placa, true);
+                    reboque.addNode("UF", reboque1.aah20ufPlaca, true);
+                    reboque.addNode("RNTC", reboque1.aah20rntrc, false, 20);
                     reboque.addNode("vagao", null, false);
                     reboque.addNode("balsa", null, false);
 
-                    Aah20 reboque3 = eaa0102.eaa0102reboque3;
-                    if (reboque3 != null) {
+                    Aah20 reboque2 = eaa0102.eaa0102reboque2;
+                    if (reboque2 != null) {
                         reboque = transp.addNode("reboque");
-                        reboque.addNode("placa", reboque3.aah20placa, true);
-                        reboque.addNode("UF", reboque3.aah20ufPlaca, true);
-                        reboque.addNode("RNTC", reboque3.aah20rntrc, false, 20);
+                        reboque.addNode("placa", reboque2.aah20placa, true);
+                        reboque.addNode("UF", reboque2.aah20ufPlaca, true);
+                        reboque.addNode("RNTC", reboque2.aah20rntrc, false, 20);
                         reboque.addNode("vagao", null, false);
                         reboque.addNode("balsa", null, false);
+
+                        Aah20 reboque3 = eaa0102.eaa0102reboque3;
+                        if (reboque3 != null) {
+                            reboque = transp.addNode("reboque");
+                            reboque.addNode("placa", reboque3.aah20placa, true);
+                            reboque.addNode("UF", reboque3.aah20ufPlaca, true);
+                            reboque.addNode("RNTC", reboque3.aah20rntrc, false, 20);
+                            reboque.addNode("vagao", null, false);
+                            reboque.addNode("balsa", null, false);
+                        }
                     }
                 }
             }
-        }
-
-        /** vol - Volumes (X26) */
-        if (!"65".equals(modelo)) {
+            /** vol - Volumes (X26) */
             ElementXml vol = transp.addNode("vol");
             vol.addNode("qVol", getCampo("382-X27", "qVol") == null ? null : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("382-X27", "qVol")), 0, false), false);
             vol.addNode("esp", eaa0102.eaa0102especie, false, 60);
@@ -494,6 +494,9 @@ class NFCe extends FormulaBase {
             vol.addNode("nVol", eaa0102.eaa0102numero, false, 60);
             vol.addNode("pesoL", getCampo("386-X31", "pesoL") == null ? null : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("386-X31", "pesoL")), 3, true), false);
             vol.addNode("pesoB", getCampo("387-X32", "pesoB") == null ? null : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("387-X32", "pesoB")), 3, true), false);
+        }else{
+            ElementXml transp = infNfe.addNode("transp");
+            transp.addNode("modFrete", 9, true);
         }
 
         /** cobr - Dados da cobrança (Y01) */
@@ -503,6 +506,7 @@ class NFCe extends FormulaBase {
                 return o1.eaa0113dtVctoN.compareTo(o2.eaa0113dtVctoN);
             }
         });
+
         eaa0113sOrdem.addAll(eaa0113s);
         if (!"65".equals(modelo)) {
             if (eaa0113s != null && eaa0113s.size() > 0) {
@@ -934,11 +938,13 @@ class NFCe extends FormulaBase {
             /** prod - Produtos e Serviços da NF-e (I01) */
             prod = det.addNode("prod");
             prod.addNode("cProd", eaa0103.eaa0103codigo, true, 60);
-            if (modelo.equals("65")) {
-                prod.addNode("cEAN", "SEM GTIN", true);
-            } else{
-                prod.addNode("cEAN", "SEM GTIN", true)
-            }
+            prod.addNode("cEAN", eaa0103.eaa0103gtin == null ? "SEM GTIN" : eaa0103.eaa0103gtin, true);
+//            if (modelo.equals("65")) {
+//                prod.addNode("cEAN", eaa0103.eaa0103gtin == null ? "SEM GTIN" : eaa0103.eaa0103gtin, true);
+//            } else{
+//                prod.addNode("cEAN", "SEM GTIN", true)
+//            }
+
             if (isProducao) {
                 if (jsonEaa0103.getString('cod_cliente') == null) {
                     prod.addNode("xProd", eaa0103.eaa0103descr, true, 120);

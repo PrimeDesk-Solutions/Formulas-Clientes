@@ -54,6 +54,7 @@ class SRF_NFCe extends RelatorioBase {
         }
 
         List<TableMap> listItens = new ArrayList<>();
+        List<TableMap> listPagamentos = new ArrayList<>();
 
         for (dado in dados) {
             Long idDoc = dado.getLong("eaa01id");
@@ -62,50 +63,60 @@ class SRF_NFCe extends RelatorioBase {
             Image imgQrdCode = gerarQrCode(dado.getString("qrCode"));
             Integer tipoInscricao = dado.getInteger("abe01ti");
             String numInscricao = dado.getString("numInscricao");
-            String inscricaoFormatada = formatarInscricaoEntidade(numInscricao,tipoInscricao);
-            TableMap tmFormaPagamento = buscarFormaDePagamento(idDoc) != null ? buscarFormaDePagamento(idDoc) : new TableMap();
+            String inscricaoFormatada = formatarInscricao(numInscricao,tipoInscricao);
+            List<TableMap> listFormaPagamento = buscarFormaDePagamento(idDoc);
 
             for (item in itensDoc) {
                 countItens++;
 
-                item.put("seq", countItens.toString() + "º ")
+                item.put("seq", countItens.toString())
                 item.put("key", idDoc);
                 listItens.add(item);
+            }
+            if(listFormaPagamento != null && listFormaPagamento.size() > 0){
+                for(pagamento in listFormaPagamento){
+                    pagamento.put("key", idDoc);
+                    pagamento.put("descrFormaPgto", pagamento.getString("descrFormaPgto"));
+                    pagamento.put("valorPgto", pagamento.getString("valorPgto"));
+                    listPagamentos.add(pagamento);
+                }
             }
 
             dado.put("key", idDoc);
             dado.put("imgQrCode", imgQrdCode);
             dado.put("numInscricao", inscricaoFormatada);
-            dado.put("descrFormaPgto", tmFormaPagamento.getString("descrFormaPgto"));
-            dado.put("valorPgto", tmFormaPagamento.getString("valorPgto"));
+
             if(itensDoc != null) dado.put("qtdTotalItens", itensDoc.size());
         }
         Aag0201 aag0201Empresa = getSession().get(Aag0201.class, "aag0201id, aag0201nome, aag0201uf", obterEmpresaAtiva().getAac10municipio().getAag0201id())
         Aag02 aag02Empresa = getSession().get(Aag02.class, "aag02id, aag02uf", aag0201Empresa.aag0201uf.aag02id);
         adicionarParametro("nomeEmpresa", obterEmpresaAtiva().getAac10rs());
-        adicionarParametro("enderecoEmpresa", obterEmpresaAtiva().getAac10endereco() + ", " + obterEmpresaAtiva().getAac10numero() + ", " + obterEmpresaAtiva().getAac10bairro() + ", " + aag0201Empresa.aag0201nome + ", " + aag02Empresa.aag02uf);
-        adicionarParametro("titulo", "Documento Auxiliar da Nota Fiscal de Consumidor Eletrônica");
+        adicionarParametro("enderecoEmpresa", obterEmpresaAtiva().getAac10endereco() + ", " + obterEmpresaAtiva().getAac10numero() + ", " + obterEmpresaAtiva().getAac10bairro());
+        adicionarParametro("ufEmpresa", aag0201Empresa.aag0201nome + ", " + aag02Empresa.aag02uf);
+        adicionarParametro("inscricaoEmpresa", formatarInscricao(obterEmpresaAtiva().getAac10ni(),obterEmpresaAtiva().getAac10ti()));
 
         // Cria os sub-relatórios
         TableMapDataSource dsPrincipal = new TableMapDataSource(dados);
         dsPrincipal.addSubDataSource("dsItens", listItens, "key", "key");
+        dsPrincipal.addSubDataSource("dsPagamentos", listPagamentos, "key", "key");
         adicionarParametro("StreamSub1", carregarArquivoRelatorio("SRF_NFCe_S1"));
+        adicionarParametro("StreamSub2", carregarArquivoRelatorio("SRF_NFCe_S2"));
 
         return gerarPDF("SRF_NFCe", dsPrincipal);
     }
 
     private List<TableMap> buscarDocumentos(List<Long> tipos, Integer numeroInicial, Integer numeroFinal, List<Long> entidades, LocalDate[] dtEmissao, LocalDate[] dtEntradaSaida) {
 
-        def whereTipos = tipos != null && tipos.size() > 0 ? " and abb01tipo in (:tipos) " : ""
-        def whereEntidades = entidades != null && entidades.size() > 0 ? " and abb01ent in (:entidades) " : ""
-        def wheredtEmissao = dtEmissao != null && dtEmissao.size() > 0 ? " and abb01data between :dataIni and :dataFim " : ""
-        def wheredtEntradaSaida = dtEntradaSaida != null && dtEntradaSaida.size() > 0 ? " and eaa01esData between :dataEntSaidaIni and :dataEntSaidaFin " : ""
-        def whereNumIni = " and abb01num >= :numeroInicial "
-        def whereNumFim = " and abb01num <= :numeroFinal "
-        def whereEmpresa = "AND eaa01gc = :idEmpresa ";
+        String whereTipos = tipos != null && tipos.size() > 0 ? " and abb01tipo in (:tipos) " : ""
+        String whereEntidades = entidades != null && entidades.size() > 0 ? " and abb01ent in (:entidades) " : ""
+        String wheredtEmissao = dtEmissao != null && dtEmissao.size() > 0 ? " and abb01data between :dataIni and :dataFim " : ""
+        String wheredtEntradaSaida = dtEntradaSaida != null && dtEntradaSaida.size() > 0 ? " and eaa01esData between :dataEntSaidaIni and :dataEntSaidaFin " : ""
+        String whereNumIni = " and abb01num >= :numeroInicial "
+        String whereNumFim = " and abb01num <= :numeroFinal "
+        String whereEmpresa = "AND eaa01gc = :idEmpresa ";
 
-        def sql = "SELECT DISTINCT eaa01id, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, abb01num AS numDoc,    " +
-                "abe01codigo AS codEntidade, abe01na AS nomeEntidade, abe0101Principal.abe0101endereco AS enderecoEntidade, abe0101Principal.abe0101numero AS numEndEntidade,    " +
+        String sql = "SELECT DISTINCT eaa01id, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, abb01num AS numDoc, eaa01obsContrib, CAST(eaa01json -> 'vlr_carga_trib' AS NUMERIC(18,6)) AS cargaTrib,    " +
+                "abe01codigo AS codEntidade, abe01na AS nomeEntidade, abe0101Principal.abe0101endereco AS enderecoEntidade, abe0101Principal.abe0101numero AS numEndEntidade, eaa01obsFisco,     " +
                 "abe0101Principal.abe0101complem AS complemEntidade, abe0101Principal.abe0101bairro AS bairroEntidade, aag0201Principal.aag0201nome AS cidadeEntidade, aag02Principal.aag02uf AS ufEntidade,    " +
                 "abe0101Principal.abe0101cep AS cepEntidade, abe0101Principal.abe0101ddd1 AS dddEntidade, abe0101Principal.abe0101fone1 AS foneEntidade, aab10nome AS usuario, abb01data AS dataEmissao, abb01operHora AS horaEmissao,    " +
                 "abe30codigo AS codCondPgto, abe30nome AS descrCondPgto, eaa01totItens AS totalItem, CAST(eaa01json ->> 'desconto' AS numeric(18,6)) AS desconto, eaa01totDoc AS totDoc,    " +
@@ -132,23 +143,23 @@ class SRF_NFCe extends RelatorioBase {
                 "ORDER BY abb01num"
 
 
-        def parametroTipo = tipos != null && tipos.size() > 0 ? criarParametroSql("tipos", tipos) : null
-        def parametroEntidade = entidades != null && entidades.size() > 0 ? criarParametroSql("entidades", entidades) : null
-        def parametroDtEmissaoIni = dtEmissao != null && dtEmissao.size() > 0 ? criarParametroSql("dataIni", dtEmissao[0]) : null
-        def parametroDtEmissaoFin = dtEmissao != null && dtEmissao.size() > 0 ? criarParametroSql("dataFim", dtEmissao[1]) : null
-        def parametroDtEntSaiIni = dtEntradaSaida != null && dtEntradaSaida.size() > 0 ? criarParametroSql("dataEntSaidaIni", dtEntradaSaida[0]) : null
-        def parametroDtEntSaiFin = dtEntradaSaida != null && dtEntradaSaida.size() > 0 ? criarParametroSql("dataEntSaidaFin", dtEntradaSaida[1]) : null
-        def parametroNumIni = criarParametroSql("numeroInicial", numeroInicial);
-        def parametroNumFin = criarParametroSql("numeroFinal", numeroFinal);
-        def parametroEmpresa = criarParametroSql("idEmpresa", obterEmpresaAtiva().getAac10id());
+        Parametro parametroTipo = tipos != null && tipos.size() > 0 ? criarParametroSql("tipos", tipos) : null
+        Parametro parametroEntidade = entidades != null && entidades.size() > 0 ? criarParametroSql("entidades", entidades) : null
+        Parametro parametroDtEmissaoIni = dtEmissao != null && dtEmissao.size() > 0 ? criarParametroSql("dataIni", dtEmissao[0]) : null
+        Parametro parametroDtEmissaoFin = dtEmissao != null && dtEmissao.size() > 0 ? criarParametroSql("dataFim", dtEmissao[1]) : null
+        Parametro parametroDtEntSaiIni = dtEntradaSaida != null && dtEntradaSaida.size() > 0 ? criarParametroSql("dataEntSaidaIni", dtEntradaSaida[0]) : null
+        Parametro parametroDtEntSaiFin = dtEntradaSaida != null && dtEntradaSaida.size() > 0 ? criarParametroSql("dataEntSaidaFin", dtEntradaSaida[1]) : null
+        Parametro parametroNumIni = criarParametroSql("numeroInicial", numeroInicial);
+        Parametro parametroNumFin = criarParametroSql("numeroFinal", numeroFinal);
+        Parametro parametroEmpresa = criarParametroSql("idEmpresa", obterEmpresaAtiva().getAac10id());
 
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroTipo, parametroEntidade, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroNumIni, parametroNumFin, parametroDtEntSaiIni, parametroDtEntSaiFin, parametroEmpresa);
 
     }
     private List<TableMap> buscarDocumentoById(Long idDoc) {
-        def sql = " SELECT DISTINCT eaa01id, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, abb01num AS numDoc, "+
-                " abe01codigo AS codEntidade, abe01na AS nomeEntidade, abe0101Principal.abe0101endereco AS enderecoEntidade, abe0101Principal.abe0101numero AS numEndEntidade, "+
+        String sql = " SELECT DISTINCT eaa01id, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, abb01num AS numDoc, eaa01obsContrib, CAST(eaa01json -> 'vlr_carga_trib' AS NUMERIC(18,6)) AS cargaTrib, "+
+                " abe01codigo AS codEntidade, abe01na AS nomeEntidade, abe0101Principal.abe0101endereco AS enderecoEntidade, abe0101Principal.abe0101numero AS numEndEntidade, eaa01obsFisco, "+
                 " abe0101Principal.abe0101complem AS complemEntidade, abe0101Principal.abe0101bairro AS bairroEntidade, aag0201Principal.aag0201nome AS cidadeEntidade, aag02Principal.aag02uf AS ufEntidade, "+
                 " abe0101Principal.abe0101cep AS cepEntidade, abe0101Principal.abe0101ddd1 AS dddEntidade, abe0101Principal.abe0101fone1 AS foneEntidade, aab10nome AS usuario, abb01data AS dataEmissao, abb01operHora AS horaEmissao, "+
                 " abe30codigo AS codCondPgto, abe30nome AS descrCondPgto, eaa01totItens AS totalItem, CAST(eaa01json ->> 'desconto' AS numeric(18,6)) AS desconto, eaa01totDoc AS totDoc, "+
@@ -180,44 +191,44 @@ class SRF_NFCe extends RelatorioBase {
                 .getListTableMap();
 
     }
-    private TableMap buscarFormaDePagamento(Long eaa01id){
-        String sql = " SELECT DISTINCT abf40descr AS descrFormaPgto, eaa01131valor AS valorPgto " +
+    private List<TableMap> buscarFormaDePagamento(Long eaa01id){
+        String sql = " SELECT abf40descr AS descrFormaPgto, eaa01131valor AS valorPgto " +
                      " FROM eaa01131 " +
                      " INNER JOIN eaa0113 ON eaa0113id = eaa01131fin "+
                      " INNER JOIN abf40 ON abf40id = eaa01131fp "+
                      " WHERE eaa0113doc = :eaa01id "
 
-        return getAcessoAoBanco().buscarUnicoTableMap(sql, Parametro.criar("eaa01id", eaa01id));
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("eaa01id", eaa01id));
 
     }
 
-    private String formatarInscricaoEntidade(String inscricaoEntidade, Integer tipoInscricao) {
+    private String formatarInscricao(String ie, Integer tipoInscricao) {
         // Retira os caracteres que não são números
-        inscricaoEntidade = inscricaoEntidade.replaceAll("\\D", "");
+        ie = ie.replaceAll("\\D", "");
 
 
-        if (tipoInscricao == 2 && inscricaoEntidade.length() != 14){
+        if (tipoInscricao == 0 && ie.length() != 14){
             interromper("CNPJ do cliente é Inválido")
-        }else if(tipoInscricao == 1 && inscricaoEntidade.length() != 11){
+        }else if(tipoInscricao == 1 && ie.length() != 11){
             interromper( "CPF do cliente é Inválido");
         }
 
-        if (tipoInscricao == 2){
+        if (tipoInscricao == 0){
             // Formata CNPJ: 00.000.000/0000-00
-            inscricaoEntidade = inscricaoEntidade.substring(0, 2) + "." +
-                    inscricaoEntidade.substring(2, 5) + "." +
-                    inscricaoEntidade.substring(5, 8) + "/" +
-                    inscricaoEntidade.substring(8, 12) + "-"+
-                    inscricaoEntidade.substring(12)
+            ie = ie.substring(0, 2) + "." +
+                    ie.substring(2, 5) + "." +
+                    ie.substring(5, 8) + "/" +
+                    ie.substring(8, 12) + "-"+
+                    ie.substring(12)
         }else{
             // Formata CPF: 000.000.000-00
-            inscricaoEntidade = inscricaoEntidade.substring(0, 3) + "." +
-                    inscricaoEntidade.substring(3, 6) + "." +
-                    inscricaoEntidade.substring(6, 9) + "-" +
-                    inscricaoEntidade.substring(9);
+            ie = ie.substring(0, 3) + "." +
+                    ie.substring(3, 6) + "." +
+                    ie.substring(6, 9) + "-" +
+                    ie.substring(9);
         }
 
-        return inscricaoEntidade
+        return ie
     }
     private Image gerarQrCode(String qrCode) {
         Image imgqrcode = null;
