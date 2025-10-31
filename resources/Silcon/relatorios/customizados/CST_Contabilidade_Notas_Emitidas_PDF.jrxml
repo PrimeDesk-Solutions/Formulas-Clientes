@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CST_Contabilidade_Notas_Emitidas_PDF" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bb3ee9ea-3216-4446-beec-53e5a39cf533">
+	<property name="ireport.zoom" value="2.143588810000005"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="56"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="TITULO_RELATORIO" class="java.lang.String"/>
+	<parameter name="PERIODO_INICIAL" class="java.lang.String"/>
+	<parameter name="PERIODO_FINAL" class="java.lang.String"/>
+	<field name="abb01num" class="java.lang.Integer"/>
+	<field name="abe01nome" class="java.lang.String"/>
+	<field name="aaj03descr" class="java.lang.String"/>
+	<field name="abe01ni" class="java.lang.String"/>
+	<field name="abe01ie" class="java.lang.String"/>
+	<field name="abb01data" class="java.util.Date"/>
+	<field name="eaa01nfestat" class="java.lang.String"/>
+	<field name="situacao" class="java.lang.String"/>
+	<field name="nomeCampo1" class="java.lang.String"/>
+	<field name="nomeCampo2" class="java.lang.String"/>
+	<field name="nomeCampo3" class="java.lang.String"/>
+	<field name="nomeCampo4" class="java.lang.String"/>
+	<field name="nomeCampo5" class="java.lang.String"/>
+	<field name="valorCampo1" class="java.math.BigDecimal"/>
+	<field name="valorCampo2" class="java.math.BigDecimal"/>
+	<field name="valorCampo3" class="java.math.BigDecimal"/>
+	<field name="valorCampo4" class="java.math.BigDecimal"/>
+	<field name="valorCampo5" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="85" splitType="Stretch">
+			<staticText>
+				<reportElement x="153" y="22" width="283" height="20" uuid="95c9e011-89ad-4635-bb31-1db4e27a6697"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Relatório de Notas Fiscais Emitidas]]></text>
+			</staticText>
+			<line>
+				<reportElement x="153" y="42" width="649" height="1" uuid="a058c390-f2c1-47fc-9133-2701eda4034a"/>
+			</line>
+			<textField pattern="dd/MM/yyyy HH:mm:ss">
+				<reportElement x="702" y="29" width="100" height="13" uuid="cb4062ad-d761-4c3f-b079-dba78b8fc8f2"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Date ()]]></textFieldExpression>
+			</textField>
+			<textField pattern="000">
+				<reportElement x="779" y="43" width="20" height="10" uuid="b3f70def-877e-41bb-8f99-09f68a15ba0b"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="742" y="43" width="37" height="10" uuid="cb6daabc-04a2-4412-b077-a1c7e9540d19"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Página]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="346" y="56" width="332" height="20" uuid="5079425b-9e3f-43d6-83d8-70bab630f39a"/>
+				<textFieldExpression><![CDATA[$P{TITULO_RELATORIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="170" y="43" width="47" height="20" uuid="6ae5c6e4-ac1c-4df7-93fb-0e8fd56096f0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Data Inicial:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="170" y="63" width="47" height="20" uuid="7c0817c1-7855-48a6-9e17-127c35ac58e9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Data Final:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="217" y="43" width="100" height="20" uuid="a067eee0-beac-49b3-9eeb-ebdc9a26c9cf"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{PERIODO_INICIAL}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="217" y="63" width="100" height="20" uuid="d0acff70-3c9a-4b17-b4c2-6fe7ff2186d7"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{PERIODO_FINAL}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="13" y="3" width="133" height="79" uuid="8c916748-3923-4f0c-b19e-e61c10e333d5"/>
+				<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\customizados\\Logo Silcon.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="31" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="43" height="31" uuid="e2bbacaf-3f54-4c4c-8fff-be932bbb787c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Número]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="43" y="0" width="153" height="31" uuid="09aca7ec-6aaf-422e-9d43-e4a126747891"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="196" y="0" width="90" height="31" uuid="6d884295-f05d-473f-969f-74424bc3e4b9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="286" y="0" width="63" height="31" uuid="64c96160-aff4-4f8d-8e56-9d119f7ae7fe"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CNPJ/CPF]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="349" y="0" width="74" height="31" uuid="c8c68837-8f70-46c5-a38f-62a3370f3b8b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[I.E]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="423" y="0" width="72" height="31" uuid="c29119c4-046a-4681-8b16-cc77bbb9ec64"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DATA]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="495" y="0" width="62" height="31" uuid="78af8fb2-901e-43af-92ab-83773769d2ed"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeCampo1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="557" y="0" width="62" height="31" uuid="7aaa2424-459c-4ea5-b743-ffa5d9fee36d"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeCampo2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="619" y="0" width="87" height="31" uuid="c784f92c-0302-4994-b730-41130d47baa5"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeCampo3}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="706" y="0" width="51" height="31" uuid="e7526714-6c1f-45cc-af12-b75a4ad5f540"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeCampo4}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="757" y="0" width="45" height="31" uuid="d0a454b2-c515-4bda-b70b-d35516a239c3"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeCampo5}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField pattern="0000" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="43" height="13" uuid="e82e07be-87d2-41a5-9426-3484f0a324e5"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abb01num}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="43" y="0" width="153" height="13" uuid="2ce0239d-fe32-4e7a-bcad-99527747fa1b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abe01nome}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="196" y="0" width="90" height="13" uuid="e87f0795-7b13-49ba-bfdc-ae9143e748d5"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{situacao}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="0" width="63" height="13" uuid="24db6f86-97e8-492b-9f6b-e6ffe2c352e9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abe01ni}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="349" y="0" width="74" height="13" uuid="19cf987c-a099-4c4b-aee3-392a8a5f906f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abe01ie}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="423" y="0" width="72" height="13" uuid="01ed24af-76eb-4c82-beba-cb30fbb8cab4"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abb01data}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="495" y="0" width="62" height="13" uuid="2394c184-87f0-413e-ba41-912d72ae08f0"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorCampo1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="619" y="0" width="87" height="13" uuid="a26998ae-48c1-4d52-827d-5dec26b1d19e"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorCampo3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="557" y="0" width="62" height="13" uuid="909de7c9-5030-4b25-9159-470f152b31f5"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorCampo2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="757" y="0" width="45" height="13" uuid="0c042de7-b2a8-48fb-8b92-b65a8f97c939"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorCampo5}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="706" y="0" width="51" height="13" uuid="8c6d5847-20b7-4ffe-bd39-78a731afc681"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorCampo4}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="112" splitType="Stretch">
+			<crosstab>
+				<reportElement mode="Transparent" x="123" y="11" width="619" height="101" backcolor="#CCCCCC" uuid="6ee5335e-bff4-44ae-ba81-0e33e79d367d"/>
+				<crosstabHeaderCell>
+					<cellContents>
+						<rectangle>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="81" height="35" backcolor="#CCCCCC" uuid="908f7876-22a8-482a-9d78-5e5191678289"/>
+							<graphicElement>
+								<pen lineWidth="0.25"/>
+							</graphicElement>
+						</rectangle>
+					</cellContents>
+				</crosstabHeaderCell>
+				<rowGroup name="situacao" width="81" totalPosition="End">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{situacao}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#F3F3F3" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" mode="Opaque" x="0" y="0" width="81" height="29" backcolor="#CCCCCC" uuid="2d9a1ce7-8bbe-4987-b444-7daad6bc8d15"/>
+								<textFieldExpression><![CDATA[$V{situacao}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents backcolor="#F3F3F3" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="81" height="27" uuid="90a049d3-aa02-4717-acdd-9cef307031d9"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Total situacao]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="nomeCampo5" height="35" totalPosition="End">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{nomeCampo5}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#FFFFFF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField isBlankWhenNull="true">
+								<reportElement style="Crosstab Data Text" mode="Opaque" x="386" y="0" width="87" height="35" backcolor="#CCCCCC" uuid="0d5ca286-718c-48aa-9b2e-90d8e9352b4e"/>
+								<box>
+									<pen lineWidth="0.25"/>
+									<topPen lineWidth="0.25"/>
+									<leftPen lineWidth="0.25"/>
+									<bottomPen lineWidth="0.25"/>
+									<rightPen lineWidth="0.25"/>
+								</box>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$V{nomeCampo5}]]></textFieldExpression>
+							</textField>
+							<staticText>
+								<reportElement style="Crosstab Data Text" mode="Opaque" x="0" y="0" width="50" height="35" backcolor="#CCCCCC" uuid="aa4a94e6-7874-4f5a-b9c5-8dd32aa854b3"/>
+								<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+									<pen lineWidth="0.25"/>
+									<topPen lineWidth="0.25"/>
+									<leftPen lineWidth="0.25"/>
+									<bottomPen lineWidth="0.25"/>
+									<rightPen lineWidth="0.25"/>
+								</box>
+								<textElement verticalAlignment="Middle"/>
+								<text><![CDATA[Qtde]]></text>
+							</staticText>
+							<textField isBlankWhenNull="true">
+								<reportElement style="Crosstab Data Text" mode="Opaque" x="50" y="0" width="84" height="35" backcolor="#CCCCCC" uuid="aeb07a8f-ac47-49ba-aa3c-2008d2847c6b"/>
+								<box>
+									<pen lineWidth="0.25"/>
+									<topPen lineWidth="0.25"/>
+									<leftPen lineWidth="0.25"/>
+									<bottomPen lineWidth="0.25"/>
+									<rightPen lineWidth="0.25"/>
+								</box>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$V{tb_nome_campo1}]]></textFieldExpression>
+							</textField>
+							<textField isBlankWhenNull="true">
+								<reportElement style="Crosstab Data Text" mode="Opaque" x="134" y="0" width="84" height="35" backcolor="#CCCCCC" uuid="2c925f8e-4856-475c-a579-ae9893285705"/>
+								<box>
+									<pen lineWidth="0.25"/>
+									<topPen lineWidth="0.25"/>
+									<leftPen lineWidth="0.25"/>
+									<bottomPen lineWidth="0.25"/>
+									<rightPen lineWidth="0.25"/>
+								</box>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$V{tb_nome_campo2}]]></textFieldExpression>
+							</textField>
+							<textField isBlankWhenNull="true">
+								<reportElement style="Crosstab Data Text" mode="Opaque" x="218" y="0" width="84" height="35" backcolor="#CCCCCC" uuid="b2d40473-d5b4-4999-bae3-aa362f137ad6"/>
+								<box>
+									<pen lineWidth="0.25"/>
+									<topPen lineWidth="0.25"/>
+									<leftPen lineWidth="0.25"/>
+									<bottomPen lineWidth="0.25"/>
+									<rightPen lineWidth="0.25"/>
+								</box>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$V{tb_nome_campo3}]]></textFieldExpression>
+							</textField>
+							<textField isBlankWhenNull="true">
+								<reportElement style="Crosstab Data Text" mode="Opaque" x="302" y="0" width="84" height="35" backcolor="#CCCCCC" uuid="01ef597f-2df8-4872-8238-0b52ee1350c4"/>
+								<box>
+									<pen lineWidth="0.25"/>
+									<topPen lineWidth="0.25"/>
+									<leftPen lineWidth="0.25"/>
+									<bottomPen lineWidth="0.25"/>
+									<rightPen lineWidth="0.25"/>
+								</box>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$V{tb_nome_campo4}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents backcolor="#F3F3F3" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+						</cellContents>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="abb01numMeasure" class="java.lang.Integer" calculation="Count">
+					<measureExpression><![CDATA[$F{abb01num}]]></measureExpression>
+				</measure>
+				<measure name="totalCampo5" class="java.math.BigDecimal" calculation="Sum">
+					<measureExpression><![CDATA[$F{valorCampo5}]]></measureExpression>
+				</measure>
+				<measure name="totalCampo1" class="java.math.BigDecimal" calculation="Sum">
+					<measureExpression><![CDATA[$F{valorCampo1}]]></measureExpression>
+				</measure>
+				<measure name="totalCampo2" class="java.math.BigDecimal" calculation="Sum">
+					<measureExpression><![CDATA[$F{valorCampo2}]]></measureExpression>
+				</measure>
+				<measure name="totalCampo3" class="java.math.BigDecimal" calculation="Sum">
+					<measureExpression><![CDATA[$F{valorCampo3}]]></measureExpression>
+				</measure>
+				<measure name="totalCampo4" class="java.math.BigDecimal" calculation="Sum">
+					<measureExpression><![CDATA[$F{valorCampo4}]]></measureExpression>
+				</measure>
+				<measure name="tb_nome_campo1" class="java.lang.String">
+					<measureExpression><![CDATA[$F{nomeCampo1}]]></measureExpression>
+				</measure>
+				<measure name="tb_nome_campo2" class="java.lang.String">
+					<measureExpression><![CDATA[$F{nomeCampo2}]]></measureExpression>
+				</measure>
+				<measure name="tb_nome_campo3" class="java.lang.String">
+					<measureExpression><![CDATA[$F{nomeCampo3}]]></measureExpression>
+				</measure>
+				<measure name="tb_nome_campo4" class="java.lang.String">
+					<measureExpression><![CDATA[$F{nomeCampo4}]]></measureExpression>
+				</measure>
+				<crosstabCell width="473" height="29">
+					<cellContents>
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="29" uuid="c2a22682-21cb-4ab4-ba7b-0f9b9ae87743"/>
+							<box>
+								<pen lineWidth="0.25"/>
+								<topPen lineWidth="0.25"/>
+								<leftPen lineWidth="0.25"/>
+								<bottomPen lineWidth="0.25"/>
+								<rightPen lineWidth="0.25"/>
+							</box>
+							<textFieldExpression><![CDATA[$V{abb01numMeasure}]]></textFieldExpression>
+						</textField>
+						<textField pattern="¤ #,##0.00">
+							<reportElement style="Crosstab Data Text" x="386" y="0" width="87" height="29" uuid="74c3ebd6-183e-4436-a121-162dfcdaf614"/>
+							<box>
+								<pen lineWidth="0.25"/>
+								<topPen lineWidth="0.25"/>
+								<leftPen lineWidth="0.25"/>
+								<bottomPen lineWidth="0.25"/>
+								<rightPen lineWidth="0.25"/>
+							</box>
+							<textFieldExpression><![CDATA[$V{totalCampo5}]]></textFieldExpression>
+						</textField>
+						<textField pattern="¤ #,##0.00">
+							<reportElement style="Crosstab Data Text" x="50" y="0" width="84" height="29" uuid="4075d5a1-9c59-4d62-afcc-488e4be70934"/>
+							<box>
+								<pen lineWidth="0.25"/>
+								<topPen lineWidth="0.25"/>
+								<leftPen lineWidth="0.25"/>
+								<bottomPen lineWidth="0.25"/>
+								<rightPen lineWidth="0.25"/>
+							</box>
+							<textFieldExpression><![CDATA[$V{totalCampo1}]]></textFieldExpression>
+						</textField>
+						<textField pattern="¤ #,##0.00">
+							<reportElement style="Crosstab Data Text" x="134" y="0" width="84" height="29" uuid="4dd7b21b-e3f0-44e5-96a3-1adb98a2d944"/>
+							<box>
+								<pen lineWidth="0.25"/>
+								<topPen lineWidth="0.25"/>
+								<leftPen lineWidth="0.25"/>
+								<bottomPen lineWidth="0.25"/>
+								<rightPen lineWidth="0.25"/>
+							</box>
+							<textFieldExpression><![CDATA[$V{totalCampo2}]]></textFieldExpression>
+						</textField>
+						<textField pattern="¤ #,##0.00">
+							<reportElement style="Crosstab Data Text" x="218" y="0" width="84" height="29" uuid="b9c66154-74f8-49c2-b639-fb641e471568"/>
+							<box>
+								<pen lineWidth="0.25"/>
+								<topPen lineWidth="0.25"/>
+								<leftPen lineWidth="0.25"/>
+								<bottomPen lineWidth="0.25"/>
+								<rightPen lineWidth="0.25"/>
+							</box>
+							<textFieldExpression><![CDATA[$V{totalCampo3}]]></textFieldExpression>
+						</textField>
+						<textField pattern="¤ #,##0.00">
+							<reportElement style="Crosstab Data Text" x="302" y="0" width="84" height="29" uuid="1d2bdfd6-58cb-4a52-81b2-8eb48ab98236"/>
+							<box>
+								<pen lineWidth="0.25"/>
+								<topPen lineWidth="0.25"/>
+								<leftPen lineWidth="0.25"/>
+								<bottomPen lineWidth="0.25"/>
+								<rightPen lineWidth="0.25"/>
+							</box>
+							<textFieldExpression><![CDATA[$V{totalCampo4}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="473" height="27" rowTotalGroup="situacao">
+					<cellContents backcolor="#F3F3F3" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="27" uuid="390d7e8b-0bd5-4cbd-afa7-d1126784c7d6"/>
+							<box>
+								<pen lineWidth="0.25"/>
+								<topPen lineWidth="0.25"/>
+								<leftPen lineWidth="0.25"/>
+								<bottomPen lineWidth="0.25"/>
+								<rightPen lineWidth="0.25"/>
+							</box>
+							<textFieldExpression><![CDATA[$V{abb01numMeasure}]]></textFieldExpression>
+						</textField>
+						<textField pattern="¤ #,##0.00">
+							<reportElement style="Crosstab Data Text" x="50" y="0" width="84" height="27" uuid="1bde3a3a-1ed5-41b9-8eb0-568c03da61c3"/>
+							<box>
+								<pen lineWidth="0.25"/>
+								<topPen lineWidth="0.25"/>
+								<leftPen lineWidth="0.25"/>
+								<bottomPen lineWidth="0.25"/>
+								<rightPen lineWidth="0.25"/>
+							</box>
+							<textFieldExpression><![CDATA[$V{totalCampo1}]]></textFieldExpression>
+						</textField>
+						<textField pattern="¤ #,##0.00">
+							<reportElement style="Crosstab Data Text" x="134" y="0" width="84" height="27" uuid="bb322be1-80fd-4593-af02-e163bf1015e2"/>
+							<box>
+								<pen lineWidth="0.25"/>
+								<topPen lineWidth="0.25"/>
+								<leftPen lineWidth="0.25"/>
+								<bottomPen lineWidth="0.25"/>
+								<rightPen lineWidth="0.25"/>
+							</box>
+							<textFieldExpression><![CDATA[$V{totalCampo2}]]></textFieldExpression>
+						</textField>
+						<textField pattern="¤ #,##0.00">
+							<reportElement style="Crosstab Data Text" x="218" y="0" width="84" height="27" uuid="d499d61f-559d-4a11-8bd9-2e8f4ab2e4f6"/>
+							<box>
+								<pen lineWidth="0.25"/>
+								<topPen lineWidth="0.25"/>
+								<leftPen lineWidth="0.25"/>
+								<bottomPen lineWidth="0.25"/>
+								<rightPen lineWidth="0.25"/>
+							</box>
+							<textFieldExpression><![CDATA[$V{totalCampo3}]]></textFieldExpression>
+						</textField>
+						<textField pattern="¤ #,##0.00">
+							<reportElement style="Crosstab Data Text" x="302" y="0" width="84" height="27" uuid="015e5e2d-f084-4268-8975-adfba447d11f"/>
+							<box>
+								<pen lineWidth="0.25"/>
+								<topPen lineWidth="0.25"/>
+								<leftPen lineWidth="0.25"/>
+								<bottomPen lineWidth="0.25"/>
+								<rightPen lineWidth="0.25"/>
+							</box>
+							<textFieldExpression><![CDATA[$V{totalCampo4}]]></textFieldExpression>
+						</textField>
+						<textField pattern="¤ #,##0.00">
+							<reportElement style="Crosstab Data Text" x="386" y="0" width="87" height="27" uuid="ea053da3-a6fa-48a5-8c44-d1833d80934d"/>
+							<box>
+								<pen lineWidth="0.25"/>
+								<topPen lineWidth="0.25"/>
+								<leftPen lineWidth="0.25"/>
+								<bottomPen lineWidth="0.25"/>
+								<rightPen lineWidth="0.25"/>
+							</box>
+							<textFieldExpression><![CDATA[$V{totalCampo5}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="50" height="29" columnTotalGroup="nomeCampo5">
+					<cellContents backcolor="#F3F3F3" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="50" height="27" rowTotalGroup="situacao" columnTotalGroup="nomeCampo5">
+					<cellContents backcolor="#F3F3F3" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+		</band>
+	</summary>
+</jasperReport>
