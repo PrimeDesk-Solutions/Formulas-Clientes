@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF - Lançamentos por Natureza " language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b8cb0795-3e47-45d9-8d28-26e578cd93a5">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="191"/>
+	<property name="ireport.y" value="0"/>
+	<field name="dab01codigo" class="java.lang.String"/>
+	<field name="abf10codigo" class="java.lang.String"/>
+	<field name="abf10nome" class="java.lang.String"/>
+	<field name="valorRec" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="34" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="e7791083-b833-4213-9224-77796b63ff37"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CONTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="148" height="20" uuid="4e8991a5-3f9f-463b-8012-18484f248540"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CODIGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="248" y="0" width="206" height="20" uuid="3db99e9d-4146-4e5d-970b-c75338f183b6"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOME ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="454" y="0" width="100" height="20" uuid="7abce695-0f50-415b-b796-1d826fd31681"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[VALOR]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="31" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="145468e1-1ebb-419d-be4c-1bdbe33408c9"/>
+				<textFieldExpression><![CDATA[$F{dab01codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="148" height="20" uuid="ac38cb90-c433-40ef-83ba-9f9533ca5f04"/>
+				<textFieldExpression><![CDATA[$F{abf10codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="248" y="0" width="206" height="20" uuid="fb0e4197-ba55-416b-9328-ce518512f2b9"/>
+				<textFieldExpression><![CDATA[$F{abf10nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="454" y="0" width="100" height="20" uuid="fe6a97db-cae0-425a-8129-289425715a90"/>
+				<textFieldExpression><![CDATA[$F{valorRec}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="transporteRelatorioNFsEmitidas" language="groovy" pageWidth="6661" pageHeight="595" orientation="Landscape" columnWidth="6621" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5875c8c4-fe44-4664-aeb7-a854f628c1e4">
+	<property name="ireport.zoom" value="2.1435888100000136"/>
+	<property name="ireport.x" value="4941"/>
+	<property name="ireport.y" value="0"/>
+	<field name="dataEmissaoNota" class="java.util.Date"/>
+	<field name="numDoc" class="java.lang.Integer"/>
+	<field name="naEntNota" class="java.lang.String"/>
+	<field name="codEntNota" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="cidade" class="java.lang.String"/>
+	<field name="codigoDespNota" class="java.lang.String"/>
+	<field name="naDespNota" class="java.lang.String"/>
+	<field name="codigoRedespNota" class="java.lang.String"/>
+	<field name="naRedespNota" class="java.lang.String"/>
+	<field name="dataEntregaNota" class="java.util.Date"/>
+	<field name="totDocNota" class="java.math.BigDecimal"/>
+	<field name="pesoLiquidoNota" class="java.math.BigDecimal"/>
+	<field name="pesoBrutoNota" class="java.math.BigDecimal"/>
+	<field name="frete" class="java.math.BigDecimal"/>
+	<field name="situacao" class="java.lang.String"/>
+	<field name="dataPrevista" class="java.util.Date"/>
+	<field name="ocorrencia" class="java.lang.String"/>
+	<field name="responsavel" class="java.lang.String"/>
+	<field name="numPed" class="java.lang.Integer"/>
+	<field name="tipoDocPed" class="java.lang.String"/>
+	<field name="descrTipoDocPed" class="java.lang.String"/>
+	<field name="dataEmissaoPed" class="java.util.Date"/>
+	<field name="tempoProcPed" class="java.lang.Integer"/>
+	<field name="prazo" class="java.lang.Integer"/>
+	<field name="prazoReal" class="java.lang.Integer"/>
+	<field name="freteAgregado" class="java.math.BigDecimal"/>
+	<field name="freteRedesp" class="java.math.BigDecimal"/>
+	<field name="numCarga" class="java.lang.Integer"/>
+	<field name="statusEntrega" class="java.lang.String"/>
+	<field name="codDepto" class="java.lang.String"/>
+	<field name="descrDepto" class="java.lang.String"/>
+	<field name="codMotivo" class="java.lang.String"/>
+	<field name="descrMotivo" class="java.lang.String"/>
+	<field name="horaEntrega" class="java.lang.String"/>
+	<field name="arquivoExt" class="java.lang.String"/>
+	<field name="bfc10ckodata" class="java.util.Date"/>
+	<field name="bfc10ckidata" class="java.util.Date"/>
+	<field name="volumes" class="java.math.BigDecimal"/>
+	<field name="regiao" class="java.lang.String"/>
+	<field name="horaPedido" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="18" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="18" uuid="b6bd720d-4800-4f7d-9954-233a33ce6cdb"/>
+				<text><![CDATA[Data Emissão ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="18" uuid="5a3591f3-2815-4c0e-9e14-bcd3af1cdf8e"/>
+				<text><![CDATA[Número Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="121" height="18" uuid="9ff3dcfa-a75d-4313-81f8-4e3dd658f68e"/>
+				<text><![CDATA[Código Cliente ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="321" y="0" width="701" height="18" uuid="542e5efa-26b5-4ffa-b1ce-15260deaef24"/>
+				<text><![CDATA[Nome Cliente ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1022" y="0" width="94" height="18" uuid="3b53a522-c9c9-4482-90ac-ab3631cd2001"/>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1116" y="0" width="248" height="18" uuid="d65108bb-026e-4696-8308-6ab460cf415e"/>
+				<text><![CDATA[Cidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1364" y="0" width="185" height="18" uuid="380258e1-6c54-423a-8184-a2ac4d549066"/>
+				<text><![CDATA[Codigo Transp]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1549" y="0" width="242" height="18" uuid="7bb203cf-3912-47ec-85c2-a111f2a6bd0e"/>
+				<text><![CDATA[Nome Transp]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1791" y="0" width="197" height="18" uuid="ec02e002-3db2-45bf-a190-32b06c5cb7d8"/>
+				<text><![CDATA[Codigo Redespacho]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1988" y="0" width="126" height="18" uuid="d35bfea0-06e5-415c-ac1b-2480c1810d39"/>
+				<text><![CDATA[Nome Redespacho]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3116" y="0" width="100" height="18" uuid="87f01b88-aaed-4e9b-ae3f-d86113821469"/>
+				<text><![CDATA[Data Entrega]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3600" y="0" width="100" height="18" uuid="03215ed2-1b9e-46ee-b629-de96b8e47ad3"/>
+				<text><![CDATA[Total Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3700" y="0" width="100" height="18" uuid="0d449e24-19b6-460f-8921-4ba7c0e7381f"/>
+				<text><![CDATA[Peso Liquido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3800" y="0" width="100" height="18" uuid="395dd439-9011-404d-a804-080a0d125854"/>
+				<text><![CDATA[Peso Bruto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3900" y="0" width="110" height="18" uuid="bdb2bd56-f6a4-423d-94c8-395bc829c638"/>
+				<text><![CDATA[Frete Agregado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4223" y="0" width="159" height="18" uuid="a5fefd99-36e5-4136-ac3d-3e5405b96b04"/>
+				<text><![CDATA[Situação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2874" y="0" width="142" height="18" uuid="9afbe133-0133-451e-95a9-3c757171c4d1"/>
+				<text><![CDATA[Previsão Entrega]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4382" y="0" width="275" height="18" uuid="04822bb4-8f2b-4349-9e57-e464a93fca67"/>
+				<text><![CDATA[Ocorrência Da Carga]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4657" y="0" width="134" height="18" uuid="0624902b-475b-4152-8c8f-26ab687d0c3f"/>
+				<text><![CDATA[Responsável]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2114" y="0" width="100" height="18" uuid="5061a1e9-553b-4a0e-b6cc-129523473950"/>
+				<text><![CDATA[Pedido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2214" y="0" width="100" height="18" uuid="3b20b889-7768-4e95-b34f-f1e40ea164ee"/>
+				<text><![CDATA[Tipo Doc Pedido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2314" y="0" width="181" height="18" uuid="17167f5d-ea28-4554-a78c-967a4da6d92d"/>
+				<text><![CDATA[Descr Tipo Doc]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2495" y="0" width="100" height="18" uuid="adcdb9cb-f44d-4fdd-8a1c-5f72e4a87118"/>
+				<text><![CDATA[Data Pedido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2737" y="0" width="137" height="18" uuid="463c4748-bf47-4e81-bf6e-b10e1a01583e"/>
+				<text><![CDATA[Tempo Proce. Pedido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3016" y="0" width="100" height="18" uuid="eb63fe86-46ea-44c2-9cf6-9c9ec5956ea5"/>
+				<text><![CDATA[Prazo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3512" y="0" width="88" height="18" uuid="8b161d29-c778-44fd-8488-0d05275e52f6"/>
+				<text><![CDATA[Prazo Real]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4010" y="0" width="100" height="18" uuid="0f7c3ea3-3e66-4e74-a774-fa64fea3cf3c"/>
+				<text><![CDATA[Frete Redesp]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4791" y="0" width="100" height="18" uuid="af1a39e6-63bb-4609-9727-109d1a545b9a"/>
+				<text><![CDATA[Numero Carga]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5458" y="0" width="121" height="18" uuid="93cf60e8-a6f6-475a-9085-ea5704813697"/>
+				<text><![CDATA[Status Entrega]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5779" y="0" width="121" height="18" uuid="2067a297-b35b-4c31-b147-423f8626c739"/>
+				<text><![CDATA[Cod Departamento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5900" y="0" width="196" height="18" uuid="bb138e66-0e2d-486b-aec9-4bcf0a1403c0"/>
+				<text><![CDATA[Descr. Departamento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6241" y="0" width="380" height="18" uuid="42e73722-2800-4cc2-a101-1dcbec0b57be"/>
+				<text><![CDATA[Descr. Motivo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6096" y="0" width="145" height="18" uuid="fcc714d0-0fb2-4ac6-ab11-7be63a91e286"/>
+				<text><![CDATA[Cod Motivo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3216" y="0" width="100" height="18" uuid="9858d2c9-d968-48e9-9939-63d6a0299d7e"/>
+				<text><![CDATA[Hora Entrega]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5579" y="0" width="100" height="18" uuid="076ddab1-19c2-4287-94ed-97b5b551f98e"/>
+				<text><![CDATA[Data Chekout]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5679" y="0" width="100" height="18" uuid="8288a2fa-195d-4375-978c-7456d3981dc9"/>
+				<text><![CDATA[Data Chekin]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3316" y="0" width="196" height="18" uuid="77ae69fa-92fe-42ce-9d79-292bfd43306c"/>
+				<text><![CDATA[Arquivo Anexo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4110" y="0" width="113" height="18" uuid="ec8c84d6-7b47-4c2f-a6aa-a2563480b3e5"/>
+				<text><![CDATA[Volumes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4891" y="0" width="567" height="18" uuid="dd26a64b-1e47-4bd4-b98d-d51a680dedc4"/>
+				<text><![CDATA[Região]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2595" y="0" width="142" height="18" uuid="6d411315-3703-4023-8e86-95e0f36bbd80"/>
+				<text><![CDATA[Hora Pedido]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="100" height="20" uuid="5a4fdac1-a4ae-4b4e-a362-93037b3d130c"/>
+				<textFieldExpression><![CDATA[$F{dataEmissaoNota}]]></textFieldExpression>
+			</textField>
+			<textField pattern="000" isBlankWhenNull="true">
+				<reportElement x="100" y="0" width="100" height="20" uuid="2380cb6f-a097-42d5-9c47-72a73088b155"/>
+				<textFieldExpression><![CDATA[$F{numDoc}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="200" y="0" width="121" height="20" uuid="62c5a5ab-fbaf-4861-859b-f7995d269e93"/>
+				<textFieldExpression><![CDATA[$F{codEntNota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="321" y="0" width="701" height="20" uuid="dc840c57-080d-4067-aab2-b247f47c37bb"/>
+				<textFieldExpression><![CDATA[$F{naEntNota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1022" y="0" width="94" height="20" uuid="47dd9d7d-52ef-4f9d-b8cb-2fb1c4bfe4a9"/>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1116" y="0" width="248" height="20" uuid="58d31034-e4c8-4711-8bea-1d6d682a4658"/>
+				<textFieldExpression><![CDATA[$F{cidade}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1364" y="0" width="185" height="20" uuid="50cb7f2c-63ef-4fad-8419-655ebfc82c7a"/>
+				<textFieldExpression><![CDATA[$F{codigoDespNota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1549" y="0" width="242" height="20" uuid="40bff811-85c0-411b-a34f-726fdedd02ba"/>
+				<textFieldExpression><![CDATA[$F{naDespNota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1791" y="0" width="197" height="20" uuid="07271952-8f22-4e68-9940-10944899e043"/>
+				<textFieldExpression><![CDATA[$F{codigoRedespNota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1988" y="0" width="126" height="20" uuid="57535b7e-cd9b-4d8f-bf9c-db24eb4f902a"/>
+				<textFieldExpression><![CDATA[$F{naRedespNota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="3600" y="0" width="100" height="20" uuid="c2f292f3-aa35-4f9c-90db-52ea5f93755f"/>
+				<textFieldExpression><![CDATA[$F{totDocNota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="3800" y="0" width="100" height="20" uuid="8ab7989f-f404-47d2-8db5-a9f405e76fdd"/>
+				<textFieldExpression><![CDATA[$F{pesoBrutoNota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="4223" y="0" width="159" height="20" uuid="8e62c1cf-f8a7-45ee-b27c-1eb18439841a"/>
+				<textFieldExpression><![CDATA[$F{situacao}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="4382" y="0" width="275" height="20" uuid="706ee55b-5b2a-4e01-bde8-11e4d990dac9"/>
+				<textFieldExpression><![CDATA[$F{ocorrencia}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="4657" y="0" width="134" height="20" uuid="282cb3bd-38b7-466e-8108-6f2fdb034452"/>
+				<textFieldExpression><![CDATA[$F{responsavel}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="3116" y="0" width="100" height="20" uuid="afe88ac4-3322-4710-a168-3cddcf13b9d6"/>
+				<textFieldExpression><![CDATA[$F{dataEntregaNota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="2214" y="0" width="100" height="20" uuid="d9666c3d-684b-4c59-bd3e-274e0f9d8076"/>
+				<textFieldExpression><![CDATA[$F{tipoDocPed}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="2314" y="0" width="181" height="20" uuid="69b2e55d-e146-45f4-92da-fe591cc9150d"/>
+				<textFieldExpression><![CDATA[$F{descrTipoDocPed}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="2495" y="0" width="100" height="20" uuid="b5af84ce-217a-406c-88c9-171ca09784e6"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dataEmissaoPed}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="2737" y="0" width="137" height="20" uuid="9c4fab4d-e966-4808-945d-82ec1d92e216"/>
+				<textFieldExpression><![CDATA[$F{tempoProcPed}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="3016" y="0" width="100" height="20" uuid="f49cb98c-9a80-43f5-8a32-cad9bee29751"/>
+				<textFieldExpression><![CDATA[$F{prazo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="2874" y="0" width="142" height="20" uuid="a42dcecf-7eb9-475e-9386-3db738310103"/>
+				<textFieldExpression><![CDATA[$F{dataPrevista}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="3512" y="0" width="88" height="20" uuid="451af593-7766-4d52-bf17-15940625f302"/>
+				<textFieldExpression><![CDATA[$F{prazoReal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="000" isBlankWhenNull="true">
+				<reportElement x="2114" y="0" width="100" height="20" uuid="31594625-19fb-4d26-ae7c-e23ddeb9f3c5"/>
+				<textFieldExpression><![CDATA[$F{numPed}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="3700" y="0" width="100" height="20" uuid="fa18650a-b5ed-46ea-afaa-9de38201c821"/>
+				<textFieldExpression><![CDATA[$F{pesoLiquidoNota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="3900" y="0" width="110" height="20" uuid="05bec963-5525-44f4-9e38-a95a74e9439d"/>
+				<textFieldExpression><![CDATA[$F{freteAgregado}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="4010" y="0" width="100" height="20" uuid="e4c4b8c5-b32a-424e-95ba-5aac2b44d6ed"/>
+				<textFieldExpression><![CDATA[$F{freteRedesp}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="4791" y="0" width="100" height="20" uuid="bedf8c8b-a65b-4f91-928b-5df58a0edc28"/>
+				<textFieldExpression><![CDATA[$F{numCarga}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="5458" y="0" width="121" height="20" uuid="b971b80f-2457-4dda-a901-86e3d8bf00a4"/>
+				<textFieldExpression><![CDATA[$F{statusEntrega}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="3216" y="0" width="100" height="20" uuid="b37e4cac-179f-4fe1-a542-be81ced4d9c2"/>
+				<textFieldExpression><![CDATA[$F{horaEntrega}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3316" y="0" width="196" height="20" uuid="b1755aeb-51e8-49e7-a389-da18079bc938"/>
+				<textFieldExpression><![CDATA[$F{arquivoExt}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="5779" y="0" width="121" height="20" uuid="b7055edb-60d6-4dae-ac60-4dcd0a3d61ea"/>
+				<textFieldExpression><![CDATA[$F{codDepto}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="5900" y="0" width="196" height="20" uuid="397fa46d-4a0a-46a4-af05-a555d490e03a"/>
+				<textFieldExpression><![CDATA[$F{descrDepto}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="6096" y="0" width="145" height="20" uuid="7d42bc4c-c437-427a-a0ba-830dd5d674f2"/>
+				<textFieldExpression><![CDATA[$F{codMotivo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="6241" y="0" width="380" height="20" uuid="414f7052-9ba4-47ec-a7ab-e2366e35685f"/>
+				<textFieldExpression><![CDATA[$F{descrMotivo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="5579" y="0" width="100" height="20" uuid="53e967d7-afae-42b2-877f-d828e8f08fbb"/>
+				<textFieldExpression><![CDATA[$F{bfc10ckodata}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="5679" y="0" width="100" height="20" uuid="868ddb3f-cab7-40f6-a9d8-8d21f5267521"/>
+				<textFieldExpression><![CDATA[$F{bfc10ckidata}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="4110" y="0" width="113" height="20" uuid="f75bd870-aa96-40cf-a2de-7828dbbbf224"/>
+				<textFieldExpression><![CDATA[$F{volumes}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="4891" y="0" width="567" height="20" uuid="76507d72-2fc1-4128-9845-6127d4c9c142"/>
+				<textFieldExpression><![CDATA[$F{regiao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2595" y="0" width="142" height="20" uuid="1aea6769-50c4-45d4-a3b2-1f94d81a56e5"/>
+				<textFieldExpression><![CDATA[$F{horaPedido}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

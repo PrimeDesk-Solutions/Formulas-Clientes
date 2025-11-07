@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sacResumoPorProduto" language="groovy" pageWidth="737" pageHeight="842" columnWidth="697" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0d2f24b2-d7f1-41a8-bb38-646737142ce8">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="itemDescr" class="java.lang.String"/>
+	<field name="codItem" class="java.lang.String"/>
+	<field name="periodo" class="java.lang.String"/>
+	<field name="qtd" class="java.math.BigDecimal"/>
+	<field name="pesoLiquido" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="222" y="0" width="182" height="20" uuid="05278807-cdbc-4036-b669-b1ecedba3755"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="405" y="0" width="100" height="20" uuid="4e01b0ff-e073-496e-bfa6-1822cf98d2bb"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Período]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="505" y="0" width="100" height="20" uuid="79004a26-1c85-4fad-a2d0-daf46062da67"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="605" y="0" width="92" height="20" uuid="e2084a74-7efb-468a-8ca6-f95e610ec915"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Peso Liquído]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="222" height="20" uuid="49d8cbd1-770a-46cd-814a-aea5f157df36"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descr Item]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="222" y="0" width="182" height="20" uuid="9b155481-dcaa-4bcd-b37d-59c950d62790"/>
+				<textFieldExpression><![CDATA[$F{codItem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="405" y="0" width="100" height="20" uuid="a5c660a1-a517-4266-b357-cfcb2f9eacf2"/>
+				<textFieldExpression><![CDATA[$F{periodo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="505" y="0" width="100" height="20" uuid="07442f41-fffa-4f3c-993b-0b0a855b4820"/>
+				<textFieldExpression><![CDATA[$F{qtd}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="605" y="0" width="92" height="20" uuid="67f5ad7d-2785-45b5-80d7-9603fb45ee7d"/>
+				<textFieldExpression><![CDATA[$F{pesoLiquido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="222" height="20" uuid="ae497290-e67c-48c9-9fc6-f8f9d226b410"/>
+				<textFieldExpression><![CDATA[$F{itemDescr}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PickingListLote" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="3a212b28-c459-43b1-b76c-e80e8fd9e9c4">
+	<property name="ireport.zoom" value="1.652892561983472"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.Object">
+		<defaultValueExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Atilatte\\relatorios\\customizados\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="periodo" class="java.lang.String"/>
+	<parameter name="emissaoRelatorio" class="java.lang.String"/>
+	<field name="numDoc" class="java.lang.Integer"/>
+	<field name="nomeCliente" class="java.lang.String"/>
+	<field name="naDespacho" class="java.lang.String"/>
+	<field name="volumes" class="java.math.BigDecimal"/>
+	<field name="codItem" class="java.lang.String"/>
+	<field name="naItem" class="java.lang.String"/>
+	<field name="codRedesp" class="java.lang.String"/>
+	<field name="naRedesp" class="java.lang.String"/>
+	<field name="umu" class="java.lang.String"/>
+	<field name="lote" class="java.lang.String"/>
+	<field name="numPed" class="java.math.BigDecimal"/>
+	<field name="totVolume" class="java.math.BigDecimal"/>
+	<field name="qtd" class="java.math.BigDecimal"/>
+	<field name="codDespacho" class="java.lang.String"/>
+	<field name="dtSaida" class="java.util.Date"/>
+	<variable name="totVolumes" class="java.math.BigDecimal" resetType="Group" resetGroup="transportadora" calculation="Sum">
+		<variableExpression><![CDATA[$F{volumes}]]></variableExpression>
+	</variable>
+	<variable name="totVolumesNota" class="java.math.BigDecimal" resetType="Group" resetGroup="notas" calculation="Sum">
+		<variableExpression><![CDATA[$F{volumes}]]></variableExpression>
+	</variable>
+	<group name="transportadora" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{codDespacho}]]></groupExpression>
+		<groupHeader>
+			<band height="46">
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField-1" x="105" y="0" width="211" height="17" uuid="26c06494-b698-4383-9bbc-9b2b56a02f96"/>
+					<textElement>
+						<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{naDespacho}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-7" x="1" y="0" width="103" height="17" uuid="6516488a-5768-421b-9f00-d9ada7f24b00"/>
+					<textElement textAlignment="Left">
+						<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Trasportadora:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField-8" x="105" y="17" width="211" height="17" uuid="20d81e2b-a59b-46cc-ace9-13ebb7f8baa1"/>
+					<textElement>
+						<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{naRedesp}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-8" x="1" y="16" width="103" height="17" uuid="ceb738eb-616b-4c9c-b1ae-530ec7963836"/>
+					<textElement textAlignment="Left">
+						<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Redespacho:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="316" y="33" width="219" height="13" uuid="fa98b804-2378-4f25-ad1b-1c3486a36367"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{periodo}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="17">
+				<staticText>
+					<reportElement key="staticText" x="364" y="4" width="113" height="13" uuid="1adc62e7-5bc4-4578-83da-7e53a6bb7bf1"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Total Caixa Transportadora:]]></text>
+				</staticText>
+				<textField pattern="###0.00;-###0.00">
+					<reportElement x="484" y="4" width="51" height="13" uuid="cb05d9d4-2909-4b5f-9fd4-867036f25598"/>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totVolumes}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="364" y="3" width="168" height="1" uuid="b13c889a-e742-4e55-b0c9-d936f5b2e8bd"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="notas">
+		<groupExpression><![CDATA[$F{numDoc}]]></groupExpression>
+		<groupHeader>
+			<band height="50">
+				<line>
+					<reportElement key="line-2" x="0" y="5" width="535" height="1" uuid="b5c805f1-4a4d-4fb3-b364-1ec98da3b2ef"/>
+				</line>
+				<rectangle>
+					<reportElement key="rectangle-1" mode="Opaque" x="2" y="10" width="533" height="35" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="af04724b-60d4-4f4f-916f-f4db94ebd28f"/>
+				</rectangle>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField-5" x="167" y="11" width="149" height="13" uuid="8dc3efb7-137d-413d-9909-51bf1f286fe3"/>
+					<box>
+						<pen lineWidth="0.0" lineStyle="Solid"/>
+						<topPen lineWidth="0.0" lineStyle="Solid"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid"/>
+					</box>
+					<textElement>
+						<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nomeCliente}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-2" mode="Transparent" x="115" y="12" width="50" height="13" uuid="b3c85dd8-1099-43e4-9d26-665b944dfd5b"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Cliente:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-1" x="0" y="11" width="40" height="13" uuid="f94a33a4-e7d7-4e12-beda-f34d75065e98"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[NFe:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-3" x="104" y="33" width="150" height="11" uuid="73c3c945-32ea-410c-bb12-a3e1cbc1a260"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Item
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-10" x="254" y="33" width="81" height="11" uuid="06220e99-e774-4137-a731-96f1bc110a68"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Lote]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-4" x="335" y="33" width="71" height="11" uuid="5b0e4155-7b7f-4207-9b66-469670ff5d6a"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[UM]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-5" x="484" y="33" width="47" height="11" uuid="9163ad83-904d-491e-94a6-07b745e48c10"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Volume(CX)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-11" x="406" y="33" width="73" height="11" uuid="7c05dbc0-d40e-4897-ab26-cfde0b8953b0"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Qtde.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-12" x="4" y="33" width="100" height="11" uuid="a99d168a-3ad0-4587-819b-723b3778c008"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Código
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-13" mode="Transparent" x="320" y="11" width="50" height="13" uuid="d9924596-1e9c-4bfd-8fb0-740ba41ee449"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Dt. Saída:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField-13" x="40" y="12" width="65" height="12" uuid="6fe04178-2da1-4806-bd7a-0a7f696be24c"/>
+					<textElement>
+						<font size="8" isBold="false" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{numDoc}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-13" mode="Transparent" x="412" y="12" width="50" height="13" uuid="e4281d04-035e-4668-914a-42f258f92625"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Num Ped:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField" x="462" y="11" width="47" height="13" uuid="022a7639-4f3d-436f-8369-a65955d8c2d2"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{numPed}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField" x="365" y="11" width="47" height="12" uuid="9b2fcb9f-35f9-40bf-a228-e11912a702b0"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dtSaida}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="19">
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="500" y="6" width="35" height="13" uuid="30d96a5e-7441-42f1-a14e-da5a0cb40cc4"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totVolumesNota}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText" x="445" y="6" width="54" height="13" uuid="c15a1081-38e0-4fcc-bb98-43e38c9f3b5e"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Total Caixa]]></text>
+				</staticText>
+				<line>
+					<reportElement x="445" y="5" width="90" height="1" uuid="a4068da5-859a-4794-8faf-2b6c090fbc0c"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="85" splitType="Stretch">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-9" x="479" y="6" width="52" height="22" uuid="c3412a39-7916-46b3-81fe-07319a2e1abc"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-9" x="427" y="6" width="50" height="20" uuid="a818277d-5d32-44d4-8d50-09831b7dc8f8"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Página:]]></text>
+			</staticText>
+			<image>
+				<reportElement key="image-1" x="10" y="1" width="135" height="77" uuid="8feb275f-6a10-4d51-8691-b2510efa3dd8"/>
+				<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Atilatte\\relatorios\\customizados\\marca-atilatte.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement key="staticText-17" x="145" y="6" width="281" height="35" uuid="91b2b8ab-a536-481a-b8b7-a159cea87229"/>
+				<textElement textAlignment="Center">
+					<font size="15" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Listagem PickingList NF's]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField>
+				<reportElement x="5" y="0" width="100" height="13" uuid="4a02f142-6596-4ecf-8dc5-31f185b1bd26"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codItem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="104" y="0" width="153" height="13" uuid="c245e11c-3895-4145-bdd9-3dc68c663bc6"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naItem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="254" y="0" width="81" height="13" uuid="132c94d3-2eb5-4cf4-8ba9-3ef02fe7d91b"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lote}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="335" y="0" width="71" height="13" uuid="1ae67539-2d75-4846-b964-0323145a5c08"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{umu}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00">
+				<reportElement x="484" y="0" width="51" height="13" uuid="457788f5-b8ef-44f0-bcfb-dd2976138970"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{volumes}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00">
+				<reportElement x="406" y="0" width="78" height="13" uuid="07a0036f-15b8-4cde-8f89-742b740761ca"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtd}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="78" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-15" x="24" y="38" width="143" height="12" uuid="c8a2d9b1-b077-4994-8dc4-564fde36723c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Assinatura (Responsável Separação)]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-3" x="11" y="35" width="172" height="2" uuid="65a8a5a2-9c04-493c-9116-67c7f587f107"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-16" x="406" y="41" width="87" height="12" uuid="57b81181-10fa-4b9d-80e5-2aa1339b6ef9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Assinatura (Motorista)]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-4" x="359" y="38" width="172" height="2" uuid="b9c9b984-d118-4115-9942-ac821591c8dd"/>
+			</line>
+			<textField>
+				<reportElement x="335" y="65" width="200" height="13" uuid="0ca33891-3b1b-41c6-b9c9-31156cf68bc0"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{emissaoRelatorio}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="UltimasVendas"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="535"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="TITULO_RELATORIO" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="EMPRESA" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="PERIODO" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="cst0302r1s1Path" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="cst0302r1s2Path" isForPrompting="false" class="java.lang.String"/>
+	<queryString><![CDATA[SELECT AA80NA, AA80NOME, AA80BAIRRO, AA601NOME, AB80.AB80CUVDA, STATUS, 0 AS DIAS  FROM AB80 AB80 INNER JOIN AA80 ON AA80ID = AB80ENT INNER JOIN AA601 ON AA601ID = AA80MUNICIPIO LEFT JOIN AA80AUX ON AA80AUXFK = AA80ID LEFT JOIN AB80 AB80REP0 ON AB80REP0.AB80ID = AB80.AB80CREP0 LEFT JOIN AB80 AB80REP1 ON AB80REP1.AB80ID = AB80.AB80CREP1 LEFT JOIN AB80 AB80REP2 ON AB80REP2.AB80ID = AB80.AB80CREP2 LEFT JOIN AB80 AB80REP3 ON AB80REP3.AB80ID = AB80.AB80CREP3 LEFT JOIN AB80 AB80REP4 ON AB80REP4.AB80ID = AB80.AB80CREP4 WHERE AB80.AB80CLI = 1 AND ((AB80REP0.AB80CODIGO BETWEEN '0400001001' AND '0500008001' ) OR (AB80REP1.AB80CODIGO BETWEEN '0400001001' AND '0500008001' ) OR (AB80REP2.AB80CODIGO BETWEEN '0400001001' AND '0500008001' ) OR (AB80REP3.AB80CODIGO BETWEEN '0400001001' AND '0500008001' ) OR (AB80REP4.AB80CODIGO BETWEEN '0400001001' AND '0500008001' ))  AND (AB80.AB80CODIGO BETWEEN '0100001005' AND '9000001000' ) AND AB80.AB80EMPRESA  = 1322578 AND AB80.AB80CUVDA <= '2013/05/24' ORDER BY AA80NA]]></queryString>
+
+	<field name="ab80cuvda" class="java.sql.Date"/>
+	<field name="dias" class="java.lang.Integer"/>
+	<field name="abe01na" class="java.lang.String"/>
+	<field name="abe01nome" class="java.lang.String"/>
+	<field name="ultimaVenda" class="java.lang.Integer"/>
+	<field name="date" class="java.util.Date"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="abe0101bairro" class="java.lang.String"/>
+	<field name="abe0101fone1" class="java.lang.String"/>
+	<field name="aag0201nome" class="java.lang.String"/>
+	<field name="abe0101ddd1" class="java.lang.String"/>
+	<field name="rep" class="java.lang.String"/>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="16"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="0000" isBlankWhenNull="false" evaluationTime="Page" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="516"
+						y="0"
+						width="19"
+						height="11"
+						key="textField"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="486"
+						y="0"
+						width="30"
+						height="11"
+						key="staticText-3"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement>
+						<font fontName="Arial" size="8"/>
+					</textElement>
+				<text><![CDATA[Página:]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="11"
+						width="535"
+						height="1"
+						key="line-5"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="6"
+						y="0"
+						width="68"
+						height="10"
+						key="staticText-21"/>
+					<box></box>
+					<textElement>
+						<font fontName="Arial" size="8"/>
+					</textElement>
+				<text><![CDATA[Ultimas Vendas]]></text>
+				</staticText>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="12"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="66"
+						y="0"
+						width="67"
+						height="12"
+						key="staticText-11"/>
+					<box></box>
+					<textElement>
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Nome]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="135"
+						y="0"
+						width="91"
+						height="12"
+						key="staticText-13"/>
+					<box></box>
+					<textElement>
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Razão Social]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="228"
+						y="0"
+						width="67"
+						height="12"
+						key="staticText-14"/>
+					<box></box>
+					<textElement>
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Bairro]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="297"
+						y="0"
+						width="59"
+						height="12"
+						key="staticText-15"/>
+					<box></box>
+					<textElement>
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Cidade]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="419"
+						y="0"
+						width="46"
+						height="12"
+						key="staticText-16"/>
+					<box></box>
+					<textElement>
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Ult. Venda]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="467"
+						y="0"
+						width="28"
+						height="12"
+						key="staticText-17"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Dias]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="498"
+						y="0"
+						width="37"
+						height="12"
+						key="staticText-18"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Status]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="358"
+						y="0"
+						width="58"
+						height="12"
+						key="staticText-19"/>
+					<box></box>
+					<textElement>
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Fone]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="61"
+						height="12"
+						key="staticText-20"/>
+					<box></box>
+					<textElement>
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Representante]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="16"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="297"
+						y="2"
+						width="59"
+						height="14"
+						key="textField"/>
+					<box></box>
+					<textElement>
+						<font fontName="Arial" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{aag0201nome}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="358"
+						y="1"
+						width="58"
+						height="14"
+						key="textField-2"/>
+					<box></box>
+					<textElement>
+						<font fontName="Arial" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["(" + $F{abe0101ddd1} +")" + $F{abe0101fone1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="2"
+						width="60"
+						height="14"
+						key="textField-3"/>
+					<box></box>
+					<textElement>
+						<font fontName="Arial" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{rep}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="66"
+						y="2"
+						width="67"
+						height="12"
+						key="textField-4"/>
+					<box></box>
+					<textElement>
+						<font fontName="Arial" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{abe01na}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="133"
+						y="2"
+						width="93"
+						height="12"
+						key="textField-5"/>
+					<box></box>
+					<textElement>
+						<font fontName="Arial" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{abe01nome}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="468"
+						y="2"
+						width="30"
+						height="13"
+						key="textField-6"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{ultimaVenda}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="418"
+						y="3"
+						width="47"
+						height="12"
+						key="textField-7"/>
+					<box></box>
+					<textElement>
+						<font fontName="Arial" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{date}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="502"
+						y="2"
+						width="33"
+						height="13"
+						key="textField-8"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{status}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="226"
+						y="2"
+						width="69"
+						height="12"
+						key="textField-9"/>
+					<box></box>
+					<textElement>
+						<font fontName="Arial" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{abe0101bairro}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="15"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="463"
+						y="3"
+						width="72"
+						height="12"
+						key="staticText-1"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" size="8"/>
+					</textElement>
+				<text><![CDATA[CST0301R1]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="3"
+						width="41"
+						height="12"
+						key="staticText-2"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8"/>
+					</textElement>
+				<text><![CDATA[Emissão:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy HH:mm:ss" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="41"
+						y="3"
+						width="176"
+						height="12"
+						key="textField-1"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="2"
+						width="535"
+						height="1"
+						key="line-2"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

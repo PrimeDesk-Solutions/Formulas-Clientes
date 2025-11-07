@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF_InconsistenciasContabeis" language="groovy" pageWidth="1218" pageHeight="595" orientation="Landscape" columnWidth="1178" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b117bd99-4e72-4868-a7be-8dce82371536">
+	<property name="ireport.zoom" value="1.7715610000000026"/>
+	<property name="ireport.x" value="444"/>
+	<property name="ireport.y" value="0"/>
+	<field name="dtFinanc" class="java.util.Date"/>
+	<field name="numDocFinanc" class="java.lang.String"/>
+	<field name="abb01parcela" class="java.lang.String"/>
+	<field name="codNatFinan" class="java.lang.String"/>
+	<field name="codCCFinanc" class="java.lang.String"/>
+	<field name="codContaContabilFinanc" class="java.lang.String"/>
+	<field name="contaDebito" class="java.lang.String"/>
+	<field name="dtContabil" class="java.util.Date"/>
+	<field name="contaCredito" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="13" uuid="10d6d635-dad3-4744-8ac6-0bf7b6ce6a65"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Financeiro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="13" uuid="ddb0c76c-07b7-448c-b1f2-4a51be2573f2"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Numero Doc Financ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="100" height="13" uuid="5388ed8a-0886-43e8-9035-e440083f4917"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Parcela Finaceiro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="0" width="100" height="13" uuid="719e603f-7f3a-41a9-91b4-28afb0adcc26"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Codigo Nat Financ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="0" width="100" height="13" uuid="2a30c903-7d55-4f16-9a4e-c100ab9ec019"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Conta Corren. Finan.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="911" y="0" width="79" height="13" uuid="763ea3d6-f8f2-4a24-ab89-645cc4147cad"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Conta Débito]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="627" y="0" width="99" height="13" uuid="3b9a2e6e-73bb-47c2-9d1b-a35f4f4c7d1c"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Contabil ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="726" y="0" width="85" height="13" uuid="d18981cf-1cac-43e4-a394-15a71c4c2295"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Numero Doc Contábil]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="811" y="0" width="100" height="13" uuid="edcbc095-f58b-4943-9881-3c0df709f21e"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Parcela Contábil]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="500" y="0" width="127" height="13" uuid="c7bc0240-8fde-48b7-aa8b-4031dff9bc03"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Conta Contabil Financ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="990" y="0" width="100" height="13" uuid="31be6558-7aab-4e0f-97b1-2971945092fc"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Conta Crédito]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1090" y="0" width="88" height="13" uuid="1a1ae6aa-81bb-4840-894e-a916bac6cb27"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="13" uuid="5d75137d-06ed-4f97-b0d2-bcbcca9cdf53"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtFinanc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="100" height="13" uuid="c119195f-46cd-46cc-895a-fba3a54e6b79"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numDocFinanc}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="200" y="0" width="100" height="13" uuid="d3f53d10-8c7e-43b3-ab42-e951d4cc6c56"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abb01parcela}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="300" y="0" width="100" height="13" uuid="4ee9dfcd-af28-447c-a3e2-a15bf252608e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codNatFinan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="0" width="100" height="13" uuid="a65cfc1a-5bd7-4fe9-a81c-69b0c2de32c0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codCCFinanc}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="500" y="0" width="127" height="13" uuid="fa43645a-f289-4e4c-a616-69194be0d0bd"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codContaContabilFinanc}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="911" y="0" width="79" height="13" uuid="04c6bf3a-6bbb-46df-a5db-4a070d77c433"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contaDebito}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="627" y="0" width="99" height="13" uuid="a796f9a4-cf81-473f-9b68-2306fcc890f2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtContabil}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="726" y="0" width="85" height="13" uuid="f1baa3e0-eb92-4234-a2f2-53aec93c8664"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numDocFinanc}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="811" y="0" width="100" height="13" uuid="b2a43ecc-2661-4fe6-8dba-3361267c9ccd"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abb01parcela}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="990" y="0" width="100" height="13" uuid="02ef8341-801d-46cf-ac97-45eae4edc459"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contaCredito}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1090" y="0" width="88" height="13" uuid="6932aeb1-6b70-4afc-9fea-3aae7d079d39"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

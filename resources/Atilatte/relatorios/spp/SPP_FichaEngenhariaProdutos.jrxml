@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SPP_FichaEngenhariaProdutos" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e565ecc6-b4e2-4d6d-bc74-5481b4f386c8">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR2" class="java.lang.Object" isForPrompting="false"/>
+	<parameter name="SUBREPORT_DIR3" class="java.lang.Object" isForPrompting="false"/>
+	<field name="codProd" class="java.lang.String"/>
+	<field name="descrProd" class="java.lang.String"/>
+	<field name="umu" class="java.lang.String"/>
+	<field name="umv" class="java.lang.String"/>
+	<field name="formula" class="java.lang.String"/>
+	<field name="dtFormula" class="java.util.Date"/>
+	<field name="numRevisao" class="java.lang.Integer"/>
+	<field name="dtRevisao" class="java.util.Date"/>
+	<field name="abm01id" class="java.lang.Long"/>
+	<field name="dsComponentes" class="java.lang.Object"/>
+	<field name="quantidade" class="java.math.BigDecimal"/>
+	<field name="dsAtividades" class="java.lang.Object"/>
+	<field name="dsRecursos" class="java.lang.Object"/>
+	<group name="item" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{abm01id} + $F{formula}]]></groupExpression>
+		<groupHeader>
+			<band height="84">
+				<staticText>
+					<reportElement x="0" y="0" width="173" height="13" uuid="d9ae8f9a-a61f-4b68-a727-1b390f9c4f8e"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Identificação do Produto]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="13" width="173" height="1" uuid="3d0ff026-151b-464a-a6bb-71706ffabbd1"/>
+				</line>
+				<staticText>
+					<reportElement x="52" y="18" width="44" height="13" uuid="ef1b65b9-86e4-4edf-bb47-c0954a4a9a29"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Código:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="96" y="18" width="100" height="13" uuid="92aeea4c-bf4f-4358-8644-96857e3e2532"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{codProd}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="225" y="18" width="62" height="13" uuid="e02d6a16-7db9-4bfe-a6bb-152efff56f89"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Descrição:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="287" y="18" width="154" height="13" uuid="19f5d5cb-f067-4131-8dbf-0f3b347f6b93"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{descrProd}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="611" y="18" width="62" height="13" uuid="a6269c50-3469-4ec7-a372-093073b18e0d"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Unid. Uso: ]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="673" y="18" width="100" height="13" uuid="7efb7e91-4ff9-4396-b1da-fa45fa785032"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{umu}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="611" y="37" width="62" height="13" uuid="6c1bdfcc-82bd-45bc-b798-5f98a6ad4823"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Unid. Venda:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="673" y="37" width="100" height="13" uuid="889140f1-96ee-4b64-a518-d94c655e97c8"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{umv}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="52" y="50" width="71" height="13" uuid="cb52b8ee-3454-476f-b92d-4a501c3779fb"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Fórmula Num: ]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="125" y="50" width="100" height="13" uuid="4af51a54-badb-4aa3-a358-d544be11dc33"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{formula}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="52" y="63" width="32" height="13" uuid="dae80888-831c-42c6-b919-330083a9987e"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Data: ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="271" y="50" width="71" height="13" uuid="c7fcc9a3-1cad-4f68-8730-5f08d1799bd6"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Revisão Num: ]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="342" y="50" width="100" height="13" uuid="65f2760e-d45a-42b8-96c8-9e65f2c8bb73"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{numRevisao}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="271" y="63" width="32" height="13" uuid="3d24f559-395e-4032-9141-aa0165aa0ef1"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Data: ]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="342" y="63" width="100" height="13" uuid="63818164-4edd-4795-afcd-9beec681bb67"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dtRevisao}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="84" y="63" width="100" height="13" uuid="375c2375-ce48-4d35-bcef-e68fb16899de"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dtFormula}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="455" y="50" width="61" height="13" uuid="03f1a7d6-b19d-4a7e-826f-f93024e9a9b6"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Quantidade:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="517" y="50" width="100" height="13" uuid="e0e3e78c-51b9-4832-9a53-ba49fcdf68f9"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="componentes">
+		<groupHeader>
+			<band height="47">
+				<subreport>
+					<reportElement x="0" y="0" width="802" height="37" uuid="15e6b6a4-5e87-4975-8d11-0a07e2d54bc7"/>
+					<dataSourceExpression><![CDATA[$F{dsComponentes}]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="atividades">
+		<groupHeader>
+			<band height="47">
+				<subreport>
+					<reportElement x="0" y="0" width="802" height="37" uuid="f041fcb1-f795-4498-9e02-c0454a90dd30"/>
+					<dataSourceExpression><![CDATA[$F{dsAtividades}]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR2}]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="recursos">
+		<groupHeader>
+			<band height="50">
+				<subreport>
+					<reportElement x="0" y="0" width="802" height="50" uuid="2b004616-0c02-4eb3-b542-640dab61ec05"/>
+					<dataSourceExpression><![CDATA[$F{dsRecursos}]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR3}]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="173" height="13" uuid="a060513b-8024-4c1b-9fbd-a0350acc8b6a"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Ficha Engenharia Produtos]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="398" y="0" width="100" height="13" uuid="b08915eb-4a25-4ac6-bc11-db6aec5c0aba"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="702" y="0" width="100" height="13" uuid="b5091958-03f3-4435-996d-b2ca94679cce"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="647" y="0" width="55" height="13" uuid="fd328d95-4167-403b-ac8b-1695c31945aa"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Página]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="14" width="802" height="1" uuid="58f9b907-c1c8-43bc-8930-5c5d9822a55d"/>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

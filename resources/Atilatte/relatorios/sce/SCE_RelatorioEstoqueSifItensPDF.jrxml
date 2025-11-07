@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCE_RelatorioEstoqueSIF" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b1cf5882-a56c-4957-a3fb-0ec40e75033d">
+	<property name="ireport.zoom" value="1.6528925619834718"/>
+	<property name="ireport.x" value="691"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="titulo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="periodo" class="java.lang.String"/>
+	<field name="abm01codigo" class="java.lang.String"/>
+	<field name="abm01na" class="java.lang.String"/>
+	<field name="classificacao" class="java.lang.String"/>
+	<field name="saldoInicial" class="java.math.BigDecimal"/>
+	<field name="qtdProdFrasco" class="java.math.BigDecimal"/>
+	<field name="vendasFrascos" class="java.math.BigDecimal"/>
+	<field name="qtdProdLitro" class="java.math.BigDecimal"/>
+	<field name="vendasLitro" class="java.math.BigDecimal"/>
+	<field name="estoqueFinalLitro" class="java.math.BigDecimal"/>
+	<field name="estoqueFinalFrasco" class="java.math.BigDecimal"/>
+	<field name="devFrasco" class="java.math.BigDecimal"/>
+	<field name="devLitro" class="java.math.BigDecimal"/>
+	<field name="fator" class="java.math.BigDecimal"/>
+	<field name="inventarioFrasco" class="java.math.BigDecimal"/>
+	<field name="transfFrasco" class="java.math.BigDecimal"/>
+	<field name="devSemEstoqueFrasco" class="java.math.BigDecimal"/>
+	<field name="devComEstoqueFrasco" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="255" height="13" uuid="99e036df-ad7b-47ac-a01a-c56327119659"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{titulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="328" y="0" width="189" height="13" uuid="1fe4af4a-fce8-43c0-8120-230e6dfc1045"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="569" y="0" width="233" height="13" uuid="c640e26d-63d7-4585-9bf0-b605d2076bc1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{periodo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="14" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="44" height="13" uuid="25ce0b4a-aff4-4ed5-8d40-90f4768d912e"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Codigo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="44" y="0" width="174" height="13" uuid="f32813b3-e7c0-4277-b6de-aadd8f4815f4"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="218" y="0" width="55" height="13" uuid="bcab3bc4-a0fa-4ac0-a2d4-6f6466a9d873"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Classificação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="385" y="0" width="51" height="13" uuid="be3aa35f-5d11-4cd2-8b60-a37fab014049"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Produção]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="318" y="0" width="67" height="13" uuid="1d015d38-9ae8-4fbf-933d-b42fa8cbd6ed"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Saldo Inicial]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="436" y="0" width="52" height="13" uuid="9d588fa0-9d5a-49b4-a572-a1c0d278820f"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Vendas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="738" y="0" width="64" height="13" uuid="5a7509f1-7dbd-42b8-8b5a-a50d6e9e7835"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Estoque Final ]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="13" width="802" height="1" uuid="9a5e6b08-7a0d-4031-9447-4650c571e85e"/>
+			</line>
+			<staticText>
+				<reportElement x="557" y="0" width="68" height="13" uuid="9dc6081a-a701-43d7-8087-9f4aa73b3b76"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Dev. C/ Estoque]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="274" y="0" width="44" height="13" uuid="e3baed83-abc0-4e6c-b2a5-53bc4842ada2"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fator Conversão]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="625" y="0" width="54" height="13" uuid="79717f12-e54a-4a59-ae2a-2e38f8716323"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Inventário]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="679" y="0" width="59" height="14" uuid="f737d491-7b4e-450a-a412-f1698071a376"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Transferência]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="488" y="1" width="69" height="13" uuid="2623316f-d5cd-4aa1-a904-a510659ba754"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Dev. S/ Estoque]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="44" height="13" uuid="7c91179c-e1be-4fbb-b7fa-527859812e61"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abm01codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="44" y="0" width="174" height="13" uuid="94397922-642f-4c87-8073-c6ef3e06915d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abm01na}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="218" y="0" width="55" height="13" uuid="3fd35226-fd30-4112-afe0-b5501faebda0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{classificacao}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="738" y="0" width="64" height="13" uuid="2914e776-ef8f-45e1-b92c-319a2309e1b6"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estoqueFinalFrasco}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00">
+				<reportElement x="274" y="0" width="44" height="13" uuid="ed267955-fbf6-4d00-b100-33c11eaaebc7"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fator}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="385" y="0" width="51" height="13" uuid="17c57de6-6d9d-4c2b-bc8f-b3cf18a31593"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtdProdFrasco}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="318" y="0" width="67" height="13" uuid="4fbd51e7-3a99-40c0-a9db-f1a53ff5b972"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{saldoInicial}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="625" y="0" width="54" height="13" uuid="1602b754-c36e-446c-b949-b439ca6dc1ac"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inventarioFrasco}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="679" y="0" width="59" height="13" uuid="907c60af-ab94-443b-9316-2b57c713b4b4"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{transfFrasco}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="436" y="0" width="52" height="13" uuid="dddc093c-f238-41e3-9c5b-f92dae74375f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vendasFrascos}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="488" y="0" width="69" height="13" uuid="47aa6a6d-4ac5-4a6a-b212-dad9eb3f05fb"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{devSemEstoqueFrasco}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="557" y="0" width="68" height="13" uuid="43c3f40e-90e6-4316-b623-9fe0ec4834eb"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{devComEstoqueFrasco}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

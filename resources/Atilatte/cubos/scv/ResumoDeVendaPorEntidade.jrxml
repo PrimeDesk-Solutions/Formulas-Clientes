@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ResumoDeVendaPorEntidade" language="groovy" pageWidth="1162" pageHeight="842" columnWidth="1122" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="91ab6e6e-9795-46e0-ad5d-28304f7edee0">
+	<property name="ireport.zoom" value="1.9487171000000025"/>
+	<property name="ireport.x" value="636"/>
+	<property name="ireport.y" value="0"/>
+	<field name="nomeEntidade" class="java.lang.String"/>
+	<field name="enderecoEntidade" class="java.lang.String"/>
+	<field name="bairro" class="java.lang.String"/>
+	<field name="numero" class="java.lang.String"/>
+	<field name="fone" class="java.lang.String"/>
+	<field name="municipio" class="java.lang.String"/>
+	<field name="naItem" class="java.lang.String"/>
+	<field name="codEnt" class="java.lang.String"/>
+	<field name="sce" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="107" y="0" width="100" height="20" uuid="cdbecd4b-9a08-4f32-bbff-820499b14481"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="207" y="0" width="218" height="20" uuid="1b9aa62b-9b7f-4097-91da-27a152dd7a90"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Endereço]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="425" y="0" width="100" height="20" uuid="0810724b-502a-4f52-b8fc-1209c1c9e18a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bairro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="525" y="0" width="100" height="20" uuid="abf115d7-3bde-4572-ad8d-fd8aa7633d9b"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="625" y="0" width="100" height="20" uuid="1ddebdb6-c2e1-4664-83b1-2d6819439196"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Telefone ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="725" y="0" width="100" height="20" uuid="d6433b21-1e6a-4d88-81d0-06ceec4d22fb"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Município]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="825" y="0" width="210" height="20" uuid="8b178b85-7d83-431e-acf9-e6f287b305e7"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="107" height="20" uuid="15898f7e-1dec-4fb7-9803-faca9ebfab1f"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1035" y="0" width="87" height="20" uuid="aef0db03-9fee-4662-a9a5-eac840a7c1b8"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qt. SCE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="107" y="0" width="100" height="20" uuid="c52af575-bc51-4117-9aa6-c74ccf08e0b0"/>
+				<textFieldExpression><![CDATA[$F{nomeEntidade}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="207" y="0" width="218" height="20" uuid="0a750afc-39c7-443d-8557-cd91469d98f2"/>
+				<textFieldExpression><![CDATA[$F{enderecoEntidade}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="425" y="0" width="100" height="20" uuid="3b7ae437-9e07-4ed2-9564-6e616cd878ba"/>
+				<textFieldExpression><![CDATA[$F{bairro}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="525" y="0" width="100" height="20" uuid="e24753a1-399b-4049-bae0-0a2ca4ef4cd0"/>
+				<textFieldExpression><![CDATA[$F{numero}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="625" y="0" width="100" height="20" uuid="b12aaf30-7123-436d-b275-026da9f568f5"/>
+				<textFieldExpression><![CDATA[$F{fone}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="725" y="0" width="100" height="20" uuid="659339d7-1100-473d-9795-f08e451ce34f"/>
+				<textFieldExpression><![CDATA[$F{municipio}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="825" y="0" width="210" height="20" uuid="96a40ef3-b198-4b5e-a43e-e06d2752ce7c"/>
+				<textFieldExpression><![CDATA[$F{naItem}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="107" height="20" uuid="68f5b8ef-e4ea-49a7-b8bd-8e5ba09b64d0"/>
+				<textFieldExpression><![CDATA[$F{codEnt}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1035" y="0" width="87" height="20" uuid="2e7fe1e8-031d-4342-a90f-c8da0d430942"/>
+				<textFieldExpression><![CDATA[$F{sce}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

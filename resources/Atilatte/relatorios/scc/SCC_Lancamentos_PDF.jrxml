@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCC_Lancamentos_PDF" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="292f2085-d002-4048-9173-948b989c4c51">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="titulo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<field name="lctto" class="java.lang.Integer"/>
+	<field name="data" class="java.util.Date"/>
+	<field name="historico" class="java.lang.String"/>
+	<field name="valor" class="java.math.BigDecimal"/>
+	<field name="codRep" class="java.lang.String"/>
+	<field name="naRep" class="java.lang.String"/>
+	<variable name="total" class="java.lang.String"/>
+	<group name="representante">
+		<groupExpression><![CDATA[$F{codRep}]]></groupExpression>
+		<groupHeader>
+			<band height="18">
+				<staticText>
+					<reportElement x="0" y="0" width="75" height="13" uuid="f6488ae9-e6b2-4a72-9bbe-1a69afbde682"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Representante:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="75" y="0" width="54" height="13" uuid="290839ea-662b-4fe2-ae6e-bc508c31de45"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{codRep}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="129" y="0" width="246" height="13" uuid="61fe7df3-2898-4c3c-a018-d9415cefcf42"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{naRep}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="21">
+				<textField>
+					<reportElement x="502" y="8" width="53" height="13" uuid="e45e7b71-5ede-4b35-9356-7205656eddb0"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{total}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="469" y="8" width="33" height="13" uuid="8a6beff8-343c-46cc-b57e-a04772ac6b39"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Total:]]></text>
+				</staticText>
+				<line>
+					<reportElement x="469" y="4" width="86" height="1" uuid="bfbca549-add6-43b1-881d-a6e3b3137313"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="139" height="20" uuid="6e6fbddd-5064-49b7-a99d-cdc27a220b8e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{titulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="205" y="0" width="155" height="20" uuid="b945f8bb-1c0a-4cfe-90be-e9fa3a25e889"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="523" y="0" width="32" height="20" uuid="2253aa5b-2c2c-4bf2-ba0c-a48d300df55e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="484" y="0" width="39" height="20" uuid="83e58ca8-efbc-4146-9c2b-e4621abe3378"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Página]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="63" height="13" uuid="402c56c7-0f0a-43b1-b642-5178d11de3f9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[LCTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="63" y="0" width="100" height="13" uuid="6153ce2e-d4cf-4a23-921a-d0edea9f6d08"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DATA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="163" y="0" width="273" height="13" uuid="a6eb93fe-f4cf-468d-88df-8c15b4d16126"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[HISTORICO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="436" y="0" width="119" height="13" uuid="159fc73a-4489-4ddb-b627-adc45c224e2e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[VALOR]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="14" width="555" height="1" uuid="0df2dc4b-578f-4b99-aaf4-3db24490af43"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="63" height="13" uuid="34039447-4bf4-4d89-b010-94e51d2af278"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lctto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="63" y="0" width="100" height="13" uuid="f9bf1388-bc16-471a-a6a1-97f7bc8a6d47"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="163" y="0" width="273" height="13" uuid="081d12ed-7096-4912-b5ae-9ae43f76fd71"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{historico}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="436" y="0" width="119" height="13" uuid="b49ccdb8-53cf-4729-95b8-849e2a77a563"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

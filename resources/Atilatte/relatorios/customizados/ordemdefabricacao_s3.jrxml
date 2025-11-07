@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ordemdefabricacao_s3" pageWidth="781" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="781" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a43c18f8-3283-4d6c-854d-85206e18c5b5">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<field name="codigoItemComp" class="java.lang.String"/>
+	<field name="descrItemComp" class="java.lang.String"/>
+	<field name="aam06codigo" class="java.lang.String"/>
+	<field name="qtd" class="java.math.BigDecimal"/>
+	<field name="bab01011lote" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="40" splitType="Stretch">
+			<rectangle>
+				<reportElement key="rectangle-1" x="1" y="3" width="780" height="36" backcolor="#CCCCCC" uuid="1739978e-49b9-4b04-b565-f397eee69da9"/>
+			</rectangle>
+			<elementGroup>
+				<rectangle>
+					<reportElement key="rectangle-2" x="381" y="4" width="83" height="35" backcolor="#CCCCCC" uuid="9a68172a-a00f-40d9-9401-6bedd9fbc22b"/>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-7" x="394" y="14" width="59" height="20" uuid="6d8c0000-01bd-4e8c-9315-b351502dcda3"/>
+					<textElement textAlignment="Center">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Requisição Estático]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup>
+				<rectangle>
+					<reportElement key="rectangle-3" x="1" y="4" width="380" height="18" backcolor="#CCCCCC" uuid="de08f4ce-c449-43da-828e-99ccc5b05a1f"/>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-8" x="100" y="5" width="186" height="15" uuid="39cf17d0-78b1-49ae-a552-a274c81faa64"/>
+					<text><![CDATA[Requisição de Estoque para OPs]]></text>
+				</staticText>
+			</elementGroup>
+			<rectangle>
+				<reportElement key="rectangle-4" x="1" y="22" width="88" height="17" backcolor="#CCCCCC" uuid="ee04c440-c489-448f-8ea8-b64dc825ab34"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-9" x="40" y="24" width="40" height="13" uuid="92de5dc4-3024-45da-a394-317d88bf2656"/>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<elementGroup>
+				<rectangle>
+					<reportElement key="rectangle-5" x="89" y="22" width="110" height="17" backcolor="#CCCCCC" uuid="9fab37bb-2033-4575-8d87-6fa44e416e8b"/>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-10" x="124" y="23" width="47" height="13" uuid="d039ec89-093c-4d2e-9c84-639add412818"/>
+					<text><![CDATA[Descrição]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup>
+				<rectangle>
+					<reportElement key="rectangle-6" x="199" y="22" width="55" height="17" backcolor="#CCCCCC" uuid="1c457af0-1fd1-40a3-a420-954bf75a7192"/>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-11" x="217" y="24" width="27" height="13" uuid="d69549de-53f1-4ce0-b96e-74af915d934b"/>
+					<text><![CDATA[Lote]]></text>
+				</staticText>
+			</elementGroup>
+			<rectangle>
+				<reportElement key="rectangle-7" x="254" y="22" width="55" height="17" backcolor="#CCCCCC" uuid="86b8125f-2938-4171-88a9-ed376d095530"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-12" x="270" y="25" width="31" height="13" uuid="6249d9d7-ea2c-42b6-b36b-71290aa96349"/>
+				<text><![CDATA[UMU]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement key="rectangle-8" x="309" y="22" width="72" height="17" backcolor="#CCCCCC" uuid="775c3609-de47-4d1b-a2f5-98caac4f70c3"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-13" x="332" y="24" width="26" height="13" uuid="d8f8933a-7d87-405d-94a8-7b4ad79e4687"/>
+				<text><![CDATA[QTD]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement key="rectangle-9" x="464" y="4" width="150" height="18" backcolor="#CCCCCC" uuid="70705ef5-18cc-4c1a-92f1-b3e1cba0f059"/>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-10" x="464" y="22" width="75" height="17" backcolor="#CCCCCC" uuid="754f037e-6659-4822-81a1-bd7b7496d998"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-14" x="485" y="6" width="119" height="13" uuid="cc640e19-0122-4603-9134-4ba2fdf3aa21"/>
+				<text><![CDATA[Separação para Produção ]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement key="rectangle-11" x="539" y="22" width="75" height="17" backcolor="#CCCCCC" uuid="eb0c40d8-16db-4125-9a62-62409b08cd08"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-15" x="493" y="24" width="23" height="13" uuid="f6b954c2-3dbf-4e6f-a04f-10a39410f3e3"/>
+				<text><![CDATA[Lote]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-16" x="553" y="24" width="59" height="13" uuid="f00c11c9-3250-4d4a-935f-425d45d86b96"/>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement key="rectangle-12" x="614" y="4" width="167" height="18" backcolor="#CCCCCC" uuid="6f3ba850-5894-4617-8ba1-674e60bdf256"/>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-13" x="614" y="22" width="75" height="17" backcolor="#CCCCCC" uuid="fbc78306-63b1-4d30-983c-3da9fc25a700"/>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-14" x="689" y="22" width="92" height="17" backcolor="#CCCCCC" uuid="4613d800-d595-4935-bc70-3f23f2338ddd"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-17" x="627" y="7" width="119" height="13" uuid="0e7835a7-4318-4703-a9d3-ce9ae08dc4d9"/>
+				<text><![CDATA[Saldo Prod. Ret Estoque]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-18" x="709" y="24" width="62" height="13" uuid="4b9f22fb-23b2-4fea-baf6-659a0be2dd87"/>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-19" x="645" y="23" width="34" height="13" uuid="40a04dee-3812-4a26-bcc7-b31a02a7b7a7"/>
+				<text><![CDATA[Lote]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<rectangle>
+				<reportElement key="rectangle-15" x="464" y="0" width="75" height="13" uuid="adf4e16e-76ce-44a3-a2e3-a24fa6c771aa"/>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-16" x="539" y="0" width="75" height="13" uuid="091d1f77-64c7-4ec2-adcf-981c4b64816e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-17" x="614" y="0" width="75" height="13" uuid="d2f71f0d-b57a-437e-bc98-c047ad74af50"/>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-18" x="689" y="0" width="92" height="13" uuid="f9dd8202-da86-4ab0-b6b6-08b82123fba8"/>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-19" x="1" y="0" width="88" height="13" uuid="a301bebc-7b02-467e-801c-8ebea5ee5d56"/>
+			</rectangle>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-13" x="2" y="0" width="88" height="13" uuid="7cdd481d-04cc-4338-9309-47e070238185"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["  "+$F{codigoItemComp}]]></textFieldExpression>
+			</textField>
+			<elementGroup>
+				<rectangle>
+					<reportElement key="rectangle-20" x="89" y="0" width="110" height="13" uuid="b1e8d949-a183-48c4-821c-9559d2930fcb"/>
+				</rectangle>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField-14" x="90" y="0" width="110" height="13" uuid="6b728d81-9e9d-4d5d-86e9-df1a3f9909a9"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA["  "+$F{descrItemComp}]]></textFieldExpression>
+				</textField>
+			</elementGroup>
+			<elementGroup>
+				<rectangle>
+					<reportElement key="rectangle-21" x="199" y="0" width="55" height="13" uuid="d126df97-ff47-4bb1-ab15-d8630ea3f382"/>
+				</rectangle>
+			</elementGroup>
+			<elementGroup>
+				<rectangle>
+					<reportElement key="rectangle-22" x="254" y="0" width="55" height="13" uuid="f25e94f4-4dd3-4995-8caa-678b65ea16a8"/>
+				</rectangle>
+			</elementGroup>
+			<rectangle>
+				<reportElement key="rectangle-23" x="309" y="0" width="72" height="13" uuid="05e24d63-4c21-4cd3-abbc-03c0609484f4"/>
+			</rectangle>
+			<elementGroup>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField-15" x="200" y="0" width="55" height="13" uuid="10bded45-d2e5-4734-bf1d-1f1fa49d506d"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{bab01011lote}]]></textFieldExpression>
+				</textField>
+			</elementGroup>
+			<elementGroup>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField-16" x="255" y="0" width="55" height="13" uuid="94482740-f145-408b-82c6-85dc75a0a635"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" "+$F{aam06codigo}]]></textFieldExpression>
+				</textField>
+			</elementGroup>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="false">
+				<reportElement key="textField-17" x="312" y="0" width="70" height="13" uuid="c5a45033-801a-45e7-8d8c-a60596eacb86"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtd}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement key="rectangle-24" x="381" y="0" width="83" height="13" uuid="fcc68b6e-6c30-4eec-a34f-a2b4a184c2e8"/>
+			</rectangle>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="false">
+				<reportElement key="textField-18" x="382" y="0" width="83" height="13" uuid="2a8e6606-72f1-4863-a5e6-16df4fbd1026"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["  "+$F{codigoItemComp}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

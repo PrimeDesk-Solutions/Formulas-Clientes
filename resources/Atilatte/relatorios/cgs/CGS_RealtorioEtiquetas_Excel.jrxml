@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CGS_RealtorioEtiquetas" language="groovy" pageWidth="2154" pageHeight="595" orientation="Landscape" columnWidth="2114" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6ac84188-7624-4a86-ae9c-fdb23c68e869">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="3419"/>
+	<property name="ireport.y" value="0"/>
+	<field name="abm70dv" class="java.lang.Integer"/>
+	<field name="abm70num" class="java.lang.Integer"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="abm70data" class="java.util.Date"/>
+	<field name="abm70validade" class="java.util.Date"/>
+	<field name="abm70fabric" class="java.util.Date"/>
+	<field name="abm70qt" class="java.math.BigDecimal"/>
+	<field name="abm70lote" class="java.lang.String"/>
+	<field name="abm01codigo" class="java.lang.String"/>
+	<field name="abm01na" class="java.lang.String"/>
+	<field name="aam06codigo" class="java.lang.String"/>
+	<field name="numDocEtiqueta" class="java.lang.Integer"/>
+	<field name="tipoDoc" class="java.lang.String"/>
+	<field name="abe01codigo" class="java.lang.String"/>
+	<field name="abe01na" class="java.lang.String"/>
+	<field name="numRomaneio" class="java.lang.Integer"/>
+	<field name="numPedido" class="java.lang.Integer"/>
+	<field name="numNota" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="62b26933-b387-421a-8512-d5848f1c4022"/>
+				<text><![CDATA[Número Etiqueta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="20" uuid="9743c4b5-0f1d-4d05-932e-c30868650a8a"/>
+				<text><![CDATA[Dígito Verificador]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="100" height="20" uuid="3209304d-b564-48ec-bdfa-58f9a1d7ef4a"/>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="0" width="98" height="20" uuid="ac3e2cc6-6444-4605-a782-950242c7f20b"/>
+				<text><![CDATA[Data]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="398" y="0" width="100" height="20" uuid="2d23ceff-a5a3-4a3a-a291-3342833a3799"/>
+				<text><![CDATA[Validade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="498" y="0" width="100" height="20" uuid="b7ca9572-01cb-4af0-b99b-9c81d8199877"/>
+				<text><![CDATA[Fabricação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="598" y="0" width="100" height="20" uuid="a60e0b00-46c3-40c3-ac9d-8177487647b0"/>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="698" y="0" width="100" height="20" uuid="bf019d5b-4b66-4473-8edb-16f2268dbb91"/>
+				<text><![CDATA[Lote]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="798" y="0" width="100" height="20" uuid="0d56895b-4519-4cc9-8436-3dbf12493df5"/>
+				<text><![CDATA[Codigo Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="898" y="0" width="271" height="20" uuid="fc2caa2e-bf88-4579-b561-4934e6d914de"/>
+				<text><![CDATA[Descrição Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1169" y="0" width="100" height="20" uuid="c976f49d-2388-4a7d-98c5-997b66cc1c91"/>
+				<text><![CDATA[UMU]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1269" y="0" width="100" height="20" uuid="caa5eae6-413b-42c4-ac4f-9e8528a40d87"/>
+				<text><![CDATA[Num Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1369" y="0" width="100" height="20" uuid="994c8a56-97fd-4fb4-9060-31047464a2ca"/>
+				<text><![CDATA[Tipo Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1469" y="0" width="100" height="20" uuid="d8cd52f4-7621-4296-b9b3-456ed725cc8e"/>
+				<text><![CDATA[Codigo Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1569" y="0" width="254" height="20" uuid="f300e84b-8288-466b-b9a7-8bb9b0f6dbf8"/>
+				<text><![CDATA[Nome Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1823" y="0" width="100" height="20" uuid="f37016f6-a119-49cd-a97f-0d36e583c78b"/>
+				<text><![CDATA[Número Romaneio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1923" y="0" width="100" height="20" uuid="de634e7b-a66a-4bb5-8c0b-dfdfa41c8222"/>
+				<text><![CDATA[Número Pedido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2023" y="0" width="91" height="20" uuid="808dcd74-f725-425a-9763-d5a14a9ceac3"/>
+				<text><![CDATA[Número Nota]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="2c255e77-08f3-4fb1-8564-524a08ec7ef7"/>
+				<textFieldExpression><![CDATA[$F{abm70num}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="100" height="20" uuid="46e04fbc-424b-4b84-8d28-ea62bd0f7066"/>
+				<textFieldExpression><![CDATA[$F{abm70dv}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="100" height="20" uuid="a35fd7a2-ca64-44c5-8d73-a0397f23e2ac"/>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="300" y="0" width="98" height="20" uuid="56a4f063-83c9-4fc6-b32c-674634fc41b2"/>
+				<textFieldExpression><![CDATA[$F{abm70data}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="398" y="0" width="100" height="20" uuid="ea813c09-653d-4372-80b4-5ec7b74161a3"/>
+				<textFieldExpression><![CDATA[$F{abm70validade}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="498" y="0" width="100" height="20" uuid="51004595-4bda-4a94-98c3-ac9de3484a4b"/>
+				<textFieldExpression><![CDATA[$F{abm70fabric}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="598" y="0" width="100" height="20" uuid="1c99700d-832d-477b-ac1b-c3570f1a3945"/>
+				<textFieldExpression><![CDATA[$F{abm70qt}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="698" y="0" width="100" height="20" uuid="a21ce294-058c-41a5-8bee-e1458c16b2e2"/>
+				<textFieldExpression><![CDATA[$F{abm70lote}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="798" y="0" width="100" height="20" uuid="63ec074e-e912-42b5-b3dc-952bb12ce7a1"/>
+				<textFieldExpression><![CDATA[$F{abm01codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="898" y="0" width="271" height="20" uuid="28890034-dd7b-4468-917f-2d998832994e"/>
+				<textFieldExpression><![CDATA[$F{abm01na}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1169" y="0" width="100" height="20" uuid="a90807c6-3a54-43fb-9ddb-86959517563e"/>
+				<textFieldExpression><![CDATA[$F{aam06codigo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1269" y="0" width="100" height="20" uuid="1f3e17dc-325a-43da-a8dd-9eafad6cbeda"/>
+				<textFieldExpression><![CDATA[$F{numDocEtiqueta}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1369" y="0" width="100" height="20" uuid="367b2606-dd8b-4080-aba0-afcbe6badc12"/>
+				<textFieldExpression><![CDATA[$F{tipoDoc}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1469" y="0" width="100" height="20" uuid="a8bd049b-43b6-4999-b96c-f13bdb17c8b2"/>
+				<textFieldExpression><![CDATA[$F{abe01codigo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1569" y="0" width="254" height="20" uuid="00dec062-52f1-4169-8250-a051e0f95788"/>
+				<textFieldExpression><![CDATA[$F{abe01na}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1823" y="0" width="100" height="20" uuid="4e58c38c-7a33-46f1-b9a3-69e0964b6685"/>
+				<textFieldExpression><![CDATA[$F{numRomaneio}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1923" y="0" width="100" height="20" uuid="214086ea-bc43-45de-9b8d-61cb8d3604fb"/>
+				<textFieldExpression><![CDATA[$F{numPedido}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="2023" y="0" width="91" height="20" uuid="96b693dc-baf1-41a9-bae3-7bb807ef00c4"/>
+				<textFieldExpression><![CDATA[$F{numNota}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

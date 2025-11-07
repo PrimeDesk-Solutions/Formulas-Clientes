@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SLM_LotesProcessados(PDF)_s1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="51958231-9221-4f54-b167-f823789c3bea">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="numPedido" class="java.lang.Integer"/>
+	<field name="numRomaneio" class="java.lang.Integer"/>
+	<field name="statusPedido" class="java.lang.String"/>
+	<field name="caixaPedido" class="java.math.BigDecimal"/>
+	<field name="pesoBrutoPedido" class="java.math.BigDecimal"/>
+	<field name="m3Pedido" class="java.math.BigDecimal"/>
+	<group name="pedido">
+		<groupExpression><![CDATA[$F{numPedido}]]></groupExpression>
+		<groupHeader>
+			<band height="13">
+				<textField>
+					<reportElement x="0" y="0" width="100" height="13" uuid="f04f9123-b4ea-4048-907b-9116619e6e82"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{numPedido}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="474" y="0" width="100" height="13" uuid="6303a558-033b-4aff-9af6-ea3ed4ff7562"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{numRomaneio}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="331" y="0" width="113" height="13" uuid="10c67cd4-3962-442f-ba37-b189680f3ab4"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{statusPedido}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="100" y="0" width="100" height="13" uuid="8324bc04-7e3b-4810-a21a-49f01149caba"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{caixaPedido}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="200" y="0" width="66" height="13" uuid="00735f99-7001-4d9b-a6dd-f841939c5c5c"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{pesoBrutoPedido}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="266" y="0" width="65" height="13" uuid="7a173e8e-6faf-4f12-99c0-96ecfec33c5b"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{m3Pedido}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="16" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="13" uuid="9b60a9be-30fd-4c77-935e-2f6894436494"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Pedido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="331" y="0" width="113" height="13" uuid="6be06d63-ce68-457b-a049-9379f2417c8a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Status Pedido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="474" y="0" width="100" height="13" uuid="62a2b5ef-ce9b-4a20-86f5-e7b211d6fc42"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Romaneio]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="13" width="595" height="1" uuid="cc88c9fb-4bcf-4230-b25a-3bb0a804e02e"/>
+			</line>
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="13" uuid="3482c7de-0474-458c-adc2-dfb4955bbf5a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Qtd Caixa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="1" width="66" height="13" uuid="1cff19ab-2954-4703-9494-93055aa35df4"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Peso Bruto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="265" y="0" width="66" height="13" uuid="9946a3c1-b138-416f-8ddf-a0ecf378317f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[M3]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

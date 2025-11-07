@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SPP_ComposicaoDetalhada" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="305af6e4-ac0d-49a0-b64e-92ab5ac7a582">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="174"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<field name="codItemComposicao" class="java.lang.String"/>
+	<field name="naItemCompos" class="java.lang.String"/>
+	<field name="umuComposicao" class="java.lang.String"/>
+	<field name="codItemComponente" class="java.lang.String"/>
+	<field name="naItemComponente" class="java.lang.String"/>
+	<field name="umuComponente" class="java.lang.String"/>
+	<field name="mps" class="java.lang.String"/>
+	<field name="sequencia" class="java.lang.Integer"/>
+	<field name="quantidade" class="java.math.BigDecimal"/>
+	<field name="perda" class="java.math.BigDecimal"/>
+	<group name="codItemComposicao">
+		<groupExpression><![CDATA[$F{codItemComposicao}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement x="0" y="0" width="44" height="13" uuid="17254445-315b-4901-a7b9-e9845ef8f896"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{codItemComposicao}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="44" y="0" width="156" height="13" uuid="c74e0f70-b667-4a71-9b56-0202e8714e5a"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{naItemCompos}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="300" y="0" width="38" height="13" uuid="e544d937-0559-4dc5-bddd-9ebf9738c688"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{umuComposicao}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="17" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="168" height="13" uuid="aabdc9e1-919f-436c-9e9c-d78ff3652fee"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Listagem Composição Detalhada]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="255" y="0" width="100" height="13" uuid="4ff45094-3e0d-42f0-8f3b-6f7d8cad41a6"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0000">
+				<reportElement x="521" y="0" width="34" height="13" uuid="a3369410-5046-4dc2-9acd-6ef859f8ac77"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="490" y="0" width="31" height="13" uuid="c6ddfb4e-e41d-41e6-90c8-c4a0a49b6324"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Página:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="18" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="66" height="13" uuid="fc22b8cf-15d9-4ac2-b98c-9687a06f5a65"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Componente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="66" y="0" width="189" height="13" uuid="dfe372d2-1df7-406a-b960-6679983a5e04"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Prod. Alternativo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="0" width="38" height="13" uuid="c9d3b7bf-0152-44fb-ad24-037b458328a6"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Unid.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="338" y="0" width="62" height="13" uuid="00864448-39ac-4069-b717-d48eb59e55bd"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Seq.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="0" width="62" height="13" uuid="9911cfdc-e285-4cc1-9dc2-07911895fd49"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="462" y="0" width="93" height="13" uuid="2552f85f-1244-4f37-9cd2-640603730c02"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Perda]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="13" width="555" height="1" uuid="baeab4e3-eb78-46de-93d3-47bf2c408be5"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="87" y="0" width="52" height="13" uuid="6e882542-160a-4e7d-8ade-c4e620b45006"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codItemComponente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="139" y="0" width="161" height="13" uuid="59aa05d4-bbf9-4cf0-893a-5b743d3a7d8a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naItemComponente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="300" y="0" width="38" height="13" uuid="fb3f15c5-5be7-4136-af9f-45855935890e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{umuComponente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="66" y="0" width="21" height="13" uuid="341733ae-93ef-4661-a88e-631512cedc91"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mps}]]></textFieldExpression>
+			</textField>
+			<textField pattern="000">
+				<reportElement x="338" y="0" width="62" height="13" uuid="c94e52e3-5aba-456c-a4f3-0f21f613ce6c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sequencia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="0" width="62" height="13" uuid="8f926db0-6ff9-4c5d-b2ee-4ef966eb656c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="462" y="0" width="93" height="13" uuid="71098736-9f3f-428a-a5bf-c620cf8082e5"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{perda}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

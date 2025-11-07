@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatoriodeapontamento" language="groovy" pageWidth="7370" pageHeight="595" orientation="Landscape" columnWidth="7310" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="a8326381-441c-421b-a825-812a4340be76">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="2.4200000000000106"/>
+	<property name="ireport.x" value="288"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<field name="inicio" class="java.sql.Timestamp"/>
+	<field name="fim" class="java.sql.Time"/>
+	<field name="minutos" class="java.lang.Double"/>
+	<field name="usuario" class="java.lang.String"/>
+	<field name="abm01codigo" class="java.lang.String"/>
+	<field name="abm01descr" class="java.lang.String"/>
+	<field name="dataIni" class="java.util.Date"/>
+	<field name="dataFim" class="java.util.Date"/>
+	<field name="horaIni" class="java.lang.String"/>
+	<field name="horaFim" class="java.lang.String"/>
+	<field name="bem" class="java.lang.String"/>
+	<field name="lote" class="java.lang.String"/>
+	<field name="abp01codigo" class="java.lang.String"/>
+	<field name="descrApont" class="java.lang.String"/>
+	<field name="obsApont" class="java.lang.String"/>
+	<field name="qtProgr" class="java.math.BigDecimal"/>
+	<field name="qtdReali" class="java.math.BigDecimal"/>
+	<field name="pesoAferido" class="java.math.BigDecimal"/>
+	<field name="qtdFerm" class="java.math.BigDecimal"/>
+	<field name="qtdAcucar" class="java.math.BigDecimal"/>
+	<field name="abb01num" class="java.lang.Integer"/>
+	<field name="qtdPerdaDef" class="java.math.BigDecimal"/>
+	<field name="qtdPecas" class="java.math.BigDecimal"/>
+	<field name="analise_acides" class="java.lang.String"/>
+	<field name="analise_gordura" class="java.lang.String"/>
+	<field name="aspecto_visual" class="java.lang.String"/>
+	<field name="desperd_base_e" class="java.math.BigDecimal"/>
+	<field name="desperd_base_f" class="java.math.BigDecimal"/>
+	<field name="desperd_base" class="java.math.BigDecimal"/>
+	<field name="desperd_copo" class="java.math.BigDecimal"/>
+	<field name="desperd_copo_m" class="java.math.BigDecimal"/>
+	<field name="desperd_copo_o" class="java.math.BigDecimal"/>
+	<field name="desperd_frasco" class="java.math.BigDecimal"/>
+	<field name="desperd_frasco_m" class="java.math.BigDecimal"/>
+	<field name="desperd_frasco_o" class="java.math.BigDecimal"/>
+	<field name="desperd_selo" class="java.math.BigDecimal"/>
+	<field name="desperd_selo_m" class="java.math.BigDecimal"/>
+	<field name="desperd_selo_o" class="java.math.BigDecimal"/>
+	<field name="desperd_tampa" class="java.math.BigDecimal"/>
+	<field name="desperd_tampa_m" class="java.math.BigDecimal"/>
+	<field name="desperd_tampa_o" class="java.math.BigDecimal"/>
+	<field name="ph_coalhada" class="java.lang.String"/>
+	<field name="peso_aferido" class="java.math.BigDecimal"/>
+	<field name="qtd_adic" class="java.math.BigDecimal"/>
+	<field name="qtd_adic_ferm" class="java.math.BigDecimal"/>
+	<field name="qtd_perda_defeito" class="java.math.BigDecimal"/>
+	<field name="perda_transferencia" class="java.lang.String"/>
+	<field name="qtd_kg" class="java.math.BigDecimal"/>
+	<field name="temperatura_cozimento" class="java.lang.String"/>
+	<field name="temperatura_resfriamento" class="java.lang.String"/>
+	<field name="temperatura_envase" class="java.lang.String"/>
+	<field name="nomePlano" class="java.lang.String"/>
+	<field name="dataIniProd" class="java.util.Date"/>
+	<field name="dataFimProd" class="java.util.Date"/>
+	<field name="field4" class="java.lang.String"/>
+	<group name="agrupaft" isStartNewColumn="true" isStartNewPage="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[]]></groupExpression>
+		<groupHeader>
+			<band splitType="Stretch"/>
+		</groupHeader>
+		<groupFooter>
+			<band splitType="Stretch"/>
+		</groupFooter>
+	</group>
+	<group name="total">
+		<groupExpression><![CDATA[]]></groupExpression>
+		<groupHeader>
+			<band splitType="Stretch"/>
+		</groupHeader>
+		<groupFooter>
+			<band splitType="Stretch"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-6" x="632" y="0" width="62" height="13" uuid="37d77078-e84b-4755-9bb1-d4f2c65c688d"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Hora Início]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-7" x="694" y="0" width="51" height="13" uuid="7bb4d43f-7d4e-47fe-bb50-7b94f83daf22"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Hora Fim]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-8" x="1041" y="0" width="66" height="13" uuid="1503c921-7b2f-4987-b5a1-de951f4b7e5e"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Recurso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="1107" y="0" width="49" height="13" uuid="3d1696da-0ef3-44ae-85e0-9d76fe8a717f"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Lote]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-10" x="1156" y="0" width="104" height="13" uuid="83c9d80d-009d-4330-b95f-ae459635d51f"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Código Apontamento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-12" x="470" y="0" width="86" height="13" uuid="6f221145-72ae-491f-a0d1-9d3c30ca966e"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Data Início Apont]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-13" x="556" y="0" width="76" height="13" uuid="d606e2ee-6400-4e14-9ad2-dd1b0dbab6fe"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Data Fim Apont]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-23" x="745" y="0" width="70" height="13" uuid="c6e75478-819f-40a4-bcb0-08d2fd63ea6c"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Código Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-24" x="815" y="0" width="226" height="13" uuid="3f14149a-fbba-48cf-b75b-fba6436377e8"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Descrição Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-26" x="1260" y="0" width="163" height="13" uuid="e669bc1a-6d72-49c3-bf4a-ad15ebf55d2a"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Descr. Apontamento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-27" x="1423" y="0" width="1049" height="13" uuid="9a77337d-bed5-4432-a963-b4f18465606e"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Obs. Apontamento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-28" x="2472" y="0" width="87" height="13" uuid="deb81df0-4ab1-4a85-8f92-e0325da01bd4"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[QtdProgramada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-29" x="2559" y="0" width="86" height="13" uuid="ee2ff0bc-07a9-4e30-9498-37fcd8c45314"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[QtdRealizada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="59" height="13" uuid="1e391f9c-1c15-41bb-a3c7-90c27be16461"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número O.P]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-29" x="2645" y="0" width="86" height="13" uuid="da96aa87-6247-4d5f-a63a-0f316fec42d3"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Qtd. Peças]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2731" y="0" width="100" height="13" uuid="35cb5631-a6d2-4bb2-87a7-64f91caec591"/>
+				<text><![CDATA[Análise Acidez]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2831" y="0" width="100" height="13" uuid="d237e2b8-8dcd-4dda-ad1b-34a702fb568d"/>
+				<text><![CDATA[Analise de Gordura]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2931" y="0" width="100" height="13" uuid="8d26d7a2-077a-4939-b9a1-0b706dc3da71"/>
+				<text><![CDATA[Aspecto Dessorado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3442" y="0" width="230" height="13" uuid="ba3ce845-1931-4f1b-b441-3c5d4fdb71d8"/>
+				<text><![CDATA[Desperdicio de Base/Inicio de Envase]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3672" y="0" width="176" height="13" uuid="1b9c2b0e-f778-4259-8c95-baa363aab48a"/>
+				<text><![CDATA[Desperdicio de Copo - Fornecedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4038" y="0" width="175" height="13" uuid="9975ec68-cd15-4ad2-9f6f-e7265ce74851"/>
+				<text><![CDATA[Desperdicio de Copo - Operacional]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4565" y="0" width="193" height="13" uuid="47c61cbb-cef2-43fb-bc8b-cc346df0b00b"/>
+				<text><![CDATA[Desperdicio de Frasco - Operacional]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5093" y="0" width="167" height="13" uuid="babea639-c937-4b14-b9ba-ad39b54b1141"/>
+				<text><![CDATA[Desperdicio de Selo - Operacional]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5930" y="0" width="100" height="13" uuid="60c8b9fd-0bac-4dba-8cb4-11d8e00d0229"/>
+				<text><![CDATA[Peso Aferido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6030" y="0" width="160" height="13" uuid="67416a3a-55bd-4732-b03b-25fc3f2e43aa"/>
+				<text><![CDATA[Quantidade Adicionada Açucar.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6499" y="0" width="216" height="13" uuid="669792b5-9b57-4224-8963-28ae0c450753"/>
+				<text><![CDATA[Quantidade de Perda para Transferência]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3848" y="0" width="190" height="13" uuid="c04c9e8e-5e92-4bb1-bf68-fae26675511a"/>
+				<text><![CDATA[Desperdicio de Copo - Maquina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4932" y="0" width="161" height="13" uuid="3e7aaac5-830f-4df8-9d3b-db1ed1f28c4b"/>
+				<text><![CDATA[Desperdicio de Selo - Maquina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5260" y="0" width="196" height="13" uuid="250e7090-d2b2-43b6-8daa-85dbf20e6c7a"/>
+				<text><![CDATA[Desperdicio de Tampa - Fornecedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5456" y="0" width="176" height="13" uuid="5250d081-077a-40ce-8235-3ee3f0179937"/>
+				<text><![CDATA[Desperdicio de Tampa - Maquina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6815" y="0" width="100" height="13" uuid="c206e4cc-96e8-49a6-93fa-d24c7b0c9af6"/>
+				<text><![CDATA[Temperatura Final de Cozimento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7015" y="0" width="295" height="13" uuid="860d3d77-bd52-4421-9c23-55f724759bb3"/>
+				<text><![CDATA[Temperatura de Liberação para Envase]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6915" y="0" width="100" height="13" uuid="345fdb4e-ec35-4644-ad42-79a030a42a1e"/>
+				<text><![CDATA[Temperatura Final de Resfriamento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6715" y="0" width="100" height="13" uuid="4eab9da0-fe74-4a71-8380-38aa4264e5a5"/>
+				<text><![CDATA[Quantidade(KG)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4393" y="0" width="172" height="13" uuid="a6790493-5623-42a2-8d0a-f0c5c6b0d8fa"/>
+				<text><![CDATA[Desperdicio de Frasco - Maquina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4213" y="0" width="180" height="13" uuid="e4b19994-dacc-4e01-83fb-451ca3038079"/>
+				<text><![CDATA[Desperdicio de Frasco - Fornecedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3031" y="0" width="221" height="13" uuid="d324ee60-3852-4c12-aeb0-9825e21ea60d"/>
+				<text><![CDATA[Desperdicio de Base Durante o Envase]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6190" y="0" width="162" height="13" uuid="99344825-48fb-4137-a702-ed4d250d7883"/>
+				<text><![CDATA[Quantidade Adicionada Fermento.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6352" y="0" width="147" height="13" uuid="7ea51425-610a-4062-bbc2-01b06d484abf"/>
+				<text><![CDATA[Quantidade de Perda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3252" y="0" width="190" height="13" uuid="ec85d6c9-53ae-471c-94b9-32d49b94030e"/>
+				<text><![CDATA[Desperdicio de Base/Final de Envase]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4758" y="0" width="174" height="13" uuid="12549b24-86fd-4c20-ae35-6728932d8f5b"/>
+				<text><![CDATA[Desperdicio de Selo - Fornecedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5632" y="0" width="198" height="13" uuid="f89a7ab3-3c81-4ebf-9829-de7800a46843"/>
+				<text><![CDATA[Desperdicio de Tampa - Operacional]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5830" y="0" width="100" height="13" uuid="ecd4e1d3-268c-4948-b436-2a80c5041398"/>
+				<text><![CDATA[PH da Coalhada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="59" y="0" width="87" height="13" uuid="6bd68665-33ed-4463-842f-231ca085c050"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Data Ini. Prod]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="146" y="0" width="100" height="13" uuid="da2d640c-20bd-436d-9977-5a1ede2cfda2"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Data Fin. Prod]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="246" y="0" width="224" height="13" uuid="0d1fcf46-3a34-4888-bde7-6c0da4df3d4b"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Nome Plano]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="745" y="0" width="70" height="22" uuid="82b12165-f544-496d-b70b-c5ac2cb0934c"/>
+				<textFieldExpression><![CDATA[$F{abm01codigo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="815" y="0" width="226" height="22" uuid="5fd77a0f-4d57-40cf-9de4-73244a1396db"/>
+				<textFieldExpression><![CDATA[$F{abm01descr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH.mm.ss" isBlankWhenNull="true">
+				<reportElement key="textField" x="632" y="0" width="62" height="22" uuid="19c1e0f2-98e2-4528-a75a-f27fd96dccd2"/>
+				<textFieldExpression><![CDATA[$F{horaIni}]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH.mm.ss" isBlankWhenNull="true">
+				<reportElement key="textField" x="556" y="0" width="76" height="22" uuid="adb96935-9fb1-4c11-a595-92b5c262fb6f"/>
+				<textFieldExpression><![CDATA[$F{dataFim}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement key="textField" x="470" y="0" width="86" height="22" uuid="844ba0d5-0bf0-41d9-a684-92f07bce9e55"/>
+				<textFieldExpression><![CDATA[$F{dataIni}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement key="textField" x="694" y="0" width="51" height="22" uuid="43ff4822-ab65-45b3-80f0-794a6261275a"/>
+				<textFieldExpression><![CDATA[$F{dataFim}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="59" height="22" uuid="236d7160-915a-4f5d-8c9a-f52294fc3702"/>
+				<textFieldExpression><![CDATA[$F{abb01num}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="59" y="0" width="87" height="22" uuid="a90553da-c611-4228-aea8-41395e8cbfec"/>
+				<textFieldExpression><![CDATA[$F{dataIniProd}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="146" y="0" width="100" height="22" uuid="ba02a0c3-cd03-4cfa-a6f8-b55090ecc58f"/>
+				<textFieldExpression><![CDATA[$F{dataFimProd}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="246" y="0" width="224" height="22" uuid="410c3c77-51fe-4a4e-b484-be4ab82db76f"/>
+				<textFieldExpression><![CDATA[$F{nomePlano}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="1041" y="0" width="66" height="22" uuid="714e3647-6f60-4104-9a59-29b8fedde524"/>
+				<textFieldExpression><![CDATA[$F{bem}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="1107" y="0" width="49" height="22" uuid="62140ab8-41aa-4be0-b83a-aee24a91c744"/>
+				<textFieldExpression><![CDATA[$F{lote}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="1156" y="0" width="104" height="22" uuid="5559117c-da72-48f9-9ea9-1e6e7c1a0d43"/>
+				<textFieldExpression><![CDATA[$F{abp01codigo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="1260" y="0" width="163" height="22" uuid="60d94598-8c8b-41f2-84f8-0af8edc21411"/>
+				<textFieldExpression><![CDATA[$F{descrApont}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="1423" y="0" width="1049" height="22" uuid="a7203aba-6c33-48c1-87c5-49368ba76658"/>
+				<textFieldExpression><![CDATA[$F{obsApont}]]></textFieldExpression>
+			</textField>
+			<textField pattern="##0.00" isBlankWhenNull="true">
+				<reportElement key="textField" x="2472" y="0" width="87" height="22" uuid="95f81b2a-5825-4e25-9523-d13b56fd8e76"/>
+				<textFieldExpression><![CDATA[$F{qtProgr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="##0.00" isBlankWhenNull="true">
+				<reportElement key="textField" x="2559" y="0" width="86" height="22" uuid="c9d4b019-2cca-4639-9232-53b026839542"/>
+				<textFieldExpression><![CDATA[$F{qtdReali}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="2645" y="0" width="86" height="22" uuid="576ec31d-00af-48fc-a65f-5e311b44954d"/>
+				<textFieldExpression><![CDATA[$F{qtdPecas}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="2732" y="0" width="99" height="22" uuid="c6ca8e5d-5365-41cf-a377-87692fd4627a"/>
+				<textFieldExpression><![CDATA[$F{analise_acides}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="2831" y="0" width="100" height="22" uuid="f4f4d8ff-37a9-4ca6-b5c8-284cbb916f7d"/>
+				<textFieldExpression><![CDATA[$F{analise_gordura}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="2931" y="0" width="100" height="22" uuid="c8c4495e-f2fc-475e-9083-d7eaaa72d3cd"/>
+				<textFieldExpression><![CDATA[$F{aspecto_visual}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="3031" y="0" width="221" height="22" uuid="2765370a-4398-490a-a669-ff49a7c0fe61"/>
+				<textFieldExpression><![CDATA[$F{desperd_base_e}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="3253" y="0" width="189" height="22" uuid="c44e555d-5e34-4617-a1d6-0ad95f100306"/>
+				<textFieldExpression><![CDATA[$F{desperd_base_f}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="3442" y="0" width="230" height="22" uuid="00752cba-46b6-48d0-9da5-c79fd30ba55c"/>
+				<textFieldExpression><![CDATA[$F{desperd_base}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="3672" y="0" width="176" height="22" uuid="79d1ea3b-c9e7-42f5-b7b4-e466aeef7977"/>
+				<textFieldExpression><![CDATA[$F{desperd_copo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="3848" y="0" width="190" height="22" uuid="1cb604ea-b716-4c9d-8319-0695b7729c1a"/>
+				<textFieldExpression><![CDATA[$F{desperd_copo_m}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="4213" y="0" width="180" height="22" uuid="5ac7d509-7354-4501-b302-2d577fab5c21"/>
+				<textFieldExpression><![CDATA[$F{desperd_frasco}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="4394" y="0" width="171" height="22" uuid="22b1b3ed-d4da-4050-9b0c-7b98fe31223e"/>
+				<textFieldExpression><![CDATA[$F{desperd_frasco_m}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="4758" y="0" width="174" height="22" uuid="7fc94303-bd07-4d2d-ad2e-089a94dd4157"/>
+				<textFieldExpression><![CDATA[$F{desperd_selo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="5456" y="0" width="176" height="22" uuid="ed0a97b8-cd07-4d25-85ea-833c4ef28f76"/>
+				<textFieldExpression><![CDATA[$F{desperd_tampa_m}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="5632" y="0" width="198" height="22" uuid="06318e86-a2d5-4c25-8fc5-63beb8ec1525"/>
+				<textFieldExpression><![CDATA[$F{desperd_tampa_o}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="5830" y="0" width="100" height="22" uuid="c30c8d15-7794-4535-9c50-32111b9f7860"/>
+				<textFieldExpression><![CDATA[$F{ph_coalhada}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="5930" y="0" width="100" height="22" uuid="be35311f-0d90-4ebd-b611-2bfba8eb30e3"/>
+				<textFieldExpression><![CDATA[$F{peso_aferido}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="6190" y="0" width="162" height="22" uuid="260c4f19-e029-47fa-b0aa-8091d597dbea"/>
+				<textFieldExpression><![CDATA[$F{qtd_adic_ferm}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="6352" y="0" width="147" height="22" uuid="31fad574-719c-4bf6-8213-769df7c7451a"/>
+				<textFieldExpression><![CDATA[$F{qtd_perda_defeito}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="6715" y="0" width="100" height="22" uuid="35378933-c7e7-4a90-89d8-4fe412def3ca"/>
+				<textFieldExpression><![CDATA[$F{qtd_kg}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="7015" y="0" width="295" height="22" uuid="71110b15-7b07-4218-aaed-d7bffe5eb77e"/>
+				<textFieldExpression><![CDATA[$F{temperatura_envase}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="4565" y="0" width="193" height="22" uuid="e6a4ee2a-8e0b-4dde-8765-76c64b3595c6"/>
+				<textFieldExpression><![CDATA[$F{desperd_frasco_o}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="5093" y="0" width="167" height="22" uuid="8459ce29-1e99-4efc-867b-524c0e6d4467"/>
+				<textFieldExpression><![CDATA[$F{desperd_selo_o}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="5260" y="0" width="196" height="22" uuid="7bcb4b0d-4785-4cd4-99a0-dc8846cf7e0a"/>
+				<textFieldExpression><![CDATA[$F{desperd_tampa}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="6030" y="0" width="160" height="22" uuid="0cbb8ac4-0897-44c2-9712-3433347f4102"/>
+				<textFieldExpression><![CDATA[$F{qtd_adic}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="6499" y="0" width="216" height="22" uuid="91958ab8-716f-41b6-87c8-8cd985955e52"/>
+				<textFieldExpression><![CDATA[$F{perda_transferencia}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="6815" y="0" width="100" height="22" uuid="047ea6ed-d753-4f45-8f7e-1e4f4c6231f2"/>
+				<textFieldExpression><![CDATA[$F{temperatura_cozimento}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="6915" y="0" width="100" height="22" uuid="d1d91047-d763-49b0-b47e-6de5c03bddb1"/>
+				<textFieldExpression><![CDATA[$F{temperatura_resfriamento}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="4038" y="0" width="175" height="22" uuid="0257dd87-d3f6-4c22-9c3a-17739d6305b7"/>
+				<textFieldExpression><![CDATA[$F{desperd_copo_o}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="4932" y="0" width="161" height="22" uuid="e8e02267-648d-429b-9ca1-1a225a2fb053"/>
+				<textFieldExpression><![CDATA[$F{desperd_selo_m}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

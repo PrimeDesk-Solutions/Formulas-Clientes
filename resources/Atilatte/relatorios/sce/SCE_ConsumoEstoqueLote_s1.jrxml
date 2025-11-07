@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCE_ConsumoEstoqueLote_s1" language="groovy" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="6bab8e3c-58a6-4adf-a4c8-98663a46bd07">
+	<property name="ireport.zoom" value="2.357947691000002"/>
+	<property name="ireport.x" value="371"/>
+	<property name="ireport.y" value="0"/>
+	<field name="codItem" class="java.lang.String"/>
+	<field name="naItem" class="java.lang.String"/>
+	<field name="loteItem" class="java.lang.String"/>
+	<field name="qtdPedido" class="java.math.BigDecimal"/>
+	<field name="qtdLote" class="java.math.BigDecimal"/>
+	<field name="saldoEntregar" class="java.math.BigDecimal"/>
+	<field name="saldoFinalLote" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="69" height="13" isRemoveLineWhenBlank="true" uuid="47133af5-4a10-4a22-bb7e-cf6c1ae33eb0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codItem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="69" y="0" width="153" height="13" uuid="c4a3e4a7-1084-40ec-9308-9384de257d87"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naItem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="222" y="0" width="156" height="13" uuid="d5c4c5e2-e63a-482f-a870-f4568049a101"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{loteItem}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="378" y="0" width="100" height="13" uuid="7708d1f8-c99d-423b-a883-812453844b5b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtdPedido}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="478" y="0" width="100" height="13" uuid="dcbdde42-164d-4842-b2dc-0a44c54c0a8f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtdLote}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="578" y="0" width="100" height="13" uuid="c8941233-d65d-41a8-91ac-182f2235c555"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{saldoEntregar}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="702" y="0" width="100" height="13" uuid="15701670-3b0e-4a79-8c83-54a525b964e7"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{saldoFinalLote}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

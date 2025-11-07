@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CST0302R1S2" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="0" bottomMargin="0" uuid="156933d4-677e-4fab-9e1a-a78c11bea03e">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="2.1435888100000016"/>
+	<property name="ireport.x" value="263"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<field name="abm01codigo" class="java.lang.String"/>
+	<field name="abm01na" class="java.lang.String"/>
+	<field name="abe30codigo" class="java.lang.String"/>
+	<field name="abe4001txdesc" class="java.math.BigDecimal"/>
+	<field name="abe4001qtmax" class="java.math.BigDecimal"/>
+	<field name="abe4001preco" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-1" positionType="FixRelativeToBottom" x="0" y="0" width="58" height="12" uuid="d18b0287-960e-455a-91bd-fbf4e1d7dd9d"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" positionType="FixRelativeToBottom" x="58" y="0" width="128" height="12" uuid="57f6ee2f-807f-46d5-b3b9-3e810e307529"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Descrição]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-3" positionType="FixRelativeToBottom" x="254" y="0" width="59" height="12" uuid="23ab68aa-79aa-4c21-8246-b1785ab77f6c"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Cond. Pagto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-4" positionType="FixRelativeToBottom" x="339" y="0" width="59" height="12" uuid="d7c214d5-2961-4f6d-8510-6ea3f33e19b0"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Desconto %]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-5" positionType="FixRelativeToBottom" x="417" y="0" width="59" height="12" uuid="5fa15281-a8e7-4f68-8e54-98d9763563b1"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" positionType="FixRelativeToBottom" x="198" y="0" width="31" height="12" uuid="6e023a5c-84e1-4d86-b7bb-c59a28647b35"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Preço]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="58" height="16" uuid="4112a745-dcfa-43ec-a368-e90e60553a94"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abm01codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="58" y="0" width="128" height="16" uuid="25b85a21-4ec5-4477-8cfc-6b83299d5c02"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abm01na}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00">
+				<reportElement x="198" y="0" width="31" height="16" uuid="c557f3e0-80bf-4225-95f0-3ff52a67bf1a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abe4001preco}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="265" y="0" width="48" height="16" uuid="c4a1ce2b-9356-4ec0-a6b9-7da92f3dfc41"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abe30codigo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00">
+				<reportElement x="341" y="0" width="59" height="16" uuid="4574c27d-6df3-456f-ae01-c0b6d71a9386"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abe4001txdesc}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00">
+				<reportElement x="417" y="0" width="59" height="16" uuid="0471a15d-a697-433e-a2e7-95d3cc3bd899"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abe4001qtmax}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SPP_FichaEngenhariaProdutos_s3" language="groovy" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="29984fbe-2013-439c-9989-a4cd89759458">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="abp10codigo" class="java.lang.String"/>
+	<field name="abp10descr" class="java.lang.String"/>
+	<field name="abb20codigo" class="java.lang.String"/>
+	<field name="abb20nome" class="java.lang.String"/>
+	<field name="abp2001seq" class="java.lang.Integer"/>
+	<group name="recursos">
+		<groupExpression><![CDATA[$F{abp10codigo}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement x="0" y="0" width="100" height="20" uuid="45f6e32f-8a35-46c8-8661-5dab664a2662"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{abp10codigo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="100" y="0" width="269" height="20" uuid="a937ada2-739a-4f64-9685-b437805df339"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{abp10descr}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="290a41c7-c2aa-4049-9657-82028e06782d"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Processo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="169" height="20" uuid="e549508a-1292-4a9d-8f16-d28471dd28f9"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Recursos Produtivos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="20" uuid="715a34cc-75fd-4489-8fe2-13cacef665cd"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Seq]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="20" width="802" height="1" uuid="e68b6a87-d43f-4771-9d9b-8fe2c5c054ed"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="128" y="0" width="51" height="20" uuid="21b6a829-613e-40d4-996f-b8478daaaf9d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abb20codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="179" y="0" width="169" height="20" uuid="7b5658ae-1cfb-40c3-81dc-2b4cd190fd01"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abb20nome}]]></textFieldExpression>
+			</textField>
+			<textField pattern="000">
+				<reportElement x="100" y="0" width="28" height="20" uuid="4cefc345-8e5b-41a2-9df5-69a916727d04"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abp2001seq}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

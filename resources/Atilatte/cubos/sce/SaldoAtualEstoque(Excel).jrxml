@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="EstoqueParaPerdas" language="groovy" pageWidth="1417" pageHeight="842" orientation="Landscape" columnWidth="1377" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="24078a37-75c8-4efb-a408-facc5df8e25d">
+	<property name="ireport.zoom" value="1.1"/>
+	<property name="ireport.x" value="779"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<field name="MPS" class="java.lang.String"/>
+	<field name="naItem" class="java.lang.String"/>
+	<field name="lote" class="java.lang.String"/>
+	<field name="serie" class="java.lang.String"/>
+	<field name="codProduto" class="java.lang.String"/>
+	<field name="naProduto" class="java.lang.String"/>
+	<field name="qtd" class="java.math.BigDecimal"/>
+	<field name="local" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="validade" class="java.util.Date"/>
+	<field name="fabricacao" class="java.util.Date"/>
+	<field name="field3" class="java.lang.String"/>
+	<field name="codLivre" class="java.lang.String"/>
+	<field name="percentValid" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="167" height="20" uuid="c26570ee-12ca-4dd1-a210-561ce7a18d7c"/>
+				<text><![CDATA[CODIGO LIVRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="167" y="0" width="74" height="20" uuid="05efc3f8-8ed0-4392-b7b3-b178a2b456c8"/>
+				<text><![CDATA[CÓDIGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="445" y="0" width="177" height="20" uuid="a4e40bc0-fd38-47fd-83ba-4739f6444c60"/>
+				<text><![CDATA[STATUS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="622" y="0" width="172" height="20" uuid="5c8b9e02-a9da-4e82-8b96-68b104dba70e"/>
+				<text><![CDATA[LOTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="970" y="0" width="155" height="20" uuid="6deef4b3-ee77-453b-9519-6e0186a5cc9b"/>
+				<text><![CDATA[LOCAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1125" y="0" width="110" height="20" uuid="e04d26ae-9dfb-45df-9a13-2f0575ef02e9"/>
+				<text><![CDATA[QTD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="241" y="0" width="204" height="20" uuid="d58bc74d-694f-4f68-8f4e-c6342ab6f9a1"/>
+				<text><![CDATA[DESR PRODUTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="888" y="0" width="82" height="20" uuid="5ae6167b-3d7d-446f-aeda-800123772f69"/>
+				<text><![CDATA[VALIDADE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="794" y="0" width="94" height="20" uuid="26c40961-c882-43c0-b409-940aaed2d04e"/>
+				<text><![CDATA[FABRICAÇÃO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1235" y="0" width="142" height="20" uuid="9e00a46c-f0a2-4c51-921a-42146848723e"/>
+				<text><![CDATA[% Validade]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="167" y="0" width="74" height="20" uuid="3827bdd1-0c24-4f32-9227-e155daa77c27"/>
+				<textFieldExpression><![CDATA[$F{codProduto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="445" y="0" width="177" height="20" uuid="0071f1ec-caed-45b0-bb14-aa4409ae37fd"/>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="622" y="0" width="172" height="20" uuid="53d28c8c-0e31-4f57-804b-d1829ed688c0"/>
+				<textFieldExpression><![CDATA[$F{lote}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="970" y="0" width="155" height="20" uuid="9380b04d-cd4f-42b8-8881-8643fbffcf42"/>
+				<textFieldExpression><![CDATA[$F{local}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="1125" y="0" width="110" height="20" uuid="9fa95087-67f9-42e7-8b22-af58fc312b41"/>
+				<textFieldExpression><![CDATA[$F{qtd}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="241" y="0" width="204" height="20" uuid="03aa8738-f5de-4572-8dc2-6f95858546ca"/>
+				<textFieldExpression><![CDATA[$F{naProduto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="888" y="0" width="82" height="20" uuid="c7fc1bbf-4f2c-4cdb-8a06-2d84db98e8f9"/>
+				<textFieldExpression><![CDATA[$F{validade}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="794" y="0" width="94" height="20" uuid="c0750712-5266-4fa1-bb3e-352d4845eaac"/>
+				<textFieldExpression><![CDATA[$F{fabricacao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="167" height="20" uuid="47c0b059-64f4-4d5c-a176-f5c55a423e04"/>
+				<textFieldExpression><![CDATA[$F{codLivre}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="1235" y="0" width="142" height="20" uuid="de34f6ba-eda8-4ba2-b9fc-b4596ba1e8fa"/>
+				<textFieldExpression><![CDATA[$F{percentValid}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

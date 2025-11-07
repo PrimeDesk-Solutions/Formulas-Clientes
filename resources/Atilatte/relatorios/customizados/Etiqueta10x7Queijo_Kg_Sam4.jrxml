@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Etiqueta10x7Queijo_Kg_Sam4" pageWidth="283" pageHeight="198" orientation="Landscape" columnWidth="283" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c0e78995-4088-4c0f-bf13-8e76b327e0f5">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="nomeEmpresa" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="enderecoEmpresa" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="bairroEmpresa" class="java.lang.String" isForPrompting="false"/>
+	<field name="tipo" class="java.lang.String"/>
+	<field name="numFolha" class="java.lang.Integer"/>
+	<field name="totalFolha" class="java.lang.Integer"/>
+	<field name="entidade" class="java.lang.String"/>
+	<field name="endereco" class="java.lang.String"/>
+	<field name="numero" class="java.lang.String"/>
+	<field name="bairro" class="java.lang.String"/>
+	<field name="municipio" class="java.lang.String"/>
+	<field name="uf" class="java.lang.String"/>
+	<field name="cep" class="java.lang.String"/>
+	<field name="nf" class="java.lang.Integer"/>
+	<field name="operacao" class="java.lang.String"/>
+	<field name="despacho" class="java.lang.String"/>
+	<field name="redespacho" class="java.lang.String"/>
+	<field name="item" class="java.lang.String"/>
+	<field name="codbarsam" class="java.lang.String"/>
+	<variable name="paginas" class="java.lang.String">
+		<variableExpression><![CDATA[$F{numFolha}+" / "+$F{totalFolha}]]></variableExpression>
+	</variable>
+	<variable name="paginasMista" class="java.lang.String">
+		<variableExpression><![CDATA["1/1"]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="198" splitType="Stretch">
+			<rectangle radius="4">
+				<reportElement key="rectangle-1" mode="Opaque" x="4" y="3" width="275" height="193" uuid="a4794f07-6872-4997-87a7-f3909e012a44"/>
+			</rectangle>
+			<line>
+				<reportElement key="line-1" x="95" y="18" width="1" height="35" uuid="f2693776-28b4-45ae-8cbf-aca999570ebf"/>
+			</line>
+			<line>
+				<reportElement key="line-2" x="12" y="53" width="260" height="1" uuid="9bf6fc56-bbd3-46c3-b4fc-2169ea038202"/>
+			</line>
+			<line>
+				<reportElement key="line-3" x="12" y="97" width="260" height="1" uuid="17b55366-4700-4299-8a58-1cb0d02f6671"/>
+			</line>
+			<line>
+				<reportElement key="line-4" x="12" y="121" width="260" height="1" uuid="d0f95922-7b70-4f26-9cb7-18131152d674"/>
+			</line>
+			<line>
+				<reportElement key="line-5" x="12" y="149" width="260" height="1" uuid="9bf2464f-b15f-4e83-b617-ebad736e4e6f"/>
+			</line>
+			<line>
+				<reportElement key="line-6" x="110" y="121" width="1" height="29" uuid="b98881e0-fc02-48be-b28e-73885089743f"/>
+			</line>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-1" x="139" y="22" width="91" height="14" uuid="a92aba84-50ae-4c1a-90a6-84c4c285c054"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nomeEmpresa}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="102" y="39" width="164" height="12" uuid="f70c6bdc-4e67-495f-8b19-40e398391537"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{enderecoEmpresa}+ ", Bairro "+$P{bairroEmpresa}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-3" x="13" y="54" width="257" height="16" uuid="88f0adf1-8328-411d-8164-866c5c1c7aab"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{entidade}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-4" x="13" y="70" width="266" height="13" uuid="44fe33bf-54f4-4e74-8ee4-1b3f4f6ecd57"/>
+				<textElement textAlignment="Justified">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{endereco} + " " + $F{numero} + " " + $F{bairro}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-5" x="13" y="83" width="175" height="13" uuid="92d9fae4-9b58-4e7f-8513-6a7f0ff689ec"/>
+				<textElement textAlignment="Justified">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{municipio} + " - " + $F{uf}+ " " + "CEP: " +$F{cep}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-6" x="59" y="103" width="50" height="16" uuid="174c2e3a-cab8-476e-bbb2-1e6fc6a54c81"/>
+				<textElement>
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nf}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line-7" x="110" y="98" width="1" height="23" uuid="6a5b0e46-d03d-4853-b7a3-2b05216f8674"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-1" x="12" y="98" width="45" height="12" uuid="75a2a6e9-ce92-4446-8ffa-37ec475e51e0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Nº Pedido:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-7" x="112" y="104" width="160" height="15" uuid="d974e1b3-3d70-4a87-9546-51d353ee02d7"/>
+				<textElement>
+					<font size="6" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{operacao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-2" x="12" y="123" width="57" height="12" uuid="bca1c180-928b-4505-a1f8-56f1f3175c62"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DESPACHO:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-8" x="13" y="136" width="97" height="13" uuid="ab09e6ef-960a-4897-ba73-6283e3df5d23"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{despacho}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-3" x="112" y="123" width="81" height="12" uuid="6c360d23-6876-46b1-a64b-b1f68d8a8411"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[REDESPACHO:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-9" x="113" y="135" width="104" height="13" uuid="3c56b0b3-2517-43c4-a90a-767a9f0291dd"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{redespacho}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-12" x="49" y="3" width="181" height="15" uuid="551c828c-e5fd-4a1b-b295-d6ba29e4cad0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" isBlankWhenNull="false">
+				<reportElement key="textField-13" positionType="Float" stretchType="RelativeToTallestObject" x="11" y="163" width="147" height="20" uuid="f6421926-4180-41ef-ab34-a82be33b54c2"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{item} + " "]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line-8" x="12" y="161" width="157" height="1" uuid="574780e1-a34e-42d4-a743-a5a4e195e9ba"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-7" x="12" y="152" width="37" height="12" uuid="067590a1-938a-4194-a23a-3d555c97928c"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Item]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-9" x="139" y="153" width="1" height="8" uuid="60a6a514-90a0-42cc-b4b9-8e4b13c4fc83"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-8" x="142" y="152" width="27" height="12" uuid="4e2cffe5-dd90-414d-931b-006f91390605"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[QTD]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="246" y="7" width="32" height="13" uuid="020cfd5e-1db4-48f3-a272-3f426bf713b5">
+					<printWhenExpression><![CDATA[new Boolean($F{tipo}.equals("CAIXA"))]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$V{paginas}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="246" y="7" width="32" height="13" uuid="e2d560e9-0b95-4875-835d-cde2a58895f6">
+					<printWhenExpression><![CDATA[new Boolean($F{tipo}.equals("CAIXA MISTA"))]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$V{paginasMista}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="171" y="154" width="105" height="35" uuid="d35aeae3-3fc7-4054-8b44-81560de0d8b8"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barHeight="50">
+					<jr:codeExpression><![CDATA[$F{codbarsam}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

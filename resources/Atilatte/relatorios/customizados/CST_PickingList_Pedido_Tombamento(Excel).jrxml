@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CST_PickingListPedido" language="groovy" pageWidth="1984" pageHeight="842" columnWidth="1944" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d67def84-9ec7-48a9-aca9-f0e3cdac1763">
+	<property name="ireport.zoom" value="1.4641000000000088"/>
+	<property name="ireport.x" value="1420"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="periodo" class="java.lang.String"/>
+	<parameter name="emissaoRelatorio" class="java.lang.String"/>
+	<field name="numPedido" class="java.lang.Integer"/>
+	<field name="codDespacho" class="java.lang.String"/>
+	<field name="naDespacho" class="java.lang.String"/>
+	<field name="naRedespacho" class="java.lang.String"/>
+	<field name="codCliente" class="java.lang.String"/>
+	<field name="nomeCliente" class="java.lang.String"/>
+	<field name="codItem" class="java.lang.String"/>
+	<field name="naItem" class="java.lang.String"/>
+	<field name="lote" class="java.lang.String"/>
+	<field name="qtd" class="java.math.BigDecimal"/>
+	<field name="unidadeMedida" class="java.lang.String"/>
+	<field name="volumeCaixa" class="java.lang.String"/>
+	<field name="caixa" class="java.math.BigDecimal"/>
+	<field name="pesoBruto" class="java.math.BigDecimal"/>
+	<field name="ordemSeparacao" class="java.lang.Integer"/>
+	<variable name="totVolumeTransp" class="java.lang.Integer" resetType="Group" resetGroup="tranportadora" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="totalCaixaDoc" class="java.math.BigDecimal" resetType="Group" resetGroup="numDoc" calculation="Sum">
+		<variableExpression><![CDATA[$F{caixa}]]></variableExpression>
+	</variable>
+	<variable name="totalCaixaTransp" class="java.math.BigDecimal" resetType="Group" resetGroup="tranportadora" calculation="Sum">
+		<variableExpression><![CDATA[$F{caixa}]]></variableExpression>
+	</variable>
+	<variable name="totCaixaItem" class="java.math.BigDecimal" resetType="Group" resetGroup="item" calculation="Sum">
+		<variableExpression><![CDATA[$F{caixa}]]></variableExpression>
+	</variable>
+	<group name="tranportadora">
+		<groupExpression><![CDATA[$F{codDespacho}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="item">
+		<groupExpression><![CDATA[$F{codItem}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="numDoc">
+		<groupExpression><![CDATA[$F{numPedido}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="201" height="13" uuid="488600da-75a5-44c1-8096-6c85395f0685"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Transportadora]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="201" y="0" width="97" height="13" uuid="9714ac78-e507-4055-9e92-39c09a55638c"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Redespacho]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="298" y="0" width="100" height="13" uuid="f405ff1d-617e-46a7-b7d7-52e48f72b26e"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="398" y="0" width="212" height="13" uuid="8a7377f6-6c68-42ee-9ad6-67117ce68233"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="610" y="0" width="107" height="13" uuid="b4a06347-7bd1-4905-b656-6e889a3a3b05"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ordem Separação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="717" y="0" width="176" height="13" uuid="3d88a975-5d19-45f1-8c76-bb8764850967"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Unidade Medida]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="893" y="0" width="148" height="13" uuid="93ea1c68-428b-4b02-be7d-4b66a447869c"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Lóte]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1041" y="0" width="153" height="13" uuid="4881659b-f277-4124-a4a4-200137cff78f"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Pedido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1194" y="0" width="129" height="13" uuid="dd216d0b-294a-4345-ab5a-3e11d6e14953"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1323" y="0" width="140" height="13" uuid="2d42bc51-8cf4-403b-ab98-e4565cfe227d"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Volume(CX)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1587" y="0" width="164" height="13" uuid="5c008a16-f5e1-483e-a8e5-658af489a2eb"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código Cliente ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1751" y="0" width="193" height="13" uuid="dd62be4c-8edf-40be-93a3-ebada918fe22"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1463" y="0" width="124" height="13" uuid="557ca72e-45d5-45eb-a86e-1188d69a9fc3"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Peso Bruto]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="201" height="13" uuid="0bd69fb0-e57a-4ff2-bd73-b8e0699cfdfc"/>
+				<textElement>
+					<font size="8" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naDespacho}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="201" y="0" width="97" height="13" uuid="029a4e1b-aeec-4296-8de2-25704d2d1123"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naRedespacho}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="298" y="0" width="100" height="13" uuid="dab5400f-d7cc-4af0-bafa-a068f4fb493c"/>
+				<textElement>
+					<font size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codItem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="398" y="0" width="212" height="13" uuid="f7888b23-31ee-41e4-b374-a05f14437894"/>
+				<textElement>
+					<font size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naItem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="610" y="0" width="107" height="13" uuid="38211ef6-52d4-4555-a2aa-62d922103161"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ordemSeparacao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="893" y="0" width="148" height="13" uuid="20433a0f-aa5f-41a0-980e-30a9bdef6c49"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lote}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="717" y="0" width="176" height="13" uuid="1ab0cbd0-d450-4985-8569-08cbda78fbf7"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unidadeMedida}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00">
+				<reportElement x="1194" y="0" width="129" height="13" uuid="e33448f2-9578-4aad-9a6a-41187a822b82"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtd}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00">
+				<reportElement x="1323" y="0" width="140" height="13" uuid="56853c7a-8f30-430a-934b-14b297115971"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{caixa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1041" y="0" width="153" height="13" uuid="d34cb1c3-c627-4cf9-aee8-3656849dde45"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numPedido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1587" y="0" width="164" height="13" uuid="41cc4658-ce89-4d07-a52d-18596bdd52b3"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codCliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1751" y="0" width="193" height="13" uuid="642be301-4e08-4dc5-aa40-25d16bcef966"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeCliente}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="1463" y="0" width="124" height="13" uuid="08908fdf-1eac-4154-bf1d-38e7fdf10afa"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pesoBruto}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VendasPorEntidade" language="groovy" pageWidth="2211" pageHeight="842" columnWidth="2171" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="019fbf45-f0b1-4c70-bdb4-ac7f0d187959">
+	<property name="ireport.zoom" value="1.366026910730142"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="numDoc" class="java.lang.Integer"/>
+	<field name="qtUso" class="java.math.BigDecimal"/>
+	<field name="unitario" class="java.math.BigDecimal"/>
+	<field name="ICMS" class="java.math.BigDecimal"/>
+	<field name="IPI" class="java.math.BigDecimal"/>
+	<field name="icmsST" class="java.lang.String"/>
+	<field name="Total" class="java.math.BigDecimal"/>
+	<field name="Desconto" class="java.lang.String"/>
+	<field name="totalDoc" class="java.math.BigDecimal"/>
+	<field name="qtComl" class="java.math.BigDecimal"/>
+	<field name="PCD" class="java.lang.String"/>
+	<field name="ramoAtividade" class="java.lang.String"/>
+	<field name="MPS" class="java.lang.Integer"/>
+	<field name="codigoEnt" class="java.lang.String"/>
+	<field name="naEntidade" class="java.lang.String"/>
+	<field name="operacao" class="java.lang.Integer"/>
+	<field name="tipoOperacao" class="java.lang.Integer"/>
+	<field name="dataEmissao" class="java.lang.String"/>
+	<field name="dataEntradaSaida" class="java.lang.String"/>
+	<field name="codigoItem" class="java.lang.String"/>
+	<field name="item" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="fb1da08c-cfdb-4a3e-9e9c-52f358f7a713"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="20" uuid="ac74ca9a-69af-498e-ba46-709d2c1ea248"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quantidade Uso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="100" height="20" uuid="6e051de9-8159-47ba-9b32-0eaf60d012a5"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unitário]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="0" width="100" height="20" uuid="ee9307ef-1a77-4282-9435-d1ad9f892d5c"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ICMS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="0" width="100" height="20" uuid="5f23b56b-384d-46bd-bec0-a458cf3f9f07"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[IPI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="500" y="0" width="100" height="20" uuid="e65e65fe-83ce-4bbc-ad69-2620adf8ef47"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ICMS ST]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="600" y="0" width="100" height="20" uuid="e7fb7d46-6b24-41e5-a73c-a85871fe5ebb"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="700" y="0" width="100" height="20" uuid="0d498ae9-2aa5-4854-9642-9a5d0beb2f34"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Desconto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="800" y="0" width="100" height="20" uuid="917fa7f5-efd0-40cb-bb41-cddd2914d4ea"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="900" y="0" width="100" height="20" uuid="bd637486-5f6c-4a64-8746-ac87b5b5ea80"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qtd Comercial]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1000" y="0" width="100" height="20" uuid="3f51a842-ed5a-428e-8912-1e5c0b07227e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PCD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1100" y="0" width="100" height="20" uuid="418e0c5a-7542-4e44-8f9d-fa6269811518"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ramo Atividade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1200" y="0" width="100" height="20" uuid="48356df0-e3f5-4f1c-870e-7dacb0970341"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MPS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1300" y="0" width="100" height="20" uuid="c717b342-50a5-4c1a-ab77-472a71735f87"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1400" y="0" width="100" height="20" uuid="17f36ab4-2ef3-43f1-9846-9226e52f8743"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1500" y="0" width="100" height="20" uuid="c1e927a8-28c3-420d-84d6-e8da82641740"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Operação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1600" y="0" width="100" height="20" uuid="3cceb7f6-d8cf-4550-b3bf-c439ceb70316"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Operação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1700" y="0" width="100" height="20" uuid="5dd0537a-2da1-4e3b-8fd8-fce05ffdc2cc"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Emissão]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1800" y="0" width="100" height="20" uuid="56830d41-b33a-40d0-ac5f-09c0371d606d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Entrada/Saída]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1900" y="0" width="100" height="20" uuid="9cce9933-185c-4f30-b1a7-2f4fe9a742db"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2000" y="0" width="171" height="20" uuid="0009335c-317f-41ed-b581-b244aa271480"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descrição Item]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="2a8dc972-342b-4d92-83e9-a66267d17402"/>
+				<textFieldExpression><![CDATA[$F{numDoc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="100" height="20" uuid="611888f4-d019-43aa-a08c-964d313463a9"/>
+				<textFieldExpression><![CDATA[$F{qtUso}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="100" height="20" uuid="a63dbfc3-9fb6-481b-86d6-ff5eeed532ee"/>
+				<textFieldExpression><![CDATA[$F{unitario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="300" y="0" width="100" height="20" uuid="8c80710a-2ed7-4be3-953f-86f092657cc3"/>
+				<textFieldExpression><![CDATA[$F{ICMS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="0" width="100" height="20" uuid="ff187126-14d2-4349-9fdc-9d6520a39419"/>
+				<textFieldExpression><![CDATA[$F{IPI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="500" y="0" width="100" height="20" uuid="123fcdb4-8f86-43c8-acb7-d32f3046bbc3"/>
+				<textFieldExpression><![CDATA[$F{icmsST}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="600" y="0" width="100" height="20" uuid="966be936-fbb6-42b5-957d-eeb6cb0c13d9"/>
+				<textFieldExpression><![CDATA[$F{Total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="700" y="0" width="100" height="20" uuid="8f75f7a5-87e6-4eb9-ab68-6698054ed815"/>
+				<textFieldExpression><![CDATA[$F{Desconto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="800" y="0" width="100" height="20" uuid="b4886da7-c883-407c-aea9-f0e6cc4e9dfe"/>
+				<textFieldExpression><![CDATA[$F{totalDoc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="900" y="0" width="100" height="20" uuid="35ab12fd-e393-4ed3-a507-ff880c73dd7d"/>
+				<textFieldExpression><![CDATA[$F{qtComl}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1000" y="0" width="100" height="20" uuid="66ba678f-f331-4db3-9516-39d12fba0e3d"/>
+				<textFieldExpression><![CDATA[$F{PCD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1100" y="0" width="100" height="20" uuid="b55ce960-f632-4c65-9047-00b9940cb988"/>
+				<textFieldExpression><![CDATA[$F{ramoAtividade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1200" y="0" width="100" height="20" uuid="b98c8a24-7d79-4e94-9a64-0bff34cdb289"/>
+				<textFieldExpression><![CDATA[$F{MPS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1300" y="0" width="100" height="20" uuid="0f7c89f4-438e-4757-80ff-d3f7dd82e2f9"/>
+				<textFieldExpression><![CDATA[$F{codigoEnt}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1400" y="0" width="100" height="20" uuid="faede11c-f887-4bf2-8a1d-f4b4203bbf9b"/>
+				<textFieldExpression><![CDATA[$F{naEntidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1500" y="0" width="100" height="20" uuid="4efbe950-ee75-41e8-8999-6ca304d4e638"/>
+				<textFieldExpression><![CDATA[$F{operacao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1600" y="0" width="100" height="20" uuid="bcbb692e-80f5-440b-99af-737b7d165138"/>
+				<textFieldExpression><![CDATA[$F{tipoOperacao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1700" y="0" width="100" height="20" uuid="37506df3-198f-49de-90e7-f5ce663ddd35"/>
+				<textFieldExpression><![CDATA[$F{dataEmissao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1800" y="0" width="100" height="20" uuid="064fbf92-2f6d-4c1b-8da1-99f3ece6564a"/>
+				<textFieldExpression><![CDATA[$F{dataEntradaSaida}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1900" y="0" width="100" height="20" uuid="62e03e92-5c5a-4826-8935-afb5d39b2ee8"/>
+				<textFieldExpression><![CDATA[$F{codigoItem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2000" y="0" width="171" height="20" uuid="a055c9ea-cea3-428f-b3ee-d8c9e1b05a01"/>
+				<textFieldExpression><![CDATA[$F{item}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

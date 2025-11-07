@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioDeSuporteAnaliseDeMargem" language="groovy" pageWidth="1247" pageHeight="842" columnWidth="1207" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b7b9caf9-15cc-4556-bd35-7535486e108c">
+	<property name="ireport.zoom" value="1.9487171000000014"/>
+	<property name="ireport.x" value="1224"/>
+	<property name="ireport.y" value="0"/>
+	<field name="numero" class="java.lang.Integer"/>
+	<field name="descrPCD" class="java.lang.String"/>
+	<field name="codEntidade" class="java.lang.String"/>
+	<field name="nomeEntidade" class="java.lang.String"/>
+	<field name="dataEmissao" class="java.util.Date"/>
+	<field name="entradaSaida" class="java.util.Date"/>
+	<field name="tipoDoc" class="java.lang.String"/>
+	<field name="totalItens" class="java.lang.String"/>
+	<field name="qtOriginal" class="java.lang.String"/>
+	<field name="TotalDoc" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="d4a24aaa-db24-47ab-ba18-0b83b46b3197"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="200" height="20" uuid="e24f1709-34a2-4d76-9ac3-f4086eb665f6"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PCD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="0" width="100" height="20" uuid="3daa0d41-f8b6-4290-b673-6c55839539bf"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código Entidade ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="0" width="200" height="20" uuid="096805df-4357-4ed3-add8-8c88c3b248e1"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome Entidade ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="600" y="0" width="100" height="20" uuid="906baa82-6b22-46ef-a7cf-bc2ff895123d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Emissão ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="800" y="0" width="100" height="20" uuid="79c3ef0c-1406-4530-a83a-6b6675a556ec"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="900" y="0" width="100" height="20" uuid="bc7986be-3450-4b7f-86b6-0f14af5f8335"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Itens]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1000" y="0" width="110" height="20" uuid="4a77d928-eec8-44d9-8464-78a850df2504"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[QTD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1110" y="0" width="97" height="20" uuid="dce05e46-fead-4441-b290-9001db33ae98"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="700" y="0" width="100" height="20" uuid="cf12c22a-00b7-43b2-abe9-a21c7895cefc"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Entrada/Saída]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="83a60e2b-768a-491b-b9b4-1deb309560c7"/>
+				<textFieldExpression><![CDATA[$F{numero}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="200" height="20" uuid="a56e605d-6c82-4c04-9dfa-737e93bb7200"/>
+				<textFieldExpression><![CDATA[$F{descrPCD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="300" y="0" width="100" height="20" uuid="56c77a34-7c92-4173-b902-2ccaeb3eb09f"/>
+				<textFieldExpression><![CDATA[$F{codEntidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="0" width="200" height="20" uuid="a17fb176-9f1d-4888-9300-70ff6aabfcd8"/>
+				<textFieldExpression><![CDATA[$F{nomeEntidade}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="600" y="0" width="100" height="20" uuid="1f416300-b6df-4d85-8390-e039b04bc28b"/>
+				<textFieldExpression><![CDATA[$F{dataEmissao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="800" y="0" width="100" height="20" uuid="8e9edc63-efca-41ff-af83-9aac369ff230"/>
+				<textFieldExpression><![CDATA[$F{tipoDoc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="900" y="0" width="100" height="20" uuid="a6c2d78c-cc4f-4746-9333-29c26f0755a0"/>
+				<textFieldExpression><![CDATA[$F{totalItens}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1000" y="0" width="110" height="20" uuid="8034aa38-32e7-45b8-ac7d-b6cf1e80aec8"/>
+				<textFieldExpression><![CDATA[$F{qtOriginal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1110" y="0" width="97" height="20" uuid="9a9674c8-1565-4387-91f1-bffe71119c53"/>
+				<textFieldExpression><![CDATA[$F{TotalDoc}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="700" y="0" width="100" height="20" uuid="91f46852-a7f6-4f0e-9d06-50f1324dd2fc"/>
+				<textFieldExpression><![CDATA[$F{entradaSaida}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorioReclamacao_subreport1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="66792071-5842-4a17-bd11-170516706451">
+	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="caa01codigo" class="java.lang.String"/>
+	<field name="caa01descr" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="2" width="31" height="20" uuid="d7ab0469-9d2f-48e2-aab3-b83217ea6dbb"/>
+				<textElement>
+					<font size="9" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{caa01codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="31" y="2" width="314" height="20" uuid="4329f7e6-5434-49d0-ae37-d6ac2753c915"/>
+				<textElement>
+					<font size="9" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{caa01descr}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

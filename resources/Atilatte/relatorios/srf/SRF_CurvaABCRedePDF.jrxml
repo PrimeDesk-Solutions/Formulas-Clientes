@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_CurvaABCEntidades" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="40a858fb-663a-4bc3-bc6d-e8fe8a0f8382">
+	<property name="ireport.zoom" value="1.7715610000000013"/>
+	<property name="ireport.x" value="6"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="titulo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="periodo" class="java.lang.String"/>
+	<field name="abe01codigo" class="java.lang.String"/>
+	<field name="abe01na" class="java.lang.String"/>
+	<field name="percentAcum" class="java.math.BigDecimal"/>
+	<field name="valorAcumulado" class="java.math.BigDecimal"/>
+	<field name="campo" class="java.math.BigDecimal"/>
+	<field name="percentValor" class="java.math.BigDecimal"/>
+	<field name="numLinha" class="java.lang.Integer"/>
+	<field name="nomeCampo" class="java.lang.String"/>
+	<field name="classe" class="java.lang.String"/>
+	<field name="rede" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="144" height="13" uuid="a1a3f8b0-a521-4c35-8f00-986821247d1c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{titulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="389" y="0" width="96" height="13" uuid="fedd7caf-dfc6-4822-8e27-dc360eb1c659"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="157" y="0" width="221" height="13" uuid="8fb2cfd1-6735-4a51-8aca-8f5b73c53395"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{periodo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="500" y="0" width="32" height="13" uuid="7991ea08-0dac-4ba2-a20c-85a2f6974858"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Página:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="532" y="0" width="23" height="13" uuid="74f9ddc8-912b-402b-97d2-e6b245e88093"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="105" height="13" uuid="489f3f06-c1f6-487e-bb74-287a078d6d2a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Nome Campo Selecionado:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="105" y="0" width="100" height="13" uuid="05ecf081-6b1a-4155-a33e-ec24c8b09f5a"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeCampo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement x="422" y="0" width="86" height="23" uuid="b9e049a9-1ffc-46db-9537-5e88997ee5a4"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[% Valor Acumulado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="286" y="0" width="95" height="13" uuid="3d0f75d8-df9b-4822-9831-f5b4e33ef48b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[VALOR ACUMULADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="238" y="0" width="48" height="13" uuid="da4503c2-b8c5-46bf-b692-603428d063b5"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[VALOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="381" y="0" width="41" height="13" uuid="ef2e9cc6-ed93-422d-9964-75e70f383584"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[% Valor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="38" height="23" uuid="44ac03a3-4142-4621-b57a-06155073d01a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NUM ORDEM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="508" y="0" width="47" height="21" uuid="28348a78-b547-45a0-8225-5fc6677d8bf1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CLASSE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="38" y="0" width="200" height="13" uuid="dbfa8c3e-ebfd-4c4a-ab5f-7bd6236df299"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Rede]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField pattern="#,##0.00">
+				<reportElement x="422" y="0" width="86" height="13" uuid="b3e080fe-9745-4332-b440-5c138b671275"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{percentAcum}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="286" y="0" width="92" height="13" uuid="9b8f22d0-8519-41b7-a14a-14dce143b4a2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorAcumulado}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="238" y="0" width="48" height="13" uuid="bd524bff-00c7-4c8b-9671-19505b128f85"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{campo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="381" y="0" width="41" height="13" uuid="953a8a96-d242-47df-addf-a45efb6b59db"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{percentValor}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0000">
+				<reportElement x="0" y="0" width="38" height="13" uuid="9627045e-96be-4c68-895b-ad6980d3d232"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numLinha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="508" y="0" width="47" height="13" uuid="75a48717-0b7c-47b4-a7e0-1da36ad76e06"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{classe}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="38" y="0" width="200" height="13" uuid="871bbed1-39ed-4bfe-b42d-023dccccc3dc"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rede}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

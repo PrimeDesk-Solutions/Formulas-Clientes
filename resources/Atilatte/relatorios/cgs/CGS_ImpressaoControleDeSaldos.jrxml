@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CGS_ControleDeSaldos" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="9ddfa173-9ad2-406c-b90d-781a16acd762">
+	<property name="ireport.zoom" value="1.1000000000000005"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="ABM15NOME" class="java.lang.String"/>
+	<field name="imgQrCode" class="java.lang.Object"/>
+	<group name="Local" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{ABM15NOME}]]></groupExpression>
+		<groupHeader>
+			<band height="228">
+				<textField>
+					<reportElement x="0" y="0" width="555" height="32" uuid="b1d3dfb9-8682-4477-80cb-748f0765c608"/>
+					<textElement textAlignment="Center">
+						<font size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ABM15NOME}]]></textFieldExpression>
+				</textField>
+				<image hAlign="Center" vAlign="Middle">
+					<reportElement x="0" y="32" width="555" height="184" uuid="2a366cfb-61da-405f-81cf-4ddf4bd93d7a"/>
+					<imageExpression><![CDATA[$F{imgQrCode}]]></imageExpression>
+				</image>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_RelacaoPedidosNotas" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="50c0471c-50e6-4438-af7d-8c3a17867d1f">
+	<property name="ireport.zoom" value="1.331000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="titulo" class="java.lang.String"/>
+	<parameter name="periodo" class="java.lang.String"/>
+	<parameter name="emissaoRelatorio" class="java.lang.String"/>
+	<field name="dataNota" class="java.util.Date"/>
+	<field name="numNota" class="java.lang.Integer"/>
+	<field name="numPed" class="java.lang.Integer"/>
+	<field name="pesoBruto" class="java.math.BigDecimal"/>
+	<field name="pesoLiq" class="java.math.BigDecimal"/>
+	<field name="volumes" class="java.math.BigDecimal"/>
+	<field name="totDoc" class="java.math.BigDecimal"/>
+	<field name="naEnt" class="java.lang.String"/>
+	<field name="municipio" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="redespacho" class="java.lang.String"/>
+	<field name="field12" class="java.lang.String"/>
+	<field name="field1" class="java.lang.String"/>
+	<variable name="totPesoLiquido" class="java.math.BigDecimal" resetType="Group" resetGroup="redespacho" calculation="Sum">
+		<variableExpression><![CDATA[$F{pesoLiq}]]></variableExpression>
+	</variable>
+	<variable name="totPesoBruto" class="java.math.BigDecimal" resetType="Group" resetGroup="redespacho" calculation="Sum">
+		<variableExpression><![CDATA[$F{pesoBruto}]]></variableExpression>
+	</variable>
+	<variable name="totVolumes" class="java.math.BigDecimal" resetType="Group" resetGroup="redespacho" calculation="Sum">
+		<variableExpression><![CDATA[$F{volumes}]]></variableExpression>
+	</variable>
+	<variable name="totTotalDoc" class="java.math.BigDecimal" resetType="Group" resetGroup="redespacho" calculation="Sum">
+		<variableExpression><![CDATA[$F{totDoc}]]></variableExpression>
+	</variable>
+	<variable name="totPesoLiquidoGeral" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{pesoLiq}]]></variableExpression>
+	</variable>
+	<variable name="totPesoBrutoGeral" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{pesoBruto}]]></variableExpression>
+	</variable>
+	<variable name="totVolumesGeral" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{volumes}]]></variableExpression>
+	</variable>
+	<variable name="totTotalDocGeral" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{totDoc}]]></variableExpression>
+	</variable>
+	<group name="geral">
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band height="34">
+				<staticText>
+					<reportElement x="144" y="11" width="50" height="13" uuid="2e106933-8aec-4d24-8ba9-f720093323be"/>
+					<textElement>
+						<font size="8" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Total Geral]]></text>
+				</staticText>
+				<line>
+					<reportElement x="144" y="10" width="301" height="1" uuid="308d7b4e-fa8e-436c-8c00-6a8f41092fdf"/>
+				</line>
+				<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+					<reportElement x="259" y="11" width="57" height="13" uuid="3d808f2d-4265-49e7-a7d9-b313920141aa"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totPesoLiquidoGeral}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+					<reportElement x="194" y="11" width="57" height="13" uuid="369bf13a-4b2b-4fab-812b-4bf4bf524311"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totPesoBrutoGeral}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+					<reportElement x="316" y="11" width="52" height="13" uuid="2e127953-6b70-4898-bf88-78fa4fd5b1dc"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totVolumesGeral}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+					<reportElement x="379" y="11" width="66" height="13" uuid="c009d053-b434-406e-9c1d-fd70aa856586"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totTotalDocGeral}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="redespacho">
+		<groupExpression><![CDATA[$F{redespacho}]]></groupExpression>
+		<groupHeader>
+			<band height="13">
+				<textField>
+					<reportElement x="70" y="0" width="189" height="13" uuid="5a07136a-c751-40e4-ad99-2a197306d1d8"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{redespacho}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="0" width="70" height="13" uuid="d2e5c86e-6597-4146-b70a-09e8481f6ac3"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Redespacho: ]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="36">
+				<line>
+					<reportElement x="104" y="12" width="341" height="1" uuid="ba6aaced-19c7-4b2f-96ab-70ef6a8f140a"/>
+				</line>
+				<staticText>
+					<reportElement x="104" y="13" width="90" height="13" uuid="26a33a19-3c3c-4003-8633-daed6dfa441f"/>
+					<textElement>
+						<font size="8" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Total Transportadora]]></text>
+				</staticText>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="194" y="13" width="57" height="13" uuid="9292b5ba-4d0d-4a7e-ac4c-fdd51cf66b1f"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totPesoBruto}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="316" y="12" width="52" height="13" uuid="e080104c-f68b-46b3-97d2-9212e90412d5"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totVolumes}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="379" y="13" width="66" height="13" uuid="8699a5b4-603b-42dc-bc41-333eb14fdcea"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totTotalDoc}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="259" y="12" width="57" height="13" uuid="498bfc25-e645-4cae-95a8-c02510bcd120"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totPesoLiquido}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="113" splitType="Stretch">
+			<textField>
+				<reportElement x="368" y="0" width="252" height="20" uuid="506249ed-54bc-43d1-b3cc-e6c862fa3e33"/>
+				<textElement textAlignment="Center">
+					<font size="12" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{titulo}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="11" y="0" width="215" height="90" uuid="c640ac92-5abd-4795-ae16-b33e96c357da"/>
+				<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Atilatte\\relatorios\\srf\\marca-atilatte.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="533" y="90" width="269" height="13" uuid="733320d1-84a4-466b-a058-46e1f4ad2cd8"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{periodo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="70" height="13" uuid="d6d30539-2865-462c-b820-f145aee17312"/>
+				<textElement>
+					<font size="8" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Data Emissão]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="0" width="64" height="13" uuid="903d71be-85d8-4187-86d1-8ccc4db7b4ee"/>
+				<textElement>
+					<font size="8" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Num. Nota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="134" y="0" width="60" height="13" uuid="5dcc0f17-87c3-4181-a2c5-83571b13fc6f"/>
+				<textElement>
+					<font size="8" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Num Ped]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="194" y="0" width="65" height="13" uuid="84d6f0d1-8723-4ad3-a2eb-8e015a99a551"/>
+				<textElement>
+					<font size="8" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Peso Bruto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="259" y="0" width="57" height="13" uuid="d7209791-7ca1-4156-9aa1-4c3fdc10abb9"/>
+				<textElement>
+					<font size="8" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Peso Liq.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="316" y="0" width="63" height="13" uuid="6d378952-3e26-493a-beeb-b48a4119e55c"/>
+				<textElement>
+					<font size="8" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Volumes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="379" y="0" width="66" height="13" uuid="be19303a-d839-4aa2-bc10-5bd413746ad6"/>
+				<textElement>
+					<font size="8" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Tot. Doc]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="445" y="0" width="212" height="13" uuid="7c9ed0b8-3c6f-481a-8f05-5c36de6b5037"/>
+				<textElement>
+					<font size="8" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="657" y="0" width="56" height="13" uuid="87821d0e-0afc-4e4a-a3ae-95c402a4d8af"/>
+				<textElement>
+					<font size="8" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Municipio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="747" y="0" width="55" height="13" uuid="f22b2d40-d122-4625-90ed-aafa22f0d9be"/>
+				<textElement>
+					<font size="8" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="13" width="802" height="1" uuid="c2b5805f-fd61-45da-a4e6-d19115518b99"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="0" y="0" width="70" height="13" uuid="2e9f8015-9bc3-49e3-8f92-89e1de0d36ab"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dataNota}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="0" width="64" height="13" uuid="57ba4e4b-04ad-4b82-b63d-fda9af0bbaae"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numNota}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="134" y="0" width="60" height="13" uuid="e821abc8-24e3-426d-87b8-8bcb69470561"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numPed}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00">
+				<reportElement x="194" y="0" width="65" height="13" uuid="96113015-9856-42f3-854e-de4bc84fee46"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pesoBruto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00">
+				<reportElement x="259" y="0" width="57" height="13" uuid="46246265-de67-4ad1-ba67-7154b31d04da"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pesoLiq}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00">
+				<reportElement x="316" y="0" width="63" height="13" uuid="4b03213c-b439-4db4-91cc-79a89ebfb4b1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{volumes}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00">
+				<reportElement x="379" y="0" width="66" height="13" uuid="215e5a10-c365-4b79-a7b3-d570cd6f20b9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totDoc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="445" y="0" width="212" height="13" uuid="66d84e59-5a89-40bc-93db-896769bab162"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naEnt}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="657" y="0" width="56" height="13" uuid="30466c42-8e16-450d-89d8-6a060453c595"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{municipio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="747" y="0" width="55" height="13" uuid="9e733e3b-cd09-4222-9ea5-03b2901cf8f9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="10" width="316" height="13" uuid="5cbc4fe6-8804-4b17-932a-7eb00052bc79"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{emissaoRelatorio}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SLM_LotesProcessados(PDF)" language="groovy" pageWidth="1417" pageHeight="842" orientation="Landscape" columnWidth="1377" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d385ec32-ecaf-4b51-b690-51607dc92d36">
+	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="titulo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="emissaoRelatorio" class="java.lang.String"/>
+	<field name="nomeLote" class="java.lang.String"/>
+	<field name="statusLote" class="java.lang.String"/>
+	<field name="dataInicioColeta" class="java.util.Date"/>
+	<field name="dataFimColeta" class="java.util.Date"/>
+	<field name="horaInicioColeta" class="java.lang.String"/>
+	<field name="horaFimColeta" class="java.lang.String"/>
+	<field name="userColeta" class="java.lang.String"/>
+	<field name="qtdCaixaLote" class="java.math.BigDecimal"/>
+	<field name="pesoBrutoLote" class="java.math.BigDecimal"/>
+	<field name="m3Lote" class="java.math.BigDecimal"/>
+	<field name="capacidadeKgVeiculo" class="java.math.BigDecimal"/>
+	<field name="capacidadeM3Veiculo" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="140" height="13" uuid="bd4b0fff-9173-436e-9160-dca87eb06c81"/>
+				<textElement>
+					<font size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Lote]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="0" width="251" height="13" uuid="2a1b35f1-20ad-4ab8-bf9c-17822762d806"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="809" y="0" width="100" height="13" uuid="1b5dc7d9-7463-4510-9552-b5621cd2d552"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Data Inicio Coleta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1009" y="0" width="100" height="13" uuid="5fdb4ad6-3ba8-4321-92f4-7c30153ab224"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Data Fim Coleta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="909" y="0" width="100" height="13" uuid="2c03a2f4-03b0-49a7-bcd5-5a1b117ca13d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Hora Início Coleta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1109" y="0" width="100" height="13" uuid="e6e5f1be-09e0-410c-87ba-9533cd7212bb"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Hora Fim Coleta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1209" y="0" width="168" height="13" uuid="9cca3a12-d5a8-4635-9122-dabb9579a23b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Usuário Coleta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="391" y="0" width="77" height="13" uuid="25989495-8d89-4aec-82e3-057a591aadc2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Qtd Caixa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="468" y="0" width="67" height="13" uuid="192d8b35-e475-4d88-a5f1-ffb5d25f49f4"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[M3 Lote]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="635" y="0" width="74" height="13" uuid="7b4e6ea2-b010-4560-887d-989cb6373330"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Peso Bruto Lote]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="535" y="0" width="100" height="13" uuid="55e7d118-be0a-4aab-a47c-cbcf90c3ecea"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[M3 Veículo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="709" y="0" width="100" height="13" uuid="b7f21a07-5cab-4072-9fae-4f837a5fa9a5"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Peso Bruto Veículo]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="140" y="0" width="251" height="13" uuid="3ebb5e36-bd5c-4dc7-b69e-05715d332381"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{statusLote}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="140" height="13" uuid="1c1eedb2-3c7f-463e-a3a4-5e4e257ca911"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeLote}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="809" y="0" width="100" height="13" uuid="0fad1eb7-c012-4f61-9d1a-cd6a0ee267c5"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dataInicioColeta}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="1009" y="0" width="100" height="13" uuid="32eb3700-5f9d-4f56-95f3-6b3ab01bfa92"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dataFimColeta}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="909" y="0" width="100" height="13" uuid="643aab92-0c04-4dea-93fb-b9471a0db875"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{horaInicioColeta}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1209" y="0" width="168" height="13" uuid="b9ced1e8-ac28-4846-8fc7-68c1de2ad104"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{userColeta}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1109" y="0" width="100" height="13" uuid="904d3b4a-2b53-4243-9e15-afb4a3d721cf"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{horaFimColeta}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="391" y="0" width="77" height="13" uuid="e783f9d8-8a75-4373-8148-029a86ef074e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtdCaixaLote}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="468" y="0" width="67" height="13" uuid="4707c614-29cb-4b00-9e0d-1d9c67719ffb"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{m3Lote}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="635" y="0" width="74" height="13" uuid="de4da8f8-8290-43b6-ac79-d4821ecacca3"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pesoBrutoLote}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="535" y="0" width="100" height="13" uuid="4ef9887d-173b-4dd1-b4ff-94e2e40b805a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{capacidadeM3Veiculo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="709" y="0" width="100" height="13" uuid="435fc21a-e469-4906-a3e0-0043165a9c22"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{capacidadeKgVeiculo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

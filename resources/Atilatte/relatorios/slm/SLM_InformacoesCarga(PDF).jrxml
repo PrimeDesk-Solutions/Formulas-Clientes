@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SLM_InformacoesCarga(PDF) " language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a639b9fe-70b8-4d18-8799-c3ca12e107b9">
+	<property name="ireport.zoom" value="1.3310000000000008"/>
+	<property name="ireport.x" value="369"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="titulo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<field name="numCarga" class="java.lang.Integer"/>
+	<field name="codMotorista" class="java.lang.String"/>
+	<field name="nomeMotorista" class="java.lang.String"/>
+	<field name="numDoc" class="java.lang.Integer"/>
+	<field name="dtEmissaoNota" class="java.util.Date"/>
+	<field name="codEntidade" class="java.lang.String"/>
+	<field name="naEntidade" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="234" height="13" uuid="b7c67e75-70b5-40a4-9c99-7fd4e2eb1825"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{titulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="345" y="0" width="244" height="13" uuid="85c44835-123d-4193-b463-93510ea9e874"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="14" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="13" width="802" height="1" uuid="7900f9b5-f7e9-4073-a827-3a291f82816b"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="0" width="57" height="13" uuid="be97f2d9-863f-4175-81f9-d67717237fa7"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Num.Carga]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="57" y="0" width="247" height="13" uuid="a4c152ea-0938-4a44-97d8-5e247f9ace93"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Motorista]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="304" y="0" width="62" height="13" uuid="aff50d35-4e0d-4c16-9bc1-7b7efa6e9ee0"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Num.Doc]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="366" y="0" width="100" height="13" uuid="4e04b588-eb00-4a76-b857-1715dcaf3b0a"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dt. Emissão Nota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="466" y="0" width="249" height="13" uuid="f2ed845c-31cc-42bd-9872-29bfe9ee2773"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="715" y="0" width="87" height="13" uuid="0681f4e3-d759-4df1-8908-8da4a81ca75c"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status de Entrega]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="57" height="13" uuid="85e28d70-e4d2-47f0-b34a-1cd60b17560d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numCarga}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="57" y="0" width="247" height="13" uuid="2199c7a4-1b86-4116-92d9-84ca5ce86c0b"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codMotorista} + "   " + $F{nomeMotorista}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="304" y="0" width="62" height="13" uuid="4d4de8f0-96f8-4ebf-b714-b9ef46c192ab"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numDoc}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="366" y="0" width="100" height="13" uuid="ba23f911-60fc-4b3d-b0db-5e7cabdb12b0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtEmissaoNota}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="466" y="0" width="249" height="13" uuid="50c8130d-2b79-4ee5-bd84-3c307d810d66"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codEntidade} + "  " + $F{naEntidade}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="715" y="0" width="87" height="13" uuid="23d5ad2c-75f7-44ce-a668-14bc40e92643"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

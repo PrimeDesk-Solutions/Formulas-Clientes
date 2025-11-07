@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="b2b000"
+
+		 language="groovy"		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="782"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+
+	<field name="nomecliente" class="java.lang.String"/>
+	<field name="cba0101item" class="java.lang.String"/>
+	<field name="abm01codigo" class="java.lang.String"/>
+	<field name="descrItem" class="java.lang.String"/>
+	<field name="abg02codigo" class="java.lang.String"/>
+	<field name="aam06codigo" class="java.lang.String"/>
+	<field name="abm1301fcCU" class="java.lang.String"/>
+	<field name="abm12ativCP" class="java.lang.String"/>
+	<field name="aaj10codigo" class="java.lang.String"/>
+	<field name="aaj12codigo" class="java.lang.String"/>
+	<field name="aaj13codigo" class="java.lang.String"/>
+	<field name="codgrupo" class="java.lang.String"/>
+	<field name="aa50descr" class="java.lang.String"/>
+	<field name="mps" class="java.lang.String"/>
+	<field name="teste" class="java.lang.String"/>
+	<field name="abm01na" class="java.lang.String"/>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="50"  isSplitAllowed="true" >
+				<rectangle radius="1" >
+					<reportElement
+						mode="Transparent"
+						x="-5"
+						y="22"
+						width="776"
+						height="23"
+						key="rectangle-2"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<graphicElement stretchType="RelativeToTallestObject"/>
+				</rectangle>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="48"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="96"
+						y="28"
+						width="54"
+						height="20"
+						key="staticText-1"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font/>
+					</textElement>
+				<text><![CDATA[Item Ent]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="154"
+						y="28"
+						width="65"
+						height="20"
+						key="staticText-2"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font/>
+					</textElement>
+				<text><![CDATA[Código Sam]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="242"
+						y="28"
+						width="161"
+						height="16"
+						key="staticText-3"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font/>
+					</textElement>
+				<text><![CDATA[Descrição]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="415"
+						y="28"
+						width="29"
+						height="16"
+						key="staticText-4"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font/>
+					</textElement>
+				<text><![CDATA[Ncm]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="458"
+						y="28"
+						width="19"
+						height="16"
+						key="staticText-5"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font/>
+					</textElement>
+				<text><![CDATA[Uni.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="481"
+						y="28"
+						width="55"
+						height="15"
+						key="staticText-6"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font size="9"/>
+					</textElement>
+				<text><![CDATA[Fator  Conv.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="220"
+						y="28"
+						width="17"
+						height="20"
+						key="staticText-7"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font/>
+					</textElement>
+				<text><![CDATA[M/P]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="28"
+						width="91"
+						height="20"
+						key="staticText-8"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font/>
+					</textElement>
+				<text><![CDATA[Entidade]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="538"
+						y="28"
+						width="22"
+						height="20"
+						key="staticText-9"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font/>
+					</textElement>
+				<text><![CDATA[Cest]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="564"
+						y="28"
+						width="41"
+						height="15"
+						key="staticText-10"
+						isPrintWhenDetailOverflows="true"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font size="9"/>
+					</textElement>
+				<text><![CDATA[CST Icms]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="607"
+						y="28"
+						width="38"
+						height="16"
+						key="staticText-11"
+						isPrintWhenDetailOverflows="true"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font size="9"/>
+					</textElement>
+				<text><![CDATA[CST PIS]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="647"
+						y="28"
+						width="42"
+						height="16"
+						key="staticText-12"
+						isPrintWhenDetailOverflows="true"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font size="9"/>
+					</textElement>
+				<text><![CDATA[CST Cof]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="685"
+						y="28"
+						width="30"
+						height="20"
+						key="staticText-13"
+						isPrintWhenDetailOverflows="true"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font/>
+					</textElement>
+				<text><![CDATA[Grupo]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="723"
+						y="28"
+						width="58"
+						height="20"
+						key="staticText-14"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font/>
+					</textElement>
+				<text><![CDATA[Descr Grupo]]></text>
+				</staticText>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="27"  isSplitAllowed="true" >
+				<rectangle radius="1" >
+					<reportElement
+						mode="Transparent"
+						x="2"
+						y="-4"
+						width="780"
+						height="30"
+						key="rectangle-1"/>
+					<graphicElement stretchType="NoStretch"/>
+				</rectangle>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="98"
+						y="1"
+						width="59"
+						height="18"
+						key="textField-1"
+						isPrintWhenDetailOverflows="true"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cba0101item}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="241"
+						y="0"
+						width="174"
+						height="18"
+						key="textField-3"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{descrItem}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="419"
+						y="2"
+						width="33"
+						height="17"
+						key="textField-4"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{abg02codigo}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="457"
+						y="0"
+						width="26"
+						height="18"
+						key="textField-5"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{aam06codigo}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="488"
+						y="0"
+						width="35"
+						height="18"
+						key="textField-6"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{abm1301fcCU}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="537"
+						y="2"
+						width="30"
+						height="17"
+						key="textField-9"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{abm12ativCP}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="572"
+						y="0"
+						width="28"
+						height="17"
+						key="textField-10"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{aaj10codigo}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="615"
+						y="0"
+						width="25"
+						height="18"
+						key="textField-11"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{aaj12codigo}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="653"
+						y="0"
+						width="25"
+						height="18"
+						key="textField-12"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{aaj13codigo}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="679"
+						y="0"
+						width="33"
+						height="18"
+						key="textField-13"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{codgrupo}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="3"
+						y="0"
+						width="90"
+						height="18"
+						key="textField-15"
+						isPrintWhenDetailOverflows="true"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{nomecliente}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="159"
+						y="1"
+						width="60"
+						height="18"
+						key="textField-16"
+						isPrintWhenDetailOverflows="true"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{abm01codigo}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="220"
+						y="2"
+						width="17"
+						height="17"
+						key="textField"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{mps}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="715"
+						y="0"
+						width="65"
+						height="17"
+						key="textField"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{abm01na}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

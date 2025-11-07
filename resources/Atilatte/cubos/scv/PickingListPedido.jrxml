@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PickingListPedido" language="groovy" pageWidth="2267" pageHeight="842" columnWidth="2227" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1affba43-181c-4bd2-a54a-567e7972aa7d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="481"/>
+	<property name="ireport.y" value="0"/>
+	<field name="numPedido" class="java.lang.Integer"/>
+	<field name="eaa01esdata" class="java.util.Date"/>
+	<field name="UMV" class="java.lang.String"/>
+	<field name="OrdemSeparacao" class="java.math.BigDecimal"/>
+	<field name="codcliente" class="java.lang.String"/>
+	<field name="nomecliente" class="java.lang.String"/>
+	<field name="codDespacho" class="java.lang.String"/>
+	<field name="NAdespacho" class="java.lang.String"/>
+	<field name="coditem" class="java.lang.String"/>
+	<field name="naitem" class="java.lang.String"/>
+	<field name="codReDespacho" class="java.lang.String"/>
+	<field name="NaRedespacho" class="java.lang.String"/>
+	<field name="Lote" class="java.lang.String"/>
+	<field name="Serie" class="java.lang.String"/>
+	<field name="QTD" class="java.math.BigDecimal"/>
+	<field name="aam06codigo" class="java.lang.String"/>
+	<field name="vida" class="java.math.BigDecimal"/>
+	<field name="qtdLote" class="java.math.BigDecimal"/>
+	<variable name="OrdemSeparacao_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{OrdemSeparacao}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="5d84cc51-ac65-41d9-8273-3b9cdff4c47e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número Pedido	]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="613" y="0" width="100" height="20" uuid="25a95fc1-eb98-4c6c-9ff6-d0873b8ef14c"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Saída]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="101" y="0" width="100" height="20" uuid="7427d83a-fcfa-4b30-97a4-6102d67eeb30"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ordem Separação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="100" height="20" uuid="59799e32-0614-4a0e-aa9f-e91a8a0402d6"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cod Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="0" width="313" height="20" uuid="1546e8bb-eda6-4fe3-b6d5-657c6b5b7c1c"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome Cliente ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="713" y="0" width="100" height="20" uuid="972faa72-cdbd-4ee4-9495-2685f5644bf6"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cod Despacho]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="813" y="0" width="228" height="20" uuid="dbd1f1ce-4adf-4b1b-af7c-c825866832a4"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome Despacho]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1041" y="0" width="145" height="20" uuid="012b2ed7-fc6f-4664-be79-fc35e0e98078"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Codigo Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1186" y="0" width="190" height="20" uuid="20cf743b-d938-4c10-8e62-b21c3b85d533"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descr. Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1376" y="0" width="100" height="20" uuid="b6229fe5-1a55-4a28-9116-8262ebc635b0"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cod Redespacho]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1476" y="0" width="169" height="20" uuid="214bc842-733b-4349-b9a7-4223f2220a2b"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cod Redespacho]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1645" y="0" width="100" height="20" uuid="97c9affc-6017-4351-8215-68943046d61f"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lote]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1745" y="0" width="100" height="20" uuid="f69560fc-52af-4ca7-a315-9cd9aa4b1ad1"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Serie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1845" y="0" width="100" height="20" uuid="4b4b4cc6-eed1-4ec4-a485-05262bdebc5d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quantidade ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1945" y="0" width="100" height="20" uuid="eacac392-acb4-4f8c-9edb-76c99718b4ff"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[UMU]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2045" y="0" width="100" height="20" uuid="04a90e5b-bbd0-43cf-85ea-bc9387c31b03"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Percentual de Vida ùtil]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2145" y="0" width="82" height="20" uuid="42934af2-dfab-4205-9ed2-10dd1c13c240"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quantidade Max. Lote]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="923808f6-9c9b-49eb-89ea-e5f40bfed26b"/>
+				<textFieldExpression><![CDATA[$F{numPedido}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="613" y="0" width="100" height="20" uuid="12d65e43-cfa8-4099-96fb-2be9300dd137"/>
+				<textFieldExpression><![CDATA[$F{eaa01esdata}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="100" height="20" uuid="0ddbe8ad-aaca-4570-8908-5fb56350509f"/>
+				<textFieldExpression><![CDATA[$F{OrdemSeparacao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="100" height="20" uuid="5f3885aa-2269-43d1-9788-1da141f035ed"/>
+				<textFieldExpression><![CDATA[$F{codcliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="300" y="0" width="313" height="20" uuid="5a1f1a19-90b2-4cbb-a825-ac3df24554b8"/>
+				<textFieldExpression><![CDATA[$F{nomecliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="713" y="0" width="100" height="20" uuid="e7c602f5-6ba1-4812-92eb-9a160b307601"/>
+				<textFieldExpression><![CDATA[$F{codDespacho}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="813" y="0" width="228" height="20" uuid="f447798d-a579-4f93-bfee-f8050b7cec52"/>
+				<textFieldExpression><![CDATA[$F{NAdespacho}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1041" y="0" width="145" height="20" uuid="64608a44-4da6-4d0d-9e3c-6f419c16a0f8"/>
+				<textFieldExpression><![CDATA[$F{coditem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1186" y="0" width="190" height="20" uuid="bcf55066-7095-4eca-b1a4-7fde5100d88c"/>
+				<textFieldExpression><![CDATA[$F{naitem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1376" y="0" width="100" height="20" uuid="8308aecb-8e44-4fbe-8a7f-ea232731abff"/>
+				<textFieldExpression><![CDATA[$F{codReDespacho}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1476" y="0" width="169" height="20" uuid="00c8ab75-3811-4006-bd8b-b9227aba0c8c"/>
+				<textFieldExpression><![CDATA[$F{NaRedespacho}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1645" y="0" width="100" height="20" uuid="1f8f587a-fb70-44fd-971c-92e61bd93198"/>
+				<textFieldExpression><![CDATA[$F{Lote}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1745" y="0" width="100" height="20" uuid="d68effd1-949c-420f-b9bb-f5d9c196db12"/>
+				<textFieldExpression><![CDATA[$F{Serie}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1845" y="0" width="100" height="20" uuid="4f2cbc94-fc00-4d17-91c3-77bb36df36fc"/>
+				<textFieldExpression><![CDATA[$F{QTD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1945" y="0" width="100" height="20" uuid="42c682cd-863e-4952-b4bd-6b7a9c151424"/>
+				<textFieldExpression><![CDATA[$F{aam06codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2045" y="0" width="100" height="20" uuid="3b6ed58b-97f1-4cc7-8d74-ae891f4e957a"/>
+				<textFieldExpression><![CDATA[$F{vida}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2145" y="0" width="82" height="20" uuid="e7eda644-25fa-4c22-8aeb-57ace71a034e"/>
+				<textFieldExpression><![CDATA[$F{qtdLote}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

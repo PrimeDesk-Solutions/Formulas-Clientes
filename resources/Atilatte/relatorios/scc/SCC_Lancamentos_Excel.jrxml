@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCC_Lancamentos_PDF" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="292f2085-d002-4048-9173-948b989c4c51">
+	<property name="ireport.zoom" value="1.0000000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="titulo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<field name="lctto" class="java.lang.Integer"/>
+	<field name="data" class="java.util.Date"/>
+	<field name="historico" class="java.lang.String"/>
+	<field name="valor" class="java.math.BigDecimal"/>
+	<field name="codRep" class="java.lang.String"/>
+	<field name="naRep" class="java.lang.String"/>
+	<variable name="total" class="java.lang.String"/>
+	<group name="representante">
+		<groupExpression><![CDATA[$F{codRep}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band height="21"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="63" height="13" uuid="402c56c7-0f0a-43b1-b642-5178d11de3f9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[LCTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="63" y="0" width="100" height="13" uuid="6153ce2e-d4cf-4a23-921a-d0edea9f6d08"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DATA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="163" y="0" width="273" height="13" uuid="a6eb93fe-f4cf-468d-88df-8c15b4d16126"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[HISTORICO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="436" y="0" width="119" height="13" uuid="159fc73a-4489-4ddb-b627-adc45c224e2e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[VALOR]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="63" height="13" uuid="34039447-4bf4-4d89-b010-94e51d2af278"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lctto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="63" y="0" width="100" height="13" uuid="f9bf1388-bc16-471a-a6a1-97f7bc8a6d47"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="163" y="0" width="273" height="13" uuid="081d12ed-7096-4912-b5ae-9ae43f76fd71"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{historico}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="436" y="0" width="119" height="13" uuid="b49ccdb8-53cf-4729-95b8-849e2a77a563"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

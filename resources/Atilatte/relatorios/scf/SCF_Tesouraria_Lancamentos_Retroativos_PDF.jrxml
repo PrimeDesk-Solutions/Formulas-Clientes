@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF_Tesouraria(Excel)" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1da072c9-7734-42ff-8bff-a917b69ae48c">
+	<property name="ireport.zoom" value="1.464100000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="titulo" class="java.lang.String"/>
+	<field name="dtEmissao" class="java.util.Date"/>
+	<field name="vencimentoNominal" class="java.util.Date"/>
+	<field name="vencimentoReal" class="java.util.Date"/>
+	<field name="dtLancamento" class="java.util.Date"/>
+	<field name="dataPagamento" class="java.util.Date"/>
+	<field name="dtConc" class="java.util.Date"/>
+	<field name="numLcto" class="java.lang.Integer"/>
+	<field name="codOper" class="java.lang.String"/>
+	<field name="descrOper" class="java.lang.String"/>
+	<field name="codNat" class="java.lang.String"/>
+	<field name="descrNat" class="java.lang.String"/>
+	<field name="codEnt" class="java.lang.String"/>
+	<field name="naEntidade" class="java.lang.String"/>
+	<field name="codConta" class="java.lang.String"/>
+	<field name="nomeConta" class="java.lang.String"/>
+	<field name="codPortador" class="java.lang.String"/>
+	<field name="naPortador" class="java.lang.String"/>
+	<field name="codOperFinanc" class="java.lang.String"/>
+	<field name="descrOperFinanc" class="java.lang.String"/>
+	<field name="codTipoDoc" class="java.lang.String"/>
+	<field name="descrTipoDoc" class="java.lang.String"/>
+	<field name="serie" class="java.lang.String"/>
+	<field name="parcela" class="java.lang.String"/>
+	<field name="quita" class="java.lang.String"/>
+	<field name="conciliado" class="java.lang.String"/>
+	<field name="movimentacao" class="java.lang.String"/>
+	<field name="vlrLiquido" class="java.math.BigDecimal"/>
+	<field name="valorDoc" class="java.math.BigDecimal"/>
+	<field name="desconto" class="java.math.BigDecimal"/>
+	<field name="multa" class="java.math.BigDecimal"/>
+	<field name="juros" class="java.math.BigDecimal"/>
+	<field name="encargos" class="java.math.BigDecimal"/>
+	<field name="saldoAtual" class="java.math.BigDecimal"/>
+	<field name="valorNat" class="java.math.BigDecimal"/>
+	<field name="field5" class="java.lang.String"/>
+	<field name="field1" class="java.lang.String"/>
+	<field name="saldoInicial" class="java.math.BigDecimal"/>
+	<field name="grupoRelatorio" class="java.util.Date"/>
+	<field name="agrupamento" class="java.lang.Integer"/>
+	<field name="aab10user" class="java.lang.String"/>
+	<group name="contaCorrente">
+		<groupExpression><![CDATA[$F{codConta} + $F{nomeConta}]]></groupExpression>
+		<groupHeader>
+			<band height="13">
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="493" y="0" width="63" height="13" uuid="b841304c-36ac-49d9-bb82-7fec30d9eb6e"/>
+					<textElement textAlignment="Right">
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{saldoInicial}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="444" y="0" width="53" height="13" uuid="9c259abc-ac8c-4459-9dd1-e2fee48528b5"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Saldo Inicial]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="0" width="46" height="13" uuid="4cd4fc86-1a47-43d6-81f7-5699d7252456"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{codConta}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="46" y="0" width="168" height="13" uuid="83b1d6fc-f849-43ce-a502-1f0d048cb88e"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nomeConta}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="semana">
+		<groupExpression><![CDATA[$F{vencimentoReal}]]></groupExpression>
+		<groupHeader>
+			<band height="13">
+				<textField pattern="dd/MM/yyyy EEEEE" isBlankWhenNull="true">
+					<reportElement x="0" y="0" width="148" height="13" uuid="d11f5284-b2b9-4934-823f-f7876e1edba2"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{vencimentoReal}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="382" y="0" width="174" height="13" uuid="b14a66c8-6408-40c8-8521-7fcd8f128da2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="293" height="13" uuid="f4970261-4a4b-41f3-8c47-3cf78c219233"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{titulo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="14" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="49" height="13" uuid="8ec89d85-ce27-4464-9bf9-3e7f90c6c0bc"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Dt. Vcto.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="269" y="0" width="57" height="13" uuid="f78e94a6-74ce-47a7-b154-1c7172f744e6"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Lcto.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="105" y="0" width="164" height="13" uuid="da299f12-1dc0-4351-94dd-290500c47ebc"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Entidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="49" y="0" width="56" height="13" uuid="74be9425-1bb0-4c3d-b1d2-1267cf4b277f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Movimentação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="415" y="0" width="51" height="13" uuid="81298d8e-9ce7-4cae-9324-b08547d23fe2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Valor Liquido]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="13" width="555" height="1" uuid="535d0541-d178-4111-a3dc-bfa25221e1f7"/>
+			</line>
+			<staticText>
+				<reportElement x="466" y="0" width="90" height="13" uuid="395b855f-adb5-4155-80bd-94d3e185c48e"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Saldo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="326" y="0" width="89" height="14" uuid="d5d6727b-f3a6-4d9c-bada-51ebf6f7abe6"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Aprovador]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="49" height="13" uuid="82ad8e1d-75c6-43ec-a9c8-1281a800c79f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vencimentoReal}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="269" y="0" width="57" height="13" uuid="b530681d-b495-47a7-8327-6c2537b72722"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numLcto}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="105" y="0" width="164" height="13" uuid="31aba48f-dd52-4df2-93f2-b40efc859773"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naEntidade}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="49" y="0" width="56" height="13" uuid="da2af56c-de34-4810-92cf-dd6e707a6f37"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{movimentacao}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="415" y="0" width="51" height="13" uuid="ff743c92-9ed4-46d6-b2f4-a7db692ddf3a"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vlrLiquido}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="466" y="0" width="90" height="13" uuid="e4677ba6-7277-4aaa-b73a-13d4983d643d"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{saldoAtual}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="326" y="0" width="89" height="13" uuid="55073f2c-948f-4b3e-8047-ad268f8551a2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{aab10user}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
