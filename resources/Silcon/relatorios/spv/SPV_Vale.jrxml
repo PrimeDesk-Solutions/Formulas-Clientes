@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="IDM_SPV_VALE" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="539" leftMargin="28" rightMargin="28" topMargin="14" bottomMargin="14" uuid="26b1ae53-19b8-4ff0-bf3a-235cf7e79066">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="EMPRESA_CODIGO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_NA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_RS" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_ENDERECO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_NUMERO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_BAIRRO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_MUNICIPIO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_UF" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_DDD" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_FONE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_NI" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_IE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ATENDENTE_USUARIO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ATENDENTE_NOME" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_CODIGO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_NA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_FONE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="DATA_IMPRESSAO" class="java.util.Date" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_DDD" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="AGENTE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_RS" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_ENDERECO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_NUMERO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_COMPLEM" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_BAIRRO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_MUNICIPIO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_CEP" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="OBSERVACAO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="VALE_NUMERO" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="VALE_EMISSAO" class="java.util.Date" isForPrompting="false"/>
+	<parameter name="VALE_CONSUMIDOR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="VALE_OBS" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="VALE_VALOR" class="java.math.BigDecimal" isForPrompting="false"/>
+	<field name="valor" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="231" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-1" x="3" y="207" width="103" height="10" uuid="ac63ee8e-9f27-4b43-9627-0843c75abda5"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[VALE]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-1" x="0" y="163" width="539" height="1" uuid="76f7c7d1-4d0e-4bc7-ad48-52dcb08f1cb8"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-2" x="3" y="217" width="104" height="10" uuid="4d78d588-aa09-4e09-9c0c-d4a821a99602"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[SEM VALOR FISCAL]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-2" x="0" y="230" width="539" height="1" uuid="2c01275c-59f3-4694-adb9-5a14e25f120f"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-11" x="3" y="128" width="29" height="14" uuid="90b4e23b-dc0d-4d87-aad4-c6183a741fc0"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[NOME:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="33" y="128" width="486" height="14" uuid="d23ea6d7-0f1f-4466-af8f-c2de28943a43"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ENTIDADE_TELA_RS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-12" x="3" y="142" width="29" height="10" uuid="243be2cf-ea83-4848-b828-17bbcfa43e3f"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[FONE:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="46" y="142" width="146" height="10" uuid="3c80a70d-b8a2-4ff4-b7ad-50d2e3f7ed36"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ENTIDADE_TELA_FONE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="32" y="142" width="14" height="10" uuid="bc3dc47a-8c13-4963-8d64-59ea9d3b56a3"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ENTIDADE_TELA_DDD}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="119" y="9" width="259" height="10" uuid="6a1ff525-dc58-42f4-b392-5791ffa592d0"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{EMPRESA_RS}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="185" y="18" width="66" height="10" uuid="d244df83-29d9-41a1-ba05-1f1293b8a382"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{EMPRESA_FONE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-3" x="119" y="18" width="48" height="10" uuid="7c7c5031-61db-4fd0-8def-b7eabe315791"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[TELEFONE:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="168" y="18" width="17" height="10" uuid="f3c43780-f4bd-4f57-9eae-4f0e708be855"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{EMPRESA_DDD}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-5" x="119" y="42" width="54" height="10" uuid="4b3fb8cd-d204-477f-b97e-59ed1dc8dcc9"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[VENDEDOR:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="174" y="42" width="152" height="10" uuid="d556676e-05c7-4d7b-8ccf-2ac2488a1a86"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ATENDENTE_NOME}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line-3" x="0" y="73" width="539" height="1" uuid="fec6baa9-99e6-4f90-bdc4-992dabcb7eb3"/>
+			</line>
+			<line>
+				<reportElement key="line-4" x="0" y="124" width="539" height="1" uuid="3526099f-1a3a-45a7-886c-899304f484a4"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-13" x="119" y="56" width="54" height="17" uuid="0739e2ad-6866-4df9-a3ed-1e75dfa28c4e"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[VALE:]]></text>
+			</staticText>
+			<textField pattern="000000000" isBlankWhenNull="true">
+				<reportElement key="textField" x="174" y="56" width="152" height="17" uuid="94d3e888-9c33-474f-88ff-67c5ae1cda9f"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{VALE_NUMERO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-14" x="11" y="81" width="514" height="20" uuid="ea6a6347-c1d3-49ba-bfac-9cb8bdec990b"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<text><![CDATA[Tem o cliente abaixo identificado um crédito, que poderá resgatar a qualquer tempo, no valor de:]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-5" x="0" y="205" width="539" height="1" uuid="f040fd9b-8e9b-45d9-9deb-b760848b0e75"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="3" y="168" width="530" height="35" uuid="08800d67-97ee-402b-87cf-fb2659e2c4d9"/>
+				<textFieldExpression><![CDATA[$P{VALE_OBS}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="FillFrame">
+				<reportElement key="image-1" x="2" y="0" width="99" height="72" uuid="7f24773b-334c-45ad-9e40-adf83b96e7ce"/>
+				<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\spv\\Logo Silcon.png"]]></imageExpression>
+			</image>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="458" y="1" width="80" height="12" uuid="a92d6df2-f687-4f57-950b-a8a7796739cd"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="459" y="13" width="80" height="13" uuid="f24b77b4-110d-4d0b-91b7-01f96beede9f"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página" + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="11" y="102" width="514" height="20" uuid="8d39b139-92c9-4833-9b8f-d55529b664d5"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+	<noData>
+		<band splitType="Stretch"/>
+	</noData>
+</jasperReport>
