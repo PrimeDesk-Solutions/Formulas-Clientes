@@ -18,7 +18,7 @@ import sam.server.samdev.relatorio.DadosParaDownload;
 import sam.server.samdev.relatorio.RelatorioBase;
 import sam.server.samdev.utils.Parametro
 
-public class SCF_Lancamentos extends RelatorioBase {
+public class SCF_LancamentosFinanceiros extends RelatorioBase {
 
     @Override
     public String getNomeTarefa() {
