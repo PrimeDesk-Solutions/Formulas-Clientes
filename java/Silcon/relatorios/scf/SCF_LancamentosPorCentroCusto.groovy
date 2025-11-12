@@ -34,12 +34,12 @@ public class SCF_LancamentosPorCentroCusto extends RelatorioBase {
 
         List<TableMap> dados = buscarDadosRelatorio(idsDeptos, datas, contasCorrentes, movimentacao, empresa);
 
-        params.put("titulo", "SCF - Lançamentos por Centro de Custos");
-        params.put("empresa", empresa.getAac10codigo() + " - " + empresa.getAac10na())
+        params.put("TITULO", "SCF - Lançamentos por Centro de Custos");
+        params.put("EMPRESA", empresa.getAac10codigo() + " - " + empresa.getAac10na())
 
-        if(impressao == 1 ) return gerarXLSX("SCF_LancamentosPorCentroCusto(Excel)", dados);
+        if(impressao == 1 ) return gerarXLSX("SCF_Lancamentos_Por_Centro_Custo_Excel", dados);
 
-        return gerarPDF("SCF_LancamentosPorCentroCusto(PDF)", dados);
+        return gerarPDF("SCF_Lancamentos_Por_Centro_Custo_PDF", dados);
     }
     private List<TableMap> buscarDadosRelatorio( List<Long>idsDeptos, LocalDate[] datas,  List<Long> contasCorrentes, Integer movimentacao, Aac10 empresa){
 

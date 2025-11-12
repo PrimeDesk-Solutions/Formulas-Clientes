@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF_Lancamentos_Por_Centro_Custo_PDF" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5ec50620-b792-48b5-ba9d-f514d841b0b2">
+	<property name="ireport.zoom" value="1.4641000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="TITULO" class="java.lang.String"/>
+	<parameter name="EMPRESA" class="java.lang.String"/>
+	<parameter name="parameter3" class="java.lang.String"/>
+	<field name="codDepto" class="java.lang.String"/>
+	<field name="nomeDepto" class="java.lang.String"/>
+	<field name="dtLcto" class="java.util.Date"/>
+	<field name="codCC" class="java.lang.String"/>
+	<field name="nomeCC" class="java.lang.String"/>
+	<field name="historico" class="java.lang.String"/>
+	<field name="valor" class="java.math.BigDecimal"/>
+	<field name="movimentacao" class="java.lang.String"/>
+	<field name="field1" class="java.lang.String"/>
+	<variable name="totDepto" class="java.math.BigDecimal" resetType="Group" resetGroup="departamento" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+	</variable>
+	<variable name="totGeral" class="java.math.BigDecimal" resetType="Group" resetGroup="Geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+	</variable>
+	<group name="Geral">
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band height="14">
+				<staticText>
+					<reportElement x="639" y="1" width="100" height="13" uuid="a15d0dd4-9881-4a90-a460-6ffade7e582b"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Total Geral]]></text>
+				</staticText>
+				<line>
+					<reportElement x="639" y="0" width="163" height="1" uuid="45d1e87f-4523-42c7-9b68-cb8e7efa6c74"/>
+				</line>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="739" y="1" width="63" height="13" uuid="7e47396e-7a9a-462b-af7a-345f3a94911e"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totGeral}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="departamento">
+		<groupExpression><![CDATA[$F{codDepto}]]></groupExpression>
+		<groupHeader>
+			<band height="13">
+				<textField>
+					<reportElement x="0" y="0" width="35" height="13" uuid="67e4355b-f44e-4e27-97b1-74e3db4f3ad9"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{codDepto}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="35" y="0" width="204" height="13" uuid="ad870a4e-c58f-48e9-ab97-eae833019aa7"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nomeDepto}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="14">
+				<line>
+					<reportElement x="639" y="0" width="163" height="1" uuid="ffcfe283-8e1f-4f5f-be1d-000bfb906552"/>
+				</line>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="739" y="1" width="63" height="13" uuid="c898c0ef-7d0f-4d25-bc62-9b194e9f6bf3"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totDepto}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="639" y="1" width="100" height="13" uuid="aeb6ce32-8413-45c7-84bf-4fc58c8bd385"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Total do Departamento]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="225" height="13" uuid="54ed2ba6-4875-4863-b857-f93d3d394ab2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TITULO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="283" y="0" width="304" height="13" uuid="162a913c-835c-407b-89c2-44805aaf5a17"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{EMPRESA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="768" y="0" width="34" height="13" uuid="f64fb453-95e9-4eaa-bfbd-3cde517f6767"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="726" y="0" width="42" height="13" uuid="e35c0798-b4a7-4536-a78e-c1fe31e25dc1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Página]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="14" splitType="Stretch">
+			<staticText>
+				<reportElement x="61" y="0" width="49" height="13" uuid="78581126-6133-4884-a9d2-0feff12981b1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DATA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="0" width="97" height="13" uuid="79c96c54-f29d-4c51-9c37-dbaab8ef0aea"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CONTA CORRENTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="207" y="0" width="403" height="13" uuid="4a48d39b-b77f-4c44-a5a2-05353348d4c6"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[HISTÓRICO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="610" y="0" width="49" height="13" uuid="6e754686-3491-43b4-a769-ced818c29069"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[D/C]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="739" y="0" width="63" height="13" uuid="f5c06bd6-5dc2-40c6-b839-a10a9bed4b51"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[VALOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="61" height="13" uuid="a8462885-4d59-4461-8927-bb6b9f00253e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DEPTO.]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="13" width="802" height="1" uuid="80d45af9-ad22-4f09-8484-140a912f544b"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="61" y="0" width="49" height="13" uuid="b9fe0fba-3667-4883-8eeb-fb539f64ae13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtLcto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="0" width="23" height="13" uuid="4916d061-bdab-4042-a978-24ef6044c5bd"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codCC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="133" y="0" width="74" height="13" uuid="ce8c9135-0024-469a-b537-1ec37e1bc08c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeCC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="207" y="0" width="403" height="13" uuid="8ecc43f6-350c-4d9d-9166-0736b829c8d2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{historico}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="610" y="0" width="49" height="13" uuid="3273253c-c1a5-4eba-b54b-f81138ff00f7"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{movimentacao}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="739" y="0" width="63" height="13" uuid="f68b81c7-55ce-4cac-919d-6d37268e3e49"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="16" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy HH:mm:ss">
+				<reportElement x="48" y="3" width="100" height="13" uuid="47256199-899f-4750-a891-d91abe3f02de"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="3" width="48" height="13" uuid="db7b9c58-cbab-49a0-8751-719f52f4c454"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Emissão:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="1" width="802" height="1" uuid="117bca17-f5ba-4a92-aae7-74fb23033943"/>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
