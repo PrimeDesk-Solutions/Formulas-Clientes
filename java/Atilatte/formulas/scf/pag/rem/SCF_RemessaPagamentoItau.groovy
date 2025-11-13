@@ -450,7 +450,7 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
     }
     private String verificarCodigoDeBarras(String codBarras){
         String codAlterado;
-
+        if(codBarras == null) interromper("Existem documentos sem o código de barras informado.")
         if(codBarras.length() == 44) return codBarras;
 
         String codBanco = codBarras.substring(0, 3);
