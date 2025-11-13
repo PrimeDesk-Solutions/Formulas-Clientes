@@ -358,15 +358,15 @@ public class SCE_RelatorioEstoqueSIF extends RelatorioBase {
         String wherePLE = pleInvent != null && pleInvent.size() > 0 ? " AND bcc01ple in (:pleInvent) " : "";
         String whereItem =  " AND bcc01item = :idItem ";
         String wherePeriodo = " AND bcc01data between :dtInicial AND :dtFinal ";
-        String whereStatus = " AND bcc01status IN (:statusTransf) ";
-        String whereLocal = " AND bcc01ctrl0 IN (:localTransf) ";
+        String whereStatus = statusTransf != null && statusTransf.size() > 0 ? " AND bcc01status IN (:statusTransf) " : "";
+        String whereLocal = localTransf != null && localTransf.size() > 0 ? " AND bcc01ctrl0 IN (:localTransf) " : "";
 
         Parametro parametroPLE = pleInvent != null && pleInvent.size() > 0 ? Parametro.criar("pleInvent", pleInvent) : null;
         Parametro parametroItem = Parametro.criar("idItem", idItem);
         Parametro parametroDtIni = Parametro.criar("dtInicial", periodo[0]);
         Parametro parametroDtFin = Parametro.criar("dtFinal", periodo[1]);
-        Parametro parametroStatus = Parametro.criar("statusTransf", statusTransf);
-        Parametro parametroLocal = Parametro.criar("localTransf", localTransf)
+        Parametro parametroStatus = statusTransf != null && statusTransf.size() > 0 ? Parametro.criar("statusTransf", statusTransf) : null;
+        Parametro parametroLocal = localTransf != null && localTransf.size() > 0 ? Parametro.criar("localTransf", localTransf) : null;
 
         String sql = "SELECT SUM(bcc01qtps) as transferencia " +
                 " FROM bcc01 " +
