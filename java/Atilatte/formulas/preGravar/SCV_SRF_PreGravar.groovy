@@ -47,7 +47,7 @@ class SCV_SRF_PreGravar extends FormulaBase {
     @Override
     public void executar() {
         eaa01 = get("eaa01");
-        //gravarInconsistencias(eaa01)
+        gravarInconsistencias(eaa01)
         verificaItensRepetidos(eaa01)
         validarQuantidadeItem(eaa01);
         definirDataPrimeiraUltimaCompra(eaa01);
