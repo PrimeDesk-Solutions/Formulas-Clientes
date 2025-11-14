@@ -1569,7 +1569,7 @@ class NFCe extends FormulaBase {
             }
 
             /** PIS - PIS (Q01) */
-            if (!"65".equals(modelo)) {
+            //if (!"65".equals(modelo)) {
                 PIS = imposto.addNode("PIS");
                 Aaj12 aaj12 = getAcessoAoBanco().buscarRegistroUnicoById("Aaj12", eaa0103.eaa0103cstPis.aaj12id);
                 String cstPis = aaj12 == null ? null : aaj12.aaj12codigo;
@@ -1744,7 +1744,7 @@ class NFCe extends FormulaBase {
                     det.addNode("infAdProd", eaa0103.eaa0103infAdic, false, 500);
                     item++;
                 }
-            }
+            //}
         }
     }
 

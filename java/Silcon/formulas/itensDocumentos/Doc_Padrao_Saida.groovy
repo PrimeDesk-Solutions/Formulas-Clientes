@@ -614,7 +614,7 @@ public class Doc_Padrao_Saida extends FormulaBase {
         jsonEaa0103.put("bc_cofins_sped", jsonEaa0103.getBigDecimal_Zero("bc_cofins"));
 
         //Aliq Cofins SPED = Aliq Cofins
-        jsonEaa0103.put("_cofins_sped", jsonEaa0103.getBigDecimal_Zero("aliq_cofins"));
+        jsonEaa0103.put("aliq_cofins_sped", jsonEaa0103.getBigDecimal_Zero("aliq_cofins"));
 
         // Cofins SPED = Cofins
         jsonEaa0103.put("cofins_sped", jsonEaa0103.getBigDecimal_Zero("cofins"));
@@ -640,10 +640,10 @@ public class Doc_Padrao_Saida extends FormulaBase {
 
 
         //Aliq Reduc BC ICMS SPED = Aliq Reduc BC ICMS
-        jsonEaa0103.put("red_bc_icms_sped", jsonEaa0103.getBigDecimal_Zero("aliq_red_bc_icms"));
+        jsonEaa0103.put("red_bcicms_sped", jsonEaa0103.getBigDecimal_Zero("aliq_red_bc_icms"));
 
         //ICMS Outras SPED = ICMS Outras
-        jsonEaa0103.put("icms_outras_sped", jsonEaa0103.getBigDecimal_Zero("icms_outras"));
+        jsonEaa0103.put("icmsoutras_sped", jsonEaa0103.getBigDecimal_Zero("icms_outras"));
 
         //ICMS Isento SPED = ICMS Isento
         jsonEaa0103.put("icms_isento_sped", jsonEaa0103.getBigDecimal_Zero("icms_isento"));
@@ -685,6 +685,7 @@ public class Doc_Padrao_Saida extends FormulaBase {
         //IPI SPED = IPI
         jsonEaa0103.put("ipi_sped", jsonEaa0103.getBigDecimal_Zero("ipi"));
     }
+
 
     @Override
     public FormulaTipo obterTipoFormula() {
