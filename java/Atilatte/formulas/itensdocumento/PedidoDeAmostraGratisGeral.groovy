@@ -8,6 +8,7 @@ import br.com.multitec.utils.ValidacaoException
 import br.com.multitec.utils.collections.TableMap;
 import sam.core.variaveis.MDate
 import sam.dicdados.FormulaTipo;
+import sam.model.entities.aa.Aae20;
 import sam.model.entities.aa.Aac10;
 import sam.model.entities.aa.Aag01;
 import sam.model.entities.aa.Aag02;
@@ -51,7 +52,7 @@ import java.time.DayOfWeek;
 
 
 public class PedidoDeAmostraGratisGeral extends FormulaBase {
-
+    private Aae20 aae20;
     private Aac10 aac10;
     private Aag01 aag01;
     private Aag02 ufEnt;
@@ -136,6 +137,9 @@ public class PedidoDeAmostraGratisGeral extends FormulaBase {
 
         //Dados da Entidade
         abe01 = getSession().get(Abe01.class, abb01.abb01ent.abe01id);
+
+        // Classe Entidades
+        aae20 = abe01.abe01classe == null ? null : getSession().get(Aae20.class, abe01.abe01classe.aae20id);
 
         // Entidade (Cliente)
         abe02 = getSession().get(Abe02.class, Criterions.eq("abe02ent", abe01.abe01id));
@@ -866,11 +870,18 @@ public class PedidoDeAmostraGratisGeral extends FormulaBase {
         jsonEaa0103.put("tx_iva_st", new BigDecimal(0));
 
     }
-
     private void definirCFOP(){
-        def cfop = aaj15_cfop.aaj15codigo;
+        def cfop = jsonAbm1001_UF_Item.getString("cfop_saida");
 
-        eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop))
+        if(cfop == null ) throw new ValidacaoException("Não foi informado CFOP no parâmetro itens-valores. Item:  " + abm01.abm01codigo);
+
+        if(aae20 != null && aae20.aae20codigo == '001') cfop = "5911"
+
+        aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
+
+        if(aaj15_cfop == null) throw new ValidacaoException("Não foi encontrado o CFOP com o código " + cfop );
+
+        eaa0103.eaa0103cfop = aaj15_cfop;
     }
 
     private trocarPrimeiroDigitoCFOP(def dentroEstado, String cfop){
@@ -883,7 +894,11 @@ public class PedidoDeAmostraGratisGeral extends FormulaBase {
 
         def cfopAlterado = primeiroDigito + restoCFOP;
 
-        eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfopAlterado))
+        aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfopAlterado));
+
+        if(aaj15_cfop == null) throw new ValidacaoException("Não foi encontrado o CFOP com o código " + cfop);
+
+        eaa0103.eaa0103cfop = aaj15_cfop;
     }
 
     private calcularPis(){
