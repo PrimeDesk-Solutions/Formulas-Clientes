@@ -122,7 +122,7 @@ class SCV_SRF_PreGravar extends FormulaBase {
 
             BigDecimal pesoMinimo = jsonRepositorio.getBigDecimal_Zero("peso_min");
 
-            if (pesoMinimo == 0) throw new ValidacaoException("Não foi informado o valor do frete mímino no município " + municipioEntidade + " do repositório de dados da transportadora " + codRedespacho + " - " + nomeRedespacho);
+            if (pesoMinimo == 0) throw new ValidacaoException("Não foi informado o valor do peso mímino no município " + municipioEntidade + " do repositório de dados da transportadora " + codRedespacho + " - " + nomeRedespacho);
 
             // Bloqueia o pedido caso não atinja o peso mínimo do município da transportadora
             if (pesoBruto < pesoMinimo) {
