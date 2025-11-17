@@ -129,7 +129,7 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                     txt.print("C");                                                                                                                  //009-009
                     txt.print("20");                                                                                                                 //010-011
                     txt.print(tmAbe01.getString("forma_pagamento"), 2);                                                                 //012-013
-                    txt.print("030");                                                                                                                //014-016
+                    txt.print("040");                                                                                                                //014-016
                     txt.print(StringUtils.space(1));                                                                                         //017-017
                     txt.print(aac10.aac10ti == 0 ? "2" : "1");                                                                                       //018-018
                     txt.print(StringUtils.extractNumbers(aac10.aac10ni), 14);                                                                //019-032
@@ -221,7 +221,7 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                 txt.print(daa0102.daa0102dtPgto.format(PATTERN_DDMMYYYY));                                                                                                                          //145-152
                 txt.print(daa01.daa01valor.add(jme).add(desconto).multiply(new BigDecimal(100)).intValue(), 15);                                                                   //153-167
                 txt.print(0, 15);                                                                                                                                                 //168-182
-                txt.print(daa01.daa01id + ";" + movimento, 20);                                                                                                                         //183-202
+                txt.print(daa01.daa01id + "E" + movimento, 20);                                                                                                                         //183-202
                 txt.print(StringUtils.space(13));                                                                                                                                       //203-215
                 txt.print(StringUtils.space(15));                                                                                                                                       //216-230
                 txt.print(StringUtils.space(10));                                                                                                                                       //231-240
@@ -308,7 +308,7 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                     txt.print(tmAbe01.getString("digito_conta"),1) // 043-043
                 }
                 txt.print(abe01.abe01nome, 30, true, true)                                                                                                        //044-073
-                txt.print(daa01.daa01id + ";" + movimento, 20);                                                                                                                       //074-0093
+                txt.print(daa01.daa01id + "E" + movimento, 20);                                                                                                                       //074-0093
                 txt.print(daa0102.daa0102dtPgto.format(PATTERN_DDMMYYYY));                                                                                                                    //094-101
                 txt.print("REA");                                                                                                                                                             //102-104
                 txt.print(0, 8);                                                                                                                                                //105-112
@@ -363,7 +363,7 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                     txt.print(tmAbe01.getString("digito_conta"),1) // 043-043
                 }
                 txt.print(abe01.abe01nome, 30, true, true)                                                                                                        //044-073
-                txt.print(daa01.daa01id + ";" + movimento, 20);                                                                                                                       //074-0093
+                txt.print(daa01.daa01id + "E" + movimento, 20);                                                                                                                       //074-0093
                 txt.print(daa0102.daa0102dtPgto.format(PATTERN_DDMMYYYY));                                                                                                                    //094-101
                 txt.print("REA");                                                                                                                                                             //102-104
                 txt.print(0, 8);                                                                                                                                                //105-112
