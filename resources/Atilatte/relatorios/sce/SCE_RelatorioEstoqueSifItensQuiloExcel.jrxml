@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCE_RelatorioEstoqueSIF" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b1cf5882-a56c-4957-a3fb-0ec40e75033d">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCE_RelatorioEstoqueSIF" language="groovy" pageWidth="1275" pageHeight="595" orientation="Landscape" columnWidth="1235" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b1cf5882-a56c-4957-a3fb-0ec40e75033d">
 	<property name="ireport.zoom" value="1.6528925619834718"/>
-	<property name="ireport.x" value="693"/>
+	<property name="ireport.x" value="772"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="titulo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
@@ -9,7 +9,7 @@
 	<field name="abm01codigo" class="java.lang.String"/>
 	<field name="abm01na" class="java.lang.String"/>
 	<field name="classificacao" class="java.lang.String"/>
-	<field name="saldoInicial" class="java.math.BigDecimal"/>
+	<field name="saldoInicialQuilo" class="java.math.BigDecimal"/>
 	<field name="fator" class="java.math.BigDecimal"/>
 	<field name="qtdProdQuilo" class="java.math.BigDecimal"/>
 	<field name="vendasQuilo" class="java.math.BigDecimal"/>
@@ -19,7 +19,16 @@
 	<field name="transfQuilo" class="java.math.BigDecimal"/>
 	<field name="devSemEstoqueQuilo" class="java.math.BigDecimal"/>
 	<field name="devComEstoqueQuilo" class="java.math.BigDecimal"/>
-	<field name="field2" class="java.lang.String"/>
+	<field name="ajusteFinalMesQuilo" class="java.math.BigDecimal"/>
+	<field name="saidaRomaneioQuilo" class="java.math.BigDecimal"/>
+	<variable name="estoqueCalculado" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{saldoInicialQuilo} +
+$F{qtdProdQuilo} +
+$F{inventarioQuilo} +
+$F{transfQuilo} -
+$F{saidaRomaneioQuilo}
+]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -68,7 +77,7 @@
 				<text><![CDATA[Vendas]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="738" y="0" width="64" height="13" uuid="5a7509f1-7dbd-42b8-8b5a-a50d6e9e7835"/>
+				<reportElement x="703" y="0" width="64" height="13" uuid="5a7509f1-7dbd-42b8-8b5a-a50d6e9e7835"/>
 				<textElement>
 					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
@@ -82,32 +91,53 @@
 				<text><![CDATA[Fator Conversão]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="625" y="0" width="54" height="13" uuid="79717f12-e54a-4a59-ae2a-2e38f8716323"/>
+				<reportElement x="490" y="0" width="54" height="13" uuid="79717f12-e54a-4a59-ae2a-2e38f8716323"/>
 				<textElement>
 					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Inventário]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="679" y="0" width="59" height="14" uuid="f737d491-7b4e-450a-a412-f1698071a376"/>
+				<reportElement x="544" y="0" width="59" height="14" uuid="f737d491-7b4e-450a-a412-f1698071a376"/>
 				<textElement>
 					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Transferência]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="490" y="0" width="62" height="13" uuid="85717e12-72a3-446a-b8cc-28384da12f6c"/>
+				<reportElement x="867" y="0" width="62" height="13" uuid="85717e12-72a3-446a-b8cc-28384da12f6c"/>
 				<textElement>
 					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Dev. S/ Estoque]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="552" y="0" width="73" height="13" uuid="c3cf1fff-67ce-4ecd-bde1-fbefd2628f70"/>
+				<reportElement x="929" y="0" width="73" height="13" uuid="c3cf1fff-67ce-4ecd-bde1-fbefd2628f70"/>
 				<textElement>
 					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Dev. C/ Estoque]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="603" y="0" width="100" height="13" uuid="85b26a6f-cfc8-46b1-8ebd-46f33008bf28"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ajuste Virada Mês]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="767" y="0" width="100" height="14" uuid="f1753e4f-6765-4cf3-9b9d-6590030c3e06"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Saídas Romaneio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1002" y="0" width="100" height="13" uuid="5fca0bf9-5527-4c4c-936f-81b601dc1116"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Estoque Calculado]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -141,7 +171,7 @@
 				<textFieldExpression><![CDATA[$F{classificacao}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="738" y="0" width="64" height="13" uuid="2914e776-ef8f-45e1-b92c-319a2309e1b6"/>
+				<reportElement x="703" y="0" width="64" height="13" uuid="2914e776-ef8f-45e1-b92c-319a2309e1b6"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -166,17 +196,17 @@
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{saldoInicial}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{saldoInicialQuilo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="625" y="0" width="54" height="13" uuid="1602b754-c36e-446c-b949-b439ca6dc1ac"/>
+				<reportElement x="490" y="0" width="54" height="13" uuid="1602b754-c36e-446c-b949-b439ca6dc1ac"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{inventarioQuilo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="679" y="0" width="59" height="13" uuid="907c60af-ab94-443b-9316-2b57c713b4b4"/>
+				<reportElement x="544" y="0" width="59" height="13" uuid="907c60af-ab94-443b-9316-2b57c713b4b4"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -190,18 +220,36 @@
 				<textFieldExpression><![CDATA[$F{vendasQuilo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="490" y="0" width="62" height="13" uuid="fdf672c2-9b75-4075-a8ed-b2e6a9300d4a"/>
+				<reportElement x="867" y="0" width="62" height="13" uuid="fdf672c2-9b75-4075-a8ed-b2e6a9300d4a"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{devSemEstoqueQuilo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="552" y="0" width="73" height="13" uuid="e6e49eb4-1076-4e43-8c52-87aeb2d77971"/>
+				<reportElement x="603" y="0" width="100" height="13" uuid="9ac4bab2-18a4-4cc5-8ebf-2bf9b6f4f0d5"/>
+				<textFieldExpression><![CDATA[$F{ajusteFinalMesQuilo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="767" y="0" width="100" height="13" uuid="10140a74-5abf-4a82-869d-9f35c3dc8f7d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{saidaRomaneioQuilo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="929" y="0" width="73" height="13" uuid="e6e49eb4-1076-4e43-8c52-87aeb2d77971"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{devComEstoqueQuilo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="1002" y="0" width="100" height="13" uuid="e5df1bb9-be9e-4a90-adc3-101ec109431e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{estoqueCalculado}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

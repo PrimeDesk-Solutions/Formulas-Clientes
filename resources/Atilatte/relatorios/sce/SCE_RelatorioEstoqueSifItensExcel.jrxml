@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCE_RelatorioEstoqueSIF" language="groovy" pageWidth="992" pageHeight="595" orientation="Landscape" columnWidth="952" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b1cf5882-a56c-4957-a3fb-0ec40e75033d">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCE_RelatorioEstoqueSIF" language="groovy" pageWidth="1275" pageHeight="595" orientation="Landscape" columnWidth="1235" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b1cf5882-a56c-4957-a3fb-0ec40e75033d">
 	<property name="ireport.zoom" value="2.000000000000001"/>
-	<property name="ireport.x" value="983"/>
+	<property name="ireport.x" value="1455"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="titulo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
@@ -23,6 +23,15 @@
 	<field name="transfFrasco" class="java.math.BigDecimal"/>
 	<field name="devSemEstoqueFrasco" class="java.math.BigDecimal"/>
 	<field name="devComEstoqueFrasco" class="java.math.BigDecimal"/>
+	<field name="ajusteFinalMesFrasco" class="java.math.BigDecimal"/>
+	<field name="saidaRomaneioFrasco" class="java.math.BigDecimal"/>
+	<variable name="estoqueCalculado" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{saldoInicial} +
+$F{qtdProdFrasco} +
+$F{inventarioFrasco} +
+$F{transfFrasco} -
+$F{saidaRomaneioFrasco}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -71,14 +80,14 @@
 				<text><![CDATA[Vendas]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="811" y="0" width="141" height="13" uuid="5a7509f1-7dbd-42b8-8b5a-a50d6e9e7835"/>
+				<reportElement x="744" y="0" width="82" height="13" uuid="5a7509f1-7dbd-42b8-8b5a-a50d6e9e7835"/>
 				<textElement>
 					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Estoque Final ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="552" y="0" width="73" height="13" uuid="9dc6081a-a701-43d7-8087-9f4aa73b3b76"/>
+				<reportElement x="926" y="0" width="73" height="13" uuid="9dc6081a-a701-43d7-8087-9f4aa73b3b76"/>
 				<textElement>
 					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
@@ -92,25 +101,46 @@
 				<text><![CDATA[Fator Conversão]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="698" y="0" width="54" height="13" uuid="79717f12-e54a-4a59-ae2a-2e38f8716323"/>
+				<reportElement x="552" y="0" width="54" height="13" uuid="79717f12-e54a-4a59-ae2a-2e38f8716323"/>
 				<textElement>
 					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Inventário]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="752" y="0" width="59" height="13" uuid="f737d491-7b4e-450a-a412-f1698071a376"/>
+				<reportElement x="606" y="0" width="59" height="13" uuid="f737d491-7b4e-450a-a412-f1698071a376"/>
 				<textElement>
 					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Transferência]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="625" y="0" width="73" height="13" uuid="abe257d0-0ca3-4844-9d1a-e755f045cf24"/>
+				<reportElement x="999" y="0" width="73" height="13" uuid="abe257d0-0ca3-4844-9d1a-e755f045cf24"/>
 				<textElement>
 					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Dev. C/ Estoque]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="665" y="0" width="79" height="13" uuid="bda393a9-7ed9-43d3-8af5-d1bc7e7b17f7"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Ajuste virada Mês]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="826" y="0" width="100" height="13" uuid="a8605d89-e8ad-4b6b-8440-1f8ec308b405"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saídas Romaneio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1072" y="0" width="163" height="13" uuid="af22d40f-ce2a-4304-a328-ef891d22d8db"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Estoque Calculado]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -144,7 +174,7 @@
 				<textFieldExpression><![CDATA[$F{classificacao}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="811" y="0" width="141" height="13" uuid="2914e776-ef8f-45e1-b92c-319a2309e1b6"/>
+				<reportElement x="744" y="0" width="82" height="13" uuid="2914e776-ef8f-45e1-b92c-319a2309e1b6"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -172,14 +202,14 @@
 				<textFieldExpression><![CDATA[$F{saldoInicial}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="698" y="0" width="54" height="13" uuid="1602b754-c36e-446c-b949-b439ca6dc1ac"/>
+				<reportElement x="552" y="0" width="54" height="13" uuid="1602b754-c36e-446c-b949-b439ca6dc1ac"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{inventarioFrasco}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="752" y="0" width="59" height="13" uuid="907c60af-ab94-443b-9316-2b57c713b4b4"/>
+				<reportElement x="606" y="0" width="59" height="13" uuid="907c60af-ab94-443b-9316-2b57c713b4b4"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -193,18 +223,39 @@
 				<textFieldExpression><![CDATA[$F{vendasFrascos}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="552" y="0" width="73" height="13" uuid="009abb30-31ae-4e3f-9f43-2b93918bdfb7"/>
+				<reportElement x="926" y="0" width="73" height="13" uuid="009abb30-31ae-4e3f-9f43-2b93918bdfb7"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{devSemEstoqueFrasco}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="625" y="0" width="73" height="13" uuid="1f0de5b5-e997-48e5-9ffa-720ade1260cb"/>
+				<reportElement x="999" y="0" width="73" height="13" uuid="1f0de5b5-e997-48e5-9ffa-720ade1260cb"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{devComEstoqueFrasco}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="665" y="0" width="79" height="13" uuid="fef585f6-0acf-43f3-b084-727077c36321"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ajusteFinalMesFrasco}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="826" y="0" width="100" height="13" uuid="3666316e-8ae4-4729-bcf5-ad263657dd54"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{saidaRomaneioFrasco}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="1072" y="0" width="163" height="13" uuid="ceac6e22-3697-4a7a-8807-f080ea28e393"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{estoqueCalculado}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
