@@ -30,9 +30,10 @@ public class SCF_Status_Aprovacao_Documentos_Financ extends RelatorioBase {
         List<Long> empresas = getListLong("empresa");
         Integer status = getInteger("status");
         Integer impressao = getInteger("impressao");
+        LocalDate[] dtVencimento = getIntervaloDatas("vencimento");
 
 
-        List<TableMap> dados = buscarDados(periodo, empresas, status);
+        List<TableMap> dados = buscarDados(periodo, empresas, status, dtVencimento);
 
         for(dado in dados){
             LocalDate dtAprovacao = dado.getDate("dtAprovacao");
@@ -54,16 +55,22 @@ public class SCF_Status_Aprovacao_Documentos_Financ extends RelatorioBase {
     }
 
 
-    private List<TableMap> buscarDados(LocalDate[] periodo, List<Long> empresas, Integer status){
+    private List<TableMap> buscarDados(LocalDate[] periodo, List<Long> empresas, Integer status, LocalDate[] dtVencimento){
         String wherePeriodo = periodo != null ? "AND abb01data BETWEEN :dtInicial AND :dtFinal " : "";
         String whereEmpresa = empresas != null && empresas.size() > 0 ? "AND daa01gc IN (:empresas) " : "AND daa01gc = :empresa ";
         String whereStatus = status == 0 ? "AND abb0103data IS NOT NULL " :
                              status == 1 ? "AND abb0103data IS NULL " : "";
+        String whereVencimento = dtVencimento != null ? "AND daa01dtVctoR BETWEEN :dtVctoIni AND :dtVctoFin " : "";
+
 
 
         Parametro parametroPeriosoIni = periodo != null ? Parametro.criar("dtInicial", periodo[0]) : null;
         Parametro parametroPeriosoFin = periodo != null ? Parametro.criar("dtFinal", periodo[1]) : null;
         Parametro parametroEmpresa = empresas != null && empresas.size() > 0 ? Parametro.criar("empresas", empresas) : Parametro.criar("empresa", obterEmpresaAtiva().getAac10id());
+        Parametro parametroDtVctoIni = dtVencimento != null ? Parametro.criar("dtVctoIni", dtVencimento[0]) : null;
+        Parametro parametroDtVctoFin = dtVencimento != null ? Parametro.criar("dtVctoFin", dtVencimento[1]) : null;
+
+
 
         String sql = "SELECT abb01num AS numDoc, abe01codigo AS codEntidade, abb01data AS dtEmissao, abe01na AS naEntidade, daa01dtvctor AS dtVcto, " +
                         "daa01valor AS valor, abb0103data AS dtAprovacao, abb0103hora AS horaAprov, aab10user AS user " +
@@ -76,10 +83,11 @@ public class SCF_Status_Aprovacao_Documentos_Financ extends RelatorioBase {
                         wherePeriodo+
                         whereEmpresa+
                         whereStatus+
+                        whereVencimento +
                         "ORDER BY abb01num";
 
 
-        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroPeriosoIni, parametroPeriosoFin, parametroEmpresa );
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroPeriosoIni, parametroPeriosoFin, parametroEmpresa, parametroDtVctoIni, parametroDtVctoFin);
 
     }
 }
