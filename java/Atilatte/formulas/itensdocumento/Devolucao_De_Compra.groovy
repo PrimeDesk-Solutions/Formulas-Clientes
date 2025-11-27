@@ -172,7 +172,7 @@ public class Devolucao_De_Compra extends FormulaBase {
 
         //Fatores de Conv. da Unid de Compra para Estoque
         abm1301 = abm13 == null ? null : eaa0103.eaa0103umComl == null ? null : getSession().get(Abm1301.class, Criterions.where("abm1301cc = " + abm13.abm13id + " AND abm1301umc = " + eaa0103.eaa0103umComl.aam06id));
-
+        if(abm1301 == null) throw new ValidacaoException("Não foi encontrada fator de conversão no cadastro do item " + abm01.abm01codigo + " - " + abm01.abm01na);
         //Unidade de Medida
         aam06 = abm13 != null && abm13.abm13umv != null ? getSession().get(Aam06.class, abm13.abm13umv.aam06id) : null;
 
@@ -270,7 +270,7 @@ public class Devolucao_De_Compra extends FormulaBase {
             }
 
             // Converte Qt.Documento para Qtde SCE
-            eaa0103.eaa0103qtUso = eaa0103.eaa0103qtComl;
+            eaa0103.eaa0103qtUso = eaa0103.eaa0103qtComl * abm1301.abm1301fcCU_Zero;
 
             // Converte Qt.Documento para Volume
             if (jsonEaa0103.getBigDecimal_Zero("volumes") == 0) {
