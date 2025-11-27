@@ -65,7 +65,7 @@ class SCV_SRF_PreGravar extends FormulaBase {
         Aag0201 aag0201;
         Parametro parametroPcd = Parametro.criar("idPcd", eaa01.eaa01pcd.abd01id);
         Integer validaPesoMinimo = getAcessoAoBanco().obterInteger("SELECT CAST(abd01camposCustom -> 'validar_peso_transp' AS INTEGER) AS validaPeso FROM abd01 WHERE abd01id = :idPcd ", parametroPcd)
-        interromper(validaPesoMinimo.toString())
+
         if(validaPesoMinimo == 1){
             // Dados Gerais
             for (Eaa0102 dadosGerais : eaa01.eaa0102s) {
