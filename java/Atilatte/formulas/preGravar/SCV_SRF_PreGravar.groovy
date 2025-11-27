@@ -16,7 +16,9 @@ import sam.model.entities.ea.Eaa0102
 import sam.model.entities.ea.Eaa0107
 import sam.server.samdev.formula.FormulaBase
 import br.com.multiorm.Query
-import br.com.multiorm.ColumnType;
+import br.com.multiorm.ColumnType
+import sam.server.samdev.utils.Parametro;
+
 import java.time.LocalDate
 import br.com.multitec.utils.collections.TableMap;
 import sam.model.entities.ea.Eaa0103
@@ -61,78 +63,82 @@ class SCV_SRF_PreGravar extends FormulaBase {
         Eaa0102 eaa0102;
         Eaa0101 eaa0101princ;
         Aag0201 aag0201;
+        Parametro parametroPcd = Parametro.criar("idPcd", eaa01.eaa01pcd.abd01id);
+        Integer validaPesoMinimo = getAcessoAoBanco().obterInteger("SELECT CAST(abd01camposCustom -> 'validar_peso_transp' AS INTEGER) AS validaPeso FROM abd01 WHERE abd01id = :idPcd ", parametroPcd)
+        interromper(validaPesoMinimo.toString())
+        if(validaPesoMinimo == 1){
+            // Dados Gerais
+            for (Eaa0102 dadosGerais : eaa01.eaa0102s) {
+                eaa0102 = dadosGerais;
+            }
 
-        // Dados Gerais
-        for (Eaa0102 dadosGerais : eaa01.eaa0102s) {
-            eaa0102 = dadosGerais;
-        }
+            // Endereço Principal Entidade
+            for (Eaa0101 eaa0101 : eaa01.eaa0101s) {
+                if (eaa0101.eaa0101principal == 1) eaa0101princ = eaa0101;
+            }
 
-        // Endereço Principal Entidade
-        for (Eaa0101 eaa0101 : eaa01.eaa0101s) {
-            if (eaa0101.eaa0101principal == 1) eaa0101princ = eaa0101;
-        }
+            // Municipio da Entidade
+            aag0201 = eaa0101princ.eaa0101municipio != null ? getSession().get(Aag0201.class, Criterions.eq("aag0201id", eaa0101princ.eaa0101municipio.aag0201id)) : null;
 
-        // Municipio da Entidade
-        aag0201 = eaa0101princ.eaa0101municipio != null ? getSession().get(Aag0201.class, Criterions.eq("aag0201id", eaa0101princ.eaa0101municipio.aag0201id)) : null;
+            // Campos Livres Documento
+            TableMap jsonEaa01 = eaa01.eaa01json != null ? eaa01.eaa01json : new TableMap();
 
-        // Campos Livres Documento
-        TableMap jsonEaa01 = eaa01.eaa01json != null ? eaa01.eaa01json : new TableMap();
+            if (eaa0102.eaa0102redespacho == null) return;
 
-        if (eaa0102.eaa0102redespacho == null) return;
+            if (eaa01.eaa01clasDoc == 0 && eaa0102.eaa0102frete != 1) {
+                // Redespacho
+                Abe01 abe01redesp = getSession().get(Abe01.class, eaa0102.eaa0102redespacho.abe01id);
 
-        if (eaa01.eaa01clasDoc == 0 && eaa0102.eaa0102frete != 1) {
-            // Redespacho
-            Abe01 abe01redesp = getSession().get(Abe01.class, eaa0102.eaa0102redespacho.abe01id);
+                String nomeRedespacho = abe01redesp.abe01na;
+                String codRedespacho = abe01redesp.abe01codigo;
+                String municipioEntidade = aag0201.aag0201nome;
+                BigDecimal pesoBruto = jsonEaa01.getBigDecimal_Zero("peso_bruto");
 
-            String nomeRedespacho = abe01redesp.abe01na;
-            String codRedespacho = abe01redesp.abe01codigo;
-            String municipioEntidade = aag0201.aag0201nome;
-            BigDecimal pesoBruto = jsonEaa01.getBigDecimal_Zero("peso_bruto");
+                String descrRepositorio = "Frete - " + nomeRedespacho.split()[0] + " Transp";
+                descrRepositorio = descrRepositorio.toUpperCase().replace(" ", "");
 
-            String descrRepositorio = "Frete - " + nomeRedespacho.split()[0] + " Transp";
-            descrRepositorio = descrRepositorio.toUpperCase().replace(" ", "");
+                // Formata o municipio da entidade para retirar os acentos
+                municipioEntidade = formatarString(municipioEntidade.toUpperCase());
 
-            // Formata o municipio da entidade para retirar os acentos
-            municipioEntidade = formatarString(municipioEntidade.toUpperCase());
+                // Busca campos livres do repositório da Transportadora
+                String sql = " SELECT aba20id, aba2001json FROM aba2001 " +
+                        " INNER JOIN aba20 ON aba2001rd = aba20id " +
+                        " WHERE REPLACE(UPPER(aba20descr), ' ','') LIKE '%" + descrRepositorio + "%'"
 
-            // Busca campos livres do repositório da Transportadora
-            String sql = " SELECT aba20id, aba2001json FROM aba2001 " +
-                    " INNER JOIN aba20 ON aba2001rd = aba20id " +
-                    " WHERE REPLACE(UPPER(aba20descr), ' ','') LIKE '%" + descrRepositorio + "%'"
+                List<TableMap> listTmRepositorio = getAcessoAoBanco().buscarListaDeTableMap(sql);
 
-            List<TableMap> listTmRepositorio = getAcessoAoBanco().buscarListaDeTableMap(sql);
+                if (listTmRepositorio.size() == 0) throw new ValidacaoException("Não foi encontrado repositório de dados para a transportadora " + codRedespacho + " - " + nomeRedespacho)
 
-            if (listTmRepositorio.size() == 0) throw new ValidacaoException("Não foi encontrado repositório de dados para a transportadora " + codRedespacho + " - " + nomeRedespacho)
+                TableMap jsonRepositorio = new TableMap();
 
-            TableMap jsonRepositorio = new TableMap();
-
-            for (repositorio in listTmRepositorio) {
-                if (repositorio.getTableMap("aba2001json") != null) {
-                    String municipioRepositorio = repositorio.getTableMap("aba2001json").getString("municipio");
-                    if (municipioRepositorio != null) {
-                        municipioRepositorio = formatarString(municipioRepositorio.toUpperCase());
-                        if (municipioRepositorio == municipioEntidade) {
-                            jsonRepositorio = repositorio.getTableMap("aba2001json");
+                for (repositorio in listTmRepositorio) {
+                    if (repositorio.getTableMap("aba2001json") != null) {
+                        String municipioRepositorio = repositorio.getTableMap("aba2001json").getString("municipio");
+                        if (municipioRepositorio != null) {
+                            municipioRepositorio = formatarString(municipioRepositorio.toUpperCase());
+                            if (municipioRepositorio == municipioEntidade) {
+                                jsonRepositorio = repositorio.getTableMap("aba2001json");
+                            }
                         }
                     }
                 }
-            }
 
-            if (jsonRepositorio.size() == 0) throw new ValidacaoException("Município " + municipioEntidade + " não encontrado no repositório de dados " + descrRepositorio)
+                if (jsonRepositorio.size() == 0) throw new ValidacaoException("Município " + municipioEntidade + " não encontrado no repositório de dados " + descrRepositorio)
 
-            BigDecimal pesoMinimo = jsonRepositorio.getBigDecimal_Zero("peso_min");
+                BigDecimal pesoMinimo = jsonRepositorio.getBigDecimal_Zero("peso_min");
 
-            if (pesoMinimo == 0) throw new ValidacaoException("Não foi informado o valor do peso mímino no município " + municipioEntidade + " do repositório de dados da transportadora " + codRedespacho + " - " + nomeRedespacho);
+                if (pesoMinimo == 0) throw new ValidacaoException("Não foi informado o valor do peso mímino no município " + municipioEntidade + " do repositório de dados da transportadora " + codRedespacho + " - " + nomeRedespacho);
 
-            // Bloqueia o pedido caso não atinja o peso mínimo do município da transportadora
-            if (pesoBruto < pesoMinimo) {
-                if (eaa01.eaa0107s == null || eaa01.eaa0107s.size() == 0) {
-                    Eaa0107 eaa0107 = new Eaa0107();
-                    eaa0107.eaa0107msg = "Pedido bloqueado por não atingir peso mínimo da transportadora."
-                    eaa0107.eaa0107user = obterUsuarioLogado();
-                    eaa01.addToEaa0107s(eaa0107);
+                // Bloqueia o pedido caso não atinja o peso mínimo do município da transportadora
+                if (pesoBruto < pesoMinimo) {
+                    if (eaa01.eaa0107s == null || eaa01.eaa0107s.size() == 0) {
+                        Eaa0107 eaa0107 = new Eaa0107();
+                        eaa0107.eaa0107msg = "Pedido bloqueado por não atingir peso mínimo da transportadora."
+                        eaa0107.eaa0107user = obterUsuarioLogado();
+                        eaa01.addToEaa0107s(eaa0107);
 
-                    eaa01.eaa01bloqueado = 1
+                        eaa01.eaa01bloqueado = 1
+                    }
                 }
             }
         }
