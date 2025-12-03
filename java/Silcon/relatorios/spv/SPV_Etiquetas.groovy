@@ -1,4 +1,3 @@
-
 package Silcon.relatorios.spv;
 import sam.server.samdev.relatorio.RelatorioBase;
 import sam.server.samdev.relatorio.DadosParaDownload
@@ -27,12 +26,12 @@ public class SPV_Etiquetas extends RelatorioBase {
         return gerarPDF("SPV_Etiquetas", dados);
     }
     private List<TableMap> buscarDadosRelatorio(Integer numPreVenda){
-        String sql = "SELECT abm01codigo AS codItem, abm01descr AS descrItem, ccb0101unit AS valorUnit, CURRENT_DATE AS data, abm01gtin " +
-                        "FROM ccb01 " +
-                        "INNER JOIN ccb0101 ON ccb0101pv = ccb01id " +
-                        "INNER JOIN abm01 ON abm01id = ccb0101item " +
-                        "WHERE ccb01num = :numPreVenda " +
-                        "ORDER BY abm01codigo";
+        String sql = "SELECT abm01codigo AS codigo, abm01descr AS descricao, ccb0101unit AS unit, CURRENT_DATE AS data, abm01gtin AS ean " +
+                "FROM ccb01 " +
+                "INNER JOIN ccb0101 ON ccb0101pv = ccb01id " +
+                "INNER JOIN abm01 ON abm01id = ccb0101item " +
+                "WHERE ccb01num = :numPreVenda " +
+                "ORDER BY abm01codigo";
 
         Parametro parametroNumero = Parametro.criar("numPreVenda", numPreVenda);
 
