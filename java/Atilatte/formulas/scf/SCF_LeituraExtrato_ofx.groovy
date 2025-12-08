@@ -26,6 +26,7 @@ class SCF_LeituraExtrato_ofx extends FormulaBase {
         BigDecimal TRNAMT = BigDecimal.ZERO;
         LocalDate FITID = null;
         String MEMO = "";
+        String CHECKNUM = "";
 
         List<SCF0221LctoExtratoDto> listExtratoDto = new ArrayList();
 
@@ -60,13 +61,16 @@ class SCF_LeituraExtrato_ofx extends FormulaBase {
                         if (line.contains("<MEMO>")){
                             MEMO = line.substring(line.indexOf(">")+1, line.length());
                         }
+                        if (line.contains("CHECKNUM")){
+                            CHECKNUM = line.substring(line.indexOf(">")+1, line.length());
+                        }
                     }
                     extratoDto.data = DTPOSTED;
                     extratoDto.valor = TRNAMT < 0 ? TRNAMT * (-1) : TRNAMT;
                     extratoDto.dc = TRNTYPE == "DEBIT" ? "D" : "C";
                     extratoDto.historico = MEMO;
                     extratoDto.ni = null;
-                    extratoDto.dados1 = null;
+                    extratoDto.dados1 = CHECKNUM;
                     extratoDto.dados2 = null;
                     listExtratoDto.add(extratoDto);
                 }
