@@ -871,15 +871,24 @@ public class PedidoDeAmostraGratisGeral extends FormulaBase {
 
     }
     private void definirCFOP(){
-        def cfop = jsonAbm1001_UF_Item.getString("cfop_saida");
 
-        if(cfop == null ) throw new ValidacaoException("Não foi informado CFOP no parâmetro itens-valores. Item:  " + abm01.abm01codigo);
+        if(abd02.abd02cfop != null){
+            aaj15_cfop = getSession().get(Aaj15.class, abd02.abd02cfop.aaj15id);
+        }else if(jsonAbm1001_UF_Item.getString("cfop_saida") != null){
+            def cfop = jsonAbm1001_UF_Item.getString("cfop_saida");
 
-        if(aae20 != null && aae20.aae20codigo == '001') cfop = "5911"
+            aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
 
-        aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
+            if(aaj15_cfop == null) throw new ValidacaoException("Não foi encontrado o CFOP com o código " + cfop );
+        }else{
+            throw new ValidacaoException("Não foi informado o CFOP no PCD ou nos parâmetros do item " + abm01.abm01codigo + " - " + abm01.abm01na + " ")
+        }
 
-        if(aaj15_cfop == null) throw new ValidacaoException("Não foi encontrado o CFOP com o código " + cfop );
+        if(aae20 != null && aae20.aae20codigo == '001'){
+            aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", '5911'));
+
+            if(aaj15_cfop == null) throw new ValidacaoException("Não foi encontrado CFOP com código 5911 cadastrado no sistema.")
+        }
 
         eaa0103.eaa0103cfop = aaj15_cfop;
     }
