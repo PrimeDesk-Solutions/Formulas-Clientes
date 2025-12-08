@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="IDM_SPV_ETIQUETA" language="groovy" columnCount="3" printOrder="Horizontal" pageWidth="595" pageHeight="842" columnWidth="191" leftMargin="11" rightMargin="11" topMargin="25" bottomMargin="0" uuid="e6d89aac-ad83-4198-966c-c28442a389f1">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="EMPRESA_CODIGO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_NA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_RS" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_ENDERECO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_NUMERO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_BAIRRO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_MUNICIPIO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_UF" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_DDD" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_FONE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_NI" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="EMPRESA_IE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ATENDENTE_USUARIO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ATENDENTE_NOME" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_CODIGO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_NA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_FONE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="UN_TELA_CODIGO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="UN_TELA_DESCRICAO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="CC_TELA_CODIGO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="CC_TELA_NOME" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="DATA_IMPRESSAO" class="java.util.Date" isForPrompting="false"/>
+	<parameter name="TOTAL_ITENS" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="SOMA_QT" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="SOMA_UNIT" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="SOMA_DESC" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="SOMA_TOTALBRUTO" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="TELA_TOTAL" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="TELA_ACRESCIMO" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="TELA_DESCONTO" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="TELA_LIQUIDO" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_DDD" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="TELA_TROCO" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="TELA_DIFERENCA" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="DS_FORMASPAGTO" class="java.lang.Object" isForPrompting="false"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["S:\\Bancos\\Silcon\\IDM\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SOMA_TOTALLIQ" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="TELA_PERCDESC" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="TELA_PERCACRESC" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="NUMERO_RECIBO" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="AGENTE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_RS" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_ENDERECO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_NUMERO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_COMPLEM" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_BAIRRO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_MUNICIPIO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_CEP" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENDERECO_ENTREGA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="FORMA_PGTO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="PARCELAS" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="OBSERVACAO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="IDENT_VDA" class="java.lang.Long" isForPrompting="false"/>
+	<parameter name="TAB_PRECO_CODIGO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="TAB_PRECO_DESCR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ENTIDADE_TELA_UF" class="java.lang.String" isForPrompting="false"/>
+	<field name="seq" class="java.lang.Integer"/>
+	<field name="lct" class="java.lang.Integer"/>
+	<field name="data" class="java.util.Date"/>
+	<field name="comanda" class="java.lang.Integer"/>
+	<field name="mps" class="java.lang.String"/>
+	<field name="codigo" class="java.lang.String"/>
+	<field name="reduzido" class="java.lang.Integer"/>
+	<field name="ean" class="java.lang.String"/>
+	<field name="livre" class="java.lang.String"/>
+	<field name="na" class="java.lang.String"/>
+	<field name="descricao" class="java.lang.String"/>
+	<field name="umf" class="java.lang.String"/>
+	<field name="umu" class="java.lang.String"/>
+	<field name="umv" class="java.lang.String"/>
+	<field name="formula_composicao" class="java.lang.Integer"/>
+	<field name="qt" class="java.math.BigDecimal"/>
+	<field name="unit" class="java.math.BigDecimal"/>
+	<field name="desc" class="java.math.BigDecimal"/>
+	<field name="totalbruto" class="java.math.BigDecimal"/>
+	<field name="codigo_cc" class="java.lang.String"/>
+	<field name="nome_cc" class="java.lang.String"/>
+	<field name="codigo_nat" class="java.lang.String"/>
+	<field name="nome_nat" class="java.lang.String"/>
+	<field name="local" class="java.lang.String"/>
+	<field name="sce" class="java.lang.Integer"/>
+	<field name="totalliq" class="java.math.BigDecimal"/>
+	<field name="obs_item" class="java.lang.String"/>
+	<field name="codigo_ncm" class="java.lang.String"/>
+	<field name="nome_ncm" class="java.lang.String"/>
+	<field name="legenda_ncm" class="java.lang.String"/>
+	<variable name="desconto" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{desc}]]></variableExpression>
+	</variable>
+	<group name="dados_adicionais">
+		<groupExpression><![CDATA[]]></groupExpression>
+		<groupHeader>
+			<band splitType="Stretch"/>
+		</groupHeader>
+		<groupFooter>
+			<band splitType="Stretch"/>
+		</groupFooter>
+	</group>
+	<group name="troco">
+		<groupExpression><![CDATA[]]></groupExpression>
+		<groupHeader>
+			<band splitType="Stretch"/>
+		</groupHeader>
+		<groupFooter>
+			<band splitType="Stretch"/>
+		</groupFooter>
+	</group>
+	<group name="formas_pagamento">
+		<groupExpression><![CDATA[]]></groupExpression>
+		<groupHeader>
+			<band splitType="Stretch"/>
+		</groupHeader>
+		<groupFooter>
+			<band splitType="Stretch"/>
+		</groupFooter>
+	</group>
+	<group name="resumo_valores">
+		<groupExpression><![CDATA[]]></groupExpression>
+		<groupHeader>
+			<band splitType="Stretch"/>
+		</groupHeader>
+		<groupFooter>
+			<band splitType="Stretch"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Prevent"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="99" splitType="Stretch">
+			<rectangle>
+				<reportElement key="rectangle-1" x="3" y="7" width="180" height="90" backcolor="#FFFFFF" uuid="d6d2fe56-3676-4576-884e-a104d28d0691"/>
+			</rectangle>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="textField-47" stretchType="RelativeToTallestObject" x="4" y="21" width="179" height="25" uuid="37a4546f-b057-4942-b9d3-0888eaf9c4a3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descricao}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-48" x="4" y="9" width="180" height="12" uuid="d57838b9-eeb6-4453-8793-5fc386057a9b"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Cód. "+$F{codigo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-50" x="9" y="80" width="93" height="12" uuid="5ac703c5-0190-4e4b-8d47-f149e77bbe80"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-1" x="4" y="46" width="178" height="9" uuid="9877477c-47b6-41d9-b423-e06434888a97"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[PREÇO À VISTA/FATURADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" mode="Opaque" x="4" y="54" width="84" height="22" forecolor="#FFFFFF" backcolor="#000000" uuid="8c7e0977-3a7e-4534-91ca-d814088b818b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[R$   ]]></text>
+			</staticText>
+			<textField pattern="##0.00" isBlankWhenNull="true">
+				<reportElement key="textField-49" mode="Opaque" x="88" y="54" width="95" height="22" forecolor="#FFFFFF" backcolor="#000000" uuid="8e06b568-e5ca-43ee-bc75-6724720221fc"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unit}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="109" y="79" width="72" height="16" uuid="499bad8c-3e26-4501-be9d-c6187fad2491"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="EAN13" drawText="false" checksumRequired="false">
+					<jr:codeExpression><![CDATA[$F{ean}.substring(0,12)]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

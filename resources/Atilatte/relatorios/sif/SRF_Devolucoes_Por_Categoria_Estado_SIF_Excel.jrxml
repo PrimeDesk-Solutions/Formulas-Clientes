@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_Devolucoes_Por_Categoria_Estado_SIF_PDF" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d970bf26-f96c-4337-a0d7-96e8bed2fcb1">
+	<property name="ireport.zoom" value="1.4641000000000008"/>
+	<property name="ireport.x" value="543"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="TOTALIZAR1" class="java.lang.Boolean"/>
+	<parameter name="TOTALIZAR2" class="java.lang.Boolean"/>
+	<parameter name="TOTALIZAR3" class="java.lang.Boolean"/>
+	<parameter name="TOTALIZAR4" class="java.lang.Boolean"/>
+	<parameter name="TOTALIZAR5" class="java.lang.Boolean"/>
+	<parameter name="TOTALIZAR6" class="java.lang.Boolean"/>
+	<parameter name="TITULO" class="java.lang.String"/>
+	<parameter name="EMPRESA" class="java.lang.String"/>
+	<parameter name="PERIODO" class="java.lang.String"/>
+	<field name="categoria" class="java.lang.String"/>
+	<field name="uf" class="java.lang.String"/>
+	<field name="nomeCampo1" class="java.lang.String"/>
+	<field name="nomeCampo2" class="java.lang.String"/>
+	<field name="nomeCampo3" class="java.lang.String"/>
+	<field name="nomeCampo4" class="java.lang.String"/>
+	<field name="nomeCampo5" class="java.lang.String"/>
+	<field name="nomeCampo6" class="java.lang.String"/>
+	<field name="valorCampo1" class="java.math.BigDecimal"/>
+	<field name="valorCampo2" class="java.math.BigDecimal"/>
+	<field name="valorCampo3" class="java.math.BigDecimal"/>
+	<field name="valorCampo4" class="java.math.BigDecimal"/>
+	<field name="valorCampo5" class="java.math.BigDecimal"/>
+	<field name="valorCampo6" class="java.math.BigDecimal"/>
+	<field name="field5" class="java.lang.String"/>
+	<field name="field6" class="java.lang.String"/>
+	<field name="field1" class="java.lang.String"/>
+	<variable name="totCategoria1" class="java.math.BigDecimal" resetType="Group" resetGroup="categoria" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorCampo1}]]></variableExpression>
+	</variable>
+	<variable name="totCategoria2" class="java.math.BigDecimal" resetType="Group" resetGroup="categoria" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorCampo2}]]></variableExpression>
+	</variable>
+	<variable name="totCategoria3" class="java.math.BigDecimal" resetType="Group" resetGroup="categoria" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorCampo3}]]></variableExpression>
+	</variable>
+	<variable name="totCategoria4" class="java.math.BigDecimal" resetType="Group" resetGroup="categoria" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorCampo4}]]></variableExpression>
+	</variable>
+	<variable name="totCategoria5" class="java.math.BigDecimal" resetType="Group" resetGroup="categoria" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorCampo5}]]></variableExpression>
+	</variable>
+	<variable name="totCategoria6" class="java.math.BigDecimal" resetType="Group" resetGroup="categoria" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorCampo6}]]></variableExpression>
+	</variable>
+	<variable name="variable7" class="java.lang.String"/>
+	<variable name="variable8" class="java.lang.String"/>
+	<variable name="variable9" class="java.lang.String"/>
+	<group name="categoria">
+		<groupExpression><![CDATA[$F{categoria}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="UF">
+		<groupExpression><![CDATA[$F{uf}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<staticText>
+				<reportElement x="135" y="0" width="36" height="13" uuid="7b8aa92a-2f76-4b5a-9c81-02dd9becd643"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[UF]]></text>
+			</staticText>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="171" y="0" width="124" height="13" uuid="11a4ab5c-3154-4cfa-a893-41365fe34949"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeCampo1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="135" height="13" uuid="12db812d-1823-495c-91c8-3a6e222c1334"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Categoria]]></text>
+			</staticText>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="295" y="0" width="100" height="13" uuid="bab1ef92-75b2-4c92-83b4-a4e968ad194c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeCampo2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="395" y="0" width="100" height="13" uuid="31bff1b0-32bb-4428-95b6-d4559355556d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeCampo3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="495" y="0" width="100" height="13" uuid="05049266-8122-4582-acb4-5c907a9eb1cf"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeCampo4}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="695" y="0" width="107" height="13" uuid="575d2ad9-22fe-48a1-a2e1-8ad955e21fd6"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeCampo6}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="595" y="0" width="100" height="13" uuid="b7cc9da2-12a7-4c30-9382-4dd9c95d5814"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeCampo5}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="135" y="0" width="36" height="13" uuid="075ac0d1-2e2a-43ac-a513-c5e1cef083c4"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{uf}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="171" y="0" width="124" height="13" uuid="8861f7ab-1a14-41cd-a4f9-28d336a91ab7"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorCampo1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="295" y="0" width="100" height="13" uuid="1ba2b09e-f97f-48d4-9306-4ea0809380df"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorCampo2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="395" y="0" width="100" height="13" uuid="dc5c9cbd-3819-4986-918f-47333e47a7d3"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorCampo3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="495" y="0" width="100" height="13" uuid="926c8164-0ba5-4960-b0eb-dbb8fe91ab34"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorCampo4}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="595" y="0" width="100" height="13" uuid="54f5383e-60bb-4871-96b6-2f5649ddb578"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorCampo5}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="695" y="0" width="107" height="13" uuid="c4e886f1-2cfa-484c-b0fa-e21fe67d28ed"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorCampo6}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="135" height="13" uuid="01620a0c-3f0d-4d05-947b-defb2fe1fe7d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{categoria}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
