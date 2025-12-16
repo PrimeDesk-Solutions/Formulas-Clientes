@@ -50,8 +50,13 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
             Long idDoc = dado.getLong("eaa01id");
             List<TableMap> itensDoc = buscarItensDoc(idDoc);
             List<TableMap> parcelamento = buscarParcelamentosDocumentos(idDoc);
+            String obsInterno = dado.getString("obsInterno");
             Integer countItens = 0;
             Integer countParcela = 0;
+
+            if(obsInterno != null ){
+                if(obsInterno.toUpperCase().contains("COM NOTA")) dado.put("comNota", 1);
+            }
 
             for (item in itensDoc) {
                 countItens++;
@@ -100,7 +105,7 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
                 "abe0101Principal.abe0101cep AS cepEntidade, abe0101Principal.abe0101ddd1 AS dddEntidade, abe0101Principal.abe0101fone1 AS foneEntidade, aab10nome AS usuario, abb01data AS dtVenda, " +
                 "abe30codigo AS codCondPgto, abe30nome AS descrCondPgto, eaa01totItens AS totalItem, CAST(eaa01json ->> 'desconto' AS numeric(18,6)) AS desconto, eaa01totDoc AS totDoc, " +
                 "abe0101Entrega.abe0101endereco AS enderecoEntregaEnt, abe0101Entrega.abe0101bairro AS bairroEntregaEnt, abe0101Entrega.abe0101numero AS numeroEntregaEnt, aag0201Entrega.aag0201nome AS cidadeEntregaEnt, " +
-                "aag02Principal.aag02uf AS ufEntregaEntidade, abe0101Entrega.abe0101cep AS cepEntregaEnt, abe0101Entrega.abe0101complem AS complemEntregaEnt " +
+                "aag02Principal.aag02uf AS ufEntregaEntidade, abe0101Entrega.abe0101cep AS cepEntregaEnt, abe0101Entrega.abe0101complem AS complemEntregaEnt, eaa01obsUsoInt AS obsInterno " +
                 "FROM eaa01 \n" +
                 "INNER JOIN eaa0101 ON eaa0101doc = eaa01id " +
                 "INNER JOIN abb01 ON abb01id = eaa01central " +
@@ -147,7 +152,7 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
                 "abe0101Principal.abe0101cep AS cepEntidade, abe0101Principal.abe0101ddd1 AS dddEntidade, abe0101Principal.abe0101fone1 AS foneEntidade, aab10nome AS usuario, abb01data AS dtVenda, " +
                 "abe30codigo AS codCondPgto, abe30nome AS descrCondPgto, eaa01totItens AS totalItem, CAST(eaa01json ->> 'desconto' AS numeric(18,6)) AS desconto, eaa01totDoc AS totDoc, " +
                 "abe0101Entrega.abe0101endereco AS enderecoEntregaEnt, abe0101Entrega.abe0101bairro AS bairroEntregaEnt, abe0101Entrega.abe0101numero AS numeroEntregaEnt, aag0201Entrega.aag0201nome AS cidadeEntregaEnt, " +
-                "aag02Principal.aag02uf AS ufEntregaEntidade, abe0101Entrega.abe0101cep AS cepEntregaEnt, abe0101Entrega.abe0101complem AS complemEntregaEnt " +
+                "aag02Principal.aag02uf AS ufEntregaEntidade, abe0101Entrega.abe0101cep AS cepEntregaEnt, abe0101Entrega.abe0101complem AS complemEntregaEnt, eaa01obsUsoInt AS obsInterno " +
                 "FROM eaa01 \n" +
                 "INNER JOIN eaa0101 ON eaa0101doc = eaa01id " +
                 "INNER JOIN abb01 ON abb01id = eaa01central " +
