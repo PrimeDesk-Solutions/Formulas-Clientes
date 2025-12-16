@@ -51,6 +51,13 @@ public class SPV_Impressao_Pre_Venda extends RelatorioBase {
             List<TableMap> itensPreVenda = buscarItensPreVenda(idPreVenda);
 
             for(item in itensPreVenda){
+                Integer entrega = item.getInteger("entrega");
+
+                if(entrega == 0){
+                    item.put("entrega", "RETIRAR");
+                }else{
+                    item.put("entrega", "ENTREGAR");
+                }
                 item.put("key", idPreVenda);
 
                 listItens.add(item);
@@ -134,7 +141,7 @@ public class SPV_Impressao_Pre_Venda extends RelatorioBase {
         Parametro parametroId = Parametro.criar("id", id);
 
         String sql = "SELECT ccb0101seq, aam06codigo AS umu, abm01codigo AS codItem, abm01descr AS naItem, ccb0101unit AS totItem, " +
-                    "ccb0101desc AS desconto, ccb0101totDoc AS totDoc, ccb0101qtComl AS qtd " +
+                    "ccb0101desc AS desconto, ccb0101totDoc AS totDoc, ccb0101qtComl AS qtd, ccb0101entregar AS entrega " +
                     "FROM ccb0101 " +
                     "INNER JOIN abm01 ON abm01id = ccb0101item " +
                     "LEFT JOIN aam06 ON aam06id = abm01umu "+
