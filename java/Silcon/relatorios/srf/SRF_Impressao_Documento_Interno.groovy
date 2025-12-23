@@ -173,15 +173,15 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
     }
 
     private List<TableMap> buscarItensDoc(Long id) {
-        return getSession().createQuery(" SELECT abm01codigo AS codItem, abm01na AS naItem, aam06codigo AS umu, eaa0103qtComl AS qtdItem, eaa0103unit AS unitItem, " +
-                "eaa0103total AS totItem,eaa0103totDoc AS totDocItem, CAST(eaa0103json ->>'desconto' AS numeric(18,6)) AS descontoItem " +
+        return getSession().createQuery(" SELECT abm01codigo AS codItem, abm01descr AS descrItem, aam06codigo AS umu, eaa0103qtComl AS qtdItem, eaa0103unit AS unitItem, " +
+                "eaa0103total AS totItem,eaa0103totDoc AS totDocItem, CAST(eaa0103json ->>'desconto' AS numeric(18,6)) AS descontoItem, abg01codigo AS codNcm " +
                 " FROM eaa0103 " +
-                "INNER JOIN abm01 ON abm01id = eaa0103item " +
+                " INNER JOIN abm01 ON abm01id = eaa0103item " +
                 " LEFT JOIN aam06 on aam06id = eaa0103umComl " +
+                " LEFT JOIN abg01 ON abg01id = eaa0103ncm "+
                 " WHERE eaa0103doc = :id " +
                 " ORDER BY eaa0103seq").setParameters("id", id)
                 .getListTableMap();
-
     }
 
     private List<TableMap> buscarParcelamentosDocumentos(Long idDoc) {

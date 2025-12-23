@@ -6,6 +6,8 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.j2se.MatrixToImageWriter
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
+import sam.model.entities.aa.Aac10
+import sam.model.entities.aa.Aac1002
 import sam.model.entities.aa.Aag02
 import sam.model.entities.aa.Aag0201
 import sam.server.samdev.relatorio.TableMapDataSource
@@ -37,6 +39,7 @@ class SRF_NFCe extends RelatorioBase {
 
     @Override
     public DadosParaDownload executar() {
+
         def tipos = getListLong("tipo");
         def numeroInicial = getInteger("numeroInicial");
         def numeroFinal = getInteger("numeroFinal");
@@ -63,7 +66,7 @@ class SRF_NFCe extends RelatorioBase {
             Image imgQrdCode = gerarQrCode(dado.getString("qrCode"));
             Integer tipoInscricao = dado.getInteger("abe01ti");
             String numInscricao = dado.getString("numInscricao");
-            String inscricaoFormatada = formatarInscricao(numInscricao,tipoInscricao);
+            String inscricaoFormatada = tipoInscricao == 0 || tipoInscricao == 1 ? formatarInscricao(numInscricao,tipoInscricao) : "";
             List<TableMap> listFormaPagamento = buscarFormaDePagamento(idDoc);
 
             for (item in itensDoc) {
@@ -77,7 +80,7 @@ class SRF_NFCe extends RelatorioBase {
                 for(pagamento in listFormaPagamento){
                     pagamento.put("key", idDoc);
                     pagamento.put("descrFormaPgto", pagamento.getString("descrFormaPgto"));
-                    pagamento.put("valorPgto", pagamento.getString("valorPgto"));
+                    pagamento.put("valorPgto", pagamento.getBigDecimal_Zero("valorPgto"));
                     listPagamentos.add(pagamento);
                 }
             }
@@ -92,8 +95,8 @@ class SRF_NFCe extends RelatorioBase {
         Aag02 aag02Empresa = getSession().get(Aag02.class, "aag02id, aag02uf", aag0201Empresa.aag0201uf.aag02id);
         adicionarParametro("nomeEmpresa", obterEmpresaAtiva().getAac10rs());
         adicionarParametro("enderecoEmpresa", obterEmpresaAtiva().getAac10endereco() + ", " + obterEmpresaAtiva().getAac10numero() + ", " + obterEmpresaAtiva().getAac10bairro());
-        adicionarParametro("ufEmpresa", aag0201Empresa.aag0201nome + ", " + aag02Empresa.aag02uf);
-        adicionarParametro("inscricaoEmpresa", formatarInscricao(obterEmpresaAtiva().getAac10ni(),obterEmpresaAtiva().getAac10ti()));
+        adicionarParametro("ufEmpresa", aag0201Empresa.aag0201nome + " - " + aag02Empresa.aag02uf + " CEP: " + obterEmpresaAtiva().getAac10cep());
+        adicionarParametro("inscricaoEmpresa", "CNPJ: " + formatarInscricao(obterEmpresaAtiva().getAac10ni(),obterEmpresaAtiva().getAac10ti()) + " IE: 382016308117");
 
         // Cria os sub-relatórios
         TableMapDataSource dsPrincipal = new TableMapDataSource(dados);
@@ -128,7 +131,7 @@ class SRF_NFCe extends RelatorioBase {
                 "INNER JOIN abe01 ON abe01id = abb01ent     " +
                 "LEFT JOIN abe0101 AS abe0101Principal ON abe0101Principal.abe0101ent = abe01id AND abe0101Principal.abe0101principal = 1    " +
                 "INNER JOIN aah01 ON abb01tipo = aah01id    " +
-                "INNER JOIN abe30 ON eaa01cp = abe30id    " +
+                "LEFT JOIN abe30 ON eaa01cp = abe30id    " +
                 "LEFT JOIN aag0201 AS aag0201Principal ON aag0201Principal.aag0201id = abe0101Principal.abe0101municipio    " +
                 "LEFT JOIN aag02 AS aag02Principal ON aag0201Principal.aag0201uf = aag02Principal.aag02id   " +
                 "INNER JOIN eaa0102 ON eaa0102doc = eaa01id  " +
@@ -158,25 +161,27 @@ class SRF_NFCe extends RelatorioBase {
 
     }
     private List<TableMap> buscarDocumentoById(Long idDoc) {
-        String sql = " SELECT DISTINCT eaa01id, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, abb01num AS numDoc, eaa01obsContrib, CAST(eaa01json -> 'vlr_carga_trib' AS NUMERIC(18,6)) AS cargaTrib, "+
-                " abe01codigo AS codEntidade, abe01na AS nomeEntidade, abe0101Principal.abe0101endereco AS enderecoEntidade, abe0101Principal.abe0101numero AS numEndEntidade, eaa01obsFisco, "+
-                " abe0101Principal.abe0101complem AS complemEntidade, abe0101Principal.abe0101bairro AS bairroEntidade, aag0201Principal.aag0201nome AS cidadeEntidade, aag02Principal.aag02uf AS ufEntidade, "+
-                " abe0101Principal.abe0101cep AS cepEntidade, abe0101Principal.abe0101ddd1 AS dddEntidade, abe0101Principal.abe0101fone1 AS foneEntidade, aab10nome AS usuario, abb01data AS dataEmissao, abb01operHora AS horaEmissao, "+
-                " abe30codigo AS codCondPgto, abe30nome AS descrCondPgto, eaa01totItens AS totalItem, CAST(eaa01json ->> 'desconto' AS numeric(18,6)) AS desconto, eaa01totDoc AS totDoc, "+
-                " aag02Principal.aag02uf AS ufEntidade, eaa01nfeChave AS chaveDoc, eaa01nfeProt AS protocoloDoc, eaa01nfeData AS dataAutorizacao, eaa01nfeHora AS horaAutorizacao, abe01ni AS numInscricao,abe01ti, abb01serie AS serie " +
-                " FROM eaa01 "+
-                " INNER JOIN eaa0101 ON eaa0101doc = eaa01id "+
-                " INNER JOIN abb01 ON abb01id = eaa01central "+
-                " INNER JOIN aab10 ON aab10id = abb01operUser "+
-                " INNER JOIN abe01 ON abe01id = abb01ent  "+
-                " LEFT JOIN abe0101 AS abe0101Principal ON abe0101Principal.abe0101ent = abe01id AND abe0101Principal.abe0101principal = 1 "+
-                " INNER JOIN aah01 ON abb01tipo = aah01id "+
-                " INNER JOIN abe30 ON eaa01cp = abe30id "+
-                " LEFT JOIN aag0201 AS aag0201Principal ON aag0201Principal.aag0201id = abe0101Principal.abe0101municipio "+
-                " LEFT JOIN aag02 AS aag02Principal ON aag0201Principal.aag0201uf = aag02Principal.aag02id  "+
-                " INNER JOIN eaa0102 ON eaa0102doc = eaa01id " +
-                " WHERE eaa01id = :idDoc " +
-                " ORDER BY abb01num"
+
+        String sql =
+                "SELECT DISTINCT eaa01id, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, abb01num AS numDoc, eaa01obsContrib, CAST(eaa01json -> 'vlr_carga_trib' AS NUMERIC(18,6)) AS cargaTrib,    " +
+                        "abe01codigo AS codEntidade, abe01na AS nomeEntidade, abe0101Principal.abe0101endereco AS enderecoEntidade, abe0101Principal.abe0101numero AS numEndEntidade, eaa01obsFisco,     " +
+                        "abe0101Principal.abe0101complem AS complemEntidade, abe0101Principal.abe0101bairro AS bairroEntidade, aag0201Principal.aag0201nome AS cidadeEntidade, aag02Principal.aag02uf AS ufEntidade,    " +
+                        "abe0101Principal.abe0101cep AS cepEntidade, abe0101Principal.abe0101ddd1 AS dddEntidade, abe0101Principal.abe0101fone1 AS foneEntidade, aab10nome AS usuario, abb01data AS dataEmissao, abb01operHora AS horaEmissao,    " +
+                        "abe30codigo AS codCondPgto, abe30nome AS descrCondPgto, eaa01totItens AS totalItem, CAST(eaa01json ->> 'desconto' AS numeric(18,6)) AS desconto, eaa01totDoc AS totDoc,    " +
+                        "aag02Principal.aag02uf AS ufEntidade, eaa01nfeChave AS chaveDoc, eaa01nfeProt AS protocoloDoc, eaa01nfeData AS dataAutorizacao,eaa01nfeHora AS horaAutorizacao, abe01ni AS numInscricao, abe01ti, abb01serie AS serie, eaa0102pvQrCodeVenda AS qrCode " +
+                        " FROM eaa01 "+
+                        " INNER JOIN eaa0101 ON eaa0101doc = eaa01id "+
+                        " INNER JOIN abb01 ON abb01id = eaa01central "+
+                        " INNER JOIN aab10 ON aab10id = abb01operUser "+
+                        " INNER JOIN abe01 ON abe01id = abb01ent  "+
+                        " LEFT JOIN abe0101 AS abe0101Principal ON abe0101Principal.abe0101ent = abe01id AND abe0101Principal.abe0101principal = 1 "+
+                        " INNER JOIN aah01 ON abb01tipo = aah01id "+
+                        " LEFT JOIN abe30 ON eaa01cp = abe30id "+
+                        " LEFT JOIN aag0201 AS aag0201Principal ON aag0201Principal.aag0201id = abe0101Principal.abe0101municipio "+
+                        " LEFT JOIN aag02 AS aag02Principal ON aag0201Principal.aag0201uf = aag02Principal.aag02id  "+
+                        " INNER JOIN eaa0102 ON eaa0102doc = eaa01id " +
+                        " WHERE eaa01id = :idDoc " +
+                        " ORDER BY abb01num"
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idDoc", idDoc))
     }
@@ -193,10 +198,10 @@ class SRF_NFCe extends RelatorioBase {
     }
     private List<TableMap> buscarFormaDePagamento(Long eaa01id){
         String sql = " SELECT abf40descr AS descrFormaPgto, eaa01131valor AS valorPgto " +
-                     " FROM eaa01131 " +
-                     " INNER JOIN eaa0113 ON eaa0113id = eaa01131fin "+
-                     " INNER JOIN abf40 ON abf40id = eaa01131fp "+
-                     " WHERE eaa0113doc = :eaa01id "
+                " FROM eaa01131 " +
+                " INNER JOIN eaa0113 ON eaa0113id = eaa01131fin "+
+                " INNER JOIN abf40 ON abf40id = eaa01131fp "+
+                " WHERE eaa0113doc = :eaa01id "
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("eaa01id", eaa01id));
 
@@ -245,4 +250,3 @@ class SRF_NFCe extends RelatorioBase {
     }
 }
 //meta-sis-eyJkZXNjciI6IlNSRiAtIEltcHJlc3PDo28gRG9jdW1lbnRvIEludGVybm8iLCJ0aXBvIjoicmVsYXRvcmlvIn0=
-//meta-sis-eyJkZXNjciI6IlNSRiAtIE5GQ2UiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
