@@ -124,7 +124,7 @@ public class Devolucao_De_Compra extends FormulaBase {
         abd01 = getSession().get(Abd01.class, eaa01.eaa01pcd.abd01id);
         //if (abd01 != null && abd01.abd01es == 0)  throw new ValidacaoException("Esta fórmula poderá ser utilizada somente em documentos de saída.");
 
-        //PCD Fiscais 
+        //PCD Fiscais
         abd02 = getSession().get(Abd02.class, abd01.abd01ceFiscais.abd02id);
 
         //Dados da Entidade
@@ -153,7 +153,7 @@ public class Devolucao_De_Compra extends FormulaBase {
         //Configurações do item, por empresa
         abm0101 = abm01 != null ? getSession().get(Abm0101.class, Criterions.where("abm0101item = " + abm01.abm01id + " AND abm0101empresa = " + aac10.aac10id)) : null;
 
-        //Valores do Item 
+        //Valores do Item
         abm10 = abm0101 != null && abm0101.abm0101valores != null ? getSession().get(Abm10.class, abm0101.abm0101valores.abm10id) : null;
 
         //Valores do Item - Estados
@@ -255,15 +255,15 @@ public class Devolucao_De_Compra extends FormulaBase {
         //=====================================
         if (eaa0103.eaa0103qtComl > 0) {
 
-            //Unidade Medida Venda 
+            //Unidade Medida Venda
             jsonEaa0103.put("umv", aam06.aam06codigo);
 
             //Define o preço unitário de acordo com a Tabela de Preço
             definirPrecoUnitarioItem();
-            
+
             //Define o Valor Unitário para Uso em Estoque
             jsonEaa0103.put("unitario_estoque", eaa0103.eaa0103unit);
-            
+
             // Quantidade Original
             if (jsonEaa0103.getBigDecimal_Zero("qt_original") == 0) {
                 jsonEaa0103.put("qt_original", eaa0103.eaa0103qtComl);
@@ -290,17 +290,17 @@ public class Devolucao_De_Compra extends FormulaBase {
 
             //TotalItem = QuantidadeVenda * Preço Unit
             eaa0103.eaa0103total = eaa0103.eaa0103qtComl * eaa0103.eaa0103unit;
-            
+
             // Calcula ICMS dos itens
             calcularICMS();
 
             //Total do Documento
             eaa0103.eaa0103totDoc = eaa0103.eaa0103total +
-                                    jsonEaa0103.getBigDecimal_Zero("ipi") +
-                                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                                    jsonEaa0103.getBigDecimal_Zero("seguro") +
-                                    jsonEaa0103.getBigDecimal_Zero("outras_despesas") -
-                                    jsonEaa0103.getBigDecimal_Zero("desconto");
+                    jsonEaa0103.getBigDecimal_Zero("ipi") +
+                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
+                    jsonEaa0103.getBigDecimal_Zero("seguro") +
+                    jsonEaa0103.getBigDecimal_Zero("outras_despesas") -
+                    jsonEaa0103.getBigDecimal_Zero("desconto");
 
             // Quantidade Convertida
             jsonEaa0103.put("qt_convertida", eaa0103.eaa0103qtComl)
@@ -310,61 +310,70 @@ public class Devolucao_De_Compra extends FormulaBase {
 
             // Total Convertido
             jsonEaa0103.put("total_conv", eaa0103.eaa0103total.round(2));
-            
+
             //IPI Outras
             jsonEaa0103.put("ipi_outras", eaa0103.eaa0103totDoc);
 
             // ICMS Isento - calculado acima isenção total, no caso de redução de base, calcular abaixo
             jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
-            
+
+            calcularFundoDeCombatePobreza();
+
+            calcularDifal(dentroEstado);
+
             // Prenche os SPEDs dos itens
             preencherSPED();
-            
+
         }
     }
 
     private void calcularICMS() {
 
-        def vlrReducao = 0;
+        if(jsonEaa0103.getBigDecimal_Zero("_icms") != -1){
+            def vlrReducao = 0;
 
-        //BC ICMS
-        jsonEaa0103.put("bc_icms", eaa0103.eaa0103total +
-                jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                jsonEaa0103.getBigDecimal_Zero("seguro") +
-                jsonEaa0103.getBigDecimal_Zero("outras_despesas"));
+            //BC ICMS
+            jsonEaa0103.put("bc_icms", eaa0103.eaa0103total +
+                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
+                    jsonEaa0103.getBigDecimal_Zero("seguro") +
+                    jsonEaa0103.getBigDecimal_Zero("outras_despesas"));
 
-        // Tratar redução da base de cálculo
-        if (abe01.abe01contribIcms == 1) {
-            if (jsonAbm1001_UF_Item.getBigDecimal_Zero("_red_bc_icms") != 0) {
-                jsonEaa0103.put("_red_bc_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("_red_bc_icms"));
+            // Tratar redução da base de cálculo
+            if (abe01.abe01contribIcms == 1) {
+                if (jsonAbm1001_UF_Item.getBigDecimal_Zero("_red_bc_icms") != 0) {
+                    jsonEaa0103.put("_red_bc_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("_red_bc_icms"));
+                }
             }
-        }
 
-        // Calculo da Redução 
-        if (jsonEaa0103.getBigDecimal_Zero("_red_bc_icms") > 0) {
-            vlrReducao = ((jsonEaa0103.getBigDecimal_Zero("bc_icms") * jsonEaa0103.getBigDecimal_Zero("_red_bc_icms")) / 100).round(2);
-            jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms") - vlrReducao);
-        }
-
-        // Obter a Aliquota de ICMS 
-        if (jsonEaa0103.getBigDecimal_Zero("_icms") == 0) {
-            if (jsonAbm1001_UF_Item.getBigDecimal_Zero("_fixa_icms") != 0) {
-                jsonEaa0103.put("_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("_fixa_icms"));
+            // Calculo da Redução
+            if (jsonEaa0103.getBigDecimal_Zero("_red_bc_icms") > 0) {
+                vlrReducao = ((jsonEaa0103.getBigDecimal_Zero("bc_icms") * jsonEaa0103.getBigDecimal_Zero("_red_bc_icms")) / 100).round(2);
+                jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms") - vlrReducao);
             }
-        }
 
-        // Calcular valor do ICMS e Valor ICMS Isento
-        if (jsonEaa0103.getBigDecimal_Zero("_icms") > 0) { // Aliquota menor que zero = Isento
-            jsonEaa0103.put("icms", ((jsonEaa0103.getBigDecimal_Zero("bc_icms") * jsonEaa0103.getBigDecimal_Zero("_icms")) / 100).round(2));
-        } else {
-            jsonEaa0103.put("icms", 0.000000);
-            jsonEaa0103.put("icms_outras", jsonEaa0103.getBigDecimal_Zero("bc_icms") + vlrReducao);
-            jsonEaa0103.put("bc_icms", 0.000000);
-            jsonEaa0103.put("_red_bc_icms", 0.000000);
-            jsonEaa0103.put("icms_isento", 0.000000);
-            vlrReducao = 0;
-        }
+            // Obter a Aliquota de ICMS
+            if (jsonEaa0103.getBigDecimal_Zero("_icms") == 0) {
+                if (jsonAbm1001_UF_Item.getBigDecimal_Zero("_fixa_icms") != 0) {
+                    jsonEaa0103.put("_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("_fixa_icms"));
+                }
+            }
 
+            // Calcular valor do ICMS e Valor ICMS Isento
+            if (jsonEaa0103.getBigDecimal_Zero("_icms") > 0) { // Aliquota menor que zero = Isento
+                jsonEaa0103.put("icms", ((jsonEaa0103.getBigDecimal_Zero("bc_icms") * jsonEaa0103.getBigDecimal_Zero("_icms")) / 100).round(2));
+            } else {
+                jsonEaa0103.put("icms", 0.000000);
+                jsonEaa0103.put("icms_outras", jsonEaa0103.getBigDecimal_Zero("bc_icms") + vlrReducao);
+                jsonEaa0103.put("bc_icms", 0.000000);
+                jsonEaa0103.put("_red_bc_icms", 0.000000);
+                jsonEaa0103.put("icms_isento", 0.000000);
+                vlrReducao = 0;
+            }
+        }else{
+            jsonEaa0103.put("bc_icms", new BigDecimal(0));
+            jsonEaa0103.put("_icms", new BigDecimal(0));
+            jsonEaa0103.put("icms", new BigDecimal(0));
+        }
     }
 
     private void trocarCFOP(Boolean dentroEstado) {
@@ -404,8 +413,25 @@ public class Devolucao_De_Compra extends FormulaBase {
             }
         }
     }
+    private calcularFundoDeCombatePobreza() {
+        if (jsonAbm1001_UF_Item.getBigDecimal_Zero("_fcp") > 0) {
+            jsonEaa0103.put("bc_fcp", jsonEaa0103.getBigDecimal_Zero("bc_icms_st"));
+            jsonEaa0103.put("icms_fcp_", jsonAbm1001_UF_Item.getBigDecimal_Zero("_fcp"));
+            jsonEaa0103.put("vlr_icms_fcp_", (jsonEaa0103.getBigDecimal_Zero("bc_fcp") * jsonEaa0103.getBigDecimal_Zero("icms_fcp_") / 100).round(2));
+        }else{
+            jsonEaa0103.put("bc_fcp", new BigDecimal(0));
+            jsonEaa0103.put("icms_fcp_", new BigDecimal(0));
+            jsonEaa0103.put("vlr_icms_fcp_", new BigDecimal(0));
+        }
+    }
+    private calcularDifal(def dentroEstado) {
+        jsonEaa0103.put("bc_difal", new BigDecimal(0));
+        jsonEaa0103.put("aliq_icms_inter", new BigDecimal(0));
+        jsonEaa0103.put("vlr_difal", new BigDecimal(0));
+        jsonEaa0103.put("icms_inter_part", new BigDecimal(0))
+    }
     private preencherSPED(){
-        //BC ICMS SPED = BC ICMS 
+        //BC ICMS SPED = BC ICMS
         jsonEaa0103.put("bc_icms_sped", jsonEaa0103.getBigDecimal_Zero("bc_icms"));
 
         //Aliq ICMS SPED = Aliq ICMS
