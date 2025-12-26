@@ -5,7 +5,8 @@ package Silcon.formulas.itensDocumentos
 
 import br.com.multiorm.Query
 import sam.model.entities.aa.Aac13
-import sam.model.entities.aa.Aaj01;
+import sam.model.entities.aa.Aaj01
+import sam.model.entities.aa.Aaj07;
 import sam.model.entities.ab.Abd02;
 import sam.server.samdev.utils.Parametro;
 import br.com.multiorm.criteria.criterion.Criterions
@@ -17,6 +18,7 @@ import sam.model.entities.aa.Aac10;
 import sam.model.entities.aa.Aag01;
 import sam.model.entities.aa.Aag02;
 import sam.model.entities.aa.Aag0201;
+import sam.model.entities.aa.Aaj07;
 import sam.model.entities.aa.Aaj10;
 import sam.model.entities.aa.Aaj11;
 import sam.model.entities.aa.Aaj12;
@@ -60,6 +62,7 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
     private Aag02 ufEmpr;
     private Aag0201 municipioEnt;
     private Aag0201 municipioEmpr;
+    private Aaj07 aaj07;
     private Aaj10 aaj10_cstIcms;
     private Aaj11 aaj11_cstIpi;
     private Aaj12 aaj12_cstPis;
@@ -102,6 +105,8 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
     private TableMap jsonAag02Empr;
     private TableMap jsonAac10;
     private TableMap jsonAbe4001;
+    private TableMap jsonAaj07clasTrib;
+
 
     @Override
     public void executar() {
@@ -348,6 +353,133 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
 
         }
 
+    }
+    private void calcularCBSIBS() {
+        // *********************************************
+        // ************ REFORMA TRIBUTÁRIA *************
+        // *********************************************
+
+        //================================
+        //******  BASE DE CALCULO   ******
+        //================================
+
+        //(vProd + vServ + vFrete + vSeg + vOutro + vII) -
+        // (vDesc - vPIS - vCOFINS - vICMS - vICMSUFDest - vFCP - vFCPUFDest - vICMSMono - vISSQN)
+        /*VBCIS*/
+        jsonEaa0103.put("is_bc", (eaa0103.eaa0103total +
+                jsonEaa0103.getBigDecimal_Zero("total_servico") +
+                jsonEaa0103.getBigDecimal_Zero("frete_dest") +
+                jsonEaa0103.getBigDecimal_Zero("seguro") +
+                jsonEaa0103.getBigDecimal_Zero("outras")) -
+                (jsonEaa0103.getBigDecimal_Zero("desconto") -
+                        jsonEaa0103.getBigDecimal_Zero("pis") -
+                        jsonEaa0103.getBigDecimal_Zero("cofins") -
+                        jsonEaa0103.getBigDecimal_Zero("icms") -
+                        jsonEaa0103.getBigDecimal_Zero("ufdest_icms") -
+                        jsonEaa0103.getBigDecimal_Zero("vlr_icms_fcp_")))
+
+
+        //vProd + vServ + vFrete + vSeg + vOutro
+        //VBC (CBS e IBS) - Base de Caculo CBS/IBS
+        jsonEaa0103.put("cbs_ibs_bc", eaa0103.eaa0103total +
+                jsonEaa0103.getBigDecimal_Zero("total_servico") +
+                jsonEaa0103.getBigDecimal_Zero("frete_dest") +
+                jsonEaa0103.getBigDecimal_Zero("seguro") +
+                jsonEaa0103.getBigDecimal_Zero("outras"))
+
+        //================================
+        //******       VALORES      ******
+        //================================
+
+        //AJUSTE DA COMPETENCIA (UB112)
+        if (jsonAaj07clasTrib.getBoolean("ajuste_comp")) {
+            jsonEaa0103.put("vlr_ibs", jsonEaa0103.getBigDecimal_Zero("vlr_ibsmun") + jsonEaa0103.getBigDecimal_Zero("vlr_ibsuf"))
+            jsonEaa0103.put("vlr_cbs", (jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * jsonEaa0103.getBigDecimal_Zero("cbs_aliq")) / 100)
+        }
+        //CREDITO PRESUMIDO DA OPERAÇÃO(UB120)
+        if (jsonAaj07clasTrib.getBoolean("cred_presumido")) {
+            jsonEaa0103.put("cred_presumido", jsonEaa0103.getBigDecimal_Zero("aliq_credpresum") * jsonEaa0103.getBigDecimal_Zero("bc_credpresum"))
+        }
+
+        //CRÉDITO PRESUMIDO IBS ZONA FRANCA DE MANAUS
+        if (jsonAaj07clasTrib.getBoolean("cred_pres_ibs_zfm")) {
+            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
+        }
+        //CST CBS/IBS
+        if (jsonAaj07clasTrib.getString("cst_cbsibs")) {
+            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
+        }
+        //DESCRIÇÃO CST CBS/IBS
+        if (jsonAaj07clasTrib.getString("desc_cstcbsibs")) {
+            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
+        }
+        //DIFERIMENTO CBS/IBS
+        if (jsonAaj07clasTrib.getBoolean("dif_cbsibs")) {
+            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
+        }
+        //ESTORNO DE CRÉDITO
+        if (jsonAaj07clasTrib.getBoolean("estorno_cred")) {
+            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
+        }
+        //MONOFÁSICA
+        if (jsonAaj07clasTrib.getBoolean("monofasica_cbsibs")) {
+            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
+        }
+        //PERCENTUAL REDUÇÃO CBS
+        if (jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_cbs")) {
+            //
+        }
+        //PERCENTUAL REDUÇÃO IBS
+        if (jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_ibs")) {
+            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
+        }
+        //REDUÇÃO BASE DE CÁLCULO
+        if (jsonAaj07clasTrib.getBoolean("red_bc")) {
+            //jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
+            eaa0103.eaa0103total = eaa0103.eaa0103total -
+                    jsonEaa0103.getBigDecimal_Zero("desconto") +
+                    jsonEaa0103.getBigDecimal_Zero("icm_desonerado") +
+                    jsonEaa0103.getBigDecimal_Zero("st_icm") +
+                    /* + icms mono */
+                    jsonEaa0103.getBigDecimal_Zero("icms_fcp") +
+                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
+                    jsonEaa0103.getBigDecimal_Zero("seguro") +
+                    jsonEaa0103.getBigDecimal_Zero("outras") +
+                    jsonEaa0103.getBigDecimal_Zero("ii_ii") +
+                    jsonEaa0103.getBigDecimal_Zero("ipi")
+
+        }
+        //REDUÇÃO BASE DE CÁLCULO CST
+        if (jsonAaj07clasTrib.getBoolean("red_bc_cst")) {
+            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
+        }
+        //REDUÇÃO DE ALÍQUOTA
+        if (jsonAaj07clasTrib.getBoolean("red_bc_aliq")) {
+            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
+        }
+        //TRANSFERÊNCIA DE CRÉDITO
+        if (jsonAaj07clasTrib.getBoolean("transf_cred")) {
+            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
+        }
+        //TRIBUTAÇÃO REGULAR
+        if (jsonAaj07clasTrib.getBoolean("tributacao")) {
+            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
+        }
+
+        //jsonEaa0103.put("cbs_ibs_bc",eaa0103.eaa0103total)//BC IBS/CBS
+        jsonEaa0103.put("cbs_aliq", jsonAag02Ent.getBigDecimal_Zero("cbs_aliq"))//Alíquota CBS
+        jsonEaa0103.put("vlr_cbs", (jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * jsonEaa0103.getBigDecimal_Zero("cbs_aliq")) / 100)
+
+        //Valor CBS
+        jsonEaa0103.put("ibs_uf_aliq", jsonAag0201Ent.getBigDecimal_Zero("ibs_uf_aliq"))//Alíquota IBS Estadua
+        jsonEaa0103.put("ibs_mun_aliq", jsonAag0201Ent.getBigDecimal_Zero("ibs_mun_aliq") * eaa0103.eaa0103total)
+
+        //Alíquota IBS Municipal
+        jsonEaa0103.put("vlr_ibsmun", jsonEaa0103.getBigDecimal_Zero("ibs_mun_aliq") * eaa0103.eaa0103total)
+
+        //Alíquota de IBS Municipal
+        jsonEaa0103.put("vlr_ibsuf", jsonEaa0103.getBigDecimal_Zero("ibs_uf_aliq") * eaa0103.eaa0103total)//IBS Estadual
+        jsonEaa0103.put("vlr_ibs", jsonEaa0103.getBigDecimal_Zero("vlr_ibsmun") + jsonEaa0103.getBigDecimal_Zero("vlr_ibsuf"))// total de IBS
     }
 
     private void definirPrecoUnitarioItem(){
