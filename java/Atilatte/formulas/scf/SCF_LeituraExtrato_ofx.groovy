@@ -29,7 +29,7 @@ class SCF_LeituraExtrato_ofx extends FormulaBase {
         String FITID = null;
         String MEMO = "";
         String CHECKNUM = "";
-        LocalDate dtAtual = LocalDate.of(2025,12,22)//LocalDate.now();
+        LocalDate dtAtual = LocalDate.now();
 
         List<SCF0221LctoExtratoDto> listExtratoDto = new ArrayList();
 
