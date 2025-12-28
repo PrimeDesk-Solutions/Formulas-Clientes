@@ -2,10 +2,12 @@ package Atilatte.formulas.scf
 
 import br.com.multitec.utils.DateUtils
 import br.com.multitec.utils.DecimalUtils
+import br.com.multitec.utils.collections.TableMap
 import org.springframework.web.multipart.MultipartFile
 import sam.dicdados.FormulaTipo
 import sam.dto.scf.SCF0221LctoExtratoDto
 import sam.server.samdev.formula.FormulaBase
+import sam.server.samdev.utils.Parametro
 
 import java.time.LocalDate
 
@@ -27,7 +29,7 @@ class SCF_LeituraExtrato_ofx extends FormulaBase {
         String FITID = null;
         String MEMO = "";
         String CHECKNUM = "";
-        LocalDate dtAtual = LocalDate.now();
+        LocalDate dtAtual = LocalDate.of(2025,12,22)//LocalDate.now();
 
         List<SCF0221LctoExtratoDto> listExtratoDto = new ArrayList();
 
@@ -77,7 +79,23 @@ class SCF_LeituraExtrato_ofx extends FormulaBase {
                     extratoDto.dados1 = CHECKNUM;
                     extratoDto.dados2 = FITID;
 
-                    if(DTPOSTED == dtAtual.minusDays(2)) listExtratoDto.add(extratoDto);
+                    LocalDate dtAnalise = dtAtual.minusDays(1);
+                    // Verifica se a data é feriado, se sim busca uma data no repositório que não seja feriado
+                    Boolean isFeriado = verificarDataFeriado(dtAnalise);
+                    LocalDate dtAux = dtAnalise
+                    if(isFeriado){
+                        Boolean feriadoAux = true
+                        def count = 0
+                        while (feriadoAux){
+                            dtAux = dtAux.minusDays(1)
+                            if(!dtAux.dayOfWeek.weekday) continue
+                            feriadoAux = verificarDataFeriado(dtAux)
+                            count++
+                            if (count > 10) interromper("Processo interrompido")
+                        }
+                    }
+
+                    if(DTPOSTED == dtAux) listExtratoDto.add(extratoDto);
                 }
             }
 
@@ -86,6 +104,23 @@ class SCF_LeituraExtrato_ofx extends FormulaBase {
             e.printStackTrace();
         }
         put("lista", listExtratoDto);
+    }
+    private Boolean verificarDataFeriado(LocalDate data){
+        if(!data.dayOfWeek.weekday) return true; // Final de semana
+
+        String dataAnalise = data.toString().replace("-", "");
+        List<String> datasFeriados = buscarFeriadosRepositorio();
+
+        return datasFeriados.contains(dataAnalise);
+
+    }
+    private List<String> buscarFeriadosRepositorio(){
+        String sql = "SELECT CAST(aba2001json ->> 'data' AS text) AS feriado " +
+                    "FROM aba2001 " +
+                    "WHERE aba2001rd = 30123851 " +
+                    "AND CAST(aba2001json ->> 'data' AS text) IS NOT NULL ";
+
+        return getAcessoAoBanco().obterListaDeString(sql);
     }
 }
 
