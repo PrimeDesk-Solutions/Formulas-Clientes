@@ -111,6 +111,8 @@ class SCF_LeituraExtrato_ofx extends FormulaBase {
         String dataAnalise = data.toString().replace("-", "");
         List<String> datasFeriados = buscarFeriadosRepositorio();
 
+        if(datasFeriados == null || datasFeriados.size() == 0) interromper("Não foi encontrado lista de feriados no repositório de dados para calculo de dia útil.")
+
         return datasFeriados.contains(dataAnalise);
 
     }
