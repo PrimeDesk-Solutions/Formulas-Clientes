@@ -106,7 +106,7 @@ class SCF_Remessa_Banco_Itau_CNAB400 extends FormulaBase{
             txt.print(abf01.abf01json.get("primeira_instrucao"), 2, true);												//157-158
             txt.print(abf01.abf01json.get("segunda_instrucao"), 2, true);											 	//159-160
             txt.print(daa01json.getBigDecimal("juros") == null ? "0000000000000" : daa01json.getBigDecimal("juros").multiply(100).intValue(), 13); //161-173
-            txt.print(daa01json.getDate("dt_limite_desc") == null ? "000000" : daa01json.getDate("dt_lim_desc").format(PATTERN_DDMMYY)); //174-179
+            txt.print(daa01json.getDate("dt_limite_desc") == null ? "000000" : daa01json.getDate("dt_limite_desc").format(PATTERN_DDMMYY)); //174-179
             txt.print(daa01json.getBigDecimal("desconto") == null ? "0000000000000" : daa01json.getBigDecimal("desconto").multiply(100).abs().intValue(), 13); //180-192
             txt.print(0, 13);																				 	//193-205
             txt.print(0, 13);																				 	//206-218
