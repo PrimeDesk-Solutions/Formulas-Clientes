@@ -281,7 +281,7 @@ public class SRF_Documentos_Por_Itens extends RelatorioBase {
                 whereES +
                 whereItens +
                 whereMps +
-                "ORDER BY abm01codigo,  abb01nota.abb01num"
+                "ORDER BY abm01codigo,abb01nota.abb01data, abb01nota.abb01num "
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroEmpresa, parametroNumIni, parametroNumFin, parametroTipoDoc, parametroPcd, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroDtEntradaSaidaIni, parametroDtEntradaSaidaFin, parametroEntidade,
                 parametroItens, parametroMps);
