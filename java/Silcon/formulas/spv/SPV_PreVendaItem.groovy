@@ -30,6 +30,7 @@ class SPV_PreVendaItem extends FormulaBase {
 
     @Override
     public void executar() {
+
         ccb0101 = get("ccb0101");
         procInvoc = get("procInvoc");
         campoDigitado = get("campoDigitado");
@@ -38,7 +39,6 @@ class SPV_PreVendaItem extends FormulaBase {
         abe01 = ccb01.ccb01ent;
         abe40 = ccb01.ccb01tp;
         abe30 = ccb01.ccb01cp;
-
         abm01 = ccb0101.ccb0101item;
 
         //Calcula somente o % Desconto e TotalDoc caso tenha sido digitado o Valor Desconto
@@ -59,35 +59,35 @@ class SPV_PreVendaItem extends FormulaBase {
             ccb0101.ccb0101percDesc = round(ccb0101.ccb0101percDesc_Zero, 2);
 
             return;
+        }else if(campoDigitado == 3){
+            //Calculando o valor do desconto com base no % Desconto
+            def valorDesc = 0;
+            if(ccb0101.ccb0101total_Zero > 0 && ccb0101.ccb0101percDesc_Zero > 0) {
+                if(ccb0101.ccb0101percDesc_Zero > 100) {
+                    throw new ValidacaoException("% do desconto não pode ser maior que 100,00.");
+                }
+
+                valorDesc = (ccb0101.ccb0101total_Zero * ccb0101.ccb0101percDesc_Zero) / 100;
+            }
+            ccb0101.ccb0101desc = valorDesc;
+            ccb0101.ccb0101desc = round(ccb0101.ccb0101desc_Zero, 2);
         }
 
-        if(ccb0101.ccb0101unit_Zero == 0) setarObterPrecoUnitario();
+        if(campoDigitado == 0){ // Inserindo item pela primeira vez ou alterando tabela
+            setarObterPrecoUnitario();
 
-        if(procInvoc == "CAS0240") return;
+            if(procInvoc == "CAS0240") return;
 
-        //Calculando total do item
-        ccb0101.ccb0101total = ccb0101.ccb0101qtComl_Zero * ccb0101.ccb0101unit_Zero;
-        ccb0101.ccb0101total = round(ccb0101.ccb0101total_Zero, 2);
+            ccb0101.ccb0101percDesc = new BigDecimal(0) // Zera percentual de desconto
 
-		//Calculando o valor do desconto com base no % Desconto
-		def valorDesc = 0;
-		if(ccb0101.ccb0101total_Zero > 0 && ccb0101.ccb0101percDesc_Zero > 0) {
-			if(ccb0101.ccb0101percDesc_Zero > 100) {
-				throw new ValidacaoException("% do desconto não pode ser maior que 100,00.");
-			}
+            //Calculando total do item
+            ccb0101.ccb0101total = ccb0101.ccb0101qtComl_Zero * ccb0101.ccb0101unit_Zero;
+            ccb0101.ccb0101total = round(ccb0101.ccb0101total_Zero, 2);
 
-			valorDesc = (ccb0101.ccb0101total_Zero * ccb0101.ccb0101percDesc_Zero) / 100;
-		}
-		ccb0101.ccb0101desc = valorDesc;
-		ccb0101.ccb0101desc = round(ccb0101.ccb0101desc_Zero, 2);
+            //Calculando o TotalDoc
+            ccb0101.ccb0101totDoc = ccb0101.ccb0101total_Zero - ccb0101.ccb0101desc_Zero;
+        }
 
-        //Calculando o TotalDoc
-        ccb0101.ccb0101totDoc = ccb0101.ccb0101total_Zero - ccb0101.ccb0101desc_Zero;
-    }
-    private TableMap buscarCamposCustomizadosUser(Long idUser){
-        String sql = "SELECT aab10camposCustom FROM aab10 WHERE aab10id = :idUser";
-
-        return getAcessoAoBanco().buscarUnicoTableMap(sql, Parametro.criar("idUser", idUser));
     }
     private void verificarLimMaxDesconto(){
         if(abe40 == null) return;
