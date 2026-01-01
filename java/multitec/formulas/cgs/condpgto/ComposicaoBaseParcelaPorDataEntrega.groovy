@@ -23,10 +23,10 @@ public class ComposicaoBaseParcelaPorDataEntrega extends FormulaBase {
 		
 		def dtBase = eaa01.getEaa01central().getAbb01data(); //Data base considerada sendo a data do documento da central
 		if(dtBase == null) return;
-
+		
 		def abe30id = eaa01.getEaa01cp() != null ? eaa01.getEaa01cp().getIdValue() : null;
 		if(abe30id == null) return; //Condição de pagamento considerada será a do documento Eaa01
-
+		
 		List<ComposicaoBaseParcelaDto> listaComposicaoBaseParcela = new ArrayList<>();
 		
 		Map<LocalDate, BigDecimal> agrupamentoDataEntregaValor = agruparValorFinanceiroItensPorDataEntrega(eaa01, dtBase);
@@ -58,8 +58,7 @@ public class ComposicaoBaseParcelaPorDataEntrega extends FormulaBase {
 		
 		if(!Utils.isEmpty(eaa01.getEaa0103s())) {
 			for(Eaa0103 eaa0103 : eaa01.getEaa0103s()) {
-				def eaa0103totFinanc = (eaa0103.getEaa0103totFinanc()).round(2);
-//												interromper(eaa0103totFinanc.toString())
+				def eaa0103totFinanc = eaa0103.getEaa0103totFinanc();
 				if(eaa0103totFinanc == null) eaa0103totFinanc = 0.0;
 				
 				def dataEntregaItem = eaa0103.getEaa0103dtEntrega();
@@ -74,7 +73,6 @@ public class ComposicaoBaseParcelaPorDataEntrega extends FormulaBase {
 				}
 				
 				map.put(dataEntregaItem, valor);
-
 			}
 		}
 		

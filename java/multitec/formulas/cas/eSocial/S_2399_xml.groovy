@@ -40,7 +40,7 @@ public class S_2399_xml extends FormulaBase {
 		
 		Map<Long, TableMap> mapDetOper = new HashMap<>();
 		
-		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtTSVTermino/v_S_01_01_00");
+		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtTSVTermino/v_S_01_03_00");
 		
 		ElementXml evtTSVTermino = eSocial.addNode("evtTSVTermino");
 		evtTSVTermino.setAttribute("Id", ESocialUtils.comporIdDoEvento(aac10.aac10ti, aac10.aac10ni));
@@ -102,7 +102,7 @@ public class S_2399_xml extends FormulaBase {
 							ElementXml ideEstabLot = dmDev.addNode("ideEstabLot");
 							ideEstabLot.addNode("tpInsc", tm.getInteger("abh02ti"), true);
 							
-							String nrInsc = StringUtils.extractNumbers(tm.getString("abh02ni"));
+							String nrInsc = StringUtils.extractNumbers(obterEmpresaAtiva().aac10ni);
 							ideEstabLot.addNode("nrInsc", StringUtils.ajustString(nrInsc, 14, '0', true), true);
 							ideEstabLot.addNode("codLotacao", tm.getString("abh02codigo"), true);
 							

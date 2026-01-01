@@ -12,10 +12,13 @@ import sam.server.samdev.formula.FormulaBase
 public class CGS_CondPagtoCompBaseParcela extends FormulaBase {
 		
 	private Eaa01 eaa01;
+	private Integer vlrAuxiliar;
 	
 	@Override
 	public void executar() {
 		eaa01 = (Eaa01)get("eaa01"); // eaa01 - objeto passivo de ser manipulado para se obter data, condição de pagemento e valor 
+		vlrAuxiliar = get("vlrAuxiliar");
+		if(vlrAuxiliar == null) vlrAuxiliar = 0;
 		
 		if(eaa01 == null) return;
 		
@@ -23,6 +26,8 @@ public class CGS_CondPagtoCompBaseParcela extends FormulaBase {
 		
 		def dtBase = eaa01.eaa01central.getAbb01data(); //Data base considerada sendo a data do documento da central
 		if(dtBase == null) return;
+		
+		dtBase = dtBase.plusDays(vlrAuxiliar);
 		
 		List<ComposicaoBaseParcelaDto> listaComposicaoBaseParcela = new ArrayList<>();
 		

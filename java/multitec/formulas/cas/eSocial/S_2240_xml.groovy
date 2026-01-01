@@ -37,7 +37,7 @@ public class S_2240_xml extends FormulaBase {
 		def tpAmb = 1;
 		def indRetif = aaa15.aaa15tipo == Aaa15.TIPO_RETIFICACAO ? 2 : 1;
 		
-		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtExpRisco/v_S_01_01_00");
+		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtExpRisco/v_S_01_03_00");
 		ElementXml evtExpRisco = eSocial.addNode("evtExpRisco");
 		evtExpRisco.setAttribute("Id", ESocialUtils.comporIdDoEvento(aac10.aac10ti, aac10.aac10ni));
 		
@@ -92,6 +92,7 @@ public class S_2240_xml extends FormulaBase {
 				if( fab0303.fab0303aval == 1 && (aap02.aap02codigo == "01.18.001" || aap02.aap02codigo == "02.01.014" ) ) fatRisco.addNode("limTol", fab0303.fab0303limTol, false);
 				if( fab0303.fab0303aval == 1 ) fatRisco.addNode("unMed",fab0303.fab0303um,true)
 				if( fab0303.fab0303aval == 1 ) fatRisco.addNode("tecMedicao",fab0303.fab0303tecMed,true)
+				if( aap02.aap02codigo.equals("05.01.001")) fatRisco.addNode("nrProcJud",fab0303.fab0303tecMed,true)
 					
 					
 				ElementXml epcEpi = fatRisco.addNode("epcEpi");

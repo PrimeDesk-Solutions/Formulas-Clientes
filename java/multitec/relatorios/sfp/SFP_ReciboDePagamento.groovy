@@ -50,8 +50,8 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 	public String getNomeTarefa() {
 		return "SFP - Recibo de Pagamento";
 	}
-	
-	
+
+
 	/**
 	 * Método Criar valores iniciais
 	 * @return Map - Filtros do Front-end
@@ -76,10 +76,10 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 		List<Long> aab1008ids = getAcessoAoBanco().obterListaDeLong("SELECT aab1008id FROM Aab1008 WHERE aab1008user = :aab10id", criarParametroSql("aab10id", obterUsuarioLogado().aab10id));
 		if (Utils.isEmpty(aab1008ids)) aab1008ids.add(0);
 		filtrosDefault.put("aab1008ids", aab1008ids);
-		
+
 		return Utils.map("filtros", filtrosDefault);
 	}
-	
+
 	/**
 	 * Método para gerar o PDF com os dados
 	 * @return gerarPDF (Nome, Dados)
@@ -95,17 +95,17 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 		Set<Integer> tipoTrabalhador = obterTipoTrabalhador();
 		Set<Integer> tipoCalculo = obterTiposCalculo();
 		String nomeRelatorio = "SFP_ReciboDePagamento";
-		String obs = getString("observacoes");
+		String obs = getString("obs");
 		String eventosNaoImprimir = getString("eventos") == null ? "": getString("eventos");
 		Long aab1008id = getLong("email");
 		boolean enviaEmail = getBoolean("enviaEmail");
 		String emailAssunto = getString("emailAssunto")
-		
+
 		String[] listaEventos = null;
 		if (!eventosNaoImprimir.isEmpty()) {
 			listaEventos = eventosNaoImprimir.split(",");
 		}
-		
+
 		if (listaEventos != null) {
 			for(int i = 0; i < listaEventos.length; i++) {
 				String evento = listaEventos[i];
@@ -113,7 +113,7 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 				listaEventos[i] = evento;
 			}
 		}
-		
+
 		// Eventos
 		String eveFeriasLiquida = getParametros(Parametros.FB_EVELIQFERIAS);
 		String eveFeriasPagas = getParametros(Parametros.FB_EVEPAGTOFERIASDESC);
@@ -138,9 +138,9 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 		String eveRbFer = "9031";
 		String eveSalContrato = "9999";
 
-		
+
 		Aac10 aac10 = getVariaveis().getAac10();
-		
+
 		String endereco = null;
 		if(aac10.getAac10endereco() != null) {
 			if(aac10.getAac10numero() != null) {
@@ -155,7 +155,7 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 				endereco += " - " + aac10.getAac10complem();
 			}
 		}
-		
+
 		// Define os campos principais do relatório
 		params.put("TITULO_RELATORIO_1", "Recibo de Pagamento");
 		params.put("TITULO_RELATORIO_2", "Demostrativo de Pagamento");
@@ -184,49 +184,49 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 		eventosBase.add(eveRb13);
 		eventosBase.add(eveRbFer);
 		eventosBase.add(eveSalContrato);
-		
+
 		TableMapDataSource reciboDePagamento = buscarDadosRelatorio(idsTrabalhador, idsDepartamento, idsCargos, idsSindicato, periodo, tipoTrabalhador, tipoCalculo, ordenacao, eveFeriasLiquida, eveFeriasPagas, eveAbonoLiquido, eveAbonoPago, eveAd13Liquido, eveAd13Pago, eveResLiquida, eveResPaga, eveFerNaoImpr, eventosBase, listaEventos);
-		
+
 		if (enviaEmail && aab1008id != null) {
 			for (int i =0; i < reciboDePagamento.recordCount; i++) {
 				TableMap tm = reciboDePagamento.records.get(i);
 				Long abh80id = tm.getLong("abh80id");
 				Abh80 abh80 = buscarTrabalhador(abh80id);
 				if (abh80.abh80eMail == null) continue;
-				
+
 				JasperReport report = carregarArquivoRelatorio(nomeRelatorio);
 				TableMapDataSource reciboParaEmail = buscarDadosRelatorio(Arrays.asList(abh80id), idsDepartamento, idsCargos, idsSindicato, periodo, tipoTrabalhador, tipoCalculo, ordenacao, eveFeriasLiquida, eveFeriasPagas, eveAbonoLiquido, eveAbonoPago, eveAd13Liquido, eveAd13Pago, eveResLiquida, eveResPaga, eveFerNaoImpr, eventosBase, listaEventos);
 				JasperPrint print = processarRelatorio(report, reciboParaEmail);
-				
+
 				Aab1008 aab1008 = getAcessoAoBanco().buscarRegistroUnicoById("Aab1008", aab1008id);
 				Email email = new Email(aab1008);
 				email.assunto = emailAssunto;
-				
+
 				StringBuilder strCorpo = new StringBuilder("");
 				strCorpo.append("Esta mensagem refere-se ao recibo de pagamento:");
-		
+
 				byte[] bytes = convertPrintToPDF(print);
 				ByteArrayDataSource arquivoPdf = new ByteArrayDataSource(bytes, "application/pdf");
 				String nomeArquivoPdf = "Recibo de Pagamento - " + abh80.abh80codigo + " - " + abh80.abh80nome + ".pdf";
-				
+
 				email.anexar(arquivoPdf, nomeArquivoPdf, nomeArquivoPdf);
 				strCorpo.append("<p><p>");
-				
+
 				email.setCorpoMsg(strCorpo.toString());
 				email.setEmailDestinoPara(abh80.abh80eMail);
-				
+
 				if (aab1008.aab1008assinatura != null) {
 					CAS1010Service cas1010Service = instanciarService(CAS1010Service.class);
 					email.adicionarAssinatura(cas1010Service.converterAssinaturaDoEmailEmInputStream(aab1008.aab1008assinatura));
 				}
-				
+
 				email.enviar();
 			}
 		}
-		
+
 		return gerarPDF(nomeRelatorio, reciboDePagamento);
 	}
-	
+
 	/**
 	 * Método para buscar os dados no banco
 	 * @param idsTrabalhador - Trabalhodores
@@ -251,18 +251,18 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 	 * @return TableMapDataSource
 	 */
 	public TableMapDataSource buscarDadosRelatorio(List<Long> idsTrabalhador, List<Long> idsDepartamento, List<Long> idsCargos, List<Long> idsSindicato, LocalDate[] periodo, Set<Integer> tipoTrabalhador, Set<Integer> tipoCalculo, Integer ordenacao, String eveFeriasLiquida, String eveFeriasPagas, String eveAbonoLiquido, String eveAbonoPago, String eveAd13Liquido, String eveAd13Pago, String eveResLiquida, String eveResPaga, String eveFerNaoImpr, List<String> eventosBase, String[] eventosNaoImprimir){
-		
+
 		List<TableMap>  listValores = buscarDadosFba0101sPeloReciboPagamento(idsTrabalhador, idsDepartamento, idsCargos, idsSindicato, periodo, tipoTrabalhador, tipoCalculo, ordenacao);
 		List<TableMap> mapValores = new ArrayList<TableMap>();
-		
+
 		//Prepara o mapa com os valores para recibo de pagamento.
 		int linha = 0;
 		if(listValores != null && listValores.size() > 0) {
 			for(int i = 0; i < listValores.size(); i++) {
-				
+
 				Long idAbh80 = listValores.get(i).getLong("abh80id");
 				String key = linha + "/" + idAbh80;
-				
+
 				List<TableMap> listaValoresEveBase = buscarDadosFba0101sValoresEventosBasePorReciboPagamento(idsDepartamento, idsCargos, idsSindicato, idAbh80, tipoCalculo, periodo, eventosBase, eveFerNaoImpr, eventosNaoImprimir);
 
 				List<BigDecimal> valoresEveBase = new ArrayList<BigDecimal>();
@@ -274,7 +274,7 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 
 					String codigo = listaValoresEveBase.get(j).getString("abh21codigo");
 					BigDecimal valor = listaValoresEveBase.get(j).getBigDecimal("totalValor");
-					
+
 					if(codigo.equals(eventosBase.get(0))) {
 						valoresEveBase.set(0, valor);
 					}else if(codigo.equals(eventosBase.get(1))) {
@@ -303,18 +303,18 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 						valoresEveBase.set(12, valor);
 					}
 				}
-				
+
 				//Calcula o salário do CADASTRO do trabalhador.
 				BigDecimal salarioMes = null;
 				BigDecimal salarioHora = null;
 				Integer horasSem = listValores.get(i).getInteger("abh80hs");
 				Long unidPagto = listValores.get(i).getLong("abh80unidPagto");
-				
+
 				Fba02 fba02 = getAcessoAoBanco().buscarRegistroUnico(" SELECT fba02id, fba02salario, fba02unidPagto FROM Fba02 " +
-																	 " WHERE fba02trab = :idAbh80 " + getWhereDataInterval("AND", periodo, "fba02dtCalc") +
-																		" ORDER BY fba02dtCalc DESC, fba02id DESC",
-																	 criarParametroSql("idAbh80", listValores.get(i).getLong("abh80id")));
-																 
+						" WHERE fba02trab = :idAbh80 " + getWhereDataInterval("AND", periodo, "fba02dtCalc") +
+						" ORDER BY fba02dtCalc DESC, fba02id DESC",
+						criarParametroSql("idAbh80", listValores.get(i).getLong("abh80id")));
+
 				if (fba02 != null && fba02.fba02unidPagto != null) {
 					Aap18 aap18 = getAcessoAoBanco().buscarRegistroUnicoById("Aap18", fba02.fba02unidPagto.aap18id);
 					def salario = fba02.fba02salario;
@@ -326,24 +326,24 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 					salarioMes = (salario * aap18.aap18fSM) * horasSem;
 					salarioHora = (salario * aap18.aap18fSH) * horasSem;
 				}
-				
+
 				//Obtêm o centro de custo, cargo e cbo do ARQUIVO DE VALORES.
 				String codAbh05 = null;
 				String nomeAbh05 = null;
 				String cbo = null;
-				
+
 				Fba0101 fba0101 = buscarFba0101PorIdEPeriodo(idAbh80, periodo);
-				
+
 				Abh80 abh80 = buscarTrabalhador(fba0101.getFba0101trab().getAbh80id());
 				Abh05 abh05 = buscarCargoESalario(abh80.getAbh80cargo().getAbh05id());
 				Abb11 abb11 = buscarDepartamento(abh80.getAbh80depto().getAbb11id());
-				
+
 				if(abh05 != null) {
 					codAbh05 = abh05.getAbh05codigo();
 					nomeAbh05 = abh05.getAbh05nome();
 					cbo = buscarCBO(abh05.getAbh05cbo().getAap03id()) != null ? buscarCBO(abh05.getAbh05cbo().getAap03id()).getAap03codigo() : null;
 				}
-				
+
 				comporLinhaMapa(mapValores, key, idAbh80, listValores.get(i).getString("abh80codigo"), listValores.get(i).getString("abh80nome"), listValores.get(i).getString("abh80bcoConta"), listValores.get(i).getString("abh80bcoDigCta"), listValores.get(i).getString("abh80bcoAgencia"), listValores.get(i).getString("abh80bcoDigAg"), salarioMes, salarioHora, listValores.get(i).getString("abh80cpf"), listValores.get(i).getString("abh80rgNum"), listValores.get(i).getDate("abh80rgDtExped"), listValores.get(i).getString("abh80rgEe"), listValores.get(i).getString("abh80rgOe"), listValores.get(i).getString("abh80pis"), listValores.get(i).getDate("abh80dtPis"), listValores.get(i).getDate("abh80dtAdmis"), abb11.getAbb11codigo(), abb11.getAbb11nome(), codAbh05, nomeAbh05, cbo, "Recibo de Pagamento", valoresEveBase);
 				linha++;
 			}
@@ -360,18 +360,18 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 				BigDecimal totalDesc = new BigDecimal(0);
 				Long idAbh80 = mapValores.get(i).getLong("abh80id");
 				String key = i + "/" + idAbh80;
-																							
+
 				List<TableMap> listEventos = buscarDadosFba01011sEventosPorReciboPagamento(idsDepartamento, idsCargos, idsSindicato, idAbh80, periodo, tipoCalculo, eveFerNaoImpr, eventosNaoImprimir);
 
 				if(listEventos != null && listEventos.size() > 0) {
 					for(int j = 0; j < listEventos.size(); j++) {
-						
+
 						TableMap mapEvento = new TableMap();
 						mapEvento.put("count", countItem);
 						mapEvento.put("key", key);
 						mapEvento.put("evento", listEventos.get(j).getString("abh21codigo") + " - " + listEventos.get(j).getString("abh21nome"));
 						mapEvento.put("ref", listEventos.get(j).getBigDecimal("totalRef"));
-						
+
 						if(listEventos.get(j).getInteger("abh21tipo") == 0) {
 							mapEvento.put("rendimento", listEventos.get(j).getBigDecimal("totalValor"));
 							totalRend = totalRend.add(listEventos.get(j).getBigDecimal("totalValor"));
@@ -386,10 +386,10 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 
 				if(tipoCalculo.contains(3)) {
 					//Verifica se existe evento de férias líquida para zerar com férias pagas.
-					
+
 					Abh21 abh21FeriasPagas = buscarPorChaveUnica(eveFeriasPagas);
 					BigDecimal valorFerias = buscarFba01011ValorEventoParaZerarFeriasERescisao(idsTrabalhador, idsDepartamento, idsCargos, idsSindicato, idAbh80, tipoTrabalhador, "", periodo, 3, eveFeriasLiquida, eventosNaoImprimir);
-					
+
 					if(abh21FeriasPagas != null && valorFerias != null && valorFerias.compareTo(new BigDecimal(0)) > 0) {
 						comporEventoPago(mapEventos, key, abh21FeriasPagas.getAbh21codigo(), abh21FeriasPagas.getAbh21nome(), valorFerias, countItem);
 						totalDesc = totalDesc.add(valorFerias);
@@ -425,7 +425,7 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 						countItem++;
 					}
 				}
-				
+
 				mapValores.get(i).put("totalRend", totalRend);
 				mapValores.get(i).put("totalDesc", totalDesc);
 				mapValores.get(i).put("totalLiquido", totalRend.subtract(totalDesc));
@@ -437,14 +437,14 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 		dsPrincipal.addSubDataSource("DsSub2", mapEventos, "key", "key");
 		params.put("StreamSub1", carregarArquivoRelatorio("SFP_ReciboDePagamento_S1"));
 		params.put("StreamSub2", carregarArquivoRelatorio("SFP_ReciboDePagamento_S1"));
-		
+
 		return dsPrincipal;
 	}
 
 	//Compõe as linhas do mapa
 	private void comporLinhaMapa(List<TableMap> mapa, String key, Long idAbh80, String codAbh80, String nomeAbh80, String contaAbh80, String digContaAbh80, String agenciaAbh80, String digAgenciaAbh80, BigDecimal salarioMes, BigDecimal salarioHora, String cpfAbh80, String rgAbh80, LocalDate rgExpedAbh80, String rgEEAbh80, String rgOEAbh80, String pisAbh80, LocalDate dtPisAbh80, LocalDate dtAdmisAbh80, String codAbb11, String nomeAbb11, String codAbh05, String nomeAbh05, String cbo, String tituloRel, List<BigDecimal> valoresEveBase) {
 		TableMap map = new TableMap();
-		
+
 		map.put("key", key);
 		map.put("abh80id", idAbh80);
 		map.put("abh80codigo", codAbh80);
@@ -482,29 +482,29 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 		map.put("valorRb13", valoresEveBase.get(10));
 		map.put("valorRbFer", valoresEveBase.get(11));
 		map.put("valorSalContrato", valoresEveBase.get(12));
-		
+
 		mapa.add(map);
 	}
 
 	//Compõe uma linha no mapa de eventos para férias pagas, abono pago e adiantamento de 13º salário pago (se houver)
 	private void comporEventoPago(List<TableMap> mapa, String key, String codAbh21, String nomeAbh21, BigDecimal valor, Integer count) {
 		TableMap map = new TableMap();
-		
+
 		map.put("key", key);
 		map.put("evento", codAbh21 + " - " + nomeAbh21);
 		map.put("ref", new BigDecimal(0));
 		map.put("desconto", valor);
 		map.put("count", count);
-		
+
 		mapa.add(map);
 	}
-		
+
 	/**Método Diverso
 	 * @return Set Integer (Tipo de Cálculo)
 	 */
 	private Set<Integer> obterTiposCalculo(){
 		Set<Integer> calc = new HashSet<Integer>();
-		
+
 		if((Boolean) get("calcFolha")) calc.add(0);
 		if((Boolean) get("calcAdiantamento")) calc.add(1);
 		if((Boolean) get("calc13sal")) calc.add(2);
@@ -512,7 +512,7 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 		if((Boolean) get("calcRescisao")) calc.add(4);
 		if((boolean) get("calcPlr")) calc.add(6);
 		if((Boolean) get("calcOutros")) calc.add(9);
-		
+
 		if(calc.size() == 0) {
 			calc.add(0);
 			calc.add(1);
@@ -524,18 +524,18 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 		}
 		return calc;
 	}
-	
+
 	/**Método Diverso
 	 * @return Set Integer (Tipo de Trabalhador)
 	 */
 	private Set<Integer> obterTipoTrabalhador(){
 		Set<Integer> tiposTrab = new HashSet<Integer>();
-		
+
 		if((Boolean) get("isTrabalhador")) tiposTrab.add(0);
 		if((Boolean) get("isAutonomo")) tiposTrab.add(1);
 		if((Boolean) get("isProlabore")) tiposTrab.add(2);
 		if((Boolean) get("isTerceiros")) tiposTrab.add(3);
-		
+
 		if(tiposTrab.size() == 0) {
 			tiposTrab.add(0);
 			tiposTrab.add(1);
@@ -544,7 +544,7 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 		}
 		return tiposTrab;
 	}
-	
+
 	/**Método Diverso
 	 * @return 	String (Parâmetro do SAM)
 	 */
@@ -554,14 +554,14 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 				.addWhere(Criterions.eq("aba01aplic", "FB"))
 				.addWhere(Criterions.where(getSamWhere().getWherePadrao("", Aba01.class)))
 				.get();
-		
+
 		String conteudo = null;
 		if(aba01 != null) {
 			conteudo = aba01.getAba01conteudo();
 		}
 		return conteudo;
 	}
-	
+
 	/**Método Diverso
 	 * @return 	Aag0201 (uf, municipio)
 	 */
@@ -571,7 +571,7 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 				.addWhere(Criterions.eq("aag0201id", aac10municipio))
 				.get();
 	}
-	
+
 	/**
 	 * Método buscar dados Recibo de Pagamento
 	 * @return List<TableMap> Dados do Banco
@@ -593,37 +593,37 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 		String whereFad0101Cargos = idsCargos != null && !idsCargos.isEmpty() ? "AND fad0101id IN (:idsCargos) " : "";
 		String whereAbh03Sindicato = idsSindicato != null && !idsSindicato.isEmpty() ? "AND abh03id IN (:idsSindicato) " : "";
 		String whereData = periodo != null ? getWhereDataInterval("WHERE", periodo, "fba0101dtCalc") : "";
-		
+
 		String sql = "SELECT abh80id, abh80codigo, abh80nome, abh80bcoConta, abh80bcoDigCta, abh80bcoAgencia, abh80bcoDigAg, abh80unidPagto, abh80salario, " +
-					 "abh80hs, abh80cpf, abh80rgNum, abh80rgDtExped, abh80rgEe, abh80rgOe, abh80pis, abh80dtPis, abh80dtAdmis, MAX(abb11codigo) as abb11codigo " +
-					 "FROM Fba0101 " +
-					 "INNER JOIN Fba01011 ON fba01011vlr = fba0101id " +
-					 "INNER JOIN Abb11 ON abb11id = fba01011depto " +
-					 "INNER JOIN Abh80 ON abh80id = fba0101trab " +
-					 "INNER JOIN Abh05 ON abh05id = abh80cargo " +
-					 "LEFT JOIN Abh03 ON abh03id = abh80sindSindical " +
-					 whereData + whereAbh80Trabalhador + whereAbb11Departamento + whereFad0101Cargos + whereAbh03Sindicato +
-					 "AND fba0101tpVlr IN (:fba0101tpVlr) " +
-					 "AND abh80tipo IN (:abh80tipo) " +
-					 getSamWhere().getWherePadrao("AND", Abh80.class) +
-					 " GROUP BY abh80id, abh80codigo, abh80nome, abh80bcoConta, abh80bcoDigCta, abh80bcoAgencia, abh80bcoDigAg, abh80salTipo, abh80salario, " +
-					 "abh80hs, abh80cpf, abh80rgNum, abh80rgDtExped, abh80rgEe, abh80rgOe, abh80pis, abh80dtPis, abh80dtAdmis " +
-					 ordem;
-		
+				"abh80hs, abh80cpf, abh80rgNum, abh80rgDtExped, abh80rgEe, abh80rgOe, abh80pis, abh80dtPis, abh80dtAdmis, MAX(abb11codigo) as abb11codigo " +
+				"FROM Fba0101 " +
+				"INNER JOIN Fba01011 ON fba01011vlr = fba0101id " +
+				"INNER JOIN Abb11 ON abb11id = fba01011depto " +
+				"INNER JOIN Abh80 ON abh80id = fba0101trab " +
+				"INNER JOIN Abh05 ON abh05id = abh80cargo " +
+				"LEFT JOIN Abh03 ON abh03id = abh80sindSindical " +
+				whereData + whereAbh80Trabalhador + whereAbb11Departamento + whereFad0101Cargos + whereAbh03Sindicato +
+				"AND fba0101tpVlr IN (:fba0101tpVlr) " +
+				"AND abh80tipo IN (:abh80tipo) " +
+				getSamWhere().getWherePadrao("AND", Abh80.class) +
+				" GROUP BY abh80id, abh80codigo, abh80nome, abh80bcoConta, abh80bcoDigCta, abh80bcoAgencia, abh80bcoDigAg, abh80salTipo, abh80salario, " +
+				"abh80hs, abh80cpf, abh80rgNum, abh80rgDtExped, abh80rgEe, abh80rgOe, abh80pis, abh80dtPis, abh80dtAdmis " +
+				ordem;
+
 		Query query = getSession().createQuery(sql);
-		
+
 		if(idsTrabalhador != null && !idsTrabalhador.isEmpty()) query.setParameter("idsTrabalhador", idsTrabalhador);
 		if(idsDepartamento != null && !idsDepartamento.isEmpty()) query.setParameter("idsDepartamento", idsDepartamento);
 		if(idsCargos != null && !idsCargos.isEmpty()) query.setParameter("idsCargos", idsCargos);
 		if(idsSindicato != null && !idsSindicato.isEmpty()) query.setParameter("idsSindicato", idsSindicato);
 		query.setParameter("fba0101tpVlr", tipoCalculo);
 		query.setParameter("abh80tipo", tipoTrabalhador);
-		
-		
+
+
 		return query.getListTableMap();
-		
+
 	}
-	
+
 	/**
 	 * Método buscar valores Evento Base por Recibo de Pagamento
 	 * @return List<TableMap> Dados do Banco
@@ -635,25 +635,25 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 		String whereAbh03Sindicato = idsSindicato != null && !idsSindicato.isEmpty() ? "AND abh03id IN (:idsSindicato) " : "";
 		String whereData = periodo != null ? getWhereDataInterval("WHERE", periodo, "fba0101dtCalc") : "";
 		String whereEventosNaoImprimir = eventosNaoImprimir != null && eventosNaoImprimir.length > 0 ? " AND abh21codigo NOT IN (:eventosNaoImprimir) " : "";
-		
+
 		String sql = "SELECT abh21codigo, SUM(fba01011valor) as totalValor " +
-					 "FROM Fba01011 " +
-					 "INNER JOIN Fba0101 ON fba0101id = fba01011vlr " +
-					 "INNER JOIN Fba01 ON Fba01id = fba0101calculo "+
-					 "INNER JOIN Abh21 ON abh21id = fba01011eve " +
-					 "INNER JOIN Abh80 ON abh80id = fba0101trab " +
-					 "INNER JOIN Abb11 ON abb11id = fba01011depto " +
-					 "INNER JOIN Abh05 ON abh05id = abh80cargo " +
-					 "LEFT JOIN Abh03 ON abh03id = abh80sindSindical " +
-					 whereData + whereAbb11Departamento + whereFad0101Cargos + whereAbh03Sindicato + whereEve + whereEventosNaoImprimir +
-					 "AND fba0101tpVlr IN (:fba0101tpVlr) " +
-					 "AND abh80id = :abh80id " +
-					 "AND abh21codigo IN (:abh21codigo) " +
-					 getSamWhere().getWherePadrao("AND", Fba01.class) +
-					 " GROUP BY abh21codigo";
-			
+				"FROM Fba01011 " +
+				"INNER JOIN Fba0101 ON fba0101id = fba01011vlr " +
+				"INNER JOIN Fba01 ON Fba01id = fba0101calculo "+
+				"INNER JOIN Abh21 ON abh21id = fba01011eve " +
+				"INNER JOIN Abh80 ON abh80id = fba0101trab " +
+				"INNER JOIN Abb11 ON abb11id = fba01011depto " +
+				"INNER JOIN Abh05 ON abh05id = abh80cargo " +
+				"LEFT JOIN Abh03 ON abh03id = abh80sindSindical " +
+				whereData + whereAbb11Departamento + whereFad0101Cargos + whereAbh03Sindicato + whereEve + whereEventosNaoImprimir +
+				"AND fba0101tpVlr IN (:fba0101tpVlr) " +
+				"AND abh80id = :abh80id " +
+				"AND abh21codigo IN (:abh21codigo) " +
+				getSamWhere().getWherePadrao("AND", Fba01.class) +
+				" GROUP BY abh21codigo";
+
 		Query query = getSession().createQuery(sql);
-		
+
 		if(idsDepartamento != null && !idsDepartamento.isEmpty()) query.setParameter("idsDepartamento", idsDepartamento);
 		if(idsCargos != null && !idsCargos.isEmpty()) query.setParameter("idsCargos", idsCargos);
 		if(idsSindicato != null && !idsSindicato.isEmpty()) query.setParameter("idsSindicato", idsSindicato);
@@ -662,11 +662,11 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 		query.setParameter("fba0101tpVlr", tipoCalculo);
 		query.setParameter("abh80id", idAbh80);
 		query.setParameter("abh21codigo", eventosBase);
-		
+
 		return query.getListTableMap();
-		
+
 	}
-	
+
 	/**
 	 * Método buscar valores por periodo
 	 * @return Fba0101 Dados do Banco
@@ -674,18 +674,18 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 	public Fba0101 buscarFba0101PorIdEPeriodo(Long idAbh80, LocalDate[] periodo) {
 		String whereData = periodo != null ? getWhereDataInterval("WHERE", periodo, "fba0101dtCalc") : "";
 		String sql = "SELECT * FROM Fba0101 " +
-					 "INNER JOIN Fba01 ON fba01id = fba0101calculo "+
-					 whereData +
-					 "AND fba0101trab = :idAbh80 " +
-					 getSamWhere().getWherePadrao("AND", Fba01.class) +
-					 " ORDER BY fba0101dtcalc DESC, fba0101id DESC";
-		
+				"INNER JOIN Fba01 ON fba01id = fba0101calculo "+
+				whereData +
+				"AND fba0101trab = :idAbh80 " +
+				getSamWhere().getWherePadrao("AND", Fba01.class) +
+				" ORDER BY fba0101dtcalc DESC, fba0101id DESC";
+
 		Query query = getSession().createQuery(sql);
-		
+
 		query.setParameter("idAbh80", idAbh80);
 		query.setMaxResult(1);
 		return (Fba0101) query.getUniqueResult(ColumnType.ENTITY);
-		
+
 	}
 
 	/**
@@ -699,27 +699,27 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 		String whereAbh03Sindicato = idsSindicato != null && !idsSindicato.isEmpty() ? "AND abh03id IN (:idsSindicato) " : "";
 		String whereData = periodo != null ? getWhereDataInterval("WHERE", periodo, "fba0101dtCalc") : "";
 		String whereEventosNaoImprimir = eventosNaoImprimir != null && eventosNaoImprimir.length > 0 ? " AND abh21codigo NOT IN (:eventosNaoImprimir) " : "";
-		
+
 		String sql = "SELECT abh21codigo, abh21nome, abh21tipo, abh80id, SUM(CASE WHEN fba01011refHoras > 0 THEN fba01011refHoras WHEN fba01011refDias > 0 THEN fba01011refDias ELSE fba01011refUnid END) as totalRef, SUM(fba01011valor) as totalValor " +
-					 "FROM Fba01011 " +
-					 "INNER JOIN Fba0101 ON fba0101id = fba01011vlr " +
-					 "INNER JOIN Fba01 ON Fba01id = fba0101calculo "+
-					 "INNER JOIN Abh21 ON abh21id = fba01011eve " +
-					 "INNER JOIN Abh80 ON abh80id = fba0101trab " +
-					 "INNER JOIN Abb11 ON abb11id = fba01011depto " +
-					 "INNER JOIN Abh05 ON abh05id = abh80cargo " +
-					 "LEFT JOIN Abh03 ON abh03id = abh80sindSindical " +
-					 whereData + whereEve +
-					 "AND fba0101trab = :idAbh80 " +
-					 "AND fba0101tpVlr IN (:fba0101tpVlr)  " +
-					 "AND abh21tipo IN (0, 1) " +
-					 whereAbb11Departamento + whereFad0101Cargos + whereAbh03Sindicato + whereEventosNaoImprimir + getSamWhere().getWherePadrao("AND", Fba01.class) +
-					 " GROUP BY abh21codigo, abh21nome, abh21tipo, abh80id " +
-					 "HAVING SUM(fba01011vlr) > 0 " +
-					 "ORDER BY abh21tipo, abh21codigo";
-		
+				"FROM Fba01011 " +
+				"INNER JOIN Fba0101 ON fba0101id = fba01011vlr " +
+				"INNER JOIN Fba01 ON Fba01id = fba0101calculo "+
+				"INNER JOIN Abh21 ON abh21id = fba01011eve " +
+				"INNER JOIN Abh80 ON abh80id = fba0101trab " +
+				"INNER JOIN Abb11 ON abb11id = fba01011depto " +
+				"INNER JOIN Abh05 ON abh05id = abh80cargo " +
+				"LEFT JOIN Abh03 ON abh03id = abh80sindSindical " +
+				whereData + whereEve +
+				"AND fba0101trab = :idAbh80 " +
+				"AND fba0101tpVlr IN (:fba0101tpVlr)  " +
+				"AND abh21tipo IN (0, 1) " +
+				whereAbb11Departamento + whereFad0101Cargos + whereAbh03Sindicato + whereEventosNaoImprimir + getSamWhere().getWherePadrao("AND", Fba01.class) +
+				" GROUP BY abh21codigo, abh21nome, abh21tipo, abh80id " +
+				"HAVING SUM(fba01011vlr) > 0 " +
+				"ORDER BY abh21tipo, abh21codigo";
+
 		Query query = getSession().createQuery(sql);
-		
+
 		if(idsDepartamento != null && !idsDepartamento.isEmpty()) query.setParameter("idsDepartamento", idsDepartamento);
 		if(idsCargos != null && !idsCargos.isEmpty()) query.setParameter("idsCargos", idsCargos);
 		if(idsSindicato != null && !idsSindicato.isEmpty()) query.setParameter("idsSindicato", idsSindicato);
@@ -727,26 +727,26 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 		if (eventosNaoImprimir != null && eventosNaoImprimir.length > 0) query.setParameter("eventosNaoImprimir", eventosNaoImprimir);
 		query.setParameter("idAbh80", idAbh80);
 		query.setParameter("fba0101tpVlr", tiposFba0101);
-		
+
 		return query.getListTableMap();
-				
+
 	}
-	
+
 	/**
 	 * Método buscar eventos por chave
 	 * @return Abh21 Dados do Banco
 	 */
 	public Abh21 buscarPorChaveUnica(String Abh21codigo){
 		if(Abh21codigo == null) return null;
-		
+
 		String sql = "SELECT * FROM Abh21 AS abh21 WHERE UPPER(abh21.abh21codigo) = UPPER(:P0) " + getSamWhere().getWherePadrao("AND", Abh21.class);
 		Query query = getSession().createQuery(sql);
 		query.setParameter("P0", Abh21codigo);
-		
+
 		return (Abh21) query.getUniqueResult(ColumnType.ENTITY);
-	
+
 	}
-	
+
 	/**
 	 * Método buscar valor evento ferias rescisão
 	 * @return Abh21 Dados do Banco
@@ -759,48 +759,48 @@ public class SFP_ReciboDePagamento extends RelatorioBase {
 		String whereAbh03Sindicato = idsSindicato != null && !idsSindicato.isEmpty() ? " AND abh03id IN (:idsSindicato) " : "";
 		String whereData = periodo != null ? getWhereDataInterval("WHERE", periodo, "fba0101dtCalc") : "";
 		String whereEventosNaoImprimir = eventosNaoImprimir != null && eventosNaoImprimir.length > 0 ? " AND abh21codigo NOT IN (:eventosNaoImprimir) " : "";
-		
+
 		String sql = "SELECT SUM(fba01011valor) FROM Fba01011 " +
-					 "INNER JOIN Fba0101 ON fba0101id = fba01011vlr " +
-					 "INNER JOIN Abh21 ON abh21id = fba01011eve " +
-					 "INNER JOIN Abh80 ON abh80id = fba0101trab " +
-					 "INNER JOIN Abb11 ON abb11id = fba01011depto " +
-					 "INNER JOIN Abh05 ON abh05id = abh80cargo " +
-					 "INNER JOIN Abh03 ON abh03id = abh80sindSindical " +
-					 whereData + where + whereAbb11Departamento + whereFad0101Cargos + whereAbh03Sindicato + whereAbh80Trabalhador + whereEventosNaoImprimir + getSamWhere().getWherePadrao("AND", Abh21.class) +
-					 " AND abh80tipo IN (:abh80tipo) " +
-					 " AND fba0101tpVlr IN (:fba0101tpVlr) " +
-					 " AND abh21codigo = :abh21codigo " +
-					 " AND fba01011valor > 0";
-			
+				"INNER JOIN Fba0101 ON fba0101id = fba01011vlr " +
+				"INNER JOIN Abh21 ON abh21id = fba01011eve " +
+				"INNER JOIN Abh80 ON abh80id = fba0101trab " +
+				"INNER JOIN Abb11 ON abb11id = fba01011depto " +
+				"INNER JOIN Abh05 ON abh05id = abh80cargo " +
+				"INNER JOIN Abh03 ON abh03id = abh80sindSindical " +
+				whereData + where + whereAbb11Departamento + whereFad0101Cargos + whereAbh03Sindicato + whereAbh80Trabalhador + whereEventosNaoImprimir + getSamWhere().getWherePadrao("AND", Abh21.class) +
+				" AND abh80tipo IN (:abh80tipo) " +
+				" AND fba0101tpVlr IN (:fba0101tpVlr) " +
+				" AND abh21codigo = :abh21codigo " +
+				" AND fba01011valor > 0";
+
 		Query query = getSession().createQuery(sql);
-		
+
 		query.setParameter("abh80tipo", tipoTrabalhador);
 		query.setParameter("fba0101tpVlr", tipoFba0101);
 		query.setParameter("abh21codigo", codAbh21);
 		query.setParameter("idsTrabalhador", idsTrabalhador);
 		if (eventosNaoImprimir != null && eventosNaoImprimir.length > 0) query.setParameter("eventosNaoImprimir", eventosNaoImprimir);
-		
+
 		if(idAbh80 != null) {
 			query.setParameter("idAbh80", idAbh80);
 		}else if(!codAbh21.equals("*")) {
 			query.setParameter("abb11codigo", codAbh21.toUpperCase()+"%");
 		}
-				
+
 		//return query.getListTableMap();
 		return (BigDecimal) query.getUniqueResult(ColumnType.BIG_DECIMAL); // == null ? new BigDecimal(0) : (BigDecimal) query.getUniqueResult(ColumnType.BIG_DECIMAL);
 	}
-	
+
 	// Buscar cargo e salario
 	public Abh05 buscarCargoESalario(Long abh05id) {
 		return getSession().createCriteria(Abh05.class).addWhere(Criterions.eq("abh05id", abh05id)).get();
 	}
-	
+
 	// Buscar trabalhador
 	public Abh80 buscarTrabalhador(Long abh80) {
 		return getSession().createCriteria(Abh80.class).addWhere(Criterions.eq("abh80id", abh80)).get();
 	}
-	
+
 	// Buscar CBO
 	public Aap03 buscarCBO(Long aap03id) {
 		return getSession().createCriteria(Aap03.class).addWhere(Criterions.eq("aap03id", aap03id)).get();

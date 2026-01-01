@@ -34,6 +34,7 @@ public class Parcelamento extends FormulaBase {
 
     @Override
     public void executar() {
+    	
         dtBase = (LocalDate) get("dtBase");
         abe30id = (Long) get("abe30id");
         valor = (BigDecimal) get("valor");
@@ -64,6 +65,7 @@ public class Parcelamento extends FormulaBase {
 
         List<Abe3001> abe3001s = buscarParcelasPeloIdCondicaoPagamento(abe30id);
         if (abe3001s != null && abe3001s.size() > 0) {
+
             int i = 1;
             for (Abe3001 abe3001 : abe3001s) {
 
@@ -113,6 +115,7 @@ public class Parcelamento extends FormulaBase {
                 i++;
             }
         }
+
 
         put("listaParcelas", listaParcelas);
     }
@@ -167,5 +170,6 @@ public class Parcelamento extends FormulaBase {
     }
 
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiMzEifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiMzEifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiMzEifQ==

@@ -1,4 +1,6 @@
-package multitec.formulas.cas.eSocial;
+package multitec.formulas.cas.eSocial
+
+import sam.model.entities.ab.Abh8007;
 
 import java.time.LocalDate;
 import java.util.stream.Collectors
@@ -92,7 +94,7 @@ public class S_1200_xml extends FormulaBase {
 		def eventoInss = aba2001?.getAba2001json()?.get("evento_inss") ?: null;
 		def eventoInssFerias = aba2001?.getAba2001json()?.get("evento_inss_ferias") ?: null;
 
-		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtRemun/v_S_01_01_00");
+		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtRemun/v_S_01_03_00");
 		
 		ElementXml evtRemun = eSocial.addNode("evtRemun");
 		evtRemun.setAttribute("Id", ESocialUtils.comporIdDoEvento(aac10.aac10ti, aac10.aac10ni));
@@ -195,11 +197,12 @@ public class S_1200_xml extends FormulaBase {
 					Abh02 abh02 = getAcessoAoBanco().buscarRegistroUnicoById("Abh02", abh02id);
 					ideEstabLot.addNode("tpInsc", abh02.abh02ti != null ? abh02.abh02ti + 1 : null, true);
 					
-					String nrInsc = StringUtils.extractNumbers(abh02.abh02ni);
+					String nrInsc = StringUtils.extractNumbers(obterEmpresaAtiva().getAac10ni());
 					ideEstabLot.addNode("nrInsc", StringUtils.ajustString(nrInsc, 14, '0', true), true);
 					ideEstabLot.addNode("codLotacao", abh02.abh02codigo, true);
 					
 					ElementXml remunPerApur = ideEstabLot.addNode("remunPerApur");
+					def teste2 = foiEnviadoMatricula()
 					if (abh80.abh80tipo == 0 || foiEnviadoMatricula()) remunPerApur.addNode("matricula", abh80.abh80codigo, false);
 					remunPerApur.addNode("indSimples", abh02.abh02contribSubst, false);
 					List<Fba01011> fba01011s = mapLotacaoFba01011s.get(abh02id).stream().sorted({o1, o2 -> o1.fba01011eve.abh21codigo.compareTo(o2.fba01011eve.abh21codigo)}).collect(Collectors.toList());
@@ -229,10 +232,25 @@ public class S_1200_xml extends FormulaBase {
 						if (abh21.abh21fator.compareTo(BigDecimal.ZERO) > 0) itensRemun.addNode("fatorRubr", ESocialUtils.formatarDecimal(abh21.abh21fator, 2, false), false);
 						if (vrRubr.compareTo(BigDecimal.ZERO) > 0) itensRemun.addNode("vrRubr", ESocialUtils.formatarDecimal(vrRubr, 2, false), true);
 						if (indApuracao == 1 && mesAnoRef.compareTo(LocalDate.of(2021, 07, 01)) >= 0 || indApuracao == 2 && mesAnoRef.getYear() >= 2021) itensRemun.addNode("indApurIR", abh21.abh21esApurIr, false);
-						
+
+						if(abh21.abh21esFgts != null && abh21.abh21esFgts.equals(Abh21.ESFGTS_DESCONTO_ECONSIGNADO)){
+							Abh8007[] abh8007s = abh80.getAbh8007s();
+							if(abh8007s != null && abh8007s.size() > 0){
+								Abh8007 abh8007 = abh8007s.stream().filter({abh8007 -> abh8007.getAbh8007eve().abh21id.equals(abh21.abh21id)}).findFirst().get();
+								if(abh8007 != null){
+									ElementXml descFolha = itensRemun.addNode("descFolha");
+									descFolha.addNode("tpDesc",1, true)
+									descFolha.addNode("instFinanc",abh8007.abh8007instFinanc, true)
+									descFolha.addNode("nrDoc",abh8007.abh8007nrDoc, true)
+									descFolha.addNode("observacao",abh8007.abh8007obs, false)
+								}
+							}
+						}
 					}
-					ElementXml infoAgNocivo = remunPerApur.addNode("infoAgNocivo");
-					infoAgNocivo.addNode("grauExp", abh02.abh02aposEspec, true);
+					if((abh80.abh80tipo != 1 && abh80.abh80tipo != 2) || abh80.abh80categ.aap14eSocial.equals("401")) {
+						ElementXml infoAgNocivo = remunPerApur.addNode("infoAgNocivo");
+						infoAgNocivo.addNode("grauExp", abh02.abh02aposEspec, false);
+					}
 				}
 			}
 
@@ -298,8 +316,10 @@ public class S_1200_xml extends FormulaBase {
 							}
 							
 							Abh02 abh02 = getAcessoAoBanco().buscarRegistroUnicoById("Abh02", fba3101.fba3101lotacao.abh02id);
-							ElementXml infoAgNocivo = remunPerAnt.addNode("infoAgNocivo");
-							infoAgNocivo.addNode("grauExp", abh02.abh02aposEspec, true);
+							if(abh80.abh80tipo != 1 ) {
+								ElementXml infoAgNocivo = remunPerAnt.addNode("infoAgNocivo");
+								infoAgNocivo.addNode("grauExp", abh02.abh02aposEspec, true);
+							}
 						}
 					}
 				}
@@ -392,11 +412,30 @@ public class S_1200_xml extends FormulaBase {
 																		 criarParametroSql("aaa15tabela", "ABH80"),
 																		 criarParametroSql("aaa15evento", aap50.aap50id),
 																		 criarParametroSql("aaa15registro", get("abh80id")));
-		if (aaa15Enviado != null) {
-			String aaa15xmlEnvio = aaa15Enviado.aaa15xmlEnvio;
-			ElementXml el1 = new ElementXml(new StringReader(aaa15xmlEnvio));
-			ElementXml subEl1 = el1.findChildNode("matricula");
-			return subEl1.getAttValue("matricula") != null;
+		try {
+			if (aaa15Enviado != null) {
+				String aaa15xmlEnvio = aaa15Enviado.aaa15xmlEnvio;
+				if(aaa15xmlEnvio != null) {
+					byte[] bytes = aaa15xmlEnvio.getBytes();
+					InputStream inputStream = new ByteArrayInputStream(bytes);
+					ElementXml el1 = new ElementXml(inputStream);
+					ElementXml subEl1 = el1.findChildNode("matricula");
+					return subEl1 != null && el1.getValue() != null;
+				}else {
+					return false
+				}
+			}
+		}catch(Exception e) {
+			if (aaa15Enviado != null) {
+				String aaa15xmlEnvio = aaa15Enviado.aaa15xmlEnvio;
+				if(aaa15xmlEnvio.contains("matricula")){
+					return true
+				}else{
+					return false
+				}
+			}else{
+				return false
+			}
 		}
 		return false;
 	}

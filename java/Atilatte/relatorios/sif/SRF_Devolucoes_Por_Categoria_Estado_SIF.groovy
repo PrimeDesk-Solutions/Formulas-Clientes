@@ -259,3 +259,4 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
 
     }
 }
+//meta-sis-eyJkZXNjciI6IlNSRiAtIERldm9sdcOnw7VlcyBwb3IgQ2F0ZWdvcmlhL0VzdGFkbyAoU0lGKSIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

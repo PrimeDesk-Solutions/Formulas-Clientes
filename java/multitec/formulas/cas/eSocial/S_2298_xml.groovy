@@ -36,7 +36,7 @@ public class S_2298_xml extends FormulaBase {
 		def indPagtoJuizo = get("indPagtoJuizo");
 		def tpAmb = get("tpAmb");
 		
-		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtReintegr/v_S_01_01_00");
+		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtReintegr/v_S_01_03_00");
 		ElementXml evtReintegr = eSocial.addNode("evtReintegr");
 		evtReintegr.setAttribute("Id", ESocialUtils.comporIdDoEvento(aac10.aac10ti, aac10.aac10ni));
 		

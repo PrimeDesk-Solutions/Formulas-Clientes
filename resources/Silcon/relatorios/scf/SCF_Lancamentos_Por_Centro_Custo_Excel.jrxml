@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF_Lancamentos_Por_Centro_Custo_PDF" language="groovy" pageWidth="992" pageHeight="595" orientation="Landscape" columnWidth="952" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5ec50620-b792-48b5-ba9d-f514d841b0b2">
 	<property name="ireport.zoom" value="1.4641000000000006"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="750"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="TITULO" class="java.lang.String"/>
 	<parameter name="EMPRESA" class="java.lang.String"/>
@@ -102,7 +102,7 @@
 	</columnHeader>
 	<detail>
 		<band height="13" splitType="Stretch">
-			<textField pattern="dd/MM/yyyy">
+			<textField>
 				<reportElement x="239" y="0" width="49" height="13" uuid="b9fe0fba-3667-4883-8eeb-fb539f64ae13"/>
 				<textElement>
 					<font size="8"/>

@@ -229,7 +229,7 @@ public class FormulaGeral extends FormulaBase {
 
         // Class. Trib CBS/IBS
         aaj07 = eaa0103.eaa0103clasTribCbsIbs != null ? getSession().get(Aaj07.class, eaa0103.eaa0103clasTribCbsIbs.aaj07id) : null;
-        if(aaj07 == null) throw new ValidacaoException("É nescessário informar a Classificação tribtária de CBS/IBS do item: " + abm01.abm01codigo + " - " + abm01.abm01na);
+        //if(aaj07 == null) throw new ValidacaoException("É nescessário informar a Classificação tribtária de CBS/IBS do item: " + abm01.abm01codigo + " - " + abm01.abm01na);
 
         // Verifica se tem itens repetidos na tabela de preço
         if(abe40 != null){
@@ -256,7 +256,7 @@ public class FormulaGeral extends FormulaBase {
         jsonAbm1003_Ent_Item = abm1003 != null && abm1003.abm1003json != null ? abm1003.abm1003json : new TableMap();
         jsonEaa0103 = eaa0103.eaa0103json != null ? eaa0103.eaa0103json : new TableMap();
         jsonAbe4001 = abe4001 != null ? abe4001.abe4001json : new TableMap();
-        jsonAaj07clasTrib = aaj07.aaj07json != null ? aaj07.aaj07json : new TableMap();
+        //jsonAaj07clasTrib = aaj07.aaj07json != null ? aaj07.aaj07json : new TableMap();
 
         if(abe01.abe01cli == 1){
             jsonAbe02 = abe02.abe02json != null ? abe02.abe02json : new TableMap();
@@ -365,7 +365,7 @@ public class FormulaGeral extends FormulaBase {
                 // Total do item
                 eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
 
-                calcularCBSIBS();
+                //calcularCBSIBS();
 
                 // Total Do Item com Desconto
                 jsonEaa0103.put("total_item_desc", eaa0103.eaa0103total - jsonEaa0103.getBigDecimal_Zero("desconto"));
@@ -452,7 +452,7 @@ public class FormulaGeral extends FormulaBase {
                 //Total Do Item
                 eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
 
-                calcularCBSIBS();
+                //calcularCBSIBS();
 
                 // Total Do Item com Desconto
                 jsonEaa0103.put("total_item_desc", eaa0103.eaa0103total - jsonEaa0103.getBigDecimal_Zero("desconto"));
@@ -544,7 +544,7 @@ public class FormulaGeral extends FormulaBase {
                 // Total do item
                 eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
 
-                calcularCBSIBS();
+                //calcularCBSIBS();
 
                 // Total Do Item com Desconto
                 jsonEaa0103.put("total_item_desc", eaa0103.eaa0103total - jsonEaa0103.getBigDecimal_Zero("desconto"));
@@ -1607,3 +1607,4 @@ public class FormulaGeral extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

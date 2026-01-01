@@ -12,17 +12,22 @@ import sam.server.samdev.formula.FormulaBase
 public class CGS_CondPagtoCompBaseDataEntrega extends FormulaBase {
 		
 	private Eaa01 eaa01;
+	private Integer vlrAuxiliar;
 	
 	@Override
 	public void executar() {
 		eaa01 = (Eaa01)get("eaa01"); // eaa01 - objeto passivo de ser manipulado para se obter data, condição de pagemento e valor 
+		vlrAuxiliar = get("vlrAuxiliar");
+		if(vlrAuxiliar == null) vlrAuxiliar = 0;
 		
 		if(eaa01 == null) return;
 		
 		if(eaa01.getEaa01central() == null) return;
 		
-		def dtBase = eaa01.getEaa01central().getAbb01data(); //Data base considerada sendo a data do documento da central
+		LocalDate dtBase = eaa01.getEaa01central().getAbb01data(); //Data base considerada sendo a data do documento da central
 		if(dtBase == null) return;
+		
+		dtBase = dtBase.plusDays(vlrAuxiliar);
 		
 		def abe30id = eaa01.getEaa01cp() != null ? eaa01.getEaa01cp().getIdValue() : null;
 		if(abe30id == null) return; //Condição de pagamento considerada será a do documento Eaa01

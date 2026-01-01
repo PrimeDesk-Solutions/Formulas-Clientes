@@ -1,4 +1,6 @@
-package multitec.relatorios.sca;
+package multitec.relatorios.sca
+
+import sam.model.entities.ab.Abh21;
 
 import java.time.LocalDate;
 
@@ -75,12 +77,21 @@ public class SCA_BancoDeHorasAnalitico extends RelatorioBase {
 				if(trabalhador != null && !trabalhador.equals(fca2001.getString("abh80codigo"))) saldo = 0;
 				
 				if(fca2001.getInteger("fca2001quita").equals(0)) {
-					saldo += fca2001.getInteger("fca2001horas");
-					
+					if(fca2001.getInteger("abh21tipo").equals(Abh21.TIPO_RENDIMENTO)){
+						saldo += fca2001.getInteger("fca2001horas");
+					}else{
+						saldo -= fca2001.getInteger("fca2001horas");
+						fca2001.put("fca2001horas", fca2001.getInteger("fca2001horas") * -1)
+					}
+
 					fca2001.put("horasRealizadas", fca2001.getInteger("fca2001horas"));
 				} else {
-					saldo -= fca2001.getInteger("fca2001horas");
-					
+					if(fca2001.getInteger("abh21tipo").equals(Abh21.TIPO_RENDIMENTO)){
+						saldo += fca2001.getInteger("fca2001horas");
+					}else{
+						saldo -= fca2001.getInteger("fca2001horas");
+						fca2001.put("fca2001horas", fca2001.getInteger("fca2001horas") * -1)
+					}
 					fca2001.put("horasQuitadas", fca2001.getInteger("fca2001horas"));
 				}
 				fca2001.put("saldo", saldo);
@@ -121,9 +132,10 @@ public class SCA_BancoDeHorasAnalitico extends RelatorioBase {
 		String whereCargos = idsCargos != null && !idsCargos.isEmpty() ? " AND abh05id IN (:idsCargos) " : "";
 		String whereMapHorario = idsMapHorario != null && !idsMapHorario.isEmpty() ? " AND abh13id IN (:idsMapHorario) " : "";
 		
-		String sql = "SELECT abh80codigo, abh80nome, abh80hs, abb11codigo, abb11nome, abh05codigo, abh05nome, fca2001data, fca2001horas, fca2001quita " +
+		String sql = "SELECT abh80codigo, abh21tipo, abh80nome, abh80hs, abb11codigo, abb11nome, abh05codigo, abh05nome, fca2001data, fca2001horas, fca2001quita " +
 			     	 "FROM Fca20 " +
 			     	 "INNER JOIN Fca2001 ON fca20id = fca2001bh "+
+					 "INNER JOIN Abh21 ON abh21id = fca2001eve " +
 			     	 "INNER JOIN Abh80 ON abh80id = fca20trab " +
 			     	 "INNER JOIN Abb11 ON abb11id = abh80depto " +
 			     	 "INNER JOIN Abh05 ON abh05id = abh80cargo " +

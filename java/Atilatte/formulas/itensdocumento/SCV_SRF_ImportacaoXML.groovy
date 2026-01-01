@@ -43,196 +43,196 @@ import sam.server.samdev.formula.FormulaBase;
 
 public class SCV_SRF_ImportacaoXML extends FormulaBase {
 
-    private Aac10 aac10;
-    private Aag01 aag01;
-    private Aag02 ufEnt;
-    private Aag02 ufEmpr;
-    private Aag0201 municipioEnt;
-    private Aag0201 municipioEmpr;
-    private Aaj10 aaj10_cstIcms;
-    private Aaj11 aaj11_cstIpi;
-    private Aaj12 aaj12_cstPis;
-    private Aaj13 aaj13_cstCof;
-    private Aaj14 aaj14_cstCsosn;
-    private Aaj15 aaj15_cfop;
-    private Aam06 aam06;
+	private Aac10 aac10;
+	private Aag01 aag01;
+	private Aag02 ufEnt;
+	private Aag02 ufEmpr;
+	private Aag0201 municipioEnt;
+	private Aag0201 municipioEmpr;
+	private Aaj10 aaj10_cstIcms;
+	private Aaj11 aaj11_cstIpi;
+	private Aaj12 aaj12_cstPis;
+	private Aaj13 aaj13_cstCof;
+	private Aaj14 aaj14_cstCsosn;
+	private Aaj15 aaj15_cfop;
+	private Aam06 aam06;
 
-    private Abb01 abb01;
-    private Abb10 abb10;
-    private Abd01 abd01;
-    private Abe01 abe01;
-    private Abe02 abe02;
-    private Abg01 abg01;
-    private Abm01 abm01;
-    private Abm0101 abm0101;
-    private Abm10 abm10;
-    private Abm1001 abm1001;
-    private Abm1003 abm1003;
-    private Abm12 abm12;
-    private Abm13 abm13;
-    private Abm1301 abm1301;
+	private Abb01 abb01;
+	private Abb10 abb10;
+	private Abd01 abd01;
+	private Abe01 abe01;
+	private Abe02 abe02;
+	private Abg01 abg01;
+	private Abm01 abm01;
+	private Abm0101 abm0101;
+	private Abm10 abm10;
+	private Abm1001 abm1001;
+	private Abm1003 abm1003;
+	private Abm12 abm12;
+	private Abm13 abm13;
+	private Abm1301 abm1301;
 
-    private Eaa01 eaa01;
-    private Eaa0101 eaa0101princ;
-    private Eaa0102 eaa0102;
-    private Eaa0103 eaa0103;
+	private Eaa01 eaa01;
+	private Eaa0101 eaa0101princ;
+	private Eaa0102 eaa0102;
+	private Eaa0103 eaa0103;
 
-    private TableMap jsonEaa0103;
-    private TableMap jsonAbm1001_UF_Item;
-    private TableMap jsonAbm1003_Ent_Item;
-    private TableMap jsonAbe01;
-    private TableMap jsonAbe02;
-    private TableMap jsonAbm0101;
-    private TableMap jsonAag02Ent;
-    private TableMap jsonAag0201Ent;
-    private TableMap jsonAag02Empr;
-    private TableMap jsonAac10;
+	private TableMap jsonEaa0103;
+	private TableMap jsonAbm1001_UF_Item;
+	private TableMap jsonAbm1003_Ent_Item;
+	private TableMap jsonAbe01;
+	private TableMap jsonAbe02;
+	private TableMap jsonAbm0101;
+	private TableMap jsonAag02Ent;
+	private TableMap jsonAag0201Ent;
+	private TableMap jsonAag02Empr;
+	private TableMap jsonAac10;
 
-    @Override
-    public void executar() {
+	@Override
+	public void executar() {
 
-        //Item do documento
-        eaa0103 = get("eaa0103");
-        if(eaa0103 == null) return;
+		//Item do documento
+		eaa0103 = get("eaa0103");
+		if(eaa0103 == null) return;
 
-        //Documento
-        eaa01 = eaa0103.eaa0103doc;
+		//Documento
+		eaa01 = eaa0103.eaa0103doc;
 
-        for (Eaa0102 dadosGerais : eaa01.eaa0102s) {
-            eaa0102 = dadosGerais;
-        }
+		for (Eaa0102 dadosGerais : eaa01.eaa0102s) {
+			eaa0102 = dadosGerais;
+		}
 
-        if (eaa0102.eaa0102ti == 1 && eaa0102.eaa0102contribIcms == 1) {
-            throw new ValidacaoException("A entidade informada é pessoa física e está caracterizada como contribuinte de ICMS.");
-        }
+		if (eaa0102.eaa0102ti == 1 && eaa0102.eaa0102contribIcms == 1) {
+			throw new ValidacaoException("A entidade informada é pessoa física e está caracterizada como contribuinte de ICMS.");
+		}
 
-        //Central de Documento
-        abb01 = eaa01.eaa01central;
+		//Central de Documento
+		abb01 = eaa01.eaa01central;
 
-        //PCD
-        abd01 = getSession().get(Abd01.class, eaa01.eaa01pcd.abd01id);
+		//PCD
+		abd01 = getSession().get(Abd01.class, eaa01.eaa01pcd.abd01id);
 
-        //Dados da Entidade
-        abe01 = getSession().get(Abe01.class, abb01.abb01ent.abe01id);
+		//Dados da Entidade
+		abe01 = getSession().get(Abe01.class, abb01.abb01ent.abe01id);
 
-        // Entidade (Cliente)
-        abe02 = getSession().get(Abe02.class, Criterions.eq("abe02ent",abe01.abe01id));
+		// Entidade (Cliente)
+		abe02 = getSession().get(Abe02.class, Criterions.eq("abe02ent",abe01.abe01id));
 
-        //Endereço principal da entidade no documento
-        for (Eaa0101 eaa0101 : eaa01.eaa0101s) {
-            if (eaa0101.eaa0101principal == 1) {
-                eaa0101princ = eaa0101;
-            }
-        }
-        if (eaa0101princ == null) throw new ValidacaoException("Não foi encontrado o endereço principal da entidade no documento.");
+		//Endereço principal da entidade no documento
+		for (Eaa0101 eaa0101 : eaa01.eaa0101s) {
+			if (eaa0101.eaa0101principal == 1) {
+				eaa0101princ = eaa0101;
+			}
+		}
+		if (eaa0101princ == null) throw new ValidacaoException("Não foi encontrado o endereço principal da entidade no documento.");
 
-        municipioEnt = eaa0101princ.eaa0101municipio != null ? getSession().get(Aag0201.class, Criterions.eq("aag0201id", eaa0101princ.eaa0101municipio.aag0201id)) : null;
-        ufEnt = municipioEnt != null ? getSession().get(Aag02.class, municipioEnt.aag0201uf.aag02id) : null;
-        aag01 = eaa0101princ.eaa0101pais != null ? getSession().get(Aag01.class, Criterions.eq("aag01id", eaa0101princ.eaa0101pais.aag01id)) : null;
+		municipioEnt = eaa0101princ.eaa0101municipio != null ? getSession().get(Aag0201.class, Criterions.eq("aag0201id", eaa0101princ.eaa0101municipio.aag0201id)) : null;
+		ufEnt = municipioEnt != null ? getSession().get(Aag02.class, municipioEnt.aag0201uf.aag02id) : null;
+		aag01 = eaa0101princ.eaa0101pais != null ? getSession().get(Aag01.class, Criterions.eq("aag01id", eaa0101princ.eaa0101pais.aag01id)) : null;
 
-        //Empresa
-        aac10 = getSession().get(Aac10.class, obterEmpresaAtiva().aac10id);
-        municipioEmpr = aac10.aac10municipio != null ? getSession().get(Aag0201.class, Criterions.eq("aag0201id", aac10.aac10municipio.aag0201id)) : null;
-        ufEmpr = municipioEmpr != null ? getSession().get(Aag02.class, municipioEmpr.aag0201uf.aag02id) : null;
+		//Empresa
+		aac10 = getSession().get(Aac10.class, obterEmpresaAtiva().aac10id);
+		municipioEmpr = aac10.aac10municipio != null ? getSession().get(Aag0201.class, Criterions.eq("aag0201id", aac10.aac10municipio.aag0201id)) : null;
+		ufEmpr = municipioEmpr != null ? getSession().get(Aag02.class, municipioEmpr.aag0201uf.aag02id) : null;
 
-        //Item
-        abm01 = eaa0103.eaa0103item != null ? getSession().get(Abm01.class, eaa0103.eaa0103item.abm01id) : null;
+		//Item
+		abm01 = eaa0103.eaa0103item != null ? getSession().get(Abm01.class, eaa0103.eaa0103item.abm01id) : null;
 
-        //Configurações do item, por empresa
-        abm0101 = abm01 != null ? getSession().get(Abm0101.class, Criterions.where("abm0101item = " + abm01.abm01id + " AND abm0101empresa = " + aac10.aac10id)) : null;
+		//Configurações do item, por empresa
+		abm0101 = abm01 != null ? getSession().get(Abm0101.class, Criterions.where("abm0101item = " + abm01.abm01id + " AND abm0101empresa = " + aac10.aac10id)) : null;
 
-        //Valores do Item
-        abm10 = abm0101 != null && abm0101.abm0101valores != null ? getSession().get(Abm10.class, abm0101.abm0101valores.abm10id) : null;
+		//Valores do Item 
+		abm10 = abm0101 != null && abm0101.abm0101valores != null ? getSession().get(Abm10.class, abm0101.abm0101valores.abm10id) : null;
 
-        //Valores do Item - Estados
-        abm1001 = ufEnt != null && ufEnt.aag02id != null && abm10 != null && abm10.abm10id != null ? getSession().get(Abm1001.class, Criterions.where("abm1001uf = "+ ufEnt.aag02id + " AND abm1001cv = "+abm10.abm10id)) : null;
+		//Valores do Item - Estados
+		abm1001 = ufEnt != null && ufEnt.aag02id != null && abm10 != null && abm10.abm10id != null ? getSession().get(Abm1001.class, Criterions.where("abm1001uf = "+ ufEnt.aag02id + " AND abm1001cv = "+abm10.abm10id)) : null;
 
-        //Valores do Item - Entidade
-        abm1003 = abm10 != null && abm10.abm10id != null ? getSession().get(Abm1003.class, Criterions.where("abm1003ent = "+ abe01.abe01id + " AND abm1003cv = "+abm10.abm10id)) : null;
+		//Valores do Item - Entidade
+		abm1003 = abm10 != null && abm10.abm10id != null ? getSession().get(Abm1003.class, Criterions.where("abm1003ent = "+ abe01.abe01id + " AND abm1003cv = "+abm10.abm10id)) : null;
 
-        //Dados Fiscais do item
-        abm12 = abm0101 != null && abm0101.abm0101fiscal != null ? getSession().get(Abm12.class, abm0101.abm0101fiscal.abm12id) : null;
-        if (abm12 == null) throw new ValidacaoException("Não foi encontrada a configuração fiscal do item: " + abm01.abm01codigo);
-        if (abm12.abm12tipo == null) throw new ValidacaoException("Necessário informar o tipo fiscal do item: " + abm01.abm01codigo);
+		//Dados Fiscais do item
+		abm12 = abm0101 != null && abm0101.abm0101fiscal != null ? getSession().get(Abm12.class, abm0101.abm0101fiscal.abm12id) : null;
+		if (abm12 == null) throw new ValidacaoException("Não foi encontrada a configuração fiscal do item: " + abm01.abm01codigo);
+		if (abm12.abm12tipo == null) throw new ValidacaoException("Necessário informar o tipo fiscal do item: " + abm01.abm01codigo);
 
-        //Dados Comerciais do item
-        abm13 = abm0101 != null && abm0101.abm0101comercial != null ? getSession().get(Abm13.class, abm0101.abm0101comercial.abm13id) : null;
+		//Dados Comerciais do item
+		abm13 = abm0101 != null && abm0101.abm0101comercial != null ? getSession().get(Abm13.class, abm0101.abm0101comercial.abm13id) : null;
 
-        if(abm13 == null) throw new ValidacaoException("Não foi encontrada as configurações comerciais do item " + abm01.abm01codigo + " - " + abm01.abm01na);
+		if(abm13 == null) throw new ValidacaoException("Não foi encontrada as configurações comerciais do item " + abm01.abm01codigo + " - " + abm01.abm01na);
 
-        //Fatores de Conv. da Unid de Compra para Estoque
-        abm1301 = abm13 == null ? null : eaa0103.eaa0103umComl == null ? null : getSession().get(Abm1301.class, Criterions.where("abm1301cc = " + abm13.abm13id + " AND abm1301umc = " + eaa0103.eaa0103umComl.aam06id));
-        if(abm1301 == null) throw new ValidacaoException("Não foi informado fator de conversão de compra no cadastro do item " + abm01.abm01codigo + " - " + abm01.abm01na);
+		//Fatores de Conv. da Unid de Compra para Estoque
+		abm1301 = abm13 == null ? null : eaa0103.eaa0103umComl == null ? null : getSession().get(Abm1301.class, Criterions.where("abm1301cc = " + abm13.abm13id + " AND abm1301umc = " + eaa0103.eaa0103umComl.aam06id));
+		if(abm1301 == null) throw new ValidacaoException("Não foi informado fator de conversão de compra no cadastro do item " + abm01.abm01codigo + " - " + abm01.abm01na);
 
-        //Unidade de Medida
-        aam06 = abm13 != null &&  abm13.abm13umv != null ? getSession().get(Aam06.class, abm13.abm13umv.aam06id) : null;
+		//Unidade de Medida
+		aam06 = abm13 != null &&  abm13.abm13umv != null ? getSession().get(Aam06.class, abm13.abm13umv.aam06id) : null;
 
-        //Operação Comercial
-        abb10 = abb01 != null &&  abb01.abb01operCod != null ? getSession().get(Abb10.class, abb01.abb01operCod.abb10id) : null;
+		//Operação Comercial
+		abb10 = abb01 != null &&  abb01.abb01operCod != null ? getSession().get(Abb10.class, abb01.abb01operCod.abb10id) : null;
 
-        //NCM
-        abg01 = eaa0103.eaa0103ncm != null ? getSession().get(Abg01.class, eaa0103.eaa0103ncm.abg01id) : null;
+		//NCM
+		abg01 = eaa0103.eaa0103ncm != null ? getSession().get(Abg01.class, eaa0103.eaa0103ncm.abg01id) : null;
 
-        //CFOP
-        aaj15_cfop = eaa0103.eaa0103cfop != null ? getSession().get(Aaj15.class, eaa0103.eaa0103cfop.aaj15id) : null;
+		//CFOP
+		aaj15_cfop = eaa0103.eaa0103cfop != null ? getSession().get(Aaj15.class, eaa0103.eaa0103cfop.aaj15id) : null;
 
-        //CSOSN (ICMS)
-        aaj14_cstCsosn = eaa0103.eaa0103csosn != null ? getSession().get(Aaj14.class, eaa0103.eaa0103csosn.aaj14id) : null;
+		//CSOSN (ICMS)
+		aaj14_cstCsosn = eaa0103.eaa0103csosn != null ? getSession().get(Aaj14.class, eaa0103.eaa0103csosn.aaj14id) : null;
 
-        //CST ICMS
-        aaj10_cstIcms = eaa0103.eaa0103cstIcms != null ? getSession().get(Aaj10.class, eaa0103.eaa0103cstIcms.aaj10id) : null;
+		//CST ICMS
+		aaj10_cstIcms = eaa0103.eaa0103cstIcms != null ? getSession().get(Aaj10.class, eaa0103.eaa0103cstIcms.aaj10id) : null;
 
-        //CST IPI
-        aaj11_cstIpi = eaa0103.eaa0103cstIpi != null ? getSession().get(Aaj11.class, eaa0103.eaa0103cstIpi.aaj11id) : null;
+		//CST IPI
+		aaj11_cstIpi = eaa0103.eaa0103cstIpi != null ? getSession().get(Aaj11.class, eaa0103.eaa0103cstIpi.aaj11id) : null;
 
-        //CST PIS
-        aaj12_cstPis = eaa0103.eaa0103cstPis != null ? getSession().get(Aaj12.class, eaa0103.eaa0103cstPis.aaj12id) : null;
+		//CST PIS
+		aaj12_cstPis = eaa0103.eaa0103cstPis != null ? getSession().get(Aaj12.class, eaa0103.eaa0103cstPis.aaj12id) : null;
 
-        //CST COFINS
-        aaj13_cstCof = eaa0103.eaa0103cstCofins != null ? getSession().get(Aaj13.class, eaa0103.eaa0103cstCofins.aaj13id) : null;
-
-
-
-        //CAMPOS LIVRES
-        jsonAac10 = aac10.aac10json != null ? aac10.aac10json : new TableMap();
-        jsonAag02Ent = ufEnt != null && ufEnt.aag02json != null ? ufEnt.aag02json : new TableMap();
-        jsonAag0201Ent = municipioEnt != null && municipioEnt.aag0201json != null ? municipioEnt.aag0201json : new TableMap();
-        jsonAag02Empr = ufEmpr != null && ufEmpr.aag02json != null ? ufEmpr.aag02json : new TableMap();
-        jsonAbe01 = abe01.abe01json != null ? abe01.abe01json : new TableMap();
-        if(abe01.abe01cli == 1){
-            jsonAbe02 = abe02.abe02json != null ? abe02.abe02json : new TableMap();
-        }else{
-            jsonAbe02 = new TableMap();
-        }
-
-        jsonAbm0101 = abm0101 != null && abm0101.abm0101json != null ? abm0101.abm0101json : new TableMap();
-        jsonAbm1001_UF_Item = abm1001 != null && abm1001.abm1001json != null ? abm1001.abm1001json : new TableMap();
-        jsonAbm1003_Ent_Item = abm1003 != null && abm1003.abm1003json != null ? abm1003.abm1003json : new TableMap();
-        jsonEaa0103 = eaa0103.eaa0103json != null ? eaa0103.eaa0103json : new TableMap();
+		//CST COFINS
+		aaj13_cstCof = eaa0103.eaa0103cstCofins != null ? getSession().get(Aaj13.class, eaa0103.eaa0103cstCofins.aaj13id) : null;
 
 
-        calcularItem();
 
-        eaa0103.eaa0103json = jsonEaa0103;
-        put("eaa0103", eaa0103);
-    }
+		//CAMPOS LIVRES
+		jsonAac10 = aac10.aac10json != null ? aac10.aac10json : new TableMap();
+		jsonAag02Ent = ufEnt != null && ufEnt.aag02json != null ? ufEnt.aag02json : new TableMap();
+		jsonAag0201Ent = municipioEnt != null && municipioEnt.aag0201json != null ? municipioEnt.aag0201json : new TableMap();
+		jsonAag02Empr = ufEmpr != null && ufEmpr.aag02json != null ? ufEmpr.aag02json : new TableMap();
+		jsonAbe01 = abe01.abe01json != null ? abe01.abe01json : new TableMap();
+		if(abe01.abe01cli == 1){
+			jsonAbe02 = abe02.abe02json != null ? abe02.abe02json : new TableMap();
+		}else{
+			jsonAbe02 = new TableMap();
+		}
 
-    private void calcularItem() {
-        if(eaa0103.eaa0103qtComl > 0){
+		jsonAbm0101 = abm0101 != null && abm0101.abm0101json != null ? abm0101.abm0101json : new TableMap();
+		jsonAbm1001_UF_Item = abm1001 != null && abm1001.abm1001json != null ? abm1001.abm1001json : new TableMap();
+		jsonAbm1003_Ent_Item = abm1003 != null && abm1003.abm1003json != null ? abm1003.abm1003json : new TableMap();
+		jsonEaa0103 = eaa0103.eaa0103json != null ? eaa0103.eaa0103json : new TableMap();
 
-            eaa0103.eaa0103unit = round(eaa0103.eaa0103unit,5);
 
-            //Troca CFOP (Dentro ou Fora do Estado)
+		calcularItem();
+
+		eaa0103.eaa0103json = jsonEaa0103;
+		put("eaa0103", eaa0103);
+	}
+
+	private void calcularItem() {
+		if(eaa0103.eaa0103qtComl > 0){
+
+			eaa0103.eaa0103unit = round(eaa0103.eaa0103unit,5);
+
+		  //Troca CFOP (Dentro ou Fora do Estado)
             if (eaa0103.eaa0103cfop != null) {
                 def cfop = aaj15_cfop.aaj15codigo.substring(1);
-
+                
                 def primeiroDigito = aaj15_cfop.aaj15codigo.substring(0,1);
                 if(!dentroEstado){
                     if(primeiroDigito == "1"){
                         primeiroDigito = "2";
                     }
                     if(primeiroDigito == "5"){
-                        primeiroDigito = "6";
+                         primeiroDigito = "6";
                     }
                 }
                 cfop = primeiroDigito + cfop;
@@ -240,262 +240,263 @@ public class SCV_SRF_ImportacaoXML extends FormulaBase {
                 eaa0103.eaa0103cfop = aaj15_cfop;
             }
 
-            def codItem = abm01.abm01codigo;
-            Query descrCriterios = getSession().createQuery("select aba3001descr from aba3001 "+
-                    "inner join abm0102 on abm0102criterio = aba3001id and aba3001criterio = 542858 " +
-                    "inner join abm01 on abm0102item = abm01id "+
-                    "where abm01codigo = '"+codItem+"'"+
-                    "and abm01tipo = 1 ");
-
-            List<TableMap> listCriterios = descrCriterios.getListTableMap();
-            String grupo = "";
-            for(TableMap criterio : listCriterios){
-                if(criterio.getString("aba3001descr").contains("Queijo")){
-                    grupo = criterio.getString("aba3001descr");
-                }
-                if(criterio.getString("aba3001descr").contains("Leite")){
-                    grupo = criterio.getString("aba3001descr");
-                }
-
-                if(criterio.getString("aba3001descr").contains("Iogurte") || criterio.getString("aba3001descr").contains("Baunilha")){
-                    grupo = criterio.getString("aba3001descr");
-                }
-            }
-
-            if(abm01.abm01tipo == 1){
-
-                // Quantidade Original
-                if(jsonEaa0103.getBigDecimal_Zero("qt_original") == 0){
-                    jsonEaa0103.put("qt_original", eaa0103.eaa0103qtComl);
-                }
-
-
-                // Converte quantidade de caixas para frasco
-                if(jsonEaa0103.getBigDecimal_Zero("calculado") == 0){
-                    if(jsonEaa0103.getString("umv") == 'CX'){
-                        eaa0103.eaa0103qtComl = (eaa0103.eaa0103qtComl * jsonAbm0101.getBigDecimal_Zero("volume_caixa")).round(2);
-                        eaa0103.eaa0103unit = (eaa0103.eaa0103unit / jsonAbm0101.getBigDecimal_Zero("volume_caixa")).round(4);
-                    }
-                }
-
-                jsonEaa0103.put("calculado", 1);
-                def qtdCaixa;
-                def qtdFrascos;
-                if(aam06.aam06codigo != 'L'){
-                    if(jsonAbm0101.getBigDecimal_Zero("volume_caixa") == 0 ) throw new ValidacaoException("Volume Caixa no cadastro do item "+abm01.abm01codigo+" é inválido! Necessário um valor maior que zero!" )
-                    qtdCaixa = (eaa0103.eaa0103qtComl / jsonAbm0101.getBigDecimal_Zero("volume_caixa")).round(2);
-                    qtdFrascos = eaa0103.eaa0103qtComl.intValue() % jsonAbm0101.getBigDecimal_Zero("volume_caixa").intValue();
-                }else{
-                    qtdCaixa = 0.000000;
-                    qtdFrascos = eaa0103.eaa0103qtComl;
-                }
-
-
-                // Quantidade SCE
-                eaa0103.eaa0103qtUso = eaa0103.eaa0103qtComl;
-
-                // Quantidades Convertida
-                if(jsonEaa0103.getString("umv") == 'CX' || jsonEaa0103.getString("umv") == 'KG' ){
-                    jsonEaa0103.put("qt_convertida", jsonEaa0103.getString("umv") == 'KG' ? Math.ceil(qtdCaixa) : qtdCaixa )
-                }else{
-                    jsonEaa0103.put("qt_convertida", eaa0103.eaa0103qtComl)
-                }
-
-                // Unitario convertido
-                if(jsonEaa0103.getString("umv") == 'CX' || jsonEaa0103.getString("umv") == 'KG'){
-                    jsonEaa0103.put("unitario_conv",  (eaa0103.eaa0103unit * jsonAbm0101.getBigDecimal_Zero("cvdnf")).round(4));
-                }else{
-                    jsonEaa0103.put("unitario_conv", eaa0103.eaa0103unit.round(4));
-                }
-
-
-                // Total Convertido
-                if(jsonEaa0103.getString("umv") == 'CX' || jsonEaa0103.getString("umv") == 'KG'){
-                    jsonEaa0103.put("total_conv",  (jsonEaa0103.getBigDecimal_Zero("qt_convertida") * jsonEaa0103.getBigDecimal_Zero("unitario_conv")).round(2))//.round(2));
-                }else{
-                    jsonEaa0103.put("total_conv", eaa0103.eaa0103total.round(2));
-                }
-
-                //interromper(qtdFrasco.toString())
-                // Quantidade de Caixa e frasco
-                jsonEaa0103.put("caixa", jsonEaa0103.getString("umv") == 'KG' ? Math.ceil(qtdCaixa) : qtdCaixa);
-                jsonEaa0103.put("frasco", qtdFrascos);
-
-                // Volumes
-                jsonEaa0103.put("volumes", jsonEaa0103.getString("umv") == 'KG' ? Math.ceil(qtdCaixa) : qtdCaixa)
-
-
-                // Total Item
-                eaa0103.eaa0103total = (eaa0103.eaa0103unit * eaa0103.eaa0103qtComl).round(2);
-
-
-                // Total Documento
-                eaa0103.eaa0103totDoc = eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("ipi_sped") +
-                        jsonEaa0103.getBigDecimal_Zero("vlr_icms_fcp_") +
-                        jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                        jsonEaa0103.getBigDecimal_Zero("seguro") +
-                        jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
-                        jsonEaa0103.getBigDecimal_Zero("icms_st_sped") -
-                        jsonEaa0103.getBigDecimal_Zero("desconto");
+			def codItem = abm01.abm01codigo;
+			Query descrCriterios = getSession().createQuery("select aba3001descr from aba3001 "+
+					"inner join abm0102 on abm0102criterio = aba3001id and aba3001criterio = 542858 " +
+					"inner join abm01 on abm0102item = abm01id "+
+					"where abm01codigo = '"+codItem+"'"+
+					"and abm01tipo = 1 ");
+
+			List<TableMap> listCriterios = descrCriterios.getListTableMap();
+			String grupo = "";
+			for(TableMap criterio : listCriterios){
+				if(criterio.getString("aba3001descr").contains("Queijo")){
+					grupo = criterio.getString("aba3001descr");
+				}
+				if(criterio.getString("aba3001descr").contains("Leite")){
+					grupo = criterio.getString("aba3001descr");
+				}
+
+				if(criterio.getString("aba3001descr").contains("Iogurte") || criterio.getString("aba3001descr").contains("Baunilha")){
+					grupo = criterio.getString("aba3001descr");
+				}
+			}
+
+			if(abm01.abm01tipo == 1){
+
+				// Quantidade Original
+				if(jsonEaa0103.getBigDecimal_Zero("qt_original") == 0){
+					jsonEaa0103.put("qt_original", eaa0103.eaa0103qtComl);
+				}
+
+
+				// Converte quantidade de caixas para frasco
+				if(jsonEaa0103.getBigDecimal_Zero("calculado") == 0){
+					if(jsonEaa0103.getString("umv") == 'CX'){
+						eaa0103.eaa0103qtComl = (eaa0103.eaa0103qtComl * jsonAbm0101.getBigDecimal_Zero("volume_caixa")).round(2);
+						eaa0103.eaa0103unit = (eaa0103.eaa0103unit / jsonAbm0101.getBigDecimal_Zero("volume_caixa")).round(4);
+					}
+				}
+
+				jsonEaa0103.put("calculado", 1);
+				def qtdCaixa;
+				def qtdFrascos;
+				if(aam06.aam06codigo != 'L'){
+					if(jsonAbm0101.getBigDecimal_Zero("volume_caixa") == 0 ) throw new ValidacaoException("Volume Caixa no cadastro do item "+abm01.abm01codigo+" é inválido! Necessário um valor maior que zero!" )
+					qtdCaixa = (eaa0103.eaa0103qtComl / jsonAbm0101.getBigDecimal_Zero("volume_caixa")).round(2);
+					qtdFrascos = eaa0103.eaa0103qtComl.intValue() % jsonAbm0101.getBigDecimal_Zero("volume_caixa").intValue();
+				}else{
+					qtdCaixa = 0.000000;
+					qtdFrascos = eaa0103.eaa0103qtComl;
+				}
+
+
+				// Quantidade SCE
+				eaa0103.eaa0103qtUso = eaa0103.eaa0103qtComl;
+
+				// Quantidades Convertida
+				if(jsonEaa0103.getString("umv") == 'CX' || jsonEaa0103.getString("umv") == 'KG' ){
+					jsonEaa0103.put("qt_convertida", jsonEaa0103.getString("umv") == 'KG' ? Math.ceil(qtdCaixa) : qtdCaixa )
+				}else{
+					jsonEaa0103.put("qt_convertida", eaa0103.eaa0103qtComl)
+				}
+
+				// Unitario convertido
+				if(jsonEaa0103.getString("umv") == 'CX' || jsonEaa0103.getString("umv") == 'KG'){
+					jsonEaa0103.put("unitario_conv",  (eaa0103.eaa0103unit * jsonAbm0101.getBigDecimal_Zero("cvdnf")).round(4));
+				}else{
+					jsonEaa0103.put("unitario_conv", eaa0103.eaa0103unit.round(4));
+				}
+
+
+				// Total Convertido
+				if(jsonEaa0103.getString("umv") == 'CX' || jsonEaa0103.getString("umv") == 'KG'){
+					jsonEaa0103.put("total_conv",  (jsonEaa0103.getBigDecimal_Zero("qt_convertida") * jsonEaa0103.getBigDecimal_Zero("unitario_conv")).round(2))//.round(2));
+				}else{
+					jsonEaa0103.put("total_conv", eaa0103.eaa0103total.round(2));
+				}
+
+				//interromper(qtdFrasco.toString())
+				// Quantidade de Caixa e frasco
+				jsonEaa0103.put("caixa", jsonEaa0103.getString("umv") == 'KG' ? Math.ceil(qtdCaixa) : qtdCaixa);
+				jsonEaa0103.put("frasco", qtdFrascos);
+
+				// Volumes
+				jsonEaa0103.put("volumes", jsonEaa0103.getString("umv") == 'KG' ? Math.ceil(qtdCaixa) : qtdCaixa)
+
+
+				// Total Item
+				eaa0103.eaa0103total = (eaa0103.eaa0103unit * eaa0103.eaa0103qtComl).round(2);
+
+
+				// Total Documento
+				eaa0103.eaa0103totDoc = eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("ipi_sped") +
+						jsonEaa0103.getBigDecimal_Zero("vlr_icms_fcp_") +
+						jsonEaa0103.getBigDecimal_Zero("frete_dest") +
+						jsonEaa0103.getBigDecimal_Zero("seguro") +
+						jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
+						jsonEaa0103.getBigDecimal_Zero("icms_st_sped") -
+						jsonEaa0103.getBigDecimal_Zero("desconto");
+
+				eaa0103.eaa0103totDoc = round(eaa0103.eaa0103totDoc, 2);
 
-                eaa0103.eaa0103totDoc = round(eaa0103.eaa0103totDoc, 2);
+				// Total Financeiro
+				eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc
 
-                // Total Financeiro
-                eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc
+				if(grupo == "Queijo" || grupo == "Iogurte"){
 
-                if(grupo == "Queijo" || grupo == "Iogurte"){
+					// Base de Calculo de Comissão
+					def aplicaReducao = jsonAbe01.getInteger("aplica_reducao");
+					def _reducao = jsonAbe01.getBigDecimal_Zero("_reduc_bc_comissao");
+					def txDescontoFinanc = jsonAbe02.getBigDecimal_Zero("tx_fixa");
+					def bcComissao;
 
-                    // Base de Calculo de Comissão
-                    def aplicaReducao = jsonAbe01.getInteger("aplica_reducao");
-                    def _reducao = jsonAbe01.getBigDecimal_Zero("_reduc_bc_comissao");
-                    def txDescontoFinanc = jsonAbe02.getBigDecimal_Zero("tx_fixa");
-                    def bcComissao;
+					if(aplicaReducao == 1){
+						bcComissao = eaa0103.eaa0103total - (( eaa0103.eaa0103totFinanc * txDescontoFinanc ) / 100);
+						bcComissao = bcComissao * (_reducao / 100);
+					}else{
+						bcComissao = eaa0103.eaa0103total - (( eaa0103.eaa0103totFinanc * txDescontoFinanc ) / 100);
+					}
 
-                    if(aplicaReducao == 1){
-                        bcComissao = eaa0103.eaa0103total - (( eaa0103.eaa0103totFinanc * txDescontoFinanc ) / 100);
-                        bcComissao = bcComissao * (_reducao / 100);
-                    }else{
-                        bcComissao = eaa0103.eaa0103total - (( eaa0103.eaa0103totFinanc * txDescontoFinanc ) / 100);
-                    }
+					if(jsonAbe01.getBigDecimal_Zero("_reduzido_entidade") > 0){
+						def _reduzido = jsonAbe01.getBigDecimal_Zero("_reduzido_entidade");
+						bcComissao = bcComissao * (jsonAbe01.getBigDecimal_Zero("_reduzido_entidade") / 100);
+					}
 
-                    if(jsonAbe01.getBigDecimal_Zero("_reduzido_entidade") > 0){
-                        def _reduzido = jsonAbe01.getBigDecimal_Zero("_reduzido_entidade");
-                        bcComissao = bcComissao * (jsonAbe01.getBigDecimal_Zero("_reduzido_entidade") / 100);
-                    }
+					jsonEaa0103.put("bc_comissao", bcComissao.round(2));
 
-                    jsonEaa0103.put("bc_comissao", bcComissao.round(2));
+				}else{
+					// Base de Calculo de Comissão
+					def aplicaReducao = jsonAbe01.getInteger("aplica_reducao");
+					def _reducao = jsonAbe01.getBigDecimal_Zero("_reduc_bc_comissao");
+					def txDescontoFinanc = jsonAbe02.getBigDecimal_Zero("tx_fixa");
+					def vlrReducao;
+					def bcComissao = new BigDecimal(0);
 
-                }else{
-                    // Base de Calculo de Comissão
-                    def aplicaReducao = jsonAbe01.getInteger("aplica_reducao");
-                    def _reducao = jsonAbe01.getBigDecimal_Zero("_reduc_bc_comissao");
-                    def txDescontoFinanc = jsonAbe02.getBigDecimal_Zero("tx_fixa");
-                    def vlrReducao;
-                    def bcComissao = new BigDecimal(0);
+					if(abm01.abm01codigo == "0101001"){
+						bcComissao = 0.000000;
+					}else{
 
-                    if(abm01.abm01codigo == "0101001"){
-                        bcComissao = 0.000000;
-                    }else{
+						bcComissao = eaa0103.eaa0103total - (( eaa0103.eaa0103totFinanc * txDescontoFinanc ) / 100);
+						bcComissao = bcComissao * (_reducao / 100);
+					}
 
-                        bcComissao = eaa0103.eaa0103total - (( eaa0103.eaa0103totFinanc * txDescontoFinanc ) / 100);
-                        bcComissao = bcComissao * (_reducao / 100);
-                    }
+					if(jsonAbe01.getBigDecimal_Zero("_reduzido_entidade") > 0){
+						def _reduzido = jsonAbe01.getBigDecimal_Zero("_reduzido_entidade");
+						bcComissao = bcComissao * (jsonAbe01.getBigDecimal_Zero("_reduzido_entidade") / 100);
+					}
 
-                    if(jsonAbe01.getBigDecimal_Zero("_reduzido_entidade") > 0){
-                        def _reduzido = jsonAbe01.getBigDecimal_Zero("_reduzido_entidade");
-                        bcComissao = bcComissao * (jsonAbe01.getBigDecimal_Zero("_reduzido_entidade") / 100);
-                    }
+					jsonEaa0103.put("bc_comissao", bcComissao.round(2));
+				}
 
-                    jsonEaa0103.put("bc_comissao", bcComissao.round(2));
-                }
 
+			}else{
 
-            }else{
+				// Total Item
+				eaa0103.eaa0103total = (eaa0103.eaa0103unit * eaa0103.eaa0103qtComl).round(2);
 
-                // Total Item
-                eaa0103.eaa0103total = (eaa0103.eaa0103unit * eaa0103.eaa0103qtComl).round(2);
 
+				// Total Documento
+				eaa0103.eaa0103totDoc = eaa0103.eaa0103total +
+											jsonEaa0103.getBigDecimal_Zero("ipi_sped") +
+											jsonEaa0103.getBigDecimal_Zero("vlr_icms_fcp_") +
+											jsonEaa0103.getBigDecimal_Zero("frete_dest") +
+											jsonEaa0103.getBigDecimal_Zero("seguro") +
+											jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
+											jsonEaa0103.getBigDecimal_Zero("icms_st_sped") -
+											jsonEaa0103.getBigDecimal_Zero("desconto");
 
-                // Total Documento
-                eaa0103.eaa0103totDoc = eaa0103.eaa0103total +
-                        jsonEaa0103.getBigDecimal_Zero("ipi_sped") +
-                        jsonEaa0103.getBigDecimal_Zero("vlr_icms_fcp_") +
-                        jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                        jsonEaa0103.getBigDecimal_Zero("seguro") +
-                        jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
-                        jsonEaa0103.getBigDecimal_Zero("icms_st_sped") -
-                        jsonEaa0103.getBigDecimal_Zero("desconto");
+				eaa0103.eaa0103totDoc = round(eaa0103.eaa0103totDoc, 2);
 
-                eaa0103.eaa0103totDoc = round(eaa0103.eaa0103totDoc, 2);
+				// Qtd SCE
+				if(abm1301.abm1301fcCU_Zero == 0) throw new ValidacaoException("Fator de conversão de uso para compra no cadastro do item " + abm01.abm01codigo + " - " + abm01.abm01na + " não é válido.");
+				eaa0103.eaa0103qtUso = (eaa0103.eaa0103qtComl * abm1301.abm1301fcCU_Zero).round(6);
 
-                // Qtd SCE
-                if(abm1301.abm1301fcCU_Zero == 0) throw new ValidacaoException("Fator de conversão de uso para compra no cadastro do item " + abm01.abm01codigo + " - " + abm01.abm01na + " não é válido.");
-                eaa0103.eaa0103qtUso = (eaa0103.eaa0103qtComl * abm1301.abm1301fcCU_Zero).round(6);
 
+				// Total Financeiro
+				eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
 
-                // Total Financeiro
-                eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
+				// Quantidade Convertida
+				jsonEaa0103.put("qt_convertida", eaa0103.eaa0103qtComl)
 
-                // Quantidade Convertida
-                jsonEaa0103.put("qt_convertida", eaa0103.eaa0103qtComl)
+				// Unitario convertido
+				jsonEaa0103.put("unitario_conv", eaa0103.eaa0103unit.round(5));
 
-                // Unitario convertido
-                jsonEaa0103.put("unitario_conv", eaa0103.eaa0103unit.round(5));
+				// Total Convertido
+				jsonEaa0103.put("total_conv", eaa0103.eaa0103total.round(2));
 
-                // Total Convertido
-                jsonEaa0103.put("total_conv", eaa0103.eaa0103total.round(2));
 
+			}
 
-            }
+			
 
+			//*******Calculo para SPED ICMS*******
 
+			//BC ICMS SPED = BC ICMS
+			jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms_sped"));
 
-            //*******Calculo para SPED ICMS*******
+			//Aliq ICMS SPED = Aliq ICMS
+			jsonEaa0103.put("_icms", jsonEaa0103.getBigDecimal_Zero("_icms_sped"));
 
-            //BC ICMS SPED = BC ICMS
-            jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms_sped"));
+			//ICMS SPED = ICMS
+			jsonEaa0103.put("icms", jsonEaa0103.getBigDecimal_Zero("icms_sped"));
 
-            //Aliq ICMS SPED = Aliq ICMS
-            jsonEaa0103.put("_icms", jsonEaa0103.getBigDecimal_Zero("_icms_sped"));
 
-            //ICMS SPED = ICMS
-            jsonEaa0103.put("icms", jsonEaa0103.getBigDecimal_Zero("icms_sped"));
+			//*******Calculo para SPED ICMS ST*******
 
+			//BC ICMS ST SPED = BC ICMS ST
+			jsonEaa0103.put("bc_icms_st", jsonEaa0103.getBigDecimal_Zero("bc_icms_st_sped"));
 
-            //*******Calculo para SPED ICMS ST*******
+			//Aliq ICMS ST SPED = Aliq ICMS ST
+			jsonEaa0103.put("_icms_st", jsonEaa0103.getBigDecimal_Zero("_icms_st_sped"));
 
-            //BC ICMS ST SPED = BC ICMS ST
-            jsonEaa0103.put("bc_icms_st", jsonEaa0103.getBigDecimal_Zero("bc_icms_st_sped"));
+			//ICMS ST SPED = ICMS ST
+			jsonEaa0103.put("icms_st", jsonEaa0103.getBigDecimal_Zero("icms_st_sped"));
 
-            //Aliq ICMS ST SPED = Aliq ICMS ST
-            jsonEaa0103.put("_icms_st", jsonEaa0103.getBigDecimal_Zero("_icms_st_sped"));
 
-            //ICMS ST SPED = ICMS ST
-            jsonEaa0103.put("icms_st", jsonEaa0103.getBigDecimal_Zero("icms_st_sped"));
+			//Aliq Reduc BC ICMS SPED = Aliq Reduc BC ICMS
+			jsonEaa0103.put("_red_bc_icms", jsonEaa0103.getBigDecimal_Zero("_red_bc_icms_sped"));
 
+			//ICMS Outras SPED = ICMS Outras
+			jsonEaa0103.put("icms_outras", jsonEaa0103.getBigDecimal_Zero("icms_outras_sped"));
 
-            //Aliq Reduc BC ICMS SPED = Aliq Reduc BC ICMS
-            jsonEaa0103.put("_red_bc_icms", jsonEaa0103.getBigDecimal_Zero("_red_bc_icms_sped"));
+			//ICMS Isento SPED = ICMS Isento
+			jsonEaa0103.put("icms_isento", jsonEaa0103.getBigDecimal_Zero("icms_isento_sped"));
 
-            //ICMS Outras SPED = ICMS Outras
-            jsonEaa0103.put("icms_outras", jsonEaa0103.getBigDecimal_Zero("icms_outras_sped"));
 
-            //ICMS Isento SPED = ICMS Isento
-            jsonEaa0103.put("icms_isento", jsonEaa0103.getBigDecimal_Zero("icms_isento_sped"));
+			//*******Calculo para SPED IPI*******
 
+			//BC IPI SPED = BC IPI
+			jsonEaa0103.put("bc_ipi", jsonEaa0103.getBigDecimal_Zero("bc_ipi_sped"));
 
-            //*******Calculo para SPED IPI*******
+			//Aliq IPI SPED = Aliq IPI
+			jsonEaa0103.put("_ipi", jsonEaa0103.getBigDecimal_Zero("_ipi_sped"));
 
-            //BC IPI SPED = BC IPI
-            jsonEaa0103.put("bc_ipi", jsonEaa0103.getBigDecimal_Zero("bc_ipi_sped"));
+			//IPI Outras SPED = IPI Outras
+			jsonEaa0103.put("ipi_outras", jsonEaa0103.getBigDecimal_Zero("ipi_outras_sped"));
 
-            //Aliq IPI SPED = Aliq IPI
-            jsonEaa0103.put("_ipi", jsonEaa0103.getBigDecimal_Zero("_ipi_sped"));
+			//IPI Isento SPED = IPI Isento
+			jsonEaa0103.put("ipi_isento", jsonEaa0103.getBigDecimal_Zero("ipi_isento_sped"));
 
-            //IPI Outras SPED = IPI Outras
-            jsonEaa0103.put("ipi_outras", jsonEaa0103.getBigDecimal_Zero("ipi_outras_sped"));
+			//IPI SPED = IPI
+			jsonEaa0103.put("ipi", jsonEaa0103.getBigDecimal_Zero("ipi_sped"));
 
-            //IPI Isento SPED = IPI Isento
-            jsonEaa0103.put("ipi_isento", jsonEaa0103.getBigDecimal_Zero("ipi_isento_sped"));
 
-            //IPI SPED = IPI
-            jsonEaa0103.put("ipi", jsonEaa0103.getBigDecimal_Zero("ipi_sped"));
-
-
-            // CFOP
-            def cfop = jsonAbm1001_UF_Item.getString("cfop_entrada");
+			// CFOP
+			def cfop = jsonAbm1001_UF_Item.getString("cfop_entrada");
 
 //	    if(cfop == null ) throw new ValidacaoException("Não foi informado CFOP no parâmetro itens-valores. Item:  " + abm01.abm01codigo);
 //
 //
 //	    eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
 
-        }
+		}
 
-    }
+	}
 
-    @Override
-    public FormulaTipo obterTipoFormula() {
-        return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
-    }
+	@Override
+	public FormulaTipo obterTipoFormula() {
+		return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
+	}
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

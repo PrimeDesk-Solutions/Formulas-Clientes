@@ -1,6 +1,6 @@
 package multitec.baseDemo
 
-import org.apache.commons.io.FileUtils
+import br.com.multitec.utils.FileUtils
 import org.springframework.web.multipart.MultipartFile
 
 import br.com.multitec.utils.DateUtils
@@ -28,7 +28,7 @@ class SCF_LeituraExtrato extends FormulaBase {
 			File file = File.createTempFile(UUID.randomUUID().toString(), "txt");
 			arquivo.transferTo(file);
 			
-			List<String> registros = FileUtils.readLines(file, "UTF-8");
+			List<String> registros = FileUtils.readLines(file);
 			TextFileLeitura txt = new TextFileLeitura(registros);
 			
 			while(txt.nextLine()) {
@@ -40,8 +40,8 @@ class SCF_LeituraExtrato extends FormulaBase {
 					extratoDto.dc = txt.getLinha().substring(168, 169).trim();
 					extratoDto.historico = txt.getLinha().substring(176, 201).trim();
 					extratoDto.ni = StringUtils.extractNumbers(txt.getLinha().substring(214, 228).trim());
-					extratoDto.dados1 = null;
-					extratoDto.dados2 = null;
+					extratoDto.dados1 = txt.getLinha().substring(24, 78).trim();
+					extratoDto.dados2 = txt.getLinha().substring(78, 142).trim();
 					
 					if(extratoDto.valor > 0) listExtratoDto.add(extratoDto);
 				}

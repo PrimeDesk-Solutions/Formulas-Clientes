@@ -33,8 +33,7 @@ public class SCF_LancamentosPorNaturezas extends RelatorioBase {
 	@Override
 	public DadosParaDownload executar() {
 		List<Long> idContaCorrente = getListLong("contaCorrente");
-		String idNaturezaIni = getString("naturezaIni");
-		String idNaturezaFin = getString("naturezaFin");
+		List<Long> idNatureza = getListLong("naturezas");
 		LocalDate[] dataPeriodo = getIntervaloDatas("periodo");
 		
 		params.put("TITULO_RELATORIO", "Lançamentos por Naturezas");
@@ -54,7 +53,7 @@ public class SCF_LancamentosPorNaturezas extends RelatorioBase {
 		int tamanhoTotal = grupos.get(grupos.size() - 1);
 		params.put("TAMANHO_NAT", tamanhoTotal);
 		
-		List<TableMap> lancamentos = buscarLancamentosPorNatureza(dataPeriodo, idContaCorrente, idNaturezaIni,idNaturezaFin);
+		List<TableMap> lancamentos = buscarLancamentosPorNatureza(dataPeriodo, idContaCorrente, idNatureza);
 		
 		for (int i = lancamentos.size(); i > 0 ; i--) {
 			int index = i - 1;
@@ -131,14 +130,13 @@ public class SCF_LancamentosPorNaturezas extends RelatorioBase {
 		}
 	}
 
-	private List<TableMap> buscarLancamentosPorNatureza(LocalDate[] dataPeriodo, List<Long> idContaCorrente, String idNaturezaIni, String idNaturezaFin) {
+	private List<TableMap> buscarLancamentosPorNatureza(LocalDate[] dataPeriodo, List<Long> idContaCorrente, List<Long> idNatureza) {
 		String wherePeriodoData = dataPeriodo != null && dataPeriodo.size() > 0 ? " where dab10.dab10data >= '" + dataPeriodo[0] + "' and dab10.dab10data <= '" + dataPeriodo[1] + "'": "";
 		String whereIdsContaCorrente = idContaCorrente != null && idContaCorrente.size() > 0 ? " and dab01.dab01id IN (:idContaCorrente)": "";
-		String whereIdNatureza = idNaturezaIni != null && idNaturezaFin != null ? " and abf10.abf10codigo between :idNaturezaIni and :idNaturezaFin ": "";
+		String whereIdNatureza = idNatureza != null && idNatureza.size() > 0 ? " and abf10.abf10id IN (:idNatureza)": "";
 
 		Parametro paramCC = idContaCorrente != null && idContaCorrente.size() > 0 ? Parametro.criar("idContaCorrente", idContaCorrente) : null;
-		Parametro paramNaturezaIni = idNaturezaIni != null ? Parametro.criar("idNaturezaIni", idNaturezaIni) : null;
-		Parametro paramNaturezaFin = idNaturezaFin != null ? Parametro.criar("idNaturezaFin", idNaturezaFin) : null;
+		Parametro paramNatureza = idNatureza != null && idNatureza.size() > 0 ? Parametro.criar("idNatureza", idNatureza) : null;
 
 		String sql = " SELECT dab10id, dab10data, abf10codigo, abf10nome, dab01codigo, dab01nome, dab10historico, dab10mov, dab10011valor " +
 				" FROM Dab10011 " +
@@ -152,7 +150,7 @@ public class SCF_LancamentosPorNaturezas extends RelatorioBase {
 				getSamWhere().getWherePadrao("AND", Dab10.class) +
 				" ORDER BY abf10codigo, dab10data, dab01codigo ";
 
-		List<TableMap> receberDadosRelatorio = getAcessoAoBanco().buscarListaDeTableMap(sql, paramCC, paramNaturezaIni,paramNaturezaFin)
+		List<TableMap> receberDadosRelatorio = getAcessoAoBanco().buscarListaDeTableMap(sql, paramCC, paramNatureza)
 		return receberDadosRelatorio
 	}
 	

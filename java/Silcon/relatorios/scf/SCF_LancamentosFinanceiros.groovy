@@ -212,3 +212,4 @@ public class SCF_LancamentosFinanceiros extends RelatorioBase {
 
 
 }
+//meta-sis-eyJkZXNjciI6IlNDRiAtIExhbsOnYW1lbnRvcyBGaW5hbmNlaXJvcyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

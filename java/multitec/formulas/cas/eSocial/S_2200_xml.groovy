@@ -40,7 +40,7 @@ public class S_2200_xml extends FormulaBase {
 
 		def indRetif = aaa15.aaa15tipo == 3 ? 2 : 1;
 
-		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtAdmissao/v_S_01_01_00");
+		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtAdmissao/v_S_01_03_00");
 		ElementXml evtAdmissao = eSocial.addNode("evtAdmissao");
 		evtAdmissao.setAttribute("Id", ESocialUtils.comporIdDoEvento(aac10.aac10ti, aac10.aac10ni));
 
@@ -119,7 +119,7 @@ public class S_2200_xml extends FormulaBase {
 			for(Abh8002 abh8002 : abh80.abh8002s) {
 				Aap09 aap09 = abh8002.abh8002parente != null ? getSession().createCriteria(Aap09.class).addWhere(Criterions.eq("aap09id", abh8002.abh8002parente.aap09id)).get(ColumnType.ENTITY) : null
 				ElementXml dependente = trabalhador.addNode("dependente");
-				dependente.addNode("tpDep", abh8002.abh8002parente != null ? aap09.aap09eSocial : null, true);
+				dependente.addNode("tpDep", abh8002.abh8002parente != null ? aap09.aap09codigo : null, true);
 				dependente.addNode("nmDep", abh8002.abh8002nome, true);
 				dependente.addNode("dtNascto", ESocialUtils.formatarData(abh8002.abh8002dtNasc, ESocialUtils.PATTERN_YYYY_MM_DD), true);
 				dependente.addNode("cpfDep", abh8002.abh8002cpf != null ? StringUtils.ajustString(StringUtils.extractNumbers(abh8002.abh8002cpf), 11, '0', true) : null, false);
@@ -127,6 +127,7 @@ public class S_2200_xml extends FormulaBase {
 				dependente.addNode("depIRRF", abh8002.abh8002ir == 0 ? 'N' : 'S', true);
 				dependente.addNode("depSF", abh8002.abh8002sf == 0 ? 'N' : 'S', true);
 				dependente.addNode("incTrab", abh8002.abh8002incapaz == 2 ? 'S' : 'N', true);
+				if(aap09.aap09codigo.equals("99")) dependente.addNode("descrDep",abh8002.abh8002descrDep, false);
 			}
 		}
 
@@ -179,9 +180,11 @@ public class S_2200_xml extends FormulaBase {
 			ideTrabSubstituido.addNode("cpfTrabSubst", StringUtils.extractNumbers(abh80.abh80ttTrabSub), true);
 		}
 		if(abh80.abh80aprendiz == 1) {
+			String aprendizNiPrat = StringUtils.extractNumbers(abh80.abh80aprendizNi);
 			ElementXml aprend = infoCeletista.addNode("aprend");
+			aprend.addNode("indAprend", abh80.abh80aprendizMod, true)
+			if(abh80.abh80aprendizMod == 1) aprend.addNode("cnpjEntQual", StringUtils.ajustString(aprendizNiPrat, 14, '0', false) ,true)
 			aprend.addNode("tpInsc", abh80.abh80aprendizTi+1, true);
-
 			String aprendizNi = StringUtils.extractNumbers(abh80.abh80aprendizNi);
 			if(abh80.abh80aprendizTi == 0) {
 				aprendizNi = StringUtils.ajustString(aprendizNi, 14, '0', false);
@@ -189,6 +192,7 @@ public class S_2200_xml extends FormulaBase {
 				aprendizNi = StringUtils.ajustString(aprendizNi, 11, '0', true);
 			}
 			aprend.addNode("nrInsc", aprendizNi, true);
+			if(abh80.abh80aprendizMod == 2) aprend.addNode("cnpjPrat", StringUtils.ajustString(aprendizNiPrat, 14, '0', false) ,true)
 		}
 		ElementXml infoContrato = vinculo.addNode("infoContrato");
 		infoContrato.addNode("nmCargo", abh80.abh80cargo?.abh05nome?: null, false);

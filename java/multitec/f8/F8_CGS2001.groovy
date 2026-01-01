@@ -1,4 +1,4 @@
-package sam.server.samdev.formula;
+package multitec.f8;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import sam.dicdados.FormulaTipo;
 import sam.dto.cadastro.f8formula.ColunaF8;
 import sam.dto.cadastro.f8formula.RespostaDoF8;
+import sam.server.samdev.formula.FormulaBase
 import sam.server.samdev.utils.Parametro;
 import sam.server.samdev.utils.RequisicaoDoF8;
 

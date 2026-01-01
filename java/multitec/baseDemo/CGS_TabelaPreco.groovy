@@ -9,10 +9,12 @@ import sam.server.samdev.formula.FormulaBase;
 public class CGS_TabelaPreco extends FormulaBase{
 
 	private Abe4001 abe4001;
+	private TableMap mapJsonFormula;
 	
 	@Override
 	public void executar() {
 		abe4001 = (Abe4001)get("abe4001");
+		mapJsonFormula = (TableMap)get("mapJsonFormula");
 		
 		if(abe4001 == null) throw new ValidacaoException("Necessário informar o item da tabela de preço.");
 		

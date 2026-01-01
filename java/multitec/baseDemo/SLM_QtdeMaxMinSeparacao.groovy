@@ -23,7 +23,6 @@ class SLM_QtdeMaxMinSeparacao extends FormulaBase {
 	
 	@Override
 	public void executar() {
-		
 		qtdeBase = get("qtdeBase");
 		abm01id = get("abm01id");
 		abe01id = get("abe01id");
@@ -52,9 +51,9 @@ class SLM_QtdeMaxMinSeparacao extends FormulaBase {
 				qtdeMax = qtdeMax + qtVariavel;
 			}
 		}
+		
 		put("qtdeMax", qtdeMax);
-		put("qtdeMin", 0.000001);
-		//put("qtdeMin", qtdeMin);
+		put("qtdeMin", qtdeMin);
 	}
 	
 	private TableMap obterJsonItem(Long abm01id) {

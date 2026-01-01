@@ -39,7 +39,6 @@ class Layout_001_Bradesco_Retorno extends FormulaBase {
 		}
 		
 		txt.nextLine();//Pula HEADER
-		
 		while(txt.nextLine()){
 			if(txt.getSubString(0, 1).equals("1")){
 				TableMap tm = new TableMap();

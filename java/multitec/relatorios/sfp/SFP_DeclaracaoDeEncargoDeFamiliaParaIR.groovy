@@ -82,7 +82,7 @@ public class SFP_DeclaracaoDeEncargoDeFamiliaParaIR extends RelatorioBase {
 		}
 		
 		params.put("EMP_ENDERECO", endereco);
-		params.put("EMP_CEP", aac10.getAac10aCep());
+		params.put("EMP_CEP", aac10.getAac10cep());
 		params.put("EMP_CIDADE", aac10.getAac10municipio() != null ? obterMunicipio(aac10.getAac10municipio().getIdValue()).getAag0201nome() : null);
 		params.put("EMP_UF",  aac10.getAac10municipio() != null ? obterMunicipio(aac10.getAac10municipio().getIdValue()).getAag0201uf().getAag02uf() : null);
 		params.put("StreamSub1R1", carregarArquivoRelatorio("SFP_DeclaracaoDeEncargoDeFamiliaParaIR_R1_S1"));

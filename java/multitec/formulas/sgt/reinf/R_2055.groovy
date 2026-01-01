@@ -75,6 +75,7 @@ class R_2055 extends FormulaBase {
 			List<Eaa01> notas = getAcessoAoBanco().buscarListaDeRegistros(sqlNotas, criarParametroSql("abe01id", tm.getLong("abb01ent")), criarParametroSql("eg", tm.getLong("eaa01eg")), criarParametroSql("numMeses", numMeses));
 			
 			Aac10 aac10EG = getAcessoAoBanco().buscarRegistroUnico("SELECT * FROM Aac10 WHERE aac10id = :id", criarParametroSql("id", tm.getLong("eaa01eg")));
+			Abe01 abe01Produtor = getAcessoAoBanco().buscarRegistroUnico("SELECT * FROM Abe01 WHERE abe01id = :abe01id", criarParametroSql("abe01id", tm.getLong("abb01ent")));
 			
 			ElementXml reinf = ReinfUtils.configurarXML("http://www.reinf.esocial.gov.br/schemas/evt2055AquisicaoProdRural/v1_05_01");
 			
@@ -82,7 +83,12 @@ class R_2055 extends FormulaBase {
 			evtAqProd.setAttribute("id", ReinfUtils.gerarID(aac10.aac10ti, aac10.aac10ni));
 			
 			ElementXml ideEvento = evtAqProd.addNode("ideEvento");
-			String recibo = isRetificacao ? reinfService.buscarAaa17RetRecPeloLayoutPeriodo("R-2055", aac10.aac10id, periodo) : null;
+			
+			def tags = Arrays.asList("nrInsc", "nrInscProd");
+			def nrInsc = StringUtils.ajustString(StringUtils.extractNumbers(aac10.aac10ni), 8);
+			def nrInscProd = StringUtils.extractNumbers(abe01Produtor.abe01ni);
+			def valores = Arrays.asList(nrInsc, nrInscProd);
+			String recibo = isRetificacao ? reinfService.buscarAaa17RetRecPeloLayoutPeriodo("R-2055", aac10.aac10id, periodo, tags, valores) : null;
 			ideEvento.addNode("indRetif", isRetificacao && recibo != null ? 2 : 1, true);
 			if(recibo != null) ideEvento.addNode("nrRecibo", recibo, false);
 			
@@ -101,12 +107,12 @@ class R_2055 extends FormulaBase {
 			ideEstabAdquir.addNode("tpInscAdq", "1", true);
 			ideEstabAdquir.addNode("nrInscAdq", StringUtils.extractNumbers(aac10EG.aac10ni), true);
 
-			Abe01 abe01Produtor = getAcessoAoBanco().buscarRegistroUnico("SELECT * FROM Abe01 WHERE abe01id = :abe01id", criarParametroSql("abe01id", tm.getLong("abb01ent")));
+			
 			Abe03 abe03 = getAcessoAoBanco().buscarRegistroUnico("SELECT * FROM Abe03 WHERE abe03ent = :abe01id", criarParametroSql("abe01id", tm.getLong("abb01ent")));
 			
 			ElementXml ideProdutor = ideEstabAdquir.addNode("ideProdutor");
 			ideProdutor.addNode("tpInscProd", abe01Produtor.abe01ti_Zero == 0 ? "1" : "2", true);
-			ideProdutor.addNode("nrInscProd", StringUtils.extractNumbers(abe01Produtor.abe01ni), true);
+			ideProdutor.addNode("nrInscProd", nrInscProd, true);
 			ideProdutor.addNode("indOpcCP", abe03.abe03contCprb_Zero == 1 ? "S" : null, false);
 			
 			Map<Integer, TableMap> mapValores = new HashMap();

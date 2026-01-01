@@ -27,7 +27,6 @@ class SCC_Demonstrativo extends RelatorioBase {
 	public Map<String, Object> criarValoresIniciais() {
 		Map<String, Object> filtrosDefault = new HashMap<String, Object>();
 		filtrosDefault.put("periodo", DateUtils.getStartAndEndMonth(MDate.date()));
-		filtrosDefault.put("impressao", "0")
 		return Utils.map("filtros", filtrosDefault);
 	}
 
@@ -36,7 +35,6 @@ class SCC_Demonstrativo extends RelatorioBase {
 		List<Long> idRepresentantes = getListLong("representantes");
 		LocalDate[] dataPeriodo = getIntervaloDatas("periodo");
 		boolean isSaltarPagina = get("isSaltarPagina");
-		Integer impressao = getInteger("impressao");
 		
 		params.put("TITULO_RELATORIO", "Demonstrativo das Comissões");
 		params.put("EMPRESA", getVariaveis().getAac10().getAac10na());
@@ -74,7 +72,6 @@ class SCC_Demonstrativo extends RelatorioBase {
 		dsPrincipal.addSubDataSource("DSSub1", documentos, "dcd01id", "dcb01calculo");
 		dsPrincipal.addSubDataSource("DSSub2", lancamentos, "dcd01id", "dcc01calculo");
 		
-		if(impressao == 1) return gerarXLSX("SCC_Demonstrativo", dsPrincipal);
 		return gerarPDF("SCC_Demonstrativo", dsPrincipal, "representante", isSaltarPagina);
 	}
 

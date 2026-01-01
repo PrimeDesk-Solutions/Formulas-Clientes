@@ -2271,4 +2271,4 @@ class NFe_Reforma extends FormulaBase {
         return NFeUtils.formatarDecimal(valor, 4, true);
     }
 }
-
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjgifQ==

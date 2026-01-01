@@ -50,7 +50,7 @@ public class S_1005_xml extends FormulaBase {
 		
 		
 		
-		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtTabEstab/v_S_01_01_00");
+		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtTabEstab/v_S_01_03_00");
 		ElementXml evtTabEstab = eSocial.addNode("evtTabEstab");
 		evtTabEstab.setAttribute("Id", ESocialUtils.comporIdDoEvento(aac10.aac10ti, aac10.aac10ni));
 

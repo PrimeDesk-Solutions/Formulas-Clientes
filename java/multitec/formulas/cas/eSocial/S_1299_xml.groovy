@@ -36,7 +36,7 @@ public class S_1299_xml extends FormulaBase {
 		boolean evtInfoComplPer = get("evtInfoComplPer");
 		boolean evtPgto = get("evtPgtos")
 		
-		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtFechaEvPer/v_S_01_01_00");
+		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtFechaEvPer/v_S_01_03_00");
 		ElementXml evtFechaEvPer = eSocial.addNode("evtFechaEvPer");
 		evtFechaEvPer.setAttribute("Id", ESocialUtils.comporIdDoEvento(aac10.aac10ti, aac10.aac10ni));
 		
@@ -64,7 +64,7 @@ public class S_1299_xml extends FormulaBase {
 		infoFech.addNode("evtContratAvNP", evtContratAvNP ? 'S' : 'N', true);
 		infoFech.addNode("evtInfoComplPer", evtInfoComplPer ? 'S' : 'N', true);
 		
-		if (indApuracao.intValue() == 2) infoFech.addNode("indExcApur1250", 'S', false);
+		if (indApuracao.intValue() != 2 && perApur.isBefore(LocalDate.of(2021, 7, 1))) infoFech.addNode("indExcApur1250", 'S', false);
 		
 		Aaj01 aaj01 = aac13.aac13classTrib;
 		String classTrib = aaj01 == null ? null : aaj01.aaj01eSocial;

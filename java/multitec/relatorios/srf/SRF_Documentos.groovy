@@ -59,7 +59,7 @@ public class SRF_Documentos extends RelatorioBase {
 
 		List<TableMap> dados = obterDadosRelatorio(idEntidade, idTipoDocumento, criterios, dataEmissao, dataEntSai, numeroInicial, numeroFinal, resumoOperacao, nomeEntidade);
 			
-		return gerarXLSX("SRF_Documentos_R1", dados);
+		return gerarPDF("SRF_Documentos_R1", dados);
 		
 	}
 	
@@ -116,7 +116,7 @@ public class SRF_Documentos extends RelatorioBase {
  				"        left join abe40 abe40 on abe40id = eaa01.eaa01tp  " +
  				"        left join aaj15 aaj15 on aaj15.aaj15id = eaa0103.eaa0103cfop  " +
 				"        left join abm01 abm01 on abm01.abm01id = eaa0103.eaa0103item " +   
-				//"        left join abm0102 abm0102 on abm0102.abm0102item = abm01.abm01id " +
+				"        left join abm0102 abm0102 on abm0102.abm0102item = abm01.abm01id " +
 				"  where eaa01.eaa01clasDoc = " + Eaa01.CLASDOC_SRF +
 				getSamWhere().getWherePadrao(" AND ", Eaa01.class) +
 				whereNumero +

@@ -38,3 +38,4 @@ public class SPV_Etiquetas extends RelatorioBase {
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroNumero);
     }
 }
+//meta-sis-eyJkZXNjciI6IlNQViAtIEV0aXF1ZXRhcyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

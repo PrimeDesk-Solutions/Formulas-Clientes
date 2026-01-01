@@ -93,3 +93,4 @@ public class CUBOS_CGS_Entidades extends RelatorioBase {
 					return getAcessoAoBanco().buscarListaDeTableMap(sql,parametroEntidadeIni,parametroEntidadeFin,parametroEmpresa);
 	}
 }
+//meta-sis-eyJkZXNjciI6IkNVQk9TIC0gQ0dTIC0gRW50aWRhZGVzIiwidGlwbyI6InJlbGF0b3JpbyJ9

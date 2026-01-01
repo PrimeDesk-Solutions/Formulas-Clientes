@@ -5,7 +5,8 @@ import br.com.multitec.utils.Utils;
 import br.com.multitec.utils.xml.ElementXml;
 import sam.dicdados.FormulaTipo;
 import sam.model.entities.aa.Aaa15;
-import sam.model.entities.aa.Aac10;
+import sam.model.entities.aa.Aac10
+import sam.model.entities.aa.Aap60;
 import sam.model.entities.ab.Abh80;
 import sam.model.entities.fa.Fab10;
 import sam.model.entities.fa.Fab1001;
@@ -30,7 +31,7 @@ public class S_2220_xml extends FormulaBase {
 		def tpAmb = 1;
 		def indRetif = aaa15.aaa15tipo == Aaa15.TIPO_RETIFICACAO ? 2 : 1;
 		
-		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtMonit/v_S_01_01_00");
+		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtMonit/v_S_01_03_00");
 		ElementXml evtMonit = eSocial.addNode("evtMonit");
 		evtMonit.setAttribute("Id", ESocialUtils.comporIdDoEvento(aac10.aac10ti, aac10.aac10ni));
 		
@@ -54,7 +55,7 @@ public class S_2220_xml extends FormulaBase {
 		ElementXml ideVinculo = evtMonit.addNode("ideVinculo");
 		ideVinculo.addNode("cpfTrab", StringUtils.ajustString(StringUtils.extractNumbers(abh80.abh80cpf), 11, '0', true), true);
 		ideVinculo.addNode("matricula", abh80.abh80codigo, false);
-		if(abh80.abh80categ != null) ideVinculo.addNode("codCateg", abh80.abh80categ.aap14eSocial, false);
+		//if(abh80.abh80categ != null) ideVinculo.addNode("codCateg", abh80.abh80categ.aap14eSocial, false);
 		
 		ElementXml exMedOcup = evtMonit.addNode("exMedOcup");
 		exMedOcup.addNode("tpExameOcup", fab10.fab10tpExOcup, true);
@@ -65,9 +66,10 @@ public class S_2220_xml extends FormulaBase {
 		
 		if(fab10.fab1001s != null && fab10.fab1001s.size() > 0) {
 			for(Fab1001 fab1001 : fab10.fab1001s) {
+                Aap60 aap60 = getSession().get(Aap60.class, "aap60id, aap60codigo",fab1001.fab1001proc.getAap60id())
 				ElementXml exame = aso.addNode("exame");
 				exame.addNode("dtExm", ESocialUtils.formatarData(fab1001.fab1001data, ESocialUtils.PATTERN_YYYY_MM_DD), true);
-				exame.addNode("procRealizado", fab1001.fab1001proc, false);
+				exame.addNode("procRealizado", aap60.getAap60codigo(), false);
 				exame.addNode("obsProc", fab1001.fab1001obs, false);
 				exame.addNode("ordExame", fab1001.fab1001ordem, true);
 				exame.addNode("indResult", fab1001.fab1001result, false);

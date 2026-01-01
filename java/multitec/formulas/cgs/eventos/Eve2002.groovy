@@ -31,16 +31,16 @@ public class Eve2002 extends FormulaBase {
 
 		if (fba01011.fba01011base != null && fba01011.fba01011base > 0) {
 			ir = fba01011.fba01011base;
-			
+
 		}else{
 			//Aplica a tabela de IR
 			def qtdDepIR = sfpUtils.buscarQtdeDependentesIR(abh80.getAbh80id());
-			
+
 			ir = sfpUtils.aplicarTabelaDeIR("001", sfpUtils.buscarValor("9030"), qtdDepIR); //RB IR Salários
-	
+
 			//Diminui o imposto já recolhido no mês
-			def irAnt = sfpUtils.buscarValorNoUltimoCalculo("*", true, fba0101.fba0101dtPgto, true, "2002", [0, 1] as Integer[]);
-	
+			def irAnt = sfpUtils.buscarValorNoCalculo(null, true, fba0101.fba0101dtPgto, true, true, "2002", [0, 1, 9] as Integer[]);
+
 			ir = ir - irAnt;
 			if(ir < 0) ir = 0;
 		}

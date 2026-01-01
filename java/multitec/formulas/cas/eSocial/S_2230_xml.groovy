@@ -34,7 +34,7 @@ public class S_2230_xml extends FormulaBase {
 		
         def indRetif = aaa15.aaa15tipo == Aaa15.TIPO_RETIFICACAO ? 2 : 1;
 		
-		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtAfastTemp/v_S_01_01_00");
+		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtAfastTemp/v_S_01_03_00");
 		
 		ElementXml evtAfastTemp = eSocial.addNode("evtAfastTemp");
 		evtAfastTemp.setAttribute("Id", ESocialUtils.comporIdDoEvento(aac10.aac10ti, aac10.aac10ni));
@@ -87,10 +87,6 @@ public class S_2230_xml extends FormulaBase {
 			ElementXml perAquis = iniAfastamento.addNode("perAquis");
 			perAquis.addNode("dtInicio", ESocialUtils.formatarData(fbc01.fbc01pai, ESocialUtils.PATTERN_YYYY_MM_DD), true);
 			perAquis.addNode("dtFim", ESocialUtils.formatarData(fbc01.fbc01paf, ESocialUtils.PATTERN_YYYY_MM_DD), false);
-		} else {
-			ElementXml perAquis = iniAfastamento.addNode("perAquis");
-			perAquis.addNode("dtInicio", ESocialUtils.formatarData(fbb01.fbb01dtSai, ESocialUtils.PATTERN_YYYY_MM_DD), true);
-			perAquis.addNode("dtFim", ESocialUtils.formatarData(fbb01.fbb01dtRet, ESocialUtils.PATTERN_YYYY_MM_DD), false);
 		}
 		
 		if (fbb01.fbb01sindCnpj != null && fbb01.fbb01sindCnpj.length() > 0) {

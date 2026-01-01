@@ -127,7 +127,7 @@ public class SRF_VendaDeItensPorEstado extends RelatorioBase {
                 if(!tmpDev.isEmpty()) listDevolucoesAjustado.add(tmpDev);
             }
         }
-
+        
         for(dado in dados){
             Long idItem = dado.getLong("eaa0103id");
             BigDecimal fatorQuilo = dado.getBigDecimal("fatorQuilo");
@@ -221,32 +221,32 @@ public class SRF_VendaDeItensPorEstado extends RelatorioBase {
         Parametro paramEmpresa = Parametro.criar("idEmpresa", idEmpresa);
 
         String sql = "SELECT eaa0103id, abm01id AS idItem, abm01codigo AS codItem, abm01na AS naItem, CAST(abm0101json ->> 'fator_litro' AS numeric(18,6)) as fatorQuilo, " +
-                "aba3001descr AS categoria, aag02uf AS estado, eaa0103qtComl " +
-                "FROM eaa01 " +
-                "INNER JOIN abd01 on eaa01pcd = abd01id "+
-                "INNER JOIN eaa0103 ON eaa0103doc = eaa01id " +
-                "INNER JOIN abb01 ON abb01id = eaa01central " +
-                "INNER JOIN abm01 ON abm01id = eaa0103item " +
-                "INNER JOIN abm0101 ON abm0101item = abm01id "+
-                "LEFT JOIN abm0102 ON abm0102item = abm01id " +
-                "INNER JOIN aba3001 ON aba3001id = abm0102criterio " +
-                "INNER JOIN abe01 ON abe01id = abb01ent " +
-                "INNER JOIN abe0101 ON abe0101ent = abe01id AND abe0101principal = 1 " +
-                "INNER JOIN aag0201 ON aag0201id = abe0101municipio " +
-                "INNER JOIN aag02 ON aag02id = aag0201uf " +
-                whereClasDoc  +
-                whereCriterio +
-                whereEmpresa +
-                whereEsMov +
-                whereEmissao +
-                whereCategoria +
-                whereEstados +
-                whereItens +
-                "and eaa01cancdata is null "+
-                "and abd01isce = 1 " +
-                "and eaa01isce = 1 " +
-                "and abb01tipo in (69744) "+
-                orderBy
+                    "aba3001descr AS categoria, aag02uf AS estado, eaa0103qtComl " +
+                    "FROM eaa01 " +
+                    "INNER JOIN abd01 on eaa01pcd = abd01id "+
+                    "INNER JOIN eaa0103 ON eaa0103doc = eaa01id " +
+                    "INNER JOIN abb01 ON abb01id = eaa01central " +
+                    "INNER JOIN abm01 ON abm01id = eaa0103item " +
+                    "INNER JOIN abm0101 ON abm0101item = abm01id "+
+                    "LEFT JOIN abm0102 ON abm0102item = abm01id " +
+                    "INNER JOIN aba3001 ON aba3001id = abm0102criterio " +
+                    "INNER JOIN abe01 ON abe01id = abb01ent " +
+                    "INNER JOIN abe0101 ON abe0101ent = abe01id AND abe0101principal = 1 " +
+                    "INNER JOIN aag0201 ON aag0201id = abe0101municipio " +
+                    "INNER JOIN aag02 ON aag02id = aag0201uf " +
+                    whereClasDoc  +
+                    whereCriterio +
+                    whereEmpresa +
+                    whereEsMov +
+                    whereEmissao +
+                    whereCategoria +
+                    whereEstados +
+                    whereItens +
+                    "and eaa01cancdata is null "+ 
+				"and abd01isce = 1 " +
+				"and eaa01isce = 1 " +
+				"and abb01tipo in (69744) "+ 
+                    orderBy
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, paramEmissaoIni, paramEmissaoFin, paramCategoria, paramEstados, paramItens, paramEmpresa );
     }
@@ -341,4 +341,5 @@ public class SRF_VendaDeItensPorEstado extends RelatorioBase {
 
 
 }
+//meta-sis-eyJkZXNjciI6IlNSRiAtIFZlbmRhcyBkZSBJdGVucyBQb3IgRXN0YWRvIChTSUYpIiwidGlwbyI6InJlbGF0b3JpbyJ9
 //meta-sis-eyJkZXNjciI6IlNSRiAtIFZlbmRhcyBkZSBJdGVucyBQb3IgRXN0YWRvIChTSUYpIiwidGlwbyI6InJlbGF0b3JpbyJ9

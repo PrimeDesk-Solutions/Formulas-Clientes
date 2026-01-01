@@ -65,7 +65,22 @@ public class SCE_ImportarItensLctos extends FormulaBase {
 			itemLcto.serie = serie;
 			itemLcto.validade = validade;
 			itemLcto.fabricacao = fabricacao;
-			itemLcto.json = null; //receber um TableMap com campos e valores a partir do id da especificação (aam02id)
+			
+			itemLcto.json = null; //receber um TableMap com campos e valores a partir do id da especificação (aam02id) (Campos livres da especificação - bcc01jsonEspec)
+			
+			itemLcto.jsonEstoque = null; //receber um TableMap com campos e valores a partir da especificação definida no parâmetro geral BC-ESPECCPOLIVRE (campos livres do lançamento - bcc01json)
+			
+			//Ids de Status e Locais de armazenamento para saída (caso utilize)
+			itemLcto.aam04idSaida = null;
+			itemLcto.abm15idSaida0 = null;
+			itemLcto.abm15idSaida1 = null;
+			itemLcto.abm15idSaida2 = null;
+			
+			//Ids de Status e Locais de armazenamento para entrada (caso utilize)
+			itemLcto.aam04idEntrada = null;
+			itemLcto.abm15idEntrada0 = null;
+			itemLcto.abm15idEntrada1 = null;
+			itemLcto.abm15idEntrada2 = null;
 			
 			itensLctos.add(itemLcto);
 		}

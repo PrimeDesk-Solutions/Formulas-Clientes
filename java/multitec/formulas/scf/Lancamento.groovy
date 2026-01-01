@@ -9,9 +9,6 @@ import sam.model.entities.da.Dab10;
 import sam.server.samdev.formula.FormulaBase;
 import sam.server.samdev.utils.Parametro;
 
-import sam.model.entities.da.Dab1002
-import sam.model.entities.da.Dab20;
-
 /**
  * 
  * Fórmula para manipular o Lançamento Financeiro
@@ -28,15 +25,6 @@ public class Lancamento extends FormulaBase{
 		dab10 = get("dab10");
 		abe01 = null;
 		aah01 = null;
-
-		Integer cheque;
-
-		for(Dab1002 dab1002 in dab10.dab1002s){
-			Dab20 dab20 = dab1002.dab1002cheque;
-			if(dab20 != null){
-				cheque = dab20.dab20num_Zero;	
-			}
-		}
 		
 		if(dab10.dab10historico != null) {
 			def historico = dab10.dab10historico;
@@ -60,7 +48,6 @@ public class Lancamento extends FormulaBase{
 			historico = historico.replace("\$4", DateTimeFormatter.ofPattern("dd/MM/yyyy").format(dab10.dab10data)); //Data do lançamento
 			historico = historico.replace("\$5", abe01 == null ? "" : abe01.abe01nome == null ? "" : abe01.abe01nome); //Nome da entidade do documento na central
 			historico = historico.replace("\$6", dab10.dab10central == null ? "" : dab10.dab10central.abb01parcela == null ? "" : dab10.dab10central.abb01parcela); //Parcela do documento na central
-			historico = historico.replace("\$7", cheque == 0 ? "" : " " + cheque.toString());
 
 			dab10.dab10historico = historico;
 		}

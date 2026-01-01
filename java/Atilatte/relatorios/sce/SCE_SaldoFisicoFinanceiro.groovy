@@ -89,7 +89,8 @@ public class SCE_SaldoFisicoFinanceiro extends RelatorioBase {
 
 		def paramDataAtual = buscarConteudoParametro(Parametros.BC_DATAATUAL.getAplic(), Parametros.BC_DATAATUAL.getParam())
 		if(StringUtils.isNullOrEmpty(paramDataAtual)) interromper("Não foi localizado o conteúdo do parametro BC-DataAtual")
-		def dataAtualEstoque = DateUtils.parseDate(paramDataAtual)
+		def dataAtualEstoque = LocalDate.now()//DateUtils.parseDate(paramDataAtual)
+
 
 		def grupos = new HashMap<Integer, List<Integer>>()
 		criarEstruturaItens(grupos)

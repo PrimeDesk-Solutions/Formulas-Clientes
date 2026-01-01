@@ -1,37 +1,28 @@
-package multitec.relatorios.sfp;
+package multitec.relatorios.sfp
 
-import java.time.LocalDate;
-
-import org.springframework.http.MediaType;
-
-import br.com.multiorm.Query;
-import br.com.multiorm.criteria.criterion.Criterions;
-import br.com.multiorm.criteria.join.Joins;
-import br.com.multitec.utils.DateUtils;
-import br.com.multitec.utils.StringUtils;
-import br.com.multitec.utils.Utils;
-import br.com.multitec.utils.ValidacaoException;
-import br.com.multitec.utils.collections.TableMap;
-import br.com.multitec.utils.dicdados.Parametro;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRPrintPage;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
+import br.com.multiorm.Query
+import br.com.multiorm.criteria.criterion.Criterions
+import br.com.multiorm.criteria.join.Joins
+import br.com.multitec.utils.DateUtils
+import br.com.multitec.utils.StringUtils
+import br.com.multitec.utils.Utils
+import br.com.multitec.utils.ValidacaoException
+import br.com.multitec.utils.collections.TableMap
+import br.com.multitec.utils.dicdados.Parametro
+import net.sf.jasperreports.engine.*
+import org.springframework.http.MediaType
 import sam.core.variaveis.MDate
-import sam.dicdados.Parametros;
-import sam.model.entities.aa.Aac10;
-import sam.model.entities.aa.Aag0201;
-import sam.model.entities.ab.Aba01;
-import sam.model.entities.ab.Abh80;
-import sam.model.entities.fb.Fba01;
-import sam.model.entities.fb.Fbb01;
-import sam.model.entities.fb.Fbb20;
-import sam.model.entities.fb.Fbc01;
-import sam.model.entities.fb.Fbd10;
-import sam.server.samdev.relatorio.DadosParaDownload;
-import sam.server.samdev.relatorio.RelatorioBase;
-import sam.server.samdev.relatorio.TableMapDataSource;
+import sam.dicdados.Parametros
+import sam.model.entities.aa.Aac10
+import sam.model.entities.aa.Aag0201
+import sam.model.entities.ab.Aba01
+import sam.model.entities.ab.Abh80
+import sam.model.entities.fb.*
+import sam.server.samdev.relatorio.DadosParaDownload
+import sam.server.samdev.relatorio.RelatorioBase
+import sam.server.samdev.relatorio.TableMapDataSource
+
+import java.time.LocalDate
 
 /**Classe para relatório SFP - Ficha de Registro de Empregados
  * @author Lucas Eliel
@@ -48,7 +39,7 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 	public String getNomeTarefa() {
 		return "SFP - Ficha de Registro de Empregados";
 	}
-	
+
 	/**Método Principal
 	 * @return Map (Filtros do Front-end)
 	 */
@@ -71,10 +62,10 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 		filtrosDefault.put("dependentes", true);
 		filtrosDefault.put("anotacoesGerais", true);
 		filtrosDefault.put("contribSindical", true);
-		
+
 		return Utils.map("filtros", filtrosDefault);
 	}
-	
+
 	/**Método Principal
 	 * @return String, byte[] (Dados para Download)
 	 */
@@ -94,10 +85,10 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 		boolean isDependentes = get("dependentes");
 		boolean isAnotacoesGerais = get("anotacoesGerais");
 		boolean isContribSindical = get("contribSindical");
-		
+
 		String eveSindical = getParametros(Parametros.FB_EVESINDICAL);
 		if(eveSindical == null) throw new ValidacaoException("Não foi encontrado o conteúdo do parâmetro FB_EVESINDICAL.");
-		
+
 		Aac10 aac10 = getVariaveis().getAac10();
 		String endereco = null;
 		if(aac10.getAac10endereco() != null) {
@@ -106,12 +97,12 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 			}else {
 				endereco = aac10.getAac10endereco();
 			}
-			
+
 			if(aac10.getAac10complem() != null) {
 				endereco += StringUtils.concat(" - ", aac10.getAac10complem());
 			}
 		}
-		
+
 		params.put("TITULO_RELATORIO", "Ficha de Registro de Empregados");
 		params.put("EMP_RS", aac10.getAac10rs());
 		params.put("EMP_NA", aac10.getAac10na());
@@ -121,15 +112,17 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 		params.put("EMP_CIDADE", aac10.getAac10municipio() != null ? obterMunicipio(aac10.getAac10municipio().getIdValue()).getAag0201nome() : null);
 		params.put("EMP_UF", aac10.getAac10municipio() != null ? obterMunicipio(aac10.getAac10municipio().getIdValue()).getAag0201uf().getAag02uf() : null);
 		params.put("EMP_CNAE", aac10.getAac10cnae());
+
+
 		params.put("StreamSub1R2", carregarArquivoRelatorio("SFP_FichaDeRegistroDeEmpregados_R2_S1"));
 		params.put("StreamSub1R3", carregarArquivoRelatorio("SFP_FichaDeRegistroDeEmpregados_R3_S1"));
 		params.put("StreamSub1R4", carregarArquivoRelatorio("SFP_FichaDeRegistroDeEmpregados_R4_S1"));
 		params.put("StreamSub1R5", carregarArquivoRelatorio("SFP_FichaDeRegistroDeEmpregados_R5_S1"));
 		params.put("StreamSub1R6", carregarArquivoRelatorio("SFP_FichaDeRegistroDeEmpregados_R6_S1"));
 		params.put("StreamSub1R7", carregarArquivoRelatorio("SFP_FichaDeRegistroDeEmpregados_R7_S1"));
-		
+
 		JasperPrint print = carregarDadosRelatorio(idsTrabalhadores, idsDeptos, idsCargos, tiposTrab, admissao, referencia, considDemitidos, isRegTrabalhador, isCargosSalarios, isAfastamentos, isAnotacoesFerias, isDependentes, isAnotacoesGerais, isContribSindical, eveSindical);
-		
+
 		byte[] bytes;
 		try {
 			bytes = JasperExportManager.exportReportToPdf(print);
@@ -144,12 +137,12 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 	 */
 	private Set<Integer> obterTipoTrabalhador(){
 		Set<Integer> tiposTrab = new HashSet<>();
-		
+
 		if((boolean) get("isTrabalhador")) tiposTrab.add(0);
 		if((boolean) get("isAutonomo")) tiposTrab.add(1);
 		if((boolean) get("isProlabore")) tiposTrab.add(2);
 		if((boolean) get("isTerceiros")) tiposTrab.add(3);
-		
+
 		if(tiposTrab.size() == 0) {
 			tiposTrab.add(0);
 			tiposTrab.add(1);
@@ -158,7 +151,7 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 		}
 		return tiposTrab;
 	}
-	
+
 	/**Método Diverso
 	 * @return 	Parametros (Aba01)
 	 */
@@ -168,14 +161,14 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 				.addWhere(Criterions.eq("aba01aplic", "FB"))
 				.addWhere(Criterions.where(getSamWhere().getWherePadrao("", Aba01.class)))
 				.get();
-		
+
 		String conteudo = null;
 		if(aba01 != null) {
 			conteudo = aba01.getAba01conteudo();
 		}
 		return conteudo;
 	}
-	
+
 	/**Método Diverso
 	 * @return 	Aag0201 (uf, municipio)
 	 */
@@ -185,7 +178,9 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 				.addWhere(Criterions.eq("aag0201id", aac10municipio))
 				.get();
 	}
-	
+
+
+
 	/**Método Diverso
 	 * @return 	List - TableMap (Query de Ficha de Registro Empregados do Trabalhador)
 	 */
@@ -195,35 +190,54 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 		String whereCargos = idsCargos != null && !idsCargos.isEmpty() ? " AND abh05id IN (:idsCargos) " : "";
 		String whereDemitidos = considDemitidos ? "" : " AND abh80dtResTrans IS NULL ";
 		String whereData = dtAdmis != null ? getWhereDataInterval("AND", dtAdmis, "abh80dtAdmis") : "";
-		
+
 		String sql = "SELECT abh80id, abh80codigo, abh80nome, abh80endereco, abh80bairro, abh80numero, aag0201nome, abh80cep, aag02uf, aap05descr, abh80nascData, abh80sexo, aap08descr, " +
-				     "aap06descr, abh80pai, abh80mae, abh80salario, abh80salTipo, abh05nome, aap03codigo, abh80dtAdmis, abh80dtResTrans, abb11nome, abh80cpf, abh80rgNum, abh80rgDtExped, abh80rgOe, " +
-				     "abh80teSecao, abh80teZona, abh80teNum, abh80ctpsNum, abh80ctpsSerie, abh80ctpsEe, abh80ctpsDtEmis, abh80pis, abh80dtPis, abh80crOe, abh80crSigla, abh80crNum, " +
-				     "abh80crRegiao, abh80crHabProf, abh80obsTrab, abh80foto, aap18codigo, abh80tipoNac " +
-				     "FROM Abh80 " +
-				     "LEFT JOIN Aap08 on aap08id = abh80estCivil " +
-				     "LEFT JOIN Aag0201 ON aag0201id = abh80municipio " +
-				     "INNER JOIN Aag02 ON aag02id = aag0201uf " +
-				     "INNER JOIN Abb11 ON abb11id = abh80depto " +
-				     "INNER JOIN Abh05 ON abh05id = abh80cargo " +
-				     "LEFT JOIN Aap03 ON aap03id = abh05cbo " +
-				     "LEFT JOIN Aap05 ON aap05id = abh80nacionalidade " +
-				     "LEFT JOIN Aap06 ON aap06id = abh80gi " +
-				     "INNER JOIN Aap18 ON aap18id = abh80unidPagto " +
-				     "WHERE abh80tipo IN (:tiposAbh80) " + whereData + whereDemitidos +
-				     whereTrabalhadores + whereDeptos + whereCargos + getSamWhere().getWherePadrao("AND", Abh80.class) +
-				     "ORDER BY abh80codigo";
-			
+				"aap06descr, abh80pai, abh80mae, abh80salario, abh80salTipo, abh05nome, aap03codigo, abh80dtAdmis, abh80dtResTrans, abb11nome, abh80cpf, abh80rgNum, abh80rgDtExped, abh80rgOe, " +
+				"abh80teSecao, abh80teZona, abh80teNum, abh80ctpsNum, abh80ctpsSerie, abh80ctpsEe, abh80ctpsDtEmis, abh80pis, abh80dtPis, abh80crOe, abh80crSigla, abh80crNum, " +
+				"abh80crRegiao, abh80crHabProf, abh80obsTrab, abh80foto, aap18codigo, abh80tipoNac, abh80json, Abh80fgtsAliq, aag0201nome, abh80jorDescr, abh80nascmunic " +
+				"FROM Abh80 " +
+				"LEFT JOIN Aap08 on aap08id = abh80estCivil " +
+				"LEFT JOIN Aag0201 ON aag0201id = abh80municipio " +
+				//"INNER JOIN Aag01 ON abh80nascPais = Aag01id " + // Adicionado aag01 para ver aag01nome
+				"INNER JOIN Aag02 ON aag02id = aag0201uf " +
+				"INNER JOIN Abb11 ON abb11id = abh80depto " +
+				"INNER JOIN Abh05 ON abh05id = abh80cargo " +
+				"LEFT JOIN Aap03 ON aap03id = abh05cbo " +
+				"LEFT JOIN Aap05 ON aap05id = abh80nacionalidade " +
+				"LEFT JOIN Aap06 ON aap06id = abh80gi " +
+				"INNER JOIN Aap18 ON aap18id = abh80unidPagto " +
+				"WHERE abh80tipo IN (:tiposAbh80) " + whereData + whereDemitidos +
+				whereTrabalhadores + whereDeptos + whereCargos + getSamWhere().getWherePadrao("AND", Abh80.class) +
+				"ORDER BY abh80codigo";
+
 		Query query = getSession().createQuery(sql);
 		query.setParameter("tiposAbh80", tiposAbh80);
 
 		if(idsTrabalhadores != null && !idsTrabalhadores.isEmpty()) query.setParameter("idsTrabalhadores", idsTrabalhadores);
 		if(idsDeptos != null && !idsDeptos.isEmpty()) query.setParameter("idsDeptos", idsDeptos);
 		if(idsCargos != null && !idsCargos.isEmpty()) query.setParameter("idsCargos", idsCargos);
-		
+
 		return query.getListTableMap();
 	}
-	
+
+	private List<TableMap> obterNascMunic(Long abh80nascmunic) {
+
+		String whereNM = abh80nascmunic != null ? " where aag0201id = :abh80nascmunic" : ""
+
+		String sql = " select distinct aag0201nome from abh80" +
+				" inner join aag0201 on abh80nascMunic = aag0201id " +
+				" inner join Aag02 on aag0201uf = Aag02id " +
+				whereNM
+
+		Query query = getSession().createQuery(sql);
+
+
+		abh80nascmunic != null? query.setParameter("abh80nascmunic", abh80nascmunic) : null
+
+		return query.getListTableMap();
+
+	}
+
 	/**Método Diverso
 	 * @return 	List - TableMap (Query da Rescisão do Trabalhador)
 	 */
@@ -233,7 +247,7 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 				.addWhere(Criterions.eq("fbd10trab", abh80id))
 				.get();
 	}
-	
+
 	/**Método Diverso
 	 * @return 	List - TableMap (Query de Ficha de Registro Empregados do Reajuste Salarial)
 	 */
@@ -243,27 +257,27 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 		String whereCargos = idsCargos != null && !idsCargos.isEmpty() ? " AND abh05id IN (:idsCargos) " : "";
 		String whereDemitidos = considDemitidos ? "" : " AND abh80dtResTrans IS NULL ";
 		String whereData = dtReferencia != null ? getWhereDataInterval("AND", dtReferencia, "fbb20data") : "";
-		
+
 		String sql = "SELECT fbb20trab, fbb20data, fbb20salAtu, fbb20motivo, Aap18codigo, fbb20hs, abh05codigo, abh05nome, abh80codigo, abh80nome " +
-				     "FROM Fbb20 " +
-				     "INNER JOIN Abh80 ON abh80id = fbb20trab " +
-				     "INNER JOIN Abb11 ON abb11id = fbb20depto " +
-				     "LEFT JOIN Abh05 ON abh05id = fbb20cargo " +
-				     "LEFT JOIN Aap18 ON aap18id = abh80unidPagto " +
-				     "WHERE abh80tipo IN (:tiposAbh80) " + whereData + whereDemitidos +
-				     whereTrabalhadores + whereDeptos + whereCargos + getSamWhere().getWherePadrao("AND", Fbb20.class) +
-				     "ORDER BY abh80codigo, fbb20data";
-		
+				"FROM Fbb20 " +
+				"INNER JOIN Abh80 ON abh80id = fbb20trab " +
+				"INNER JOIN Abb11 ON abb11id = fbb20depto " +
+				"LEFT JOIN Abh05 ON abh05id = fbb20cargo " +
+				"LEFT JOIN Aap18 ON aap18id = abh80unidPagto " +
+				"WHERE abh80tipo IN (:tiposAbh80) " + whereData + whereDemitidos +
+				whereTrabalhadores + whereDeptos + whereCargos + getSamWhere().getWherePadrao("AND", Fbb20.class) +
+				"ORDER BY abh80codigo, fbb20data";
+
 		Query query = getSession().createQuery(sql);
 		query.setParameter("tiposAbh80", tiposAbh80);
-		
+
 		if(idsTrabalhadores != null && !idsTrabalhadores.isEmpty()) query.setParameter("idsTrabalhadores", idsTrabalhadores);
 		if(idsDeptos != null && !idsDeptos.isEmpty()) query.setParameter("idsDeptos", idsDeptos);
 		if(idsCargos != null && !idsCargos.isEmpty()) query.setParameter("idsCargos", idsCargos);
 
 		return query.getListTableMap();
 	}
-	
+
 	/**Método Diverso
 	 * @return 	List - TableMap (Query de Ficha de Registro Empregados do Afastamento e Retorno)
 	 */
@@ -274,27 +288,27 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 		String whereDemitidos = considDemitidos ? "" : "AND abh80dtResTrans IS NULL ";
 		String whereDataSaida = dtReferencia != null ? getWhereDataInterval("", dtReferencia, "fbb01dtSai") : "";
 		String whereDataRetorno = dtReferencia != null ? getWhereDataInterval("", dtReferencia, "fbb01dtRet") : "";
-		
+
 		String sql = "SELECT fbb01trab, fbb01dtSai, fbb01dtRet, abh07codigo, abh07nome, abh80codigo, abh80nome " +
-				     "FROM Fbb01 " +
-			         "INNER JOIN Abh80 ON abh80id = fbb01trab " +
-			         "INNER JOIN Abh07 ON abh07id = fbb01ma " +
-			         "INNER JOIN Abb11 ON abb11id = abh80depto " +
-			         "INNER JOIN Abh05 ON abh05id = abh80cargo " +
-			         "WHERE ((" + whereDataSaida + ") OR (" + whereDataRetorno + ")) AND abh80tipo IN (:tiposAbh80) " + whereDemitidos +
-			          whereTrabalhadores + whereDeptos + whereCargos + getSamWhere().getWherePadrao("AND", Fbb01.class) +
-			         "ORDER BY abh80codigo, fbb01dtSai";
-		
+				"FROM Fbb01 " +
+				"INNER JOIN Abh80 ON abh80id = fbb01trab " +
+				"INNER JOIN Abh07 ON abh07id = fbb01ma " +
+				"INNER JOIN Abb11 ON abb11id = abh80depto " +
+				"INNER JOIN Abh05 ON abh05id = abh80cargo " +
+				"WHERE ((" + whereDataSaida + ") OR (" + whereDataRetorno + ")) AND abh80tipo IN (:tiposAbh80) " + whereDemitidos +
+				whereTrabalhadores + whereDeptos + whereCargos + getSamWhere().getWherePadrao("AND", Fbb01.class) +
+				"ORDER BY abh80codigo, fbb01dtSai";
+
 		Query query = getSession().createQuery(sql);
 		query.setParameter("tiposAbh80", tiposAbh80);
-		
+
 		if(idsTrabalhadores != null && !idsTrabalhadores.isEmpty()) query.setParameter("idsTrabalhadores", idsTrabalhadores);
 		if(idsDeptos != null && !idsDeptos.isEmpty()) query.setParameter("idsDeptos", idsDeptos);
 		if(idsCargos != null && !idsCargos.isEmpty()) query.setParameter("idsCargos", idsCargos);
-		
+
 		return query.getListTableMap();
 	}
-	
+
 	/**Método Diverso
 	 * @return 	List - TableMap (Query de Ficha de Registro Empregados do Período Aquisitivo)
 	 */
@@ -304,27 +318,27 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 		String whereCargos = idsCargos != null && !idsCargos.isEmpty() ? " AND abh05id IN (:idsCargos) " : "";
 		String whereDemitidos = considDemitidos ? "" : "AND abh80dtResTrans IS NULL ";
 		String whereData = dtReferencia != null ? getWhereDataInterval("AND", dtReferencia, "fbc0101dtPagto") : "";
-		
+
 		String sql = "SELECT fbc01trab, fbc01pai, fbc01paf, fbc0101pgi, fbc0101pgf, fbc0101pbi, fbc0101pbf, fbc0101obs, abh80codigo, abh80nome " +
-				     "FROM Fbc01 " +
-				     "INNER JOIN Fbc0101 ON fbc0101pa = fbc01id " +
-			         "INNER JOIN Abh80 ON abh80id = fbc01trab " +
-			         "INNER JOIN Abb11 ON abb11id = abh80depto " +
-			         "INNER JOIN Abh05 ON abh05id = abh80cargo " +
-			         "WHERE abh80tipo IN (:tiposAbh80) " + whereData + whereDemitidos +
-			         whereTrabalhadores + whereDeptos + whereCargos + getSamWhere().getWherePadrao("AND", Fbc01.class) +
-			         "ORDER BY abh80codigo, fbc0101dtPagto";
-		
+				"FROM Fbc01 " +
+				"INNER JOIN Fbc0101 ON fbc0101pa = fbc01id " +
+				"INNER JOIN Abh80 ON abh80id = fbc01trab " +
+				"INNER JOIN Abb11 ON abb11id = abh80depto " +
+				"INNER JOIN Abh05 ON abh05id = abh80cargo " +
+				"WHERE abh80tipo IN (:tiposAbh80) " + whereData + whereDemitidos +
+				whereTrabalhadores + whereDeptos + whereCargos + getSamWhere().getWherePadrao("AND", Fbc01.class) +
+				"ORDER BY abh80codigo, fbc0101dtPagto";
+
 		Query query = getSession().createQuery(sql);
 		query.setParameter("tiposAbh80", tiposAbh80);
-		
+
 		if(idsTrabalhadores != null && !idsTrabalhadores.isEmpty()) query.setParameter("idsTrabalhadores", idsTrabalhadores);
 		if(idsDeptos != null && !idsDeptos.isEmpty()) query.setParameter("idsDeptos", idsDeptos);
 		if(idsCargos != null && !idsCargos.isEmpty()) query.setParameter("idsCargos", idsCargos);
-		
+
 		return query.getListTableMap();
 	}
-	
+
 	/**Método Diverso
 	 * @return 	List - TableMap (Query de Ficha de Registro Empregados dos Dependentes)
 	 */
@@ -334,27 +348,27 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 		String whereCargos = idsCargos != null && !idsCargos.isEmpty() ? " AND abh05id IN (:idsCargos) " : "";
 		String whereDemitidos = considDemitidos ? "" : "AND abh80dtResTrans IS NULL ";
 		String whereData = dtReferencia != null ? getWhereDataInterval("AND", dtReferencia, "abh80dtAdmis") : "";
-		
+
 		String sql = "SELECT abh8002trab, abh8002nome, abh8002dtNasc, aap09descr " +
-				     "FROM Abh8002 " +
-				     "INNER JOIN Abh80 ON abh80id = abh8002trab " +
-				     "INNER JOIN Abb11 ON abb11id = abh80depto " +
-				     "INNER JOIN Abh05 ON abh05id = abh80cargo " +
-				     "LEFT JOIN Aap09 ON aap09id = abh8002parente " +
-	                 "WHERE abh80tipo IN (:tiposAbh80) " + whereData + whereDemitidos +
-				     whereTrabalhadores + whereDeptos + whereCargos + getSamWhere().getWherePadrao("AND", Abh80.class) +
-				     "ORDER BY abh80codigo";
-		
+				"FROM Abh8002 " +
+				"INNER JOIN Abh80 ON abh80id = abh8002trab " +
+				"INNER JOIN Abb11 ON abb11id = abh80depto " +
+				"INNER JOIN Abh05 ON abh05id = abh80cargo " +
+				"LEFT JOIN Aap09 ON aap09id = abh8002parente " +
+				"WHERE abh80tipo IN (:tiposAbh80) " + whereData + whereDemitidos +
+				whereTrabalhadores + whereDeptos + whereCargos + getSamWhere().getWherePadrao("AND", Abh80.class) +
+				"ORDER BY abh80codigo";
+
 		Query query = getSession().createQuery(sql);
 		query.setParameter("tiposAbh80", tiposAbh80);
-		
+
 		if(idsTrabalhadores != null && !idsTrabalhadores.isEmpty()) query.setParameter("idsTrabalhadores", idsTrabalhadores);
 		if(idsDeptos != null && !idsDeptos.isEmpty()) query.setParameter("idsDeptos",	 idsDeptos);
 		if(idsCargos != null && !idsCargos.isEmpty()) query.setParameter("idsCargos", idsCargos);
-			
+
 		return query.getListTableMap();
 	}
-	
+
 	/**Método Diverso
 	 * @return 	List - TableMap (Query de Ficha de Registro Empregados das Anotações)
 	 */
@@ -364,27 +378,27 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 		String whereCargos = idsCargos != null && !idsCargos.isEmpty() ? " AND abh05id IN (:idsCargos) " : "";
 		String whereDemitidos = considDemitidos ? "" : "AND abh80dtResTrans IS NULL ";
 		String whereData = dtReferencia != null ? getWhereDataInterval("AND", dtReferencia, "abh80dtAdmis") : "";
-		
+
 		String sql = "SELECT abh8004trab, abh8004data, abh8004ficha, abh8004nota, aap12codigo, aap12descr " +
-				     "FROM Abh8004 " +
-				     "INNER JOIN Abh80 ON abh80id = abh8004trab " +
-				     "INNER JOIN Abb11 ON abb11id = abh80depto " +
-				     "INNER JOIN Abh05 ON abh05id = abh80cargo " +
-				     "INNER JOIN Aap12 ON aap12id = abh8004anotacao " +
-	                 "WHERE abh8004ficha = 1 AND abh80tipo IN (:tiposAbh80) " + whereData + whereDemitidos +
-				     whereTrabalhadores + whereDeptos + whereCargos + getSamWhere().getWherePadrao("AND", Abh80.class) + 
-				     "ORDER BY abh80codigo";
-		
+				"FROM Abh8004 " +
+				"INNER JOIN Abh80 ON abh80id = abh8004trab " +
+				"INNER JOIN Abb11 ON abb11id = abh80depto " +
+				"INNER JOIN Abh05 ON abh05id = abh80cargo " +
+				"INNER JOIN Aap12 ON aap12id = abh8004anotacao " +
+				"WHERE abh8004ficha = 1 AND abh80tipo IN (:tiposAbh80) " + whereData + whereDemitidos +
+				whereTrabalhadores + whereDeptos + whereCargos + getSamWhere().getWherePadrao("AND", Abh80.class) +
+				"ORDER BY abh80codigo";
+
 		Query query = getSession().createQuery(sql);
 		query.setParameter("tiposAbh80", tiposAbh80);
-		
+
 		if(idsTrabalhadores != null && !idsTrabalhadores.isEmpty()) query.setParameter("idsTrabalhadores", idsTrabalhadores);
 		if(idsDeptos != null && !idsDeptos.isEmpty()) query.setParameter("idsDeptos", idsDeptos);
 		if(idsCargos != null && !idsCargos.isEmpty()) query.setParameter("idsCargos", idsCargos);
-		
+
 		return query.getListTableMap();
 	}
-	
+
 	/**Método Diverso
 	 * @return 	List - TableMap (Query da Contribuição Sindical por Ficha de Registro de Empregados - Eventos)
 	 */
@@ -394,30 +408,30 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 		String whereCargos = idsCargos != null && !idsCargos.isEmpty() ? " AND abh05id IN (:idsCargos) " : "";
 		String whereDemitidos = considDemitidos ? "" : "AND abh80dtResTrans IS NULL ";
 		String whereData = dtReferencia != null ? getWhereDataInterval("AND", dtReferencia, "fba0101dtCalc") : "";
-		
+
 		String sql = "SELECT abh21codigo, abh21nome, fba01011valor, fba0101dtCalc, fba0101trab " +
-			         "FROM Fba01011 " +
-				     "INNER JOIN Fba0101 ON fba0101id = fba01011vlr " +
-			         "INNER JOIN Fba01 ON fba01id = fba0101calculo " +
-				     "INNER JOIN Abh21 ON abh21id = fba01011eve " +
-					 "INNER JOIN Abh80 ON abh80id = fba0101trab " +
-					 "INNER JOIN Abb11 ON abb11id = abh80depto " +
-					 "INNER JOIN Abh05 ON abh05id = abh80cargo " +
-				     "WHERE abh80tipo IN (:tiposAbh80) AND abh21codigo = :codAbh21 " + whereData + whereDemitidos +
-				     whereTrabalhadores + whereDeptos + whereCargos + getSamWhere().getWherePadrao("AND",Fba01.class) + 
-				     " ORDER BY abh80codigo, fba0101dtCalc";
-		
+				"FROM Fba01011 " +
+				"INNER JOIN Fba0101 ON fba0101id = fba01011vlr " +
+				"INNER JOIN Fba01 ON fba01id = fba0101calculo " +
+				"INNER JOIN Abh21 ON abh21id = fba01011eve " +
+				"INNER JOIN Abh80 ON abh80id = fba0101trab " +
+				"INNER JOIN Abb11 ON abb11id = abh80depto " +
+				"INNER JOIN Abh05 ON abh05id = abh80cargo " +
+				"WHERE abh80tipo IN (:tiposAbh80) AND abh21codigo = :codAbh21 " + whereData + whereDemitidos +
+				whereTrabalhadores + whereDeptos + whereCargos + getSamWhere().getWherePadrao("AND",Fba01.class) +
+				" ORDER BY abh80codigo, fba0101dtCalc";
+
 		Query query = getSession().createQuery(sql);
 		query.setParameter("tiposAbh80", tiposAbh80);
 		query.setParameter("codAbh21", codAbh21);
-		
+
 		if(idsTrabalhadores != null && !idsTrabalhadores.isEmpty()) query.setParameter("idsTrabalhadores", idsTrabalhadores);
 		if(idsDeptos != null && !idsDeptos.isEmpty()) query.setParameter("idsDeptos", idsDeptos);
 		if(idsCargos != null && !idsCargos.isEmpty()) query.setParameter("idsCargos", idsCargos);
-		
+
 		return query.getListTableMap();
 	}
-	
+
 	/**Método Diverso
 	 * @return 	JasperPrint (Ficha de Registro de Empregados)
 	 */
@@ -427,6 +441,7 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 			for(int i = 0; i < listAbh80s.size(); i++) {
 				String endereco = listAbh80s.get(i).getString("abh80endereco") + ", " + listAbh80s.get(i).getString("abh80numero");
 				listAbh80s.get(i).put("endereco", endereco);
+
 
 				String sexo = null;
 				if(listAbh80s.get(i).getInteger("abh80sexo") == 0) {
@@ -445,18 +460,32 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 					}
 				}
 				listAbh80s.get(i).put("tipoSal", tipoSal);
-				
-				String naturalidade = null;
-				listAbh80s.get(i).put("naturalidade", naturalidade);
-				
+
+				List<TableMap> obterNaturalidade = null;
+				obterNaturalidade = obterNascMunic(listAbh80s.get(i).getLong("abh80nascmunic"))
+				String nat = ""
+
+				for (natural in obterNaturalidade) {
+					nat = natural.getString("aag0201nome")
+					listAbh80s.get(i).put("naturalidade", nat)
+				}
+
+				String jornada = null;
+				jornada = listAbh80s.get(i).getString("abh80jorDescr")
+				listAbh80s.get(i).put("jornada", jornada)
+
 				//Se demitido - localizar dados da rescisão.
 				Fbd10 fbd10 = getDadosDaRescisaoByTrabalhador(listAbh80s.get(i).getLong("abh80id"));
 				if(fbd10 != null)listAbh80s.get(i).put("causaRescisao", fbd10.getFbd10causa().getAbh06causa());
+
+				TableMap abh80json = listAbh80s.get(i).getTableMap("abh80json") == null ? new TableMap() : listAbh80s.get(i).getTableMap("abh80json")
+				LocalDate dataUltimoExame = abh80json.getDate("trab_data_ultimo_exame")
+				listAbh80s.get(i).put("DataUltimoExame", dataUltimoExame)
 			}
 		}
-		
+
 		JasperPrint print = null;
-		
+
 		//Relatório de registro de empregado
 		JasperReport report = carregarArquivoRelatorio("SFP_FichaDeRegistroDeEmpregados_R1");
 		if(isRegTrabalhador) {
@@ -464,14 +493,14 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 			dsPrincipal.addAll(listAbh80s);
 			print = processarRelatorio(report, dsPrincipal);
 		}
-		
-		
+
+
 		//Relatório de alterações de cargos e salários
 		if(isCargosSalarios) {
 			report = carregarArquivoRelatorio("SFP_FichaDeRegistroDeEmpregados_R2");
-			
+
 			TableMapDataSource dsPrincipal = new TableMapDataSource(listAbh80s);
-			
+
 			List<TableMap> listFbb20s = getDadosFbb20sByFichaRegistroEmpregados(idsTrabalhadores, idsDeptos, idsCargos, tiposAbh80, dtReferencia, considDemitidos);
 			for(TableMap fbb20 : listFbb20s) {
 				String tipoSal = null;
@@ -482,29 +511,9 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 				}
 				fbb20.put("tipoSal", tipoSal);
 			}
-			
+
 			dsPrincipal.addSubDataSource("DsSub1R2", listFbb20s, "abh80id", "fbb20trab");
-			
-			JasperPrint printTemp = processarRelatorio(report, dsPrincipal); 
-			if(print == null) {
-				print = printTemp;
-			}else {
-				for(Object page : printTemp.getPages()) {
-					print.addPage((JRPrintPage)page);
-				}
-			}
-		}
-		
-		
-		//Relatório de afastamentos
-		if(isAfastamentos) {
-			report = carregarArquivoRelatorio("SFP_FichaDeRegistroDeEmpregados_R3");
-			
-			List<TableMap> listFbb01s = getDadosFbb01sByFichaRegistroEmpregados(idsTrabalhadores, idsDeptos, idsCargos, tiposAbh80, dtReferencia, considDemitidos);
-			
-			TableMapDataSource dsPrincipal = new TableMapDataSource(listAbh80s);
-			dsPrincipal.addSubDataSource("DsSub1R3", listFbb01s, "abh80id", "fbb01trab");
-			
+
 			JasperPrint printTemp = processarRelatorio(report, dsPrincipal);
 			if(print == null) {
 				print = printTemp;
@@ -514,17 +523,37 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 				}
 			}
 		}
-		
-		
+
+
+		//Relatório de afastamentos
+		if(isAfastamentos) {
+			report = carregarArquivoRelatorio("SFP_FichaDeRegistroDeEmpregados_R3");
+
+			List<TableMap> listFbb01s = getDadosFbb01sByFichaRegistroEmpregados(idsTrabalhadores, idsDeptos, idsCargos, tiposAbh80, dtReferencia, considDemitidos);
+
+			TableMapDataSource dsPrincipal = new TableMapDataSource(listAbh80s);
+			dsPrincipal.addSubDataSource("DsSub1R3", listFbb01s, "abh80id", "fbb01trab");
+
+			JasperPrint printTemp = processarRelatorio(report, dsPrincipal);
+			if(print == null) {
+				print = printTemp;
+			}else {
+				for(Object page : printTemp.getPages()) {
+					print.addPage((JRPrintPage)page);
+				}
+			}
+		}
+
+
 		//Relatório de férias
 		if(isAnotacoesFerias) {
 			report = carregarArquivoRelatorio("SFP_FichaDeRegistroDeEmpregados_R4");
 
 			List<TableMap> listFbc01s = getDadosFbc01sByFichaRegistroEmpregados(idsTrabalhadores, idsDeptos, idsCargos, tiposAbh80, dtReferencia, considDemitidos);
-			
+
 			TableMapDataSource dsPrincipal = new TableMapDataSource(listAbh80s);
 			dsPrincipal.addSubDataSource("DsSub1R4", listFbc01s, "abh80id", "fbc01trab");
-			
+
 			JasperPrint printTemp = processarRelatorio(report, dsPrincipal);
 			if(print == null) {
 				print = printTemp;
@@ -534,16 +563,16 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 				}
 			}
 		}
-		
+
 		//Relatório de dependentes
 		if(isDependentes) {
 			report = carregarArquivoRelatorio("SFP_FichaDeRegistroDeEmpregados_R5");
-			
+
 			List<TableMap> listAbh8002s = getDadosAbh8002sByFichaRegistroEmpregados(idsTrabalhadores, idsDeptos, idsCargos, tiposAbh80, dtReferencia, considDemitidos);
-			
+
 			TableMapDataSource dsPrincipal = new TableMapDataSource(listAbh80s);
 			dsPrincipal.addSubDataSource("DsSub1R5", listAbh8002s, "abh80id", "abh8002trab");
-			
+
 			JasperPrint printTemp = processarRelatorio(report, dsPrincipal);
 			if(print == null) {
 				print = printTemp;
@@ -553,16 +582,16 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 				}
 			}
 		}
-		
+
 		//Anotações Gerais
 		if(isAnotacoesGerais) {
 			report = carregarArquivoRelatorio("SFP_FichaDeRegistroDeEmpregados_R6");
-			
+
 			List<TableMap> listAbh8004s = getDadosAbh8004sByFichaRegistroEmpregados(idsTrabalhadores, idsDeptos, idsCargos, tiposAbh80, dtReferencia, considDemitidos);
-			
+
 			TableMapDataSource dsPrincipal = new TableMapDataSource(listAbh80s);
 			dsPrincipal.addSubDataSource("DsSub1R6", listAbh8004s, "abh80id", "abh8004trab");
-			
+
 			JasperPrint printTemp = processarRelatorio(report, dsPrincipal);
 			if(print == null) {
 				print = printTemp;
@@ -572,16 +601,16 @@ public class SFP_FichaDeRegistroDeEmpregados extends RelatorioBase{
 				}
 			}
 		}
-		
+
 		//Contribuições Sindicais
 		if(isContribSindical && eveSindical != null) {
 			report = carregarArquivoRelatorio("SFP_FichaDeRegistroDeEmpregados_R7");
-			
+
 			List<TableMap> listFba01011s = getDadosFba01011sContribuicaoSindicalByFichaRegistroEmpregados(idsTrabalhadores, idsDeptos, idsCargos, tiposAbh80, dtReferencia, eveSindical, considDemitidos);
-			
+
 			TableMapDataSource dsPrincipal = new TableMapDataSource(listAbh80s);
 			dsPrincipal.addSubDataSource("DsSub1R7", listFba01011s, "abh80id", "fba0101trab");
-					
+
 			JasperPrint printTemp = processarRelatorio(report, dsPrincipal);
 			if(print == null) {
 				print = printTemp;

@@ -40,6 +40,7 @@ class ConsultarCepViaCep extends FormulaBase {
 			cepDto.bairro = tmCep.getString("bairro")
 			cepDto.uf = tmCep.getString("uf")
 			cepDto.cidade = tmCep.getString("localidade")
+			cepDto.regiao = tmCep.getString("regiao")
 			
 			put("cepDto", cepDto)
 			

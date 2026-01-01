@@ -58,7 +58,6 @@ public class SPP_FichaEngenhariaProdutos extends RelatorioBase {
 				for(componente in componentes){
 					String codProcesso = componente.getString("abp10codigo");
 					def total = obterTotalGeralPorProcesso(idComposicao,codProcesso);
-                    if(total == 0) interromper("Há componentes com quantidade zero no processo " + codProcesso)
 					componente.put("key",idComposicao);
 					componente.put("qtdFinal",componente.getBigDecimal_Zero("qtd") * quantidade );
 					componente.put("totalItem",componente.getBigDecimal_Zero("valorItem") * componente.getBigDecimal_Zero("qtdFinal") )

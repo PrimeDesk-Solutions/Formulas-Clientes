@@ -682,7 +682,7 @@ public class CalculoItem_Entrada extends FormulaBase{
 			jsonEaa0103.put("custo_aquisicao", (custoAquisicao + jsonEaa0103.getBigDecimal_Zero("vlr_frete_dest") +
 																 jsonEaa0103.getBigDecimal_Zero("vlr_seguro") +
 																 jsonEaa0103.getBigDecimal_Zero("vlr_outras") -
-																 jsonEaa0103.getBigDecimal_Zero("desconto") -
+																 jsonEaa0103.getBigDecimal_Zero("vlr_desc") -
 																 jsonEaa0103.getBigDecimal_Zero("icm_icm") -
 																 jsonEaa0103.getBigDecimal_Zero("ipi_ipi") -
 																 jsonEaa0103.getBigDecimal_Zero("pis_pis") -
@@ -702,7 +702,7 @@ public class CalculoItem_Entrada extends FormulaBase{
 													             jsonEaa0103.getBigDecimal_Zero("vlr_outras") +
 														         jsonEaa0103.getBigDecimal_Zero("st_icm") +
 														         jsonEaa0103.getBigDecimal_Zero("ipi_obs") - 
-														         jsonEaa0103.getBigDecimal_Zero("desconto") -
+														         jsonEaa0103.getBigDecimal_Zero("vlr_desc") -
 														         jsonEaa0103.getBigDecimal_Zero("vlr_descicmszf");
 														  
             eaa0103.eaa0103totDoc = round(eaa0103.eaa0103totDoc, 2);

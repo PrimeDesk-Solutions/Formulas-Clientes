@@ -1,4 +1,3 @@
-
 package Silcon.formulas.srf
 
 import sam.model.entities.aa.Aaj11
@@ -589,5 +588,6 @@ class ImportaXmlNFe_Entrada extends FormulaBase {
         return FormulaTipo.IMPORTAR_ARQUIVOS_XML_DE_NFE;
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjcifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjcifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjcifQ==

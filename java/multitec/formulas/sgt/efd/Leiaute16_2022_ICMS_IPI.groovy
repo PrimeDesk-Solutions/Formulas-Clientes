@@ -2,6 +2,7 @@ package multitec.formulas.sgt.efd;
 
 import java.text.NumberFormat
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
@@ -152,6 +153,8 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 
 	@Override
 	public void executar() {
+		LocalTime inicio = LocalTime.now();
+		
 		dtInicial = get("dtInicial");
 		dtFinal = get("dtFinal");
 		arqSubstituto = get("arqSubstituto");
@@ -213,6 +216,10 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 		efd.print(txt2);
 		
 		put("dadosArquivo", efd);
+		
+		LocalTime fim = LocalTime.now();
+		
+		println('Comecei as ' + inicio + ' e terminei as ' + fim);
 	}
 	
 	/**
@@ -464,13 +471,14 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 				for(Eaa01 eaa01 : eaa01s) {
 					if(!gerarRegByPerfil(perfil, "C100", eaa01.eaa01esMov)) continue;
 					
-					Abb01 abb01 = getSession().get(Abb01.class, eaa01.eaa01central.abb01id);
+					Abb01 abb01 = getSession().get(Abb01.class, "abb01id, abb01ent, abb01tipo, abb01num, abb01serie, abb01data, abb01operCod", eaa01.eaa01central.abb01id);
 					
 					verificarProcessoCancelado();
 					enviarStatusProcesso("Compondo registro C100 - Documento: " + abb01.abb01num);
 
-					Abe01 abe01 = getSession().get(Abe01.class, abb01.abb01ent.abe01id);
-					Aah01 aah01 = getSession().get(Aah01.class, abb01.abb01tipo.aah01id);
+					if(abb01.abb01ent == null) throw new ValidacaoException("A entidade do documento não foi informada. Documento de " + (eaa01.eaa01esMov == 0 ? "entrada" : "saída") + ": " + abb01.abb01num);
+					Abe01 abe01 = getSession().get(Abe01.class, "abe01id, abe01codigo, abe01ie, abe01nome, abe01ti, abe01ni, abe01suframa", abb01.abb01ent.abe01id);
+					Aah01 aah01 = getSession().get(Aah01.class, "aah01id, aah01modelo", abb01.abb01tipo.aah01id);
 					Eaa0102 eaa0102 = getSession().get(Eaa0102.class, Criterions.eq("eaa0102doc", eaa01.eaa01id));
 					TableMap jsonEaa01 = eaa01.eaa01json != null ? eaa01.eaa01json : new TableMap();
 					
@@ -479,7 +487,7 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 					def serie = formatarSerie(abb01.abb01serie, modelo);
 					
 					//Se a situação for 02, 03, 04, 05, 06 ou 07 os registros filhos não precisam ser gerados
-					Aaj03 aaj03 = getSession().get(Aaj03.class, eaa01.eaa01sitDoc.aaj03id);
+					Aaj03 aaj03 = getSession().get(Aaj03.class, "aaj03id, aaj03efd", eaa01.eaa01sitDoc.aaj03id);
 					boolean isSit06ou07 = "06".equals(aaj03.aaj03efd) || "07".equals(aaj03.aaj03efd);
 					boolean geraFilhos = !"02".equals(aaj03.aaj03efd) && !"03".equals(aaj03.aaj03efd) && !"04".equals(aaj03.aaj03efd) && !"05".equals(aaj03.aaj03efd);
 					
@@ -752,14 +760,14 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 						/**
 						 * REGISTRO C140: Fatura (Código 01)
 						 */
-						List<Eaa0113> eaa0113s = getAcessoAoBanco().buscarListaDeRegistros("SELECT * FROM Eaa0113 WHERE eaa0113clasParc = 0 AND eaa0113doc = :eaa01id", Parametro.criar("eaa01id", eaa01.eaa01id));
+						List<Eaa0113> eaa0113s = getAcessoAoBanco().buscarListaDeRegistros("SELECT eaa0113id, eaa0113valor, eaa0113tipo, eaa0113dtVctoN FROM Eaa0113 WHERE eaa0113clasParc = 0 AND eaa0113doc = :eaa01id", Parametro.criar("eaa01id", eaa01.eaa01id));
 						if(gerarRegByPerfil(perfil, "C140", eaa01.eaa01esMov) && modelo.equals("01") && eaa0113s != null && eaa0113s.size() > 0) {
 							verificarProcessoCancelado();
 							enviarStatusProcesso("Gerando registro C140 - Documento: " + abb01.abb01num);
-							
+
 							def valorTitulo = new BigDecimal(0);
 							for(Eaa0113 eaa0113 : eaa0113s) valorTitulo = valorTitulo.add(eaa0113.eaa0113valor);
-							Aah01 aah01Fat = getSession().get(Aah01.class, eaa0113s.get(0).eaa0113tipo.aah01id);
+							Aah01 aah01Fat = getSession().get(Aah01.class, "aah01id, aah01nome", eaa0113s.get(0).eaa0113tipo.aah01id);
 							
 							txt2.print("C140");
 							txt2.print(eaa01.eaa01emissao == Eaa01.SIM ? 0 : 1);
@@ -807,7 +815,7 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 								txt2.print(null);
 							}
 	
-							Aah20 aah20 = getSession().get(Aah20.class, eaa0102.eaa0102veiculo.aah20id);
+							Aah20 aah20 = getSession().get(Aah20.class, "aah20id, aah20placa, aah20ufplaca", eaa0102.eaa0102veiculo.aah20id);
 							txt2.print(aah20 == null ? null : aah20.aah20placa);
 							txt2.print(formatarValor(jsonEaa01.getBigDecimal_Zero(getCampo(alinEFD, "C160", "QTD_VOL")), 0));
 							txt2.print(formatarValor(jsonEaa01.getBigDecimal_Zero(getCampo(alinEFD, "C160", "PESO_BRT")), 2));
@@ -829,7 +837,7 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 								
 								TableMap jsonEaa0103 = eaa0103.eaa0103json != null ? eaa0103.eaa0103json : new TableMap();
 								
-								Abm01 abm01 = getSession().get(Abm01.class, eaa0103.eaa0103item.abm01id);
+								Abm01 abm01 = getSession().get(Abm01.class, "abm01id, abm01umu", eaa0103.eaa0103item.abm01id);
 								comporRegistro0200(abm01);
 	
 								txt2.print("C170");
@@ -839,7 +847,7 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 								txt2.print(formatarValor(eaa0103.eaa0103qtComl, 5));
 	
 								if(eaa0103.eaa0103umComl != null) {
-									Aam06 aam06 = getSession().get(Aam06.class, eaa0103.eaa0103umComl.aam06id);
+									Aam06 aam06 = getSession().get(Aam06.class, "aam06id, aam06codigo", eaa0103.eaa0103umComl.aam06id);
 									txt2.print(aam06.aam06codigo);
 									set0190.add(eaa0103.eaa0103umComl.aam06id);
 									comporRegistro0220(abm01, aam06, eaa01.eaa01esMov == 1);
@@ -851,13 +859,13 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 								txt2.print(formatarValor(jsonEaa0103.getBigDecimal_Zero(getCampo(alinEFD, "C170", "VL_DESC")), 2));
 								txt2.print(eaa01.eaa01iSCE == 0 ? 0 : 1);
 								
-								Aaj10 aaj10 = eaa0103.eaa0103cstIcms != null ? getSession().get(Aaj10.class, eaa0103.eaa0103cstIcms.aaj10id) : null;
+								Aaj10 aaj10 = eaa0103.eaa0103cstIcms != null ? getSession().get(Aaj10.class, "aaj10id, aaj10codigo", eaa0103.eaa0103cstIcms.aaj10id) : null;
 								txt2.print(aaj10 == null ? null : aaj10.aaj10codigo);
 								
-								Aaj15 aaj15 = eaa0103.eaa0103cfop != null ? getSession().get(Aaj15.class, eaa0103.eaa0103cfop.aaj15id) : null;
+								Aaj15 aaj15 = eaa0103.eaa0103cfop != null ? getSession().get(Aaj15.class, "aaj15id, aaj15codigo", eaa0103.eaa0103cfop.aaj15id) : null;
 								txt2.print(aaj15 == null ? null : aaj15.aaj15codigo);
 	
-								Abb10 abb10 = abb01.abb01operCod != null ? getSession().get(Abb10.class, abb01.abb01operCod.abb10id) : null;
+								Abb10 abb10 = abb01.abb01operCod != null ? getSession().get(Abb10.class, "abb10id, abb10codigo, abb10descr", abb01.abb01operCod.abb10id) : null;
 								txt2.print(abb10 == null ? null : abb10.abb10codigo);
 								if(abb10 != null) map0400.put(abb10.abb10codigo, abb10.abb10descr);
 	
@@ -869,14 +877,14 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 								txt2.print(formatarValor(jsonEaa0103.getBigDecimal_Zero(getCampo(alinEFD, "C170", "VL_ICMS_ST")), 2));
 								txt2.print("0");
 								
-								Aaj11 aaj11 = eaa0103.eaa0103cstIpi != null ? getSession().get(Aaj11.class, eaa0103.eaa0103cstIpi.aaj11id) : null;
+								Aaj11 aaj11 = eaa0103.eaa0103cstIpi != null ? getSession().get(Aaj11.class, "aaj11id, aaj11codigo", eaa0103.eaa0103cstIpi.aaj11id) : null;
 								txt2.print(aaj11 == null ? null : aaj11.aaj11codigo);
 								txt2.print(null); //txt2.print(eaa0103.eaa0103codEnqIpi);
 								txt2.print(formatarValor(jsonEaa0103.getBigDecimal_Zero(getCampo(alinEFD, "C170", "VL_BC_IPI")), 2));
 								txt2.print(formatarValor(jsonEaa0103.getBigDecimal_Zero(getCampo(alinEFD, "C170", "ALIQ_IPI")), 2));
 								txt2.print(formatarValor(jsonEaa0103.getBigDecimal_Zero(getCampo(alinEFD, "C170", "VL_IPI")), 2));
 								
-								Aaj12 aaj12 = eaa0103.eaa0103cstPis != null ? getSession().get(Aaj12.class, eaa0103.eaa0103cstPis.aaj12id) : null;
+								Aaj12 aaj12 = eaa0103.eaa0103cstPis != null ? getSession().get(Aaj12.class, "aaj12id, aaj12codigo", eaa0103.eaa0103cstPis.aaj12id) : null;
 								txt2.print(aaj12 == null ? null : aaj12.aaj12codigo);
 								txt2.print(formatarValor(jsonEaa0103.getBigDecimal_Zero(getCampo(alinEFD, "C170", "VL_BC_PIS")), 2));
 								txt2.print(formatarValor(jsonEaa0103.getBigDecimal_Zero(getCampo(alinEFD, "C170", "ALIQ_PIS_P")), 2));
@@ -884,7 +892,7 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 								txt2.print(formatarValor(jsonEaa0103.getBigDecimal_Zero(getCampo(alinEFD, "C170", "ALIQ_PIS_R")), 4));
 								txt2.print(formatarValor(jsonEaa0103.getBigDecimal_Zero(getCampo(alinEFD, "C170", "VL_PIS")), 2));
 								
-								Aaj13 aaj13 = eaa0103.eaa0103cstCofins != null ? getSession().get(Aaj13.class, eaa0103.eaa0103cstCofins.aaj13id) : null;
+								Aaj13 aaj13 = eaa0103.eaa0103cstCofins != null ? getSession().get(Aaj13.class, "aaj13id, aaj13codigo", eaa0103.eaa0103cstCofins.aaj13id) : null;
 								txt2.print(aaj13 == null ? null : aaj13.aaj13codigo);
 								txt2.print(formatarValor(jsonEaa0103.getBigDecimal_Zero(getCampo(alinEFD, "C170", "VL_BC_COFINS")), 2));
 								txt2.print(formatarValor(jsonEaa0103.getBigDecimal_Zero(getCampo(alinEFD, "C170", "ALIQ_COFINS_P")), 2));
@@ -893,7 +901,7 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 								txt2.print(formatarValor(jsonEaa0103.getBigDecimal_Zero(getCampo(alinEFD, "C170", "VL_COFINS")), 2));
 								
 								if(eaa0103.eaa0103cta != null) {
-									Abc10 abc10 = getSession().get(Abc10.class, eaa0103.eaa0103cta.abc10id);
+									Abc10 abc10 = getSession().get(Abc10.class, "abc10id, abc10codigo", eaa0103.eaa0103cta.abc10id);
 									
 									txt2.print(abc10.abc10codigo);
 									abc10s.add(abc10.abc10codigo);
@@ -1002,7 +1010,7 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 									
 									txt2.print("C197");
 									
-									Aaj16 aaj16 = getSession().get(Aaj16.class, eaa01031.eaa01031codAjuste.aaj16id);
+									Aaj16 aaj16 = getSession().get(Aaj16.class, "aaj16id, aaj16codigo", eaa01031.eaa01031codAjuste.aaj16id);
 									txt2.print(aaj16 == null ? null : aaj16.aaj16codigo);
 									txt2.print(eaa01031.eaa01031descr);
 	
@@ -4162,36 +4170,36 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 	}
 	
 	private boolean contemDadosBlocoC() {
-		def c100 = buscarDocumentosPorModelo(modelosC100, 0);
-		if(c100 != null && c100.size() > 0) return true;
+		boolean c100 = verificarQuantidadeDocumentosPorModelo(modelosC100, 0);
+		if(c100) return true;
 	
-		def c300 = buscarDocumentosPorModelo(modelosC300, 0)
-		if(c300 != null && c300.size() > 0) return true;
+		boolean c300 = verificarQuantidadeDocumentosPorModelo(modelosC300, 0)
+		if(c300) return true;
 	
-		def c500 = buscarDocumentosPorMovimentoModelo(0, 0, modelosC500, 0);
-		if(c500 != null && c500.size() > 0) return true;
+		boolean c500 = verificarQuantidadeDocumentosPorMovimentoModelo(0, 0, modelosC500, 0);
+		if(c500) return true;
 	
-		def c800 = buscarDocumentosPorMovimentoModelo(1, 0, modelosC800, 0);
-		if(c800 != null && c800.size() > 0) return true;
+		boolean c800 = verificarQuantidadeDocumentosPorMovimentoModelo(1, 0, modelosC800, 0);
+		if(c800) return true;
 
-		def c860 = buscarDocumentosPorMovimentoModelo(1, 0, modelosC800, 0)
-		if(c860 != null && c860.size() > 0) return true;
+		boolean c860 = verificarQuantidadeDocumentosPorMovimentoModelo(1, 0, modelosC800, 0)
+		if(c860) return true;
 		
 		return false;
 	}
 	
 	private boolean contemDadosBlocoD() {
-		def d100 = buscarDocumentosPorModelo(modelosD100, 0);
-		if(d100 != null && d100.size() > 0) return true;
+		def d100 = verificarQuantidadeDocumentosPorModelo(modelosD100, 0);
+		if(d100) return true;
 				
-		def d500 = buscarDocumentosPorModelo(modelosD500, 0);
-		if(d500 != null && d500.size() > 0) return true;
+		def d500 = verificarQuantidadeDocumentosPorModelo(modelosD500, 0);
+		if(d500) return true;
 		
 		return false;
 	}
 	
 	private void validacoes(List<Eaa01> eaa01s) {
-		for(Eaa01 eaa01 : eaa01s) {
+		/*for(Eaa01 eaa01 : eaa01s) {
 			Eaa0102 eaa0102 = getSession().get(Eaa0102.class, Criterions.eq("eaa0102doc", eaa01.eaa01id));
 			Abb01 abb01 = getSession().get(Abb01.class, eaa01.eaa01central.abb01id);
 			if(abb01.abb01ent == null) throw new ValidacaoException("A entidade do documento não foi informada. Documento de " + (eaa01.eaa01esMov == 0 ? "entrada" : "saída") + ": " + abb01.abb01num);
@@ -4200,7 +4208,7 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 
 			def abe0101 = getAcessoAoBanco().buscarRegistroUnico("SELECT * FROM Abe0101 WHERE abe0101ent = :ent AND abe0101principal = 1", Parametro.criar("ent", abb01.abb01ent.abe01id));
 			if(abe0101 == null) throw new ValidacaoException("O documento de " + (eaa01.eaa01esMov == 0 ? "entrada" : "saída") + " de número " + abb01.abb01num + " não contém o endereço da entidade.");
-		}
+		}*/
 	}
 	
 	def gerarRegByPerfil(String perfil, String registro, int operacao) {
@@ -4475,18 +4483,17 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 		def Map<Long, BigDecimal> mapUnid = new HashMap<Long, BigDecimal>();
 
 		Abm0101 abm0101 = abm01 != null ? getSession().get(Abm0101.class, Criterions.where("abm0101item = " + abm01.abm01id + " AND abm0101empresa = " + aac10.aac10id)) : null;
-		Abm13 abm13 = abm0101 != null && abm0101.abm0101comercial != null ? getSession().get(Abm13.class, abm0101.abm0101comercial.abm13id) : null;
+		Abm13 abm13 = abm0101 != null && abm0101.abm0101comercial != null ? getSession().get(Abm13.class, "abm13id, abm13fcUV", abm0101.abm0101comercial.abm13id) : null;
 		if(abm13 != null) {
 			if(isSaida) {
 				if(abm13 != null) {
 					mapUnid.put(aam06.aam06id, abm13.abm13fcUV_Zero);
 				}
 			}else {
-				List<Abm1301> abm1301s = getAcessoAoBanco().buscarListaDeRegistros("SELECT * FROM Abm1301 WHERE abm1301cc = :abm13id", Parametro.criar("abm13id", abm13.abm13id));
+				List<Abm1301> abm1301s = getAcessoAoBanco().buscarListaDeRegistros("SELECT abm1301id, abm1301umc, abm1301fcCU FROM Abm1301 WHERE abm1301cc = :abm13id", Parametro.criar("abm13id", abm13.abm13id));
 				if(abm1301s != null && abm1301s.size() > 0) {
 					for(Abm1301 abm1301 : abm1301s) {
 						if(abm1301.abm1301umc.aam06id == aam06.aam06id) {
-							Aam06 aam06UMC = getSession().get(Aam06.class, abm1301.abm1301umc.aam06id);
 							mapUnid.put(aam06.aam06id, abm1301.abm1301fcCU);
 						}
 					}
@@ -4511,6 +4518,22 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 																			Parametro.criar("modelos", modelos));
 	}
 	
+	boolean verificarQuantidadeDocumentosPorModelo(List<String> modelos, Integer pagina) {
+		def sql = " SELECT eaa01id FROM Eaa01 " +
+				  " INNER JOIN Abb01 ON abb01id = eaa01central " +
+				  " INNER JOIN Aah01 ON aah01id = abb01tipo " +
+				  " WHERE ((eaa01esMov = 0 AND eaa01esData BETWEEN :dtInicial AND :dtFinal) " +
+				  " OR (eaa01esMov = 1 AND abb01data BETWEEN :dtInicial AND :dtFinal)) " +
+				  " AND aah01modelo IN (:modelos) " +
+				  " AND eaa01iEfdIcms = 1 " + obterWherePadrao("eaa01");
+				  
+		Eaa01 eaa01 = getAcessoAoBanco().buscarRegistroUnico(sql, Parametro.criar("dtInicial", dtInicial),
+														   Parametro.criar("dtFinal", dtFinal), 
+														   Parametro.criar("modelos", modelos));
+													   
+		return eaa01 != null;
+	}
+	
 	List<Eaa01> buscarDocumentosPorMovimentoModelo(Integer mov, Integer cancelados, List<String> modelos, Integer pagina) {
 		def coluna = mov == 0 ? "eaa01esData" : "abb01data";
 		def canc = cancelados == 0 ? "" : cancelados == 1 ? " AND eaa01cancData IS NULL " : " AND eaa01cancData IS NOT NULL ";
@@ -4527,6 +4550,26 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 			                                                                Parametro.criar("modelos", modelos), 
 																			Parametro.criar("dtInicial", dtInicial), 
 																			Parametro.criar("dtFinal", dtFinal));
+	}
+	
+	boolean verificarQuantidadeDocumentosPorMovimentoModelo(Integer mov, Integer cancelados, List<String> modelos, Integer pagina) {
+		def coluna = mov == 0 ? "eaa01esData" : "abb01data";
+		def canc = cancelados == 0 ? "" : cancelados == 1 ? " AND eaa01cancData IS NULL " : " AND eaa01cancData IS NOT NULL ";
+		
+		def sql = " SELECT eaa01id FROM Eaa01 " +
+				  " INNER JOIN Abb01 ON abb01id = eaa01central " +
+				  " INNER JOIN Aah01 ON aah01id = abb01tipo " +
+				  " WHERE eaa01esMov = :mov AND eaa01iEfdIcms = 1 " +
+				  " AND "+coluna+" BETWEEN :dtInicial AND :dtFinal " +
+				    canc + " AND aah01modelo IN (:modelos) " + 
+					obterWherePadrao("eaa01");
+				  
+		Eaa01 eaa01 = getAcessoAoBanco().buscarRegistroUnico(sql, Parametro.criar("mov", mov), 
+			          		                                      Parametro.criar("modelos", modelos), 
+																  Parametro.criar("dtInicial", dtInicial), 
+																  Parametro.criar("dtFinal", dtFinal));
+															  
+		return eaa01 != null;
 	}
 	
 	List<Eaa01> buscarDocumentosRegistro1100() {
@@ -4587,7 +4630,7 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 	}
 	
 	List<Eaa01034> buscarDeclaracoesDeImportacao(Long eaa01id) {
-		return getSession().createQuery(" SELECT * FROM Eaa01034 " +
+		return getSession().createQuery(" SELECT eaa01034id, eaa01034decSimp, eaa01034num, eaa01034pis, eaa01034cofins, eaa01034drawback FROM Eaa01034 " +
 										" INNER JOIN Eaa0103 ON eaa0103id = eaa01034item " +
 										" INNER JOIN Eaa01 ON eaa01id = :eaa01id")
 						   .setParameter("eaa01id", eaa01id)
@@ -4614,7 +4657,7 @@ public class Leiaute16_2022_ICMS_IPI extends FormulaBase {
 	}
 	
 	List<Eaa01031> buscarLancamentosFiscaisDocumento(Long eaa01id) {
-		def sql = " SELECT * FROM Eaa01031 " +
+		def sql = " SELECT eaa01031id, eaa01031obs, eaa01031obsComplem, eaa01031codAjuste, eaa01031descr, eaa01031icmsBc, eaa01031icmsTx, eaa01031icms, eaa01031icmsOutras FROM Eaa01031 " +
 				  " INNER JOIN Eaa0103 ON eaa0103id = eaa01031item " +
 				  " WHERE eaa0103doc = :eaa01id";
 				  

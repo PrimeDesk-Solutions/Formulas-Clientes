@@ -10,6 +10,7 @@ import sam.dto.cgs.ParcelaDto
 import sam.model.entities.ab.Abe30
 import sam.model.entities.ab.Abe3001
 import sam.model.entities.ea.Eaa01
+import sam.model.entities.ea.Eaa0113
 import sam.server.samdev.formula.FormulaBase
 
 public class CGS_CondPagtoParcelamento extends FormulaBase {
@@ -19,6 +20,11 @@ public class CGS_CondPagtoParcelamento extends FormulaBase {
 	private BigDecimal valor;
 	private Long abe01id;
 	private Eaa01 eaa01;
+	private Integer vlrAuxiliar;
+	private Integer clasParc;
+	private List<Eaa0113> eaa0113sCashback;
+	private Long abf40id;
+	private Long abf4001id;
 	
 	@Override
 	public void executar() {
@@ -27,6 +33,13 @@ public class CGS_CondPagtoParcelamento extends FormulaBase {
 		valor = (BigDecimal)get("valor");
 		abe01id = (BigDecimal)get("abe01id");
 		eaa01 = (Eaa01)get("eaa01");
+		vlrAuxiliar = get("vlrAuxiliar");
+		if(vlrAuxiliar == null) vlrAuxiliar = 0;
+		clasParc = get("clasParc");
+		if(clasParc == null) clasParc = 0;
+		eaa0113sCashback = (List<Eaa0113>)get("eaa0113sCashback");
+		abf40id = (Long)get("abf40id");
+		abf4001id = (Long)get("abf4001id");
 		
 		if(dtBase == null) return;
 		
@@ -44,40 +57,45 @@ public class CGS_CondPagtoParcelamento extends FormulaBase {
 		//Adicionando dias a data base
 		dtBase = dtBase.plusDays(diasAdicionaisDtBase);
 		
-		def vlrSaldo = valor;
-		
-		List<Abe3001> abe3001s = buscarParcelasPeloIdCondicaoPagamento(abe30id);
-		if(abe3001s != null && abe3001s.size() > 0) {
-			int i = 1;
-			for(Abe3001 abe3001 : abe3001s) {
-				
-				//Valor da parcela
-				def vlrParcela = 0.0;
-				if(i == abe3001s.size()) { //Última parcela
-					vlrParcela = vlrSaldo;
-				}else{					
-					vlrParcela = round((valor * abe3001.getAbe3001perc_Zero()) / 100, 2);
-					vlrSaldo = vlrSaldo - vlrParcela;
+		if(valor > 0) {
+			def vlrSaldo = valor;
+			List<Abe3001> abe3001s = buscarParcelasPeloIdCondicaoPagamento(abe30id);
+			if(abe3001s != null && abe3001s.size() > 0) {
+				int i = 1;
+				for(Abe3001 abe3001 : abe3001s) {
+					
+					//Valor da parcela
+					def vlrParcela = 0.0;
+					if(i == abe3001s.size()) { //Última parcela
+						vlrParcela = vlrSaldo;
+					}else{					
+						vlrParcela = round((valor * abe3001.getAbe3001perc_Zero()) / 100, 2);
+						vlrSaldo = vlrSaldo - vlrParcela;
+					}
+					
+					//Data de vencimento nominal
+					def vctoN = LocalDate.of(dtBase.getYear(), dtBase.getMonth(), dtBase.getDayOfMonth());
+					
+					//Verificando dia
+					vctoN = vctoN.plusDays(abe3001.getAbe3001dias());
+					
+					//Verificando dia da semana para a data de vencimento nominal
+					def diasAdicionaisVctoN = obterDiasAdicionaisAData(vctoN, abe30, 1);
+					//Adicionando dias a data de vencimento nominal
+					vctoN = vctoN.plusDays(diasAdicionaisVctoN);
+					
+					ParcelaDto parcelaDto = new ParcelaDto();
+					parcelaDto.vctoN = vctoN;
+					parcelaDto.valor = vlrParcela;
+					parcelaDto.criaDoc = abe3001.getAbe3001docFinan();
+					parcelaDto.abf15id = abe3001.getAbe3001port() != null ? abe3001.getAbe3001port().getAbf15id() : null;
+					parcelaDto.abf16id = abe3001.getAbe3001oper() != null ? abe3001.getAbe3001oper().getAbf16id() : null;
+					parcelaDto.abf01id = abe3001.getAbe3001banco() != null ? abe3001.getAbe3001banco().getAbf01id() : null;
+					parcelaDto.abf40id = abe3001.getAbe3001fp() != null ? abe3001.getAbe3001fp().getAbf40id() : null;
+					listaParcelas.add(parcelaDto);
+					
+					i++;
 				}
-				
-				//Data de vencimento nominal
-				def vctoN = LocalDate.of(dtBase.getYear(), dtBase.getMonth(), dtBase.getDayOfMonth());
-				
-				//Verificando dia
-				vctoN = vctoN.plusDays(abe3001.getAbe3001dias());
-				
-				//Verificando dia da semana para a data de vencimento nominal
-				def diasAdicionaisVctoN = obterDiasAdicionaisAData(vctoN, abe30, 1);
-				//Adicionando dias a data de vencimento nominal
-				vctoN = vctoN.plusDays(diasAdicionaisVctoN);
-				
-				ParcelaDto parcelaDto = new ParcelaDto();
-				parcelaDto.vctoN = vctoN;
-				parcelaDto.valor = vlrParcela;
-				parcelaDto.criaDoc = abe3001.getAbe3001docFinan();
-				listaParcelas.add(parcelaDto);
-				
-				i++;
 			}
 		}
 		

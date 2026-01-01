@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF_Boleto" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5404f1f6-d64f-4954-b512-df557b625fe9">
 	<property name="ireport.zoom" value="1.3636363636363635"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="465"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="instrucoes" class="java.lang.String"/>
 	<parameter name="localPagamento" class="java.lang.String"/>
 	<parameter name="instrucoes1" class="java.lang.String"/>
@@ -235,9 +235,7 @@ BANCÁRIO.]]></text>
 					<textFieldExpression><![CDATA[$F{codigoLinhaDigitavel}]]></textFieldExpression>
 				</textField>
 				<image>
-					<reportElement x="2" y="2" width="39" height="42" uuid="0b8076bc-db37-4ae2-bb81-6c8891b84e6b">
-						<printWhenExpression><![CDATA[1 == 2]]></printWhenExpression>
-					</reportElement>
+					<reportElement x="2" y="2" width="39" height="42" uuid="0b8076bc-db37-4ae2-bb81-6c8891b84e6b"/>
 					<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\scf\\LogoItau.png"]]></imageExpression>
 				</image>
 			</band>
@@ -650,9 +648,7 @@ BANCÁRIO.]]></text>
 				<textFieldExpression><![CDATA[$F{instrucao4}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="0" y="4" width="39" height="42" uuid="faa1b1f1-2fa3-45ed-aefd-296c04d4e440">
-					<printWhenExpression><![CDATA[1 == 2]]></printWhenExpression>
-				</reportElement>
+				<reportElement x="0" y="4" width="39" height="42" uuid="faa1b1f1-2fa3-45ed-aefd-296c04d4e440"/>
 				<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\scf\\LogoItau.png"]]></imageExpression>
 			</image>
 			<textField pattern="#,##0.00;-#,##0.00">

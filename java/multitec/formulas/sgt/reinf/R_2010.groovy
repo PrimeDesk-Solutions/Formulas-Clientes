@@ -80,6 +80,7 @@ class R_2010 extends FormulaBase {
 			List<Eaa01> eaa01s = getAcessoAoBanco().buscarListaDeRegistros(sqlNotas, criarParametroSql("abe01id", tm.getLong("abb01ent")), criarParametroSql("eg", tm.getLong("eaa01eg")), criarParametroSql("numMeses", numMeses));
 			
 			Abe01 abe01Prestador = getAcessoAoBanco().buscarRegistroUnico("SELECT * FROM Abe01 WHERE abe01id = :abe01id", criarParametroSql("abe01id", tm.getLong("abb01ent")));
+			Abe03 abe03 = getAcessoAoBanco().buscarRegistroUnico("SELECT * FROM Abe03 WHERE abe03ent = :abe01id", criarParametroSql("abe01id", tm.getLong("abb01ent")));
 			
 			ElementXml reinf = ReinfUtils.configurarXML("http://www.reinf.esocial.gov.br/schemas/evtTomadorServicos/v1_05_01");
 			
@@ -87,7 +88,12 @@ class R_2010 extends FormulaBase {
 			evtServTom.setAttribute("id", ReinfUtils.gerarID(aac10.aac10ti, aac10.aac10ni));
 		
 			ElementXml ideEvento = evtServTom.addNode("ideEvento");
-			String recibo = isRetificacao ? reinfService.buscarAaa17RetRecPeloLayoutPeriodo("R-2010", aac10.aac10id, periodo) : null;
+			def tags = Arrays.asList("nrInsc", "nrInscEstab", "cnpjPrestador");
+			def nrInsc = StringUtils.ajustString(StringUtils.extractNumbers(aac10.aac10ni), 8);
+			def nrInscEstab = abe03.abe03ccEmpreita_Zero == 0 ? StringUtils.extractNumbers(aac10.aac10ni) : abe03.abe03ccCno;
+			def cnpjPrestador = StringUtils.extractNumbers(abe01Prestador.abe01ni);
+			def valores = Arrays.asList(nrInsc, nrInscEstab, cnpjPrestador);
+			String recibo = isRetificacao ? reinfService.buscarAaa17RetRecPeloLayoutPeriodo("R-2010", aac10.aac10id, periodo, tags, valores) : null;
 			ideEvento.addNode("indRetif", isRetificacao && recibo != null ? 2 : 1, true);
 			if(recibo != null) ideEvento.addNode("nrRecibo", recibo, false);
 			
@@ -109,7 +115,6 @@ class R_2010 extends FormulaBase {
 			
 			ElementXml infoServTom = evtServTom.addNode("infoServTom");
 			ElementXml ideEstabObra = infoServTom.addNode("ideEstabObra");
-			Abe03 abe03 = getAcessoAoBanco().buscarRegistroUnico("SELECT * FROM Abe03 WHERE abe03ent = :abe01id", criarParametroSql("abe01id", tm.getLong("abb01ent")));
 			ideEstabObra.addNode("tpInscEstab", abe03.abe03ccEmpreita_Zero == 0 ? 1 : 4, true);
 			ideEstabObra.addNode("nrInscEstab", abe03.abe03ccEmpreita_Zero == 0 ? StringUtils.extractNumbers(aac10.aac10ni) : abe03.abe03ccCno, true);
 			ideEstabObra.addNode("indObra", abe03.abe03ccEmpreita_Zero, true);

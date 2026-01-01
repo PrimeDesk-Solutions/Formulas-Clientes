@@ -33,4 +33,4 @@ public class DashServlet_PedidosEmAberto extends ServletBase {
 			.body(dto);
 	}
 }
-//meta-sis-eyJkZXNjciI6Ik11bHRpdGVjLVBlZGlkb3MgZW0gYWJlcnRvIiwidGlwbyI6InNlcnZsZXQiLCJ3IjozLCJoIjo3LCJyZXNpemUiOiJmYWxzZSIsInRpcG9kYXNoYm9hcmQiOiJjb21wb25lbnRlIn0=
+//meta-sis-eyJkZXNjciI6Ik11bHRpdGVjLVBlZGlkb3MgZW0gYWJlcnRvIiwidGlwbyI6InNlcnZsZXQiLCJ3IjozLCJoIjo3LCJyZXNpemUiOmZhbHNlLCJ0aXBvZGFzaGJvYXJkIjoiY29tcG9uZW50ZSJ9

@@ -330,3 +330,4 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
         return qtDig;
     }
 }
+//meta-sis-eyJkZXNjciI6IlNDRiAtIFJlc3VtbyBkb3MgTGFuw6dhbWVudG9zIFBvciBOYXR1cmV6YSIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

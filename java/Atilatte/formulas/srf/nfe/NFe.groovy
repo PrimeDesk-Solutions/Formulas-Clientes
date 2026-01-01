@@ -1596,6 +1596,7 @@ class NFe extends FormulaBase {
 						ICMSUFDest.addNode("vICMSUFRemet", getCampo("245a.17-NA17","vICMSUFRemet") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245a.17-NA17","icmsremet")), 2, false), true);
 					}
 				}
+				
 
 				/** impostoDevol - Informação do Imposto devolvido */
 				if(getCampo("324s-UA04","vIPIDevol") != null && !jsonEaa0103.getBigDecimal(getCampo("324s-UA04","vIPIDevol")).equals(0)) {

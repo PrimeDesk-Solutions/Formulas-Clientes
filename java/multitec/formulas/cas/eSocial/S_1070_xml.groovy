@@ -37,7 +37,7 @@ public class S_1070_xml extends FormulaBase{
 		if(aac10ti == 1) aac10ni = StringUtils.ajustString(aac10ni, 14, '0', false).substring(0, 8);
 		if(aac10ti != 1) aac10ni = StringUtils.ajustString(aac10ni, 11, '0', true);
 
-		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtTabProcesso/v_S_01_01_00");
+		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtTabProcesso/v_S_01_03_00");
 
 		ElementXml evtTabProcesso = eSocial.addNode("evtTabProcesso");
 		evtTabProcesso.setAttribute("Id", ESocialUtils.comporIdDoEvento(aac10.aac10ti, aac10.aac10ni));

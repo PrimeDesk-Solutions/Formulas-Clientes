@@ -1,4 +1,6 @@
-package multitec.relatorios.sca;
+package multitec.relatorios.sca
+
+import sam.model.entities.ab.Abh21;
 
 import java.time.LocalDate;
 
@@ -78,9 +80,18 @@ public class SCA_ResumoDoBancoDeHoras extends RelatorioBase {
 				codAbh80 = fca20s.get(i).getString("abh80codigo");
 				
 				if(fca20s.get(i).getInteger("fca2001quita").equals(0)) {
-					totalHoras += fca20s.get(i).getInteger("fca2001horas");
+					if(fca20s.get(i).getInteger("abh21tipo").equals(Abh21.TIPO_RENDIMENTO)){
+						totalHoras += fca20s.get(i).getInteger("fca2001horas");;
+					}else{
+						totalHoras -= fca20s.get(i).getInteger("fca2001horas");
+					}
+
 				}else {
-					totalHoras -= fca20s.get(i).getInteger("fca2001horas");
+					if(fca20s.get(i).getInteger("abh21tipo").equals(Abh21.TIPO_RENDIMENTO)){
+						totalHoras += fca20s.get(i).getInteger("fca2001horas");;
+					}else{
+						totalHoras -= fca20s.get(i).getInteger("fca2001horas");
+					}
 				}
 				
 				if((i == fca20s.size() - 1) || (!codAbh80.equals(fca20s.get(i + 1).getString("abh80codigo")))) {
@@ -134,12 +145,13 @@ public class SCA_ResumoDoBancoDeHoras extends RelatorioBase {
 		String whereCargos = idsCargos != null && !idsCargos.isEmpty() ? " AND abh05id IN (:idsCargos) " : "";
 		String whereMapHorario = idsMapHorario != null && !idsMapHorario.isEmpty() ? " AND abh13id IN (:idsMapHorario) " : "";
 		
-		String sql = "SELECT abh80codigo, abh80nome, abh80hs, fca2001data, fca2001horas, fca2001quita,  " +
+		String sql = "SELECT abh80codigo, abh80nome, abh21tipo, abh80hs, fca2001data, fca2001horas, fca2001quita,  " +
 					 Fields.concat("abh05codigo", "'-'", "abh05nome") + " AS cargo, "+
 					 Fields.concat("abb11codigo", "'-'", "abb11nome") + " AS depto "+
 			     	 "FROM Fca20 " +
 			     	 "INNER JOIN Fca2001 ON fca20id = fca2001bh "+
 			     	 "INNER JOIN Abh80 ON abh80id = fca20trab " +
+					 "INNER JOIN Abh21 ON abh21id = fca2001eve " +
 			     	 "INNER JOIN Abb11 ON abb11id = abh80depto " +
 			     	 "INNER JOIN Abh05 ON abh05id = abh80cargo " +
 			     	 "LEFT JOIN Abh13 ON abh13id = abh80mapHor " +

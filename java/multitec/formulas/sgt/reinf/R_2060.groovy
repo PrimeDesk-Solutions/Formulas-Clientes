@@ -59,14 +59,19 @@ class R_2060 extends FormulaBase {
 														.getList(ColumnType.ENTITY)
 			
 			for (edb1001 in edb1001s) {				
-				
+				String aac10ni = getSession().createCriteria(Aac10.class).addFields("aac10ni").addWhere(Criterions.eq("aac10id", edb1001.edb1001empresa.aac10id)).get(ColumnType.STRING)
+				def nrInscEstab = StringUtils.ajustString(StringUtils.extractNumbers(aac10ni), 14)
 				ElementXml reinf = ReinfUtils.configurarXML("http://www.reinf.esocial.gov.br/schemas/evtInfoCPRB/v1_05_01");
 				
 				ElementXml evtCPRB = reinf.addNode("evtCPRB");
 				evtCPRB.setAttribute("id", ReinfUtils.gerarID(aac10.aac10ti, aac10.aac10ni));
 		
 				ElementXml ideEvento = evtCPRB.addNode("ideEvento");
-				String recibo = isRetificacao ? reinfService.buscarAaa17RetRecPeloLayoutPeriodo("R-2060", aac10.aac10id, periodo) : null;
+				
+				def tags = Arrays.asList("nrInsc", "nrInscEstab");
+				def nrInsc = StringUtils.ajustString(StringUtils.extractNumbers(aac10.aac10ni), 8);
+				def valores = Arrays.asList(nrInsc, nrInscEstab);
+				String recibo = isRetificacao ? reinfService.buscarAaa17RetRecPeloLayoutPeriodo("R-2060", aac10.aac10id, periodo, tags, valores) : null;
 				ideEvento.addNode("indRetif", isRetificacao && recibo != null ? 2 : 1, true);
 				if(recibo != null) ideEvento.addNode("nrRecibo", recibo, false);
 				
@@ -81,10 +86,10 @@ class R_2060 extends FormulaBase {
 				
 				ElementXml infoCPRB = evtCPRB.addNode("infoCPRB");
 				
-				String aac10ni = getSession().createCriteria(Aac10.class).addFields("aac10ni").addWhere(Criterions.eq("aac10id", edb1001.edb1001empresa.aac10id)).get(ColumnType.STRING)
+				
 				ElementXml ideEstab = infoCPRB.addNode("ideEstab");
 				ideEstab.addNode("tpInscEstab", "1", true);
-				ideEstab.addNode("nrInscEstab", StringUtils.ajustString(StringUtils.extractNumbers(aac10ni), 14), true);
+				ideEstab.addNode("nrInscEstab", nrInscEstab, true);
 				ideEstab.addNode("vlrRecBrutaTotal", ReinfUtils.formatarDecimal(edb1001.edb1001rb_Zero, 2, false), true);
 				
 				def edb10011cprb = 0;

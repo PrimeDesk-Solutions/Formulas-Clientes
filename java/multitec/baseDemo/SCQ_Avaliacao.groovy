@@ -29,12 +29,6 @@ public class SCQ_Avaliacao extends FormulaBase {
 
         TableMap tmJsonBbb0101 = bbb0101.bbb0101json == null ? new TableMap() : bbb0101.bbb0101json;
 
-        if(tmJsonBbb0101.getInteger("conformidade") == 0){
-        	bbb0101.bbb0101valida = 2; //2-Inválida
-        }else if(tmJsonBbb0101.getInteger("conformidade") == 1){
-        	bbb0101.bbb0101valida = 1; //1-Válida
-        }
-	 /*
         //Avaliação de itens: 10-Sólidos
         if(abm50.abm50codigo == "10") {
             def odor = tmJsonBbb0101.get("scq_odor");             // 0-Fraco,        1-Médio, 2-Forte
@@ -79,7 +73,6 @@ public class SCQ_Avaliacao extends FormulaBase {
                 bbb0101.bbb0101valida = 2; //2-Inválida
             }
         }
-        */
     }
 }
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNzkifQ==

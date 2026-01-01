@@ -29,7 +29,7 @@ public class S_2206_xml extends FormulaBase {
 		def tpAmb = 1;
 		def indRetif = aaa15.aaa15tipo == Aaa15.TIPO_RETIFICACAO ? 2 : 1;
 
-		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtAltContratual/v_S_01_01_00");
+		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtAltContratual/v_S_01_03_00");
 		ElementXml evtAltContratual = eSocial.addNode("evtAltContratual");
 		evtAltContratual.setAttribute("Id", ESocialUtils.comporIdDoEvento(aac10.aac10ti, aac10.aac10ni));
 
@@ -74,9 +74,12 @@ public class S_2206_xml extends FormulaBase {
 			trabTemporario.addNode("justProrr", abh80.abh80ttJust, true);
 		}
 
-		if (abh80.abh80aprendiz == Abh80.SIM) {
+		if(abh80.abh80aprendiz == 1) {
+			String aprendizNiPrat = StringUtils.extractNumbers(abh80.abh80aprendizNi);
 			ElementXml aprend = infoCeletista.addNode("aprend");
-			aprend.addNode("tpInsc", abh80.abh80aprendizTi + 1, true);
+			aprend.addNode("indAprend", abh80.abh80aprendizMod, true)
+			if(abh80.abh80aprendizMod == 1) aprend.addNode("cnpjEntQual", StringUtils.ajustString(aprendizNiPrat, 14, '0', false) ,true)
+			aprend.addNode("tpInsc", abh80.abh80aprendizTi+1, true);
 			String aprendizNi = StringUtils.extractNumbers(abh80.abh80aprendizNi);
 			if(abh80.abh80aprendizTi == 0) {
 				aprendizNi = StringUtils.ajustString(aprendizNi, 14, '0', false);
@@ -84,6 +87,7 @@ public class S_2206_xml extends FormulaBase {
 				aprendizNi = StringUtils.ajustString(aprendizNi, 11, '0', true);
 			}
 			aprend.addNode("nrInsc", aprendizNi, true);
+			if(abh80.abh80aprendizMod == 2) aprend.addNode("cnpjPrat", StringUtils.ajustString(aprendizNiPrat, 14, '0', false) ,true)
 		}
 
 		ElementXml infoContrato = vinculo.addNode("infoContrato");

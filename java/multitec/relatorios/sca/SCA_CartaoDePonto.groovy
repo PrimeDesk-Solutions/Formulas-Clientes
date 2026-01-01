@@ -1,4 +1,6 @@
-package multitec.relatorios.sca;
+package multitec.relatorios.sca
+
+import br.com.multiorm.criteria.criterion.Criterion;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -313,21 +315,16 @@ public class SCA_CartaoDePonto extends RelatorioBase{
 	 */
 	private List<Fca2001> findBancoHorasByCalculoSalarios(Long idAbh80, Integer numMesesInicial, Integer numMesesFinal, boolean isAnterior) {
 		String numMeses = isAnterior ? " < :numMesesInicial " : " BETWEEN :numMesesInicial AND :numMesesFinal ";
-
-		String sql = "SELECT fca2001id, fca2001horas, fca2001quita " +
-				"FROM Fca2001 " +
-				"INNER JOIN Fca20 ON fca20id = fca2001bh " +
-				"WHERE "+ Fields.numMeses("fca20mes", "fca20ano") + numMeses +
-				" AND fca20trab = :idAbh80 AND fca20quitado = 0 " +
-				getSamWhere().getWherePadrao("AND", Fca20.class) +
-				"ORDER BY fca2001data";
-
-		Query query = getSession().createQuery(sql);
-		query.setParameter("idAbh80", idAbh80);
-		query.setParameters("numMesesInicial", numMesesInicial,
-				"numMesesFinal", numMesesFinal);
-
-		return query.getList(ColumnType.ENTITY);
+		Criterion mes = isAnterior ? Criterions.lt(Fields.numMeses("fca20mes", "fca20ano"),numMesesInicial ) : Criterions.between(Fields.numMeses("fca20mes", "fca20ano"),numMesesInicial,numMesesFinal )
+		return getSession().createCriteria(Fca2001.class)
+			.addFields("fca20id, fca2001id, fca2001horas, fca2001quita, abh21id, abh21tipo")
+			.addJoin(Joins.part("fca2001bh"))
+			.addJoin(Joins.part("fca2001eve"))
+			.addWhere(getSamWhere().getCritPadrao(Fca2001.class))
+			.addWhere(Criterions.eq("fca20trab", idAbh80))
+			.addWhere(Criterions.eq("fca20quitado", Fca2001.NAO))
+			.addWhere(mes)
+			.getList(ColumnType.ENTITY)
 	}
 
 	/**Método Diverso
@@ -523,9 +520,17 @@ public class SCA_CartaoDePonto extends RelatorioBase{
 					if(fca2001SaldoPeriodo != null && fca2001SaldoPeriodo.size() > 0) {
 						for(int i = 0; i < fca2001SaldoPeriodo.size(); i++) {
 							if(fca2001SaldoPeriodo.get(i).getFca2001quita().equals(0)) {
-								saldoPeriodo += fca2001SaldoPeriodo.get(i).getFca2001horas();
+								if(fca2001SaldoPeriodo.get(i).getFca2001eve().getAbh21tipo().equals(Abh21.TIPO_RENDIMENTO)){
+									saldoPeriodo += fca2001SaldoPeriodo.get(i).getFca2001horas();
+								}else{
+									saldoPeriodo -= fca2001SaldoPeriodo.get(i).getFca2001horas();
+								}
 							} else {
-								saldoPeriodo -= fca2001SaldoPeriodo.get(i).getFca2001horas();
+								if(fca2001SaldoPeriodo.get(i).getFca2001eve().getAbh21tipo().equals(Abh21.TIPO_RENDIMENTO)){
+									saldoPeriodo += fca2001SaldoPeriodo.get(i).getFca2001horas();
+								}else{
+									saldoPeriodo -= fca2001SaldoPeriodo.get(i).getFca2001horas();
+								}
 							}
 						}
 					}
@@ -536,9 +541,17 @@ public class SCA_CartaoDePonto extends RelatorioBase{
 					if(fca2001SaldoAnt != null && fca2001SaldoAnt.size() > 0) {
 						for(int i= 0; i < fca2001SaldoAnt.size(); i++) {
 							if(fca2001SaldoAnt.get(i).getFca2001quita().equals(0)) {
-								saldoAnterior += fca2001SaldoAnt.get(i).getFca2001horas();
+								if(fca2001SaldoAnt.get(i).getFca2001eve().getAbh21tipo().equals(Abh21.TIPO_RENDIMENTO)) {
+									saldoAnterior += fca2001SaldoAnt.get(i).getFca2001horas();
+								} else {
+									saldoAnterior -= fca2001SaldoAnt.get(i).getFca2001horas();
+								}
 							} else {
-								saldoAnterior -= fca2001SaldoAnt.get(i).getFca2001horas();
+								if(fca2001SaldoAnt.get(i).getFca2001eve().getAbh21tipo().equals(Abh21.TIPO_RENDIMENTO)) {
+									saldoAnterior += fca2001SaldoAnt.get(i).getFca2001horas();
+								} else {
+									saldoAnterior -= fca2001SaldoAnt.get(i).getFca2001horas();
+								}
 							}
 						}
 					}
@@ -549,6 +562,7 @@ public class SCA_CartaoDePonto extends RelatorioBase{
 					TableMap dsTrab = new TableMap();
 					dsTrab.put("key", key);
 					dsTrab.put("trabalhador", StringUtils.concat(abh80.getAbh80codigo(), " - ", abh80.getAbh80nome()));
+					dsTrab.put("abh80cpf", abh80.getAbh80cpf())
 					dsTrab.put("trabJornada", getAbh13ById(abh80.abh80mapHor.abh13id).abh13nome);
 					dsTrab.put("dtAdmis", abh80.getAbh80dtAdmis());
 					dsTrab.put("ctps", abh80.getAbh80ctpsNum() == null ? "" : StringUtils.concat(abh80.getAbh80ctpsNum(), "/", (abh80.getAbh80ctpsSerie() == null ? "" : abh80.getAbh80ctpsSerie())));

@@ -27,7 +27,7 @@ public class S_1298_xml extends FormulaBase {
 		def perApur = get("perApur");
 		def tpAmb = get("tpAmb");
 		
-		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtReabreEvPer/v_S_01_01_00");
+		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtReabreEvPer/v_S_01_03_00");
 		ElementXml evtReabreEvPer = eSocial.addNode("evtReabreEvPer");
 		evtReabreEvPer.setAttribute("Id", ESocialUtils.comporIdDoEvento(aac10.aac10ti, aac10.aac10ni));
 		

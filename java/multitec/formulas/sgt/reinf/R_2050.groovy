@@ -63,7 +63,11 @@ class R_2050 extends FormulaBase {
 			evtComProd.setAttribute("id", ReinfUtils.gerarID(aac10.aac10ti, aac10.aac10ni));
 		
 			ElementXml ideEvento = evtComProd.addNode("ideEvento");
-			String recibo = isRetificacao ? reinfService.buscarAaa17RetRecPeloLayoutPeriodo("R-2050", aac10.aac10id, periodo) : null;
+			
+			def tags = Arrays.asList("nrInsc");
+			def nrInsc = StringUtils.ajustString(StringUtils.extractNumbers(aac10.aac10ni), 8);
+			def valores = Arrays.asList(nrInsc);
+			String recibo = isRetificacao ? reinfService.buscarAaa17RetRecPeloLayoutPeriodo("R-2050", aac10.aac10id, periodo, tags, valores) : null;
 			ideEvento.addNode("indRetif", isRetificacao && recibo != null ? 2 : 1, true);
 			if(recibo != null) ideEvento.addNode("nrRecibo", recibo, false);
 			

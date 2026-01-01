@@ -1,5 +1,5 @@
 package multitec.baseDemo
-import br.com.multitec.utils.ValidacaoException
+
 import br.com.multiorm.criteria.criterion.Criterions
 import br.com.multiorm.criteria.join.Joins
 import sam.dicdados.FormulaTipo
@@ -54,7 +54,7 @@ class SRF_ComporEmailsNFe extends FormulaBase {
 		
 		Abe01 abe01 = getSession().get(Abe01.class, "abe01id, abe01nome, abe01ni", abb01.abb01ent.abe01id);
 		
-		String assunto = getVariaveis().getAac10().getAac10na() + " - Arq. Digital Ref. a Nota Fiscal: " + abb01.abb01num + " - " + abe01.abe01na;
+		String assunto = getVariaveis().getAac10().getAac10na() + " - Arq. Digital Ref. a Nota Fiscal: " + abb01.abb01num;
 		
 		String corpo = comporCorpoMsg(aaa16, eaa01, abe01, abb01, eaa0114id);
 		
@@ -62,19 +62,20 @@ class SRF_ComporEmailsNFe extends FormulaBase {
 		
 		if(eaa0102.eaa0102eMail == null) return;
 		
-		if(aaa16.getAaa16tipo().equals(Aaa16.TIPO_CANCELAMENTO_NFE) || aaa16.getAaa16tipo().equals(Aaa16.TIPO_CCE)) {
+		if(aaa16.aaa16tipo == 2 || aaa16.aaa16tipo == 1) {
 			//E-mail de CANCELAMENTO ou CARTA DE CORREÇÃO
-			EmailNFeDto email = new EmailNFeDto();
-			email.assunto = assunto;
-			email.corpo = corpo;
-			email.addEmailDestinoPara(eaa0102.eaa0102eMail);
-			email.enviarXML = true;
-			email.enviarDanfe = false;
-			email.enviarBoleto = false;
-			email.emailRemetente = 2;
-			
-			emails.add(email);
-			
+			if(corpo != null) {
+				EmailNFeDto email = new EmailNFeDto();
+				email.assunto = assunto;
+				email.corpo = corpo;
+				email.addEmailDestinoPara(eaa0102.eaa0102eMail);
+				email.enviarXML = true;
+				email.enviarDanfe = false;
+				email.enviarBoleto = false;
+				email.emailRemetente = 2;
+				
+				emails.add(email);
+			}
 		}else {
 			//E-mail de FATURAMENTO
 			EmailNFeDto emailFat = new EmailNFeDto();
@@ -85,13 +86,12 @@ class SRF_ComporEmailsNFe extends FormulaBase {
 			emailFat.enviarDanfe = true;
 			emailFat.enviarBoleto = false;
 			emailFat.emailRemetente = 2;
-
 			
-			EmailNFeDto emailCob = new EmailNFeDto();
 			String emailDestinoCob = obterEmailCobranca(eaa01.eaa01id, abe01.abe01id, eaa0102);
 			if(eaa0102.eaa0102eMail != emailDestinoCob) {
 				//E-mail de COBRANÇA, destinatário para faturamento é diferente do de cobrança.
 				//Então o boleto será enviado somente para o destinatário de cobrança
+				EmailNFeDto emailCob = new EmailNFeDto();
 				emailCob.assunto = assunto;
 				emailCob.corpo = corpo;
 				emailCob.addEmailDestinoPara(emailDestinoCob);
@@ -105,7 +105,6 @@ class SRF_ComporEmailsNFe extends FormulaBase {
 				//Destinatário para faturamento e cobrança é o mesmo ou não existe um específico para cobrança.
 				//Então o boleto será enviado junto com o de faturamento (com xml e danfe).
 				emailFat.enviarBoleto = true;
-				emailCob.enviarXML = true;
 			}
 			
 			emails.add(emailFat);
@@ -149,7 +148,8 @@ class SRF_ComporEmailsNFe extends FormulaBase {
 	
 	private String comporCorpoMsg(Aaa16 aaa16, Eaa01 eaa01, Abe01 abe01, Abb01 abb01, Long eaa0114id) {
 		StringBuilder strCorpo = new StringBuilder("");
-		if(aaa16.getAaa16tipo().equals(Aaa16.TIPO_CANCELAMENTO_NFE)) {
+		if(aaa16.aaa16tipo == 2) {
+			//Cancelamento
 			Aae11 aae11 = getSession().get(Aae11.class, "aae11id, aae11descr", eaa01.getEaa01cancMotivo().getIdValue());
 			strCorpo.append("<html>");
 			strCorpo.append("<body>Esta mensagem refere-se a Cancelamento de Nota Fiscal Eletr&ocirc;nica Nacional de n&uacute;mero <b>" + abb01.getAbb01num() + "</b> emitida para:");
@@ -161,8 +161,10 @@ class SRF_ComporEmailsNFe extends FormulaBase {
 			strCorpo.append("<br>Protocolo: " + aaa16.getAaa16retProt());
 			strCorpo.append("<p>Este e-mail foi enviado automaticamente pelo SAM (Sistemas Administrativos Multitec) da MULTITEC SISTEMAS");
 			strCorpo.append("<p>Acesse o site: <a href='http://www.multitecsistemas.com.br'>www.multitecsistemas.com.br</a>");
-		}else if(aaa16.getAaa16tipo().equals(Aaa16.TIPO_CCE)) {
+		}else if(aaa16.aaa16tipo == 1) {
+			//Carta de Correção
 			Eaa0114 eaa0114 = session.get(Eaa0114.class, "eaa0114id, eaa0114correcao", eaa0114id);
+			if(eaa0114.eaa0114correcao == null) return null;
 	
 			strCorpo.append("<html>");
 			strCorpo.append("<body>Esta mensagem refere-se a Carta de Corre&ccedil;&atilde;o da Nota Fiscal Eletr&ocirc;nica Nacional de n&uacute;mero <b>" + abb01.getAbb01num() + "</b> emitida para:");

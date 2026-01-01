@@ -75,6 +75,10 @@ public class Parcelamento extends FormulaBase {
 				parcelaDto.vctoN = vctoN;
 				parcelaDto.valor = vlrParcela;
 				parcelaDto.criaDoc = abe3001.getAbe3001docFinan();
+				parcelaDto.abf15id = abe3001.getAbe3001port() != null ? abe3001.getAbe3001port().getAbf15id() : null;
+				parcelaDto.abf16id = abe3001.getAbe3001oper() != null ? abe3001.getAbe3001oper().getAbf16id() : null;
+				parcelaDto.abf01id = abe3001.getAbe3001banco() != null ? abe3001.getAbe3001banco().getAbf01id() : null;
+				parcelaDto.abf40id = abe3001.getAbe3001fp() != null ? abe3001.getAbe3001fp().getAbf40id() : null;
 				listaParcelas.add(parcelaDto);
 				
 				i++;

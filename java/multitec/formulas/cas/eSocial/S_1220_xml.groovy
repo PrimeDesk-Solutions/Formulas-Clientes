@@ -39,7 +39,7 @@ public class S_1220_xml extends FormulaBase{
 		def indRetif = aaa15.aaa15tipo == aaa15.TIPO_RETIFICACAO ? 2 : 1;
 		List<Fba0101> fba0101s = get("fba0101s");
 
-		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtInfoIR/v_S_01_01_00");
+		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtInfoIR/v_S_01_03_00");
 		
 		ElementXml evtPgtos = eSocial.addNode("evtInfoIR");
 		evtPgtos.setAttribute("Id", ESocialUtils.comporIdDoEvento(aac10.aac10ti, aac10.aac10ni));

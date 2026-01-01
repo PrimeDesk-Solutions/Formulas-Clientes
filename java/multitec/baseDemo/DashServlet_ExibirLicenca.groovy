@@ -8,6 +8,7 @@ import br.com.multitec.utils.http.HttpRequest
 import sam.dto.samdev.DashboardMetadata
 import sam.dto.samdev.DashboardMetadata.TipoDashboard
 import sam.dto.samdoc.Licenca
+import sam.server.cas.service.LicencaService
 import sam.server.samdev.relatorio.ServletBase
 import sam.server.samdev.relatorio.UiDto
 
@@ -25,11 +26,10 @@ public class DashServlet_ExibirLicenca extends ServletBase {
 
 	@Override
 	public ResponseEntity<Object> executar() {
-		Licenca licenca = HttpRequest.create()
-			.finalUrl("http://" + httpServletRequest.getServerName() + ":" + httpServletRequest.getServerPort() + "/licenca/buscarLicenca")
-			.header("x-auth-token", variaveis.getAab10().getAab10hash())
-			.post()
-			.parseResponse(Licenca.class);
+		LicencaService licencaService =  instanciarService(LicencaService.class)
+		
+		Licenca licenca = licencaService.buscarLicenca();
+		licencaService.validarLicenca(licenca);
 			
 		Map<String, Object> valoresDefault = Utils.map(
 			"bancoDados", session.getConnection().getMetaData().getURL().replace("jdbc:postgresql://", ""),

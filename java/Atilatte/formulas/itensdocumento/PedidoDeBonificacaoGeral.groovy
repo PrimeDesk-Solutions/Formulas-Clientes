@@ -848,7 +848,7 @@ public class PedidoDeBonificacaoGeral extends FormulaBase {
 
                 //IPI SPED = IPI
                 jsonEaa0103.put("ipi_sped", jsonEaa0103.getBigDecimal_Zero("ipi"));
-
+                
                 calcularCBSIBS();
             }
             if (grupo == "Queijo") {
@@ -2052,5 +2052,6 @@ public class PedidoDeBonificacaoGeral extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

@@ -33,7 +33,7 @@ public class S_2210_xml extends FormulaBase {
 		def tpAmb = 1;
 		def indRetif = aaa15.aaa15tipo == Aaa15.TIPO_RETIFICACAO ? 2 : 1;
 
-		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtCAT/v_S_01_01_00");
+		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtCAT/v_S_01_03_00");
 		ElementXml evtCAT = eSocial.addNode("evtCAT");
 		evtCAT.setAttribute("Id", ESocialUtils.comporIdDoEvento(aac10.aac10ti, aac10.aac10ni));
 		

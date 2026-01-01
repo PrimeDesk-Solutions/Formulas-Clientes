@@ -428,7 +428,7 @@ public class Leiaute9 extends FormulaBase {
 										Parametro.criar("numMesesFin", Criterions.valNumMeses(dtF.getMonthValue(), dtF.getYear())));
 
 			for(int i = 0; i < qtMeses; i++) {
-				dtI = LocalDate.of(dtI.getYear(), dtI.getMonthValue(), i == 0 ? dtI.getDayOfMonth() : 1); //Primeiro mês é o dia da data inicial
+				dtI = LocalDate.of(dtI.getYear(), dtI.getMonthValue(), 1); //Primeiro dia do mês
 
 				/**
 				 * I155 - Detalhe dos saldos periódicos  
@@ -468,13 +468,14 @@ public class Leiaute9 extends FormulaBase {
 						txt.print("I150");
 						txt.print(dtfData.format(dtI));
 
+						LocalDate dt = dtI;
 						if(i == qtMeses-1) { //último mês recebe a data final
-							dtI = LocalDate.of(dtFinal.getYear(), dtFinal.getMonthValue(), dtFinal.getDayOfMonth());
+							dt = LocalDate.of(dtFinal.getYear(), dtFinal.getMonthValue(), dtFinal.getDayOfMonth());
 						}else {
-							dtI = dtI.with(TemporalAdjusters.lastDayOfMonth());
+							dt = dt.with(TemporalAdjusters.lastDayOfMonth());
 						}
 
-						txt.print(dtfData.format(dtI));
+						txt.print(dtfData.format(dt));
 						txt.newLine();
 
 						totalI150++;
@@ -506,7 +507,7 @@ public class Leiaute9 extends FormulaBase {
 						}
 					}
 				}
-				dtI = dtI.plusDays(1);
+				dtI = dtI.plusMonths(1);
 			}
 			listContas = null;
 

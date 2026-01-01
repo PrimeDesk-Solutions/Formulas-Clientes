@@ -31,7 +31,7 @@ public class S_3000_xml extends FormulaBase {
 		def nrRecEvt = aaa15.aaa15dados.getString("nrRecEvt");
 		def cpfTrab = aaa15.aaa15dados.getString("cpfTrab");
 		def nisTrab = aaa15.aaa15dados.getString("nisTrab");
-		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtExclusao/v_S_01_01_00");
+		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtExclusao/v_S_01_03_00");
 
 		ElementXml evtExclusao = eSocial.addNode("evtExclusao");
 		evtExclusao.setAttribute("Id", ESocialUtils.comporIdDoEvento(aac10.aac10ti, aac10.aac10ni));

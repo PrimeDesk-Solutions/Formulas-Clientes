@@ -33,7 +33,7 @@ public class S_1280_xml extends FormulaBase {
 		BigDecimal fatorMes = get("fatorMes");
 		def tpAmb = get("tpAmb");
 		
-		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtInfoComplPer/v_S_01_01_00");
+		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtInfoComplPer/v_S_01_03_00");
 		ElementXml evtInfoComplPer = eSocial.addNode("evtInfoComplPer");
 		evtInfoComplPer.setAttribute("Id", ESocialUtils.comporIdDoEvento(aac10.aac10ti, aac10.aac10ni));
 		

@@ -36,7 +36,7 @@ public class SCE_PleCompra extends FormulaBase{
 		
 		//Cálculo do Preço Médio
 		def saldoAtual = sceUtils.saldoEstoque(bcc01.bcc01item.abm01id, bcc01.bcc01data, bcc01.bcc01id);
-		def pmAtual =  sceUtils.buscarPMRetroativo(bcc01.bcc01item.abm01id, bcc01.bcc01data, bcc01.bcc01id, abm0101.abm0101pmu_Zero);
+		def pmAtual =  sceUtils.buscarPMRetroativo(bcc01.bcc01item.abm01id, bcc01.bcc01data, bcc01.bcc01id);
 		
 		def pmu = pmAtual;
 		if((saldoAtual + qtde) > 0) {

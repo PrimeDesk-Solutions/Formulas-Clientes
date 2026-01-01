@@ -48,7 +48,7 @@ public class S_1000_xml extends FormulaBase {
 		
 
 
-		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtInfoEmpregador/v_S_01_01_00");
+		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtInfoEmpregador/v_S_01_03_00");
 
 		ElementXml evtInfoEmpregador = eSocial.addNode("evtInfoEmpregador");
 		evtInfoEmpregador.setAttribute("Id", ESocialUtils.comporIdDoEvento(aac10.aac10ti, aac10.aac10ni));
@@ -77,7 +77,8 @@ public class S_1000_xml extends FormulaBase {
 			infoCadastro.addNode("indOpcCP", aac12.aac12tribPR, false);
 			if( geraIndPorteEmInfoCadastro ) infoCadastro.addNode("indPorte", 'S', false);
 			infoCadastro.addNode("indOptRegEletron", aac12.aac12regEletron, true);
-
+			if(aac12.aac12indTribFolha_Zero != 0) infoCadastro.addNode("indTribFolhaPisCofins", "S", true)
+				
 			if( aac12.aac12eiMinLei != null ) {
 				ElementXml dadosIsencao = infoCadastro.addNode("dadosIsencao");
 				dadosIsencao.addNode("ideMinLei", aac12.aac12eiMinLei, true);

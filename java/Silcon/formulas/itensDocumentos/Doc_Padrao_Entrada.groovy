@@ -293,8 +293,8 @@ public class Doc_Padrao_Entrada extends FormulaBase {
                                                             jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
                                                             jsonEaa0103.getBigDecimal_Zero("icms_st") -
                                                             jsonEaa0103.getBigDecimal_Zero("desconto")).round(2);
-
-
+            
+            
             // Total Fiananceiro
             eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
 
@@ -305,7 +305,7 @@ public class Doc_Padrao_Entrada extends FormulaBase {
 
             // Calcula ICMS Itens
             calcularICMS(contribICMS);
-
+            
             jsonEaa0103.put("ipi_observacoes", eaa0103.eaa0103totDoc.round(2));
 
             preencherSPEDS();
@@ -609,6 +609,7 @@ public class Doc_Padrao_Entrada extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

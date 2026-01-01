@@ -5,8 +5,7 @@ package Silcon.formulas.itensDocumentos
 
 import br.com.multiorm.Query
 import sam.model.entities.aa.Aac13
-import sam.model.entities.aa.Aaj01
-import sam.model.entities.aa.Aaj07;
+import sam.model.entities.aa.Aaj01;
 import sam.model.entities.ab.Abd02;
 import sam.server.samdev.utils.Parametro;
 import br.com.multiorm.criteria.criterion.Criterions
@@ -18,7 +17,6 @@ import sam.model.entities.aa.Aac10;
 import sam.model.entities.aa.Aag01;
 import sam.model.entities.aa.Aag02;
 import sam.model.entities.aa.Aag0201;
-import sam.model.entities.aa.Aaj07;
 import sam.model.entities.aa.Aaj10;
 import sam.model.entities.aa.Aaj11;
 import sam.model.entities.aa.Aaj12;
@@ -49,8 +47,14 @@ import sam.model.entities.ea.Eaa0102;
 import sam.model.entities.ea.Eaa0103;
 import sam.server.samdev.formula.FormulaBase
 
-import java.time.LocalDate
+import sam.model.entities.aa.Aaj07;
+import sam.model.entities.ab.Abe40;
+import sam.model.entities.ab.Abe4001;
+import br.com.multiorm.Query
+import java.time.Month;
+import java.time.DayOfWeek;
 import java.time.format.DateTimeFormatter;
+import java.time.LocalDate
 
 public class Doc_Padrao_Saida_PDV extends FormulaBase {
 
@@ -62,7 +66,6 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
     private Aag02 ufEmpr;
     private Aag0201 municipioEnt;
     private Aag0201 municipioEmpr;
-    private Aaj07 aaj07;
     private Aaj10 aaj10_cstIcms;
     private Aaj11 aaj11_cstIpi;
     private Aaj12 aaj12_cstPis;
@@ -76,6 +79,7 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
     private Abd01 abd01;
     private Abd02 abd02;
     private Abe01 abe01;
+    private Aaj07 aaj07;
     private Abe02 abe02;
     private Abe40 abe40;
     private Abe4001 abe4001;
@@ -218,6 +222,10 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
         //Tabela Preço
         abe40 = eaa01.eaa01tp != null ? getSession().get(Abe40.class, eaa01.eaa01tp.abe40id) : null;
 
+        // Class. Trib CBS/IBS
+        aaj07 = eaa0103.eaa0103clasTribCbsIbs != null ? getSession().get(Aaj07.class, eaa0103.eaa0103clasTribCbsIbs.aaj07id) : null;
+        if(aaj07 == null) throw new ValidacaoException("É nescessário informar a Classificação tribtária de CBS/IBS do item: " + abm01.abm01codigo + " - " + abm01.abm01na);
+
         // Verifica se tem itens repetidos na tabela de preço
         if(abe40 != null){
             Query tmItensTabela = getSession().createQuery("select abe4001id from abe4001 where abe4001tab = " + abe40.abe40id + " AND abe4001item = " + abm01.abm01id);
@@ -232,7 +240,6 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
 
         if(abe4001 == null && eaa01.eaa01tp != null) throw new ValidacaoException("Item "+ abm01.abm01codigo +" Não Encontrado Na Tabela De Preço "+abe40.abe40codigo);
 
-
         //CAMPOS LIVRES
         jsonAac10 = aac10.aac10json != null ? aac10.aac10json : new TableMap();
         jsonAag02Ent = ufEnt != null && ufEnt.aag02json != null ? ufEnt.aag02json : new TableMap();
@@ -244,6 +251,7 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
         jsonAbm1003_Ent_Item = abm1003 != null && abm1003.abm1003json != null ? abm1003.abm1003json : new TableMap();
         jsonEaa0103 = eaa0103.eaa0103json != null ? eaa0103.eaa0103json : new TableMap();
         jsonAbe4001 = abe4001 != null ? abe4001.abe4001json : new TableMap();
+        jsonAaj07clasTrib = aaj07.aaj07json != null ? aaj07.aaj07json : new TableMap();
 
 
         calcularItem();
@@ -280,6 +288,8 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
             if (ufEmpr != null && ufEnt != null) {
                 dentroEstado = ufEmpr.aag02uf == ufEnt.aag02uf;
             }
+
+            definirPrecoUnitarioItem();
 
             definirCFOP(dentroEstado);
 
@@ -348,13 +358,39 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
             //CalculoCOFINS
             calculaCOFINS();
 
+             calcularCBSIBS();
+
             // preencherSPEDS
             preencherSPEDS();
 
         }
 
     }
-    private void calcularCBSIBS() {
+
+     private void definirPrecoUnitarioItem(){
+       if(eaa01.eaa01tp != null){
+           if(jsonAbe4001 != null){
+               if(jsonAbe4001.getString("data_promo_ini") != null && jsonAbe4001.getString("data_promo_fin") != null && jsonAbe4001.getBigDecimal_Zero("preco_promocao") > 0){
+                   DateTimeFormatter formato2 = DateTimeFormatter.ofPattern("yyyyMMdd");
+                   LocalDate dataIniPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_ini"), formato2);
+                   LocalDate dataFinPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_fin"), formato2);
+                   LocalDate dataAtual = LocalDate.now();
+                   def precoPromocao = jsonAbe4001.getBigDecimal_Zero("preco_promocao");
+                   if(dataAtual >= dataIniPromo && dataAtual <= dataFinPromo){
+                       eaa0103.eaa0103unit = precoPromocao.round(4);
+                   }else{
+                       eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
+                   }
+               }else{
+                   eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
+               }
+           }else{
+               eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
+           }
+       }
+    }
+
+        private void calcularCBSIBS() {
         // *********************************************
         // ************ REFORMA TRIBUTÁRIA *************
         // *********************************************
@@ -425,28 +461,9 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
         if (jsonAaj07clasTrib.getBoolean("monofasica_cbsibs")) {
             jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
         }
-        //PERCENTUAL REDUÇÃO CBS
-        if (jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_cbs")) {
-            //
-        }
-        //PERCENTUAL REDUÇÃO IBS
-        if (jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_ibs")) {
-            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
-        }
+
         //REDUÇÃO BASE DE CÁLCULO
         if (jsonAaj07clasTrib.getBoolean("red_bc")) {
-            //jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
-            eaa0103.eaa0103total = eaa0103.eaa0103total -
-                    jsonEaa0103.getBigDecimal_Zero("desconto") +
-                    jsonEaa0103.getBigDecimal_Zero("icm_desonerado") +
-                    jsonEaa0103.getBigDecimal_Zero("st_icm") +
-                    /* + icms mono */
-                    jsonEaa0103.getBigDecimal_Zero("icms_fcp") +
-                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                    jsonEaa0103.getBigDecimal_Zero("seguro") +
-                    jsonEaa0103.getBigDecimal_Zero("outras") +
-                    jsonEaa0103.getBigDecimal_Zero("ii_ii") +
-                    jsonEaa0103.getBigDecimal_Zero("ipi")
 
         }
         //REDUÇÃO BASE DE CÁLCULO CST
@@ -466,44 +483,57 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
             jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
         }
 
-        //jsonEaa0103.put("cbs_ibs_bc",eaa0103.eaa0103total)//BC IBS/CBS
+        // CBS
         jsonEaa0103.put("cbs_aliq", jsonAag02Ent.getBigDecimal_Zero("cbs_aliq"))//Alíquota CBS
-        jsonEaa0103.put("vlr_cbs", (jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * jsonEaa0103.getBigDecimal_Zero("cbs_aliq")) / 100)
+        jsonEaa0103.put("vlr_cbs", jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * (jsonEaa0103.getBigDecimal_Zero("cbs_aliq") / 100))
 
-        //Valor CBS
-        jsonEaa0103.put("ibs_uf_aliq", jsonAag0201Ent.getBigDecimal_Zero("ibs_uf_aliq"))//Alíquota IBS Estadua
-        jsonEaa0103.put("ibs_mun_aliq", jsonAag0201Ent.getBigDecimal_Zero("ibs_mun_aliq") * eaa0103.eaa0103total)
+        // Aliquotas IBS
+        jsonEaa0103.put("ibs_uf_aliq", jsonAag0201Ent.getBigDecimal_Zero("ibs_uf_aliq"));//Alíquota IBS Estadual
+        jsonEaa0103.put("ibs_mun_aliq", jsonAag0201Ent.getBigDecimal_Zero("ibs_mun_aliq"));
 
         //Alíquota IBS Municipal
-        jsonEaa0103.put("vlr_ibsmun", jsonEaa0103.getBigDecimal_Zero("ibs_mun_aliq") * eaa0103.eaa0103total)
+        jsonEaa0103.put("vlr_ibsmun", jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * (jsonEaa0103.getBigDecimal_Zero("ibs_mun_aliq") / 100));
 
-        //Alíquota de IBS Municipal
-        jsonEaa0103.put("vlr_ibsuf", jsonEaa0103.getBigDecimal_Zero("ibs_uf_aliq") * eaa0103.eaa0103total)//IBS Estadual
+        //IBS
+        jsonEaa0103.put("vlr_ibsuf", jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * (jsonEaa0103.getBigDecimal_Zero("ibs_uf_aliq") / 100))//IBS Estadual
         jsonEaa0103.put("vlr_ibs", jsonEaa0103.getBigDecimal_Zero("vlr_ibsmun") + jsonEaa0103.getBigDecimal_Zero("vlr_ibsuf"))// total de IBS
-    }
 
-    private void definirPrecoUnitarioItem(){
-        if(abb01.abb01operAutor != "SRF"){
-            if(eaa01.eaa01tp != null){
-                if(jsonAbe4001 != null){
-                    if(jsonAbe4001.getString("data_promo_ini") != null && jsonAbe4001.getString("data_promo_fin") != null && jsonAbe4001.getBigDecimal_Zero("preco_promocao") > 0){
-                        DateTimeFormatter formato2 = DateTimeFormatter.ofPattern("yyyyMMdd");
-                        LocalDate dataPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_fin"), formato2);
-                        LocalDate dataAtual = LocalDate.now();
-                        def precoPromocao = jsonAbe4001.getBigDecimal_Zero("preco_promocao");
-                        if(dataPromo > dataAtual){
-                            eaa0103.eaa0103unit = precoPromocao.round(4);
-                        }else{
-                            eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
-                        }
-                    }else{
-                        eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
-                    }
-                }else{
-                    eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
-                }
+        //CST 200 - Tributação c/ Redução
+        if(jsonAaj07clasTrib.getString("cst_cbsibs") == "200"){
+            //PERCENTUAL REDUÇÃO CBS
+            if (jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_cbs")) {
+                jsonEaa0103.put("perc_red_cbs", jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_cbs"))
             }
+            //PERCENTUAL REDUÇÃO IBS UF
+            if (jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_ibs_uf")) {
+                jsonEaa0103.put("perc_red_ibs_uf", jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_ibs_uf")); // Mudar nome do campo
+            }
+
+            //PERCENTUAL DE REDUÇÃO IBS MUNIC
+            if(jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_ibs_munic")){
+                jsonEaa0103.put("perc_red_ibs_munic", jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_ibs_munic")) // Criar campo
+            }
+
+            // Aliquotas Efetivas
+            jsonEaa0103.put("aliq_efet_ibs_uf", (jsonEaa0103.getBigDecimal_Zero("ibs_uf_aliq") * ( 100 -  jsonEaa0103.getBigDecimal_Zero("perc_red_ibs_uf")) / 100)); // Mudar nome campo
+            jsonEaa0103.put("aliq_efet_ibs_mun", (jsonEaa0103.getBigDecimal_Zero("ibs_mun_aliq") * ( 100 -  jsonEaa0103.getBigDecimal_Zero("perc_red_ibs_mun")) / 100));
+            jsonEaa0103.put("aliq_efet_cbs", (jsonEaa0103.getBigDecimal_Zero("cbs_aliq") * ( 100 -  jsonEaa0103.getBigDecimal_Zero("perc_red_cbs")) / 100));
+
+            // CBS
+            jsonEaa0103.put("vlr_cbs", jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * (jsonEaa0103.getBigDecimal_Zero("aliq_efet_cbs") / 100))
+
+            // IBS Município
+            jsonEaa0103.put("vlr_ibsmun", jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * (jsonEaa0103.getBigDecimal_Zero("aliq_efet_ibs_munic") / 100));
+
+            // IBS UF
+            jsonEaa0103.put("vlr_ibsuf", jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * (jsonEaa0103.getBigDecimal_Zero("aliq_efet_ibs_uf") / 100))//IBS Estadual
+
+            // Soma total do IBS UF/Municipio
+            jsonEaa0103.put("vlr_ibs", jsonEaa0103.getBigDecimal_Zero("vlr_ibsmun") + jsonEaa0103.getBigDecimal_Zero("vlr_ibsuf"))// total de IBS
+
         }
+
+
     }
 
     // Trocar CFOP (Dentro ou fora do estado)
@@ -869,3 +899,4 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

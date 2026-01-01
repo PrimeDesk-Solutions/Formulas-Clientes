@@ -29,6 +29,7 @@ public class SCV_ImportarDocum extends FormulaBase {
 	private Long abd01id;
 	private LocalDate data;
 	private TableMap json;
+	private TableMap jsonArquivo;
 	private MultipartFile arquivo;
 	
 	@Override
@@ -41,6 +42,7 @@ public class SCV_ImportarDocum extends FormulaBase {
 		abd01id = get("abd01id");
 		data = get("data");
 		json = get("json");
+		jsonArquivo = get("jsonArquivo");
 		arquivo = get("arquivo");
 		
 		List<Eaa01> eaa01s = new ArrayList<>();

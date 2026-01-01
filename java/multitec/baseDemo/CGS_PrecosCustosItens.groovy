@@ -7,6 +7,7 @@ import sam.server.samdev.formula.FormulaBase
 class CGS_PrecosCustosItens extends FormulaBase {
 	
 	Long abm01id;
+	String bomCodigo;
 	BigDecimal valorComposicao;
 	BigDecimal valorProcesso;
 	TableMap json;
@@ -19,6 +20,7 @@ class CGS_PrecosCustosItens extends FormulaBase {
 	@Override
 	public void executar() {
 		abm01id = get("abm01id");
+		bomCodigo = get("bomCodigo");
 		valorComposicao = get("valorComposicao");
 		valorProcesso = get("valorProcesso");
 		json = get("json");

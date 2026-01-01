@@ -84,8 +84,8 @@ public class SFP_RelacaoDeSalarios extends RelatorioBase {
 		boolean adicionalTempoServ = get("adicionalTempoServ");
 		BigDecimal indiceSobreSal = DecimalUtils.create(getBigDecimal("indiceSal").toString()).get();
 		Set<Integer> tiposTrab = obterTipoTrabalhador();
-		CentralService centralService = new CentralService(session, samWhere, variaveis);
-		ParametroService parametroService = new ParametroService(session, samWhere, variaveis);
+		CentralService centralService = instanciarService(CentralService.class)
+		ParametroService parametroService = instanciarService(ParametroService.class)
 		SFPService sfpService = new SFPService(session, samWhere, centralService, parametroService, variaveis, null);
 		SFPVarDto sfpVarDto = new SFPVarDto();
 		SFPUtils sfpUtils = new SFPUtils(session, samWhere, sfpService, variaveis, sfpVarDto);

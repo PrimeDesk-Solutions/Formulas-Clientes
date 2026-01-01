@@ -1,4 +1,6 @@
-package multitec.relatorios.cgs;
+package multitec.relatorios.cgs
+
+import com.google.zxing.datamatrix.DataMatrixWriter;
 
 import java.awt.Image
 import java.awt.Toolkit
@@ -187,6 +189,20 @@ public class CGS_Etiquetas extends RelatorioBase {
 			imgqrcode = Toolkit.getDefaultToolkit().createImage(bufferedImage.getSource());
 		}
 		return imgqrcode;
+	}
+
+	private Image gerarDataMatrix(String dataMatrixCode) {
+		Image imgDataMatrix = null;
+		if (dataMatrixCode != null) {
+			DataMatrixWriter dataMatrixWriter = new DataMatrixWriter();
+
+			int size = 400;
+			BitMatrix bitMatrix = dataMatrixWriter.encode(dataMatrixCode, BarcodeFormat.DATA_MATRIX, size, size);
+
+			BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
+			imgDataMatrix = Toolkit.getDefaultToolkit().createImage(bufferedImage.getSource());
+		}
+		return imgDataMatrix;
 	}
 	
 	private void gravarStatusImpressaoEtiquetas(List<Long> abm70ids) {

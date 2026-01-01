@@ -53,7 +53,7 @@ public class S_1020_xml extends FormulaBase{
 		if( abh02.abh02tiProp != 0 ) abh02niProp = StringUtils.ajustString(abh02niProp, 11, '0', true);
 		
 			
-		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtTabLotacao/v_S_01_01_00");
+		ElementXml eSocial = ESocialUtils.criarElementXmlESocial("http://www.esocial.gov.br/schema/evt/evtTabLotacao/v_S_01_03_00");
 		ElementXml evtTabLotacao = eSocial.addNode("evtTabLotacao");
 		evtTabLotacao.setAttribute("Id", ESocialUtils.comporIdDoEvento(aac10.aac10ti, aac10.aac10ni));
 
@@ -74,17 +74,17 @@ public class S_1020_xml extends FormulaBase{
 			ideLotacao.addNode("codLotacao", abh02.abh02codigo, true);
 			ideLotacao.addNode("iniValid", abh02esDti, true);
 
-			ElementXml dadosLotacao = elemento.addNode("dadosLotacao");
-			if(!ValidacaoESocial.isCodigoValido(["01", "10", "21", "24", "90", "91" ] as String[], abh02.abh02tipo.aap52codigo)) {
-				dadosLotacao.addNode("tpLotacao", StringUtils.ajustString(abh02.abh02tipo?.aap52codigo?: null, 2, '0', true), true);
-				dadosLotacao.addNode("tpInsc", StringUtils.ajustString(abh02.abh02ti + 1, 2, '0', true), true);
-			}
-			dadosLotacao.addNode("nrInsc", abh02ni_extractNumbers, true);
+            ElementXml dadosLotacao = elemento.addNode("dadosLotacao");
+            dadosLotacao.addNode("tpLotacao", StringUtils.ajustString(abh02.abh02tipo?.aap52codigo?: null, 2, '0', true), true);
+            if(!ValidacaoESocial.isCodigoValido(["01", "10", "21", "24", "90", "91" ] as String[], abh02.abh02tipo.aap52codigo)) {
+				dadosLotacao.addNode("tpInsc", abh02.abh02ti + 1, true);
+                dadosLotacao.addNode("nrInsc", abh02ni_extractNumbers, true);
+            }
 
 			ElementXml fpasLotacao = dadosLotacao.addNode("fpasLotacao");
 			fpasLotacao.addNode("fpas", abh02.abh02fpas?.aap51codigo?: null, true);
 			fpasLotacao.addNode("codTercs", StringUtils.ajustString(abh02.abh02fpas?.aap51codTerc?: null, 4, '0', true), true);
-			fpasLotacao.addNode("codTercsSusp", StringUtils.ajustString(abh02.abh02fpas?.aap51codTercSusp?: null, 4, '0', true), false);
+			if(abh02.abh02fpas?.aap51codTercSusp != null) fpasLotacao.addNode("codTercsSusp", StringUtils.ajustString(abh02.abh02fpas?.aap51codTercSusp?: null, 4, '0', true), false);
 
 			ElementXml infoProcJudTerceiros = fpasLotacao.addNode("infoProcJudTerceiros");
 
@@ -101,11 +101,13 @@ public class S_1020_xml extends FormulaBase{
 				procJudTerceiro.addNode("codSusp", abh0201.abh0201processo != null ? abh0201.abh0201processo.abb4001s.stream().findFirst() : null, false);
 			}
 
-			ElementXml infoEmprParcial = dadosLotacao.addNode("infoEmprParcial");
-			infoEmprParcial.addNode("tpInscContrat", abh02.abh02tiContr + 1, true);
-			infoEmprParcial.addNode("nrInscContrat", abh02niContr, true);
-			infoEmprParcial.addNode("tpInscProp", abh02.abh02tiProp + 1, true);
-			infoEmprParcial.addNode("nrInscProp", abh02niProp, true);
+            if(abh02.abh02niProp != null || abh02.abh02niContr != null){
+                ElementXml infoEmprParcial = dadosLotacao.addNode("infoEmprParcial");
+                infoEmprParcial.addNode("tpInscContrat", abh02.abh02tiContr + 1, true);
+                infoEmprParcial.addNode("nrInscContrat", abh02niContr, true);
+                infoEmprParcial.addNode("tpInscProp", abh02.abh02tiProp + 1, true);
+                infoEmprParcial.addNode("nrInscProp", abh02niProp, true);
+            }
 
 			if(isAlteracao) {
 				ElementXml novaValidade = elemento.addNode("novaValidade");

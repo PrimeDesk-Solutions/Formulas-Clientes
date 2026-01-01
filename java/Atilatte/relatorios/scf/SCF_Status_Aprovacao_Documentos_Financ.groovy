@@ -93,3 +93,4 @@ public class SCF_Status_Aprovacao_Documentos_Financ extends RelatorioBase {
 }
 //meta-sis-eyJkZXNjciI6IlNDRiAtIFN0YXR1cyBBcHJvdmHDp8OjbyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
 //meta-sis-eyJkZXNjciI6IlNDRiAtIFN0YXR1cyBBcHJvdmHDp8OjbyBEb2MuIEZpbmFuY2Vpcm9zIiwidGlwbyI6InJlbGF0b3JpbyJ9
+//meta-sis-eyJkZXNjciI6IlNDRiAtIFN0YXR1cyBBcHJvdmHDp8OjbyBEb2MuIEZpbmFuY2Vpcm9zIiwidGlwbyI6InJlbGF0b3JpbyJ9

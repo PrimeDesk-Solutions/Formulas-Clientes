@@ -276,7 +276,7 @@ class SCF_Boleto_Itau extends RelatorioBase {
         String whereEntidade = entidade != null && entidade.size() > 0 ? " and abe01.abe01id in (:entId) " : ""
         Parametro parametroEntidade = entidade != null && entidade.size() > 0 ? Parametro.criar("entId", entidade) : null
 
-        String sql = " SELECT DISTINCT abe01.abe01codigo, abe01.abe01id, abe01.abe01nome, daa01.daa01json, abe01.abe01ni, daa01.daa01dtVctoN, daa01.daa01valor, daa01.daa01id, daa01.daa01nossoNum, daa01.daa01nossoNumDV, abb01.abb01num, " +
+        String sql = " SELECT abe01.abe01codigo, abe01.abe01id, abe01.abe01nome, daa01.daa01json, abe01.abe01ni, daa01.daa01dtVctoN, daa01.daa01valor, daa01.daa01id, daa01.daa01nossoNum, daa01.daa01nossoNumDV, abb01.abb01num, " +
                 " abb01.abb01data,abb01.abb01parcela, abb01.abb01num, abf01.abf01agencia, abf01.abf01conta,abf01.abf01digconta, abf01.abf01digconta, abf01.abf01json, abf01.abf01numero, aah01.aah01nome, daa0102.daa0102movim " +
                 " FROM daa01 daa01 " +
                 " INNER JOIN abb01 abb01 ON abb01id = daa01central " +
@@ -298,7 +298,7 @@ class SCF_Boleto_Itau extends RelatorioBase {
     private List<TableMap> buscarDadosBoletoPelosIds(List<Long> daa01id) {
 
 
-        String sql = " SELECT DISTINCT abe01.abe01codigo, abe01.abe01id, abe01.abe01nome, daa01.daa01json, abe01.abe01ni, daa01.daa01dtVctoN, daa01.daa01valor, daa01.daa01id, daa01.daa01nossoNum, daa01.daa01nossoNumDV, abb01.abb01num, " +
+        String sql = " SELECT abe01.abe01codigo, abe01.abe01id, abe01.abe01nome, daa01.daa01json, abe01.abe01ni, daa01.daa01dtVctoN, daa01.daa01valor, daa01.daa01id, daa01.daa01nossoNum, daa01.daa01nossoNumDV, abb01.abb01num, " +
                 " abb01.abb01data,abb01.abb01parcela, abb01.abb01num, abf01.abf01agencia, abf01.abf01conta,abf01.abf01digconta, abf01.abf01digconta, abf01.abf01json, abf01.abf01numero, aah01.aah01nome, daa0102.daa0102movim " +
                 " FROM daa01 daa01 " +
                 " INNER JOIN abb01 abb01 ON abb01id = daa01central " +
@@ -569,5 +569,6 @@ class SCF_Boleto_Itau extends RelatorioBase {
     }
 }
 //meta-sis-eyJkZXNjciI6IlNDRiAtIEJvbGV0byBJdGHDuiAtIEVsIFRlY2giLCJ0aXBvIjoicmVsYXRvcmlvIn0=
+//meta-sis-eyJkZXNjciI6IlNDRiAtIEJvbGV0byBJdGHDuiIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
 //meta-sis-eyJkZXNjciI6IlNDRiAtIEJvbGV0byBJdGHDuiIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
 //meta-sis-eyJkZXNjciI6IlNDRiAtIEJvbGV0byBJdGHDuiIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
