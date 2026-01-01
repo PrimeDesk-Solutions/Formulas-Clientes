@@ -77,6 +77,8 @@
 	<field name="cepEntregaEnt" class="java.lang.String"/>
 	<field name="complemEntregaEnt" class="java.lang.String"/>
 	<field name="dsItens" class="java.lang.Object"/>
+	<field name="obsInterno" class="java.lang.String"/>
+	<field name="comNota" class="java.lang.Integer"/>
 	<group name="teste">
 		<groupExpression><![CDATA[$F{numDoc}]]></groupExpression>
 		<groupFooter>
@@ -288,9 +290,7 @@
 					<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
 				</textField>
 				<image>
-					<reportElement x="0" y="0" width="78" height="69" uuid="3150c2f4-6cdf-441f-8f59-67a909cf2b4a">
-						<printWhenExpression><![CDATA[1 ==2]]></printWhenExpression>
-					</reportElement>
+					<reportElement x="0" y="0" width="78" height="69" uuid="3150c2f4-6cdf-441f-8f59-67a909cf2b4a"/>
 					<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\srf\\Logo Silcon.png"]]></imageExpression>
 				</image>
 				<staticText>
@@ -511,64 +511,57 @@ $F{foneEntidade} == null ? "" : $F{foneEntidade}]]></textFieldExpression>
 					<text><![CDATA[Código]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="96" y="226" width="121" height="10" uuid="896b7656-7365-426f-b22c-c36544b0f312"/>
+					<reportElement x="70" y="226" width="121" height="10" uuid="896b7656-7365-426f-b22c-c36544b0f312"/>
 					<textElement>
 						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[Descrição]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="243" y="226" width="25" height="10" uuid="fbc62dce-b841-4b99-b312-f9da2c5f6d19"/>
+					<reportElement x="219" y="226" width="25" height="10" uuid="fbc62dce-b841-4b99-b312-f9da2c5f6d19"/>
 					<textElement>
 						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[UN]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="277" y="226" width="25" height="10" uuid="96516eb8-8729-4472-a7a1-f5244341b117"/>
-					<textElement>
-						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
-					</textElement>
-					<text><![CDATA[QTD]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="313" y="226" width="25" height="10" uuid="b53268a8-1e75-45a9-aad9-28e964c7d997"/>
+					<reportElement x="286" y="226" width="18" height="10" uuid="b53268a8-1e75-45a9-aad9-28e964c7d997"/>
 					<textElement>
 						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[M/F]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="344" y="226" width="25" height="10" uuid="64442c94-8027-4543-8454-82d718284c64"/>
+					<reportElement x="308" y="226" width="15" height="10" uuid="64442c94-8027-4543-8454-82d718284c64"/>
 					<textElement>
 						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[CD]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="370" y="226" width="25" height="10" uuid="6c8da322-07ff-4faa-a327-246c8f5a5dd4"/>
+					<reportElement x="329" y="226" width="14" height="10" uuid="6c8da322-07ff-4faa-a327-246c8f5a5dd4"/>
 					<textElement>
 						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[CF]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="397" y="226" width="38" height="10" uuid="e2b8e5ba-bf2f-400e-95e5-623639f63224"/>
+					<reportElement x="373" y="226" width="30" height="10" uuid="e2b8e5ba-bf2f-400e-95e5-623639f63224"/>
 					<textElement>
 						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[V. Unit.]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="473" y="226" width="53" height="10" uuid="538875e9-fd86-4195-83e4-9767c6a653fc"/>
+					<reportElement x="441" y="226" width="40" height="10" uuid="538875e9-fd86-4195-83e4-9767c6a653fc"/>
 					<textElement>
 						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[Desconto]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="526" y="226" width="29" height="10" uuid="cd27c0de-af83-4542-bc4a-4a1abe6e32ea"/>
-					<textElement textAlignment="Right">
+					<reportElement x="484" y="226" width="54" height="10" uuid="cd27c0de-af83-4542-bc4a-4a1abe6e32ea"/>
+					<textElement>
 						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[V. Total]]></text>
@@ -577,11 +570,41 @@ $F{foneEntidade} == null ? "" : $F{foneEntidade}]]></textFieldExpression>
 					<reportElement x="0" y="240" width="557" height="1" uuid="89fe4bb8-4e62-4bf2-a8d1-0566392688b3"/>
 				</line>
 				<staticText>
-					<reportElement x="435" y="227" width="36" height="10" uuid="2bebd7ef-8aaf-497d-a3d3-c7382686e5d9"/>
+					<reportElement x="408" y="226" width="30" height="10" uuid="2bebd7ef-8aaf-497d-a3d3-c7382686e5d9"/>
 					<textElement>
 						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[T. Item]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="66" y="146" width="297" height="27" uuid="ee533583-663f-4200-948a-f9f289382cb4"/>
+					<textElement>
+						<font fontName="Arial"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{obsInterno}.replace("COM NOTA.", "")]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="473" y="189" width="82" height="26" uuid="7519885c-a563-41d5-88e9-412f38556dac">
+						<printWhenExpression><![CDATA[$F{comNota} == 1]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[C/NF]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="246" y="226" width="25" height="10" uuid="2701b4d8-cadc-4f85-91a7-bd7b2750049f"/>
+					<textElement>
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[NCM]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="350" y="226" width="20" height="10" uuid="96516eb8-8729-4472-a7a1-f5244341b117"/>
+					<textElement>
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[QTD]]></text>
 				</staticText>
 			</band>
 		</groupHeader>

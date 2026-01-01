@@ -148,9 +148,7 @@
 					<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
 				</textField>
 				<image>
-					<reportElement x="0" y="0" width="78" height="69" uuid="3150c2f4-6cdf-441f-8f59-67a909cf2b4a">
-						<printWhenExpression><![CDATA[1 == 2]]></printWhenExpression>
-					</reportElement>
+					<reportElement x="0" y="0" width="78" height="69" uuid="3150c2f4-6cdf-441f-8f59-67a909cf2b4a"/>
 					<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\srf\\Logo Silcon.png"]]></imageExpression>
 				</image>
 				<staticText>
@@ -305,15 +303,15 @@ $F{foneEntidade} == null ? "" : $F{foneEntidade}]]></textFieldExpression>
 					<text><![CDATA[UN]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="470" y="176" width="40" height="12" uuid="538875e9-fd86-4195-83e4-9767c6a653fc"/>
-					<textElement textAlignment="Right">
+					<reportElement x="400" y="176" width="40" height="12" uuid="538875e9-fd86-4195-83e4-9767c6a653fc"/>
+					<textElement textAlignment="Center">
 						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[V. Desc.]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="510" y="176" width="45" height="12" uuid="cd27c0de-af83-4542-bc4a-4a1abe6e32ea"/>
-					<textElement textAlignment="Right">
+					<reportElement x="448" y="176" width="45" height="12" uuid="cd27c0de-af83-4542-bc4a-4a1abe6e32ea"/>
+					<textElement>
 						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[V. Tot Liq.]]></text>
@@ -322,7 +320,7 @@ $F{foneEntidade} == null ? "" : $F{foneEntidade}]]></textFieldExpression>
 					<reportElement x="2" y="190" width="553" height="1" uuid="89fe4bb8-4e62-4bf2-a8d1-0566392688b3"/>
 				</line>
 				<staticText>
-					<reportElement x="434" y="176" width="36" height="12" uuid="2bebd7ef-8aaf-497d-a3d3-c7382686e5d9"/>
+					<reportElement x="364" y="176" width="36" height="12" uuid="2bebd7ef-8aaf-497d-a3d3-c7382686e5d9"/>
 					<textElement textAlignment="Center">
 						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>

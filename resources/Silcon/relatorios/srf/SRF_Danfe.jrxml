@@ -1770,7 +1770,9 @@ $F{eaa01nfeProt}.substring(12,15)+" "   : ""]]></textFieldExpression>
 				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="0" y="15" width="66" height="35" uuid="b8991880-fa12-4cc9-b376-74d96d1a8ec0"/>
+				<reportElement x="0" y="15" width="66" height="35" uuid="b8991880-fa12-4cc9-b376-74d96d1a8ec0">
+					<printWhenExpression><![CDATA[1 == 2]]></printWhenExpression>
+				</reportElement>
 				<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\srf\\Logo Silcon.png"]]></imageExpression>
 			</image>
 			<textField isBlankWhenNull="true">

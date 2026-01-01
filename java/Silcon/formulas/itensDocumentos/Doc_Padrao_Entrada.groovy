@@ -1,6 +1,3 @@
-/*
- * Desenvolvido por: ROGER.
- */
 package Silcon.formulas.itensDocumentos
 
 import sam.model.entities.aa.Aac13;
@@ -295,7 +292,11 @@ public class Doc_Padrao_Entrada extends FormulaBase {
                                                             jsonEaa0103.getBigDecimal_Zero("seguro") +
                                                             jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
                                                             jsonEaa0103.getBigDecimal_Zero("icms_st") -
-                                                            jsonEaa0103.getBigDecimal_Zero("desconto"));
+                                                            jsonEaa0103.getBigDecimal_Zero("desconto")).round(2);
+
+
+            // Total Fiananceiro
+            eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
 
             // Preenche o CST de ICMS do Item
             String cstIcms = buscarCstICMS();
@@ -305,7 +306,6 @@ public class Doc_Padrao_Entrada extends FormulaBase {
             // Calcula ICMS Itens
             calcularICMS(contribICMS);
 
-            //Total Financ
             jsonEaa0103.put("ipi_observacoes", eaa0103.eaa0103totDoc.round(2));
 
             preencherSPEDS();

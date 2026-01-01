@@ -4,7 +4,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="codItem" class="java.lang.String"/>
-	<field name="naItem" class="java.lang.String"/>
+	<field name="descrItem" class="java.lang.String"/>
 	<field name="umu" class="java.lang.String"/>
 	<field name="qtdItem" class="java.math.BigDecimal"/>
 	<field name="unitItem" class="java.math.BigDecimal"/>
@@ -14,6 +14,7 @@
 	<field name="field2" class="java.lang.String"/>
 	<field name="field3" class="java.lang.String"/>
 	<field name="seq" class="java.lang.String"/>
+	<field name="codNcm" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -27,84 +28,91 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="15" splitType="Stretch">
+		<band height="19" splitType="Stretch">
 			<textField>
-				<reportElement x="26" y="0" width="67" height="13" uuid="04f07a6c-0f6f-4f0c-a3af-7a8e8b25f4be"/>
+				<reportElement x="15" y="0" width="55" height="18" uuid="04f07a6c-0f6f-4f0c-a3af-7a8e8b25f4be"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{codItem}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="14" width="553" height="1" uuid="ea19981c-df5c-4ce8-acad-f211b1d9117b"/>
+				<reportElement x="0" y="18" width="553" height="1" uuid="ea19981c-df5c-4ce8-acad-f211b1d9117b"/>
 				<graphicElement>
 					<pen lineStyle="Dashed"/>
 				</graphicElement>
 			</line>
-			<textField>
-				<reportElement x="93" y="0" width="150" height="13" uuid="7d951c5c-0d30-4beb-af64-65fbcdc9a95c"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="70" y="0" width="150" height="18" uuid="7d951c5c-0d30-4beb-af64-65fbcdc9a95c"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{naItem}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{descrItem}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="243" y="0" width="33" height="13" uuid="c1cd7e54-f633-44d1-aa7c-f1e6644c4933"/>
+				<reportElement x="220" y="0" width="25" height="18" uuid="c1cd7e54-f633-44d1-aa7c-f1e6644c4933"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{umu}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="276" y="0" width="32" height="13" uuid="9c98e09b-c9ea-4a19-be22-8fdcd91e7165"/>
+				<reportElement x="348" y="0" width="23" height="13" uuid="9c98e09b-c9ea-4a19-be22-8fdcd91e7165"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{qtdItem}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="404" y="0" width="38" height="13" uuid="19e485e3-bd54-47bd-8645-b7b6f14ae3d5"/>
+				<reportElement x="378" y="0" width="28" height="13" uuid="19e485e3-bd54-47bd-8645-b7b6f14ae3d5"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{unitItem}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="442" y="0" width="40" height="13" uuid="85832e9d-f72f-45e1-ab4b-fc2e2a785f5a"/>
+				<reportElement x="410" y="0" width="31" height="13" uuid="85832e9d-f72f-45e1-ab4b-fc2e2a785f5a"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totItem}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="509" y="0" width="44" height="14" uuid="25f95893-e4ef-432d-9c41-f47625e2b7f6"/>
+				<reportElement x="468" y="0" width="32" height="14" uuid="25f95893-e4ef-432d-9c41-f47625e2b7f6"/>
 				<textElement textAlignment="Right">
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totDocItem}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
-				<reportElement x="482" y="0" width="27" height="14" uuid="e670f9b9-14d3-4629-8346-7ffa84d110cb"/>
+				<reportElement x="441" y="0" width="27" height="14" uuid="e670f9b9-14d3-4629-8346-7ffa84d110cb"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{descontoItem} == null ? new BigDecimal(0) : $F{descontoItem}]]></textFieldExpression>
 			</textField>
 			<rectangle radius="2">
-				<reportElement x="310" y="1" width="24" height="12" uuid="72a257bb-af70-423c-955b-13c1f3a9dbeb"/>
+				<reportElement x="286" y="1" width="17" height="12" uuid="72a257bb-af70-423c-955b-13c1f3a9dbeb"/>
 			</rectangle>
 			<rectangle radius="2">
-				<reportElement x="338" y="1" width="24" height="12" uuid="11fffb4e-38dd-4ed0-a6ac-b1ba5f770a5e"/>
+				<reportElement x="306" y="1" width="17" height="12" uuid="11fffb4e-38dd-4ed0-a6ac-b1ba5f770a5e"/>
 			</rectangle>
 			<rectangle radius="2">
-				<reportElement x="365" y="1" width="24" height="12" uuid="84861028-a590-4f66-838c-a30c8669f2c6"/>
+				<reportElement x="326" y="1" width="17" height="12" uuid="84861028-a590-4f66-838c-a30c8669f2c6"/>
 			</rectangle>
 			<textField>
-				<reportElement x="0" y="1" width="26" height="12" uuid="bc5b146f-7671-46b6-b32d-fd04e0890d55"/>
+				<reportElement x="0" y="1" width="15" height="17" uuid="bc5b146f-7671-46b6-b32d-fd04e0890d55"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{seq}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="245" y="0" width="38" height="17" uuid="a4bd7971-734f-4a68-a7d1-4d4cea7ef2bd"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codNcm}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

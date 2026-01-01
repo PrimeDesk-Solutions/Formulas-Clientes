@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SPV_Impressao_Pre_Venda_S1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="87e01482-c022-4f9b-b5d9-2d91de471630">
 	<property name="ireport.zoom" value="1.771561000000001"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="29"/>
 	<property name="ireport.y" value="0"/>
 	<field name="codItem" class="java.lang.String"/>
 	<field name="ccb0101seq" class="java.lang.String"/>
@@ -11,9 +11,10 @@
 	<field name="desconto" class="java.math.BigDecimal"/>
 	<field name="totDoc" class="java.math.BigDecimal"/>
 	<field name="qtd" class="java.math.BigDecimal"/>
-	<field name="field8" class="java.lang.String"/>
+	<field name="entrega" class="java.lang.String"/>
 	<field name="field9" class="java.lang.String"/>
 	<field name="field1" class="java.lang.String"/>
+	<field name="field2" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -36,29 +37,29 @@
 				<textFieldExpression><![CDATA[$F{codItem}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="141" y="0" width="218" height="13" uuid="689090ae-2775-40b0-a1a2-e2e548301776"/>
+				<reportElement x="141" y="0" width="214" height="13" uuid="689090ae-2775-40b0-a1a2-e2e548301776"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{naItem}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="424" y="0" width="51" height="13" uuid="fc4a6903-e842-4dbc-b436-c66bb830ae05"/>
+				<reportElement x="355" y="0" width="51" height="13" uuid="fc4a6903-e842-4dbc-b436-c66bb830ae05"/>
 				<textElement textAlignment="Center">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totItem}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="475" y="0" width="27" height="13" uuid="fa79e790-0d40-4061-b189-77d8b23e2187"/>
-				<textElement textAlignment="Right">
+				<reportElement x="406" y="0" width="27" height="13" uuid="fa79e790-0d40-4061-b189-77d8b23e2187"/>
+				<textElement textAlignment="Center">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{desconto}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="502" y="0" width="53" height="13" uuid="6c564740-448d-46cb-ab95-9dd1cc2093d9"/>
-				<textElement textAlignment="Right">
+				<reportElement x="433" y="0" width="53" height="13" uuid="6c564740-448d-46cb-ab95-9dd1cc2093d9"/>
+				<textElement textAlignment="Center">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totDoc}]]></textFieldExpression>
@@ -83,6 +84,13 @@
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{umu}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="497" y="0" width="58" height="13" uuid="33a65a9f-a550-4d50-90f2-1f061c49b5b1"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{entrega}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
