@@ -200,7 +200,7 @@ public class DocPadraoRemessa extends FormulaBase {
 
 	   // Class. Trib CBS/IBS
 	   aaj07 = eaa0103.eaa0103clasTribCbsIbs != null ? getSession().get(Aaj07.class, eaa0103.eaa0103clasTribCbsIbs.aaj07id) : null;
-        if(aaj07 == null) throw new ValidacaoException("É nescessário informar a Classificação tribtária de CBS/IBS do item: " + abm01.abm01codigo + " - " + abm01.abm01na);
+        //if(aaj07 == null) throw new ValidacaoException("É nescessário informar a Classificação tribtária de CBS/IBS do item: " + abm01.abm01codigo + " - " + abm01.abm01na);
 
 
 
@@ -214,7 +214,7 @@ public class DocPadraoRemessa extends FormulaBase {
         jsonAbm1001_UF_Item = abm1001 != null && abm1001.abm1001json != null ? abm1001.abm1001json : new TableMap();
         jsonAbm1003_Ent_Item = abm1003 != null && abm1003.abm1003json != null ? abm1003.abm1003json : new TableMap();
         jsonEaa0103 = eaa0103.eaa0103json != null ? eaa0103.eaa0103json : new TableMap();
-	   jsonAaj07clasTrib = aaj07.aaj07json != null ? aaj07.aaj07json : new TableMap();
+	   //jsonAaj07clasTrib = aaj07.aaj07json != null ? aaj07.aaj07json : new TableMap();
 
 
         calcularItem();
@@ -288,7 +288,7 @@ public class DocPadraoRemessa extends FormulaBase {
             // Total Financeiro
             eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
 
-            calcularCBSIBS();
+            //calcularCBSIBS();
 
             // Preenche os campos Sped
             preencherSPEDS();
