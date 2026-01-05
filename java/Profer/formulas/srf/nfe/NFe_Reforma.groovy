@@ -163,7 +163,7 @@ class NFe_Reforma extends FormulaBase {
 		ide.addNode("nNF", eaa01.eaa01central.abb01num, true);
 		ide.addNode("dhEmi", NFeUtils.dataFormatoUTC(eaa01.eaa01central.abb01data, eaa01.eaa01central.abb01operHora, empresa.aac10fusoHorario), true);
 		ide.addNode("dhSaiEnt", eaa01.eaa01esData == null ? null : NFeUtils.dataFormatoUTC(eaa01.eaa01esData, eaa01.eaa01esHora != null ? eaa01.eaa01esHora : eaa01.eaa01central.abb01operHora, empresa.aac10fusoHorario), false);
-          ide.addNode("dPrevEntrega", eaa01.eaa01dtEntregaPrev  == null ? null : DateUtils.formatDate(eaa01.eaa01dtEntregaPrev, "yyyy-MM-dd"));
+        if(eaa01.eaa01dtEntregaPrev != null) ide.addNode("dPrevEntrega", eaa01.eaa01dtEntregaPrev  == null ? null : DateUtils.formatDate(eaa01.eaa01dtEntregaPrev, "yyyy-MM-dd"));
 		ide.addNode("tpNF", eaa01.eaa01esMov, true);
 
 		idDest = 1; //1-Interna
@@ -1702,7 +1702,7 @@ class NFe_Reforma extends FormulaBase {
                             gTribRegular.addNode("vTribRegCBS", getDecimalReq(jsonEaa0103, "324.72d-UB72d", "vTribRegCBS"));
                         }
 
-                        if(getDecimal(aaj07json, "324-UB82b", "pAliqIBSUF") != null) {
+                        if(getDecimal(aaj07json, "324-UB82b", "pAliqIBSUF") != null && !getDecimal(aaj07json, "324-UB82b", "pAliqIBSUF") == 0) {
                             def gTribCompraGov = gIBSCBS.addNode("gTribCompraGov");
                             gTribCompraGov.addNode("pAliqIBSUF", getDecimalReq4Dig(jsonEaa0103, "324-UB82b", "pAliqIBSUF"));
                             gTribCompraGov.addNode("vTribIBSUF", getDecimalReq(jsonEaa0103, "324-UB82c", "vTribIBSUF"));
