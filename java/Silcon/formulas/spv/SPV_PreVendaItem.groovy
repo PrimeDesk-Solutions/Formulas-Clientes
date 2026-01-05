@@ -86,6 +86,13 @@ class SPV_PreVendaItem extends FormulaBase {
 
             //Calculando o TotalDoc
             ccb0101.ccb0101totDoc = ccb0101.ccb0101total_Zero - ccb0101.ccb0101desc_Zero;
+        }else{
+            //Calculando total do item
+            ccb0101.ccb0101total = ccb0101.ccb0101qtComl_Zero * ccb0101.ccb0101unit_Zero;
+            ccb0101.ccb0101total = round(ccb0101.ccb0101total_Zero, 2);
+
+            //Calculando o TotalDoc
+            ccb0101.ccb0101totDoc = ccb0101.ccb0101total_Zero - ccb0101.ccb0101desc_Zero;
         }
 
     }
