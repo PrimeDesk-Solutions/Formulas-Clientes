@@ -1,4 +1,4 @@
-package multitec.formulas.srf.nfe
+package Profer.formulas.srf.nfe
 
 import br.com.multiorm.ColumnType
 import br.com.multiorm.criteria.criterion.Criterions
@@ -1667,7 +1667,7 @@ class NFe_Reforma extends FormulaBase {
                 }
 
                 TableMap aaj07json = aaj07.getAaj07json();
-                //if(aaj07json.getBoolean("exige_tributacao")){
+                if(aaj07json.getInteger("exige_tributacao") == 1){
                     if(aaj07json.getBoolean("transf_cred")){
                         def gTransfCred = IBSCBS.addNode("gTransfCred");
                         gTransfCred.addNode("vIBS", getDecimalReq(jsonEaa0103, "324.107-UB107", "vIBS"));
@@ -1712,7 +1712,7 @@ class NFe_Reforma extends FormulaBase {
                             gTribCompraGov.addNode("vTribCBS", getDecimalReq(jsonEaa0103, "324-UB82g", "vTribCBS"));
                         }
                     }
-                //}
+                }
                 if(aaj07json.getBoolean("estorno_cred")) {
                     gerouEstornoCred = true;
                     def gEstornoCred = IBSCBS.addNode("gEstornoCred");
