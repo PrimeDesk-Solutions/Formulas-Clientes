@@ -18,6 +18,7 @@ import sam.model.entities.aa.Aag01;
 import sam.model.entities.aa.Aag02;
 import sam.model.entities.aa.Aag0201;
 import sam.model.entities.aa.Aaj07;
+import sam.model.entities.aa.Aaj09;
 import sam.model.entities.aa.Aaj10;
 import sam.model.entities.aa.Aaj11;
 import sam.model.entities.aa.Aaj12;
@@ -71,6 +72,7 @@ public class FormulaGeral extends FormulaBase {
     private Aag0201 municipioEnt;
     private Aag0201 municipioEmpr;
     private Aaj07 aaj07;
+    private Aaj09 aaj09;
     private Aaj10 aaj10_cstIcms;
     private Aaj10 aaj10_cstIcmsB;
     private Aaj11 aaj11_cstIpi;
@@ -229,7 +231,10 @@ public class FormulaGeral extends FormulaBase {
 
         // Class. Trib CBS/IBS
         aaj07 = eaa0103.eaa0103clasTribCbsIbs != null ? getSession().get(Aaj07.class, eaa0103.eaa0103clasTribCbsIbs.aaj07id) : null;
-        //if(aaj07 == null) throw new ValidacaoException("É nescessário informar a Classificação tribtária de CBS/IBS do item: " + abm01.abm01codigo + " - " + abm01.abm01na);
+        if(aaj07 == null) throw new ValidacaoException("Necessário informar a Classificação tribtária de CBS/IBS do item: " + abm01.abm01codigo + " - " + abm01.abm01na);
+
+        aaj09 = eaa0103.eaa0103cstCbsIbs != null ? getSession().get(Aaj09.class, eaa0103.eaa0103cstCbsIbs.aaj09id) : null;
+        if(aaj09 == null) interromper("Necessário informar o CST de CBS/IBS no item: " + abm01.abm01codigo + " - " + abm01.abm01na);
 
         // Verifica se tem itens repetidos na tabela de preço
         if(abe40 != null){
@@ -256,7 +261,7 @@ public class FormulaGeral extends FormulaBase {
         jsonAbm1003_Ent_Item = abm1003 != null && abm1003.abm1003json != null ? abm1003.abm1003json : new TableMap();
         jsonEaa0103 = eaa0103.eaa0103json != null ? eaa0103.eaa0103json : new TableMap();
         jsonAbe4001 = abe4001 != null ? abe4001.abe4001json : new TableMap();
-        //jsonAaj07clasTrib = aaj07.aaj07json != null ? aaj07.aaj07json : new TableMap();
+        jsonAaj07clasTrib = aaj07.aaj07json != null ? aaj07.aaj07json : new TableMap();
 
         if(abe01.abe01cli == 1){
             jsonAbe02 = abe02.abe02json != null ? abe02.abe02json : new TableMap();
@@ -422,6 +427,8 @@ public class FormulaGeral extends FormulaBase {
                 // Calcula Difal dos Itens
                 calcularDifal(dentroEstado);
 
+                calcularCBSIBS()
+
                 // Preenche os SPEDs dos Itens
                 preencherSPED();
             }
@@ -504,6 +511,8 @@ public class FormulaGeral extends FormulaBase {
 
                 //OutrasIPI = TotalDocumento
                 jsonEaa0103.put("ipi_outras", eaa0103.eaa0103totDoc);
+
+                calcularCBSIBS();
 
                 // Preenche os SPEDs dos Itens
                 preencherSPED();
@@ -611,6 +620,8 @@ public class FormulaGeral extends FormulaBase {
 
                 // Calcula Difal dos itens
                 calcularDifal(dentroEstado);
+
+                calcularCBSIBS();
 
                 // Preenche os SPEDs dos Itens
                 preencherSPED();
@@ -720,7 +731,7 @@ public class FormulaGeral extends FormulaBase {
         jsonEaa0103.put("ibs_uf_aliq", jsonAag0201Ent.getBigDecimal_Zero("ibs_uf_aliq"));//Alíquota IBS Estadual
         jsonEaa0103.put("ibs_mun_aliq", jsonAag0201Ent.getBigDecimal_Zero("ibs_mun_aliq"));
 
-        //Alíquota IBS Municipal
+        // IBS Municipio
         jsonEaa0103.put("vlr_ibsmun", jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * (jsonEaa0103.getBigDecimal_Zero("ibs_mun_aliq") / 100));
 
         //IBS
@@ -728,7 +739,7 @@ public class FormulaGeral extends FormulaBase {
         jsonEaa0103.put("vlr_ibs", jsonEaa0103.getBigDecimal_Zero("vlr_ibsmun") + jsonEaa0103.getBigDecimal_Zero("vlr_ibsuf"))// total de IBS
 
         //CST 200 - Tributação c/ Redução
-        if(jsonAaj07clasTrib.getString("cst_cbsibs") == "200"){
+        if(aaj09.aaj09codigo == "200"){
             //PERCENTUAL REDUÇÃO CBS
             if (jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_cbs")) {
                 jsonEaa0103.put("perc_red_cbs", jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_cbs"))
@@ -762,7 +773,15 @@ public class FormulaGeral extends FormulaBase {
 
         }
 
-
+        if(jsonAaj07clasTrib.getInteger("exige_tributacao") == 0){ // Zera impostos caso não exige tributação
+            jsonEaa0103.put("cbs_aliq", new BigDecimal(0));
+            jsonEaa0103.put("vlr_cbs", new BigDecimal(0));
+            jsonEaa0103.put("ibs_uf_aliq", new BigDecimal(0));
+            jsonEaa0103.put("ibs_mun_aliq", new BigDecimal(0));
+            jsonEaa0103.put("vlr_ibsmun", new BigDecimal(0));
+            jsonEaa0103.put("vlr_ibsuf", new BigDecimal(0));
+            jsonEaa0103.put("vlr_ibs", new BigDecimal(0));
+        }
     }
 
     private String buscarCategoriaItem(codItem){
