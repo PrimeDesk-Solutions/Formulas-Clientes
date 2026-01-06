@@ -1802,7 +1802,7 @@ class NFe_Reforma extends FormulaBase {
             def gDevTrib = gIBSMun.addNode("gDevTrib");
             gDevTrib.addNode("vDevTrib", vDevTrib);
         }
-        if (aaj07json.getBoolean("red_bc")) {
+        if (aaj07json.getBoolean("red_bc") && aaj07json.getBigDecimal_Zero("perc_red_ibs_mun") > 0) {
             def gRed = gIBSMun.addNode("gRed");
             gRed.addNode("pRedAliq", getDecimalReq4Dig(jsonEaa0103, "324.46-UB46", "pRedAliq"));
             gRed.addNode("pAliqEfet", getDecimalReq4Dig(jsonEaa0103, "324.47-UB47", "pAliqEfet"));

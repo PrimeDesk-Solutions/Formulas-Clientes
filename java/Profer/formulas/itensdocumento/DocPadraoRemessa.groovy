@@ -1,6 +1,3 @@
-/*
- * Desenvolvido por : Roger Robert
- */
 package Profer.formulas.itensdocumento
 
 import sam.model.entities.ab.Abd02;
@@ -43,7 +40,6 @@ import sam.model.entities.ea.Eaa0101;
 import sam.model.entities.ea.Eaa0102;
 import sam.model.entities.ea.Eaa0103;
 import sam.server.samdev.formula.FormulaBase;
-import sam.model.entities.aa.Aaj07;
 
 
 public class DocPadraoRemessa extends FormulaBase {
@@ -61,7 +57,6 @@ public class DocPadraoRemessa extends FormulaBase {
     private Aaj14 aaj14_cstCsosn;
     private Aaj15 aaj15_cfop;
     private Aam06 aam06;
-    private Aaj07 aaj07;
 
 
     private Abb01 abb01;
@@ -95,7 +90,6 @@ public class DocPadraoRemessa extends FormulaBase {
     private TableMap jsonAag0201Ent;
     private TableMap jsonAag02Empr;
     private TableMap jsonAac10;
-    private TableMap jsonAaj07clasTrib;
 
 
     @Override
@@ -104,7 +98,7 @@ public class DocPadraoRemessa extends FormulaBase {
         //Item do documento
         eaa0103 = get("eaa0103");
 
-        if(eaa0103 == null) return;
+        if (eaa0103 == null) return;
 
         //Documento
         eaa01 = eaa0103.eaa0103doc;
@@ -120,7 +114,7 @@ public class DocPadraoRemessa extends FormulaBase {
         abd01 = getSession().get(Abd01.class, eaa01.eaa01pcd.abd01id);
 
         //PCD Fiscais
-        if(abd01.abd01ceFiscais == null) throw new ValidacaoException("Não foi econtrado PCD fiscal no cadastro do PCD " + abd01.abd01codigo);
+        if (abd01.abd01ceFiscais == null) throw new ValidacaoException("Não foi econtrado PCD fiscal no cadastro do PCD " + abd01.abd01codigo);
 
         abd02 = getSession().get(Abd02.class, abd01.abd01ceFiscais.abd02id);
 
@@ -154,10 +148,10 @@ public class DocPadraoRemessa extends FormulaBase {
         abm10 = abm0101 != null && abm0101.abm0101valores != null ? getSession().get(Abm10.class, abm0101.abm0101valores.abm10id) : null;
 
         //Valores do Item - Estados
-        abm1001 = ufEnt != null && ufEnt.aag02id != null && abm10 != null && abm10.abm10id != null ? getSession().get(Abm1001.class, Criterions.where("abm1001uf = "+ ufEnt.aag02id + " AND abm1001cv = "+abm10.abm10id)) : null;
+        abm1001 = ufEnt != null && ufEnt.aag02id != null && abm10 != null && abm10.abm10id != null ? getSession().get(Abm1001.class, Criterions.where("abm1001uf = " + ufEnt.aag02id + " AND abm1001cv = " + abm10.abm10id)) : null;
 
         //Valores do Item - Entidade
-        abm1003 = abm10 != null && abm10.abm10id != null ? getSession().get(Abm1003.class, Criterions.where("abm1003ent = "+ abe01.abe01id + " AND abm1003cv = "+abm10.abm10id)) : null;
+        abm1003 = abm10 != null && abm10.abm10id != null ? getSession().get(Abm1003.class, Criterions.where("abm1003ent = " + abe01.abe01id + " AND abm1003cv = " + abm10.abm10id)) : null;
 
         //Dados Fiscais do item
         abm12 = abm0101 != null && abm0101.abm0101fiscal != null ? getSession().get(Abm12.class, abm0101.abm0101fiscal.abm12id) : null;
@@ -166,16 +160,16 @@ public class DocPadraoRemessa extends FormulaBase {
 
         //Dados Comerciais do item
         abm13 = abm0101 != null && abm0101.abm0101comercial != null ? getSession().get(Abm13.class, abm0101.abm0101comercial.abm13id) : null;
-        if(abm13 == null ) throw new ValidacaoException("Não foi encontrada as configurações comerciais do item: " + abm01.abm01codigo);
+        if (abm13 == null) throw new ValidacaoException("Não foi encontrada as configurações comerciais do item: " + abm01.abm01codigo);
 
         //Fatores de Conv. da Unid de Compra para Estoque
         abm1301 = abm13 == null ? null : eaa0103.eaa0103umComl == null ? null : getSession().get(Abm1301.class, Criterions.where("abm1301cc = " + abm13.abm13id + " AND abm1301umc = " + eaa0103.eaa0103umComl.aam06id));
 
         //Unidade de Medida
-        aam06 = abm13 != null &&  abm13.abm13umv != null ? getSession().get(Aam06.class, abm13.abm13umv.aam06id) : null;
+        aam06 = abm13 != null && abm13.abm13umv != null ? getSession().get(Aam06.class, abm13.abm13umv.aam06id) : null;
 
         //Operação Comercial
-        abb10 = abb01 != null &&  abb01.abb01operCod != null ? getSession().get(Abb10.class, abb01.abb01operCod.abb10id) : null;
+        abb10 = abb01 != null && abb01.abb01operCod != null ? getSession().get(Abb10.class, abb01.abb01operCod.abb10id) : null;
 
         //NCM
         abg01 = eaa0103.eaa0103ncm != null ? getSession().get(Abg01.class, eaa0103.eaa0103ncm.abg01id) : null;
@@ -198,11 +192,6 @@ public class DocPadraoRemessa extends FormulaBase {
         //CST COFINS
         aaj13_cstCof = eaa0103.eaa0103cstCofins != null ? getSession().get(Aaj13.class, eaa0103.eaa0103cstCofins.aaj13id) : null;
 
-	   // Class. Trib CBS/IBS
-	   aaj07 = eaa0103.eaa0103clasTribCbsIbs != null ? getSession().get(Aaj07.class, eaa0103.eaa0103clasTribCbsIbs.aaj07id) : null;
-        //if(aaj07 == null) throw new ValidacaoException("É nescessário informar a Classificação tribtária de CBS/IBS do item: " + abm01.abm01codigo + " - " + abm01.abm01na);
-
-
 
         //CAMPOS LIVRES
         jsonAac10 = aac10.aac10json != null ? aac10.aac10json : new TableMap();
@@ -214,7 +203,6 @@ public class DocPadraoRemessa extends FormulaBase {
         jsonAbm1001_UF_Item = abm1001 != null && abm1001.abm1001json != null ? abm1001.abm1001json : new TableMap();
         jsonAbm1003_Ent_Item = abm1003 != null && abm1003.abm1003json != null ? abm1003.abm1003json : new TableMap();
         jsonEaa0103 = eaa0103.eaa0103json != null ? eaa0103.eaa0103json : new TableMap();
-	   //jsonAaj07clasTrib = aaj07.aaj07json != null ? aaj07.aaj07json : new TableMap();
 
 
         calcularItem();
@@ -229,15 +217,15 @@ public class DocPadraoRemessa extends FormulaBase {
 
             //Define se a entidade é ou não contribuinte de ICMS
             def contribICMS = 0;
-            if(abe01.abe01cli == 1){
+            if (abe01.abe01cli == 1) {
                 contribICMS = abe01.abe01contribIcms; // Cliente
             }
-            if(abe01.abe01for == 1){
+            if (abe01.abe01for == 1) {
                 contribICMS = abe01.abe01contribIcms; // Fornecedor
             }
 
             // Verifica se o tipo de inscrição é CPF, se sim, define como não contribuinte de ICMS
-            if(abe01.abe01ti == 1){
+            if (abe01.abe01ti == 1) {
                 contribICMS = 0;
             }
 
@@ -246,27 +234,27 @@ public class DocPadraoRemessa extends FormulaBase {
             if (ufEmpr != null && ufEnt != null) {
                 dentroEstado = ufEmpr.aag02uf == ufEnt.aag02uf;
             }
-            
+
             //trocarCFOPDentroOuForaDosEstado
             trocarCFOPDentroOuForaDosEstado(dentroEstado);
 
             // *** Processa QUANTIDADES
             // Conserva Qt.Original do documento (Qt.Faturamento original)
-            if(jsonEaa0103.getBigDecimal_Zero("qt_original") == 0){
+            if (jsonEaa0103.getBigDecimal_Zero("qt_original") == 0) {
                 jsonEaa0103.put("qt_original", eaa0103.eaa0103qtComl);
             }
 
             // Unitário para estoque
-		  jsonEaa0103.put("unitario_estoque", eaa0103.eaa0103unit);
+            jsonEaa0103.put("unitario_estoque", eaa0103.eaa0103unit);
 
-		    // Busca CST ICMS
+            // Busca CST ICMS
             String cst = buscarCstICMS();
 
             eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cst));
 
             //Qtde SCE
-            if(abm13.abm13fcUV == null) throw new ValidacaoException("Não foi preenchido Fatores de Conversão de Uso para Vendas no item " + abm01.abm01codigo);
-            eaa0103.eaa0103qtUso = (eaa0103.eaa0103qtComl * abm13.abm13fcUV).round(3); 
+            if (abm13.abm13fcUV == null) throw new ValidacaoException("Não foi preenchido Fatores de Conversão de Uso para Vendas no item " + abm01.abm01codigo);
+            eaa0103.eaa0103qtUso = (eaa0103.eaa0103qtComl * abm13.abm13fcUV).round(3);
 
             //Total Item 
             eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
@@ -275,20 +263,18 @@ public class DocPadraoRemessa extends FormulaBase {
             eaa0103.eaa0103totDoc = eaa0103.eaa0103total;
 
             // Total Documento para estoque 
-		  jsonEaa0103.put("total_documento", eaa0103.eaa0103totDoc);
+            jsonEaa0103.put("total_documento", eaa0103.eaa0103totDoc);
 
             //IcmsOutras = TotalDocumento
             jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
-            
+
 
             //OutrasIPI = TotalDocumento
             jsonEaa0103.put("ipi_outras", eaa0103.eaa0103totDoc);
-            
+
 
             // Total Financeiro
             eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
-
-            //calcularCBSIBS();
 
             // Preenche os campos Sped
             preencherSPEDS();
@@ -296,185 +282,40 @@ public class DocPadraoRemessa extends FormulaBase {
         }
     }
 
-     private void calcularCBSIBS() {
-        // *********************************************
-        // ************ REFORMA TRIBUTÁRIA *************
-        // *********************************************
+    // Trocar CFOP (Dentro ou fora do estado)
+    private void trocarCFOPDentroOuForaDosEstado(Boolean dentroEstado) {
+        if (eaa0103.eaa0103cfop != null) {
+            def cfop = aaj15_cfop.aaj15codigo.substring(1);
+            def primeiroDigito = aaj15_cfop.aaj15codigo.substring(0, 1);
 
-        //================================
-        //******  BASE DE CALCULO   ******
-        //================================
+            if (!dentroEstado) {
+                if (primeiroDigito == "1") {
+                    primeiroDigito = "2"
+                }
 
-        //(vProd + vServ + vFrete + vSeg + vOutro + vII) -
-        // (vDesc - vPIS - vCOFINS - vICMS - vICMSUFDest - vFCP - vFCPUFDest - vICMSMono - vISSQN)
-        /*VBCIS*/
-        jsonEaa0103.put("is_bc", (eaa0103.eaa0103total +
-                jsonEaa0103.getBigDecimal_Zero("total_servico") +
-                jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                jsonEaa0103.getBigDecimal_Zero("seguro") +
-                jsonEaa0103.getBigDecimal_Zero("outras")) -
-                (jsonEaa0103.getBigDecimal_Zero("desconto") -
-                        jsonEaa0103.getBigDecimal_Zero("pis") -
-                        jsonEaa0103.getBigDecimal_Zero("cofins") -
-                        jsonEaa0103.getBigDecimal_Zero("icms") -
-                        jsonEaa0103.getBigDecimal_Zero("ufdest_icms") -
-                        jsonEaa0103.getBigDecimal_Zero("vlr_icms_fcp_")))
-
-
-        //vProd + vServ + vFrete + vSeg + vOutro
-        //VBC (CBS e IBS) - Base de Caculo CBS/IBS
-        jsonEaa0103.put("cbs_ibs_bc", eaa0103.eaa0103total +
-                jsonEaa0103.getBigDecimal_Zero("total_servico") +
-                jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                jsonEaa0103.getBigDecimal_Zero("seguro") +
-                jsonEaa0103.getBigDecimal_Zero("outras"))
-
-        //================================
-        //******       VALORES      ******
-        //================================
-
-        //AJUSTE DA COMPETENCIA (UB112)
-        if (jsonAaj07clasTrib.getBoolean("ajuste_comp")) {
-            jsonEaa0103.put("vlr_ibs", jsonEaa0103.getBigDecimal_Zero("vlr_ibsmun") + jsonEaa0103.getBigDecimal_Zero("vlr_ibsuf"))
-            jsonEaa0103.put("vlr_cbs", (jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * jsonEaa0103.getBigDecimal_Zero("cbs_aliq")) / 100)
-        }
-        //CREDITO PRESUMIDO DA OPERAÇÃO(UB120)
-        if (jsonAaj07clasTrib.getBoolean("cred_presumido")) {
-            jsonEaa0103.put("cred_presumido", jsonEaa0103.getBigDecimal_Zero("aliq_credpresum") * jsonEaa0103.getBigDecimal_Zero("bc_credpresum"))
-        }
-
-        //CRÉDITO PRESUMIDO IBS ZONA FRANCA DE MANAUS
-        if (jsonAaj07clasTrib.getBoolean("cred_pres_ibs_zfm")) {
-            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
-        }
-        //CST CBS/IBS
-        if (jsonAaj07clasTrib.getString("cst_cbsibs")) {
-            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
-        }
-        //DESCRIÇÃO CST CBS/IBS
-        if (jsonAaj07clasTrib.getString("desc_cstcbsibs")) {
-            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
-        }
-        //DIFERIMENTO CBS/IBS
-        if (jsonAaj07clasTrib.getBoolean("dif_cbsibs")) {
-            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
-        }
-        //ESTORNO DE CRÉDITO
-        if (jsonAaj07clasTrib.getBoolean("estorno_cred")) {
-            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
-        }
-        //MONOFÁSICA
-        if (jsonAaj07clasTrib.getBoolean("monofasica_cbsibs")) {
-            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
-        }
-
-        //REDUÇÃO BASE DE CÁLCULO
-        if (jsonAaj07clasTrib.getBoolean("red_bc")) {
-
-        }
-        //REDUÇÃO BASE DE CÁLCULO CST
-        if (jsonAaj07clasTrib.getBoolean("red_bc_cst")) {
-            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
-        }
-        //REDUÇÃO DE ALÍQUOTA
-        if (jsonAaj07clasTrib.getBoolean("red_bc_aliq")) {
-            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
-        }
-        //TRANSFERÊNCIA DE CRÉDITO
-        if (jsonAaj07clasTrib.getBoolean("transf_cred")) {
-            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
-        }
-        //TRIBUTAÇÃO REGULAR
-        if (jsonAaj07clasTrib.getBoolean("tributacao")) {
-            jsonEaa0103.put("", 0.0) //VERIFICAR COMO SERÁ FEITO
-        }
-
-        // CBS
-        jsonEaa0103.put("cbs_aliq", jsonAag02Ent.getBigDecimal_Zero("cbs_aliq"))//Alíquota CBS
-        jsonEaa0103.put("vlr_cbs", jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * (jsonEaa0103.getBigDecimal_Zero("cbs_aliq") / 100))
-
-        // Aliquotas IBS
-        jsonEaa0103.put("ibs_uf_aliq", jsonAag0201Ent.getBigDecimal_Zero("ibs_uf_aliq"));//Alíquota IBS Estadual
-        jsonEaa0103.put("ibs_mun_aliq", jsonAag0201Ent.getBigDecimal_Zero("ibs_mun_aliq"));
-
-        //Alíquota IBS Municipal
-        jsonEaa0103.put("vlr_ibsmun", jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * (jsonEaa0103.getBigDecimal_Zero("ibs_mun_aliq") / 100));
-
-        //IBS
-        jsonEaa0103.put("vlr_ibsuf", jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * (jsonEaa0103.getBigDecimal_Zero("ibs_uf_aliq") / 100))//IBS Estadual
-        jsonEaa0103.put("vlr_ibs", jsonEaa0103.getBigDecimal_Zero("vlr_ibsmun") + jsonEaa0103.getBigDecimal_Zero("vlr_ibsuf"))// total de IBS
-
-        //CST 200 - Tributação c/ Redução
-        if(jsonAaj07clasTrib.getString("cst_cbsibs") == "200"){
-            //PERCENTUAL REDUÇÃO CBS
-            if (jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_cbs")) {
-                jsonEaa0103.put("perc_red_cbs", jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_cbs"))
-            }
-            //PERCENTUAL REDUÇÃO IBS UF
-            if (jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_ibs_uf")) {
-                jsonEaa0103.put("perc_red_ibs_uf", jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_ibs_uf")); // Mudar nome do campo
+                if (primeiroDigito == "5") {
+                    primeiroDigito = "6"
+                }
             }
 
-            //PERCENTUAL DE REDUÇÃO IBS MUNIC
-            if(jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_ibs_munic")){
-                jsonEaa0103.put("perc_red_ibs_munic", jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_ibs_munic")) // Criar campo
-            }
-
-            // Aliquotas Efetivas
-            jsonEaa0103.put("aliq_efet_ibs_uf", (jsonEaa0103.getBigDecimal_Zero("ibs_uf_aliq") * ( 100 -  jsonEaa0103.getBigDecimal_Zero("perc_red_ibs_uf")) / 100)); // Mudar nome campo
-            jsonEaa0103.put("aliq_efet_ibs_mun", (jsonEaa0103.getBigDecimal_Zero("ibs_mun_aliq") * ( 100 -  jsonEaa0103.getBigDecimal_Zero("perc_red_ibs_mun")) / 100));
-            jsonEaa0103.put("aliq_efet_cbs", (jsonEaa0103.getBigDecimal_Zero("cbs_aliq") * ( 100 -  jsonEaa0103.getBigDecimal_Zero("perc_red_cbs")) / 100));
-
-            // CBS
-            jsonEaa0103.put("vlr_cbs", jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * (jsonEaa0103.getBigDecimal_Zero("aliq_efet_cbs") / 100))
-
-            // IBS Município
-            jsonEaa0103.put("vlr_ibsmun", jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * (jsonEaa0103.getBigDecimal_Zero("aliq_efet_ibs_munic") / 100));
-
-            // IBS UF
-            jsonEaa0103.put("vlr_ibsuf", jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * (jsonEaa0103.getBigDecimal_Zero("aliq_efet_ibs_uf") / 100))//IBS Estadual
-
-            // Soma total do IBS UF/Municipio
-            jsonEaa0103.put("vlr_ibs", jsonEaa0103.getBigDecimal_Zero("vlr_ibsmun") + jsonEaa0103.getBigDecimal_Zero("vlr_ibsuf"))// total de IBS
-
+            cfop = primeiroDigito + cfop;
+            aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
+            eaa0103.eaa0103cfop = aaj15_cfop;
         }
     }
 
-    
-     // Trocar CFOP (Dentro ou fora do estado)
-	private void trocarCFOPDentroOuForaDosEstado(Boolean dentroEstado){
-		if(eaa0103.eaa0103cfop != null){
-			def cfop = aaj15_cfop.aaj15codigo.substring(1);
-			def primeiroDigito = aaj15_cfop.aaj15codigo.substring(0,1);
-			
-			if(!dentroEstado){
-				if(primeiroDigito == "1"){
-					primeiroDigito = "2"
-				}
-				
-				if(primeiroDigito == "5"){
-					primeiroDigito = "6"
-				}
-			}
-			
-			cfop = primeiroDigito + cfop;
-			aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
-			eaa0103.eaa0103cfop = aaj15_cfop;
-		}	
-	}
-
-	 private String buscarCstICMS(){
+    private String buscarCstICMS() {
         // Busca primeiramente o CST de ICMS no cadastro do PCD, caso não econcontrado, busca no cadastro do item
         String cst = "";
 
-        if(abd02.abd02cstIcmsB != null){
-            aaj10_cstIcms = getSession().get(Aaj10.class,  abd02.abd02cstIcmsB.aaj10id);
+        if (abd02.abd02cstIcmsB != null) {
+            aaj10_cstIcms = getSession().get(Aaj10.class, abd02.abd02cstIcmsB.aaj10id);
             cst = aaj10_cstIcms.aaj10codigo;
-            
-        } else if(abm12.abm12cstIcms != null){
-            aaj10_cstIcms = getSession().get(Aaj10.class,  abm12.abm12cstIcms.aaj10id);
+
+        } else if (abm12.abm12cstIcms != null) {
+            aaj10_cstIcms = getSession().get(Aaj10.class, abm12.abm12cstIcms.aaj10id);
             cst = aaj10_cstIcms.aaj10codigo;
-            
+
         } else {
             throw new ValidacaoException("Necessário preencher o CST de ICMS cadastro do item " + abm01.abm01codigo + " ou no cadastro do PCD " + abd01.abd01codigo)
         }
@@ -482,7 +323,7 @@ public class DocPadraoRemessa extends FormulaBase {
         return cst;
     }
 
-    private void preencherSPEDS(){
+    private void preencherSPEDS() {
 
         // ========================================================================================
         //                                 PIS/COFINS SPED
@@ -563,8 +404,6 @@ public class DocPadraoRemessa extends FormulaBase {
         //IPI SPED = IPI
         jsonEaa0103.put("ipi_sped", jsonEaa0103.getBigDecimal_Zero("ipi"));
     }
-
-
 
 
     @Override
