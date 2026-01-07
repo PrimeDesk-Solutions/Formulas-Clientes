@@ -144,7 +144,7 @@ class SCF_Retorno_Cob_Itau_CNAB_400 extends FormulaBase {
 
     private String buscarDescricaoOcorrencia(String codigoOcorrencia) {
         switch(codigoOcorrencia) {
-            case "02": return "ENTRADA CONFIRMADA COM POSSIBILIDADE DE MENSAGEM (NOTA 20 - TABELA 10)";
+            case "02": return "ENTRADA CONFIRMADA";
             case "03": return "ENTRADA REJEITADA (NOTA 20 - TABELA 1)";
             case "04": return "ALTERAÇÃO DE DADOS - NOVA ENTRADA OU ALTERAÇÃO/EXCLUSÃO DE DADOS ACATADA";
             case "05": return "ALTERAÇÃO DE DADOS - BAIXA";

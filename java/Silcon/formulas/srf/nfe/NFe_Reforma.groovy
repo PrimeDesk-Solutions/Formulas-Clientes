@@ -774,7 +774,7 @@ class NFe_Reforma extends FormulaBase {
             if(!isProducao) indIEDest = 9;
 
             dest.addNode("indIEDest", indIEDest, true);
-            dest.addNode("IE", indIEDest == 2 ? null : IE, false);
+            dest.addNode("IE", indIEDest == 9 ? null : IE, false);
 
             dest.addNode("ISUF", eaa0102.eaa0102suframa == null ? null : StringUtils.extractNumbers(eaa0102.eaa0102suframa), false);
             dest.addNode("IM", eaa0102.eaa0102im == null ? null : NFeUtils.formatarIE(eaa0102.eaa0102im), false);
