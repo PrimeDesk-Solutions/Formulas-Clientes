@@ -1,5 +1,6 @@
 package Profer.relatorios.scf
 
+import java.lang.reflect.Parameter
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -138,10 +139,12 @@ class SCF_FluxoCaixa extends RelatorioBase {
 	private BigDecimal buscarSaldoPorContaCorrentes(Long idcontaCorrente, List<Long> idEmps) {
 		List<Long> idsGc = obterGCbyEmpresa(idEmps, "Da");
 
-		def whereCcs = idcontaCorrente != null ? " AND dab0101cc IN (:idcontaCorrente) " : "";
-		def whereGcs = idsGc != null && idsGc.size() > 0 ? " AND dab01gc in(:idEmprs)" : getSamWhere().getWherePadrao(" AND ", Daa01.class);
-		def whereAno = idcontaCorrente != null ? " AND dab0101ano = (SELECT MAX(dab0101ano) FROM Dab0101 WHERE TRUE " + whereCcs + ") "  : "";
-		def whereMes = idcontaCorrente != null ? " AND dab0101mes = (SELECT MAX(dab0101mes) FROM Dab0101 WHERE TRUE " + whereCcs + ") " : "";
+		def whereCcs = " AND dab0101cc IN (:idcontaCorrente) ";
+        Integer maiorAno = buscarMaiorAnoContaCorrente(idcontaCorrente);
+		def whereGcs = idsGc != null && idsGc.size() > 0 ? " AND dab01gc in (:idEmprs)" : getSamWhere().getWherePadrao(" AND ", Daa01.class);
+		def whereAno = " AND dab0101ano = (SELECT MAX(dab0101ano) FROM Dab0101 WHERE TRUE " + whereCcs + ") ";
+		def whereMes = " AND dab0101mes = (SELECT MAX(dab0101mes) FROM Dab0101 WHERE TRUE " + whereCcs + " AND dab0101ano = :maiorAno) ";
+
 		def sql = " SELECT SUM(dab0101saldo) FROM Dab0101 " +
 				" INNER JOIN Dab01 ON dab01id = dab0101cc " +
 				" WHERE TRUE " +
@@ -152,23 +155,24 @@ class SCF_FluxoCaixa extends RelatorioBase {
 
 		def p1 = idcontaCorrente != null ? criarParametroSql("idcontaCorrente", idcontaCorrente) : null;
 		def p2 = idEmps != null && idEmps.size() > 0 ? criarParametroSql("idEmprs", idEmps) : criarParametroSql("idEmprs", idsGc);
+        def p3 = Parametro.criar("maiorAno", maiorAno);
 
-		return getAcessoAoBanco().obterBigDecimal(sql, p1,p2);
+		return getAcessoAoBanco().obterBigDecimal(sql, p1,p2, p3);
 	}
+    private Integer buscarMaiorAnoContaCorrente(Long idCc){
+        String sql = "SELECT MAX(dab0101ano) FROM Dab0101 WHERE dab0101cc = :idContaCorrente";
+
+        return getAcessoAoBanco().obterInteger(sql, Parametro.criar("idContaCorrente", idCc));
+    }
 
 	private BigDecimal somarSaldoDasContasCorrentes(List<Long> idsContasCorrentes, List<Long> idEmps ){
 		BigDecimal saldoTotal = 0;
 
-		if(idsContasCorrentes != null && idsContasCorrentes.size() > 0){
-			for(id in idsContasCorrentes){
-				BigDecimal saldoConta = buscarSaldoPorContaCorrentes(id, idEmps);
+        for(id in idsContasCorrentes){
+            BigDecimal saldoConta = buscarSaldoPorContaCorrentes(id, idEmps);
 
-				saldoTotal = saldoTotal + saldoConta
-			}
-		}else{
-			saldoTotal = buscarSaldoPorContaCorrentes(null, idEmps)
-		}
-
+            saldoTotal = saldoTotal + saldoConta
+        }
 
 		return saldoTotal
 	}
