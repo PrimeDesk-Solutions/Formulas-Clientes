@@ -460,7 +460,7 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
         String fatorVencimento = codBarras.substring(33, 37);
         String valorTitulo = codBarras.substring(37, 47);
 
-        return codAlterado = codBanco + codMoeda + DAC + fatorVencimento + valorTitulo + codLivre;
+        return codBanco + codMoeda + DAC + fatorVencimento + valorTitulo + codLivre;
 
     }
 }

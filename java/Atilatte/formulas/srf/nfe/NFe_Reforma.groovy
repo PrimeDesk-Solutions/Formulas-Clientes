@@ -1318,6 +1318,7 @@ class NFe_Reforma extends FormulaBase {
                             if(eaa0103.eaa0103motDesIcms > 0){
                                 ICMS40.addNode("vICMSDeson", getCampo("204.01-N28a","vICMSDeson") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("204.01-N28a","vICMSDeson")), 2, false), true);
                                 ICMS40.addNode("motDesICMS", eaa0103.eaa0103motDesIcms, true);
+                                ICMS40.addNode("indDeduzDeson", new BigDecimal(1), true);
                             }
 
                         }else if(cst.equals("51")) {
@@ -2174,7 +2175,7 @@ class NFe_Reforma extends FormulaBase {
                 .addJoin(Joins.fetch("eaa0103codServ").left(true))
                 .addJoin(Joins.fetch("eaa0103codBcCred").left(true))
                 .addJoin(Joins.fetch("eaa0103clasTribCbsIbs").left(true))
-                //.addJoin(Joins.fetch("eaa0103credPresIbsZFM").left(true))
+        //.addJoin(Joins.fetch("eaa0103credPresIbsZFM").left(true))
                 .addJoin(Joins.fetch("eaa0103credPresCbsIbs").left(true))
                 .addJoin(Joins.fetch("eaa0103clasTribCbsIbsReg").left(true))
                 .addWhere(Criterions.eq("eaa0103doc", eaa01id))
