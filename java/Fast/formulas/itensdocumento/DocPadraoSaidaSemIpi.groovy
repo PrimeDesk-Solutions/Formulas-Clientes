@@ -592,10 +592,15 @@ public class DocPadraoSaidaSemIpi extends FormulaBase {
     }
 
     private void calcularIPI(){
-        // BC IPI
-        jsonEaa0103.put("bc_ipi", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest"));
 
-        if(jsonEaa0103.getBigDecimal_Zero("aliq_ipi") > 0 ){
+        if(jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_ipi") > 0 && jsonEaa0103.getBigDecimal_Zero("aliq_ipi") == 0 ){
+            // % IPI
+            jsonEaa0103.put("aliq_ipi", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_ipi"));
+
+            // BC IPI
+            jsonEaa0103.put("bc_ipi", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest"));
+
+            // IPI
             jsonEaa0103.put("ipi", jsonEaa0103.getBigDecimal_Zero("bc_ipi") * jsonEaa0103.getBigDecimal_Zero("aliq_ipi") / 100);
             jsonEaa0103.put("ipi", jsonEaa0103.getBigDecimal_Zero("ipi").round(2));
         }else{
