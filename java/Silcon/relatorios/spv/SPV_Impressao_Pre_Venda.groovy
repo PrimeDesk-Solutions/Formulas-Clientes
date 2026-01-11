@@ -45,13 +45,18 @@ public class SPV_Impressao_Pre_Venda extends RelatorioBase {
 
         }
 
-
         for(dado in dados){
             Long idPreVenda = dado.getLong("ccb01id");
             String nomeEntidade = dado.getString("nomeEntidade").toUpperCase();
             String dddConsumidor = dado.getString("dddConsumidor");
             String foneConsumidor = dado.getString("foneConsumidor");
             List<TableMap> itensPreVenda = buscarItensPreVenda(idPreVenda);
+
+            if(dado.getInteger("ccb01status") == 2){
+                dado.put("tipoDoc", "ORÇAMENTO");
+            }else{
+                dado.put("tipoDoc", "VENDA")
+            }
 
             for(item in itensPreVenda){
                 Integer entrega = item.getInteger("entrega");
@@ -107,7 +112,7 @@ public class SPV_Impressao_Pre_Venda extends RelatorioBase {
         String sql = "SELECT ccb01id, ccb01num AS numDoc, abe01nome AS nomeEntidade, abe0101endereco AS enderecoEntidade, " +
                 "abe0101numero AS numEndEntidade, abe0101complem AS complemEntidade, abe0101bairro AS bairroEntidade, " +
                 "abe0101cep AS cepEntidade, abe0101ddd1 AS dddEntidade, abe0101fone1 AS foneEntidade, aab10user AS usuario, " +
-                "ccb01obs AS observacao, ccb01eeDdd1 AS dddConsumidor, ccb01eeFone1 AS foneConsumidor, ccb01comprador AS comprador " +
+                "ccb01obs AS observacao, ccb01eeDdd1 AS dddConsumidor, ccb01eeFone1 AS foneConsumidor, ccb01comprador AS comprador, ccb01status " +
                 "FROM ccb01 " +
                 "INNER JOIN abe01 ON abe01id = ccb01ent " +
                 "LEFT JOIN abe0101 ON abe0101ent = abe01id AND abe0101principal = 1 " +
@@ -130,7 +135,7 @@ public class SPV_Impressao_Pre_Venda extends RelatorioBase {
         String sql = "SELECT ccb01id, ccb01num AS numDoc, abe01nome AS nomeEntidade, abe0101endereco AS enderecoEntidade, " +
                     "abe0101numero AS numEndEntidade, abe0101complem AS complemEntidade, abe0101bairro AS bairroEntidade, " +
                     "abe0101cep AS cepEntidade, abe0101ddd1 AS dddEntidade, abe0101fone1 AS foneEntidade, aab10user AS usuario, " +
-                    "ccb01obs AS observacao, ccb01eeDdd1 AS dddConsumidor, ccb01eeFone1 AS foneConsumidor, ccb01comprador AS comprador " +
+                    "ccb01obs AS observacao, ccb01eeDdd1 AS dddConsumidor, ccb01eeFone1 AS foneConsumidor, ccb01comprador AS comprador, ccb01status " +
                     "FROM ccb01 " +
                     "INNER JOIN abe01 ON abe01id = ccb01ent " +
                     "LEFT JOIN abe0101 ON abe0101ent = abe01id AND abe0101principal = 1 " +
