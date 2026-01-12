@@ -132,7 +132,7 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
                 "INNER JOIN dab1001 ON dab1001lct = dab10id " +
                 "INNER JOIN abb11 ON abb11id = dab1001depto " +
                 "INNER JOIN dab1002 ON dab1002lct = dab10id " +
-                "INNER JOIN dab01 ON dab01id = dab1002cc " +
+                "LEFT JOIN dab01 ON dab01id = dab1002cc " +
                 "INNER JOIN dab10011 ON dab10011depto = dab1001id "+
                 "INNER JOIN abf10 ON abf10id = dab10011nat "+
                 whereDeptos+
@@ -165,7 +165,7 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
                 "INNER JOIN dab1001 ON dab1001lct = dab10id " +
                 "INNER JOIN abb11 ON abb11id = dab1001depto " +
                 "INNER JOIN dab1002 ON dab1002lct = dab10id " +
-                "INNER JOIN dab01 ON dab01id = dab1002cc " +
+                "LEFT JOIN dab01 ON dab01id = dab1002cc " +
                 "INNER JOIN dab10011 ON dab10011depto = dab1001id "+
                 "INNER JOIN abf10 ON abf10id = dab10011nat "+
                 whereDeptos+

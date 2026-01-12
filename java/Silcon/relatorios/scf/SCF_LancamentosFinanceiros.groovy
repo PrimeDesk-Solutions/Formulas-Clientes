@@ -120,7 +120,7 @@ public class SCF_LancamentosFinanceiros extends RelatorioBase {
         String sql = " SELECT distinct sum(dab10valor) " +
                 " FROM dab10 " +
                 " INNER JOIN dab1002 ON dab1002lct = dab10id "+
-                " INNER JOIN dab01 ON dab1002cc = dab01id " +
+                " LEFT JOIN dab01 ON dab1002cc = dab01id " +
                 obterWherePadrao("dab10011", "where") +
                 " AND dab10mov = '0' " +
                 " AND dab10data between '" +
@@ -142,7 +142,7 @@ public class SCF_LancamentosFinanceiros extends RelatorioBase {
         String sql = " SELECT DISTINCT SUM(dab10valor) " +
                 " FROM dab10 " +
                 " INNER JOIN dab1002 ON dab1002lct = dab10id "+
-                " INNER JOIN dab01 on dab1002cc = dab01id " +
+                " LEFT JOIN dab01 on dab1002cc = dab01id " +
                 obterWherePadrao("dab10011", "WHERE") +
                 " AND dab10mov = '1' " +
                 " AND dab10data BETWEEN '" + data.getYear() + "-" + data.getMonthValue() + "-01' AND '" +
@@ -198,7 +198,7 @@ public class SCF_LancamentosFinanceiros extends RelatorioBase {
                 " Dab10.dab10cc, Dab10.dab10mov, Dab10.dab10historico, Dab10.dab10valor" +
                 " FROM Dab10 Dab10" +
                 " INNER JOIN dab1002 ON dab1002lct = dab10id "+
-                " INNER JOIN dab01 on dab1002cc = dab01id " +
+                " LEFT JOIN dab01 on dab1002cc = dab01id " +
                 " INNER JOIN Abb01 ON abb01id = dab10central " +
                 " INNER JOIN aac01 AS aac01 ON dab10gc = aac01id "+
                 " INNER JOIN aac10 AS aac10 ON dab10eg = aac10id "+

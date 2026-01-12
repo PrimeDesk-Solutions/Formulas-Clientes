@@ -69,7 +69,7 @@ public class SCF_LancamentosPorCentroCusto extends RelatorioBase {
                     "INNER JOIN dab1001 ON dab1001lct = dab10id " +
                     "INNER JOIN abb11 ON abb11id = dab1001depto " +
                     "INNER JOIN dab1002 ON dab1002lct = dab10id " +
-                    "INNER JOIN dab01 ON dab01id = dab1002cc "+
+                    "LEFT JOIN dab01 ON dab01id = dab1002cc "+
                     whereEmpresa +
                     whereDepartamento +
                     whereDatas +
