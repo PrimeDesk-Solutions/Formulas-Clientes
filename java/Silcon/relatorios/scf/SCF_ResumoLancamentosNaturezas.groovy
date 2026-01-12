@@ -50,7 +50,7 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
         BigDecimal saldoAnterior = BigDecimal.ZERO;
         String codigoConta = null;
 
-        List<TableMap> dadosRel = obterDadosRelatorio(idNaturezas, idContaCorrente, dataPeriodo, exibeTotalGeral)
+        List<TableMap> dadosRel =   obterDadosRelatorio(idNaturezas, idContaCorrente, dataPeriodo, exibeTotalGeral)
         List<String> graus = new ArrayList<>();
 
         for (TableMap mapDados : dadosRel) {
@@ -76,6 +76,7 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
 
                 //Exibir somente total não precisa da conta corrente
                 if (!exibeTotalGeral) {
+                    if(mapDados.getString("dab01codigo") == null) interromper("Existem lançamentos financeiros sem conta corrente.");
                     tm.put("codigoConta", mapDados.getString("dab01codigo"));
                     if (!tm.getString("codigoConta").equalsIgnoreCase(codigoConta)) {
                         saldo = BigDecimal.ZERO;
