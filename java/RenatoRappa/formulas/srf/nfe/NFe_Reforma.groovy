@@ -926,7 +926,7 @@ class NFe_Reforma extends FormulaBase {
             prod.addNode("cBenef", null, false);
             prod.addNode("tpCredPresIBSZFM", eaa0103.eaa0103credPresIbsZFM, false);
             if(abm01.abm01tipo != 2) {
-                prod.addNode("EXTIPI", ncm == null ? null : ncm.indexOf("/") == -1 ? null : ncm.substring(ncm.indexOf("/") +1), false);
+                prod.addNode("EXTIPI", ncm == null ? null : abg01.abg01codigo.indexOf("/") == -1 ? null : abg01.abg01codigo.substring(abg01.abg01codigo.indexOf("/") + 1,abg01.abg01codigo.length()), false);
             }
 
             Aaj15 aaj45 = getAcessoAoBanco().buscarRegistroUnicoById("Aaj15", eaa0103.eaa0103cfop.aaj15id);
@@ -1315,6 +1315,7 @@ class NFe_Reforma extends FormulaBase {
                             if(eaa0103.eaa0103motDesIcms > 0){
                                 ICMS40.addNode("vICMSDeson", getCampo("204.01-N28a","vICMSDeson") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("204.01-N28a","vICMSDeson")), 2, false), true);
                                 ICMS40.addNode("motDesICMS", eaa0103.eaa0103motDesIcms, true);
+                                ICMS40.addNode("indDeduzDeson", new BigDecimal(1), true);
                             }
 
                         }else if(cst.equals("51")) {
