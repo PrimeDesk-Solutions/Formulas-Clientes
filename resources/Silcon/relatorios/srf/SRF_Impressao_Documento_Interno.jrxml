@@ -12,6 +12,7 @@
 		<defaultValueExpression><![CDATA["C:\\SAM-Servidor\\src\\main\\resources\\Silcon\\relatorios\\srf\\"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="StreamSub1" class="java.lang.Object"/>
+	<parameter name="TIPODOCUMENTO" class="java.lang.String"/>
 	<field name="numDoc" class="java.lang.Integer"/>
 	<field name="codTipoDoc" class="java.lang.String"/>
 	<field name="nomeTipoDoc" class="java.lang.String"/>
@@ -79,6 +80,7 @@
 	<field name="dsItens" class="java.lang.Object"/>
 	<field name="obsInterno" class="java.lang.String"/>
 	<field name="comNota" class="java.lang.Integer"/>
+	<field name="tipoDoc" class="java.lang.String"/>
 	<group name="teste">
 		<groupExpression><![CDATA[$F{numDoc}]]></groupExpression>
 		<groupFooter>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_Impressao_Documento_Interno" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="445d9ec7-a679-4b63-89db-9c84506eab2f">
-	<property name="ireport.zoom" value="1.2100000000000006"/>
+	<property name="ireport.zoom" value="1.9487171000000019"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="48"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="telefoneEmpresa" class="java.lang.String"/>
 	<parameter name="parameter3" class="java.lang.String"/>
@@ -78,6 +78,8 @@
 	<field name="complemEntregaEnt" class="java.lang.String"/>
 	<field name="dsItens" class="java.lang.Object"/>
 	<field name="observacao" class="java.lang.String"/>
+	<field name="comprador" class="java.lang.String"/>
+	<field name="tipoDoc" class="java.lang.String"/>
 	<group name="teste">
 		<groupExpression><![CDATA[$F{numDoc}]]></groupExpression>
 		<groupFooter>
@@ -239,7 +241,7 @@
 					<textFieldExpression><![CDATA[$F{cepEntidade}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="363" y="86" width="163" height="15" uuid="15a70344-f163-4f8e-a3b4-909ac5864202"/>
+					<reportElement x="363" y="101" width="163" height="15" uuid="15a70344-f163-4f8e-a3b4-909ac5864202"/>
 					<textElement>
 						<font fontName="Arial" size="8"/>
 					</textElement>
@@ -254,21 +256,21 @@ $F{foneEntidade} == null ? "" : $F{foneEntidade}]]></textFieldExpression>
 					<text><![CDATA[CEP:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="331" y="86" width="32" height="15" uuid="168dc812-f292-4fbc-891b-e7c64f1d61b2"/>
+					<reportElement x="331" y="101" width="32" height="15" uuid="168dc812-f292-4fbc-891b-e7c64f1d61b2"/>
 					<textElement>
 						<font fontName="Arial" size="8"/>
 					</textElement>
 					<text><![CDATA[Fone:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="331" y="101" width="43" height="15" uuid="33a322ab-759d-4afd-8db9-b6a55fd0b90a"/>
+					<reportElement x="331" y="116" width="43" height="15" uuid="33a322ab-759d-4afd-8db9-b6a55fd0b90a"/>
 					<textElement>
 						<font fontName="Arial" size="8"/>
 					</textElement>
-					<text><![CDATA[Usuário:]]></text>
+					<text><![CDATA[Vendedor:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="374" y="101" width="100" height="15" uuid="c2cd4a58-d79b-4f29-89d6-ccb272d7cd9c"/>
+					<reportElement x="374" y="116" width="100" height="15" uuid="c2cd4a58-d79b-4f29-89d6-ccb272d7cd9c"/>
 					<textElement>
 						<font fontName="Arial" size="8"/>
 					</textElement>
@@ -340,6 +342,24 @@ $F{foneEntidade} == null ? "" : $F{foneEntidade}]]></textFieldExpression>
 					</textElement>
 					<text><![CDATA[Código]]></text>
 				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="384" y="86" width="100" height="15" uuid="020e4447-ac48-40e8-8d65-8bd011571d5e"/>
+					<textElement>
+						<font fontName="Arial" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{comprador}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="331" y="86" width="53" height="15" uuid="64a79582-e572-42fc-a43a-23083e82caa9"/>
+					<textElement>
+						<font fontName="Arial" size="8"/>
+					</textElement>
+					<text><![CDATA[Comprador:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="90" y="13" width="109" height="20" uuid="7411785c-a894-456e-a5d5-2b19b462e641"/>
+					<textFieldExpression><![CDATA[$F{tipoDoc}]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupHeader>
 		<groupFooter>

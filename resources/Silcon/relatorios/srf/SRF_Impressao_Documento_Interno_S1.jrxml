@@ -15,6 +15,7 @@
 	<field name="field3" class="java.lang.String"/>
 	<field name="seq" class="java.lang.String"/>
 	<field name="codNcm" class="java.lang.String"/>
+	<field name="entrega" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -113,6 +114,13 @@
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{codNcm}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="511" y="1" width="44" height="13" uuid="d360a368-0f67-48a2-9745-76eaa2cb5171"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{entrega}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
