@@ -8,6 +8,9 @@ import sam.server.samdev.utils.Parametro
 import java.time.LocalDate
 import sam.server.samdev.relatorio.DadosParaDownload
 import sam.server.samdev.relatorio.RelatorioBase
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 class SRF_Impressao_Documento_Interno extends RelatorioBase {
 
@@ -79,10 +82,12 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
                 dado.putAll(parcela);
             }
 
+            preencherFormaCondicaoPagamento(dado);
+
             dado.put("key", idDoc);
         }
 
-        adicionarParametro("empresa", "SILCON " + obterEmpresaAtiva().getAac10ni());
+        adicionarParametro("empresa", obterEmpresaAtiva().getAac10rs());
         adicionarParametro("telefoneEmpresa", "Telefone: " + "(" + obterEmpresaAtiva().getAac10dddFone() + ")" + " " + obterEmpresaAtiva().getAac10fone());
         adicionarParametro("dataIni", dtEmissao == null ? null : dtEmissao[0].format("dd/MM/yyyy"));
         adicionarParametro("dataFim", dtEmissao == null ? null : dtEmissao[1].format("dd/MM/yyyy"));
@@ -120,7 +125,7 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
                 "LEFT JOIN abe0101 AS abe0101Principal ON abe0101Principal.abe0101ent = abe01id AND abe0101Principal.abe0101principal = 1 " +
                 "LEFT JOIN abe0101 AS abe0101Entrega ON abe0101Entrega.abe0101ent = abe01id AND abe0101Entrega.abe0101entrega = 1 " +
                 "INNER JOIN aah01 ON abb01tipo = aah01id " +
-                "INNER JOIN abe30 ON eaa01cp = abe30id " +
+                "LEFT JOIN abe30 ON eaa01cp = abe30id " +
                 "LEFT JOIN aag0201 AS aag0201Principal ON aag0201Principal.aag0201id = abe0101Principal.abe0101municipio " +
                 "LEFT JOIN aag02 AS aag02Principal ON aag0201Principal.aag0201uf = aag02Principal.aag02id " +
                 "LEFT JOIN aag0201 AS aag0201Entrega ON aag0201Entrega.aag0201id = abe0101Entrega.abe0101municipio " +
@@ -167,7 +172,7 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
                 "LEFT JOIN abe0101 AS abe0101Principal ON abe0101Principal.abe0101ent = abe01id AND abe0101Principal.abe0101principal = 1 " +
                 "LEFT JOIN abe0101 AS abe0101Entrega ON abe0101Entrega.abe0101ent = abe01id AND abe0101Entrega.abe0101entrega = 1 " +
                 "INNER JOIN aah01 ON abb01tipo = aah01id " +
-                "INNER JOIN abe30 ON eaa01cp = abe30id " +
+                "LEFT JOIN abe30 ON eaa01cp = abe30id " +
                 "LEFT JOIN aag0201 AS aag0201Principal ON aag0201Principal.aag0201id = abe0101Principal.abe0101municipio " +
                 "LEFT JOIN aag02 AS aag02Principal ON aag0201Principal.aag0201uf = aag02Principal.aag02id " +
                 "LEFT JOIN aag0201 AS aag0201Entrega ON aag0201Entrega.aag0201id = abe0101Entrega.abe0101municipio " +
@@ -197,6 +202,37 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
                 "ORDER BY eaa0113dtVctoN"
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idDoc", idDoc));
+    }
+    private void preencherFormaCondicaoPagamento(TableMap dado){
+        Long idDocumento = dado.getLong("eaa01id");
+        String condicaoPagamento = dado.getString("descrCondPgto");
+        StringBuilder listCondicao = new StringBuilder();
+        DecimalFormat df = new DecimalFormat("#,##0.00");
+        df.setDecimalFormatSymbols(
+                DecimalFormatSymbols.getInstance(new Locale("pt", "BR"))
+        );
+
+        if(condicaoPagamento != null){
+            listCondicao.append(condicaoPagamento);
+        }else{
+            List<TableMap> formasPgto = buscarFormasPagamentoDocumento(idDocumento);
+            for(formaPgto in formasPgto){
+                String descricao = formaPgto.getString("abf40descr");
+                BigDecimal valor = formaPgto.getBigDecimal_Zero("eaa01131valor");
+
+                listCondicao.append(descricao).append("                  ").append(df.format(valor)).append("\n")
+            }
+        }
+
+        dado.put("pagamentos", listCondicao);
+    }
+    private List<TableMap> buscarFormasPagamentoDocumento(Long idDocumento){
+        String sql = "SELECT DISTINCT abf40descr, eaa01131valor FROM eaa01131 "+
+                        "INNER JOIN eaa0113 ON eaa0113id = eaa01131fin "+
+                        "INNER JOIN abf40 ON abf40id = eaa01131fp "+
+                        "WHERE eaa0113doc = :idDocumento";
+
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idDocumento", idDocumento));
     }
 }
 //meta-sis-eyJkZXNjciI6IlNSRiAtIEltcHJlc3PDo28gRG9jdW1lbnRvIEludGVybm8iLCJ0aXBvIjoicmVsYXRvcmlvIn0=
