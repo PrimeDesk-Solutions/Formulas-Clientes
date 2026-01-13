@@ -282,9 +282,6 @@ public class SCV_SRF_FormulaLoja extends FormulaBase {
                 eaa0103.eaa0103cfop = aaj15_cfop;
             }
 
-            // Definir Peso Bruto e Peso Liquido
-            calcularPesoBrutoeLiquido();
-
             // Unitario Item
             definirPrecoUnitarioItem();
 
@@ -309,6 +306,9 @@ public class SCV_SRF_FormulaLoja extends FormulaBase {
 
             // Quantidade uso
             eaa0103.eaa0103qtUso = eaa0103.eaa0103qtComl;
+
+            // Definir Peso Bruto e Peso Liquido
+            calcularPesoBrutoeLiquido();
 
             //Total Item 
             eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2)
