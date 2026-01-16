@@ -260,10 +260,10 @@ public class DocPadraoEntrada extends FormulaBase {
             jsonEaa0103.put("volumes", (eaa0103.eaa0103qtComl * abm13.abm13fcVW).round(2));
 
             // Peso Brutro
-            jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto).round(3));
+            jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto_Zero).round(3));
 
             // Peso Liquido
-            jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(3));
+            jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq_Zero).round(3));
 
             // Total item
             eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
