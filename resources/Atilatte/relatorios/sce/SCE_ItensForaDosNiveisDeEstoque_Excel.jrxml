@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCE_ItensForaDosNiveisDeEstoque_PDF" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ef0c0e17-4c98-4ea4-a6a0-bd6756525144">
-	<property name="ireport.zoom" value="2.5937424601000023"/>
-	<property name="ireport.x" value="845"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCE_ItensForaDosNiveisDeEstoque_PDF" language="groovy" pageWidth="992" pageHeight="595" orientation="Landscape" columnWidth="952" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ef0c0e17-4c98-4ea4-a6a0-bd6756525144">
+	<property name="ireport.zoom" value="1.7715610000000013"/>
+	<property name="ireport.x" value="1073"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="titulo" class="java.lang.String"/>
 	<parameter name="periodo" class="java.lang.String"/>
@@ -18,7 +18,8 @@
 	<field name="totCompra" class="java.math.BigDecimal"/>
 	<field name="totVenda" class="java.math.BigDecimal"/>
 	<field name="excesso" class="java.math.BigDecimal"/>
-	<field name="field5" class="java.lang.String"/>
+	<field name="mediaConsumo" class="java.math.BigDecimal"/>
+	<field name="field1" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -107,6 +108,13 @@
 					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[EXCESSO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="802" y="0" width="150" height="13" uuid="a4539d9e-5851-4107-969a-f8ec1ef57990"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Média Consumo]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -201,6 +209,13 @@
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{excesso}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="802" y="0" width="150" height="13" uuid="6f85c7bf-81e5-4e59-97fe-88b18f7ca53e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mediaConsumo}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

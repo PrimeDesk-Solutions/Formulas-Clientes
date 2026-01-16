@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_ItensPorRepresentantes(PDF)" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5e978d6c-8e30-4e1e-b0ed-58ea006d3ba4">
 	<property name="ireport.zoom" value="1.4641000000000013"/>
-	<property name="ireport.x" value="535"/>
+	<property name="ireport.x" value="342"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="title" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
@@ -155,21 +155,21 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{mps}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
 				<reportElement x="319" y="0" width="100" height="13" uuid="542f5886-c6de-4c30-b8ba-82f51dc3eaf0"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{valorCampo1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
 				<reportElement x="419" y="0" width="100" height="13" uuid="c045778a-4e25-42a0-8166-31a06f6415a3"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{valorCampo2}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
 				<reportElement x="519" y="0" width="100" height="13" uuid="881a51d2-5b38-4899-9dcb-e629c254647e"/>
 				<textElement>
 					<font size="8"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_DocumentosPorItens" language="groovy" pageWidth="1133" pageHeight="595" orientation="Landscape" columnWidth="1093" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="096b9e1f-9fbf-40a7-b3ae-a6b790a9cdd1">
-	<property name="ireport.zoom" value="1.210000000000001"/>
-	<property name="ireport.x" value="312"/>
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="1277"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.Object" isForPrompting="false">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -12,6 +12,8 @@
 	<parameter name="totalizar1" class="java.lang.Boolean"/>
 	<parameter name="totalizar2" class="java.lang.Boolean"/>
 	<parameter name="totalizar3" class="java.lang.Boolean"/>
+	<parameter name="LOGO_EMPRESA" class="java.lang.String"/>
+	<parameter name="LOGO_REVENDA" class="java.lang.String"/>
 	<field name="codRep" class="java.lang.String"/>
 	<field name="naRep" class="java.lang.String"/>
 	<field name="numNota" class="java.lang.Integer"/>
@@ -55,67 +57,35 @@
 			<band/>
 		</groupHeader>
 		<groupFooter>
-			<band height="16">
-				<line>
-					<reportElement x="645" y="0" width="448" height="1" uuid="cece3ac4-1e6b-4b44-bb6d-1aa8298e526a"/>
-				</line>
-				<staticText>
-					<reportElement x="645" y="0" width="65" height="13" uuid="099fc7a4-6647-409b-aa62-99ab30603251"/>
-					<textElement>
-						<font size="8"/>
-					</textElement>
-					<text><![CDATA[Total Geral]]></text>
-				</staticText>
-				<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
-					<reportElement x="793" y="0" width="100" height="13" uuid="75d21d04-9c52-4903-9660-3741863913c2">
-						<printWhenExpression><![CDATA[$P{totalizar1}]]></printWhenExpression>
-					</reportElement>
-					<textElement>
-						<font size="8"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{totalGeral1}]]></textFieldExpression>
-				</textField>
-				<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
-					<reportElement x="893" y="0" width="100" height="13" uuid="064db6c4-0ebc-44a8-83f0-bd8b9b5c559d">
-						<printWhenExpression><![CDATA[$P{totalizar2}]]></printWhenExpression>
-					</reportElement>
-					<textElement>
-						<font size="8"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{totalGeral2}]]></textFieldExpression>
-				</textField>
-				<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
-					<reportElement x="993" y="1" width="100" height="13" uuid="60ec87fb-8b74-4e2b-978c-ffff2883d9a7">
-						<printWhenExpression><![CDATA[$P{totalizar3}]]></printWhenExpression>
-					</reportElement>
-					<textElement>
-						<font size="8"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{totalGeral3}]]></textFieldExpression>
-				</textField>
-			</band>
+			<band/>
 		</groupFooter>
 	</group>
 	<group name="codRep">
 		<groupExpression><![CDATA[$F{codRep}]]></groupExpression>
 		<groupHeader>
-			<band height="20">
+			<band height="13">
 				<textField>
-					<reportElement x="0" y="0" width="62" height="20" uuid="4e0f2e16-39ee-4e83-b9fd-659aa4a9684c"/>
+					<reportElement x="0" y="0" width="62" height="13" uuid="4e0f2e16-39ee-4e83-b9fd-659aa4a9684c"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$F{codRep}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="62" y="0" width="100" height="20" uuid="3c795dbd-7db2-42f4-a681-3f8979e19cc0"/>
+					<reportElement x="62" y="0" width="100" height="13" uuid="3c795dbd-7db2-42f4-a681-3f8979e19cc0"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$F{naRep}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="21">
+			<band height="45">
 				<line>
 					<reportElement x="724" y="3" width="367" height="1" uuid="e2156b63-fae2-454a-a06b-14b1e00cabd4"/>
 				</line>
-				<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
 					<reportElement x="793" y="4" width="100" height="13" uuid="662d405b-6a84-450e-878e-87a688776200">
 						<printWhenExpression><![CDATA[$P{totalizar1}]]></printWhenExpression>
 					</reportElement>
@@ -124,7 +94,7 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$V{total1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
 					<reportElement x="893" y="3" width="100" height="13" uuid="32acd235-30eb-47a2-a0f9-aa7c5b84e38f">
 						<printWhenExpression><![CDATA[$P{totalizar2}]]></printWhenExpression>
 					</reportElement>
@@ -133,7 +103,7 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$V{total2}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
 					<reportElement x="993" y="4" width="100" height="13" uuid="79822d4a-ab4e-43b6-8252-241b7e6fee57">
 						<printWhenExpression><![CDATA[$P{totalizar3}]]></printWhenExpression>
 					</reportElement>
@@ -156,25 +126,25 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="55" splitType="Stretch">
+		<band height="62" splitType="Stretch">
 			<textField>
-				<reportElement x="543" y="0" width="100" height="20" uuid="6c861570-e660-4d88-b52e-b54225e0fd3b"/>
-				<textElement>
-					<font size="9"/>
+				<reportElement x="418" y="0" width="361" height="13" uuid="6c861570-e660-4d88-b52e-b54225e0fd3b"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
 			</textField>
 			<textField pattern="000">
 				<reportElement x="1036" y="0" width="55" height="20" uuid="4ae1901f-9252-4533-b494-9397e9f5e4cb"/>
 				<textElement>
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="988" y="0" width="48" height="20" uuid="a5f91e53-d269-47e6-9cc8-8653b8d0b2c7"/>
 				<textElement>
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<text><![CDATA[Página]]></text>
 			</staticText>
@@ -186,19 +156,23 @@
 				<textFieldExpression><![CDATA[$P{periodo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="0" width="155" height="20" uuid="4bb8e6f2-1bea-4120-8855-f61aa278bb8f"/>
+				<reportElement x="119" y="0" width="249" height="20" uuid="4bb8e6f2-1bea-4120-8855-f61aa278bb8f"/>
 				<textElement>
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{title}]]></textFieldExpression>
 			</textField>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="0" width="95" height="51" uuid="91042709-7e99-41eb-a863-a5a0367b62e4"/>
+				<imageExpression><![CDATA[$P{LOGO_EMPRESA}]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="13" splitType="Stretch">
+		<band height="14" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="0" width="166" height="13" uuid="4ca0df2b-2e17-4cea-b62b-8485e2426e32"/>
 				<textElement>
@@ -269,6 +243,16 @@
 				</textElement>
 				<text><![CDATA[ENTIDADE]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="368" y="0" width="48" height="13" uuid="96209399-0447-4847-ac86-f02f86d2d65e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[TIPO PED.]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="13" width="1091" height="1" uuid="28f752e3-86a8-4d3a-90c0-fafa36b36227"/>
+			</line>
 		</band>
 	</columnHeader>
 	<detail>
@@ -301,14 +285,14 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{esDataNota}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="368" y="0" width="42" height="13" uuid="11ba7739-3762-47de-8c49-554807ea946d"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tipoDocPedido}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="418" y="0" width="48" height="13" uuid="ea8c5faa-adc3-4a2b-aebb-c01fdf5f4bdb"/>
 				<textElement>
 					<font size="8"/>
@@ -322,21 +306,21 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{txComis}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
 				<reportElement x="793" y="0" width="100" height="13" uuid="d1d05f47-720d-4cff-80ae-5a4003b5022b"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{valorCampo1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
 				<reportElement x="893" y="0" width="100" height="13" uuid="bf27780c-01d6-4fd8-9c79-f44be561d5dc"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{valorCampo2}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
 				<reportElement x="993" y="0" width="100" height="13" uuid="77b8c39b-722e-445d-a51d-200d12268d27"/>
 				<textElement>
 					<font size="8"/>
@@ -363,7 +347,22 @@
 		<band splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band splitType="Stretch"/>
+		<band height="41" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="5" width="332" height="13" uuid="ec3f281a-2080-4e52-a578-8bca92fea19a"/>
+				<textElement>
+					<font size="5" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[PRIMEDESK SOLUTIONS - (11) 93466-6594 / (11) 91846-8283]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="1017" y="5" width="75" height="36" uuid="6b815018-a1db-4d18-bc44-4fca67042b64"/>
+				<imageExpression><![CDATA[$P{LOGO_REVENDA}]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="0" y="3" width="1093" height="1" uuid="a3f8de78-43e0-4cb5-9ea3-ebf5a4e4fa2b"/>
+			</line>
+		</band>
 	</pageFooter>
 	<summary>
 		<band splitType="Stretch"/>

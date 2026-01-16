@@ -188,7 +188,9 @@
 				<textFieldExpression><![CDATA[$P{VALE_OBS}]]></textFieldExpression>
 			</textField>
 			<image scaleImage="FillFrame">
-				<reportElement key="image-1" x="2" y="0" width="99" height="72" uuid="7f24773b-334c-45ad-9e40-adf83b96e7ce"/>
+				<reportElement key="image-1" x="2" y="0" width="99" height="72" uuid="7f24773b-334c-45ad-9e40-adf83b96e7ce">
+					<printWhenExpression><![CDATA[1 == 2]]></printWhenExpression>
+				</reportElement>
 				<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\spv\\Logo Silcon.png"]]></imageExpression>
 			</image>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">

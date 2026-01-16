@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_Impressao_Documento_Interno" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="445d9ec7-a679-4b63-89db-9c84506eab2f">
-	<property name="ireport.zoom" value="1.9487171000000019"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="48"/>
+	<property name="ireport.zoom" value="1.771561000000002"/>
+	<property name="ireport.x" value="375"/>
+	<property name="ireport.y" value="286"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="telefoneEmpresa" class="java.lang.String"/>
 	<parameter name="parameter3" class="java.lang.String"/>
@@ -80,6 +80,16 @@
 	<field name="observacao" class="java.lang.String"/>
 	<field name="comprador" class="java.lang.String"/>
 	<field name="tipoDoc" class="java.lang.String"/>
+	<field name="codPgto" class="java.lang.String"/>
+	<field name="qtdItens" class="java.lang.Integer"/>
+	<field name="enderecoEntrega" class="java.lang.String"/>
+	<field name="numeroEntrega" class="java.lang.String"/>
+	<field name="bairroEntrega" class="java.lang.String"/>
+	<field name="complemEntrega" class="java.lang.String"/>
+	<field name="CEPEntrega" class="java.lang.String"/>
+	<field name="cidadeEntrega" class="java.lang.String"/>
+	<field name="ufEntrega" class="java.lang.String"/>
+	<field name="comNota" class="java.lang.Integer"/>
 	<group name="teste">
 		<groupExpression><![CDATA[$F{numDoc}]]></groupExpression>
 		<groupFooter>
@@ -93,15 +103,8 @@
 				<line>
 					<reportElement x="78" y="62" width="477" height="1" uuid="bfe77b20-dbae-443b-8bb1-7c3f4819ee9d"/>
 				</line>
-				<staticText>
-					<reportElement x="90" y="42" width="41" height="20" uuid="754a4d3a-e303-4799-8e9d-3900f1fb2437"/>
-					<textElement>
-						<font fontName="SansSerif" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
-					</textElement>
-					<text><![CDATA[FICHA-]]></text>
-				</staticText>
 				<textField>
-					<reportElement x="134" y="42" width="65" height="20" uuid="eb87bfca-823e-48cd-a13e-4e6eea485b1b"/>
+					<reportElement x="81" y="42" width="65" height="20" uuid="eb87bfca-823e-48cd-a13e-4e6eea485b1b"/>
 					<textElement>
 						<font fontName="SansSerif" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
@@ -150,7 +153,9 @@
 					<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
 				</textField>
 				<image>
-					<reportElement x="0" y="0" width="78" height="69" uuid="3150c2f4-6cdf-441f-8f59-67a909cf2b4a"/>
+					<reportElement x="0" y="0" width="78" height="69" uuid="3150c2f4-6cdf-441f-8f59-67a909cf2b4a">
+						<printWhenExpression><![CDATA[1 == 2]]></printWhenExpression>
+					</reportElement>
 					<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\srf\\Logo Silcon.png"]]></imageExpression>
 				</image>
 				<staticText>
@@ -240,13 +245,12 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{cepEntidade}]]></textFieldExpression>
 				</textField>
-				<textField>
-					<reportElement x="363" y="101" width="163" height="15" uuid="15a70344-f163-4f8e-a3b4-909ac5864202"/>
+				<textField isBlankWhenNull="true">
+					<reportElement x="374" y="102" width="155" height="15" uuid="15a70344-f163-4f8e-a3b4-909ac5864202"/>
 					<textElement>
 						<font fontName="Arial" size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{dddEntidade} == null ? "" : "("+$F{dddEntidade}+") " +
-$F{foneEntidade} == null ? "" : $F{foneEntidade}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{foneEntidade}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="331" y="71" width="32" height="15" uuid="19c763c0-1987-47b8-ac7f-fb182599733c"/>
@@ -256,21 +260,21 @@ $F{foneEntidade} == null ? "" : $F{foneEntidade}]]></textFieldExpression>
 					<text><![CDATA[CEP:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="331" y="101" width="32" height="15" uuid="168dc812-f292-4fbc-891b-e7c64f1d61b2"/>
+					<reportElement x="331" y="102" width="32" height="15" uuid="168dc812-f292-4fbc-891b-e7c64f1d61b2"/>
 					<textElement>
 						<font fontName="Arial" size="8"/>
 					</textElement>
 					<text><![CDATA[Fone:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="331" y="116" width="43" height="15" uuid="33a322ab-759d-4afd-8db9-b6a55fd0b90a"/>
+					<reportElement x="331" y="117" width="43" height="15" uuid="33a322ab-759d-4afd-8db9-b6a55fd0b90a"/>
 					<textElement>
 						<font fontName="Arial" size="8"/>
 					</textElement>
 					<text><![CDATA[Vendedor:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="374" y="116" width="100" height="15" uuid="c2cd4a58-d79b-4f29-89d6-ccb272d7cd9c"/>
+					<reportElement x="374" y="117" width="100" height="15" uuid="c2cd4a58-d79b-4f29-89d6-ccb272d7cd9c"/>
 					<textElement>
 						<font fontName="Arial" size="8"/>
 					</textElement>
@@ -284,66 +288,66 @@ $F{foneEntidade} == null ? "" : $F{foneEntidade}]]></textFieldExpression>
 					<text><![CDATA[Item]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="28" y="176" width="40" height="12" uuid="551bd6ef-f09b-46d4-8a20-f22ebcbd84e9"/>
+					<reportElement x="28" y="176" width="26" height="12" uuid="551bd6ef-f09b-46d4-8a20-f22ebcbd84e9"/>
 					<textElement>
 						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[Qtde]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="142" y="176" width="119" height="12" uuid="896b7656-7365-426f-b22c-c36544b0f312"/>
+					<reportElement x="177" y="176" width="119" height="12" uuid="896b7656-7365-426f-b22c-c36544b0f312"/>
 					<textElement>
 						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[Descrição]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="70" y="176" width="25" height="12" uuid="fbc62dce-b841-4b99-b312-f9da2c5f6d19"/>
+					<reportElement x="60" y="176" width="25" height="12" uuid="fbc62dce-b841-4b99-b312-f9da2c5f6d19"/>
 					<textElement>
 						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[UN]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="400" y="176" width="40" height="12" uuid="538875e9-fd86-4195-83e4-9767c6a653fc"/>
+					<reportElement x="369" y="176" width="40" height="12" uuid="538875e9-fd86-4195-83e4-9767c6a653fc"/>
 					<textElement textAlignment="Center">
 						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[V. Desc.]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="448" y="176" width="45" height="12" uuid="cd27c0de-af83-4542-bc4a-4a1abe6e32ea"/>
+					<reportElement x="412" y="176" width="45" height="12" uuid="cd27c0de-af83-4542-bc4a-4a1abe6e32ea"/>
 					<textElement>
 						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
-					<text><![CDATA[V. Tot Liq.]]></text>
+					<text><![CDATA[V. Total]]></text>
 				</staticText>
 				<line>
 					<reportElement x="2" y="190" width="553" height="1" uuid="89fe4bb8-4e62-4bf2-a8d1-0566392688b3"/>
 				</line>
 				<staticText>
-					<reportElement x="364" y="176" width="36" height="12" uuid="2bebd7ef-8aaf-497d-a3d3-c7382686e5d9"/>
+					<reportElement x="331" y="176" width="36" height="12" uuid="2bebd7ef-8aaf-497d-a3d3-c7382686e5d9"/>
 					<textElement textAlignment="Center">
 						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[V. Unit.]]></text>
 				</staticText>
-				<textField isBlankWhenNull="true">
-					<reportElement x="54" y="146" width="293" height="30" uuid="e8c230fa-39ae-482b-905c-c3cfc29a05f7"/>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="54" y="146" width="420" height="23" uuid="e8c230fa-39ae-482b-905c-c3cfc29a05f7"/>
 					<textElement>
 						<font size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{observacao}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{observacao}.replace("COM NOTA.","")]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="95" y="176" width="47" height="12" uuid="6b82f8bc-8d15-4eb7-a03b-4d2ae4498358"/>
+					<reportElement x="85" y="176" width="47" height="12" uuid="6b82f8bc-8d15-4eb7-a03b-4d2ae4498358"/>
 					<textElement>
 						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[Código]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement x="384" y="86" width="100" height="15" uuid="020e4447-ac48-40e8-8d65-8bd011571d5e"/>
+					<reportElement x="384" y="86" width="171" height="16" uuid="020e4447-ac48-40e8-8d65-8bd011571d5e"/>
 					<textElement>
 						<font fontName="Arial" size="8"/>
 					</textElement>
@@ -357,15 +361,39 @@ $F{foneEntidade} == null ? "" : $F{foneEntidade}]]></textFieldExpression>
 					<text><![CDATA[Comprador:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="90" y="13" width="109" height="20" uuid="7411785c-a894-456e-a5d5-2b19b462e641"/>
+					<reportElement x="81" y="29" width="86" height="15" uuid="7411785c-a894-456e-a5d5-2b19b462e641"/>
 					<textFieldExpression><![CDATA[$F{tipoDoc}]]></textFieldExpression>
 				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="364" y="102" width="10" height="14" uuid="c3f75975-717c-4d38-8077-4eae1c63b953"/>
+					<textElement>
+						<font fontName="Arial" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dddEntidade}]]></textFieldExpression>
+				</textField>
+				<rectangle radius="10">
+					<reportElement x="486" y="145" width="59" height="24" uuid="425e2245-97c0-4932-a9b4-5eb93f35af2c"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="487" y="145" width="58" height="24" uuid="90aad8b7-e0c9-4f72-9df3-d0330dc99408">
+						<printWhenExpression><![CDATA[$F{comNota} == 1]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<text><![CDATA[C/NF]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="133" y="176" width="44" height="12" uuid="d6d5b87d-0ef8-4412-a202-7544e7a22edd"/>
+					<textElement>
+						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[NCM]]></text>
+				</staticText>
 			</band>
 		</groupHeader>
 		<groupFooter>
 			<band height="141">
 				<staticText>
-					<reportElement x="1" y="9" width="119" height="15" uuid="ffaff1aa-9ac6-4bc3-90d6-ce8b76b7dea0"/>
+					<reportElement x="1" y="9" width="94" height="15" uuid="ffaff1aa-9ac6-4bc3-90d6-ce8b76b7dea0"/>
 					<textElement>
 						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
@@ -414,34 +442,27 @@ $F{foneEntidade} == null ? "" : $F{foneEntidade}]]></textFieldExpression>
 					<textFieldExpression><![CDATA[$F{totDoc}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="0" y="69" width="247" height="59" uuid="ec96ce85-aece-471f-98c3-50869e04efcd"/>
+					<reportElement x="0" y="84" width="247" height="44" uuid="ec96ce85-aece-471f-98c3-50869e04efcd"/>
 					<textElement>
 						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[OBS: DEVOLUÇÃO/TROCA NO PERÍODO DE 30 DIAS E SOMENTE COM A APRESENTAÇÃO DESTE PEDIDO (SUJEITO A APROVAÇÃO)]]></text>
 				</staticText>
 				<line>
-					<reportElement x="0" y="65" width="247" height="1" uuid="99ff121d-495b-4524-9427-bd56ed0e26b7"/>
+					<reportElement x="1" y="83" width="247" height="1" uuid="99ff121d-495b-4524-9427-bd56ed0e26b7"/>
 				</line>
 				<line>
 					<reportElement x="0" y="2" width="555" height="1" uuid="da73b6a6-c66c-4b16-935c-3bb2b0ab58ed"/>
 				</line>
 				<staticText>
-					<reportElement x="120" y="9" width="87" height="15" uuid="048e01ee-d8a7-4162-8609-d06c65502107"/>
+					<reportElement x="120" y="9" width="70" height="15" uuid="048e01ee-d8a7-4162-8609-d06c65502107"/>
 					<textElement>
 						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[Forma de Pagto:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="120" y="25" width="57" height="15" uuid="9d454d26-5302-4a1f-8576-ba2278ea7002"/>
-					<textElement>
-						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
-					</textElement>
-					<text><![CDATA[Parcelas:]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="318" y="83" width="118" height="15" uuid="28315032-540d-47a1-b266-e65fc458158c"/>
+					<reportElement x="318" y="83" width="90" height="15" uuid="28315032-540d-47a1-b266-e65fc458158c"/>
 					<textElement>
 						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
@@ -457,6 +478,33 @@ $F{foneEntidade} == null ? "" : $F{foneEntidade}]]></textFieldExpression>
 					</textElement>
 					<text><![CDATA[Forma de Entrega]]></text>
 				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="190" y="9" width="194" height="15" uuid="b06f0690-2deb-4cc9-b0ab-ba8a63f12b95"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{codPgto}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="95" y="9" width="25" height="15" uuid="6747abe0-db96-40e6-92ed-c6c66266d962"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{qtdItens}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="318" y="98" width="237" height="43" uuid="f72cb0e0-23ff-4ca3-af9b-98f13d3c8635"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{enderecoEntrega} == null ? "" : $F{enderecoEntrega}) + ", " +
+($F{numeroEntrega} == null ? "" : $F{numeroEntrega}) + ", " +
+($F{bairroEntrega} == null ? "" : $F{bairroEntrega}) + ", " +
+($F{complemEntrega} == null ? "" : $F{complemEntrega}) + ", " +
+($F{CEPEntrega} == null ? "" : $F{CEPEntrega}) + ", " +
+($F{cidadeEntrega} == null ? "" : $F{cidadeEntrega} ) + " - " +
+($F{ufEntrega} == null ? "" : $F{ufEntrega})]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupFooter>
 	</group>

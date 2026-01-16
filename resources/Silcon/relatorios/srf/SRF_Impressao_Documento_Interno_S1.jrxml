@@ -51,7 +51,7 @@
 				<textFieldExpression><![CDATA[$F{descrItem}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="220" y="0" width="25" height="18" uuid="c1cd7e54-f633-44d1-aa7c-f1e6644c4933"/>
+				<reportElement x="324" y="1" width="25" height="18" uuid="c1cd7e54-f633-44d1-aa7c-f1e6644c4933"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
@@ -93,13 +93,13 @@
 				<textFieldExpression><![CDATA[$F{descontoItem} == null ? new BigDecimal(0) : $F{descontoItem}]]></textFieldExpression>
 			</textField>
 			<rectangle radius="2">
-				<reportElement x="286" y="1" width="17" height="12" uuid="72a257bb-af70-423c-955b-13c1f3a9dbeb"/>
+				<reportElement x="263" y="1" width="17" height="12" uuid="72a257bb-af70-423c-955b-13c1f3a9dbeb"/>
 			</rectangle>
 			<rectangle radius="2">
-				<reportElement x="306" y="1" width="17" height="12" uuid="11fffb4e-38dd-4ed0-a6ac-b1ba5f770a5e"/>
+				<reportElement x="283" y="1" width="17" height="12" uuid="11fffb4e-38dd-4ed0-a6ac-b1ba5f770a5e"/>
 			</rectangle>
 			<rectangle radius="2">
-				<reportElement x="326" y="1" width="17" height="12" uuid="84861028-a590-4f66-838c-a30c8669f2c6"/>
+				<reportElement x="303" y="1" width="17" height="12" uuid="84861028-a590-4f66-838c-a30c8669f2c6"/>
 			</rectangle>
 			<textField>
 				<reportElement x="0" y="1" width="15" height="17" uuid="bc5b146f-7671-46b6-b32d-fd04e0890d55"/>
@@ -109,7 +109,7 @@
 				<textFieldExpression><![CDATA[$F{seq}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="245" y="0" width="38" height="17" uuid="a4bd7971-734f-4a68-a7d1-4d4cea7ef2bd"/>
+				<reportElement x="220" y="0" width="38" height="17" uuid="a4bd7971-734f-4a68-a7d1-4d4cea7ef2bd"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
@@ -118,7 +118,7 @@
 			<textField>
 				<reportElement x="511" y="1" width="44" height="13" uuid="d360a368-0f67-48a2-9745-76eaa2cb5171"/>
 				<textElement>
-					<font fontName="Arial" size="8"/>
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{entrega}]]></textFieldExpression>
 			</textField>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SPV_Impressao_Pre_Venda_S1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="87e01482-c022-4f9b-b5d9-2d91de471630">
 	<property name="ireport.zoom" value="1.771561000000001"/>
-	<property name="ireport.x" value="29"/>
+	<property name="ireport.x" value="287"/>
 	<property name="ireport.y" value="0"/>
 	<field name="codItem" class="java.lang.String"/>
 	<field name="ccb0101seq" class="java.lang.String"/>
@@ -12,9 +12,11 @@
 	<field name="totDoc" class="java.math.BigDecimal"/>
 	<field name="qtd" class="java.math.BigDecimal"/>
 	<field name="entrega" class="java.lang.String"/>
-	<field name="field9" class="java.lang.String"/>
+	<field name="descrNcm" class="java.lang.String"/>
+	<field name="codNcm" class="java.lang.String"/>
+	<field name="ambiente" class="java.lang.String"/>
+	<field name="field3" class="java.lang.String"/>
 	<field name="field1" class="java.lang.String"/>
-	<field name="field2" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -30,35 +32,35 @@
 	<detail>
 		<band height="13" splitType="Stretch">
 			<textField>
-				<reportElement x="93" y="0" width="48" height="13" uuid="4831110b-e4d3-40d1-b438-8e7b2aa5e4af"/>
+				<reportElement x="81" y="0" width="48" height="13" uuid="4831110b-e4d3-40d1-b438-8e7b2aa5e4af"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{codItem}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="141" y="0" width="214" height="13" uuid="689090ae-2775-40b0-a1a2-e2e548301776"/>
+				<reportElement x="173" y="0" width="159" height="13" uuid="689090ae-2775-40b0-a1a2-e2e548301776"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{naItem}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="355" y="0" width="51" height="13" uuid="fc4a6903-e842-4dbc-b436-c66bb830ae05"/>
+				<reportElement x="332" y="0" width="40" height="13" uuid="fc4a6903-e842-4dbc-b436-c66bb830ae05"/>
 				<textElement textAlignment="Center">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totItem}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="406" y="0" width="27" height="13" uuid="fa79e790-0d40-4061-b189-77d8b23e2187"/>
+				<reportElement x="372" y="0" width="27" height="13" uuid="fa79e790-0d40-4061-b189-77d8b23e2187"/>
 				<textElement textAlignment="Center">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{desconto}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="433" y="0" width="53" height="13" uuid="6c564740-448d-46cb-ab95-9dd1cc2093d9"/>
+				<reportElement x="399" y="0" width="47" height="13" uuid="6c564740-448d-46cb-ab95-9dd1cc2093d9"/>
 				<textElement textAlignment="Center">
 					<font size="7"/>
 				</textElement>
@@ -79,18 +81,32 @@
 				<textFieldExpression><![CDATA[$F{qtd}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="70" y="0" width="20" height="13" uuid="4b15ab9e-ff66-4373-94c1-8303c919f5e8"/>
+				<reportElement x="61" y="0" width="20" height="13" uuid="4b15ab9e-ff66-4373-94c1-8303c919f5e8"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{umu}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="497" y="0" width="58" height="13" uuid="33a65a9f-a550-4d50-90f2-1f061c49b5b1"/>
+				<reportElement x="446" y="0" width="46" height="13" uuid="33a65a9f-a550-4d50-90f2-1f061c49b5b1"/>
 				<textElement>
-					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{entrega}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="129" y="0" width="44" height="13" uuid="158943e1-1dd0-4717-a810-88e0899e25ec"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codNcm}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="492" y="0" width="63" height="13" uuid="3d568333-5341-4f82-bbf9-547c423eb43e"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ambiente}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
