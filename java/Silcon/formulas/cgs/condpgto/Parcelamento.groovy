@@ -94,10 +94,12 @@ public class Parcelamento extends FormulaBase {
                 BigDecimal txJuros = jsonAbe30.getBigDecimal_Zero("taxa_juros_diario");
                 BigDecimal vlrMulta = vlrParcela * (txMulta / 100);
                 BigDecimal vlrJuros = vlrParcela * (txJuros / 100);
+                String txtVencimento = vctoN.toString();
 
                 jsonEaa0113.put("multa", vlrMulta.round(2));
                 jsonEaa0113.put("juros", vlrJuros.round(2));
-                jsonEaa0113.put("desconto", jsonAbe30.getBigDecimal_Zero("desconto_cond_taxa") * -1)
+                jsonEaa0113.put("desconto", jsonAbe30.getBigDecimal_Zero("desconto_cond_taxa") * -1);
+                jsonEaa0113.put("dt_limite_desc", txtVencimento.replace("-",""));
 
 
                 ParcelaDto parcelaDto = new ParcelaDto();
