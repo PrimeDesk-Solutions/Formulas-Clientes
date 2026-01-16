@@ -395,7 +395,6 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
             }
         }
     }
-
     private void calcularCBSIBS() {
         // *********************************************
         // ************ REFORMA TRIBUTÁRIA *************
@@ -427,7 +426,11 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
                 jsonEaa0103.getBigDecimal_Zero("total_servico") +
                 jsonEaa0103.getBigDecimal_Zero("frete_dest") +
                 jsonEaa0103.getBigDecimal_Zero("seguro") +
-                jsonEaa0103.getBigDecimal_Zero("outras"))
+                jsonEaa0103.getBigDecimal_Zero("outras") -
+                jsonEaa0103.getBigDecimal_Zero("desconto") -
+                jsonEaa0103.getBigDecimal_Zero("pis") -
+                jsonEaa0103.getBigDecimal_Zero("cofins") -
+                jsonEaa0103.getBigDecimal_Zero("icms"));
 
         //================================
         //******       VALORES      ******
@@ -512,28 +515,25 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
         jsonEaa0103.put("vlr_ibs", jsonEaa0103.getBigDecimal_Zero("vlr_ibs").round(2));
 
         //CST 200 - Tributação c/ Redução
-        if (aaj09.aaj09codigo == "200") {
+        if(aaj09.aaj09codigo == "200"){
             //PERCENTUAL REDUÇÃO CBS
             if (jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_cbs")) {
                 jsonEaa0103.put("perc_red_cbs", jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_cbs"))
             }
             //PERCENTUAL REDUÇÃO IBS UF
             if (jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_ibs_uf")) {
-                jsonEaa0103.put("perc_red_ibs_uf", jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_ibs_uf"));
-                // Mudar nome do campo
+                jsonEaa0103.put("perc_red_ibs_uf", jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_ibs_uf")); // Mudar nome do campo
             }
 
             //PERCENTUAL DE REDUÇÃO IBS MUNIC
-            if (jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_ibs_mun")) {
-                jsonEaa0103.put("perc_red_ibs_mun", jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_ibs_mun"))
-                // Criar campo
+            if(jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_ibs_mun")){
+                jsonEaa0103.put("perc_red_ibs_mun", jsonAaj07clasTrib.getBigDecimal_Zero("perc_red_ibs_mun")) // Criar campo
             }
 
             // Aliquotas Efetivas
-            jsonEaa0103.put("aliq_efet_ibs_uf", (jsonEaa0103.getBigDecimal_Zero("ibs_uf_aliq") * (100 - jsonEaa0103.getBigDecimal_Zero("perc_red_ibs_uf")) / 100));
-            // Mudar nome campo
-            jsonEaa0103.put("aliq_efet_ibs_mun", (jsonEaa0103.getBigDecimal_Zero("ibs_mun_aliq") * (100 - jsonEaa0103.getBigDecimal_Zero("perc_red_ibs_mun")) / 100));
-            jsonEaa0103.put("aliq_efet_cbs", (jsonEaa0103.getBigDecimal_Zero("cbs_aliq") * (100 - jsonEaa0103.getBigDecimal_Zero("perc_red_cbs")) / 100));
+            jsonEaa0103.put("aliq_efet_ibs_uf", (jsonEaa0103.getBigDecimal_Zero("ibs_uf_aliq") * ( 100 -  jsonEaa0103.getBigDecimal_Zero("perc_red_ibs_uf")) / 100)); // Mudar nome campo
+            jsonEaa0103.put("aliq_efet_ibs_mun", (jsonEaa0103.getBigDecimal_Zero("ibs_mun_aliq") * ( 100 -  jsonEaa0103.getBigDecimal_Zero("perc_red_ibs_mun")) / 100));
+            jsonEaa0103.put("aliq_efet_cbs", (jsonEaa0103.getBigDecimal_Zero("cbs_aliq") * ( 100 -  jsonEaa0103.getBigDecimal_Zero("perc_red_cbs")) / 100));
 
             // CBS
             jsonEaa0103.put("vlr_cbs", jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * (jsonEaa0103.getBigDecimal_Zero("aliq_efet_cbs") / 100))
@@ -544,7 +544,7 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
             jsonEaa0103.put("vlr_ibsmun", jsonEaa0103.getBigDecimal_Zero("vlr_ibsmun").round(2));
 
             // IBS UF
-            jsonEaa0103.put("vlr_ibsuf", jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * (jsonEaa0103.getBigDecimal_Zero("aliq_efet_ibs_uf") / 100)) //IBS Estadual
+            jsonEaa0103.put("vlr_ibsuf", jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc") * (jsonEaa0103.getBigDecimal_Zero("aliq_efet_ibs_uf") / 100))//IBS Estadual
             jsonEaa0103.put("vlr_ibsuf", jsonEaa0103.getBigDecimal_Zero("vlr_ibsuf").round(2))
 
             // Soma total do IBS UF/Municipio
@@ -553,7 +553,7 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
 
         }
 
-        if (jsonAaj07clasTrib.getInteger("exige_tributacao") == 0) { // Zera impostos caso não exige tributação
+        if(jsonAaj07clasTrib.getInteger("exige_tributacao") == 0){ // Zera impostos caso não exige tributação
             jsonEaa0103.put("cbs_aliq", new BigDecimal(0));
             jsonEaa0103.put("vlr_cbs", new BigDecimal(0));
             jsonEaa0103.put("ibs_uf_aliq", new BigDecimal(0));
@@ -561,6 +561,7 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
             jsonEaa0103.put("vlr_ibsmun", new BigDecimal(0));
             jsonEaa0103.put("vlr_ibsuf", new BigDecimal(0));
             jsonEaa0103.put("vlr_ibs", new BigDecimal(0));
+            jsonEaa0103.put("cbs_ibs_bc", new BigDecimal(0));
         }
     }
     // Trocar CFOP (Dentro ou fora do estado)
