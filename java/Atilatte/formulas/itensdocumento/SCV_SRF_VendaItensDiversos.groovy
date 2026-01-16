@@ -419,7 +419,11 @@ public class SCV_SRF_VendaItensDiversos extends FormulaBase {
                 jsonEaa0103.getBigDecimal_Zero("total_servico") +
                 jsonEaa0103.getBigDecimal_Zero("frete_dest") +
                 jsonEaa0103.getBigDecimal_Zero("seguro") +
-                jsonEaa0103.getBigDecimal_Zero("outras"))
+                jsonEaa0103.getBigDecimal_Zero("outras") -
+                jsonEaa0103.getBigDecimal_Zero("desconto") -
+                jsonEaa0103.getBigDecimal_Zero("pis") -
+                jsonEaa0103.getBigDecimal_Zero("cofins") -
+                jsonEaa0103.getBigDecimal_Zero("icms"));
 
         //================================
         //******       VALORES      ******
@@ -541,6 +545,7 @@ public class SCV_SRF_VendaItensDiversos extends FormulaBase {
             jsonEaa0103.put("vlr_ibs", jsonEaa0103.getBigDecimal_Zero("vlr_ibs").round(2))
 
         }
+
         if(jsonAaj07clasTrib.getInteger("exige_tributacao") == 0){ // Zera impostos caso não exige tributação
             jsonEaa0103.put("cbs_aliq", new BigDecimal(0));
             jsonEaa0103.put("vlr_cbs", new BigDecimal(0));
@@ -549,6 +554,7 @@ public class SCV_SRF_VendaItensDiversos extends FormulaBase {
             jsonEaa0103.put("vlr_ibsmun", new BigDecimal(0));
             jsonEaa0103.put("vlr_ibsuf", new BigDecimal(0));
             jsonEaa0103.put("vlr_ibs", new BigDecimal(0));
+            jsonEaa0103.put("cbs_ibs_bc", new BigDecimal(0));
         }
     }
     @Override

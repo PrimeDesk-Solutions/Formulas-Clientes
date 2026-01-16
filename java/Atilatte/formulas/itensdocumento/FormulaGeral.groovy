@@ -624,7 +624,6 @@ public class FormulaGeral extends FormulaBase {
             }
         }
     }
-
     private void calcularCBSIBS() {
         // *********************************************
         // ************ REFORMA TRIBUTÁRIA *************
@@ -656,7 +655,11 @@ public class FormulaGeral extends FormulaBase {
                 jsonEaa0103.getBigDecimal_Zero("total_servico") +
                 jsonEaa0103.getBigDecimal_Zero("frete_dest") +
                 jsonEaa0103.getBigDecimal_Zero("seguro") +
-                jsonEaa0103.getBigDecimal_Zero("outras"))
+                jsonEaa0103.getBigDecimal_Zero("outras") -
+                jsonEaa0103.getBigDecimal_Zero("desconto") -
+                jsonEaa0103.getBigDecimal_Zero("pis") -
+                jsonEaa0103.getBigDecimal_Zero("cofins") -
+                jsonEaa0103.getBigDecimal_Zero("icms"));
 
         //================================
         //******       VALORES      ******
@@ -787,9 +790,9 @@ public class FormulaGeral extends FormulaBase {
             jsonEaa0103.put("vlr_ibsmun", new BigDecimal(0));
             jsonEaa0103.put("vlr_ibsuf", new BigDecimal(0));
             jsonEaa0103.put("vlr_ibs", new BigDecimal(0));
+            jsonEaa0103.put("cbs_ibs_bc", new BigDecimal(0));
         }
     }
-
     private String buscarCategoriaItem(codItem){
 
         Query descrCriterios = getSession().createQuery("select aba3001descr from aba3001 "+
