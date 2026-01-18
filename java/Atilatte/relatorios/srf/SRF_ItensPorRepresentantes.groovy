@@ -44,10 +44,8 @@ class SRF_Itens_Por_Representantes extends RelatorioBase {
         Integer resumoOperacao = getInteger("resumoOperacao");
         LocalDate[] dtEmissao = getIntervaloDatas("dataEmissao");
         LocalDate[] dtEntradaSaida = getIntervaloDatas("dataEntradaSaida");
-        List<Long> idsEntidades = getListLong("entidade");
         List<Long> idsReps = getListLong("representantes");
         List<Long> idsItens = getListLong("itens")
-        Integer optionResumo = getInteger("resumo");
         boolean totalizar1 = getBoolean("total1");
         boolean totalizar2 = getBoolean("total2");
         boolean totalizar3 = getBoolean("total3");
@@ -84,9 +82,11 @@ class SRF_Itens_Por_Representantes extends RelatorioBase {
         params.put("totalizar4", totalizar4);
         params.put("totalizar5", totalizar5);
         params.put("totalizar6", totalizar6);
-        params.put("title", "SRF - Documento por Entidades");
+        params.put("title", "SRF - Itens Por Representantes");
         params.put("empresa", empresa.aac10codigo + "-" + empresa.aac10na);
         params.put("periodo", periodo);
+        params.put("LOGO_EMPRESA", "C:\\SAM-Servidor\\samdev\\resources\\Atilatte\\relatorios\\srf\\marca-atilatte.jpg");
+        params.put("LOGO_REVENDA", "C:\\SAM-Servidor\\samdev\\resources\\Atilatte\\relatorios\\srf\\logoPrimeDesk.png");
 
         if (campoLivre1 != null && campoFixo1 != null) interromper("Selecione apenas 1 valor por campo!");
         if (campoLivre2 != null && campoFixo2 != null) interromper("Selecione apenas 1 valor por campo!");
@@ -107,69 +107,76 @@ class SRF_Itens_Por_Representantes extends RelatorioBase {
 
         List<TableMap> representantes = buscarRepresentantes(idsReps);
         List<TableMap> dadosRelatorio = new ArrayList();
-        List<TableMap> idsItensDoc = obterIdsItensDoc(idsReps, numDocIni, numDocFin, idsTipoDoc, idsPcd, resumoOperacao, dtEmissao, dtEntradaSaida, idsEntidades, idsItens, idEmpresa);
+        List<TableMap> dados = buscarDadosDocumentos(idsReps, numDocIni, numDocFin, idsTipoDoc, idsPcd, resumoOperacao, dtEmissao, dtEntradaSaida, idsItens, idEmpresa);
 
+        if (dados == null || dados.size() == 0) interromper("Não foram encontrados registros com os filtros informados.");
+        List<TableMap> idsItensDoc = obterIdsItensDoc(idsReps, numDocIni, numDocFin, idsTipoDoc, idsPcd, resumoOperacao, dtEmissao, dtEntradaSaida, idsItens, idEmpresa);
+
+        List<TableMap> listDevolucoesGeral = new ArrayList();
+        def idControleDevolucao = null;
+        List<TableMap> listDevolucoesAjustado = new ArrayList<>()
+        TableMap dadosTmpDev = new TableMap()
+        TableMap valoresTotaisDevolucao = new TableMap();
+
+        //Agrupa as devoluções
+        if (devolucoes) {
+            listDevolucoesGeral = obterDevolucao(idsItensDoc);
+            if (listDevolucoesGeral != null && listDevolucoesGeral.size() > 0) {
+                for (devolucao in listDevolucoesGeral) {
+                    devolucao.putAll(devolucao.getTableMap("eaa0103json"));
+                    devolucao.remove("eaa0103json");
+                    if (idControleDevolucao == null) {
+                        dadosTmpDev.putAll(devolucao);
+                        idControleDevolucao = devolucao.getLong("eaa01033itemdoc");
+                        somarValores(devolucao, valoresTotaisDevolucao, campos);
+                    } else if (idControleDevolucao == devolucao.getLong("eaa01033itemdoc")) {
+                        somarValores(devolucao, valoresTotaisDevolucao, campos);
+                    } else {
+                        TableMap tmpDev = new TableMap();
+                        tmpDev.putAll(dadosTmpDev);
+                        tmpDev.putAll(valoresTotaisDevolucao);
+                        listDevolucoesAjustado.add(tmpDev);
+
+                        dadosTmpDev = new TableMap()
+                        dadosTmpDev.putAll(devolucao);
+                        valoresTotaisDevolucao = new TableMap();
+                        idControleDevolucao = devolucao.getLong("eaa01033itemdoc");
+
+                        somarValores(devolucao, valoresTotaisDevolucao, campos)
+                    }
+                }
+
+                TableMap tmpDev = new TableMap();
+                tmpDev.putAll(dadosTmpDev);
+                tmpDev.putAll(valoresTotaisDevolucao);
+                if (!tmpDev.isEmpty()) listDevolucoesAjustado.add(tmpDev);
+            }
+        }
 
         for (representante in representantes) {
             Long idRep = representante.getLong("abe01id");
             String codRep = representante.getString("abe01codigo");
             String nomeRep = representante.getString("abe01na");
             def txComissao = representante.getBigDecimal_Zero("abe05taxa");
-            List<TableMap> listDevolucoesGeral = new ArrayList();
-            List<TableMap> listDevolucoesAjustado = new ArrayList<>()
             def idControle = null;
-            def idControleDevolucao = null;
             TableMap dadosTmp = new TableMap();
-            TableMap dadosTmpDev = new TableMap()
             TableMap valoresTotais = new TableMap();
-            TableMap valoresTotaisDevolucao = new TableMap();
-
-            List<TableMap> dados = buscarDadosDocumentos(idRep, numDocIni, numDocFin, idsTipoDoc, idsPcd, resumoOperacao, dtEmissao, dtEntradaSaida, idsEntidades, idsItens, idEmpresa);
-
-            if (dados == null || dados.size() == 0) continue;
-
-            //Agrupa as devoluções
-            if (devolucoes) {
-                listDevolucoesGeral = obterDevolucao(idsItensDoc);
-                if (listDevolucoesGeral != null && listDevolucoesGeral.size() > 0) {
-                    for (devolucao in listDevolucoesGeral) {
-                        devolucao.putAll(devolucao.getTableMap("eaa0103json"));
-                        devolucao.remove("eaa0103json");
-                        if (idControleDevolucao == null) {
-                            dadosTmpDev.putAll(devolucao);
-                            idControleDevolucao = devolucao.getLong("eaa01033itemdoc");
-                            somarValores(devolucao, valoresTotaisDevolucao, campos);
-                        } else if (idControleDevolucao == devolucao.getLong("eaa01033itemdoc")) {
-                            somarValores(devolucao, valoresTotaisDevolucao, campos);
-                        } else {
-                            TableMap tmpDev = new TableMap();
-                            tmpDev.putAll(dadosTmpDev);
-                            tmpDev.putAll(valoresTotaisDevolucao);
-                            listDevolucoesAjustado.add(tmpDev);
-
-                            dadosTmpDev = new TableMap()
-                            dadosTmpDev.putAll(devolucao);
-                            valoresTotaisDevolucao = new TableMap();
-                            idControleDevolucao = devolucao.getLong("eaa01033itemdoc");
-
-                            somarValores(devolucao, valoresTotaisDevolucao, campos)
-                        }
-                    }
-
-                    TableMap tmpDev = new TableMap();
-                    tmpDev.putAll(dadosTmpDev);
-                    tmpDev.putAll(valoresTotaisDevolucao);
-                    if (!tmpDev.isEmpty()) listDevolucoesAjustado.add(tmpDev);
-                }
-            }
-
             for (dado in dados) {
+                Long idRep0 = dado.getLong("eaa01rep0");
+                Long idRep1 = dado.getLong("eaa01rep1");
+                Long idRep2 = dado.getLong("eaa01rep2");
+                Long idRep3 = dado.getLong("eaa01rep3");
+                Long idRep4 = dado.getLong("eaa01rep4");
+
+                if(idRep != idRep0 && idRep != idRep1 && idRep != idRep2 && idRep != idRep3 && idRep != idRep4) continue;
+
                 Long idItem = dado.getLong("eaa0103id");
+
                 dado.putAll(dado.getTableMap("eaa0103json"));
                 dado.put("codRep", codRep);
                 dado.put("naRep", nomeRep);
                 dado.put("txComis", txComissao);
-                dado.remove("eaa0103json");
+                //dado.remove("eaa0103json");
 
                 for (devolucao in listDevolucoesAjustado) {
                     Long idItemDev = devolucao.getLong("eaa01033itemdoc")
@@ -199,20 +206,22 @@ class SRF_Itens_Por_Representantes extends RelatorioBase {
                 }
             }
 
-            TableMap tmp = new TableMap();
-            tmp.putAll(dadosTmp);
-            tmp.putAll(valoresTotais);
-            comporValores(tmp, campos);
+            if(dadosTmp.size() > 0){
+                TableMap tmp = new TableMap();
+                tmp.putAll(dadosTmp);
+                tmp.putAll(valoresTotais);
+                comporValores(tmp, campos);
 
-            dadosRelatorio.add(tmp)
+                dadosRelatorio.add(tmp)
+            }
         }
 
-        if (impressao == 0) return gerarPDF("SRF_ItensPorRepresentantes(PDF)", dadosRelatorio);
-        return gerarXLSX("SRF_ItensPorRepresentantes(Excel)", dadosRelatorio);
+        if (impressao == 0) return gerarPDF("SRF_Itens_Por_Representantes_PDF", dadosRelatorio);
+        return gerarXLSX("SRF_Itens_Por_Representantes_Excel", dadosRelatorio);
 
     }
 
-    private List<TableMap> buscarDadosDocumentos(Long idRepresentante, Integer numDocIni, Integer numDocFin, List<Long> idsTipoDoc, List<Long> idsPcd, Integer resumoOperacao, LocalDate[] dtEmissao, LocalDate[] dtEntradaSaida, List<Long> idsEntidades, List<Long> idsItens, Long idEmpresa) {
+    private List<TableMap> buscarDadosDocumentos(List<Long> idsReps, Integer numDocIni, Integer numDocFin, List<Long> idsTipoDoc, List<Long> idsPcd, Integer resumoOperacao, LocalDate[] dtEmissao, LocalDate[] dtEntradaSaida, List<Long> idsItens, Long idEmpresa) {
 
         String whereNumIni = numDocIni != null ? "AND abb01num >= :numDocIni " : "";
         String whereNumFin = numDocFin != null ? "AND abb01num <= :numDocFin " : "";
@@ -220,10 +229,9 @@ class SRF_Itens_Por_Representantes extends RelatorioBase {
         String wherePcd = idsPcd != null && idsPcd.size() > 0 ? "AND abd01id IN (:idsPcd) " : "";
         String whereDtEmissao = dtEmissao != null && dtEmissao.size() > 0 ? "AND abb01data BETWEEN :dtEmissIni AND :dtEmissFin " : "";
         String whereDtEntradaSaida = dtEntradaSaida != null ? "AND eaa01esdata BETWEEN :dtEntradaSaidaIni AND :dtEntradaSaidaFin " : "";
-        String whereEntidade = idsEntidades != null && idsEntidades.size() > 0 ? "AND ent.abe01id IN (:idsEntidades) " : "";
         String whereES = resumoOperacao == 1 ? " AND eaa01esMov = 1 " : " AND eaa01esMov = 0";
         String whereItens = idsItens != null && idsItens.size() > 0 ? "AND abm01id in (:idsItens) " : "";
-        String whereRepresentantes = "AND (eaa01rep0 = :idRepresentante OR eaa01rep1 = :idRepresentante OR eaa01rep2 = :idRepresentante OR eaa01rep3 = :idRepresentante OR eaa01rep4 = :idRepresentante) ";
+        String whereRepresentantes = idsReps != null && idsReps.size() > 0 ? "AND (eaa01rep0 IN (:idsReps) OR eaa01rep1 IN (:idsReps) OR eaa01rep2 IN (:idsReps) OR eaa01rep3 IN (:idsReps) OR eaa01rep4 IN (:idsReps)) " : "";
         String whereEmpresa = "AND eaa01gc = :idEmpresa ";
 
 
@@ -235,12 +243,11 @@ class SRF_Itens_Por_Representantes extends RelatorioBase {
         Parametro parametroDtEmissaoFin = dtEmissao != null ? Parametro.criar("dtEmissFin", dtEmissao[1]) : null;
         Parametro parametroDtEntradaSaidaIni = dtEntradaSaida != null ? Parametro.criar("dtEntradaSaidaIni", dtEntradaSaida[0]) : null;
         Parametro parametroDtEntradaSaidaFin = dtEntradaSaida != null? Parametro.criar("dtEntradaSaidaFin", dtEntradaSaida[1]) : null;
-        Parametro parametroEntidade = idsEntidades != null && idsEntidades.size() > 0 ? Parametro.criar("idsEntidades", idsEntidades) : null;
         Parametro parametroItens = idsItens != null && idsItens.size() > 0 ? Parametro.criar("idsItens", idsItens) : null;
-        Parametro parametroRepresentantes = Parametro.criar("idRepresentante", idRepresentante);
+        Parametro parametroRepresentantes = idsReps != null && idsReps.size() > 0 ? Parametro.criar("idsReps", idsReps) : null;
         Parametro parametroEmpresa = Parametro.criar("idEmpresa", idEmpresa);
 
-        String sql = "SELECT eaa01id, eaa0103id, abm01id, aam06codigo, abm01codigo, abm01na,CASE WHEN abm01tipo = 0 THEN 'M' WHEN abm01tipo = 1 THEN 'P' WHEN abm01tipo = 2 THEN 'S' ELSE 'MER' END AS mps, " +
+        String sql = "SELECT eaa01rep0, eaa01rep1, eaa01rep2, eaa01rep3, eaa01rep4, eaa01id, eaa0103id, abm01id, aam06codigo, abm01codigo, abm01na,CASE WHEN abm01tipo = 0 THEN 'M' WHEN abm01tipo = 1 THEN 'P' WHEN abm01tipo = 2 THEN 'S' ELSE 'MER' END AS mps, " +
                 "eaa01id, eaa0103id, eaa0103qtuso,eaa0103qtcoml, eaa0103unit, eaa0103unit,eaa0103total,eaa0103totdoc, eaa0103totfinanc, eaa0103json " +
                 "FROM eaa01 " +
                 "INNER JOIN abb01 on abb01id = eaa01central " +
@@ -259,16 +266,14 @@ class SRF_Itens_Por_Representantes extends RelatorioBase {
                 wherePcd +
                 whereDtEmissao +
                 whereDtEntradaSaida +
-                whereEntidade +
                 whereRepresentantes +
                 whereES +
                 whereItens +
                 "ORDER BY abm01tipo, abm01codigo";
 
-        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroEmpresa, parametroNumIni, parametroNumFin, parametroTipoDoc, parametroPcd, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroDtEntradaSaidaIni,parametroRepresentantes, parametroDtEntradaSaidaFin,
-                parametroEntidade, parametroItens);
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroEmpresa, parametroNumIni, parametroNumFin, parametroTipoDoc, parametroPcd, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroDtEntradaSaidaIni,parametroRepresentantes, parametroDtEntradaSaidaFin, parametroItens);
     }
-    private List<Long> obterIdsItensDoc(List<Long> idsReps, Integer numDocIni, Integer numDocFin, List<Long> idsTipoDoc, List<Long> idsPcd, Integer resumoOperacao, LocalDate[] dtEmissao, LocalDate[] dtEntradaSaida, List<Long> idsEntidades, List<Long> idsItens, Long idEmpresa) {
+    private List<Long> obterIdsItensDoc(List<Long> idsReps, Integer numDocIni, Integer numDocFin, List<Long> idsTipoDoc, List<Long> idsPcd, Integer resumoOperacao, LocalDate[] dtEmissao, LocalDate[] dtEntradaSaida, List<Long> idsItens, Long idEmpresa) {
 
         String whereNumIni = numDocIni != null ? "AND abb01num >= :numDocIni " : "";
         String whereNumFin = numDocFin != null ? "AND abb01num <= :numDocFin " : "";
@@ -276,7 +281,6 @@ class SRF_Itens_Por_Representantes extends RelatorioBase {
         String wherePcd = idsPcd != null && idsPcd.size() > 0 ? "AND abd01id IN (:idsPcd) " : "";
         String whereDtEmissao = dtEmissao != null ? "AND abb01data BETWEEN :dtEmissIni AND :dtEmissFin " : "";
         String whereDtEntradaSaida = dtEntradaSaida != null ? "AND eaa01esdata BETWEEN :dtEntradaSaidaIni AND :dtEntradaSaidaFin " : "";
-        String whereEntidade = idsEntidades != null && idsEntidades.size() > 0 ? "AND ent.abe01id IN (:idsEntidades) " : "";
         String whereES = resumoOperacao == 1 ? " AND eaa01esMov = 1 " : " AND eaa01esMov = 0";
         String whereItens = idsItens != null && idsItens.size() > 0 ? "AND abm01id in (:idsItens) " : "";
         String whereRepresentantes = idsReps != null && idsReps.size() > 0 ? "AND (eaa01rep0 IN (:idsReps) OR eaa01rep1 IN (:idsReps) OR eaa01rep2 IN (:idsReps) OR eaa01rep3 IN (:idsReps) OR eaa01rep4 IN (:idsReps)) " : "";
@@ -291,7 +295,6 @@ class SRF_Itens_Por_Representantes extends RelatorioBase {
         Parametro parametroDtEmissaoFin = dtEmissao != null ? Parametro.criar("dtEmissFin", dtEmissao[1]) : null;
         Parametro parametroDtEntradaSaidaIni = dtEntradaSaida != null ? Parametro.criar("dtEntradaSaidaIni", dtEntradaSaida[0]) : null;
         Parametro parametroDtEntradaSaidaFin = dtEntradaSaida != null ? Parametro.criar("dtEntradaSaidaFin", dtEntradaSaida[1]) : null;
-        Parametro parametroEntidade = idsEntidades != null && idsEntidades.size() > 0 ? Parametro.criar("idsEntidades", idsEntidades) : null;
         Parametro parametroItens = idsItens != null && idsItens.size() > 0 ? Parametro.criar("idsItens", idsItens) : null;
         Parametro parametroRepresentantes = idsReps != null && idsReps.size() > 0 ? Parametro.criar("idsReps", idsReps) : null;
         Parametro parametroEmpresa = Parametro.criar("idEmpresa", idEmpresa);
@@ -315,13 +318,11 @@ class SRF_Itens_Por_Representantes extends RelatorioBase {
                 wherePcd +
                 whereDtEmissao +
                 whereDtEntradaSaida +
-                whereEntidade +
                 whereRepresentantes+
                 whereES +
                 whereItens;
 
-        return getAcessoAoBanco().obterListaDeLong(sql, parametroEmpresa, parametroNumIni, parametroNumFin, parametroTipoDoc, parametroPcd, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroDtEntradaSaidaIni,parametroRepresentantes, parametroDtEntradaSaidaFin,
-                parametroEntidade, parametroItens);
+        return getAcessoAoBanco().obterListaDeLong(sql, parametroEmpresa, parametroNumIni, parametroNumFin, parametroTipoDoc, parametroPcd, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroDtEntradaSaidaIni,parametroRepresentantes, parametroDtEntradaSaidaFin, parametroItens);
     }
 
     private List<TableMap> buscarRepresentantes(List<Long> ids) {
