@@ -207,7 +207,7 @@ public class SRF_VendaDeItensPorEstado extends RelatorioBase {
         String whereCriterio = "AND aba3001criterio = 35610617 ";
         String whereEmpresa = "AND eaa01gc = :idEmpresa ";
         String whereEsMov = entradaSaida == 0 ? "AND eaa01esMov = 0 " : "AND eaa01esMov = 1 ";
-        String whereEmissao = emissao != null ? "AND abb01data between :dtEmissaoIni and :dtEmissaoFin " : "";
+        String whereEmissao = emissao != null ? "AND eaa01esData between :dtEmissaoIni and :dtEmissaoFin " : "";
         String whereCategoria = idsCategorias != null && idsCategorias.size() > 0 ?  "and aba3001id IN (:idsCategorias) " : ""
         String whereEstados = idsEstados != null && idsEstados.size() > 0 ?  "and aag02id IN (:idsEstados) " : ""
         String whereItens = idsItens != null && idsItens.size() > 0 ?  "and abm01id IN (:idsItens) " : ""
@@ -265,7 +265,7 @@ public class SRF_VendaDeItensPorEstado extends RelatorioBase {
         String whereCriterio = "AND aba3001criterio = 35610617 ";
         String whereEmpresa = "AND eaa01gc = :idEmpresa ";
         String whereEsMov = entradaSaida == 0 ? "AND eaa01esMov = 0 " : "AND eaa01esMov = 1 ";
-        String whereEmissao = emissao != null ? "AND abb01data between :dtEmissaoIni and :dtEmissaoFin " : "";
+        String whereEmissao = emissao != null ? "AND eaa01esData between :dtEmissaoIni and :dtEmissaoFin " : "";
         String whereCategoria = idsCategorias != null && idsCategorias.size() > 0 ?  "and aba3001id IN (:idsCategorias) " : ""
         String whereEstados = idsEstados != null && idsEstados.size() > 0 ?  "and aag02id IN (:idsEstados) " : ""
         String whereItens = idsItens != null && idsItens.size() > 0 ?  "and abm01id IN (:idsItens) " : ""
