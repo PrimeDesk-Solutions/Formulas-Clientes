@@ -169,10 +169,10 @@ public class SCE_ItensForaDosNiveisDeEstoque extends RelatorioBase {
         String whereItem = idsItens != null && idsItens.size() > 0 ? "AND bcc01item IN (:idsItens) " : "";
         Parametro parametroItem = idsItens != null && idsItens.size() > 0 ? Parametro.criar("idsItens", idsItens) : null;
 
-        String sql = "SELECT bcc01item, AVG(bcc01qt) AS media " +
+        String sql = "SELECT bcc01item, SUM(bcc01qt) / 3 AS media " +
                     "FROM bcc01 " +
                     "WHERE bcc01data >= CURRENT_DATE - INTERVAL '3 months' " +
-                    //"AND bcc01ple = 128275 " +
+                    "AND bcc01ple IN (SELECT abm20id FROM abm20 WHERE abm20codigo IN ('2000','2050', '2200', '2203', '2207', '2017')) "+
                     "AND bcc01mov = 1 "+
                     whereItem +
                     "GROUP BY bcc01item";
@@ -248,7 +248,7 @@ public class SCE_ItensForaDosNiveisDeEstoque extends RelatorioBase {
         String whereTipo = tipos != null && !tipos.contains(-1) ? "AND abm01tipo IN (:tipos) " : null;
         String whereEmpresa = "AND abm01gc = :empresa ";
         String whereItens = itens != null && itens.size() > 0 ? "AND abm01id IN (:itens) " : "";
-        String whereItensAux = "AND abm01id NOT IN (:idItensAux) ";
+        String whereItensAux = idItensAux != null && idItensAux.size() > 0 ? "AND abm01id NOT IN (:idItensAux) " : "";
         String whereInativo = "AND abm01di IS NULL ";
         String whereMovEst = !movEst.contains(-1) ? "AND abm11movEst IN (:movEst) " : "";
 
@@ -256,7 +256,7 @@ public class SCE_ItensForaDosNiveisDeEstoque extends RelatorioBase {
         Parametro parametroTipo = tipos != null && !tipos.contains(-1) ? Parametro.criar("tipos", tipos) : null;
         Parametro parametroEmpresa = Parametro.criar("empresa", obterEmpresaAtiva().getAac10id());
         Parametro parametroItens = itens != null && itens.size() > 0 ? Parametro.criar("itens", itens) : null;
-        Parametro parametroItensAux = Parametro.criar("idItensAux", idItensAux);
+        Parametro parametroItensAux = idItensAux != null && idItensAux.size() > 0 ? Parametro.criar("idItensAux", idItensAux) : null;
         Parametro parametroMovEst = !movEst.contains(-1) ? Parametro.criar("movEst", movEst) : null;
 
         String sql = "SELECT abm01tipo,abm01id, abm01codigo AS codItem, CASE WHEN abm01tipo = 0 THEN 'M' ELSE 'P' END AS mps, abm01na AS naItem, abm0101estMax, " +
