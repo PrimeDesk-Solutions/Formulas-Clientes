@@ -26,10 +26,11 @@ public class CST_Fechamento_Cliente extends RelatorioBase {
 
         List<TableMap> docsFinanc = buscarDocumentosFinanceiros(dtEmissao, dtVencimento, entidades);
         Long idEntidade = null;
+        TableMap vlrVale = new TableMap();
         for(doc in docsFinanc){
-            TableMap vlrVale = new TableMap()
 
             if(idEntidade != doc.getLong("idEnt")){
+                vlrVale = new TableMap();
                 idEntidade = doc.getLong("idEnt");
                 vlrVale = buscarValorValeCliente(idEntidade) == null ? new TableMap() : buscarValorValeCliente(idEntidade);
             }
@@ -107,7 +108,7 @@ public class CST_Fechamento_Cliente extends RelatorioBase {
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroDtVctoIni, parametroDtVctoFin, parametroEntidade);
     }
     private TableMap buscarValorValeCliente(Long idEntidade){
-        String sql = "SELECT dad01saldo, dad01dtI FROM dad01 WHERE dad01ent = :idEntidade";
+        String sql = "SELECT dad01saldo, dad01dtI FROM dad01 WHERE dad01ent = :idEntidade AND dad01tipo = 35610614 ";
 
         Parametro parametroEntidade = Parametro.criar("idEntidade", idEntidade);
 
