@@ -51,11 +51,15 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
 
         for (dado in dados) {
             Long idDoc = dado.getLong("eaa01id");
+            Long idEntidade = dado.getLong("abe01id");
             List<TableMap> itensDoc = buscarItensDoc(idDoc);
             List<TableMap> parcelamento = buscarParcelamentosDocumentos(idDoc);
+            TableMap tmEnderecoEntrega = buscarEnderecoEntregaEntidade(idEntidade);
             String obsInterno = dado.getString("obsInterno");
             Integer countItens = 0;
             Integer countParcela = 0;
+
+            if(tmEnderecoEntrega != null && tmEnderecoEntrega.size() > 0) dado.putAll(tmEnderecoEntrega);
 
             if(obsInterno != null ){
                 if(obsInterno.toUpperCase().contains("COM NOTA")) dado.put("comNota", 1);
@@ -119,22 +123,17 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
                 "abe0101Principal.abe0101complem AS complemEntidade, abe0101Principal.abe0101bairro AS bairroEntidade, aag0201Principal.aag0201nome AS cidadeEntidade, aag02Principal.aag02uf AS ufEntidade, " +
                 "abe0101Principal.abe0101cep AS cepEntidade, abe0101Principal.abe0101ddd1 AS dddEntidade, abe0101Principal.abe0101fone1 AS foneEntidade, aab10nome AS usuario, abb01data AS dtVenda, " +
                 "abe30codigo AS codCondPgto, abe30nome AS descrCondPgto, eaa01totItens AS totalItem, CAST(eaa01json ->> 'desconto' AS numeric(18,6)) AS desconto, eaa01totDoc AS totDoc, " +
-                "abe0101Entrega.abe0101endereco AS enderecoEntregaEnt, abe0101Entrega.abe0101bairro AS bairroEntregaEnt, abe0101Entrega.abe0101numero AS numeroEntregaEnt, aag0201Entrega.aag0201nome AS cidadeEntregaEnt, " +
-                "aag02Principal.aag02uf AS ufEntregaEntidade, abe0101Entrega.abe0101cep AS cepEntregaEnt, abe0101Entrega.abe0101complem AS complemEntregaEnt, eaa01obsUsoInt AS obsInterno, " +
-                "CAST(eaa01json ->> 'com_nota' AS INTEGER) AS comNota "+
-                "FROM eaa01 \n" +
+                "eaa01obsUsoInt AS obsInterno, CAST(eaa01json ->> 'com_nota' AS INTEGER) AS comNota, abe01id " +
+                "FROM eaa01 " +
                 "INNER JOIN eaa0101 ON eaa0101doc = eaa01id " +
                 "INNER JOIN abb01 ON abb01id = eaa01central " +
                 "INNER JOIN aab10 ON aab10id = abb01operUser " +
                 "INNER JOIN abe01 ON abe01id = abb01ent  " +
                 "LEFT JOIN abe0101 AS abe0101Principal ON abe0101Principal.abe0101ent = abe01id AND abe0101Principal.abe0101principal = 1 " +
-                "LEFT JOIN abe0101 AS abe0101Entrega ON abe0101Entrega.abe0101ent = abe01id AND abe0101Entrega.abe0101entrega = 1 " +
                 "INNER JOIN aah01 ON abb01tipo = aah01id " +
                 "LEFT JOIN abe30 ON eaa01cp = abe30id " +
                 "LEFT JOIN aag0201 AS aag0201Principal ON aag0201Principal.aag0201id = abe0101Principal.abe0101municipio " +
                 "LEFT JOIN aag02 AS aag02Principal ON aag0201Principal.aag0201uf = aag02Principal.aag02id " +
-                "LEFT JOIN aag0201 AS aag0201Entrega ON aag0201Entrega.aag0201id = abe0101Entrega.abe0101municipio " +
-                "LEFT JOIN aag02 AS aag02Entrega ON aag0201Entrega.aag0201uf = aag02Entrega.aag02id " +
                 "WHERE eaa01cancData IS NULL " +
                 whereTipos +
                 whereEntidades +
@@ -167,26 +166,33 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
                 "abe0101Principal.abe0101complem AS complemEntidade, abe0101Principal.abe0101bairro AS bairroEntidade, aag0201Principal.aag0201nome AS cidadeEntidade, aag02Principal.aag02uf AS ufEntidade, " +
                 "abe0101Principal.abe0101cep AS cepEntidade, abe0101Principal.abe0101ddd1 AS dddEntidade, abe0101Principal.abe0101fone1 AS foneEntidade, aab10nome AS usuario, abb01data AS dtVenda, " +
                 "abe30codigo AS codCondPgto, abe30nome AS descrCondPgto, eaa01totItens AS totalItem, CAST(eaa01json ->> 'desconto' AS numeric(18,6)) AS desconto, eaa01totDoc AS totDoc, " +
-                "abe0101Entrega.abe0101endereco AS enderecoEntregaEnt, abe0101Entrega.abe0101bairro AS bairroEntregaEnt, abe0101Entrega.abe0101numero AS numeroEntregaEnt, aag0201Entrega.aag0201nome AS cidadeEntregaEnt, " +
-                "aag02Principal.aag02uf AS ufEntregaEntidade, abe0101Entrega.abe0101cep AS cepEntregaEnt, abe0101Entrega.abe0101complem AS complemEntregaEnt, eaa01obsUsoInt AS obsInterno, " +
-                "CAST(eaa01json ->> 'com_nota' AS INTEGER) AS comNota " +
-                "FROM eaa01 \n" +
+                "eaa01obsUsoInt AS obsInterno, CAST(eaa01json ->> 'com_nota' AS INTEGER) AS comNota, abe01id " +
+                "FROM eaa01 " +
                 "INNER JOIN eaa0101 ON eaa0101doc = eaa01id " +
                 "INNER JOIN abb01 ON abb01id = eaa01central " +
                 "INNER JOIN aab10 ON aab10id = abb01operUser " +
                 "INNER JOIN abe01 ON abe01id = abb01ent  " +
                 "LEFT JOIN abe0101 AS abe0101Principal ON abe0101Principal.abe0101ent = abe01id AND abe0101Principal.abe0101principal = 1 " +
-                "LEFT JOIN abe0101 AS abe0101Entrega ON abe0101Entrega.abe0101ent = abe01id AND abe0101Entrega.abe0101entrega = 1 " +
                 "INNER JOIN aah01 ON abb01tipo = aah01id " +
                 "LEFT JOIN abe30 ON eaa01cp = abe30id " +
                 "LEFT JOIN aag0201 AS aag0201Principal ON aag0201Principal.aag0201id = abe0101Principal.abe0101municipio " +
                 "LEFT JOIN aag02 AS aag02Principal ON aag0201Principal.aag0201uf = aag02Principal.aag02id " +
-                "LEFT JOIN aag0201 AS aag0201Entrega ON aag0201Entrega.aag0201id = abe0101Entrega.abe0101municipio " +
-                "LEFT JOIN aag02 AS aag02Entrega ON aag0201Entrega.aag0201uf = aag02Entrega.aag02id " +
                 "WHERE eaa01id = :idDoc " +
                 "ORDER BY abb01num"
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idDoc", idDoc))
+    }
+    private buscarEnderecoEntregaEntidade(Long idEntidade){
+        return getSession().createQuery("SELECT abe0101bairro AS bairroEntregaEnt, abe0101endereco AS enderecoEntregaEnt, " +
+                                "abe0101numero AS numeroEntregaEnt, abe0101cep AS cepEntregaEnt, abe0101complem AS complemEntregaEnt, " +
+                                "aag0201nome AS cidadeEntregaEnt, aag02uf AS ufEntregaEntidade " +
+                                "FROM abe01 " +
+                                "LEFT JOIN abe0101 ON abe0101ent = abe01id " +
+                                "LEFT JOIN aag0201 ON aag0201id = abe0101municipio " +
+                                "LEFT JOIN aag02 ON aag0201uf = aag02id " +
+                                "WHERE abe01id = :idEntidade "+
+                                "AND abe0101entrega = 1").setParameter("idEntidade", idEntidade)
+                                .setMaxResult(1).getUniqueTableMap();
     }
 
     private List<TableMap> buscarItensDoc(Long id) {
