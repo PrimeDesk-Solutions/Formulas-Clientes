@@ -108,11 +108,18 @@ public class CST_Fechamento_Cliente extends RelatorioBase {
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroDtVctoIni, parametroDtVctoFin, parametroEntidade);
     }
     private TableMap buscarValorValeCliente(Long idEntidade){
-        String sql = "SELECT dad01saldo, dad01dtI FROM dad01 WHERE dad01ent = :idEntidade AND dad01tipo = 35610614 ";
+        Long idEmpresa = obterEmpresaAtiva().getAac10id();
+
+        String sql = "SELECT dad01saldo, dad01dtI " +
+                " FROM dad01 " +
+                " WHERE dad01ent = :idEntidade " +
+                " AND dad01tipo = 35610614 " +
+                " AND dad01eg = :idEmpresa ";
 
         Parametro parametroEntidade = Parametro.criar("idEntidade", idEntidade);
+        Parametro parametroEmpresa = Parametro.criar("idEmpresa", idEmpresa)
 
-        return getAcessoAoBanco().buscarUnicoTableMap(sql, parametroEntidade);
+        return getAcessoAoBanco().buscarUnicoTableMap(sql, parametroEntidade, parametroEmpresa);
     }
 }
 //meta-sis-eyJkZXNjciI6IkNTVCAtIEZlY2hhbWVudG8gQ2xpZW50ZSIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
