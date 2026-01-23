@@ -926,7 +926,7 @@ class NFe_Reforma extends FormulaBase {
                 prod.addNode("CNPJFab", StringUtils.extractNumbers(eaa0103.eaa0103cnpjFabr), false);
             }
             prod.addNode("cBenef", null, false);
-            prod.addNode("tpCredPresIBSZFM", eaa0103.eaa0103credPresIbsZFM, false);
+            if(eaa0103.eaa0103credPresIbsZFM != 0) prod.addNode("tpCredPresIBSZFM", eaa0103.eaa0103credPresIbsZFM, false);
             if(abm01.abm01tipo != 2) {
                 prod.addNode("EXTIPI", ncm == null ? null : abg01.abg01codigo.indexOf("/") == -1 ? null : abg01.abg01codigo.substring(abg01.abg01codigo.indexOf("/") + 1,abg01.abg01codigo.length()), false);
             }
