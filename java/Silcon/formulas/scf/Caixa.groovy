@@ -1,4 +1,4 @@
-package multitec.formulas.scf;
+package Silcon.formulas.scf;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
