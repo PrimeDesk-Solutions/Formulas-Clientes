@@ -97,9 +97,10 @@ public class ParcelamentoTaxaFinanceira extends FormulaBase {
 
                 BigDecimal txMulta = jsonAbe30.getBigDecimal_Zero("taxa_multa_atraso");
                 BigDecimal txJuros = jsonAbe30.getBigDecimal_Zero("taxa_juros_diario");
+                BigDecimal txDesconto = abf4001 != null ? abf4001.abf4001txFinanc : new BigDecimal(0)
                 BigDecimal vlrMulta = vlrParcela * (txMulta / 100);
                 BigDecimal vlrJuros = vlrParcela * (txJuros / 100);
-                BigDecimal vlrDesconto = abf4001 != null ? abf4001.abf4001txFinanc : new BigDecimal(0);
+                BigDecimal vlrDesconto = vlrParcela * txDesconto / 100;
 
                 jsonEaa0113.put("multa", vlrMulta.round(2));
                 jsonEaa0113.put("juros", vlrJuros.round(2));
