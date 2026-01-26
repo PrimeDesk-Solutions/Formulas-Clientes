@@ -305,21 +305,26 @@ public class SRF_Danfe extends RelatorioBase {
 				" WHERE eaa0103doc = :id ",
 				" ORDER BY eaa0103seq").setParameters("id",id)
 				.getListTableMap();
-
 	}
+    private Long buscarIdCentral(Long eaa01id){
+        String sql = "SELECT DISTINCT abb01id FROM eaa01 "+
+                "INNER JOIN abb01 ON eaa01central = abb01id "+
+                "WHERE eaa01id = :eaa01id";
+
+        return getAcessoAoBanco().obterLong(sql, Parametro.criar("eaa01id", eaa01id))
+    }
 
 	private List<TableMap> buscarPedidoCliente(TableMap dadosNfe,Long eaa01id){
-		String sql =  "select distinct abb01pedido.abb01num as numPed, eaa0103nota.eaa0103pcNum as pedCliente from eaa01032 "+
-				"inner join eaa0103 as eaa0103pedido on eaa01032itemscv = eaa0103pedido.eaa0103id "+
-				"inner join eaa01 as eaa01pedido on eaa01pedido.eaa01id = eaa0103pedido.eaa0103doc "+
-				"inner join abb01 as abb01pedido on abb01pedido.abb01id = eaa01pedido.eaa01central "+
-				"full join eaa0103 as eaa0103nota on eaa01032itemsrf = eaa0103nota.eaa0103id "+
-				"full join eaa01 as eaa01nota on eaa01nota.eaa01id = eaa0103nota.eaa0103doc "+
-				"where eaa01nota.eaa01id = :eaa01id ";
+        Long idCentral = buscarIdCentral(eaa01id);
 
-		TableMap numPedido = getAcessoAoBanco().buscarUnicoTableMap(sql, Parametro.criar("eaa01id",eaa01id));
+		String sql =  "SELECT STRING_AGG(abb01num::text, ', ' ORDER BY abb01num) AS documentosAtrelados " +
+                        "FROM abb0102 " +
+                        "INNER JOIN abb01 ON abb01id = abb0102central " +
+                        "WHERE abb0102doc = :idCentral"
 
-		if(numPedido != null) dadosNfe.putAll(numPedido);
+		TableMap numPedidos = getAcessoAoBanco().buscarUnicoTableMap(sql, Parametro.criar("idCentral",idCentral));
+
+		if(numPedidos != null) dadosNfe.putAll(numPedidos);
 	}
 
 	private List<TableMap> buscarMensagemItem(TableMap dadosNfe,Long eaa01id){
