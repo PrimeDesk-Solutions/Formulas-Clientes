@@ -924,7 +924,7 @@ class NFe_Reforma extends FormulaBase {
 				prod.addNode("CNPJFab", StringUtils.extractNumbers(eaa0103.eaa0103cnpjFabr), false);
 			}
 			prod.addNode("cBenef", null, false);
-            prod.addNode("tpCredPresIBSZFM", eaa0103.eaa0103credPresIbsZFM, false);
+            if(eaa0103.eaa0103credPresIbsZFM != 0) prod.addNode("tpCredPresIBSZFM", eaa0103.eaa0103credPresIbsZFM, false);
 			if(abm01.abm01tipo != 2) {
                 prod.addNode("EXTIPI", ncm == null ? null : abg01.abg01codigo.indexOf("/") == -1 ? null : abg01.abg01codigo.substring(abg01.abg01codigo.indexOf("/") + 1,abg01.abg01codigo.length()), false);
 			}
@@ -1107,7 +1107,8 @@ class NFe_Reforma extends FormulaBase {
 							ICMSSN201 = ICMS.addNode("ICMSSN201");
 							ICMSSN201.addNode("orig", orig, true);
 							ICMSSN201.addNode("CSOSN", cso, true);
-							ICMSSN201.addNode("modBCST", configItem.abm0101fiscal.abm12modBcIcmsST, true);
+//							ICMSSN201.addNode("modBCST", configItem.abm0101fiscal.abm12modBcIcmsST, true);
+							ICMSSN201.addNode("modBCST", 0, true);
 							ICMSSN201.addNode("pMVAST", getCampo("245.31-N19","pMVAST") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.31-N19","pMVAST")), 2, true), false);
 							ICMSSN201.addNode("pRedBCST", getCampo("224.32-N20","pRedBCST") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("224.32-N20","pRedBCST")), 2, true), false);
 							ICMSSN201.addNode("vBCST", getCampo("245.33-N21","vBCST") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.33-N21","vBCST")), 2, false), true);
@@ -1124,7 +1125,8 @@ class NFe_Reforma extends FormulaBase {
 							ICMSSN202 = ICMS.addNode("ICMSSN202");
 							ICMSSN202.addNode("orig", orig, true);
 							ICMSSN202.addNode("CSOSN", cso, true);
-							ICMSSN202.addNode("modBCST", configItem.abm0101fiscal.abm12modBcIcmsST, true);
+//							ICMSSN202.addNode("modBCST", configItem.abm0101fiscal.abm12modBcIcmsST, true);
+							ICMSSN202.addNode("modBCST", 0, true);
 							ICMSSN202.addNode("pMVAST", getCampo("245.42-N19","pMVAST") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.42-N19","pMVAST")), 2, true), false);
 							ICMSSN202.addNode("pRedBCST", getCampo("224.43-N20","pRedBCST") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("224.43-N20","pRedBCST")), 2, true), false);
 							ICMSSN202.addNode("vBCST", getCampo("245.44-N21","vBCST") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.44-N21","vBCST")), 2, false), true);
@@ -1171,7 +1173,8 @@ class NFe_Reforma extends FormulaBase {
 							ICMSSN900.addNode("CSOSN", cso, true);
 
 							if(getCampo("245.56-N15","vBC") != null && !jsonEaa0103.getBigDecimal(getCampo("245.56-N15","vBC")).equals(0)){
-								ICMSSN900.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, true);
+//								ICMSSN900.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, true);
+								ICMSSN900.addNode("modBC", 0, true);
 								ICMSSN900.addNode("vBC", getCampo("245.56-N15","vBC") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.56-N15","vBC")), 2, false), true);
 								ICMSSN900.addNode("pRedBC", getCampo("245.57-N14","pRedBC") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.57-N14","pRedBC")), 2, true), false);
 								ICMSSN900.addNode("pICMS", getCampo("245.58-N16","pICMS") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.58-N16","pICMS")), 2, false), true);
@@ -1179,7 +1182,8 @@ class NFe_Reforma extends FormulaBase {
 							}
 
 							if(getCampo("245.63-N21","vBCST") != null && !jsonEaa0103.getBigDecimal(getCampo("245.63-N21","vBCST")).equals(0)){
-								ICMSSN900.addNode("modBCST", configItem.abm0101fiscal.abm12modBcIcmsST, true);
+//								ICMSSN900.addNode("modBCST", configItem.abm0101fiscal.abm12modBcIcmsST, true);
+								ICMSSN900.addNode("modBCST", 0, true);
 								ICMSSN900.addNode("pMVAST", getCampo("245.61-N19","pMVAST") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.61-N19","pMVAST")), 2, true), false);
 								ICMSSN900.addNode("pRedBCST", getCampo("245.62-N20","pRedBCST") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.62-N20","pRedBCST")), 2, true), false);
 								ICMSSN900.addNode("vBCST", getCampo("245.63-N21","vBCST") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.63-N21","vBCST")), 2, false), true);
@@ -1239,7 +1243,8 @@ class NFe_Reforma extends FormulaBase {
 							ICMS00 = ICMS.addNode("ICMS00");
 							ICMS00.addNode("orig", orig, true);
 							ICMS00.addNode("CST", cst, true);
-							ICMS00.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, true);
+//							ICMS00.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, true);
+							ICMS00.addNode("modBC", 0, true);
 							ICMS00.addNode("vBC", getCampo("169-N15","vBC") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("169-N15","vBC")), 2, false), true);
 							ICMS00.addNode("pICMS", getCampo("170-N16","pICMS") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("170-N16","pICMS")), 2, false), true);
 							ICMS00.addNode("vICMS", getCampo("171-N17","vICMS") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("171-N17","vICMS")), 2, false), true);
@@ -1251,14 +1256,16 @@ class NFe_Reforma extends FormulaBase {
 							ICMS10 = ICMS.addNode("ICMS10");
 							ICMS10.addNode("orig", orig, true);
 							ICMS10.addNode("CST", cst, true);
-							ICMS10.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, true);
+//							ICMS10.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, true);
+							ICMS10.addNode("modBC", 0, true);
 							ICMS10.addNode("vBC", getCampo("176-N15","vBC") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("176-N15","vBC")), 2, false), true);
 							ICMS10.addNode("pICMS", getCampo("177-N16","pICMS") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("177-N16","pICMS")), 2, false), true);
 							ICMS10.addNode("vICMS", getCampo("178-N17","vICMS") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("178-N17","vICMS")), 2, false), true);
 							ICMS10.addNode("vBCFCP", getCampo("178.1-N17a","vBCFCP") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("178.1-N17a","vBCFCP")), 2, true), false);
 							ICMS10.addNode("pFCP", getCampo("178.2-N17b","pFCP") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("178.2-N17b","pFCP")), 4, true), false);
 							ICMS10.addNode("vFCP", getCampo("178.3-N17c","vFCP") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("178.3-N17c","vFCP")), 2, true), false);
-							ICMS10.addNode("modBCST", configItem.abm0101fiscal.abm12modBcIcmsST, true);
+//							ICMS10.addNode("modBCST", configItem.abm0101fiscal.abm12modBcIcmsST, true);
+							ICMS10.addNode("modBCST", 0, true);
 							ICMS10.addNode("pMVAST", getCampo("180-N19","pMVAST") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("180-N19","pMVAST")), 2, true), false);
 							ICMS10.addNode("pRedBCST", getCampo("181-N20","pRedBCST") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("181-N20","pRedBCST")), 2, true), false);
 							ICMS10.addNode("vBCST", getCampo("182-N21","vBCST") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("182-N21","vBCST")), 2, false), true);
@@ -1273,7 +1280,8 @@ class NFe_Reforma extends FormulaBase {
 							ICMS20 = ICMS.addNode("ICMS20");
 							ICMS20.addNode("orig", orig, true);
 							ICMS20.addNode("CST", cst, true);
-							ICMS20.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, true);
+//							ICMS20.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, true);
+							ICMS20.addNode("modBC", 0, true);
 							ICMS20.addNode("pRedBC", getCampo("189-N14","pRedBC") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("189-N14","pRedBC")), 2, false), true);
 							ICMS20.addNode("vBC", getCampo("190-N15","vBC") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("190-N15","vBC")), 2, false), true);
 							ICMS20.addNode("pICMS", getCampo("191-N16","pICMS") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("191-N16","pICMS")), 2, false), true);
@@ -1291,7 +1299,8 @@ class NFe_Reforma extends FormulaBase {
 							ICMS30 = ICMS.addNode("ICMS30");
 							ICMS30.addNode("orig", orig, true);
 							ICMS30.addNode("CST", cst, true);
-							ICMS30.addNode("modBCST", configItem.abm0101fiscal.abm12modBcIcms, true);
+//							ICMS30.addNode("modBCST", configItem.abm0101fiscal.abm12modBcIcms, true);
+							ICMS30.addNode("modBCST", 0, true);
 							ICMS30.addNode("pMVAST", getCampo("197-N19","pMVAST") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("197-N19","pMVAST")), 2, true), false);
 							ICMS30.addNode("pRedBCST", getCampo("198-N20","pRedBCST") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("198-N20","pRedBCST")), 2, true), false);
 							ICMS30.addNode("vBCST", getCampo("199-N21","vBCST") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("199-N21","vBCST")), 2, false), true);
@@ -1323,7 +1332,8 @@ class NFe_Reforma extends FormulaBase {
 							ICMS51 = ICMS.addNode("ICMS51");
 							ICMS51.addNode("orig", orig, true);
 							ICMS51.addNode("CST", cst, true);
-							ICMS51.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, false);
+							//ICMS51.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, false);
+							ICMS51.addNode("modBC",0, false);
 
 							Boolean temDiferimento = getCampo("211.02-N16b","pDif") != null && !jsonEaa0103.getBigDecimal(getCampo("211.02-N16b","pDif")).equals(0); //Se houver % de diferimento, gerar as tag mesmo que seja zero
 
@@ -1371,7 +1381,8 @@ class NFe_Reforma extends FormulaBase {
 							ICMS70 = ICMS.addNode("ICMS70");
 							ICMS70.addNode("orig", orig, true);
 							ICMS70.addNode("CST", cst, true);
-							ICMS70.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, true);
+							//ICMS70.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, true);
+							ICMS70.addNode("modBC",0, true);
 							ICMS70.addNode("pRedBC", getCampo("222-N14","pRedBC") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("222-N14","pRedBC")), 2, false), true);
 							ICMS70.addNode("vBC", getCampo("223-N15","vBC") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("223-N15","vBC")), 2, false), true);
 							ICMS70.addNode("pICMS", getCampo("224-N16","pICMS") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("224-N16","pICMS")), 2, false), true);
@@ -1379,7 +1390,8 @@ class NFe_Reforma extends FormulaBase {
 							ICMS70.addNode("vBCFCP", getCampo("225.1-N17a","vBCFCP") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("225.1-N17a","vBCFCP")), 2, true), false);
 							ICMS70.addNode("pFCP", getCampo("225.2-N17b","pFCP") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("225.2-N17b","pFCP")), 4, true), false);
 							ICMS70.addNode("vFCP", getCampo("225.3-N17c","vFCP") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("225.3-N17c","vFCP")), 2, true), false);
-							ICMS70.addNode("modBCST", configItem.abm0101fiscal.abm12modBcIcmsST, true);
+//							ICMS70.addNode("modBCST", configItem.abm0101fiscal.abm12modBcIcmsST, true);
+							ICMS70.addNode("modBCST", 0, true);
 							ICMS70.addNode("pMVAST", getCampo("227-N19","pMVAST") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("227-N19","pMVAST")), 2, true), false);
 							ICMS70.addNode("pRedBCST", getCampo("228-N20","pRedBCST") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("228-N20","pRedBCST")), 2, true), false);
 							ICMS70.addNode("vBCST", getCampo("229-N21","vBCST") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("229-N21","vBCST")), 2, false), true);
@@ -1399,7 +1411,8 @@ class NFe_Reforma extends FormulaBase {
 							ICMS90 = ICMS.addNode("ICMS90");
 							ICMS90.addNode("orig", orig, true);
 							ICMS90.addNode("CST", cst, true);
-							ICMS90.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcmsST, true);
+//							ICMS90.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcmsST, true);
+							ICMS90.addNode("modBC", 0, true);
 							ICMS90.addNode("vBC", getCampo("236-N15","vBC") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("236-N15","vBC")), 2, false), true);
 							ICMS90.addNode("pRedBC", getCampo("237-N14","pRedBC") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("237-N14","pRedBC")), 2, true), false);
 							ICMS90.addNode("pICMS", getCampo("238-N16","pICMS") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("238-N16","pICMS")), 2, false), true);
@@ -1409,7 +1422,8 @@ class NFe_Reforma extends FormulaBase {
 							ICMS90.addNode("vFCP", getCampo("239.y-N17c","vFCP") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("239.y-N17c","vFCP")), 2, true), false);
 
 							if(getCampo("243-N21","vBCST") != null && !jsonEaa0103.getBigDecimal(getCampo("243-N21","vBCST")).equals(0)) {
-								ICMS90.addNode("modBCST", configItem.abm0101fiscal.abm12modBcIcmsST, true);
+//								ICMS90.addNode("modBCST", configItem.abm0101fiscal.abm12modBcIcmsST, true);
+								ICMS90.addNode("modBCST", 0, true);
 								ICMS90.addNode("pMVAST", getCampo("241-N19","pMVAST") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("241-N19","pMVAST")), 2, true), false);
 								ICMS90.addNode("pRedBCST", getCampo("242-N20","pRedBCST") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("242-N20","pRedBCST")), 2, true), false);
 								ICMS90.addNode("vBCST", getCampo("243-N21","vBCST") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("243-N21","vBCST")), 2, false), true);
