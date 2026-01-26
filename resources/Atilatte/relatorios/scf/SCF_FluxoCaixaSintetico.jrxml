@@ -2,9 +2,9 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF2602R1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="fccb9374-6a81-4e93-937c-ba8c8857cb4b">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
-	<property name="ireport.zoom" value="5.054470284992946"/>
-	<property name="ireport.x" value="1225"/>
-	<property name="ireport.y" value="70"/>
+	<property name="ireport.zoom" value="1.7715610000000022"/>
+	<property name="ireport.x" value="356"/>
+	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -31,7 +31,7 @@
 	<field name="rp" class="java.lang.String"/>
 	<field name="entidade" class="java.lang.String"/>
 	<field name="abb01num" class="java.lang.Integer"/>
-	<field name="aab10user" class="java.lang.String"/>
+	<field name="aprovadores" class="java.lang.String"/>
 	<variable name="totalTes" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{tesouraria}]]></variableExpression>
 		<initialValueExpression><![CDATA[new BigDecimal(0)]]></initialValueExpression>
@@ -97,14 +97,14 @@
 					<text><![CDATA[Saldo Inicial]]></text>
 				</staticText>
 				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
-					<reportElement key="textField" x="456" y="0" width="79" height="11" uuid="f5992824-1a3f-4f70-8de0-fb394ec42045"/>
+					<reportElement key="textField" x="398" y="0" width="63" height="11" uuid="f5992824-1a3f-4f70-8de0-fb394ec42045"/>
 					<box>
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 						<bottomPen lineWidth="0.0" lineColor="#000000"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
-					<textElement textAlignment="Right">
+					<textElement>
 						<font fontName="Arial" size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{saldoInicial}]]></textFieldExpression>
@@ -117,21 +117,21 @@
 					<reportElement x="234" y="1" width="300" height="1" uuid="c7ca4e95-2473-4bfd-a6e2-dd2724709d59"/>
 				</line>
 				<staticText>
-					<reportElement x="268" y="2" width="53" height="13" uuid="59af06d8-0835-447c-8477-da56704b85e8"/>
+					<reportElement x="235" y="2" width="53" height="13" uuid="59af06d8-0835-447c-8477-da56704b85e8"/>
 					<textElement textAlignment="Center">
 						<font size="8"/>
 					</textElement>
 					<text><![CDATA[Total do Dia: ]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="327" y="2" width="64" height="13" uuid="bdc56ab3-3bfb-4df8-86c1-7418c0206e03"/>
+					<reportElement x="294" y="2" width="51" height="13" uuid="bdc56ab3-3bfb-4df8-86c1-7418c0206e03"/>
 					<textElement>
 						<font size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{totReceberGeral}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="392" y="2" width="64" height="13" uuid="aed32d85-d48b-400d-b05c-b801e747e232"/>
+					<reportElement x="346" y="2" width="52" height="13" uuid="aed32d85-d48b-400d-b05c-b801e747e232"/>
 					<textElement>
 						<font size="8"/>
 					</textElement>
@@ -145,14 +145,14 @@
 		<groupHeader>
 			<band height="11">
 				<textField evaluationTime="Group" evaluationGroup="vencimento" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
-					<reportElement key="textField" x="456" y="0" width="79" height="11" uuid="d9b101bf-4988-4755-a9b7-f02b91b401e6"/>
+					<reportElement key="textField" x="398" y="0" width="63" height="11" uuid="d9b101bf-4988-4755-a9b7-f02b91b401e6"/>
 					<box>
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 						<bottomPen lineWidth="0.0" lineColor="#000000"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
-					<textElement textAlignment="Right">
+					<textElement>
 						<font fontName="Arial" size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{totalSaldoAtualAgrup}]]></textFieldExpression>
@@ -171,37 +171,44 @@
 					<textFieldExpression><![CDATA[$F{vencimento}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="vencimento" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
-					<reportElement key="textField" x="327" y="0" width="64" height="11" uuid="561849fd-8070-4258-91be-6187d237ca7f"/>
+					<reportElement key="textField" x="294" y="0" width="51" height="11" uuid="561849fd-8070-4258-91be-6187d237ca7f"/>
 					<box>
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 						<bottomPen lineWidth="0.0" lineColor="#000000"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
-					<textElement textAlignment="Center">
+					<textElement>
 						<font fontName="Arial" size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{totalReceberAgrup}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="vencimento" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
-					<reportElement key="textField" x="392" y="0" width="64" height="11" uuid="46988514-1ead-40be-a6f1-f851210676a9"/>
+					<reportElement key="textField" x="346" y="0" width="52" height="11" uuid="46988514-1ead-40be-a6f1-f851210676a9"/>
 					<box>
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 						<bottomPen lineWidth="0.0" lineColor="#000000"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
-					<textElement textAlignment="Center">
+					<textElement>
 						<font fontName="Arial" size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{totalPagarAgrup}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="461" y="0" width="73" height="11" uuid="4f0c62a6-743d-42e1-8ead-661430eeb657"/>
+					<textElement>
+						<font fontName="Arial" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{aprovadores}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
 		<groupFooter>
 			<band height="16">
 				<staticText>
-					<reportElement x="258" y="3" width="53" height="13" uuid="6613f4ff-fd66-407a-b4d9-d588081f1ea4"/>
+					<reportElement x="225" y="3" width="53" height="13" uuid="6613f4ff-fd66-407a-b4d9-d588081f1ea4"/>
 					<textElement textAlignment="Center">
 						<font size="8"/>
 					</textElement>
@@ -211,27 +218,27 @@
 					<reportElement x="234" y="2" width="301" height="1" uuid="745ca3f8-4a31-4fdf-863a-87397e5b124b"/>
 				</line>
 				<textField evaluationTime="Group" evaluationGroup="vencimento" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
-					<reportElement key="textField" x="327" y="3" width="64" height="11" uuid="1a4b3a04-24f0-4de0-aeac-35a0feacd522"/>
+					<reportElement key="textField" x="294" y="3" width="51" height="11" uuid="1a4b3a04-24f0-4de0-aeac-35a0feacd522"/>
 					<box>
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 						<bottomPen lineWidth="0.0" lineColor="#000000"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
-					<textElement textAlignment="Center">
+					<textElement>
 						<font fontName="Arial" size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{totalReceberAgrup}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="vencimento" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
-					<reportElement key="textField" x="392" y="3" width="64" height="11" uuid="33337f10-dc27-42a5-995e-44035426c206"/>
+					<reportElement key="textField" x="346" y="3" width="52" height="11" uuid="33337f10-dc27-42a5-995e-44035426c206"/>
 					<box>
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 						<bottomPen lineWidth="0.0" lineColor="#000000"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
-					<textElement textAlignment="Center">
+					<textElement>
 						<font fontName="Arial" size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{totalPagarAgrup}]]></textFieldExpression>
@@ -320,40 +327,40 @@
 				<reportElement key="line-1" x="0" y="14" width="535" height="1" uuid="92643409-151d-47fd-821d-1c9faaa5d9f7"/>
 			</line>
 			<staticText>
-				<reportElement key="staticText-6" x="327" y="3" width="64" height="11" uuid="a3b67d24-f7ac-41de-aefb-23eb44454a3e"/>
+				<reportElement key="staticText-6" x="294" y="3" width="51" height="11" uuid="a3b67d24-f7ac-41de-aefb-23eb44454a3e"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<text><![CDATA[RECEBER]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-7" x="456" y="3" width="79" height="11" uuid="3381af5c-deb0-4ae6-9fb6-7b2d3f322ef5"/>
+				<reportElement key="staticText-7" x="398" y="3" width="63" height="11" uuid="3381af5c-deb0-4ae6-9fb6-7b2d3f322ef5"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Right">
+				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<text><![CDATA[SALDO ATUAL]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-8" x="392" y="3" width="64" height="11" uuid="23859c18-a12d-4f74-aaf4-9caa5c8155eb"/>
+				<reportElement key="staticText-8" x="346" y="3" width="52" height="11" uuid="23859c18-a12d-4f74-aaf4-9caa5c8155eb"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<text><![CDATA[PAGAR]]></text>
@@ -379,14 +386,14 @@
 				<text><![CDATA[Numero]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-6" x="294" y="3" width="33" height="11" uuid="8f535043-ac2e-4401-a35c-1fa8b4cc089e"/>
+				<reportElement key="staticText-6" x="461" y="3" width="73" height="11" uuid="8f535043-ac2e-4401-a35c-1fa8b4cc089e"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<text><![CDATA[APROV.]]></text>
@@ -418,15 +425,15 @@
 				<textFieldExpression><![CDATA[$F{entidade}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="392" y="0" width="64" height="13" uuid="01a5c620-7977-4ff9-b6ff-8f7ece2135ea"/>
-				<textElement textAlignment="Center">
+				<reportElement x="346" y="0" width="52" height="13" uuid="01a5c620-7977-4ff9-b6ff-8f7ece2135ea"/>
+				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{pagar}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="327" y="0" width="64" height="13" uuid="b3f18b47-0f2d-4db0-9b73-8d4de6c96276"/>
-				<textElement textAlignment="Center">
+				<reportElement x="294" y="0" width="51" height="13" uuid="b3f18b47-0f2d-4db0-9b73-8d4de6c96276"/>
+				<textElement>
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[0,00]]></text>
@@ -437,13 +444,6 @@
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{abb01num}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="294" y="0" width="33" height="13" uuid="4f0c62a6-743d-42e1-8ead-661430eeb657"/>
-				<textElement>
-					<font fontName="Arial" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{aab10user}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

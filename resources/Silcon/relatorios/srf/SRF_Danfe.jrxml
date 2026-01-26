@@ -3,7 +3,7 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.6528925619834725"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="48"/>
+	<property name="ireport.y" value="0"/>
 	<style name="style1" hAlign="Center"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\FontesSam4\\formulas-multitec\\src\\main\\resources\\multitec\\relatorios\\srf\\"]]></defaultValueExpression>
@@ -123,6 +123,7 @@
 	<field name="eaa01totItens" class="java.math.BigDecimal"/>
 	<field name="eaa0102despacho_complem" class="java.lang.String"/>
 	<field name="volumes" class="java.math.BigDecimal"/>
+	<field name="documentosAtrelados" class="java.lang.String"/>
 	<variable name="PEDCLI" class="java.lang.String"/>
 	<variable name="eaa01_NUMBER" class="java.lang.String"/>
 	<group name="eaa01" isStartNewPage="true" isResetPageNumber="true">
@@ -1971,13 +1972,6 @@ $F{eaa01nfeProt}.substring(12,15)+" "   : ""]]></textFieldExpression>
     ? $F{eaa01obsContrib} : $F{eaa01obsFisco})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="6" y="58" width="372" height="10" uuid="2b940762-e751-4134-a518-193310b46608"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="6"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{PEDCLI} == null ? "" : "Pedido do Cliente: " + $V{PEDCLI}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
 				<reportElement x="6" y="68" width="372" height="10" uuid="1f34298d-377d-4bd0-8af9-87660caf7e08"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="6"/>
@@ -1995,6 +1989,14 @@ $F{eaa01nfeProt}.substring(12,15)+" "   : ""]]></textFieldExpression>
 					<font fontName="Arial" size="6"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Valor aproximado dos impostos (Fonte: IBPT) : R$ " + ($F{total_impostos} == null ? "0,00" : new java.text.DecimalFormat("#,##0.00").format($F{total_impostos})) + " (" + ($F{percent_impostos} == null ? "0" : new java.text.DecimalFormat("#,##0.00").format($F{percent_impostos})) + "%)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="6" y="58" width="371" height="10" uuid="8a7b77ab-018e-4889-9bc3-86a096167a67"/>
+				<textElement>
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{documentosAtrelados} != null ? "Documentos Referenciados: " + $F{documentosAtrelados} :
+"";]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>

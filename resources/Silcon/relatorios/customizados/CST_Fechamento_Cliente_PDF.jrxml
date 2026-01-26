@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CST_Fechamento_Cliente_PDF" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="813b5c33-b783-4a77-b586-0b575d25c9a3">
 	<property name="ireport.zoom" value="1.24184264611831"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="54"/>
 	<parameter name="DATA" class="java.util.Date">
 		<defaultValueExpression><![CDATA[new Date()]]></defaultValueExpression>
 	</parameter>
@@ -31,7 +31,7 @@
 	<variable name="VLR_TITULOS" class="java.math.BigDecimal" resetType="Group" resetGroup="entidade" calculation="Sum">
 		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
 	</variable>
-	<variable name="VLR_DEVOLUCOES" class="java.math.BigDecimal" resetType="Group" resetGroup="entidade" calculation="Sum">
+	<variable name="VLR_DEVOLUCOES" class="java.math.BigDecimal" resetType="Group" resetGroup="entidade">
 		<variableExpression><![CDATA[$F{valorVale}]]></variableExpression>
 	</variable>
 	<variable name="VLR_JUROS" class="java.math.BigDecimal" resetType="Group" resetGroup="entidade" calculation="Sum">
@@ -292,7 +292,9 @@
 				<textFieldExpression><![CDATA[$P{USUARIO}]]></textFieldExpression>
 			</textField>
 			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="0" y="0" width="139" height="74" uuid="b544a5af-05a0-4505-bc47-45f3cd6cab20"/>
+				<reportElement x="0" y="0" width="139" height="74" uuid="b544a5af-05a0-4505-bc47-45f3cd6cab20">
+					<printWhenExpression><![CDATA[1 == 2]]></printWhenExpression>
+				</reportElement>
 				<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\customizados\\Logo Silcon.png"]]></imageExpression>
 			</image>
 			<line>

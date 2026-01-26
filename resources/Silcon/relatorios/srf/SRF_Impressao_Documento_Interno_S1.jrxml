@@ -115,7 +115,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{codNcm}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="511" y="1" width="44" height="13" uuid="d360a368-0f67-48a2-9745-76eaa2cb5171"/>
 				<textElement>
 					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
