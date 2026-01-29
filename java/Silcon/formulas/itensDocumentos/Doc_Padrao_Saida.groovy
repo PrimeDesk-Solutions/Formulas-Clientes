@@ -1,6 +1,3 @@
-/*
- * Desenvolvido por: ROGER.
- */
 package Silcon.formulas.itensDocumentos
 
 import sam.model.entities.aa.Aac13
@@ -712,6 +709,8 @@ public class Doc_Padrao_Saida extends FormulaBase {
                 jsonEaa0103.getBigDecimal_Zero("pis") -
                 jsonEaa0103.getBigDecimal_Zero("cofins") -
                 jsonEaa0103.getBigDecimal_Zero("icms"));
+
+        jsonEaa0103.put("cbs_ibs_bc", jsonEaa0103.getBigDecimal_Zero("cbs_ibs_bc").round(2))
 
         //================================
         //******       VALORES      ******
