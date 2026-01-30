@@ -100,6 +100,8 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
                 }
                 String comprador = buscarComprador(idDoc);
                 dado.put("comprador", comprador);
+            }else{
+                dado.put("comprador", dado.getString("nomeEntidade"))
             }
 
             dado.put("key", idDoc);
