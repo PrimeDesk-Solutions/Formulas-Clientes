@@ -52,9 +52,10 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
         for (dado in dados) {
             Long idDoc = dado.getLong("eaa01id");
             Long idEntidade = dado.getLong("abe01id");
+            String codEntidade = dado.getLong("codEntidade");
             List<TableMap> itensDoc = buscarItensDoc(idDoc);
             List<TableMap> parcelamento = buscarParcelamentosDocumentos(idDoc);
-            TableMap tmEnderecoEntrega = buscarEnderecoEntregaEntidade(idEntidade);
+            TableMap tmEnderecoEntrega = buscarEnderecoEntregaDocumento(idDoc);
             String obsInterno = dado.getString("obsInterno");
             Integer countItens = 0;
             Integer countParcela = 0;
@@ -91,6 +92,15 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
             }
 
             preencherFormaCondicaoPagamento(dado);
+
+            if(codEntidade == "9999999100"){ // Consumidor
+                if(tmEnderecoEntrega != null && tmEnderecoEntrega.size() > 0){
+                    dado.put("dddEntidade", tmEnderecoEntrega.getString("eaa0101ddd"));
+                    dado.put("foneEntidade", tmEnderecoEntrega.getString("eaa0101fone"));
+                }
+                String comprador = buscarComprador(idDoc);
+                dado.put("comprador", comprador);
+            }
 
             dado.put("key", idDoc);
         }
@@ -162,13 +172,12 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
 
     private List<TableMap> buscarDocumentoById(Long idDoc) {
         def sql = "SELECT DISTINCT eaa01id, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, abb01num AS numDoc, " +
-                "abe01codigo AS codEntidade, abe01na AS nomeEntidade, abe0101Principal.abe0101endereco AS enderecoEntidade, abe0101Principal.abe0101numero AS numEndEntidade, " +
+                "abe01codigo AS codEntidade, abe01nome AS nomeEntidade, abe0101Principal.abe0101endereco AS enderecoEntidade, abe0101Principal.abe0101numero AS numEndEntidade, " +
                 "abe0101Principal.abe0101complem AS complemEntidade, abe0101Principal.abe0101bairro AS bairroEntidade, aag0201Principal.aag0201nome AS cidadeEntidade, aag02Principal.aag02uf AS ufEntidade, " +
                 "abe0101Principal.abe0101cep AS cepEntidade, abe0101Principal.abe0101ddd1 AS dddEntidade, abe0101Principal.abe0101fone1 AS foneEntidade, aab10nome AS usuario, abb01data AS dtVenda, " +
                 "abe30codigo AS codCondPgto, abe30nome AS descrCondPgto, eaa01totItens AS totalItem, CAST(eaa01json ->> 'desconto' AS numeric(18,6)) AS desconto, eaa01totDoc AS totDoc, " +
                 "eaa01obsUsoInt AS obsInterno, CAST(eaa01json ->> 'com_nota' AS INTEGER) AS comNota, abe01id " +
                 "FROM eaa01 " +
-                "INNER JOIN eaa0101 ON eaa0101doc = eaa01id " +
                 "INNER JOIN abb01 ON abb01id = eaa01central " +
                 "INNER JOIN aab10 ON aab10id = abb01operUser " +
                 "INNER JOIN abe01 ON abe01id = abb01ent  " +
@@ -182,17 +191,20 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idDoc", idDoc))
     }
-    private buscarEnderecoEntregaEntidade(Long idEntidade){
-        return getSession().createQuery("SELECT abe0101bairro AS bairroEntregaEnt, abe0101endereco AS enderecoEntregaEnt, " +
-                                "abe0101numero AS numeroEntregaEnt, abe0101cep AS cepEntregaEnt, abe0101complem AS complemEntregaEnt, " +
-                                "aag0201nome AS cidadeEntregaEnt, aag02uf AS ufEntregaEntidade " +
-                                "FROM abe01 " +
-                                "LEFT JOIN abe0101 ON abe0101ent = abe01id " +
-                                "LEFT JOIN aag0201 ON aag0201id = abe0101municipio " +
+    private buscarEnderecoEntregaDocumento(Long idDoc){
+        return getSession().createQuery("SELECT eaa0101bairro AS bairroEntregaEnt, eaa0101endereco AS enderecoEntregaEnt, " +
+                                "eaa0101numero AS numeroEntregaEnt, eaa0101cep AS cepEntregaEnt, eaa0101complem AS complemEntregaEnt, " +
+                                "aag0201nome AS cidadeEntregaEnt, aag02uf AS ufEntregaEntidade, eaa0101ddd, eaa0101fone " +
+                                "FROM eaa0101 " +
+                                "LEFT JOIN aag0201 ON aag0201id = eaa0101municipio " +
                                 "LEFT JOIN aag02 ON aag0201uf = aag02id " +
-                                "WHERE abe01id = :idEntidade "+
-                                "AND abe0101entrega = 1").setParameter("idEntidade", idEntidade)
+                                "WHERE eaa0101doc = :idDoc "+
+                                "AND eaa0101entrega = 1").setParameter("idDoc", idDoc)
                                 .setMaxResult(1).getUniqueTableMap();
+    }
+    private String buscarComprador(idDoc){
+        String sql = "SELECT DISTINCT eaa0102pvComprador FROM eaa0102 WHERE eaa0102doc = :idDoc ";
+        return getAcessoAoBanco().obterString(sql, Parametro.criar("idDoc", idDoc));
     }
 
     private List<TableMap> buscarItensDoc(Long id) {
