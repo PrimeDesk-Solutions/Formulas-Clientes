@@ -82,6 +82,7 @@
 	<field name="comNota" class="java.lang.Integer"/>
 	<field name="tipoDoc" class="java.lang.String"/>
 	<field name="pagamentos" class="java.lang.String"/>
+	<field name="comprador" class="java.lang.String"/>
 	<group name="teste">
 		<groupExpression><![CDATA[$F{numDoc}]]></groupExpression>
 		<groupFooter>
@@ -159,9 +160,7 @@
 					<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
 				</textField>
 				<image>
-					<reportElement x="0" y="0" width="78" height="69" uuid="3150c2f4-6cdf-441f-8f59-67a909cf2b4a">
-						<printWhenExpression><![CDATA[1 == 2]]></printWhenExpression>
-					</reportElement>
+					<reportElement x="0" y="0" width="78" height="69" uuid="3150c2f4-6cdf-441f-8f59-67a909cf2b4a"/>
 					<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\srf\\Logo Silcon.png"]]></imageExpression>
 				</image>
 				<staticText>
@@ -214,13 +213,6 @@
 					<textFieldExpression><![CDATA[$F{nomeEntidade}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="55" y="86" width="162" height="15" uuid="2bf81890-8ac0-44b4-be7b-079603ac631f"/>
-					<textElement>
-						<font fontName="Arial" size="8"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{enderecoEntidade} + " " + $F{numEndEntidade}.equals(0) ? "S/N" : ", " + $F{numEndEntidade}]]></textFieldExpression>
-				</textField>
-				<textField isBlankWhenNull="true">
 					<reportElement x="66" y="101" width="151" height="15" uuid="781350d0-865d-46d6-968f-4bf5d5381da8"/>
 					<textElement>
 						<font fontName="Arial" size="8"/>
@@ -256,8 +248,8 @@
 					<textElement>
 						<font fontName="Arial" size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{dddEntidade} == null ? "" : "("+$F{dddEntidade}+") " +
-$F{foneEntidade} == null ? "" : $F{foneEntidade}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[($F{dddEntidade} == null ? "" : "("+$F{dddEntidade}+") ") +
+($F{foneEntidade} == null ? "" : $F{foneEntidade})]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="331" y="71" width="32" height="15" uuid="19c763c0-1987-47b8-ac7f-fb182599733c"/>
@@ -477,6 +469,28 @@ $F{foneEntidade} == null ? "" : $F{foneEntidade}]]></textFieldExpression>
 					</textElement>
 					<text><![CDATA[QTD]]></text>
 				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="387" y="131" width="166" height="15" uuid="79a5520a-dc75-452e-8766-fe8c9ae295ef"/>
+					<textElement>
+						<font fontName="Arial" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{comprador}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="331" y="131" width="55" height="15" uuid="69a8c4a4-d1cb-4045-b7fb-8259d3530e04"/>
+					<textElement>
+						<font fontName="Arial" size="8"/>
+					</textElement>
+					<text><![CDATA[Comprador:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="55" y="86" width="276" height="15" uuid="c29b34af-ca62-4490-914e-fc28cf9d8f4d"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{enderecoEntidade} != null ? $F{enderecoEntidade} + ", " : "")+
+($F{numEndEntidade}.equals("0") ? "S/N" : $F{numEndEntidade} )]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupHeader>
 		<groupFooter>
