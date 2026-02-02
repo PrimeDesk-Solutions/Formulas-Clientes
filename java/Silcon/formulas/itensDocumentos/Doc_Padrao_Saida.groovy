@@ -11,6 +11,7 @@ import br.com.multitec.utils.collections.TableMap;
 import sam.core.variaveis.MDate
 import sam.dicdados.FormulaTipo;
 import sam.model.entities.aa.Aac10;
+import sam.model.entities.aa.Aah01;
 import sam.model.entities.aa.Aag01;
 import sam.model.entities.aa.Aag02;
 import sam.model.entities.aa.Aag0201;
@@ -59,6 +60,7 @@ import java.time.LocalDate
 public class Doc_Padrao_Saida extends FormulaBase {
 
     private Aac10 aac10;
+    private Aah01 aah01;
     private Aaj01 aaj01;
     private Aac13 aac13;
     private Aag01 aag01;
@@ -131,6 +133,9 @@ public class Doc_Padrao_Saida extends FormulaBase {
 
         //Central de Documento
         abb01 = eaa01.eaa01central;
+
+        // Tipo de Documento
+        aah01 = getSession().get(Aah01.class, abb01.abb01tipo.aah01id)
 
         //PCD
         abd01 = getSession().get(Abd01.class, eaa01.eaa01pcd.abd01id);
@@ -276,6 +281,8 @@ public class Doc_Padrao_Saida extends FormulaBase {
 
         if (eaa0103.eaa0103qtComl > 0) {
 
+            if(eaa01.eaa01obsUsoInt == "MIGRADO") return;
+
             //Define se a entidade é ou não contribuinte de ICMS
             Integer contribICMS = 0;
 
@@ -404,13 +411,13 @@ public class Doc_Padrao_Saida extends FormulaBase {
     // Trocar CFOP (Dentro ou fora do estado)
     private void definirCFOP(Boolean dentroEstado) {
         String cfop = "";
-        
+
         // Atribui o CFOP 5102
         if (dentroEstado) {
             if (eaa0103.eaa0103cstIcms != null) {
 
                 if (eaa0103.eaa0103cstIcms.aaj10codigo == "000" || eaa0103.eaa0103cstIcms.aaj10codigo == "040" || eaa0103.eaa0103cstIcms.aaj10codigo == "041" || eaa0103.eaa0103cstIcms.aaj10codigo == "090" || eaa0103.eaa0103cstIcms.aaj10codigo == "200" ||
-                    eaa0103.eaa0103cstIcms.aaj10codigo == "240" || eaa0103.eaa0103cstIcms.aaj10codigo == "241") {
+                        eaa0103.eaa0103cstIcms.aaj10codigo == "240" || eaa0103.eaa0103cstIcms.aaj10codigo == "241") {
 
                     cfop = "5102";
 
@@ -421,8 +428,17 @@ public class Doc_Padrao_Saida extends FormulaBase {
         }
 
         if (!dentroEstado) {
-            cfop = "6404";
+            cfop = "6403";
         }
+
+        if(aah01.aah01modelo == '65'){
+            cfop = '5102'
+        }
+
+        aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
+        if(aaj15_cfop == null) throw new ValidacaoException("Não foi encontrado CFOP com o código " + cfop);
+
+        eaa0103.eaa0103cfop = aaj15_cfop;
     }
 
     private void calcularIcmsSTRetido() {

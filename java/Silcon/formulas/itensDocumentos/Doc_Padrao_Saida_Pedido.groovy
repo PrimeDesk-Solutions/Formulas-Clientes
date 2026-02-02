@@ -270,6 +270,8 @@ public class Doc_Padrao_Saida_Pedido extends FormulaBase {
 
     private void calcularItem() {
         if (eaa0103.eaa0103qtComl > 0) {
+            if(eaa01.eaa01obsUsoInt == "MIGRADO") return;
+
             definirPrecoUnitarioItem();
 
             //Define se a entidade é ou não contribuinte de ICMS

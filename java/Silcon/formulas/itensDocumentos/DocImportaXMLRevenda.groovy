@@ -1,6 +1,3 @@
-/*
- * Desenvolvido por: ROGER.
- */
 package Silcon.formulas.itensDocumentos
 
 import sam.model.entities.aa.Aac13
@@ -248,15 +245,13 @@ public class DocImportaXMLRevenda extends FormulaBase {
                 dentroEstado = ufEmpr.aag02uf == ufEnt.aag02uf;
             }
 
-            definirCFOP(dentroEstado);
-
             // Conserva Qt.Original do documento (Qt.Faturamento original)
             if (jsonEaa0103.getBigDecimal_Zero("qt_original") == 0) {
                 jsonEaa0103.put("qt_original", eaa0103.eaa0103qtComl);
             }
 
             // Qtde SCE
-            eaa0103.eaa0103qtUso = (eaa0103.eaa0103qtComl * abm13.abm13fcVU).round(3);
+            eaa0103.eaa0103qtUso = eaa0103.eaa0103qtComl;
 
             // Converte Qt.Documento para Volume
             if (jsonEaa0103.getBigDecimal_Zero("volumes") >= 0) {
@@ -267,10 +262,10 @@ public class DocImportaXMLRevenda extends FormulaBase {
             }
 
             // Peso Bruto
-            jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto).round(3));
+            jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto_Zero).round(3));
 
             // Peso Líquido
-            jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(3));
+            jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq_Zero).round(3));
 
             //Soma IPI no Unitario
             if (eaa0103.eaa0103unit == 0) {
@@ -285,66 +280,28 @@ public class DocImportaXMLRevenda extends FormulaBase {
                                     jsonEaa0103.getBigDecimal_Zero("seguro") +
                                     jsonEaa0103.getBigDecimal_Zero("outras_despesas").round(2));
 
+            calcularIcmsST(dentroEstado);
+
             // Total do Documento
-            eaa0103.eaa0103totDoc = (eaa0103.eaa0103total - jsonEaa0103.getBigDecimal_Zero("icms_st_sped"));
+            eaa0103.eaa0103totDoc = (eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("icms_st_sped"));
 
-            // CALCULOIPI
-            calcularIPI();
-
-            // Preenche o CST de ICMS do Item
-            String cstIcms = buscarCstICMS();
-
-            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cstIcms));
-
-            // Calcula ICMS Itens
-            calcularICMS(contribICMS);
-
-            // CalculoIcmsSTRetido
-            calcularIcmsSTRetido();
-
-            // Calcular ICMS ST REGIME
-            calcularIcmsSTRegime();
-
-            //CalculoPIS
-            calculaPIS();
-
-            //CalculoCOFINS
-            calculaCOFINS();
-
-            // ICMS Isento
-            if (eaa0103.eaa0103cstIcms.aaj10codigo == '040' || eaa0103.eaa0103cstIcms.aaj10codigo == '240' ||
-                eaa0103.eaa0103cstIcms.aaj10codigo == '041' || eaa0103.eaa0103cstIcms.aaj10codigo == '241' || eaa0103.eaa0103cstIcms.aaj10codigo == '090') {
-
-                jsonEaa0103.put("icms_isento", eaa0103.eaa0103totDoc);
-                jsonEaa0103.put("bc_icms", new BigDecimal(0));
-                jsonEaa0103.put("_reduc_bc_icms", new BigDecimal(0));
-                jsonEaa0103.put("aliq_icms", new BigDecimal(0));
-                jsonEaa0103.put("icms", new BigDecimal(0));
-                jsonEaa0103.put("icms_outras", new BigDecimal(0));
-            }
-
-            //Total finaceiro
-            if (jsonAbm1001_UF_Item == null || jsonAbm1001_UF_Item.getBigDecimal_Zero("_iva_st_var_ou") ||
-                                               jsonAbm1001_UF_Item.getBigDecimal_Zero("_iva_st_atac") == 0) {
-                                               eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
-
-            } else {
+            // Total Financeiro
+            if(jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_iva_st") == 0){
+                eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
+            }else{
                 eaa0103.eaa0103totFinanc = eaa0103.eaa0103total;
             }
 
-            //Adicionar IPI no campo IPI Interno
-            jsonEaa0103.put("bc_ipi_interno", jsonEaa0103.getBigDecimal_Zero("bcipi_sped"));
-//            jsonEaa0103.put("ipi_interno", jsonEaa0103.getBigDecimal_Zero("ipi_sped"));
-//            jsonEaa0103.put("ipi_interno", jsonEaa0103.getBigDecimal_Zero("ipi_sped"));
+            definirCFOP(dentroEstado);
 
-            // calcularCargaTributaria
-            calcularCargaTributaria();
-
-            // calculaCupomFiscal
-            calculaCupomFiscal(dentroEstado);
+            // Adicionar IPO no campo IPI Interno
+            jsonEaa0103.put("bc_ipi_interno", jsonEaa0103.getBigDecimal_Zero("bc_ipi_sped"));
+            jsonEaa0103.put("aliq_ipi_interno", jsonEaa0103.getBigDecimal_Zero("aliq_ipi_sped"));
+            jsonEaa0103.put("ipi_interno", jsonEaa0103.getBigDecimal_Zero("ipi_sped"));
 
             // preencherSPEDS
             preencherSPEDS();
+
 
         }
 
@@ -352,86 +309,71 @@ public class DocImportaXMLRevenda extends FormulaBase {
 
     // Trocar CFOP (Dentro ou fora do estado)
     private void definirCFOP (Boolean dentroEstado) {
+
+
         if (eaa0103.eaa0103cfop != null) {
             String cfop = aaj15_cfop.aaj15codigo;
-
             String primeiroDigito = cfop.substring(0, 1);
+            String segundoDigito = cfop.substring(1,2);
 
-            if (!dentroEstado) {
-                if (primeiroDigito == "1") {
-                    primeiroDigito = "2";
-                }
-
-                if (primeiroDigito == "5") {
-                    primeiroDigito = "6";
-                }
-
-                if (dentroEstado) {
-                    String cfopF = "2403";
-                    eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfopF));
-
-                } else {
-                    String cfopD = "1403";
-                    eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfopD));
-                }
-
-                String segundoDigito = cfop.substring(1,2);
-
-                if (segundoDigito == "0" || segundoDigito == "1" || segundoDigito =="9") {
-                    cfop = "1102";
-                    eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
-                    eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.in("aaj10codigo", 7, cfop));
-                }
-
-                if (segundoDigito == "4" || segundoDigito == "6") {
-                    cfop = "1403";
-                    eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", "000"));
-                    eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.in("aaj10codigo", 7, "060"));
-                }
-
-                if (eaa0103.eaa0103cstIcms.aaj10codigo = "1405" && eaa0103.eaa0103cstIcms.aaj10codigo == "060") {
-                    jsonEaa0103.put("icms_st_sped", new BigDecimal(0));
-                    jsonEaa0103.put("bcicms_st_sped", new BigDecimal(0));
-                    jsonEaa0103.put("icmsst_sped", new BigDecimal(0));
-                }
+            if (segundoDigito == "0" || segundoDigito == "1" || segundoDigito =="9") {
+                cfop = "1102";
+                eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
+                eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.in("aaj10codigo", "000"));
             }
 
-            cfop = primeiroDigito + cfop.substring(1);
+            if (segundoDigito == "4" || segundoDigito == "6") {
+                cfop = "1403";
+                eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
+                eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", "060"));
+            }
 
-            aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
-
-            eaa0103.eaa0103cfop = aaj15_cfop;
+            if(!dentroEstado){
+                primeiroDigito = "2";
+                cfop = primeiroDigito + cfop.substring(1);
+                aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
+            }else{
+                primeiroDigito = "1";
+                cfop = primeiroDigito + cfop.substring(1);
+                aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
+            }
         }
     }
+    private calcularIcmsST(Boolean dentroEstado){
+        def ivaSt = 0;
+        if(jsonEaa0103.getBigDecimal_Zero("icms_st_sped") == 0){
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_icms_st") != -1){
+                jsonEaa0103.put("aliq_icms_st_sped", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms_st"));
+                ivaSt = jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_iva_st");
 
-    private void calcularIPI() {
+                if(ivaSt > 0){
+                    jsonEaa0103.put("bc_icms_st_sped", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest") + jsonEaa0103.getBigDecimal_Zero("seguro") + jsonEaa0103.getBigDecimal_Zero("outras_despesas" + jsonEaa0103.getBigDecimal_Zero("ipi")))
+                    jsonEaa0103.put("bc_icms_st_sped", jsonEaa0103.getBigDecimal_Zero("bc_icms_st_sped") * ((ivaSt / 100) + 1));
+                    jsonEaa0103.put("bc_icms_st_sped", jsonEaa0103.getBigDecimal_Zero("bc_icms_st_sped").round(2));
 
-        // ============================================================================================
-        // ***************************************** IPI **********************************************
-        // ============================================================================================
+                    jsonEaa0103.put("icms_st_sped", (jsonEaa0103.getBigDecimal_Zero("bc_icms_st_sped") * (jsonEaa0103.getBigDecimal_Zero("aliq_icms_st_sped") / 100)) - jsonEaa0103.getBigDecimal_Zero("icms_sped"));
+                    jsonEaa0103.put("icms_st_sped", jsonEaa0103.getBigDecimal_Zero("icms_st_sped").round(2));
 
-        // Valor do IPI
-        if (jsonEaa0103.getBigDecimal_Zero("aliq_ipi") != -1) {
+                    // Troca CFOP
+                    if(!dentroEstado){
+                        aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", '2403'));
+                    }else{
+                        aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", '1403'));
+                    }
 
-            //BC de IPI = Total do Item + Frete + Seguro + Despesas Acessorias
-            jsonEaa0103.put("bc_ipi", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest") + jsonEaa0103.getBigDecimal_Zero("seguro") +jsonEaa0103.getBigDecimal_Zero("outras_despesas"));
+                }else{
+                    jsonEaa0103.put("aliq_icms_st_sped", new BigDecimal(0));
+                    jsonEaa0103.put("bc_icms_st_sped", new BigDecimal(0));
+                    jsonEaa0103.put("icms_st_sped", new BigDecimal(0));
+                }
 
-            jsonEaa0103.put("bc_ipi", round(jsonEaa0103.getBigDecimal_Zero("bc_ipi"),2));
-
-            //Alíquota de IPI do cadastro de NCM
-            if (abg01 != null && abg01.abg01txIpi_Zero > 0) {
-                jsonEaa0103.put("aliq_ipi", abg01.abg01txIpi);
+            }else{
+                jsonEaa0103.put("aliq_icms_st_sped", new BigDecimal(0));
+                jsonEaa0103.put("bc_icms_st_sped", new BigDecimal(0));
+                jsonEaa0103.put("icms_st_sped", new BigDecimal(0));
             }
-
-            // Aplica Aliquota para calcular IPI
-            jsonEaa0103.put("ipi", jsonEaa0103.getBigDecimal_Zero("bc_ipi") * (jsonEaa0103.getBigDecimal_Zero("aliq_ipi") / 100) );
-            jsonEaa0103.put("ipi", jsonEaa0103.getBigDecimal_Zero("ipi").round(2));
-
-        } else {
-            jsonEaa0103.put("ipi_outras", eaa0103.eaa0103totDoc);
-            jsonEaa0103.put("bc_ipi", new BigDecimal(0));
-            jsonEaa0103.put("ipi", new BigDecimal(0));
         }
+
     }
 
     private String buscarCstICMS() {
@@ -724,45 +666,45 @@ public class DocImportaXMLRevenda extends FormulaBase {
         // ========================================================================================
 
         // BC Cofins SPED = Cofins
-        jsonEaa0103.put("bc_cofins_sped", jsonEaa0103.getBigDecimal_Zero("bc_cofins"));
+        jsonEaa0103.put("bc_cofins", jsonEaa0103.getBigDecimal_Zero("bc_cofins_sped"));
 
         //Aliq Cofins SPED = Aliq Cofins
-        jsonEaa0103.put("_cofins_sped", jsonEaa0103.getBigDecimal_Zero("aliq_cofins"));
+        jsonEaa0103.put("aliq_cofins", jsonEaa0103.getBigDecimal_Zero("aliq_cofins_sped"));
 
         // Cofins SPED = Cofins
-        jsonEaa0103.put("cofins_sped", jsonEaa0103.getBigDecimal_Zero("cofins"));
+        jsonEaa0103.put("cofins", jsonEaa0103.getBigDecimal_Zero("cofins_sped"));
 
         // BC PIS SPED = BC PIS
-        jsonEaa0103.put("bc_pis_sped", jsonEaa0103.getBigDecimal_Zero("bc_pis"));
+        jsonEaa0103.put("bc_pis", jsonEaa0103.getBigDecimal_Zero("bc_pis_sped"));
 
         // Aliq PIS SPED = Aliq SPED
-        jsonEaa0103.put("_pis_sped", jsonEaa0103.getBigDecimal_Zero("aliq_pis"));
+        jsonEaa0103.put("aliq_pis", jsonEaa0103.getBigDecimal_Zero("aliq_pis_sped"));
 
         // PIS SPED = PIS
-        jsonEaa0103.put("pis", jsonEaa0103.getBigDecimal_Zero("pis"));
+        jsonEaa0103.put("pis", jsonEaa0103.getBigDecimal_Zero("pis_sped"));
 
         // ========================================================================================
         // 								  ICMS SPED
         // ========================================================================================
 
         //BC ICMS SPED = BC ICMS
-        jsonEaa0103.put("bcicms_sped", jsonEaa0103.getBigDecimal_Zero("bc_icms"));
+        jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms_sped"));
 
         //Aliq ICMS SPED = Aliq ICMS
-        jsonEaa0103.put("aliq_icms_sped", jsonEaa0103.getBigDecimal_Zero("aliq_icms"));
+        jsonEaa0103.put("aliq_icms", jsonEaa0103.getBigDecimal_Zero("aliq_icms_sped"));
 
 
         //Aliq Reduc BC ICMS SPED = Aliq Reduc BC ICMS
-        jsonEaa0103.put("redbcicms_sped", jsonEaa0103.getBigDecimal_Zero("_red_bc_icms"));
+        jsonEaa0103.put("aliq_red_bc_icms", jsonEaa0103.getBigDecimal_Zero("aliq_red_bc_icms_sped"));
 
         //ICMS Outras SPED = ICMS Outras
-        jsonEaa0103.put("icmsoutras_sped", jsonEaa0103.getBigDecimal_Zero("icms_outras"));
+        jsonEaa0103.put("icms_outras", jsonEaa0103.getBigDecimal_Zero("icms_outras_sped"));
 
         //ICMS Isento SPED = ICMS Isento
-        jsonEaa0103.put("icmsisento_sped", jsonEaa0103.getBigDecimal_Zero("icms_isento"));
+        jsonEaa0103.put("icms_isento", jsonEaa0103.getBigDecimal_Zero("icms_isento_sped"));
 
         //ICMS SPED = ICMS
-        jsonEaa0103.put("icms_sped", jsonEaa0103.getBigDecimal_Zero("icms"));
+        jsonEaa0103.put("icms", jsonEaa0103.getBigDecimal_Zero("icms_sped"));
 
 
         // ========================================================================================
@@ -770,13 +712,13 @@ public class DocImportaXMLRevenda extends FormulaBase {
         // ========================================================================================
 
         //BC ICMS ST SPED = BC ICMS ST
-        jsonEaa0103.put("bc_icms_st_sped", jsonEaa0103.getBigDecimal_Zero("bc_icms_st"));
+        jsonEaa0103.put("bc_icms_st", jsonEaa0103.getBigDecimal_Zero("bc_icms_st_sped"));
 
         //Aliq ICMS ST SPED = Aliq ICMS ST
-        jsonEaa0103.put("_icms_st_sped", jsonEaa0103.getBigDecimal_Zero("_icms_st"));
+        jsonEaa0103.put("aliq_icms_st", jsonEaa0103.getBigDecimal_Zero("aliq_icms_st_sped"));
 
         //ICMS ST SPED = ICMS ST
-        jsonEaa0103.put("icms_st_sped", jsonEaa0103.getBigDecimal_Zero("icms_st"));
+        jsonEaa0103.put("icms_st", jsonEaa0103.getBigDecimal_Zero("icms_st_sped"));
 
 
         // ========================================================================================
@@ -784,19 +726,19 @@ public class DocImportaXMLRevenda extends FormulaBase {
         // ========================================================================================
 
         //BC IPI SPED = BC IPI
-        jsonEaa0103.put("bcipi_sped", jsonEaa0103.getBigDecimal_Zero("bc_ipi"));
+        jsonEaa0103.put("bc_ipi", jsonEaa0103.getBigDecimal_Zero("bc_ipi_sped"));
 
         //Aliq IPI SPED = Aliq IPI
-        jsonEaa0103.put("_ipi_sped", jsonEaa0103.getBigDecimal_Zero("aliq_ipi"));
+        jsonEaa0103.put("aliq_ipi", jsonEaa0103.getBigDecimal_Zero("aliq_ipi_sped"));
 
         //IPI Outras SPED = IPI Outras
-        jsonEaa0103.put("ipioutras_sped", jsonEaa0103.getBigDecimal_Zero("ipi_outras"));
+        jsonEaa0103.put("ipi_outras", jsonEaa0103.getBigDecimal_Zero("ipi_outras_sped"));
 
         //IPI Isento SPED = IPI Isento
-        jsonEaa0103.put("ipiisento_sped", jsonEaa0103.getBigDecimal_Zero("ipi_isento"));
+        jsonEaa0103.put("ipi_isento", jsonEaa0103.getBigDecimal_Zero("ipi_isento_sped"));
 
         //IPI SPED = IPI
-        jsonEaa0103.put("ipi_sped", jsonEaa0103.getBigDecimal_Zero("ipi"));
+        jsonEaa0103.put("ipi", jsonEaa0103.getBigDecimal_Zero("ipi_sped"));
     }
 
     @Override
