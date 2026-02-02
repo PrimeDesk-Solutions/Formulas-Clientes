@@ -633,6 +633,7 @@ class CAS_ImportarXmlDocSam3 extends FormulaBase{
                 eaa01.eaa01central.abb01operAutor = "CAS4801";
                 eaa01.eaa01central.abb01eg = obterEmpresaAtiva()
 
+
                 if(eaa01.eaa0102s == null) eaa01.eaa0102s = new ArrayList();
 
                 List<Eaa0102> eaa0102s = eaa01.eaa0102s.toList();
@@ -724,6 +725,7 @@ class CAS_ImportarXmlDocSam3 extends FormulaBase{
                                 BigDecimal valueBigDecimal = new BigDecimal(value);
                                 eaa0103json.put(campoLivre, valueBigDecimal)
                             }
+                            eaa0103json.put("migrado", 1)
                         }
                         eaa0103.eaa0103json = eaa0103json;
 
@@ -753,21 +755,25 @@ class CAS_ImportarXmlDocSam3 extends FormulaBase{
         }
 
         if(mensagens.size() > 0){
-            Aba20 aba20 = session.createCriteria(Aba20.class).addWhere(Criterions.eq("aba20codigo", "Avisos")).get(ColumnType.ENTITY);
+            try{
+                Aba20 aba20 = session.createCriteria(Aba20.class).addWhere(Criterions.eq("aba20codigo", "Avisos")).get(ColumnType.ENTITY);
 
-            for(String mensagem : mensagens){
-                Aba2001 aba2001 = new Aba2001();
-                aba2001.setAba2001rd(aba20)
-                aba2001.setAba2001lcto(mensagens.indexOf(mensagem))
-                aba2001.setAba2001prop("Aviso")
-                TableMap json = new TableMap()
-                json.put("msg", mensagem)
-                aba2001.setAba2001json(json);
+                for(String mensagem : mensagens){
+                    Aba2001 aba2001 = new Aba2001();
+                    aba2001.setAba2001rd(aba20)
+                    aba2001.setAba2001lcto(mensagens.indexOf(mensagem))
+                    aba2001.setAba2001prop("Aviso")
+                    TableMap json = new TableMap()
+                    json.put("msg", mensagem)
+                    aba2001.setAba2001json(json);
 
-                session.persist(aba2001)
+                    session.persist(aba2001)
+                }
+            }catch(MultiValidationException ex){
+                interromper(ex.validations.get(0).message)
             }
 
-            interromper("Repositorio de dados preenchido!")
+            //interromper("Repositorio de dados preenchido!")
         }
 
     }

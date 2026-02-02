@@ -40,13 +40,13 @@ public class CAS_Importar_Central_Documentos_Cashback extends FormulaBase{
         while(txt.nextLine()){
             linha++;
             Integer numDoc = Integer.parseInt(txt.getCampo(1));
-            Long idEntidade = Long.parseLong(txt.getCampo(2));
+            String codEntidade = txt.getCampo(2);
             BigDecimal valor = new BigDecimal(txt.getCampo(3));
             String tipoDoc = txt.getCampo(4);
 
             // Entidade
-            Abe01 abe01 = getSession().createCriteria(Abe01.class).addWhere(Criterions.eq("abe01id", idEntidade)).addWhere(Criterions.eq("abe01gc", 1075797)).get(ColumnType.ENTITY);
-            if(abe01 == null) interromper("Não foi encontrado a entidade para o id " + idEntidade.toString() + ". Linha: " + linha);
+            Abe01 abe01 = getSession().createCriteria(Abe01.class).addWhere(Criterions.eq("abe01codigo", codEntidade)).addWhere(Criterions.eq("abe01gc", 1075797)).get(ColumnType.ENTITY);
+            if(abe01 == null) interromper("Não foi encontrado a entidade para o codigo " + codEntidade.toString() + ". Linha: " + linha);
 
             // Tipo Documento
             Aah01 aah01 = getSession().createCriteria(Aah01.class).addWhere(Criterions.eq("aah01codigo", tipoDoc)).get(ColumnType.ENTITY);

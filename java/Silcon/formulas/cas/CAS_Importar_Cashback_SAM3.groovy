@@ -44,26 +44,26 @@ public class CAS_Importar_Cashback_SAM3 extends FormulaBase {
 
         while (txt.nextLine()) {
             linha++;
-            Integer numero = Integer.parseInt(txt.getCampo(1));
-            Long idEntidade = Long.parseLong(txt.getCampo(2));
-            String codTipoDoc = txt.getCampo(3);
-            String nomeCashback = txt.getCampo(4);
-            LocalDate data = LocalDate.parse(txt.getCampo(5));
-            String observacao = txt.getCampo(6);
+            Integer numero = Integer.parseInt(txt.getCampo(2));
+            String codEntidade = txt.getCampo(3);
+            String codTipoDoc = txt.getCampo(4);
+            String nomeCashback = txt.getCampo(5);
+            LocalDate data = LocalDate.parse(txt.getCampo(6));
+            String observacao = txt.getCampo(7);
 
             // Tipo Documento
-            Abf30 abf30 = getSession().createCriteria(Abf30.class).addWhere(Criterions.eq("abf30codigo", codTipoDoc)).addWhere(Criterions.eq("abf30gc", 1075797)).get(ColumnType.ENTITY);
+            Abf30 abf30 = getSession().createCriteria(Abf30.class).addWhere(Criterions.eq("abf30id", 35610614)).addWhere(Criterions.eq("abf30gc", 1075797)).get(ColumnType.ENTITY);
             if (abf30 == null) interromper("Tipo de documento de cashback não encontrado.");
 
             // Entidade
-            Abe01 abe01 = getSession().createCriteria(Abe01.class).addWhere(Criterions.eq("abe01id", idEntidade)).addWhere(Criterions.eq("abe01gc", 1075797)).get(ColumnType.ENTITY);
-            if (abe01 == null) interromper("Não foi encontrado a entidade para o id " + idEntidade.toString() + ". Linha: " + linha);
+            Abe01 abe01 = getSession().createCriteria(Abe01.class).addWhere(Criterions.eq("abe01codigo", codEntidade)).addWhere(Criterions.eq("abe01gc", 1075797)).get(ColumnType.ENTITY);
+            if (abe01 == null) interromper("Não foi encontrado a entidade para o id " + codEntidade.toString() + ". Linha: " + linha);
 
             criarCashback(abe01, abf30, nomeCashback, data, observacao, numero, linha);
         }
     }
     private void criarCashback(Abe01 abe01, Abf30 abf30, String nomeCashback, LocalDate data, String observacao, Integer numero, Integer linha) {
-        try {
+        //try {
             Dad01 dad01 = new Dad01();
             dad01.dad01ent = abe01;
             dad01.dad01tipo = abf30;
@@ -81,9 +81,9 @@ public class CAS_Importar_Cashback_SAM3 extends FormulaBase {
 
             criarLancamentosVale(dad01, numero);
 
-        } catch (Exception e) {
-            interromper("Falha ao gravar registro. " + e.getMessage() + " linha: " + linha)
-        }
+//        } catch (Exception e) {
+//            interromper("Falha ao gravar registro. " + e.getMessage() + " linha: " + linha)
+//        }
     }
     private BigDecimal somarSaldoCashback(Integer numero) {
         Long idTipoDoc = buscarIdTipoDoc();

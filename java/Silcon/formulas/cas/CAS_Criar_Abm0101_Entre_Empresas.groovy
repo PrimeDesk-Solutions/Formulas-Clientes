@@ -1,3 +1,6 @@
+/*
+    Script utilizado para replicar os dados de uma empresa principal para as filiais. Excluir a Abm0101 das demais empresas e deixar somente da principal.
+ */
 package Silcon.formulas.cas
 
 import br.com.multiorm.ColumnType
@@ -24,8 +27,10 @@ public class CAS_Criar_Abm0101_Entre_Empresas extends FormulaBase{
         List<Abm0101> abm0101s = buscarListaAbm0101();
         replicarAbm0101(abm0101s);
     }
+
     private List<Abm0101> buscarListaAbm0101(){
-        return getSession().createCriteria(Abm0101.class).getList(ColumnType.ENTITY)
+
+        return getSession().createCriteria(Abm0101.class).getList(ColumnType.ENTITY);
     }
     private void replicarAbm0101(List<Abm0101> abm0101s){
 
@@ -69,7 +74,7 @@ public class CAS_Criar_Abm0101_Entre_Empresas extends FormulaBase{
     }
 
     private List<Aac10> buscarListaAac10(){
-        return getSession().createCriteria(Aac10.class).addWhere(Criterions.in("aac10codigo", List.of("000", "002", "003"))).getList(ColumnType.ENTITY)
+        return getSession().createCriteria(Aac10.class).addWhere(Criterions.in("aac10codigo", List.of("000", "002"))).getList(ColumnType.ENTITY)
     }
 }
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiMTAwIn0=
