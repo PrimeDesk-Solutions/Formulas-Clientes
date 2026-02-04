@@ -94,6 +94,7 @@ public class SCF_Historico_Lancamento_Nat extends RelatorioBase {
 			tm.put("dab01codigo", lcto.getString("dab01codigo"));
 			tm.put("dab01nome", lcto.getString("dab01nome"));
 			tm.put("dab10historico", lcto.getString("dab10historico"));
+            tm.put("abb01parcela", lcto.getString("abb01parcela"))
 			if (lcto.getString("abf10codigo").length() ==  tamanhoTotal) tm.put("es", lcto.getInteger("dab10mov").equals(0) ? "E" : "S");
 
 			BigDecimal valor = lcto.getBigDecimal("dab10011valor");
@@ -145,13 +146,14 @@ public class SCF_Historico_Lancamento_Nat extends RelatorioBase {
 		Parametro paramNaturezaIni = idNaturezaIni != null ? Parametro.criar("idNaturezaIni", idNaturezaIni) : null;
 		Parametro paramNaturezaFin = idNaturezaFin != null ? Parametro.criar("idNaturezaFin", idNaturezaFin) : null;
 
-		String sql = " SELECT dab10id, dab10data, abf10codigo, abf10nome, dab01codigo, dab01nome, dab10historico, dab10mov, dab10011valor " +
+		String sql = " SELECT dab10id, dab10data, abf10codigo, abf10nome, dab01codigo, dab01nome, dab10historico, dab10mov, dab10011valor, abb01parcela " +
 				" FROM Dab10011 " +
 				" INNER JOIN abf10 ON abf10id = dab10011nat " +
 				" INNER JOIN dab1001 ON dab1001id  = dab10011depto " +
 				" INNER JOIN dab10 ON dab10id = dab1001lct " +
 				" LEFT JOIN dab1002 ON dab1002lct = dab10id "+
 				" LEFT JOIN dab01 ON dab01id = dab1002cc " +
+                " LEFT JOIN abb01 ON abb01id = dab10central "+
 				wherePeriodoData +
 				whereIdsContaCorrente +
 				whereIdNatureza +
