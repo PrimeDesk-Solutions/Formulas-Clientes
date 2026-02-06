@@ -1,7 +1,13 @@
 package Silcon.relatorios.srf
 
+import br.com.multiorm.ColumnType
 import br.com.multiorm.Query
-import br.com.multitec.utils.collections.TableMap;
+import br.com.multiorm.criteria.criterion.Criterion
+import br.com.multiorm.criteria.criterion.Criterions
+import br.com.multiorm.criteria.join.Joins
+import br.com.multitec.utils.collections.TableMap
+import sam.model.entities.aa.Aac1001
+import sam.model.entities.ab.Abe01;
 import sam.server.samdev.relatorio.RelatorioBase;
 import sam.server.samdev.relatorio.DadosParaDownload
 import sam.server.samdev.utils.Parametro
@@ -27,7 +33,10 @@ public class SRF_Resumo_Por_Representantes extends RelatorioBase {
 
     @Override
     public Map<String, Object> criarValoresIniciais() {
-        Map<String, Object> filtrosDefault = new HashMap()
+        Map<String, Object> filtrosDefault = new HashMap();
+
+        preencherDadosIniciaisRepresentante(filtrosDefault);
+
         filtrosDefault.put("total1", true);
         filtrosDefault.put("total2", true);
         filtrosDefault.put("total3", true);
@@ -42,7 +51,7 @@ public class SRF_Resumo_Por_Representantes extends RelatorioBase {
         filtrosDefault.put("tipoOperacao", "0");
         filtrosDefault.put("impressao", "0");
         filtrosDefault.put("resumo", "0");
-        filtrosDefault.put("resumoOperacao", "0")
+        filtrosDefault.put("resumoOperacao", "1")
         return Utils.map("filtros", filtrosDefault);
     }
 
@@ -115,6 +124,13 @@ public class SRF_Resumo_Por_Representantes extends RelatorioBase {
         campos.put("4", campoLivre4 != null ? campoLivre4 : campoFixo4 != null ? campoFixo4 : null);
         campos.put("5", campoLivre5 != null ? campoLivre5 : campoFixo5 != null ? campoFixo5 : null);
         campos.put("6", campoLivre6 != null ? campoLivre6 : campoFixo6 != null ? campoFixo6 : null);
+
+        Long idUser = obterUsuarioLogado().getAab10id();
+        Integer setorUser = buscarCamposCustomUser(idUser) == null ? null : buscarCamposCustomUser(idUser);
+        if(setorUser == null) interromper("Necessário preencher o campo de setor no cadastro do usuário logado.")
+        Abe01 abe01user = buscarEntidadeUsuarioLogado(idUser);
+
+        if((idsReps == null || idsReps.size() == 0) &&  setorUser == 2) idsReps = [abe01user.abe01id];
 
 
         List<TableMap> representantes = buscarRepresentantes(idsReps);
@@ -251,6 +267,10 @@ public class SRF_Resumo_Por_Representantes extends RelatorioBase {
             esDataFin = dtEntradaSaida[1];
         }
 
+        List<Long> idsEmpresa = [obterEmpresaAtiva().getAac10id()]
+
+        List<Long> idsGc = obterGCbyEmpresa(idsEmpresa, "Ea");
+
         String whereNumDoc = "AND abb01num BETWEEN :numDocIni AND :numDocFin ";
         String whereMov = resumoOperacao == 0 ? "AND eaa01esmov = 0 " : "AND eaa01esmov = 1 ";
         String whereClasDoc = "AND eaa01clasdoc = 1 "
@@ -259,7 +279,7 @@ public class SRF_Resumo_Por_Representantes extends RelatorioBase {
         String whereDataEmissao = dtEmissao != null ? "AND abb01data BETWEEN :dtEmissaoIni AND :dtEmissaoFin " : "";
         String whereDataEntradaSaida = dtEntradaSaida != null ? "AND eaa01esdata BETWEEN :esDataIni AND :esDataFin " : "";
         String whereRepresentantes = idsReps != null && idsReps.size() > 0 ? "AND (eaa01rep0 IN (:idsReps) OR eaa01rep1 IN (:idsReps) OR eaa01rep2 IN (:idsReps) OR eaa01rep3 IN (:idsReps) OR eaa01rep4 IN (:idsReps)) " : "";
-        String whereEmpresa = "AND eaa01gc = :idEmpresa ";
+        String whereEmpresa = idsGc != null && idsGc.size() > 0 ? "AND eaa01gc IN (:idsGc) " : getSamWhere().getWherePadrao("WHERE", Eaa01.class);
 
         Parametro parametroNumDocIni = numDocIni != null ? Parametro.criar("numDocIni", numDocIni) : null;
         Parametro parametroNumDocFin = numDocFin != null ? Parametro.criar("numDocFin", numDocFin) : null;
@@ -270,7 +290,7 @@ public class SRF_Resumo_Por_Representantes extends RelatorioBase {
         Parametro parametroDataEntradaSaidaIni = dtEntradaSaida != null ? Parametro.criar("esDataIni", esDataIni) : null;
         Parametro parametroDataEntradaSaidaFin = dtEntradaSaida != null ? Parametro.criar("esDataFin", esDataFin) : null;
         Parametro parametroRepresentantes = idsReps != null && idsReps.size() > 0 ? Parametro.criar("idsReps", idsReps) : null;
-        Parametro parametroEmpresa = Parametro.criar("idEmpresa", idEmpresa);
+        Parametro parametroEmpresa = idsGc != null && idsGc.size() > 0 ? Parametro.criar("idsGc", idsGc) : null;
 
         String sql = "SELECT eaa01rep0, eaa01rep1, eaa01rep2, eaa01rep3, eaa01rep4, eaa01id, eaa0103id, eaa0103qtuso,eaa0103qtcoml, eaa0103unit, eaa0103unit,eaa0103total,eaa0103totdoc, eaa0103totfinanc, eaa0103json " +
                 " FROM eaa01 " +
@@ -311,6 +331,10 @@ public class SRF_Resumo_Por_Representantes extends RelatorioBase {
             esDataFin = dtEntradaSaida[1];
         }
 
+        List<Long> idsEmpresa = [obterEmpresaAtiva().getAac10id()]
+
+        List<Long> idsGc = obterGCbyEmpresa(idsEmpresa, "Ea");
+
         String whereNumDoc = "AND abb01num BETWEEN :numDocIni AND :numDocFin ";
         String whereMov = resumoOperacao == 0 ? "AND eaa01esmov = 0 " : "AND eaa01esmov = 1 ";
         String whereClasDoc = "AND eaa01clasdoc = 1 "
@@ -319,7 +343,7 @@ public class SRF_Resumo_Por_Representantes extends RelatorioBase {
         String whereDataEmissao = dtEmissao != null ? "AND abb01data BETWEEN :dtEmissaoIni AND :dtEmissaoFin " : "";
         String whereDataEntradaSaida = dtEntradaSaida != null ? "AND eaa01esdata BETWEEN :esDataIni AND :esDataFin " : "";
         String whereRepresentantes = idsReps != null && idsReps.size() > 0 ? "AND (eaa01rep0 IN (:idsReps) OR eaa01rep1 IN (:idsReps) OR eaa01rep2 IN (:idsReps) OR eaa01rep3 IN (:idsReps) OR eaa01rep4 IN (:idsReps)) " : "";
-        String whereEmpresa = "AND eaa01gc = :idEmpresa ";
+        String whereEmpresa = idsGc != null && idsGc.size() > 0 ? "AND eaa01gc IN (:idsGc) " : getSamWhere().getWherePadrao("WHERE", Eaa01.class);
 
         Parametro parametroNumDocIni = numDocIni != null ? Parametro.criar("numDocIni", numDocIni) : null;
         Parametro parametroNumDocFin = numDocFin != null ? Parametro.criar("numDocFin", numDocFin) : null;
@@ -330,7 +354,7 @@ public class SRF_Resumo_Por_Representantes extends RelatorioBase {
         Parametro parametroDataEntradaSaidaIni = dtEntradaSaida != null ? Parametro.criar("esDataIni", esDataIni) : null;
         Parametro parametroDataEntradaSaidaFin = dtEntradaSaida != null ? Parametro.criar("esDataFin", esDataFin) : null;
         Parametro parametroRepresentantes = idsReps != null && idsReps.size() > 0 ? Parametro.criar("idsReps", idsReps) : null;
-        Parametro parametroEmpresa = Parametro.criar("idEmpresa", idEmpresa);
+        Parametro parametroEmpresa = idsGc != null && idsGc.size() > 0 ? Parametro.criar("idsGc", idsGc) : null;
 
         String sql = "SELECT DISTINCT eaa0103id " +
                 "FROM eaa01 " +
@@ -456,11 +480,50 @@ public class SRF_Resumo_Por_Representantes extends RelatorioBase {
                 break
         }
     }
+    private void preencherDadosIniciaisRepresentante(Map<String, Object> filtrosDefault){
+        Long idUser = obterUsuarioLogado().getAab10id();
+
+        Integer setorUser = buscarCamposCustomUser(idUser) == null ? null : buscarCamposCustomUser(idUser);
+
+        if(setorUser == 2){
+            Abe01 abe01user = buscarEntidadeUsuarioLogado(idUser);
+
+            if(abe01user == null) interromper("Não foi encontrado entidade cadastrada para o usuário logado.")
+
+            filtrosDefault.put("idRepresentantes", abe01user.abe01id);
+        }
+
+    }
+    private Integer buscarCamposCustomUser(idUser){
+        String sql = "SELECT CAST(aab10camposCustom ->> 'setor' AS INTEGER) AS setor FROM aab10 WHERE aab10id = :idUser";
+
+        return getAcessoAoBanco().obterInteger(sql, Parametro.criar("idUser", idUser));
+    }
+    private Abe01 buscarEntidadeUsuarioLogado(Long idUser){
+
+        return getSession().createCriteria(Abe01.class)
+                .addFields("abe01id")
+                .addJoin(Joins.join("Abe05", "abe05ent = abe01id"))
+                .addJoin(Joins.join("Aab10", "aab10id = abe05user"))
+                .addWhere(Criterions.eq("aab10id", idUser)).setMaxResults(1)
+                .get(ColumnType.ENTITY);
+
+    }
 
     public String buscarNomeCampoLivre(String campo) {
         def sql = " SELECT aah02descr FROM aah02 WHERE aah02nome = :nome "
         return getAcessoAoBanco().obterString(sql, criarParametroSql("nome", campo))
 
+    }
+    public List<Long> obterGCbyEmpresa(List<Long> empresa, String tabela) {
+        Criterion whereEmpresa = empresa != null && empresa.size() > 0 ? Criterions.in("aac1001empresa", empresa) : Criterions.in("aac1001empresa", obterEmpresaAtiva().aac10id);
+        Criterion whereTabela = tabela != null ? Criterions.eq("aac1001tabela", tabela) : null;
+
+        return getSession().createCriteria(Aac1001.class)
+                .addFields("aac1001gc")
+                .addWhere(whereEmpresa)
+                .addWhere(whereTabela)
+                .getList(ColumnType.LONG);
     }
 
 
