@@ -263,8 +263,6 @@ public class Doc_Padrao_SaidaCupom extends FormulaBase {
 
         if (eaa0103.eaa0103qtComl > 0) {
 
-            if(eaa01.eaa01obsUsoInt == "MIGRADO") return;
-
             //Define se a entidade é ou não contribuinte de ICMS
             Integer contribICMS = 0;
 
@@ -288,7 +286,7 @@ public class Doc_Padrao_SaidaCupom extends FormulaBase {
                 dentroEstado = ufEmpr.aag02uf == ufEnt.aag02uf;
             }
 
-            definirPrecoUnitarioItem();
+            if(eaa0103.eaa0103unit == 0) definirPrecoUnitarioItem();
 
             definirCFOP(dentroEstado);
 

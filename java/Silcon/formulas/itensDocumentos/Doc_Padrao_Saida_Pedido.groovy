@@ -297,7 +297,7 @@ public class Doc_Padrao_Saida_Pedido extends FormulaBase {
                 dentroEstado = ufEmpr.aag02uf == ufEnt.aag02uf;
             }
 
-            definirPrecoUnitarioItem();
+            if(eaa0103.eaa0103unit == 0) definirPrecoUnitarioItem();
 
             preencherCstIcms();
 
