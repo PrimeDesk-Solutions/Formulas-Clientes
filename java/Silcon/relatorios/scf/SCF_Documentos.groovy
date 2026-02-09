@@ -17,6 +17,7 @@ import sam.server.samdev.utils.Parametro
 import java.util.Map;
 import java.util.HashMap;
 import sam.model.entities.aa.Aac1001;
+import java.time.temporal.ChronoUnit;
 
 public class SCF_Documentos extends RelatorioBase{
 
@@ -87,6 +88,11 @@ public class SCF_Documentos extends RelatorioBase{
         List<TableMap> dados = obterDadosRelatorio(Emprs, classe, tp, documento,  numeroInicial, numeroFinal, entidade, rep, departamento, naturezas, dataVenc, opcVcto, dataEmissao, tipoData, data, isAgrupamento, port, oper, ordem, opc);
 
         for(TableMap tm : dados) {
+            LocalDate dtAtual = LocalDate.now();
+            LocalDate dtVctoN = tm.getDate("daa01dtVctoN");
+            Integer dias = ChronoUnit.DAYS.between(dtAtual, dtVctoN)
+            tm.put("dias", dias);
+
             TableMap daa01Json = tm.getTableMap("daa01json");
             if (daa01Json != null) {
                 tm.putAll(daa01Json);
@@ -94,7 +100,7 @@ public class SCF_Documentos extends RelatorioBase{
         }
 
         if (isAgrupamento == "D" && exportar == 0) {
-            params.put("TITULO_RELATORIO", "Documentos por Departamentos e Naturezas");
+            params.put("TITULO_RELATORIO", "Documentos por Departamentos");
             return gerarPDF("SCF_Documentos_R1(PDF)", dados);
         }
         if (isAgrupamento == "D" && exportar == 1) {
