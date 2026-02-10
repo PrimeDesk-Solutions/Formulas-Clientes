@@ -44,76 +44,64 @@ public class CAS_Importar_Cashback_SAM3 extends FormulaBase {
 
         while (txt.nextLine()) {
             linha++;
-            Integer numero = Integer.parseInt(txt.getCampo(2));
-            String codEntidade = txt.getCampo(3);
-            String codTipoDoc = txt.getCampo(4);
-            String nomeCashback = txt.getCampo(5);
-            LocalDate data = LocalDate.parse(txt.getCampo(6));
-            String observacao = txt.getCampo(7);
+            String codEntidade = txt.getCampo(1);
+            String codTipoCash = txt.getCampo(2);
+            String nomeCashback = txt.getCampo(3);
 
             // Tipo Documento
-            Abf30 abf30 = getSession().createCriteria(Abf30.class).addWhere(Criterions.eq("abf30id", 35610614)).addWhere(Criterions.eq("abf30gc", 1075797)).get(ColumnType.ENTITY);
-            if (abf30 == null) interromper("Tipo de documento de cashback não encontrado.");
+            Abf30 abf30 = getSession().createCriteria(Abf30.class).addWhere(Criterions.eq("abf30codigo", codTipoCash)).addWhere(Criterions.eq("abf30gc", 1075797)).get(ColumnType.ENTITY);
+            if (abf30 == null) interromper("Tipo de documento de cashback com o número " + codTipoCash + " não encontrado. Linha: " + linha);
 
             // Entidade
             Abe01 abe01 = getSession().createCriteria(Abe01.class).addWhere(Criterions.eq("abe01codigo", codEntidade)).addWhere(Criterions.eq("abe01gc", 1075797)).get(ColumnType.ENTITY);
-            if (abe01 == null) interromper("Não foi encontrado a entidade para o id " + codEntidade.toString() + ". Linha: " + linha);
+            if (abe01 == null) interromper("Não foi encontrado a entidade com o código " + codEntidade.toString() + ". Linha: " + linha);
 
-            criarCashback(abe01, abf30, nomeCashback, data, observacao, numero, linha);
+            criarCashback(abe01, abf30, nomeCashback, LocalDate.now());
         }
     }
-    private void criarCashback(Abe01 abe01, Abf30 abf30, String nomeCashback, LocalDate data, String observacao, Integer numero, Integer linha) {
-        //try {
-            Dad01 dad01 = new Dad01();
-            dad01.dad01ent = abe01;
-            dad01.dad01tipo = abf30;
-            dad01.dad01nome = nomeCashback.length() > 25 ? nomeCashback.substring(0, 24) : nomeCashback;
-            dad01.dad01saldo = somarSaldoCashback(numero);
-            dad01.dad01prop = 0;
-            dad01.dad01dti = data;
-            dad01.dad01dtf = data;
-            dad01.dad01neg = 0;
-            dad01.dad01obs = observacao;
-            dad01.dad01eg = obterEmpresaAtiva();
-            dad01.dad01gc = getSession().createCriteria(Aac01.class).addWhere(Criterions.eq("aac01id", 1075797)).get(ColumnType.ENTITY);
+    private void criarCashback(Abe01 abe01, Abf30 abf30, String nomeCashback, LocalDate data) {
+        Dad01 dad01 = new Dad01();
+        dad01.dad01ent = abe01;
+        dad01.dad01tipo = abf30;
+        dad01.dad01nome = nomeCashback.length() > 25 ? nomeCashback.substring(0, 24) : nomeCashback;
+        dad01.dad01saldo = somarSaldoCashback(abe01.abe01id);
+        dad01.dad01prop = 1;
+        dad01.dad01dti = data;
+        dad01.dad01dtf = data;
+        dad01.dad01neg = 0;
+        dad01.dad01eg = obterEmpresaAtiva();
+        dad01.dad01gc = getSession().createCriteria(Aac01.class).addWhere(Criterions.eq("aac01id", 1075797)).get(ColumnType.ENTITY);
 
-            getSession().persist(dad01);
+        getSession().persist(dad01);
 
-            criarLancamentosVale(dad01, numero);
-
-//        } catch (Exception e) {
-//            interromper("Falha ao gravar registro. " + e.getMessage() + " linha: " + linha)
-//        }
+        criarLancamentosVale(dad01, abe01.abe01id);
     }
-    private BigDecimal somarSaldoCashback(Integer numero) {
-        Long idTipoDoc = buscarIdTipoDoc();
-        if(idTipoDoc == null) interromper("Não foi encontrado tipo de documento com o código 001.");
+    private BigDecimal somarSaldoCashback(Long idEntidade) {
+        Aah01 aah01 = getSession().createCriteria(Aah01.class).addWhere(Criterions.eq("aah01codigo", "001")).get(ColumnType.ENTITY);
 
-        String sql = "SELECT COALESCE(SUM(abb01valor), 0) AS valor FROM abb01 WHERE abb01num = :numero AND abb01tipo = :idTipoDoc AND abb01gc = 1075797";
+        if(aah01 == null) interromper("Não foi encontrado tipo de documento com o código 001.");
 
-        Parametro parametroNumero = Parametro.criar("numero", numero);
-        Parametro parametroTipoDoc = Parametro.criar("idTipoDoc", idTipoDoc);
+        String sql = "SELECT COALESCE(SUM(abb01valor), 0) AS valor FROM abb01 WHERE abb01ent = :idEntidade AND abb01tipo = :idTipoDoc AND abb01gc = 1075797";
 
-        return getAcessoAoBanco().obterBigDecimal(sql, parametroNumero, parametroTipoDoc)
+        Parametro parametroEntidade = Parametro.criar("idEntidade", idEntidade);
+        Parametro parametroTipoDoc = Parametro.criar("idTipoDoc", aah01.aah01id);
+
+        return getAcessoAoBanco().obterBigDecimal(sql, parametroEntidade, parametroTipoDoc)
     }
-    private Long buscarIdTipoDoc(){
-        String sql = "SELECT aah01id FROM aah01 WHERE aah01codigo = '001'";
+    private List<TableMap> buscarLancamentosCentral(Long idEntidade){
+        Aah01 aah01 = getSession().createCriteria(Aah01.class).addWhere(Criterions.eq("aah01codigo", "001")).get(ColumnType.ENTITY);
 
-        return getAcessoAoBanco().obterLong(sql);
-    }
-    private List<TableMap> buscarLancamentosCentral(Integer numero){
-        Long idTipoDoc = buscarIdTipoDoc();
-        if(idTipoDoc == null) interromper("Não foi encontrado tipo de documento com o código 001.");
+        if(aah01 == null) interromper("Não foi encontrado tipo de documento com o código 001.");
 
-        String sql = "SELECT abb01valor, abb01id FROM abb01 WHERE abb01num = :numero AND abb01tipo = :idTipoDoc AND abb01gc = 1075797";
+        String sql = "SELECT abb01valor, abb01id FROM abb01 WHERE abb01ent = :idEntidade AND abb01tipo = :idTipoDoc AND abb01gc = 1075797";
 
-        Parametro parametroNumero = Parametro.criar("numero", numero);
-        Parametro parametroTipoDoc = Parametro.criar("idTipoDoc", idTipoDoc);
+        Parametro parametroNumero = Parametro.criar("idEntidade", idEntidade);
+        Parametro parametroTipoDoc = Parametro.criar("idTipoDoc", aah01.aah01id);
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroNumero, parametroTipoDoc)
     }
-    private void criarLancamentosVale(Dad01 dad01, Integer numero){
-        List<TableMap> lancamentos = buscarLancamentosCentral(numero);
+    private void criarLancamentosVale(Dad01 dad01, Long idEntidade){
+        List<TableMap> lancamentos = buscarLancamentosCentral(idEntidade);
 
         for(lancamento in lancamentos){
             BigDecimal valor = lancamento.getBigDecimal_Zero("abb01valor");
@@ -137,8 +125,8 @@ public class CAS_Importar_Cashback_SAM3 extends FormulaBase {
 /*
     Arquivo Exemplo
 
-    Numero Vale|id Entidade|Tipo Documento|Nome do Cashback|Data Emissão|Observação
-    |1|416595|53|1. CHEQUEINFRATECNICA ENGENH|2016-08-02|teste|
+    Cod Entidade|Tipo Documento|Nome do Cashback
+    |0100031000|53|MARCELO RICARDO MOURA|
 
  */
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiMTAwIn0=
