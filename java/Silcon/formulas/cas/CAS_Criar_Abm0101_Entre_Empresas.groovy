@@ -72,7 +72,6 @@ public class CAS_Criar_Abm0101_Entre_Empresas extends FormulaBase{
             }
         }
     }
-
     private List<Aac10> buscarListaAac10(){
         return getSession().createCriteria(Aac10.class).addWhere(Criterions.in("aac10codigo", List.of("000", "002"))).getList(ColumnType.ENTITY)
     }

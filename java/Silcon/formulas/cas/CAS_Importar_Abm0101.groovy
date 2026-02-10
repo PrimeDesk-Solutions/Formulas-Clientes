@@ -46,72 +46,70 @@ public class CAS_Importar_Abm0101 extends FormulaBase{
 
         int linha = 1;
         while(txt.nextLine()) {
-            //for(int i = 0; i <= 3; i++){ // Cria o mesmo registro em todas as empresass
-                String codEmpresa = "001" //+ i;
-                Aac10 aac10 = buscarEmpresaPeloCodigo(codEmpresa);
-                Abm0101 abm0101 = new Abm0101();
-                Abm01 abm01 = buscarItemPeloCodigo(txt.getCampo(2), txt.getCampo(1));
-                if(abm01 == null) interromper("Item " + txt.getCampo(1) + " - " + txt.getCampo(2) + " não encontrado no sistema.");
-                abm0101.setAbm0101item(abm01);
-                abm0101.setAbm0101empresa(aac10);
-                abm0101.setAbm0101unidDiv(Integer.parseInt(txt.getCampo(3)));
-                abm0101.setAbm0101montagem(Integer.parseInt(txt.getCampo(4)));
-                abm0101.setAbm0101sgpPrev(Integer.parseInt(txt.getCampo(5)));
-                abm0101.setAbm0101sgpCpra(Integer.parseInt(txt.getCampo(6)));
-                if(!txt.getCampo(7).isEmpty()){
-                    Aam06 aam06 = buscarUnidadeMedidaPeloCodigo(txt.getCampo(7))
+            String codEmpresa = "001" //+ i;
+            Aac10 aac10 = buscarEmpresaPeloCodigo(codEmpresa);
+            Abm0101 abm0101 = new Abm0101();
+            Abm01 abm01 = buscarItemPeloCodigo(txt.getCampo(1), txt.getCampo(3));
+            if(abm01 == null) interromper("Item " + txt.getCampo(1) + " - " + txt.getCampo(2) + " não encontrado no sistema.");
+            abm0101.setAbm0101item(abm01);
+            abm0101.setAbm0101empresa(aac10);
+            abm0101.setAbm0101unidDiv(Integer.parseInt(txt.getCampo(4)));
+            abm0101.setAbm0101montagem(Integer.parseInt(txt.getCampo(5)));
+            abm0101.setAbm0101sgpPrev(Integer.parseInt(txt.getCampo(6)));
+            abm0101.setAbm0101sgpCpra(Integer.parseInt(txt.getCampo(7)));
+            if(!txt.getCampo(8).isEmpty()){
+                Aam06 aam06 = buscarUnidadeMedidaPeloCodigo(txt.getCampo(8))
 
-                    if(aam06 == null) interromper("Unidade de medida " + txt.getCampo(7) + " não encontrada no sistema.");
+                if(aam06 == null) interromper("Unidade de medida " + txt.getCampo(8) + " não encontrada no sistema.");
 
-                    abm0101.setAbm0101umt(aam06);
-                }
+                abm0101.setAbm0101umt(aam06);
+            }
 
-                if(!txt.getCampo(8).isEmpty()){
-                    Abg01 abg01 = buscarNCMPeloCodigo(txt.getCampo(8));
+            if(!txt.getCampo(9).isEmpty()){
+                Abg01 abg01 = buscarNCMPeloCodigo(txt.getCampo(9));
 
-                    if(abg01 == null) interromper("NCM " + txt.getCampo(8) + " não encontrado no sistema.");
+                if(abg01 == null) interromper("NCM " + txt.getCampo(9) + " não encontrado no sistema.");
 
-                    abm0101.setAbm0101ncm(abg01);
-                }
+                abm0101.setAbm0101ncm(abg01);
+            }
 
-                abm0101.setAbm0101calcNiveis(Integer.parseInt(txt.getCampo(9)));
-                abm0101.setAbm0101itemTerc(Integer.parseInt(txt.getCampo(10)));
-                abm0101.setAbm0101wmsMassa(new BigDecimal(txt.getCampo(11)));
+            abm0101.setAbm0101calcNiveis(Integer.parseInt(txt.getCampo(10)));
+            abm0101.setAbm0101itemTerc(Integer.parseInt(txt.getCampo(11)));
+            abm0101.setAbm0101wmsMassa(new BigDecimal(txt.getCampo(12)));
 
-                if(!txt.getCampo(12).isEmpty()){
-                    Abb11 abb11 = buscarDepartamentoPeloCodigo(txt.getCampo(12));
+            if(!txt.getCampo(13).isEmpty()){
+                Abb11 abb11 = buscarDepartamentoPeloCodigo(txt.getCampo(13));
 
-                    if(abb11 == null) interromper("Departamento " + txt.getCampo(12) + " não encontrado no sistema.");
+                if(abb11 == null) interromper("Departamento " + txt.getCampo(13) + " não encontrado no sistema.");
 
-                    abm0101.setAbm0101eDepto(abb11);
-                }
+                abm0101.setAbm0101eDepto(abb11);
+            }
 
-                if(!txt.getCampo(13).isEmpty()){
-                    Abf10 abf10 = buscarNaturezaPeloCodigo(txt.getCampo(13));
+            if(!txt.getCampo(14).isEmpty()){
+                Abf10 abf10 = buscarNaturezaPeloCodigo(txt.getCampo(14));
 
-                    if(abf10 == null) interromper("Natureza " + txt.getCampo(13) + " não encontrado no sistema.");
+                if(abf10 == null) interromper("Natureza " + txt.getCampo(14) + " não encontrado no sistema.");
 
-                    abm0101.setAbm0101eNat(abf10);
-                }
+                abm0101.setAbm0101eNat(abf10);
+            }
 
-                if(!txt.getCampo(13).isEmpty()){
-                    Abb11 abb11 = buscarDepartamentoPeloCodigo(txt.getCampo(14));
+            if(!txt.getCampo(15).isEmpty()){
+                Abb11 abb11 = buscarDepartamentoPeloCodigo(txt.getCampo(15));
 
-                    if(abb11 == null) interromper("Departamento " + txt.getCampo(14) + " não encontrado no sistema.");
+                if(abb11 == null) interromper("Departamento " + txt.getCampo(15) + " não encontrado no sistema.");
 
-                    abm0101.setAbm0101sDepto(abb11);
-                }
+                abm0101.setAbm0101sDepto(abb11);
+            }
 
-                if(!txt.getCampo(15).isEmpty()){
-                    Abf10 abf10 = buscarNaturezaPeloCodigo(txt.getCampo(15));
+            if(!txt.getCampo(16).isEmpty()){
+                Abf10 abf10 = buscarNaturezaPeloCodigo(txt.getCampo(16));
 
-                    if(abf10 == null) interromper("Natureza " + txt.getCampo(15) + " não encontrado no sistema.");
+                if(abf10 == null) interromper("Natureza " + txt.getCampo(16) + " não encontrado no sistema.");
 
-                    abm0101.setAbm0101sNat(abf10);
-                }
+                abm0101.setAbm0101sNat(abf10);
+            }
 
-                getSession().persist(abm0101);
-            //}
+            getSession().persist(abm0101);
 
         }
     }
@@ -119,7 +117,7 @@ public class CAS_Importar_Abm0101 extends FormulaBase{
         return getSession().createCriteria(Aac10.class).addWhere(Criterions.eq("aac10codigo", codEmpresa)).get();
     }
     private Abm01 buscarItemPeloCodigo(String codItem, String tipo){
-        if(tipo == 2) tipo = 3
+        if(tipo == "2") tipo = "3"
         return getSession().get(Abm01.class, Criterions.where("abm01codigo = '" + codItem + "' AND abm01tipo = " + tipo + " AND abm01gc = 1075797"));
     }
     private Aam06 buscarUnidadeMedidaPeloCodigo(String umu){
