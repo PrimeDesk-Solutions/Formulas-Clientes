@@ -292,8 +292,6 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
 
             if(eaa0103.eaa0103unit == 0) definirPrecoUnitarioItem();
 
-            definirCFOP(dentroEstado);
-
             // Conserva Qt.Original do documento (Qt.Faturamento original)
             if (jsonEaa0103.getBigDecimal_Zero("qt_original") == 0) {
                 jsonEaa0103.put("qt_original", eaa0103.eaa0103qtComl);
@@ -325,20 +323,14 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
             //Total finaceiro
             eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
 
-            // calcularCargaTributaria
-            calcularCargaTributaria();
+            // Preenche o CST de ICMS do Item
+            preencherCstIcms();
 
             // Calcular ICMS ST RETIDO
             calcularIcmsSTRetido();
 
-            // Preenche o CST de ICMS do Item
-            preencherCstIcms();
-
             // Calcula ICMS Itens
             calcularICMS(contribICMS);
-
-            // Calculo Cupom Fiscal
-            calculaCupomFiscal(dentroEstado);
 
             // ICMS Isento
             if (aaj10_cstIcms != null) {
@@ -352,6 +344,14 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
                     jsonEaa0103.put("icms_outras", new BigDecimal(0));
                 }
             }
+
+            // calcularCargaTributaria
+            calcularCargaTributaria();
+
+            // Calculo Cupom Fiscal
+            calculaCupomFiscal(dentroEstado);
+
+            definirCFOP(dentroEstado);
 
             //CalculoPIS
             calculaPIS();
@@ -595,11 +595,11 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
         String cst = "";
 
         if (eaa0103.eaa0103cstIcms == null) {
-            if (abd02.abd02cstIcmsB != null) {
+            if (abd02 != null && abd02.abd02cstIcmsB != null) {
                 aaj10_cstIcms = getSession().get(Aaj10.class, abd02.abd02cstIcmsB.aaj10id);
                 cst = aaj10_cstIcms.aaj10codigo;
 
-            } else if (abm12.abm12cstIcms != null) {
+            } else if (abm12 != null && abm12.abm12cstIcms != null) {
                 aaj10_cstIcms = getSession().get(Aaj10.class, abm12.abm12cstIcms.aaj10id);
                 cst = aaj10_cstIcms.aaj10codigo;
 
@@ -691,7 +691,7 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
             if (eaa0103.eaa0103cstPis != null) {
                 if (eaa0103.eaa0103cstPis.aaj12codigo == '01') {
                     // BC PIS
-                    jsonEaa0103.put("bc_pis", eaa0103.eaa0103totDoc - jsonEaa0103.getBigDecimal_Zero("desconto"));
+                    jsonEaa0103.put("bc_pis", eaa0103.eaa0103totDoc - jsonEaa0103.getBigDecimal_Zero("icms"));
 
                     // Aliquota
                     jsonEaa0103.put("aliq_pis", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_pis"));
@@ -715,7 +715,7 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
             if (eaa0103.eaa0103cstCofins != null) {
                 if (eaa0103.eaa0103cstCofins.aaj13codigo == '01') {
                     // BC COFINS
-                    jsonEaa0103.put("bc_cofins", eaa0103.eaa0103totDoc - jsonEaa0103.getBigDecimal_Zero("desconto"));
+                    jsonEaa0103.put("bc_cofins", eaa0103.eaa0103totDoc - jsonEaa0103.getBigDecimal_Zero("icms"));
 
                     // Aliquota
                     jsonEaa0103.put("aliq_cofins", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_cofins"));
@@ -760,7 +760,6 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
             }
         }
     }
-
     private calculaCupomFiscal(Boolean dentroEstado) {
         // Simples Nacional
         if (aaj01.aaj01codigo == "04") {
@@ -815,30 +814,8 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
                 txICM = txICM.round(2);
                 jsonEaa0103.put("aliq_ecf", String.format("%04d", txICM.multiply(100).intValue()));
             }
-
-            //Atribuir CFOP 5102
-
-            String cfop;
-
-            if (dentroEstado) {
-                if (cstICMS == "000" || cstICMS == "040" || cstICMS == "041" ||
-                        cstICMS == "090" || cstICMS == "200" || cstICMS == "240" || cstICMS == "241") {
-
-                    cfop = "5102";
-                    eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
-
-                } else {
-                    cfop = "5405";
-                    eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
-                }
-
-            } else {
-                cfop = "6404";
-                eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
-            }
         }
     }
-
     private void preencherSPEDS() {
 
         // ========================================================================================
