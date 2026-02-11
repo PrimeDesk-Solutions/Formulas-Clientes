@@ -1,7 +1,9 @@
-package Silcon.formulas.cas;
+package Silcon.formulas.cas
 
+import br.com.multitec.utils.ValidacaoException;
 import sam.model.entities.aa.Aag01;
-import sam.model.entities.aa.Aag0201;
+import sam.model.entities.aa.Aag0201
+import sam.model.entities.aa.Aag03;
 import sam.model.entities.ab.Abe0101
 import sam.model.entities.ab.Abe01
 import org.apache.poi.xssf.usermodel.XSSFSheet
@@ -43,7 +45,7 @@ public class CAS_Importar_Abe0101 extends FormulaBase {
                 linha++
                 Abe0101 abe0101 = new Abe0101();
                 Abe01 abe01 = buscarEntidadePeloCodigo(txt.getCampo(1));
-                if (abe01 == null) interromper("Entidade com o código " + txt.getCampo(1) + " não localizada no sistema. Linha: " + (linha + 1).toString());
+                if (abe01 == null) throw new ValidacaoException("Entidade com o código " + txt.getCampo(1) + " não localizada no sistema. Linha: " + linha);
 
                 abe0101.setAbe0101ent(abe01);
                 abe0101.setAbe0101local(txt.getCampo(2).isEmpty() ? null : txt.getCampo(2));
@@ -69,7 +71,12 @@ public class CAS_Importar_Abe0101 extends FormulaBase {
 
                     abe0101.setAbe0101pais(aag01);
                 }
-                abe0101.setAbe0101regiao(null);
+                if(!txt.getCampo(13).isEmpty()){
+                    Aag03 aag03 = getSession().createCriteria(Aag03.class).addWhere(Criterions.eq("aag03nome", txt.getCampo(13))).get(ColumnType.ENTITY);
+                    if(aag03 == null) throw new ValidacaoException("Região " + txt.getCampo(13) + " não encontrada no sistema.");
+
+                    abe0101.setAbe0101regiao(aag03);
+                }
                 abe0101.setAbe0101ddd1(txt.getCampo(14).isEmpty() ? null : txt.getCampo(14));
                 abe0101.setAbe0101fone1(txt.getCampo(15).isEmpty() ? null : txt.getCampo(15));
                 abe0101.setAbe0101ddd2(txt.getCampo(16).isEmpty() ? null : txt.getCampo(16));

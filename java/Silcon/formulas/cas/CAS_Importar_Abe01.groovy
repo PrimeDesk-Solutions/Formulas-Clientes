@@ -88,10 +88,10 @@ public class CAS_Importar_Abe01 extends FormulaBase{
     private montarJsonEntidade(TextFileLeitura txt,TableMap jsonAbe01){
 
         String txtVlrLimCredito = txt.getCampo(30).toString().replace(",", '.');
-        String txtDtVctoLimCredito = txt.getCampo(31) != null ? txt.getCampo(31).replace("-", "") : null;
+        String txtDtVctoLimCredito = !txt.getCampo(31).isEmpty() ? txt.getCampo(31).replace("-", "") : null;
 
         jsonAbe01.put("vlr_lim_credito", new BigDecimal(txtVlrLimCredito));
         if(txtDtVctoLimCredito) jsonAbe01.put("dt_vcto_lim_credito",txtDtVctoLimCredito)
-        jsonAbe01.put("obs_lim_credito", txt.getCampo(32));
+        jsonAbe01.put("obs_lim_credito", txt.getCampo(32).replace("|", ""));
     }
 }
