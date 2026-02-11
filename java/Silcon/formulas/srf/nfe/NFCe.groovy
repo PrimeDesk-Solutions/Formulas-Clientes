@@ -688,6 +688,7 @@ class NFCe extends FormulaBase {
             String cscToken;
             def aac10 = obterEmpresaAtiva();
             TableMap jsonAac10 = aac10.aac10json
+            if(jsonAac10 == null) interromper("Necessário preencher os campos livres da empresa ativa.")
             if (tpAmb == "1") {
                 cscToken = jsonAac10.getString("csctoken_prod")
             } else {
