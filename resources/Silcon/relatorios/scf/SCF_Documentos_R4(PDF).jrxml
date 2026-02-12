@@ -37,6 +37,7 @@
 	<field name="abf16codigo" class="java.lang.String"/>
 	<field name="abf16nome" class="java.lang.String"/>
 	<field name="cnpj" class="java.lang.String"/>
+	<field name="dias" class="java.lang.Integer"/>
 	<variable name="totalEntidade" class="java.math.BigDecimal" resetType="Group" resetGroup="entidade" calculation="Sum">
 		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
 	</variable>
@@ -175,7 +176,7 @@
 				<reportElement x="0" y="10" width="802" height="1" uuid="232942a3-25d5-47c8-8e6b-053569231948"/>
 			</line>
 			<textField>
-				<reportElement x="325" y="1" width="51" height="10" uuid="ff8839fc-e779-489c-bb50-5cb63218a203"/>
+				<reportElement x="318" y="1" width="51" height="10" uuid="ff8839fc-e779-489c-bb50-5cb63218a203"/>
 				<textElement textAlignment="Center" markup="none">
 					<font fontName="Arial" size="8"/>
 				</textElement>
@@ -203,13 +204,6 @@
 				<text><![CDATA[PARC]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="378" y="0" width="51" height="10" uuid="def030e5-f054-4689-95ab-05e0ee4b9d11"/>
-				<textElement textAlignment="Center">
-					<font fontName="Arial" size="8"/>
-				</textElement>
-				<text><![CDATA[PAGTO]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="140" y="0" width="41" height="10" uuid="c513bc3e-4708-4749-bfd6-e2964a8f779a"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
@@ -224,11 +218,25 @@
 				<text><![CDATA[OPERAÇÃO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="448" y="0" width="113" height="10" uuid="68c1065e-0176-4957-8061-0ce0b4c9a4fe"/>
+				<reportElement x="466" y="0" width="95" height="10" uuid="68c1065e-0176-4957-8061-0ce0b4c9a4fe"/>
 				<textElement textAlignment="Left">
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<text><![CDATA[PORTADOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="415" y="0" width="51" height="10" uuid="def030e5-f054-4689-95ab-05e0ee4b9d11"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[PAGTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="369" y="0" width="46" height="10" uuid="e0ade1c0-98cb-45c8-94a7-066ee3f86acf"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[DIAS]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -256,7 +264,7 @@
 				<textFieldExpression><![CDATA[$F{abb01parcela} != null ? $F{abb01parcela} : ""]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="327" y="0" width="49" height="10" isRemoveLineWhenBlank="true" uuid="36e89aeb-6b81-46a2-9b74-dd4b957ace84"/>
+				<reportElement x="319" y="0" width="49" height="10" isRemoveLineWhenBlank="true" uuid="36e89aeb-6b81-46a2-9b74-dd4b957ace84"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
@@ -270,7 +278,7 @@
 				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="379" y="0" width="49" height="10" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="706ef2fd-d814-43ac-9887-17cd97297153"/>
+				<reportElement mode="Transparent" x="417" y="0" width="49" height="10" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="706ef2fd-d814-43ac-9887-17cd97297153"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -292,11 +300,18 @@
 				<textFieldExpression><![CDATA[$F{abf16codigo} == null ? "" : $F{abf16codigo}+"-"+$F{abf16nome}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="448" y="0" width="113" height="10" isRemoveLineWhenBlank="true" uuid="88698755-5933-4d93-b38c-7d4f818be89c"/>
+				<reportElement x="466" y="0" width="95" height="10" isRemoveLineWhenBlank="true" uuid="88698755-5933-4d93-b38c-7d4f818be89c"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{abf15codigo} != null && $F{abf15nome} != null ?  $F{abf15codigo} + " - " + $F{abf15nome} : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="368" y="0" width="49" height="10" uuid="6bc1d112-1c97-4d2e-ae88-61108e8c7efe"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dias}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

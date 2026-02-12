@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF_DocumentosPorDepartamentosNaturezas_R1" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1f67a61e-6a0a-4ade-8897-168f78801ff5">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="547"/>
+	<property name="ireport.x" value="279"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="TITULO_RELATORIO" class="java.lang.String"/>
 	<parameter name="EMPRESA" class="java.lang.String"/>
@@ -38,6 +38,8 @@
 	<field name="daa01dtVctoR" class="java.util.Date"/>
 	<field name="desconto" class="java.math.BigDecimal"/>
 	<field name="liquido" class="java.math.BigDecimal"/>
+	<field name="dias" class="java.lang.Integer"/>
+	<field name="field1" class="java.lang.String"/>
 	<variable name="totalDoc" class="java.math.BigDecimal" resetType="Group" resetGroup="vcto" calculation="Sum">
 		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
 	</variable>
@@ -191,7 +193,7 @@
 				<textFieldExpression><![CDATA[$P{OPCVCTO} == 0 ? "VENCTON" : "VENCTOR"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="312" y="0" width="173" height="10" uuid="94dec70b-4be5-43ad-9fba-c3e13dc39ade"/>
+				<reportElement x="334" y="0" width="173" height="10" uuid="94dec70b-4be5-43ad-9fba-c3e13dc39ade"/>
 				<textElement textAlignment="Left">
 					<font fontName="Arial" size="8"/>
 				</textElement>
@@ -212,7 +214,7 @@
 				<text><![CDATA[PARC]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="250" y="0" width="51" height="10" uuid="def030e5-f054-4689-95ab-05e0ee4b9d11"/>
+				<reportElement x="283" y="0" width="51" height="10" uuid="def030e5-f054-4689-95ab-05e0ee4b9d11"/>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="8"/>
 				</textElement>
@@ -226,14 +228,14 @@
 				<text><![CDATA[EMISSÃO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="559" y="1" width="82" height="10" uuid="3194d865-b889-4ad3-a815-eb69b077ce13"/>
+				<reportElement x="570" y="1" width="71" height="10" uuid="3194d865-b889-4ad3-a815-eb69b077ce13"/>
 				<textElement textAlignment="Left">
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<text><![CDATA[OPERAÇÃO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="486" y="1" width="73" height="10" uuid="f9a5ebd2-f234-4e48-a120-7c8f670cbeac"/>
+				<reportElement x="507" y="1" width="63" height="10" uuid="f9a5ebd2-f234-4e48-a120-7c8f670cbeac"/>
 				<textElement textAlignment="Left">
 					<font fontName="Arial" size="8"/>
 				</textElement>
@@ -253,10 +255,17 @@
 				</textElement>
 				<text><![CDATA[LIQU.]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="236" y="-1" width="46" height="12" uuid="9ab24d42-6fbb-4169-8c5f-c1b91461e433"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[DIAS]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="31">
+		<band height="10">
 			<textField pattern="0000000" isBlankWhenNull="true">
 				<reportElement x="102" y="0" width="58" height="10" isRemoveLineWhenBlank="true" uuid="22762068-3be1-4dac-b952-f185911f0400"/>
 				<textElement>
@@ -279,7 +288,7 @@
 				<textFieldExpression><![CDATA[$F{abb01parcela} != null ? $F{abb01parcela} : ""]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="314" y="0" width="171" height="10" isRemoveLineWhenBlank="true" uuid="5913a3e2-5615-4714-8252-84465b32fec6"/>
+				<reportElement x="336" y="0" width="171" height="10" isRemoveLineWhenBlank="true" uuid="5913a3e2-5615-4714-8252-84465b32fec6"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
@@ -293,7 +302,7 @@
 				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="251" y="0" width="49" height="10" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="706ef2fd-d814-43ac-9887-17cd97297153"/>
+				<reportElement mode="Transparent" x="283" y="0" width="53" height="10" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="706ef2fd-d814-43ac-9887-17cd97297153"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -308,14 +317,14 @@
 				<textFieldExpression><![CDATA[$F{abb01data}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="486" y="0" width="73" height="10" isRemoveLineWhenBlank="true" uuid="7c373c5e-f89a-4e21-911f-50e61bd36711"/>
+				<reportElement x="507" y="0" width="63" height="10" isRemoveLineWhenBlank="true" uuid="7c373c5e-f89a-4e21-911f-50e61bd36711"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{abf15codigo} != null && $F{abf15nome} != null ? $F{abf15codigo}+"-"+$F{abf15nome} : ""]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="559" y="0" width="82" height="10" isRemoveLineWhenBlank="true" uuid="c73af741-1e49-4463-a70d-ee8e1b074987"/>
+				<reportElement x="570" y="0" width="71" height="10" isRemoveLineWhenBlank="true" uuid="c73af741-1e49-4463-a70d-ee8e1b074987"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
@@ -334,6 +343,13 @@
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{liquido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="234" y="0" width="49" height="10" uuid="2aa414b2-0efc-453c-b4cf-2f506c28bdcf"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dias}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

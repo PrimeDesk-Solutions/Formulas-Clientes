@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF_DocumentosPorDepartamentosNaturezas_R1" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1f67a61e-6a0a-4ade-8897-168f78801ff5">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="547"/>
+	<property name="ireport.x" value="377"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="TITULO_RELATORIO" class="java.lang.String"/>
 	<parameter name="EMPRESA" class="java.lang.String"/>
@@ -38,6 +38,7 @@
 	<field name="abf15nome" class="java.lang.String"/>
 	<field name="abf16codigo" class="java.lang.String"/>
 	<field name="abf16nome" class="java.lang.String"/>
+	<field name="dias" class="java.lang.Integer"/>
 	<variable name="totalRep" class="java.math.BigDecimal" resetType="Group" resetGroup="representante" calculation="Sum">
 		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
 	</variable>
@@ -163,14 +164,14 @@
 				<reportElement x="0" y="12" width="802" height="1" uuid="232942a3-25d5-47c8-8e6b-053569231948"/>
 			</line>
 			<textField>
-				<reportElement x="263" y="3" width="51" height="10" uuid="00261321-f533-4dff-9523-abbd9e293351"/>
+				<reportElement x="263" y="2" width="51" height="10" uuid="00261321-f533-4dff-9523-abbd9e293351"/>
 				<textElement textAlignment="Center" markup="none">
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{OPCVCTO} == 0 ? "VENCTON" : "VENCTOR"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="377" y="2" width="200" height="10" uuid="94dec70b-4be5-43ad-9fba-c3e13dc39ade"/>
+				<reportElement x="415" y="2" width="178" height="10" uuid="94dec70b-4be5-43ad-9fba-c3e13dc39ade"/>
 				<textElement textAlignment="Left">
 					<font fontName="Arial" size="8"/>
 				</textElement>
@@ -191,8 +192,8 @@
 				<text><![CDATA[PARC]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="316" y="2" width="51" height="10" uuid="def030e5-f054-4689-95ab-05e0ee4b9d11"/>
-				<textElement textAlignment="Center">
+				<reportElement x="364" y="2" width="51" height="10" uuid="def030e5-f054-4689-95ab-05e0ee4b9d11"/>
+				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<text><![CDATA[PAGTO]]></text>
@@ -219,11 +220,18 @@
 				<text><![CDATA[OPERAÇÃO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="577" y="2" width="97" height="10" uuid="69634922-275c-456b-848a-097701aa9af0"/>
+				<reportElement x="593" y="2" width="81" height="10" uuid="69634922-275c-456b-848a-097701aa9af0"/>
 				<textElement textAlignment="Left">
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<text><![CDATA[PORTADOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="314" y="2" width="51" height="11" uuid="396453ab-08e0-4497-a008-127860122581"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[DIAS]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -258,7 +266,7 @@
 				<textFieldExpression><![CDATA[$P{OPCVCTO} == 0 ? $F{daa01dtVctoN} : $F{daa01dtVctoR}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="379" y="0" width="198" height="10" isRemoveLineWhenBlank="true" uuid="5913a3e2-5615-4714-8252-84465b32fec6"/>
+				<reportElement x="417" y="0" width="176" height="10" isRemoveLineWhenBlank="true" uuid="5913a3e2-5615-4714-8252-84465b32fec6"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
@@ -272,8 +280,8 @@
 				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="317" y="0" width="49" height="10" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="706ef2fd-d814-43ac-9887-17cd97297153"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+				<reportElement mode="Transparent" x="365" y="0" width="49" height="10" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="706ef2fd-d814-43ac-9887-17cd97297153"/>
+				<textElement verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
@@ -287,7 +295,7 @@
 				<textFieldExpression><![CDATA[$F{abb01data}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="579" y="0" width="95" height="10" isRemoveLineWhenBlank="true" uuid="c363933f-6286-46c0-99c2-36f0d5932d04"/>
+				<reportElement x="595" y="0" width="79" height="10" isRemoveLineWhenBlank="true" uuid="c363933f-6286-46c0-99c2-36f0d5932d04"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
@@ -299,6 +307,13 @@
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{abf16codigo} != null && $F{abf16nome} != null ? $F{abf16codigo}+"-"+$F{abf16nome} : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="314" y="0" width="51" height="10" uuid="aa3f8737-d716-4749-921a-f7d2b404e7d6"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dias}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

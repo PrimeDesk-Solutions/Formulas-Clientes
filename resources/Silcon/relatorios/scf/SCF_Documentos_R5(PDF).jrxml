@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF_DocumentosPorDepartamentosNaturezas_R1" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1f67a61e-6a0a-4ade-8897-168f78801ff5">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="993"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="TITULO_RELATORIO" class="java.lang.String"/>
 	<parameter name="EMPRESA" class="java.lang.String"/>
@@ -37,6 +37,7 @@
 	<field name="abf15nome" class="java.lang.String"/>
 	<field name="abf16codigo" class="java.lang.String"/>
 	<field name="abf16nome" class="java.lang.String"/>
+	<field name="dias" class="java.lang.Integer"/>
 	<variable name="totalDoc" class="java.math.BigDecimal" resetType="Group" resetGroup="tipo" calculation="Sum">
 		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
 	</variable>
@@ -65,7 +66,7 @@
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="23">
+			<band height="13">
 				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 					<reportElement x="736" y="3" width="65" height="10" isRemoveLineWhenBlank="true" uuid="886ae64e-2916-4902-beba-13899fb83d8f"/>
 					<textElement textAlignment="Right">
@@ -168,7 +169,7 @@
 				<textFieldExpression><![CDATA[$P{OPCVCTO} == 0 ? "VENCTON" : "VENCTOR"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="270" y="0" width="301" height="10" uuid="94dec70b-4be5-43ad-9fba-c3e13dc39ade"/>
+				<reportElement x="325" y="0" width="246" height="10" uuid="94dec70b-4be5-43ad-9fba-c3e13dc39ade"/>
 				<textElement textAlignment="Left">
 					<font fontName="Arial" size="8"/>
 				</textElement>
@@ -216,6 +217,13 @@
 				</textElement>
 				<text><![CDATA[OPERAÇÃO]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="263" y="-1" width="62" height="12" uuid="410aaf98-630d-4dcd-bf29-551578fa8d03"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[DIAS]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
@@ -242,7 +250,7 @@
 				<textFieldExpression><![CDATA[$P{OPCVCTO} == 0 ? $F{daa01dtVctoN} : $F{daa01dtVctoR}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="270" y="0" width="301" height="10" isRemoveLineWhenBlank="true" uuid="5913a3e2-5615-4714-8252-84465b32fec6"/>
+				<reportElement x="325" y="0" width="246" height="10" isRemoveLineWhenBlank="true" uuid="5913a3e2-5615-4714-8252-84465b32fec6"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
@@ -283,6 +291,13 @@
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{abf16codigo} == null ? "" : $F{abf16codigo}+"-"+$F{abf16nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="262" y="0" width="63" height="10" uuid="665c869b-38ca-4edf-b94a-8f75b9ef7962"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dias}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

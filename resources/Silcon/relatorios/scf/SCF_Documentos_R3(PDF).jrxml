@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF_DocumentosPorDepartamentosNaturezas_R1" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1f67a61e-6a0a-4ade-8897-168f78801ff5">
 	<property name="ireport.zoom" value="1.9965000000000006"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="679"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="TITULO_RELATORIO" class="java.lang.String"/>
 	<parameter name="EMPRESA" class="java.lang.String"/>
@@ -40,6 +40,7 @@
 	<field name="daa01previsao" class="java.lang.Integer"/>
 	<field name="jme" class="java.math.BigDecimal"/>
 	<field name="desconto" class="java.math.BigDecimal"/>
+	<field name="dias" class="java.lang.Integer"/>
 	<variable name="totalGeral" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
 		<initialValueExpression><![CDATA[new BigDecimal(0)]]></initialValueExpression>
@@ -65,7 +66,7 @@
 			<band/>
 		</groupHeader>
 		<groupFooter>
-			<band height="1"/>
+			<band/>
 		</groupFooter>
 	</group>
 	<background>
@@ -143,7 +144,7 @@
 				<textFieldExpression><![CDATA[$P{OPCVCTO} == 0 ? "VCTON" : "VCTOR"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="242" y="0" width="209" height="10" uuid="94dec70b-4be5-43ad-9fba-c3e13dc39ade"/>
+				<reportElement x="277" y="0" width="174" height="10" uuid="94dec70b-4be5-43ad-9fba-c3e13dc39ade"/>
 				<textElement textAlignment="Left">
 					<font fontName="Arial" size="8"/>
 				</textElement>
@@ -155,13 +156,6 @@
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<text><![CDATA[PARC]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="193" y="0" width="49" height="10" uuid="def030e5-f054-4689-95ab-05e0ee4b9d11"/>
-				<textElement textAlignment="Center">
-					<font fontName="Arial" size="8"/>
-				</textElement>
-				<text><![CDATA[PGTO]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="101" y="0" width="43" height="10" uuid="c513bc3e-4708-4749-bfd6-e2964a8f779a"/>
@@ -219,6 +213,20 @@
 				</textElement>
 				<text><![CDATA[P/R]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="237" y="0" width="40" height="10" uuid="def030e5-f054-4689-95ab-05e0ee4b9d11"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[PGTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="193" y="0" width="44" height="10" uuid="02f183d9-f44d-430c-ae85-fc12d49b30cc"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[DIAS]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
@@ -252,14 +260,6 @@
 				<textFieldExpression><![CDATA[$P{OPCVCTO} == 0 ? $F{daa01dtVctoN} : $F{daa01dtVctoR}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="193" y="0" width="49" height="10" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="706ef2fd-d814-43ac-9887-17cd97297153"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{daa01dtBaixa}]]></textFieldExpression>
-			</textField>
-			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="101" y="0" width="43" height="10" isRemoveLineWhenBlank="true" uuid="9e840ab8-1ec8-4f79-afaa-8cf624832033"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
@@ -267,7 +267,7 @@
 				<textFieldExpression><![CDATA[$F{abb01data}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="242" y="0" width="209" height="10" isRemoveLineWhenBlank="true" uuid="5913a3e2-5615-4714-8252-84465b32fec6"/>
+				<reportElement x="277" y="0" width="174" height="10" isRemoveLineWhenBlank="true" uuid="5913a3e2-5615-4714-8252-84465b32fec6"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
@@ -314,6 +314,21 @@
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{PR}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="237" y="0" width="40" height="10" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="706ef2fd-d814-43ac-9887-17cd97297153"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{daa01dtBaixa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="193" y="-1" width="44" height="11" uuid="78ae52ec-49c6-4e11-a3ae-bf91bcd3be31"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dias}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
