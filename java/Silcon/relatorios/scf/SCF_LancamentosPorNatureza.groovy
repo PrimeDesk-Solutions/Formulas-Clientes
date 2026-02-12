@@ -33,14 +33,13 @@ public class SCF_LancamentosPorNatureza extends RelatorioBase {
         List<Long> tipoDoc = getListLong("tipo");
         List<Long> plf = getListLong("plf");
         List<Long> contasCorrentes = getListLong("contaCorrente");
-        String codNatIni = getString("naturezaIni");
-        String codNatFin = getString("naturezaFin");
+        List<Long> naturezas = getListLong("naturezas")
         List<Long> entidades = getListLong("entidade");
         LocalDate[] dataEmissao = getIntervaloDatas("dataEmissao");
         Integer impressao = getInteger("impressao");
         Long idEmpresa = obterEmpresaAtiva().getAac10id();
 
-        List<TableMap> dados = buscarLancamentos(numDocIni, numDocFin, tipoDoc, plf, codNatIni, codNatFin, entidades, dataEmissao, idEmpresa, contasCorrentes);
+        List<TableMap> dados = buscarLancamentos(numDocIni, numDocFin, tipoDoc, plf, naturezas, entidades, dataEmissao, idEmpresa, contasCorrentes);
 
         if (impressao == 1) return gerarXLSX("SCF_LancamentosPorNatureza_Excel", dados);
         params.put("empresa", obterEmpresaAtiva().getAac10codigo() + "-" + obterEmpresaAtiva().getAac10na());
@@ -51,7 +50,7 @@ public class SCF_LancamentosPorNatureza extends RelatorioBase {
 
     }
 
-    private List<TableMap> buscarLancamentos(Integer numDocIni, Integer numDocFin, List<Long> tipoDoc, List<Long> plf, String codNatIni, String codNatFin, List<Long> entidades, LocalDate[] dataEmissao, Long idEmpresa, List<Long> contasCorrentes) {
+    private List<TableMap> buscarLancamentos(Integer numDocIni, Integer numDocFin, List<Long> tipoDoc, List<Long> plf, List<Long> naturezas, List<Long> entidades, LocalDate[] dataEmissao, Long idEmpresa, List<Long> contasCorrentes) {
 
         // Data Inicial - Final
         LocalDate dataIni = null;
@@ -66,9 +65,9 @@ public class SCF_LancamentosPorNatureza extends RelatorioBase {
         String whereContas = contasCorrentes != null && contasCorrentes.size() > 0 ? "AND dab01id IN (:contasCorrentes)" : "";
         String whereTipoDoc = tipoDoc != null && tipoDoc.size() > 0 ? "AND aah01id IN (:tipoDoc)" : "";
         String wherePlf = plf != null && plf.size() > 0 ? "AND dab10plf in (:plf) " : "";
-        String whereNatureza = codNatIni != null && codNatFin != null ? "AND abf10codigo BETWEEN :codNatIni AND :codNatFin " : codNatIni != null && codNatFin == null ? "AND abf10codigo >= :codNatIni " : codNatIni == null && codNatFin != null ? "AND abf10codigo <= :codNatFin " : "";
+        String whereNaturezas = naturezas != null && naturezas.size() > 0 ? "AND abf10id IN (:naturezas) " : "";
         String whereEntidade = entidades != null && entidades.size() > 0 ? "AND abe01id IN (:entidades)" : "";
-        String whereDataEmissao = dataIni != null && dataFin != null ? "AND abb01data BETWEEN :dataIni AND :dataFin " : "";
+        String whereDataEmissao = dataIni != null && dataFin != null ? "AND dab10data BETWEEN :dataIni AND :dataFin " : "";
 
         Parametro parametroNumDocIni = Parametro.criar("numDocIni", numDocIni);
         Parametro parametroNumDocFin = Parametro.criar("numDocFin", numDocFin);
@@ -76,8 +75,7 @@ public class SCF_LancamentosPorNatureza extends RelatorioBase {
         Parametro parametroContas = contasCorrentes != null && contasCorrentes.size() > 0 ? Parametro.criar("contasCorrentes", contasCorrentes) : null;
         Parametro parametroTipoDoc = tipoDoc != null && tipoDoc.size() > 0 ? Parametro.criar("tipoDoc", tipoDoc) : null;
         Parametro parametroPlf = plf != null && plf.size() > 0 ? Parametro.criar("plf", plf) : null;
-        Parametro parametroNaturezaIni = codNatIni != null ? Parametro.criar("codNatIni", codNatIni) : null;
-        Parametro parametroNaturezaFin = codNatFin != null ? Parametro.criar("codNatFin", codNatFin) : null;
+        Parametro parametroNatureza = naturezas != null && naturezas.size() > 0 ? Parametro.criar("naturezas", naturezas) : null;
         Parametro parametroEntidade = entidades != null && entidades.size() > 0 ? Parametro.criar("entidades", entidades) : null;
         Parametro parametroDataIni = dataIni != null ? Parametro.criar("dataIni", dataIni) : null;
         Parametro parametroDataFin = dataFin != null ? Parametro.criar("dataFin", dataFin) : null;
@@ -98,14 +96,14 @@ public class SCF_LancamentosPorNatureza extends RelatorioBase {
                 whereNumDoc +
                 whereTipoDoc +
                 wherePlf +
-                whereNatureza +
+                whereNaturezas +
                 whereEntidade +
                 whereDataEmissao +
                 whereEmpresa +
                 whereContas +
                 "ORDER BY abb01num,aah01codigo, abf10codigo,abb01parcela, abb01data";
 
-        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroNumDocIni, parametroNumDocFin, parametroEmpresa, parametroContas, parametroTipoDoc, parametroPlf, parametroNaturezaIni, parametroNaturezaFin, parametroEntidade, parametroDataIni, parametroDataFin);
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroNumDocIni, parametroNumDocFin, parametroEmpresa, parametroContas, parametroTipoDoc, parametroPlf, parametroNatureza, parametroEntidade, parametroDataIni, parametroDataFin);
 
     }
 }

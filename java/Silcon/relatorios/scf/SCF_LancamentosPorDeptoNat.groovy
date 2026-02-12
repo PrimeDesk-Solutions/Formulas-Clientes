@@ -1,5 +1,6 @@
 package Silcon.relatorios.scf
 
+import br.com.multitec.utils.Utils
 import br.com.multitec.utils.collections.TableMap
 import com.lowagie.text.Table;
 import sam.server.samdev.relatorio.RelatorioBase;
@@ -18,8 +19,10 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
     @Override
     public Map<String, Object> criarValoresIniciais() {
         Map<String, Object> filtrosDefault = new HashMap<>();
-        return filtrosDefault;
-    }
+        filtrosDefault.put("agrupamento", "0");
+        filtrosDefault.put("impressao", "0");
+        filtrosDefault.put("detalhamento", "0");
+        return Utils.map("filtros", filtrosDefault);    }
     @Override
     public DadosParaDownload executar() {
         List<Long> idsDeptos = getListLong("departamento");
@@ -31,7 +34,7 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
 
 
         if(detalhamento == 0){
-            params.put("titulo", "SCF - Lançamentos por Departamento e Natureza (Análitico)")
+            params.put("titulo", "SCF - Lançamentos por Departamento e Natureza (Analítico)")
         }else{
             params.put("titulo", "SCF - Lançamentos por Departamento e Natureza (Sintético)")
         }
@@ -117,7 +120,7 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
         String whereEmpresa = "WHERE dab10gc = :idEmpresa ";
 
         Parametro parametroDeptos = idsDeptos != null && idsDeptos.size() > 0 ? Parametro.criar("idsDeptos", idsDeptos) : null;
-        Parametro parametroNat = idsDeptos != null && idsDeptos.size() > 0 ? Parametro.criar("idsDeptos", idsDeptos) : null;
+        Parametro parametroNat = idsNaturezas != null && idsNaturezas.size() > 0 ? Parametro.criar("idsNaturezas", idsNaturezas) : null;
         Parametro parametroDtInicial = dataLcto != null ? Parametro.criar("dtInicial", dataLcto[0]) : null;
         Parametro parametroDtFinal = dataLcto != null ? Parametro.criar("dtFinal", dataLcto[1]) : null;
         Parametro parametroEmpresa = Parametro.criar("idEmpresa", obterEmpresaAtiva().getAac10id());

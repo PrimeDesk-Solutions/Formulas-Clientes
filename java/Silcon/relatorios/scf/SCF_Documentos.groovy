@@ -253,6 +253,8 @@ public class SCF_Documentos extends RelatorioBase{
         Parametro paramRep = rep != null && rep.size() > 0 ? Parametro.criar("idRep", rep) : null;
         Parametro paramnumeroInicial =  Parametro.criar("numeroInicial", numeroInicial);
         Parametro paramnumeroFinal =  Parametro.criar("numeroFinal", numeroFinal);
+        Parametro parametroPort = port != null && port.size() != 0 ? Parametro.criar("idPort", port) : null;
+        Parametro parametroOper = oper != null && oper.size() != 0 ? Parametro.criar("idOper", oper) : null;
 
         String sql = " SELECT DISTINCT daa01id,abe01.abe01codigo, abe01.abe01na, abb01.abb01num, abb01.abb01parcela, abb01.abb01data, " +
                 (agrup == "D" || agrup == "N" || agrup == "NE" || agrup == "DN" ? "abb11.abb11codigo, abb11.abb11nome, abf10.abf10codigo, abf10.abf10nome, " :
@@ -296,7 +298,7 @@ public class SCF_Documentos extends RelatorioBase{
                 whereOpc +
                 orderBy;
 
-        List<TableMap> receberDadosRelatorio = getAcessoAoBanco().buscarListaDeTableMap(sql, paramEmpresa, paramDepartamento, paramDocumento, paramNaturezas, paramEntidade, paramRep, paramnumeroInicial, paramnumeroFinal, paramOpc);
+        List<TableMap> receberDadosRelatorio = getAcessoAoBanco().buscarListaDeTableMap(sql, paramEmpresa, paramDepartamento, paramDocumento, paramNaturezas, paramEntidade, paramRep, paramnumeroInicial, paramnumeroFinal, paramOpc, parametroPort, parametroOper);
         return receberDadosRelatorio;
     }
 
