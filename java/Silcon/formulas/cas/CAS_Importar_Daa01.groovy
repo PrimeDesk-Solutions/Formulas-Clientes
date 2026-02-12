@@ -32,6 +32,7 @@ import sam.model.entities.ab.Abf16
 import sam.model.entities.ab.Abf20
 import sam.model.entities.da.Daa01
 import sam.server.samdev.formula.FormulaBase
+import java.time.format.DateTimeFormatter;
 
 class CAS_Importar_Daa01 extends FormulaBase {
 
@@ -184,14 +185,34 @@ class CAS_Importar_Daa01 extends FormulaBase {
     }
     private TableMap montarJsonDoc(TextFileLeitura txt){
         TableMap jsonDaa01 = new TableMap();
+        String dtVctoTxt = txt.getCampo(13);
+        String dtVctoR = converterData(dtVctoTxt, "ddMMyyyy", "yyyy-MM-dd")
 
         if(!txt.getCampo(29).isEmpty()) jsonDaa01.put("multa", new BigDecimal(txt.getCampo(29)));
         if(!txt.getCampo(30).isEmpty()) jsonDaa01.put("juros", new BigDecimal(txt.getCampo(30)));
         if(!txt.getCampo(31).isEmpty()) jsonDaa01.put("encargos", new BigDecimal(txt.getCampo(31)));
         if(!txt.getCampo(32).isEmpty()) jsonDaa01.put("desconto", new BigDecimal(txt.getCampo(32)));
-        jsonDaa01.put("id_documento", txt.getCampo(33))
+        jsonDaa01.put("id_documento", txt.getCampo(33));
+        jsonDaa01.put("dt_limite_desc", dtVctoR.replace("-", ""));
 
         return jsonDaa01;
+    }
+    private String converterData(String txtData, String formatoEntrada, String formatoSaida){
+        String dataOriginal = txtData;
+
+        // Define o formato de entrada
+        DateTimeFormatter formatterEntrada = DateTimeFormatter.ofPattern(formatoEntrada);
+
+        // Converte a String para LocalDate
+        LocalDate data = LocalDate.parse(dataOriginal, formatterEntrada);
+
+        // Define o formato de saída
+        DateTimeFormatter formatterSaida = DateTimeFormatter.ofPattern(formatoSaida);
+
+        // Converte para o novo formato
+        String dataFormatada = data.format(formatterSaida);
+
+        return dataFormatada;
     }
     private String buscarTipoDoc(String codTipoDoc){
         switch (codTipoDoc){
