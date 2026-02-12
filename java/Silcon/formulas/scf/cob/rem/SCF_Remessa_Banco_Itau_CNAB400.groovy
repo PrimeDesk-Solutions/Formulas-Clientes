@@ -41,6 +41,7 @@ class SCF_Remessa_Banco_Itau_CNAB400 extends FormulaBase{
         Integer movimento = get("movimento");
         Aac10 aac10 = get("aac10");
         Abf01 abf01 = get("abf01");
+        if(abf01.abf01json == null) interromper("Necessário preencher os campos livres no cadastro do banco.")
         List<Daa01> daa01s = get("daa01s");
         SCFService scfService = instanciarService(SCFService.class);
         def total = 0;
