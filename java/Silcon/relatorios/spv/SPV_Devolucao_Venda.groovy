@@ -47,11 +47,11 @@ public class SPV_Devolucao_Venda extends RelatorioBase {
                 docsRef.add(docs);
             }
 
-            BigDecimal totalDocDevolvido = documento.getBigDecimal_Zero("vlrDoc");
-            BigDecimal totalDocReferenciados = buscarTotalDocsReferenciados(idDocumento);
-            BigDecimal totalDevolver = totalDocReferenciados.subtract(totalDocDevolvido);
-
-            documento.put("totalDevolver", totalDevolver);
+//            BigDecimal totalDocDevolvido = documento.getBigDecimal_Zero("vlrDoc");
+//            BigDecimal totalDocReferenciados = buscarTotalDocsReferenciados(idDocumento);
+//            BigDecimal totalDevolver = totalDocReferenciados.subtract(totalDocDevolvido);
+//
+//            documento.put("totalDevolver", totalDevolver);
 
             documento.put("key", idDocumento);
         }
