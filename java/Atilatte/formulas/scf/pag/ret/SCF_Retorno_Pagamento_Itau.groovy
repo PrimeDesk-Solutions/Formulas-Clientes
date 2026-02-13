@@ -43,7 +43,7 @@ class SCF_Retorno_Pagamento_Itau extends FormulaBase {
         while(txt.nextLine()){
             if(txt.getSubString(7, 8).equals("3") && txt.getSubString(13, 14).equals("J")){
                 String posId = txt.getSubString(182, 202).trim();
-                int pos = posId.indexOf(";", -1);
+                int pos = posId.indexOf("E", -1);
 
                 Abf20 abf20 = null;
                 Daa0102 daa0102 = null;
