@@ -734,7 +734,7 @@ class NFCe_Reforma extends FormulaBase {
             // Montar a URL completa
             String qrCodeURL = "${urlqrCode}?p=${chave}|2|${tpAmb}|${idCSC}|${hash}";
             eaa0102.setEaa0102pvQrCodeVenda(qrCodeURL)
-            //getSession().persist(eaa0102)
+            getSession().persist(eaa0102)
 
             // Criar o bloco infNFeSupl
             xmlInfNFeSupl = "<infNFeSupl><qrCode><![CDATA[" + qrCodeURL + "]]></qrCode><urlChave>" + urlConsulta + "</urlChave></infNFeSupl>"
