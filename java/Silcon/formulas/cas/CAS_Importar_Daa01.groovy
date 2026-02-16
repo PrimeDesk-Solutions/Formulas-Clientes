@@ -105,6 +105,7 @@ class CAS_Importar_Daa01 extends FormulaBase {
         abb01.setAbb01num(aah01.getAah01numeracao().equals(Aah01.NUMERACAO_UNICA_E_AUTOMATICA) ? 0 : Integer.parseInt(txt.getCampo(4)));
         abb01.setAbb01parcela(txt.getCampo(6));
         abb01.setAbb01quita(0);
+        abb01.setAbb01operAutor("MIGRADO SAM 3")
         LocalDate data = txt.getCampo(7) == null || txt.getCampo(7).length() == 0 ? abb01data : LocalDate.parse(txt.getCampo(7), DateTimeFormatter.ofPattern("ddMMyyyy"));
         abb01.setAbb01data(data);
         abb01.setAbb01serie(txt.getCampo(5));

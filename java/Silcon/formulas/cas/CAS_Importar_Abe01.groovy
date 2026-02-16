@@ -80,7 +80,13 @@ public class CAS_Importar_Abe01 extends FormulaBase{
 
             abe01.setAbe01json(jsonAbe01);
 
-            getSession().persist(abe01);
+            try{
+                getSession().persist(abe01);
+            }catch (Exception e){
+                interromper(e.getMessage() + " Linha: " + linha)
+            }
+
+            linha++
         }
        
     }

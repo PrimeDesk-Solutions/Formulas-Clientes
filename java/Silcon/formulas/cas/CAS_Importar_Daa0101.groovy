@@ -44,7 +44,9 @@ public class CAS_Importar_Daa0101 extends FormulaBase{
             Daa01 daa01;
             for(daa01aux in daa01s){
                 TableMap jsonDaa01 = daa01aux.daa01json;
+                if(jsonDaa01 == null) continue;
                 Long idDocSam3 = jsonDaa01.getLong("id_documento");
+                if(idDocSam3 == null) continue // Trata somente os documentos que vieram do SAM 3
                 if(idDocSam3 == idDoc) daa01 = daa01aux;
             }
 
@@ -66,7 +68,9 @@ public class CAS_Importar_Daa0101 extends FormulaBase{
         }
     }
     private List<Daa01> buscarDocumentosFinanceiros(){
-        return getSession().createCriteria(Daa01.class).addFields("daa01id, daa01json").getList(ColumnType.ENTITY)
+        return getSession().createCriteria(Daa01.class)
+                .addFields("daa01id, daa01json")
+                .getList(ColumnType.ENTITY)
     }
 
 }
