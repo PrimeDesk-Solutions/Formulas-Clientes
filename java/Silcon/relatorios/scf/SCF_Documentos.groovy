@@ -90,8 +90,11 @@ public class SCF_Documentos extends RelatorioBase{
         for(TableMap tm : dados) {
             LocalDate dtAtual = LocalDate.now();
             LocalDate dtVctoN = tm.getDate("daa01dtVctoN");
-            Integer dias = ChronoUnit.DAYS.between(dtAtual, dtVctoN)
+            Integer dias = ChronoUnit.DAYS.between(dtAtual, dtVctoN);
+            BigDecimal juros = tm.getBigDecimal_Zero("juros");
+
             tm.put("dias", dias);
+            tm.put("jme", (juros * dias).round(2));
 
             TableMap daa01Json = tm.getTableMap("daa01json");
             if (daa01Json != null) {
@@ -263,7 +266,7 @@ public class SCF_Documentos extends RelatorioBase{
                 " daa01.daa01dtVctoN, daa01.daa01dtVctoR, daa01.daa01dtPgto, daa01.daa01dtBaixa,  "+
                 (agrup == "D" || agrup == "N" || agrup == "NE" || agrup == "DN" ? "daa01011.daa01011valor AS valor, " : "daa01valor AS valor, ")+
                 " aac10.aac10codigo as codemp, aac10.aac10na as nomeemp, abf15codigo, abf15nome, abf16codigo, abf16nome, " +
-                " abe01Rep.abe01codigo as repcodigo, abe01Rep.abe01na as repna, daa01previsao, daa01json, "+
+                " abe01Rep.abe01codigo as repcodigo, abe01Rep.abe01na as repna, daa01previsao, daa01json, cast(daa01json ->> 'juros' as numeric(18,6)) AS juros, "+
                 " cast(daa01json ->> 'juros' as numeric(18,6)) + cast(daa01json ->> 'multa' as numeric(18,6)) + cast(daa01json ->> 'encargos' as numeric(18,6)) as jme, "+
                 "case when cast(daa01json ->> 'desconto' as numeric(18,6)) is null then 0.000000 else cast(daa01json ->> 'desconto' as numeric(18,6)) end as desconto, "+
                 (agrup == "D" || agrup == "N" ? "case when cast(daa01json ->> 'desconto' as numeric(18,6)) is null then daa01011.daa01011valor + 0.000000 else daa01011.daa01011valor + cast(daa01json ->> 'desconto' as numeric(18,6)) end AS liquido " : "case when cast(daa01json ->> 'desconto' as numeric(18,6)) is null then daa01valor + 0.000000 else daa01valor + cast(daa01json ->> 'desconto' as numeric(18,6)) end AS liquido ")+
