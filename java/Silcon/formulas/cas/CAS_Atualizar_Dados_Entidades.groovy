@@ -3,7 +3,7 @@
  */
 package Silcon.formulas.cas
 
-
+import br.com.multitec.utils.ValidacaoException
 import sam.model.entities.ab.Aba20;
 import sam.model.entities.ab.Aba2001;
 import sam.model.entities.ab.Abe02;
@@ -63,7 +63,7 @@ public class CAS_Atualizar_Dados_Entidades extends FormulaBase{
                 //abe01.setAbe01obs(txt.getCampo(3).contains("SEM VALOR") ? null : txt.getCampo(3));
                 TableMap jsonAbe01 = montarJsonEntidade(txt);
                 abe01.setAbe01json(jsonAbe01);
-                abe02.setAbe02obsUsoInt(txt.getCampo(7).contains("SEM VALOR") ? null : txt.getCampo(7));
+                abe02.setAbe02obsUsoInt(txt.getCampo(7).isEmpty() ? null : txt.getCampo(7));
 
                 getSession().persist(abe01);
                 getSession().persist(abe02);
@@ -84,14 +84,16 @@ public class CAS_Atualizar_Dados_Entidades extends FormulaBase{
         TableMap jsonAbe01 = new TableMap();
 
         jsonAbe01.put("vlr_lim_credito", new BigDecimal(txt.getCampo(4)));
-        if(!txt.getCampo(5).contains("SEM VALOR")) jsonAbe01.put("dt_vcto_lim_credito",txt.getCampo(5).replace("-", ""))
-        if(!txt.getCampo(6).contains("SEM VALOR")) jsonAbe01.put("obs_lim_credito", txt.getCampo(6));
+        if(!txt.getCampo(5).isEmpty()) jsonAbe01.put("dt_vcto_lim_credito",txt.getCampo(5).replace("-", ""))
+        if(!txt.getCampo(6).isEmpty()) jsonAbe01.put("obs_lim_credito", txt.getCampo(6));
 
 
         return jsonAbe01 != null && jsonAbe01.size() > 0 ? jsonAbe01 : new TableMap();
     }
     private gravarInconsistenciasRepositorio(List<String> mensagens){
         Aba20 aba20 = session.createCriteria(Aba20.class).addWhere(Criterions.eq("aba20codigo", "Avisos")).get(ColumnType.ENTITY);
+
+        if(aba20 == null) throw new ValidacaoException("Repositório de dados 'Avisos' não encontrado.")
 
         for(String mensagem : mensagens){
             Aba2001 aba2001 = new Aba2001();
