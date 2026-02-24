@@ -33,20 +33,22 @@ class SCF_LayoutBancoItauRetorno_CNAB_400 extends FormulaBase {
                 TableMap tm = new TableMap();
                 List<String> inconsistencias = new ArrayList();
 
-                //pega o id do documento, remove zeros a esquerda e converte em Integer
-                String id = txt.getSubString(37,45)
-                Integer docId = null
+                //pega o id do documento, remove zeros a esquerda e converte em Long
+                String id = txt.getSubString(37,62).trim();
+                int pos = id.indexOf(";", -1);
+
+                Long docId = null
                 if(id == null || id.length() <= 0 || id == '        ') {
                     String inconsistencia = "Documento não encontrado por não haver o ID informado no retorno. Conteúdo encontrado: " + id + ". Linha: " + linha;
                     inconsistencias.add(inconsistencia);
                 }else {
-                    docId = Integer.parseInt(id)
+                    docId = Long.parseLong(id.substring(0, pos))
                 }
 
                 Daa01 daa01 = null
 
                 if(docId != null) {
-                    daa01 = getAcessoAoBanco().buscarRegistroUnicoById("Daa01", Long.parseLong(docId.toString()));
+                    daa01 = getAcessoAoBanco().buscarRegistroUnicoById("Daa01", docId);
                 }
 
                 boolean validouDocumento = true;
