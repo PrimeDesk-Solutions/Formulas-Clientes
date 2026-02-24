@@ -133,16 +133,17 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
         def whereEmpresa = "AND eaa01gc = :idEmpresa ";
 
         def sql = "SELECT eaa01id, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, abb01num AS numDoc, " +
-                " abe01codigo AS codEntidade, abe01nome AS nomeEntidade, " +
-                " aab10nome AS usuario, abb01data AS dtVenda, " +
+                " ent.abe01codigo AS codEntidade, ent.abe01nome AS nomeEntidade, " +
+                " aab10nome AS usuarioLogado, abb01data AS dtVenda, " +
                 " abe30codigo AS codCondPgto, abe30nome AS descrCondPgto, eaa01totItens AS totalItem, CAST(eaa01json ->> 'desconto' AS numeric(18,6)) AS desconto, eaa01totDoc AS totDoc, " +
-                " eaa01obsUsoInt AS obsInterno, CAST(eaa01json ->> 'com_nota' AS INTEGER) AS comNota, abe01id " +
+                " eaa01obsUsoInt AS obsInterno, CAST(eaa01json ->> 'com_nota' AS INTEGER) AS comNota, ent.abe01id AS abe01id, abe01nome AS usuario " +
                 " FROM eaa01 " +
                 " INNER JOIN abb01 ON abb01id = eaa01central " +
                 " INNER JOIN aab10 ON aab10id = abb01operUser " +
-                " INNER JOIN abe01 ON abe01id = abb01ent  " +
+                " INNER JOIN abe01 AS ent ON ent.abe01id = abb01ent  " +
                 " INNER JOIN aah01 ON abb01tipo = aah01id " +
                 " LEFT JOIN abe30 ON eaa01cp = abe30id " +
+                " LEFT JOIN abe01 AS user user.abe01id = eaa01rep0 " +
                 "WHERE eaa01cancData IS NULL " +
                 whereTipos +
                 whereEntidades +
@@ -171,16 +172,17 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
 
     private List<TableMap> buscarDocumentoById(Long idDoc) {
         def sql = "SELECT eaa01id, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, abb01num AS numDoc, " +
-                    " abe01codigo AS codEntidade, abe01nome AS nomeEntidade, " +
-                    " aab10nome AS usuario, abb01data AS dtVenda, " +
+                    " ent.abe01codigo AS codEntidade, ent.abe01nome AS nomeEntidade, " +
+                    " aab10nome AS usuarioLogado, abb01data AS dtVenda, " +
                     " abe30codigo AS codCondPgto, abe30nome AS descrCondPgto, eaa01totItens AS totalItem, CAST(eaa01json ->> 'desconto' AS numeric(18,6)) AS desconto, eaa01totDoc AS totDoc, " +
-                    " eaa01obsUsoInt AS obsInterno, CAST(eaa01json ->> 'com_nota' AS INTEGER) AS comNota, abe01id " +
+                    " eaa01obsUsoInt AS obsInterno, CAST(eaa01json ->> 'com_nota' AS INTEGER) AS comNota, ent.abe01id AS abe01id, rep0.abe01nome AS usuario " +
                     " FROM eaa01 " +
                     " INNER JOIN abb01 ON abb01id = eaa01central " +
                     " INNER JOIN aab10 ON aab10id = abb01operUser " +
-                    " INNER JOIN abe01 ON abe01id = abb01ent  " +
+                    " INNER JOIN abe01 AS ent ON ent.abe01id = abb01ent  " +
                     " INNER JOIN aah01 ON abb01tipo = aah01id " +
                     " LEFT JOIN abe30 ON eaa01cp = abe30id " +
+                    " LEFT JOIN abe01 AS rep0 ON rep0.abe01id = eaa01rep0 " +
                     " WHERE eaa01id = :idDoc " +
                     " ORDER BY abb01num"
 
