@@ -265,14 +265,20 @@ public class SCV_SRF_VendaItensDiversos extends FormulaBase {
             jsonEaa0103.put("total_conv", eaa0103.eaa0103total);
             jsonEaa0103.put("qt_convertida", eaa0103.eaa0103qtComl);
 
-
-            //Total Item 
-            //eaa0103.eaa0103total = eaa0103.eaa0103total - jsonEaa0103.getBigDecimal_Zero("desconto");
             //Total Item
-            eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2)
-            //Total Documento 
-            eaa0103.eaa0103totDoc = eaa0103.eaa0103total;
+            eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
 
+            calcularIcmsST();
+
+            //Total Documento 
+            eaa0103.eaa0103totDoc = eaa0103.eaa0103total +
+                                    jsonEaa0103.getBigDecimal_Zero("ipi") +
+                                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
+                                    jsonEaa0103.getBigDecimal_Zero("seguro") +
+                                    jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
+                                    jsonEaa0103.getBigDecimal_Zero("vlr_icms_fcp_") +
+                                    jsonEaa0103.getBigDecimal_Zero("icms_st") -
+                                    jsonEaa0103.getBigDecimal_Zero("desconto");
 
             // ==============================================
             //                    ICMS
@@ -558,6 +564,67 @@ public class SCV_SRF_VendaItensDiversos extends FormulaBase {
             jsonEaa0103.put("vlr_ibs", new BigDecimal(0));
             jsonEaa0103.put("cbs_ibs_bc", new BigDecimal(0));
         }
+    }
+    private void calcularIcmsST(){
+        def ivaST = 0;
+        if(jsonEaa0103.getBigDecimal_Zero("_icms_st") != -1){
+            if(jsonAbe01 != null){
+                if(jsonAbe01.getBigDecimal_Zero("calcula_st") == 1 ){
+
+                    //BC ICMS ST
+                    jsonEaa0103.put("bc_icms_st", (eaa0103.eaa0103total+
+                            jsonEaa0103.getBigDecimal_Zero("frete_dest") +
+                            jsonEaa0103.getBigDecimal_Zero("seguro") +
+                            jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
+                            jsonEaa0103.getBigDecimal_Zero("ipi")).round(2));
+
+                    // Aliquota de ICMS ST
+                    if(jsonAbm1001_UF_Item.getBigDecimal_Zero("_icms_interno") != null) jsonEaa0103.put("_icms_st", jsonAbm1001_UF_Item.getBigDecimal_Zero("_icms_interno"));
+
+                    // Taxa IVA cadastro Item
+                    ivaST = jsonAbm1001_UF_Item.getBigDecimal_Zero("tx_iva_st");
+
+                    // Soma o IVA do item na base de cálculo de ICMS
+                    if(ivaST > 0){
+                        // BC ICMS ST com IVA
+                        jsonEaa0103.put("bc_icms_st", (jsonEaa0103.getBigDecimal_Zero("bc_icms_st") + (jsonEaa0103.getBigDecimal_Zero("bc_icms_st") * ( ivaST / 100 ))).round(2) );
+
+                        // ICMS ST com IVA
+                        jsonEaa0103.put("icms_st", ((jsonEaa0103.getBigDecimal_Zero("bc_icms_st") * (jsonEaa0103.getBigDecimal_Zero("_icms_st")/ 100))- jsonEaa0103.getBigDecimal_Zero("icms") ).round(2));
+                    }else{
+                        jsonEaa0103.put("bc_icms_st", new BigDecimal(0));
+                        jsonEaa0103.put("icms_st", new BigDecimal(0));
+                        jsonEaa0103.put("_icms_st", new BigDecimal(0));
+                    }
+
+                    // Define Tx. Iva do Item no documento
+                    if(jsonEaa0103.getBigDecimal_Zero("bc_icms_st") > 0){
+                        jsonEaa0103.put("tx_iva_st", jsonAbm1001_UF_Item.getBigDecimal_Zero("tx_iva_st"));
+                    }else{
+                        jsonEaa0103.put("tx_iva_st", new BigDecimal(0));
+                    }
+
+                    // Zera ICMS ST caso entidade está caracterizada para não calcular
+                    if(jsonAbe01.getBigDecimal_Zero("isento_st") == 1){
+                        jsonEaa0103.put("bc_icms_st", new BigDecimal(0));
+                        jsonEaa0103.put("icms_st", new BigDecimal(0));
+                        jsonEaa0103.put("_icms_st", new BigDecimal(0));
+                    }
+
+                }else{
+                    jsonEaa0103.put("bc_icms_st",new BigDecimal(0));
+                    jsonEaa0103.put("_icms_st",new BigDecimal(0));
+                    jsonEaa0103.put("icms_st",new BigDecimal(0));
+                    jsonEaa0103.put("tx_iva_st", new BigDecimal(0));
+                }
+            }
+        }else{
+            jsonEaa0103.put("bc_icms_st",new BigDecimal(0));
+            jsonEaa0103.put("_icms_st",new BigDecimal(0));
+            jsonEaa0103.put("icms_st",new BigDecimal(0));
+            jsonEaa0103.put("tx_iva_st", new BigDecimal(0));
+        }
+
     }
     @Override
     public FormulaTipo obterTipoFormula() {
