@@ -56,7 +56,7 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
             List<TableMap> itensDoc = buscarItensDoc(idDoc);
             List<TableMap> parcelamento = buscarParcelamentosDocumentos(idDoc);
             TableMap tmEnderecoEntrega = buscarEnderecoEntregaDocumento(idDoc);
-            TableMap tmEnderecoPrincipal = buscarEnderecoPrincipalDocumento(idDoc);
+            TableMap tmEnderecoPrincipal = buscarEnderecoPrincipalEntidade(idEntidade);
             String obsInterno = dado.getString("obsInterno");
             Integer countItens = 0;
             Integer countParcela = 0;
@@ -188,17 +188,17 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idDoc", idDoc))
     }
-    private buscarEnderecoPrincipalDocumento(Long idDoc){
+    private buscarEnderecoPrincipalEntidade(Long idEntidade){
         return getSession().createQuery(
-                " SELECT eaa0101endereco AS enderecoEntidade, eaa0101numero AS numEndEntidade, " +
-                " eaa0101complem AS complemEntidade, eaa0101bairro AS bairroEntidade," +
-                " eaa0101cep AS cepEntidade, " +
-                " eaa0101ddd AS dddEntidade, eaa0101fone AS foneEntidade, aag0201nome AS cidadeEntidade, aag02uf AS ufEntidade "+
-                " FROM eaa0101 " +
-                " LEFT JOIN aag0201 ON aag0201id = eaa0101municipio " +
+                " SELECT abe0101endereco AS enderecoEntidade, abe0101numero AS numEndEntidade, " +
+                " abe0101complem AS complemEntidade, abe0101bairro AS bairroEntidade," +
+                " abe0101cep AS cepEntidade, " +
+                " abe0101ddd1 AS dddEntidade, abe0101fone1 AS foneEntidade, aag0201nome AS cidadeEntidade, aag02uf AS ufEntidade "+
+                " FROM abe0101 " +
+                " LEFT JOIN aag0201 ON aag0201id = abe0101municipio " +
                 " LEFT JOIN aag02 ON aag0201uf = aag02id " +
-                " WHERE eaa0101doc = :idDoc "+
-                " AND eaa0101principal = 1 ").setParameter("idDoc", idDoc)
+                " WHERE abe0101ent = :idEntidade "+
+                " AND abe0101principal = 1 ").setParameter("idEntidade", idEntidade)
                 .setMaxResult(1).getUniqueTableMap();
 
     }
