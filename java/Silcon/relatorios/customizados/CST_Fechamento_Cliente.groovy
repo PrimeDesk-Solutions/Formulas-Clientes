@@ -24,7 +24,21 @@ public class CST_Fechamento_Cliente extends RelatorioBase {
         LocalDate[] dtVencimento = getIntervaloDatas("dtVencimento");
         List<Long> entidades = getListLong("entidades");
 
-        List<TableMap> docsFinanc = buscarDocumentosFinanceiros(dtEmissao, dtVencimento, entidades);
+        // Dados vindo da tela SCF0501
+        Long abe01id = getLong("abe01id");
+        LocalDate dtEmisIni = getLong("abe01id") != null && getString("dtEmisIni") != "null" ? LocalDate.parse(getString("dtEmisIni")) : null;
+        LocalDate dtEmisFin = getLong("abe01id") != null && getString("dtEmisFin") != "null" ? LocalDate.parse(getString("dtEmisFin")) : null;
+        LocalDate dtVctoIni = getLong("abe01id") != null && getString("dtVctoIni") != "null" ? LocalDate.parse(getString("dtVctoIni")) : null;
+        LocalDate dtVctoFin = getLong("abe01id") != null && getString("dtVctoFin") != "null" ? LocalDate.parse(getString("dtVctoFin")) : null;
+
+        List<TableMap> docsFinanc = new ArrayList();
+
+        if(abe01id == null){
+            docsFinanc = buscarDocumentosFinanceiros(dtEmissao, dtVencimento, entidades);
+        }else{
+            docsFinanc = buscarDocumentosFinanceirosPorIdEntidade(abe01id, dtEmisIni, dtEmisFin, dtVctoIni, dtVctoFin);
+        }
+
         Long idEntidade = null;
         TableMap vlrVale = new TableMap();
         for(doc in docsFinanc){
@@ -104,6 +118,73 @@ public class CST_Fechamento_Cliente extends RelatorioBase {
                     whereDtVctoR +
                     whereEntidades +
                     "ORDER BY abe01codigo, daa01dtVctoR, abb01num, abb01parcela ";
+
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroDtVctoIni, parametroDtVctoFin, parametroEntidade);
+    }
+    private List<TableMap> buscarDocumentosFinanceirosPorIdEntidade(Long abe01id, LocalDate dtEmisIni, LocalDate dtEmisFin, LocalDate dtVctoIni, LocalDate dtVctoFin){
+
+        String whereQuita = " WHERE abb01quita = 0 ";
+        String whereRP = " AND daa01rp = 0 ";
+        String whereDtEmissao = dtEmisIni != null && dtEmisFin != null ? "AND abb01data BETWEEN :dtEmissaoIni AND :dtEmissaoFin " :
+                                dtEmisIni != null && dtEmisFin == null ? "AND abb01data >= :dtEmissaoIni " :
+                                dtEmisIni == null && dtEmisFin != null ? "AND abb01data <= :dtEmissaoFin" : "";
+
+        String whereDtVctoR = dtVctoIni != null && dtVctoFin != null ? "AND daa01dtVctoR BETWEEN :dtVctoIni AND :dtVctoFin " :
+                              dtVctoIni != null && dtVctoFin == null ? "AND daa01dtVctoR >= :dtVctoIni " :
+                              dtVctoIni == null && dtVctoFin != null ? "AND daa01dtVctoR <= :dtVctoFin " : "";
+
+        String whereEntidade = "AND abe01id = :abe01id "
+
+
+        Parametro parametroDtEmissaoIni = dtEmisIni != null ? Parametro.criar("dtEmissaoIni", dtEmisIni) : null;
+        Parametro parametroDtEmissaoFin = dtEmisFin != null ? Parametro.criar("dtEmissaoFin", dtEmisFin) : null;
+        Parametro parametroDtVctoIni = dtVctoIni != null ? Parametro.criar("dtVctoIni", dtVctoIni) : null;
+        Parametro parametroDtVctoFin = dtVctoFin != null ? Parametro.criar("dtVctoFin", dtVctoFin) : null;
+        Parametro parametroEntidade = Parametro.criar("abe01id", abe01id);
+
+
+        String sql = "SELECT  " +
+                "    aah01codigo AS codTipoDoc,  " +
+                "    aah01nome AS descrTipoDoc,  " +
+                "    aac10id AS empresa,   " +
+                "    abe01codigo AS codEntidade,  " +
+                "    abe01na AS naEntidade,  " +
+                "    abe01id AS idEnt,  " +
+                "    abb01num AS numDoc,  " +
+                "    abb01parcela AS parcela,  " +
+                "    daa01dtLcto AS dtLcto,  " +
+                "    daa01dtVctoR AS dtVctoR,  " +
+                "    abb01valor AS valor,   " +
+                "    CASE  " +
+                "        WHEN NOW() > daa01dtVctoR  " +
+                "        THEN (CAST(daa01json ->> 'juros' AS numeric(18,6)) * CAST(TO_CHAR((NOW()) - (daa01dtVctoR),'DD') AS INT))  " +
+                "        ELSE 0.00  " +
+                "    END AS juros,  " +
+                "    (abb01valor +  " +
+                "        (CASE  " +
+                "            WHEN NOW() > daa01dtVctoR  " +
+                "            THEN (CAST(daa01json ->> 'juros' AS numeric(18,6)) * CAST(TO_CHAR((NOW()) - (daa01dtVctoR),'DD') AS INT))  " +
+                "            ELSE 0.00  " +
+                "        END) " +
+                "    ) AS vlrFinal,  " +
+                "    daa01obs AS observacao,  " +
+                "    abf15codigo AS codPort,  " +
+                "    abf15nome AS nomePort,  " +
+                "    abf16codigo AS codOper,  " +
+                "    abf16nome AS nomeOper  " +
+                " FROM daa01  " +
+                " INNER JOIN abb01 ON abb01id = daa01central  " +
+                " INNER JOIN aah01 ON aah01id = abb01tipo  " +
+                " INNER JOIN aac10 ON aac10id = daa01gc  " +
+                " INNER JOIN abe01 ON abe01id = abb01ent  " +
+                " LEFT JOIN abf15 ON abf15id = daa01port  " +
+                " LEFT JOIN abf16 ON abf16id = daa01oper   " +
+                whereQuita +
+                whereRP+
+                whereDtEmissao +
+                whereDtVctoR +
+                whereEntidade +
+                "ORDER BY abe01codigo, daa01dtVctoR, abb01num, abb01parcela ";
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroDtVctoIni, parametroDtVctoFin, parametroEntidade);
     }
