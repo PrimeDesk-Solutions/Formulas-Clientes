@@ -57,6 +57,8 @@ public class Verificar_Limite_Credito_Entidade extends ServletBase {
         LocalDate dataAtual = LocalDate.now();
         LocalDate dtVencLimCredito = jsonAbe01.getDate("dt_vcto_lim_credito");
 
+        if(dtVencLimCredito == null) interromper("Não foi informado data de vencimento de limite de crédito no cadastro da entidade.");
+
         if(vlrLimiteCredito >= 0){
             if(dtVencLimCredito < dataAtual){ // Data de vencimento de crédito menor que data atual, significa expirou
                 interromper("Data de vencimento do limite de crédito do cliente venceu em " + dtVencLimCredito.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString() + ".")
