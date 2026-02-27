@@ -199,7 +199,7 @@ public class SCF_LancamentosFinanceiros extends RelatorioBase {
                 " FROM Dab10 Dab10" +
                 " INNER JOIN dab1002 ON dab1002lct = dab10id "+
                 " LEFT JOIN dab01 on dab1002cc = dab01id " +
-                " INNER JOIN Abb01 ON abb01id = dab10central " +
+                " LEFT JOIN Abb01 ON abb01id = dab10central " +
                 " INNER JOIN aac01 AS aac01 ON dab10gc = aac01id "+
                 " INNER JOIN aac10 AS aac10 ON dab10eg = aac10id "+
                 wherePeriodoData +
