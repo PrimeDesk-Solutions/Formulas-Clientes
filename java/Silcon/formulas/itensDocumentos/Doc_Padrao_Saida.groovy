@@ -530,7 +530,7 @@ public class Doc_Padrao_Saida extends FormulaBase {
     }
 
     private calculaPIS() {
-        if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_pis") > 0) {
+        if (eaa0103.eaa0103cstPis != null && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_pis") > 0) {
 
             if (eaa0103.eaa0103cstPis.aaj12codigo == '01') {
                 // BC PIS
@@ -553,7 +553,7 @@ public class Doc_Padrao_Saida extends FormulaBase {
     }
 
     private calculaCOFINS() {
-        if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_cofins") > 0) {
+        if (eaa0103.eaa0103cstCofins && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_cofins") > 0) {
 
             if (eaa0103.eaa0103cstCofins != null) {
                 if (eaa0103.eaa0103cstCofins.aaj13codigo == '01') {
