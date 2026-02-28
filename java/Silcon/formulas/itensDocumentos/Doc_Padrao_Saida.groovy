@@ -159,11 +159,12 @@ public class Doc_Padrao_Saida extends FormulaBase {
                 eaa0101princ = eaa0101;
             }
         }
-        if (eaa0101princ == null) throw new ValidacaoException("Não foi encontrado o endereço principal da entidade no documento.");
 
-        municipioEnt = eaa0101princ.eaa0101municipio != null ? getSession().get(Aag0201.class, Criterions.eq("aag0201id", eaa0101princ.eaa0101municipio.aag0201id)) : null;
+        Long idMunicipioPrincipalEntidade = eaa0101princ == null ? abe0101principal.abe0101municipio.aag0201id : eaa0101princ.eaa0101municipio.aag0201id;
+        Long idPaisEntidade = eaa0101princ == null ? abe0101principal.abe0101pais.aag01id : eaa0101princ.eaa0101pais.aag01id
+        municipioEnt = idMunicipioPrincipalEntidade != null ? getSession().get(Aag0201.class, Criterions.eq("aag0201id", idMunicipioPrincipalEntidade)) : null;
         ufEnt = municipioEnt != null ? getSession().get(Aag02.class, municipioEnt.aag0201uf.aag02id) : null;
-        aag01 = eaa0101princ.eaa0101pais != null ? getSession().get(Aag01.class, Criterions.eq("aag01id", eaa0101princ.eaa0101pais.aag01id)) : null;
+        aag01 = idPaisEntidade != null ? getSession().get(Aag01.class, Criterions.eq("aag01id", idPaisEntidade)) : null;
 
         //Empresa
         aac10 = getSession().get(Aac10.class, obterEmpresaAtiva().aac10id);
