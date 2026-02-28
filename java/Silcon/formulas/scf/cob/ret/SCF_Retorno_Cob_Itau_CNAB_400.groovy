@@ -24,6 +24,7 @@ class SCF_Retorno_Cob_Itau_CNAB_400 extends FormulaBase {
         List<TableMap> tmList = new ArrayList();
         TextFileLeitura txt = new TextFileLeitura(get("registros"))
         SCFService scfService = instanciarService(SCFService.class);
+        Long idBanco = getLong("abf01id")
 
 
         txt.nextLine() //Pula o Header
@@ -132,8 +133,9 @@ class SCF_Retorno_Cob_Itau_CNAB_400 extends FormulaBase {
                  * Exibindo documentos
                  */
                 if(validouDocumento){
+                    String ocorrencia = txt.getSubString(108, 110);
                     tm.put("daa01", daa01);
-                    tm.put("abf20id", buscarPLF(codigoPLF(txt.getSubString(108, 110))));
+                    tm.put("abf20id", buscarPLF(codigoPLF(ocorrencia, idBanco)));
                     tm.put("ocorrencia", buscarDescricaoOcorrencia(txt.getSubString(108, 110)));
                 }
 
@@ -231,13 +233,23 @@ class SCF_Retorno_Cob_Itau_CNAB_400 extends FormulaBase {
         }
     }
 
-    private String codigoPLF(String codigoOcorrencia) {
-        switch(codigoOcorrencia) {
-            case "06": return "100";
-            default: return null;
+    private String codigoPLF(String codigoOcorrencia, Long idBanco) {
+        if(codigoOcorrencia == "06"){
+            if(idBanco == 322714){
+                return "100";
+            }else if(idBanco == 1065135){
+                return "102";
+            }else if(idBanco == 36288893){
+                return "103";
+            }else if(idBanco == 36288895){
+                return "104";
+            }else{
+                return null
+            }
+        }else{
+            return null;
         }
     }
-
     private Long buscarPLF(String codigoPLF) {
         Abf20 abf20 = getAcessoAoBanco().buscarRegistroUnico("SELECT abf20id FROM Abf20 WHERE abf20codigo = :P1 " + getSamWhere().getWherePadrao("AND", Abf20.class) , Parametro.criar("P1", codigoPLF));
         return abf20 == null ? null : abf20.abf20id;
