@@ -243,7 +243,7 @@ class SCF_Retorno_Cob_Itau_CNAB_400 extends FormulaBase {
             }else if(idBanco == 36288895){
                 return "104";
             }else{
-                return null
+                return null;
             }
         }else{
             return null;
