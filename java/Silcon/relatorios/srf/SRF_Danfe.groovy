@@ -361,7 +361,7 @@ public class SRF_Danfe extends RelatorioBase {
 	}
     private void comporDuplicatas2(TableMap dadosNfe, Abb01 abb01, Eaa01 eaa01){
         abb01 = getSession().get(Abb01.class, abb01.getAbb01id());
-        String sql = "SELECT abb01num, abb01parcela, daa01dtVcton, daa01valor " +
+        String sql = "SELECT abb01num, abb01parcela, daa01dtVctoR, daa01valor " +
                         "FROM abb0102 " +
                         "INNER JOIN abb01 ON abb01id = abb0102doc " +
                         "INNER JOIN daa01 ON daa01central = abb01id " +
@@ -375,7 +375,7 @@ public class SRF_Danfe extends RelatorioBase {
             for(duplicata in duplicatas){
                 dadosNfe.put("abb01num", abb01.getAbb01num());
                 dadosNfe.put("parcela" + i, i+1)
-                dadosNfe.put("data" + i, duplicata.getDate("daa01dtVcton"));
+                dadosNfe.put("data" + i, duplicata.getDate("daa01dtVctoR"));
                 dadosNfe.put("valor" + i, duplicata.getBigDecimal_Zero("daa01valor"));
                 i++
             }

@@ -239,7 +239,7 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idDoc", idDoc));
     }
     private List<TableMap> buscarParcelamentosDocumentos2(Long idCentral) {
-        String sql = "SELECT  daa01dtVcton AS eaa0113dtVctoN, daa01valor AS eaa0113valor " +
+        String sql = "SELECT  daa01dtVctoR AS eaa0113dtVctoN, daa01valor AS eaa0113valor " +
                     "FROM abb0102 " +
                     "INNER JOIN abb01 ON abb01id = abb0102doc " +
                     "INNER JOIN daa01 ON daa01central = abb01id " +
