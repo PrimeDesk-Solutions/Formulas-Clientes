@@ -232,7 +232,6 @@ class SCF_Retorno_Cob_Itau_CNAB_400 extends FormulaBase {
             default: return null;
         }
     }
-
     private String codigoPLF(String codigoOcorrencia, Long idBanco) {
         if(codigoOcorrencia == "06"){
             if(idBanco == 322714){
