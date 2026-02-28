@@ -50,11 +50,12 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
         List<TableMap> listItens = new ArrayList<>();
 
         for (dado in dados) {
+            Long idCentral = dado.getLong("abb01id");
             Long idDoc = dado.getLong("eaa01id");
             Long idEntidade = dado.getLong("abe01id");
             String codEntidade = dado.getLong("codEntidade");
             List<TableMap> itensDoc = buscarItensDoc(idDoc);
-            List<TableMap> parcelamento = buscarParcelamentosDocumentos(idDoc);
+            List<TableMap> parcelamento = buscarParcelamentosDocumentos2(idCentral);//buscarParcelamentosDocumentos(idDoc);
             TableMap tmEnderecoEntrega = buscarEnderecoEntregaDocumento(idDoc);
             TableMap tmEnderecoPrincipal = buscarEnderecoPrincipalEntidade(idEntidade);
             String obsInterno = dado.getString("obsInterno");
@@ -132,7 +133,7 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
         def whereNumFim = " and abb01num <= :numeroFinal "
         def whereEmpresa = "AND eaa01gc = :idEmpresa ";
 
-        def sql = "SELECT eaa01id, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, abb01num AS numDoc, " +
+        def sql = "SELECT abb01id, eaa01id, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, abb01num AS numDoc, " +
                 " ent.abe01codigo AS codEntidade, ent.abe01nome AS nomeEntidade, " +
                 " aab10nome AS usuarioLogado, abb01data AS dtVenda, " +
                 " abe30codigo AS codCondPgto, abe30nome AS descrCondPgto, eaa01totItens AS totalItem, CAST(eaa01json ->> 'desconto' AS numeric(18,6)) AS desconto, eaa01totDoc AS totDoc, " +
@@ -171,7 +172,7 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
     }
 
     private List<TableMap> buscarDocumentoById(Long idDoc) {
-        def sql = "SELECT eaa01id, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, abb01num AS numDoc, " +
+        def sql = "SELECT abb01id, eaa01id, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, abb01num AS numDoc, " +
                     " ent.abe01codigo AS codEntidade, ent.abe01nome AS nomeEntidade, " +
                     " aab10nome AS usuarioLogado, abb01data AS dtVenda, " +
                     " abe30codigo AS codCondPgto, abe30nome AS descrCondPgto, eaa01totItens AS totalItem, CAST(eaa01json ->> 'desconto' AS numeric(18,6)) AS desconto, eaa01totDoc AS totDoc, " +
@@ -229,7 +230,6 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
                 " ORDER BY eaa0103seq").setParameters("id", id)
                 .getListTableMap();
     }
-
     private List<TableMap> buscarParcelamentosDocumentos(Long idDoc) {
         String sql = "SELECT eaa0113dtVctoN, eaa0113valor " +
                 "FROM eaa0113 " +
@@ -237,6 +237,16 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
                 "ORDER BY eaa0113dtVctoN"
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idDoc", idDoc));
+    }
+    private List<TableMap> buscarParcelamentosDocumentos2(Long idCentral) {
+        String sql = "SELECT  daa01dtVcton AS eaa0113dtVctoN, daa01valor AS eaa0113valor " +
+                    "FROM abb0102 " +
+                    "INNER JOIN abb01 ON abb01id = abb0102doc " +
+                    "INNER JOIN daa01 ON daa01central = abb01id " +
+                    "WHERE abb0102central = :idCentral " +
+                    "ORDER BY daa01dtVcton"
+
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idCentral", idCentral));
     }
     private void preencherFormaCondicaoPagamento(TableMap dado){
         Long idDocumento = dado.getLong("eaa01id");

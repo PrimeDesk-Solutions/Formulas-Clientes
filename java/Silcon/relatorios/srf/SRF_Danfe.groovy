@@ -80,7 +80,8 @@ public class SRF_Danfe extends RelatorioBase {
 			comporDadosDocumento(dadosNfe, eaa01);
 			comporDadosEndereco(dadosNfe, eaa01);
 			comporDadosGerais(dadosNfe, eaa01);
-			comporDuplicatas(dadosNfe, eaa01.getEaa01central(), eaa01);
+			//comporDuplicatas(dadosNfe, eaa01.getEaa01central(), eaa01);
+            comporDuplicatas2(dadosNfe, eaa01.getEaa01central(), eaa01);
 			comporValores(dadosNfe, eaa01);
 			buscarPedidoCliente(dadosNfe,eaa01id);
 			buscarMensagemItem(dadosNfe,eaa01id);
@@ -358,6 +359,28 @@ public class SRF_Danfe extends RelatorioBase {
 			}
 		}
 	}
+    private void comporDuplicatas2(TableMap dadosNfe, Abb01 abb01, Eaa01 eaa01){
+        abb01 = getSession().get(Abb01.class, abb01.getAbb01id());
+        String sql = "SELECT abb01num, abb01parcela, daa01dtVcton, daa01valor " +
+                        "FROM abb0102 " +
+                        "INNER JOIN abb01 ON abb01id = abb0102doc " +
+                        "INNER JOIN daa01 ON daa01central = abb01id " +
+                        "WHERE abb0102central = :idDoc " +
+                        "ORDER BY daa01dtVcton"
+
+        List<TableMap> duplicatas = getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idDoc", abb01.abb01id));
+
+        if(duplicatas != null && duplicatas.size() > 0){
+            Integer i = 0;
+            for(duplicata in duplicatas){
+                dadosNfe.put("abb01num", abb01.getAbb01num());
+                dadosNfe.put("parcela" + i, i+1)
+                dadosNfe.put("data" + i, duplicata.getDate("daa01dtVcton"));
+                dadosNfe.put("valor" + i, duplicata.getBigDecimal_Zero("daa01valor"));
+                i++
+            }
+        }
+    }
 
 	private String buscarUfEntidade(Long abe01id) {
 		return getSession().createCriteria(Abe01.class).addFields("aag02uf")
