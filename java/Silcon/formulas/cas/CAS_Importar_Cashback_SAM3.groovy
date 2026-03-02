@@ -67,7 +67,7 @@ public class CAS_Importar_Cashback_SAM3 extends FormulaBase {
         dad01.dad01saldo = somarSaldoCashback(abe01.abe01id);
         dad01.dad01prop = 1;
         dad01.dad01dti = data;
-        dad01.dad01dtf = data;
+        dad01.dad01dtf = LocalDate.of(2026,12,31);
         dad01.dad01neg = 0;
         dad01.dad01eg = obterEmpresaAtiva();
         dad01.dad01gc = getSession().createCriteria(Aac01.class).addWhere(Criterions.eq("aac01id", 1075797)).get(ColumnType.ENTITY);

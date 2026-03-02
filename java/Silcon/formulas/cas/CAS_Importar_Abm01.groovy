@@ -33,7 +33,7 @@ public class CAS_Importar_Abm01 extends FormulaBase{
 
         List<String> registros = FileUtils.readLines(file, "UTF-8");
 
-        TextFileLeitura txt = new TextFileLeitura(registros, ";");
+        TextFileLeitura txt = new TextFileLeitura(registros, "|");
 
         int linha = 1;
         while(txt.nextLine()) {

@@ -7,6 +7,7 @@ import br.com.multitec.utils.TextFileLeitura
 import org.apache.commons.io.FileUtils
 import org.springframework.web.multipart.MultipartFile
 import sam.model.entities.aa.Aac01
+import sam.model.entities.aa.Aac10
 import sam.model.entities.aa.Aah01
 import sam.model.entities.ab.Abb01
 import sam.model.entities.ab.Abe01;
@@ -43,6 +44,7 @@ public class CAS_Importar_Central_Documentos_Cashback extends FormulaBase{
             String codEntidade = txt.getCampo(2);
             BigDecimal valor = new BigDecimal(txt.getCampo(3));
             String tipoDoc = txt.getCampo(4);
+            Long idEmpresa = Long.parseLong(txt.getCampo(5));
 
             // Entidade
             Abe01 abe01 = getSession().createCriteria(Abe01.class).addWhere(Criterions.eq("abe01codigo", codEntidade)).addWhere(Criterions.eq("abe01gc", 1075797)).get(ColumnType.ENTITY);
@@ -52,10 +54,10 @@ public class CAS_Importar_Central_Documentos_Cashback extends FormulaBase{
             Aah01 aah01 = getSession().createCriteria(Aah01.class).addWhere(Criterions.eq("aah01codigo", tipoDoc)).get(ColumnType.ENTITY);
             if(aah01 == null) interromper("Tipo de documento não encontrado.");
 
-            criarCentral(numDoc, abe01, valor, aah01)
+            criarCentral(numDoc, abe01, valor, aah01, idEmpresa)
         }
     }
-    private void criarCentral(Integer numDoc, Abe01 abe01, BigDecimal valor, Aah01 aah01){
+    private void criarCentral(Integer numDoc, Abe01 abe01, BigDecimal valor, Aah01 aah01, Long idEmpresa){
         try{
             Abb01 abb01 = new Abb01();
 
@@ -72,8 +74,8 @@ public class CAS_Importar_Central_Documentos_Cashback extends FormulaBase{
             abb01.abb01intConc = 1;
             abb01.abb01aprovado = 1;
             abb01.abb01status = 0;
-            abb01.abb01gc = getSession().createCriteria(Aac01.class).addWhere(Criterions.eq("aac01id", 1075797)).get(ColumnType.ENTITY);
-            abb01.abb01eg = obterEmpresaAtiva();
+            abb01.abb01gc = getSession().createCriteria(Aac01.class).addWhere(Criterions.eq("aac01id", idEmpresa)).get(ColumnType.ENTITY);
+            abb01.abb01eg = getSession().createCriteria(Aac10.class).addWhere(Criterions.eq("aac10id", idEmpresa)).get(ColumnType.ENTITY);//obterEmpresaAtiva();
 
             getSession().persist(abb01);
 

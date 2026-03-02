@@ -44,7 +44,7 @@ public class CAS_Atualizar_Dados_Entidades extends FormulaBase{
             while (txt.nextLine()) {
                 linha++
 
-                String codEntidade = txt.getCampo(2);
+                String codEntidade = txt.getCampo(1);
 
                 // Entidade
                 Abe01 abe01 = buscarEntidadePorCodigo(codEntidade);
@@ -55,18 +55,10 @@ public class CAS_Atualizar_Dados_Entidades extends FormulaBase{
                     continue;
                 }
 
-                // Cliente
-                Abe02 abe02 = getSession().get(Abe02.class, Criterions.eq("abe02ent", abe01.abe01id));
-
-                if(abe02 == null) mensagens.add("Registro não atualizado: Aba Clientes da entidade " + codEntidade + " não encontrada no sistema.")
-
-                //abe01.setAbe01obs(txt.getCampo(3).contains("SEM VALOR") ? null : txt.getCampo(3));
                 TableMap jsonAbe01 = montarJsonEntidade(txt);
                 abe01.setAbe01json(jsonAbe01);
-                abe02.setAbe02obsUsoInt(txt.getCampo(7).isEmpty() ? null : txt.getCampo(7));
 
                 getSession().persist(abe01);
-                getSession().persist(abe02);
             }
 
             if(mensagens.size() > 0){
@@ -83,9 +75,9 @@ public class CAS_Atualizar_Dados_Entidades extends FormulaBase{
     private TableMap montarJsonEntidade(TextFileLeitura txt){
         TableMap jsonAbe01 = new TableMap();
 
-        jsonAbe01.put("vlr_lim_credito", new BigDecimal(txt.getCampo(4)));
-        if(!txt.getCampo(5).isEmpty()) jsonAbe01.put("dt_vcto_lim_credito",txt.getCampo(5).replace("-", ""))
-        if(!txt.getCampo(6).isEmpty()) jsonAbe01.put("obs_lim_credito", txt.getCampo(6));
+        jsonAbe01.put("vlr_lim_credito", new BigDecimal(txt.getCampo(2)));
+        if(!txt.getCampo(3).isEmpty()) jsonAbe01.put("dt_vcto_lim_credito",txt.getCampo(3).replace("-", ""))
+        if(!txt.getCampo(4).isEmpty()) jsonAbe01.put("obs_lim_credito", txt.getCampo(4));
 
 
         return jsonAbe01 != null && jsonAbe01.size() > 0 ? jsonAbe01 : new TableMap();
