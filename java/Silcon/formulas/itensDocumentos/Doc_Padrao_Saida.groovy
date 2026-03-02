@@ -468,20 +468,19 @@ public class Doc_Padrao_Saida extends FormulaBase {
     }
 
     private void preencherCSTICMS() {
-        // Busca primeiramente o CST de ICMS no cadastro do PCD, caso não econcontrado, busca no cadastro do item
+        // Busca primeiramente o CST de ICMS no cadastro do item, caso não econcontrado, busca no cadastro do PCD
         String cst = "";
 
-        if (abd02 != null && abd02.abd02cstIcmsB != null) {
-            aaj10_cstIcms = getSession().get(Aaj10.class, abd02.abd02cstIcmsB.aaj10id);
-            cst = aaj10_cstIcms.aaj10codigo;
-
-        } else if (abm12 != null && abm12.abm12cstIcms != null) {
+         if (abm12 != null && abm12.abm12cstIcms != null) {
             aaj10_cstIcms = getSession().get(Aaj10.class, abm12.abm12cstIcms.aaj10id);
             cst = aaj10_cstIcms.aaj10codigo;
 
-        } else {
+         }else if (abd02 != null && abd02.abd02cstIcmsB != null) {
+             aaj10_cstIcms = getSession().get(Aaj10.class, abd02.abd02cstIcmsB.aaj10id);
+             cst = aaj10_cstIcms.aaj10codigo;
+         } else {
             throw new ValidacaoException("Necessário preencher o CST de ICMS no cadastro do item " + abm01.abm01codigo + " ou no cadastro do PCD " + abd01.abd01codigo)
-        }
+         }
 
         eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cst));
     }

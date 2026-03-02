@@ -325,7 +325,7 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
             eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
 
             // Preenche o CST de ICMS do Item
-            preencherCstIcms();
+            preencherCSTICMS();
 
             // Calcular ICMS ST RETIDO
             calcularIcmsSTRetido();
@@ -590,28 +590,23 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
         eaa0103.eaa0103cfop = aaj15_cfop;
 
     }
-
-    private void preencherCstIcms() {
-        // Busca primeiramente o CST de ICMS no cadastro do PCD, caso não econcontrado, busca no cadastro do item
+    private void preencherCSTICMS() {
+        // Busca primeiramente o CST de ICMS no cadastro do item, caso não econcontrado, busca no cadastro do PCD
         String cst = "";
 
-        if (eaa0103.eaa0103cstIcms == null) {
-            if (abd02 != null && abd02.abd02cstIcmsB != null) {
-                aaj10_cstIcms = getSession().get(Aaj10.class, abd02.abd02cstIcmsB.aaj10id);
-                cst = aaj10_cstIcms.aaj10codigo;
+        if (abm12 != null && abm12.abm12cstIcms != null) {
+            aaj10_cstIcms = getSession().get(Aaj10.class, abm12.abm12cstIcms.aaj10id);
+            cst = aaj10_cstIcms.aaj10codigo;
 
-            } else if (abm12 != null && abm12.abm12cstIcms != null) {
-                aaj10_cstIcms = getSession().get(Aaj10.class, abm12.abm12cstIcms.aaj10id);
-                cst = aaj10_cstIcms.aaj10codigo;
-
-            } else {
-                throw new ValidacaoException("Necessário preencher o CST de ICMS no cadastro do item " + abm01.abm01codigo + " ou no cadastro do PCD " + abd01.abd01codigo)
-            }
-
-            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cst));
+        }else if (abd02 != null && abd02.abd02cstIcmsB != null) {
+            aaj10_cstIcms = getSession().get(Aaj10.class, abd02.abd02cstIcmsB.aaj10id);
+            cst = aaj10_cstIcms.aaj10codigo;
+        } else {
+            throw new ValidacaoException("Necessário preencher o CST de ICMS no cadastro do item " + abm01.abm01codigo + " ou no cadastro do PCD " + abd01.abd01codigo)
         }
-    }
 
+        eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cst));
+    }
     private void calcularICMS(Integer contribICMS) {
         Integer vlrReducao = 0;
         if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
