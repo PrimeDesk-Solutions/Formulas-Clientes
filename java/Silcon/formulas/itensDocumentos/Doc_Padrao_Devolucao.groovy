@@ -176,6 +176,7 @@ public class Doc_Padrao_Devolucao extends FormulaBase {
         abb10 = abb01 != null && abb01.abb01operCod != null ? getSession().get(Abb10.class, abb01.abb01operCod.abb10id) : null;
 
         //NCM
+        if(abm0101.abm0101ncm == null) interromper("Não foi encontrado NCM no cadastro do item " + abm01.abm01codigo + " - " + abm01.abm01descr);
         abg01 = eaa0103.eaa0103ncm != null ? getSession().get(Abg01.class, abm0101.abm0101ncm.abg01id) : null;
 
         //CFOP
