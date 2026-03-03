@@ -223,7 +223,7 @@ public class SCF_Documentos extends RelatorioBase{
 
         String whereOpc = opc != 2 ? " AND daa01previsao IN(:opc) " : "";
         String whereNum = numeroInicial != null && numeroFinal != null ? " AND abb01num BETWEEN  :numeroInicial and :numeroFinal " : "";
-        String whereIdEmpresa = idsGc != null && idsGc.size() > 0 ? " WHERE aac01id in(:idEmprs)" : getSamWhere().getWherePadrao(" WHERE ", Daa01.class);
+        String whereIdEmpresa = Emprs != null && Emprs.size() > 0 ? " WHERE daa01eg in(:idEmprs)" : ""; //idsGc != null && idsGc.size() > 0 ? " WHERE daa01eg in(:idEmprs)" : getSamWhere().getWherePadrao(" WHERE ", Daa01.class);
         String whereIdDepartamento = departamento != null && departamento.size() > 0 ? " AND abb11.abb11id IN (:idDepartamento)": "";
         String whereIdDocumento = documento != null && documento.size() > 0 ? " AND aah01.aah01id IN (:idDocumentos)": "";
         String whereIdNatureza = naturezas != null && naturezas.size() > 0 ? " AND abf10.abf10id IN (:idNaturezas)": "";
@@ -271,7 +271,7 @@ public class SCF_Documentos extends RelatorioBase{
                 "case when cast(daa01json ->> 'desconto' as numeric(18,6)) is null then 0.000000 else cast(daa01json ->> 'desconto' as numeric(18,6)) end as desconto, "+
                 (agrup == "D" || agrup == "N" ? "case when cast(daa01json ->> 'desconto' as numeric(18,6)) is null then daa01011.daa01011valor + 0.000000 else daa01011.daa01011valor + cast(daa01json ->> 'desconto' as numeric(18,6)) end AS liquido " : "case when cast(daa01json ->> 'desconto' as numeric(18,6)) is null then daa01valor + 0.000000 else daa01valor + cast(daa01json ->> 'desconto' as numeric(18,6)) end AS liquido ")+
                 " FROM Daa01 daa01 " +
-                " INNER JOIN aac01 as aac01 ON daa01gc = aac01id" +
+                //" INNER JOIN aac01 as aac01 ON daa01gc = aac01id" +
                 " INNER JOIN aac10 as aac10 ON daa01eg = aac10id "+
                 " LEFT JOIN daa0101 as daa0101 on daa0101.daa0101doc = daa01.daa01id "+
                 " LEFT JOIN daa01011 as daa01011 on daa01011.daa01011depto = daa0101.daa0101id "+
