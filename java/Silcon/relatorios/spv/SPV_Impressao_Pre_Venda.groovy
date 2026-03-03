@@ -171,7 +171,7 @@ public class SPV_Impressao_Pre_Venda extends RelatorioBase {
         String whereId = "WHERE ccb0101pv = :id ";
         Parametro parametroId = Parametro.criar("id", id);
 
-        String sql = "SELECT DISTINCT ccb0101seq, aam06codigo AS umu, abm01codigo AS codItem, abm01descr AS naItem, ccb0101unit AS totItem, " +
+        String sql = "SELECT DISTINCT ccb0101seq, aam06codigo AS umu, abm01codigo AS codItem, abm01descr AS naItem, ccb0101unit AS unit, " +
                     "ccb0101desc AS desconto, ccb0101totDoc AS totDoc, ccb0101qtComl AS qtd, ccb0101entregar AS entrega, abg01codigo AS codNcm, " +
                     "abg01descr AS descrNcm, abg01codigo AS codNcm, CAST(ccb0101json ->> 'ambiente' AS text) AS ambiente " +
                     "FROM ccb0101 " +
@@ -191,7 +191,7 @@ public class SPV_Impressao_Pre_Venda extends RelatorioBase {
         String whereId = "WHERE ccb0101pv = :id ";
         Parametro parametroId = Parametro.criar("id", id);
 
-        String sql = "SELECT SUM(ccb0101unit) AS totalItem, " +
+        String sql = "SELECT SUM(ccb0101total) AS totalItem, " +
                     "SUM(ccb0101desc) AS desconto, SUM(ccb0101totDoc) AS totDoc " +
                     "FROM ccb0101 " +
                     whereId;
