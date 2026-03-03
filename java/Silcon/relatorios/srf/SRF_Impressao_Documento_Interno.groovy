@@ -204,7 +204,7 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
 
     }
     private buscarEnderecoEntregaDocumento(Long idDoc){
-        return getSession().createQuery("SELECT eaa0101bairro AS bairroEntregaEnt, eaa0101endereco AS enderecoEntregaEnt, " +
+        return getSession().createQuery("SELECT eaa0101local AS localEntrega, eaa0101bairro AS bairroEntregaEnt, eaa0101endereco AS enderecoEntregaEnt, " +
                                 "eaa0101numero AS numeroEntregaEnt, eaa0101cep AS cepEntregaEnt, eaa0101complem AS complemEntregaEnt, " +
                                 "aag0201nome AS cidadeEntregaEnt, aag02uf AS ufEntregaEntidade, eaa0101ddd, eaa0101fone " +
                                 "FROM eaa0101 " +
