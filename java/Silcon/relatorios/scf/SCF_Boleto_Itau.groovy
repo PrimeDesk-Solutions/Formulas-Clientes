@@ -114,13 +114,13 @@ class SCF_Boleto_Itau extends RelatorioBase {
             TableMap tm = new TableMap();
 
             String campoLivre = campoLivrePorBanco(daa01.getString("abf01numero"), daa01.getString("abf01agencia"), daa01.getString("abf01conta"), daa01.getLong("daa01nossoNum"));
-            Long fatorVencimento = definirFatorVencimento(daa01.getDate("daa01dtVctoN"));
+            Long fatorVencimento = definirFatorVencimento(daa01.getDate("daa01dtVctoR"));
             String carteira = daa01.getTableMap("abf01json") == null ? "" : daa01.getTableMap("abf01json").getString("carteira")
             if(carteira == null || carteira == "" ) interromper("O cadastro do banco esta sem carteira, por favor configurar para a impressão do boleto")
 
             tm.put("abe01nome", daa01.getString("abe01nome"));
             tm.put("abe01ni", daa01.getString("abe01ni"));
-            tm.put("daa01dtVctoN", daa01.getDate("daa01dtVctoN"));
+            tm.put("daa01dtVctoR", daa01.getDate("daa01dtVctoR"));
             tm.put("daa01valor", daa01.getBigDecimal("daa01valor"));
             tm.put("daa01id", daa01.getLong("daa01id"))
             tm.put("carteira", daa01.getTableMap("abf01json") == null ? "" : daa01.getTableMap("abf01json").getString("carteira") )
@@ -129,12 +129,12 @@ class SCF_Boleto_Itau extends RelatorioBase {
             NumberFormat dinheiro = NumberFormat.getCurrencyInstance(localeBR);
 
             if(daa01.getTableMap("daa01json") != null && daa01.getTableMap("daa01json").getBigDecimal("multa") != null) {
-                tm.put("instrucao1","Após " +daa01.getDate("daa01dtVctoN").format("dd/MM/yyyy") +"  cobrar multa de "+ dinheiro.format(daa01.getTableMap("daa01json").getBigDecimal("multa") ))
+                tm.put("instrucao1","Após " +daa01.getDate("daa01dtVctoR").format("dd/MM/yyyy") +"  cobrar multa de "+ dinheiro.format(daa01.getTableMap("daa01json").getBigDecimal("multa") ))
             }else {
                 tm.put("instrucao1","" )
             }
             if(daa01.getTableMap("daa01json") != null && daa01.getTableMap("daa01json").getBigDecimal("juros") != null) {
-                tm.put("instrucao2","Após " +daa01.getDate("daa01dtVctoN").format("dd/MM/yyyy") +"  cobra "+ dinheiro.format(daa01.getTableMap("daa01json").getBigDecimal("juros") ) + " por dia de atraso" )
+                tm.put("instrucao2","Após " +daa01.getDate("daa01dtVctoR").format("dd/MM/yyyy") +"  cobra "+ dinheiro.format(daa01.getTableMap("daa01json").getBigDecimal("juros") ) + " por dia de atraso" )
             }else {
                 tm.put("instrucao2","" )
             }
@@ -271,12 +271,12 @@ class SCF_Boleto_Itau extends RelatorioBase {
         Parametro parametroMovimento = movimento != null ? Parametro.criar("idMovimento", movimento) : null;
 
         String whereNumero = numeroInicial != null && numeroFinal != null ? " and abb01.abb01num >= '" + numeroInicial + "' and abb01.abb01num <= '" + numeroFinal + "'": "";
-        String whereVencimento = dataVenc != null && dataVenc[0] != null && dataVenc[1] != null ? " and daa01.daa01dtVctoN >= '" + dataVenc[0] + "' and daa01.daa01dtVctoN <= '" + dataVenc[1] + "'": "";
+        String whereVencimento = dataVenc != null && dataVenc[0] != null && dataVenc[1] != null ? " and daa01.daa01dtVctoR >= '" + dataVenc[0] + "' and daa01.daa01dtVctoR <= '" + dataVenc[1] + "'": "";
 
         String whereEntidade = entidade != null && entidade.size() > 0 ? " and abe01.abe01id in (:entId) " : ""
         Parametro parametroEntidade = entidade != null && entidade.size() > 0 ? Parametro.criar("entId", entidade) : null
 
-        String sql = " SELECT abe01.abe01codigo, abe01.abe01id, abe01.abe01nome, daa01.daa01json, abe01.abe01ni, daa01.daa01dtVctoN, daa01.daa01valor, daa01.daa01id, daa01.daa01nossoNum, daa01.daa01nossoNumDV, abb01.abb01num, " +
+        String sql = " SELECT abe01.abe01codigo, abe01.abe01id, abe01.abe01nome, daa01.daa01json, abe01.abe01ni, daa01.daa01dtVctoR, daa01.daa01valor, daa01.daa01id, daa01.daa01nossoNum, daa01.daa01nossoNumDV, abb01.abb01num, " +
                 " abb01.abb01data,abb01.abb01parcela, abb01.abb01num, abf01.abf01agencia, abf01.abf01conta,abf01.abf01digconta, abf01.abf01digconta, abf01.abf01json, abf01.abf01numero, aah01.aah01nome, daa0102.daa0102movim " +
                 " FROM daa01 daa01 " +
                 " INNER JOIN abb01 abb01 ON abb01id = daa01central " +
@@ -298,7 +298,7 @@ class SCF_Boleto_Itau extends RelatorioBase {
     private List<TableMap> buscarDadosBoletoPelosIds(List<Long> daa01id) {
 
 
-        String sql = " SELECT abe01.abe01codigo, abe01.abe01id, abe01.abe01nome, daa01.daa01json, abe01.abe01ni, daa01.daa01dtVctoN, daa01.daa01valor, daa01.daa01id, daa01.daa01nossoNum, daa01.daa01nossoNumDV, abb01.abb01num, " +
+        String sql = " SELECT abe01.abe01codigo, abe01.abe01id, abe01.abe01nome, daa01.daa01json, abe01.abe01ni, daa01.daa01dtVctoR, daa01.daa01valor, daa01.daa01id, daa01.daa01nossoNum, daa01.daa01nossoNumDV, abb01.abb01num, " +
                 " abb01.abb01data,abb01.abb01parcela, abb01.abb01num, abf01.abf01agencia, abf01.abf01conta,abf01.abf01digconta, abf01.abf01digconta, abf01.abf01json, abf01.abf01numero, aah01.aah01nome, daa0102.daa0102movim " +
                 " FROM daa01 daa01 " +
                 " INNER JOIN abb01 abb01 ON abb01id = daa01central " +
