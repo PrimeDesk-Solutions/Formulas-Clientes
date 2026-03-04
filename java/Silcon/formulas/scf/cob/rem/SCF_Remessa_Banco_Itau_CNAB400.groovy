@@ -97,7 +97,7 @@ class SCF_Remessa_Banco_Itau_CNAB400 extends FormulaBase{
             txt.print(abf01.abf01json.get("cod_carteira"), 1, (char) '0', true);											//108-108
             txt.print("01");																					//109-110
             txt.print(StringUtils.ajustString(seuNumero(daa01.daa01central.abb01num, daa01.daa01central.abb01parcela), 10));		//111-120
-            txt.print(daa01.daa01dtVctoN.format(PATTERN_DDMMYY));													 	//121-126
+            txt.print(daa01.daa01dtVctoR.format(PATTERN_DDMMYY));													 	//121-126
             txt.print(daa01.daa01valor.multiply(100).intValue(), 13);										 			//127-139
             txt.print("341");																				 	//140-142
             txt.print("00000");																				 	//143-147
