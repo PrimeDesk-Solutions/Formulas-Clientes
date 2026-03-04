@@ -166,7 +166,7 @@ public class Doc_Padrao_Saida_Pedido extends FormulaBase {
         }
 
         Long idMunicipioPrincipalEntidade = abe0101principal.abe0101municipio.aag0201id;//eaa0101princ == null ? abe0101principal.abe0101municipio.aag0201id : eaa0101princ.eaa0101municipio.aag0201id;
-        Long idPaisEntidade = abe0101principal.abe0101pais.aag01id; //eaa0101princ == null ? abe0101principal.abe0101pais.aag01id : eaa0101princ.eaa0101pais != null ? eaa0101princ.eaa0101pais.aag01id : null;
+        Long idPaisEntidade = abe0101principal.abe0101pais != null ? abe0101principal.abe0101pais.aag01id : null; //eaa0101princ == null ? abe0101principal.abe0101pais.aag01id : eaa0101princ.eaa0101pais != null ? eaa0101princ.eaa0101pais.aag01id : null;
         municipioEnt = idMunicipioPrincipalEntidade != null ? getSession().get(Aag0201.class, Criterions.eq("aag0201id", idMunicipioPrincipalEntidade)) : null;
         ufEnt = municipioEnt != null ? getSession().get(Aag02.class, municipioEnt.aag0201uf.aag02id) : null;
         aag01 = idPaisEntidade != null ? getSession().get(Aag01.class, Criterions.eq("aag01id", idPaisEntidade)) : null;
@@ -387,6 +387,7 @@ public class Doc_Padrao_Saida_Pedido extends FormulaBase {
     }
 
     private void definirPrecoUnitarioItem() {
+        //if(eaa0103.eaa0103unit == 0){
         if (eaa01.eaa01tp != null) {
             if (jsonAbe4001 != null) {
                 if (jsonAbe4001.getString("data_promo_ini") != null && jsonAbe4001.getString("data_promo_fin") != null && jsonAbe4001.getBigDecimal_Zero("preco_promocao") > 0) {
@@ -407,6 +408,7 @@ public class Doc_Padrao_Saida_Pedido extends FormulaBase {
                 eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
             }
         }
+        //}
     }
     private void calcularCBSIBS() {
         // *********************************************
@@ -651,10 +653,10 @@ public class Doc_Padrao_Saida_Pedido extends FormulaBase {
         if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
             // BC ICMS
             jsonEaa0103.put("bc_icms", eaa0103.eaa0103total +
-                                        jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                                        jsonEaa0103.getBigDecimal_Zero("seguro") +
-                                        jsonEaa0103.getBigDecimal_Zero("outras_despesas") -
-                                        jsonEaa0103.getBigDecimal_Zero("desconto"));
+                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
+                    jsonEaa0103.getBigDecimal_Zero("seguro") +
+                    jsonEaa0103.getBigDecimal_Zero("outras_despesas") -
+                    jsonEaa0103.getBigDecimal_Zero("desconto"));
 
             jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms").round(2));
 
