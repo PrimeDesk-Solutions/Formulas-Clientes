@@ -223,7 +223,7 @@ public class SCF_Documentos extends RelatorioBase{
 
         String whereOpc = opc != 2 ? " AND daa01previsao IN(:opc) " : "";
         String whereNum = numeroInicial != null && numeroFinal != null ? " AND abb01num BETWEEN  :numeroInicial and :numeroFinal " : "";
-        String whereIdEmpresa = Emprs != null && Emprs.size() > 0 ? " WHERE daa01eg in(:idEmprs)" : ""; //idsGc != null && idsGc.size() > 0 ? " WHERE daa01eg in(:idEmprs)" : getSamWhere().getWherePadrao(" WHERE ", Daa01.class);
+        String whereIdEmpresa = Emprs != null && Emprs.size() > 0 ? " WHERE daa01eg in(:idEmprs)" : "WHERE TRUE "; //idsGc != null && idsGc.size() > 0 ? " WHERE daa01eg in(:idEmprs)" : getSamWhere().getWherePadrao(" WHERE ", Daa01.class);
         String whereIdDepartamento = departamento != null && departamento.size() > 0 ? " AND abb11.abb11id IN (:idDepartamento)": "";
         String whereIdDocumento = documento != null && documento.size() > 0 ? " AND aah01.aah01id IN (:idDocumentos)": "";
         String whereIdNatureza = naturezas != null && naturezas.size() > 0 ? " AND abf10.abf10id IN (:idNaturezas)": "";
@@ -258,6 +258,7 @@ public class SCF_Documentos extends RelatorioBase{
         Parametro paramnumeroFinal =  Parametro.criar("numeroFinal", numeroFinal);
         Parametro parametroPort = port != null && port.size() != 0 ? Parametro.criar("idPort", port) : null;
         Parametro parametroOper = oper != null && oper.size() != 0 ? Parametro.criar("idOper", oper) : null;
+
 
         String sql = " SELECT DISTINCT daa01id,abe01.abe01codigo, abe01.abe01na, abb01.abb01num, abb01.abb01parcela, abb01.abb01data, " +
                 (agrup == "D" || agrup == "N" || agrup == "NE" || agrup == "DN" ? "abb11.abb11codigo, abb11.abb11nome, abf10.abf10codigo, abf10.abf10nome, " :
