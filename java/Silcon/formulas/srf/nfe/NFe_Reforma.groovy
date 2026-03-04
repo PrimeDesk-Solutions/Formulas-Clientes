@@ -162,7 +162,8 @@ class NFe_Reforma extends FormulaBase {
         ide.addNode("serie", eaa01.eaa01central.abb01serie == null ? 0 : eaa01.eaa01central.abb01serie.length() <= 3 ? eaa01.eaa01central.abb01serie : eaa01.eaa01central.abb01serie.substring(0, 3), true);
         ide.addNode("nNF", eaa01.eaa01central.abb01num, true);
         ide.addNode("dhEmi", NFeUtils.dataFormatoUTC(eaa01.eaa01central.abb01data, eaa01.eaa01central.abb01operHora, empresa.aac10fusoHorario), true);
-        ide.addNode("dhSaiEnt", eaa01.eaa01esData == null ? null : NFeUtils.dataFormatoUTC(eaa01.eaa01esData, eaa01.eaa01esHora != null ? eaa01.eaa01esHora : eaa01.eaa01central.abb01operHora, empresa.aac10fusoHorario), false);
+        ide.addNode("dhSaiEnt", NFeUtils.dataFormatoUTC(eaa01.eaa01central.abb01data, eaa01.eaa01central.abb01operHora, empresa.aac10fusoHorario), true);
+        //ide.addNode("dhSaiEnt", eaa01.eaa01esData == null ? null : NFeUtils.dataFormatoUTC(eaa01.eaa01esData, eaa01.eaa01esHora != null ? eaa01.eaa01esHora : eaa01.eaa01central.abb01operHora, empresa.aac10fusoHorario), false);
         if(eaa01.eaa01dtEntregaPrev != null) ide.addNode("dPrevEntrega", eaa01.eaa01dtEntregaPrev  == null ? null : DateUtils.formatDate(eaa01.eaa01dtEntregaPrev, "yyyy-MM-dd"));
         ide.addNode("tpNF", eaa01.eaa01esMov, true);
 
