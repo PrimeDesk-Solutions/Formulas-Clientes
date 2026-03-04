@@ -156,7 +156,7 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
         }
 
         Long idMunicipioPrincipalEntidade = abe0101principal.abe0101municipio.aag0201id; //eaa0101princ == null ? abe0101principal.abe0101municipio.aag0201id : eaa0101princ.eaa0101municipio.aag0201id;
-        Long idPaisEntidade = abe0101principal.abe0101pais.aag01id; //eaa0101princ == null ? abe0101principal.abe0101pais.aag01id : eaa0101princ.eaa0101pais.aag01id
+        Long idPaisEntidade = abe0101principal.abe0101pais != null ? abe0101principal.abe0101pais.aag01id : null; //eaa0101princ == null ? abe0101principal.abe0101pais.aag01id : eaa0101princ.eaa0101pais.aag01id
         municipioEnt = idMunicipioPrincipalEntidade != null ? getSession().get(Aag0201.class, Criterions.eq("aag0201id", idMunicipioPrincipalEntidade)) : null;
         ufEnt = municipioEnt != null ? getSession().get(Aag02.class, municipioEnt.aag0201uf.aag02id) : null;
         aag01 = idPaisEntidade != null ? getSession().get(Aag01.class, Criterions.eq("aag01id", idPaisEntidade)) : null;
