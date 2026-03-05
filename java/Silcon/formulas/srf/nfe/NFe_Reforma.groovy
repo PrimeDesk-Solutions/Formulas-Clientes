@@ -1206,7 +1206,7 @@ class NFe_Reforma extends FormulaBase {
                         String orig = cstIcms.substring(0, 1);
                         String cst = cstIcms.substring(1);
 
-                        if((cst.equals("41") || cst.equals("60")) && getCampo("245.20-N26","vBCSTRet") != null && !jsonEaa0103.getBigDecimal(getCampo("245.20-N26","vBCSTRet")).equals(0)) {
+                        if((cst.equals("41")) && getCampo("245.20-N26","vBCSTRet") != null && !jsonEaa0103.getBigDecimal(getCampo("245.20-N26","vBCSTRet")).equals(0)) {
                             /** ICMSST - CST = 41 e base de cálculo diferente de zero */
 
                             ICMSST = ICMS.addNode("ICMSST");
@@ -1227,8 +1227,8 @@ class NFe_Reforma extends FormulaBase {
                                 ICMSST.addNode("vFCPSTRet", getCampo("245.21d-N27d","vFCPSTRet") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.21d-N27d","vFCPSTRet")), 2, false), true);
                             }
 
-                            ICMSST.addNode("vBCSTDest", getCampo("245.22-N31","vBCSTDest") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.22-N31","vBCSTDest")), 2, false), true);
-                            ICMSST.addNode("vICMSSTDest", getCampo("245.23-N32","vICMSSTDest") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.23-N32","vICMSSTDest")), 2, false), true);
+//                            ICMSST.addNode("vBCSTDest", getCampo("245.22-N31","vBCSTDest") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.22-N31","vBCSTDest")), 2, false), true);
+//                            ICMSST.addNode("vICMSSTDest", getCampo("245.23-N32","vICMSSTDest") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.23-N32","vICMSSTDest")), 2, false), true);
 
                             if(getCampo("245.23c-N35","vBCEfet") != null && !jsonEaa0103.getBigDecimal(getCampo("245.23c-N35","vBCEfet")).equals(0) ||
                                     getCampo("245.23e-N37","vICMSEfet") != null && !jsonEaa0103.getBigDecimal(getCampo("245.23e-N37","vICMSEfet")).equals(0)) {
@@ -1350,7 +1350,11 @@ class NFe_Reforma extends FormulaBase {
 
                             if(getCampo("216-N26","vBCSTRet") != null) {
                                 ICMS60.addNode("vBCSTRet", getCampo("216-N26","vBCSTRet") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("216-N26","vBCSTRet")), 2, false), true);
-                                ICMS60.addNode("pST", getCampo("216.1-N26a","pST") == null ? "0.00" : jsonEaa0103.getBigDecimal(getCampo("216.1-N26a","pST")).equals(0) ? "0.00" : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("216.1-N26a","pST")), 4, false), true);
+                                ICMS60.addNode("pST", (getCampo("216.1-N26a","pST") == null || jsonEaa0103.getBigDecimal(getCampo("216.1-N26a","pST")) == null
+                                        || jsonEaa0103.getBigDecimal(getCampo("216.1-N26a","pST")).compareTo(BigDecimal.ZERO) == 0)
+                                        ? "0.00" : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("216.1-N26a","pST")), 4, false),
+                                        true);
+//                                ICMS60.addNode("pST", getCampo("216.1-N26a","pST") == null ? "0.00" : jsonEaa0103.getBigDecimal(getCampo("216.1-N26a","pST")).equals(0) ? "0.00" : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("216.1-N26a","pST")), 4, false), true);
                                 ICMS60.addNode("vICMSSubstituto", getCampo("216.2-N26b","vICMSSubstituto") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("216.2-N26b","vICMSSubstituto")), 2, false), true);
                                 ICMS60.addNode("vICMSSTRet", getCampo("217-N27","vICMSSTRet") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("217-N27","vICMSSTRet")), 2, false), true);
                             }
