@@ -55,7 +55,7 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
             Long idEntidade = dado.getLong("abe01id");
             String codEntidade = dado.getLong("codEntidade");
             List<TableMap> itensDoc = buscarItensDoc(idDoc);
-            List<TableMap> parcelamento = buscarParcelamentosDocumentos2(idCentral);//buscarParcelamentosDocumentos(idDoc);
+            List<TableMap> parcelamento = buscarParcelamentosDocumentos(idDoc) //buscarParcelamentosDocumentos2(idCentral);//buscarParcelamentosDocumentos(idDoc);
             TableMap tmEnderecoEntrega = buscarEnderecoEntregaDocumento(idDoc);
             TableMap tmEnderecoPrincipal = buscarEnderecoPrincipalEntidade(idEntidade);
             String obsInterno = dado.getString("obsInterno");

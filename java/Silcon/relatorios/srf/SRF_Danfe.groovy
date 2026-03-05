@@ -80,8 +80,8 @@ public class SRF_Danfe extends RelatorioBase {
 			comporDadosDocumento(dadosNfe, eaa01);
 			comporDadosEndereco(dadosNfe, eaa01);
 			comporDadosGerais(dadosNfe, eaa01);
-			//comporDuplicatas(dadosNfe, eaa01.getEaa01central(), eaa01);
-            comporDuplicatas2(dadosNfe, eaa01.getEaa01central(), eaa01);
+			comporDuplicatas(dadosNfe, eaa01.getEaa01central(), eaa01);
+//            comporDuplicatas2(dadosNfe, eaa01.getEaa01central(), eaa01);
 			comporValores(dadosNfe, eaa01);
 			buscarPedidoCliente(dadosNfe,eaa01id);
 			buscarMensagemItem(dadosNfe,eaa01id);
@@ -366,6 +366,8 @@ public class SRF_Danfe extends RelatorioBase {
                         "INNER JOIN abb01 ON abb01id = abb0102doc " +
                         "INNER JOIN daa01 ON daa01central = abb01id " +
                         "WHERE abb0102central = :idDoc " +
+                        "AND daa01dtPgto IS NULL "+
+                        "AND daa01dtBaixa IS NULL "+
                         "ORDER BY daa01dtVcton"
 
         List<TableMap> duplicatas = getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idDoc", abb01.abb01id));
