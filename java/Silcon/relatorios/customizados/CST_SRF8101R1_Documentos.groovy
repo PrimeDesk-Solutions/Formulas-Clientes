@@ -90,6 +90,12 @@ public class CST_SRF8101R1_Documentos extends RelatorioBase {
         TableMap valoresTotais = new TableMap();
 
         for (dado in dados) {
+            String descrSituacao = dado.getString("descrSituacao");
+            LocalDate dtCancelamento = dado.getDate("dtCancelamento");
+
+            if(descrSituacao == null || descrSituacao.isEmpty() && dtCancelamento == null){
+                dado.put("descrSituacao", "CANCELADO");
+            }
 
             if (idControle == null) {
                 dadosTmp.putAll(dado);
@@ -117,6 +123,13 @@ public class CST_SRF8101R1_Documentos extends RelatorioBase {
         tmp.putAll(valoresTotais);
         comporValores(tmp, campos);
 
+        String descrSituacao = tmp.getString("descrSituacao");
+        LocalDate dtCancelamento = tmp.getDate("dtCancelamento");
+
+        if(descrSituacao == null || descrSituacao.isEmpty() && dtCancelamento == null){
+            tmp.put("descrSituacao", "CANCELADO");
+        }
+
         dadosRelatorio.add(tmp);
 
         if(impressao == 1) return gerarXLSX("CST_SRF8101R1_Documentos_Excel", dadosRelatorio);
@@ -129,7 +142,7 @@ public class CST_SRF8101R1_Documentos extends RelatorioBase {
         String whereNumDoc = " WHERE abb01Nota.abb01num BETWEEN :numDocIni AND :numDocFin ";
         String whereOperacao = operacao == 0 ? " AND eaa01Nota.eaa01esMov = 0 " : " AND eaa01Nota.eaa01esMov = 1";
         String whereClassDoc = " AND eaa01Nota.eaa01clasDoc = " + Eaa01.CLASDOC_SRF;
-        String whereCancelamento = " AND eaa01Nota.eaa01cancData IS NULL ";
+        //String whereCancelamento = " AND eaa01Nota.eaa01cancData IS NULL ";
         String whereEntidades = idsEntidades != null && idsEntidades.size() > 0 ? " AND abe01id IN (:idsEntidades) " : "";
         String whereTipoDoc = idsTiposDoc != null && idsTiposDoc.size() > 0 ? " AND aah01Nota.aah01id IN (:idsTiposDoc) " : "";
         String whereDtEmissao = dtEmissao != null ? " AND abb01Nota.abb01data BETWEEN :dtEmissaoIni AND :dtEmissaoFin " : "";
@@ -156,7 +169,7 @@ public class CST_SRF8101R1_Documentos extends RelatorioBase {
         String sql = " SELECT eaa01Nota.eaa01id AS eaa01id, aah01Nota.aah01codigo AS codTipoDocNota, abb01Nota.abb01num AS numDocNota, abb01Nota.abb01data AS dtEmissaoNota, " +
                 " eaa01Nota.eaa01esData AS dtEntradaSaidaNota, aaj03codigo AS codSituacao, aaj03descr AS descrSituacao, abe01codigo AS codEntidade, " +
                 " abe01na AS nomeEntidade, aag02uf AS ufEntidade, abe30codigo AS codCondPgto, abe30nome AS descrCondPgto, aah01Ref.aah01codigo AS codTipoDocRef, " +
-                " aah01Ref.aah01nome AS descrTipoDocRef, abb01Ref.abb01num AS numDocRef, " +
+                " aah01Ref.aah01nome AS descrTipoDocRef, abb01Ref.abb01num AS numDocRef, eaa01nota.eaa01cancData AS dtCancelamento,  " +
                 " eaa0103Nota.eaa0103qtUso AS eaa0103qtuso, eaa0103Nota.eaa0103qtComl AS eaa0103qtcoml, eaa0103Nota.eaa0103unit AS eaa0103unit, " +
                 " eaa0103Nota.eaa0103total AS eaa0103total, eaa0103Nota.eaa0103totDoc AS eaa0103totdoc, eaa0103Nota.eaa0103totFinanc AS eaa0103totfinanc, eaa0103Nota.eaa0103json AS eaa0103json"+
                 " FROM eaa01 AS eaa01Nota " +
@@ -178,7 +191,7 @@ public class CST_SRF8101R1_Documentos extends RelatorioBase {
                 whereNumDoc +
                 whereOperacao +
                 whereClassDoc +
-                whereCancelamento +
+                //whereCancelamento +
                 whereEntidades +
                 whereTipoDoc +
                 whereDtEmissao +

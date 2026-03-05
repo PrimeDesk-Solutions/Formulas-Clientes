@@ -194,8 +194,8 @@ public class CST_Fechamento_Cliente extends RelatorioBase {
         String sql = "SELECT dad01saldo, dad01dtI " +
                 " FROM dad01 " +
                 " WHERE dad01ent = :idEntidade " +
-                " AND dad01tipo = 35610614 " +
-                " AND dad01eg = :idEmpresa ";
+                " AND dad01tipo = 35610614 "
+                //" AND dad01eg = :idEmpresa ";
 
         Parametro parametroEntidade = Parametro.criar("idEntidade", idEntidade);
         Parametro parametroEmpresa = Parametro.criar("idEmpresa", idEmpresa)
