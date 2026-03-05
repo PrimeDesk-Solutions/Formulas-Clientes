@@ -2,7 +2,8 @@ package Silcon.formulas.itensDocumentos
 
 import sam.model.entities.aa.Aac13
 import sam.model.entities.aa.Aaj01;
-import sam.model.entities.ab.Abd02;
+import sam.model.entities.ab.Abd02
+import sam.model.entities.ab.Abe0101;
 import sam.server.samdev.utils.Parametro;
 import br.com.multiorm.criteria.criterion.Criterions
 import br.com.multitec.utils.ValidacaoException
@@ -10,6 +11,7 @@ import br.com.multitec.utils.collections.TableMap;
 import sam.core.variaveis.MDate
 import sam.dicdados.FormulaTipo;
 import sam.model.entities.aa.Aac10;
+import sam.model.entities.aa.Aah01;
 import sam.model.entities.aa.Aag01;
 import sam.model.entities.aa.Aag02;
 import sam.model.entities.aa.Aag0201;
@@ -30,6 +32,7 @@ import sam.model.entities.ab.Abe01;
 import sam.model.entities.ab.Abe02;
 import sam.model.entities.ab.Abe40;
 import sam.model.entities.ab.Abe4001;
+
 import sam.model.entities.ab.Abg01
 import sam.model.entities.ab.Abm01;
 import sam.model.entities.ab.Abm0101;
@@ -52,18 +55,21 @@ import java.time.DayOfWeek;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate
 
+
+
 public class Doc_Padrao_SaidaCupom extends FormulaBase {
 
     private Aac10 aac10;
+    private Aah01 aah01;
     private Aaj01 aaj01;
     private Aac13 aac13;
     private Aag01 aag01;
     private Aag02 ufEnt;
     private Aag02 ufEmpr;
-    private Aaj07 aaj07;
-    private Aaj09 aaj09;
     private Aag0201 municipioEnt;
     private Aag0201 municipioEmpr;
+    private Aaj07 aaj07;
+    private Aaj09 aaj09;
     private Aaj10 aaj10_cstIcms;
     private Aaj11 aaj11_cstIpi;
     private Aaj12 aaj12_cstPis;
@@ -79,6 +85,7 @@ public class Doc_Padrao_SaidaCupom extends FormulaBase {
     private Abe01 abe01;
     private Abe40 abe40;
     private Abe4001 abe4001;
+    private Abe0101 abe0101principal;
     private Abe02 abe02;
     private Abg01 abg01;
     private Abm01 abm01;
@@ -108,6 +115,7 @@ public class Doc_Padrao_SaidaCupom extends FormulaBase {
     private TableMap jsonAbe4001;
     private TableMap jsonAaj07clasTrib;
 
+
     @Override
     public void executar() {
 
@@ -126,16 +134,24 @@ public class Doc_Padrao_SaidaCupom extends FormulaBase {
         //Central de Documento
         abb01 = eaa01.eaa01central;
 
+        // Tipo de Documento
+        aah01 = getSession().get(Aah01.class, abb01.abb01tipo.aah01id)
+
         //PCD
         abd01 = getSession().get(Abd01.class, eaa01.eaa01pcd.abd01id);
 
         //PCD Fiscais
-        if (abd01.abd01ceFiscais == null) throw new ValidacaoException("Não foi econtrado PCD fiscal no cadastro do PCD " + abd01.abd01codigo);
+        if (abd01.abd01ceFiscais == null) throw new ValidacaoException("Não foi encontrado PCD fiscal no cadastro do PCD " + abd01.abd01codigo);
 
         abd02 = getSession().get(Abd02.class, abd01.abd01ceFiscais.abd02id);
 
         //Dados da Entidade
         abe01 = getSession().get(Abe01.class, abb01.abb01ent.abe01id);
+
+        // Endereço principal entidade
+        abe0101principal = getSession().get(Abe0101.class, Criterions.where("abe0101principal = 1 and abe0101ent = " + abe01.abe01id));
+
+        if(abe0101principal == null) throw new ValidacaoException("Não foi encontrado endereço principal no cadastro da entidade.");
 
         //Endereço principal da entidade no documento
         for (Eaa0101 eaa0101 : eaa01.eaa0101s) {
@@ -143,11 +159,12 @@ public class Doc_Padrao_SaidaCupom extends FormulaBase {
                 eaa0101princ = eaa0101;
             }
         }
-        if (eaa0101princ == null) throw new ValidacaoException("Não foi encontrado o endereço principal da entidade no documento.");
 
-        municipioEnt = eaa0101princ.eaa0101municipio != null ? getSession().get(Aag0201.class, Criterions.eq("aag0201id", eaa0101princ.eaa0101municipio.aag0201id)) : null;
+        Long idMunicipioPrincipalEntidade = abe0101principal.abe0101municipio.aag0201id;//eaa0101princ == null ? abe0101principal.abe0101municipio.aag0201id : eaa0101princ.eaa0101municipio.aag0201id;        Long idPaisEntidade = eaa0101princ == null ? abe0101principal.abe0101pais.aag01id : eaa0101princ.eaa0101pais != null ? eaa0101princ.eaa0101pais.aag01id : null;
+        Long idPaisEntidade = abe0101principal.abe0101pais != null ? abe0101principal.abe0101pais.aag01id : null;//eaa0101princ == null ? abe0101principal.abe0101pais.aag01id : eaa0101princ.eaa0101pais != null ? eaa0101princ.eaa0101pais.aag01id : null;
+        municipioEnt = idMunicipioPrincipalEntidade != null ? getSession().get(Aag0201.class, Criterions.eq("aag0201id", idMunicipioPrincipalEntidade)) : null;
         ufEnt = municipioEnt != null ? getSession().get(Aag02.class, municipioEnt.aag0201uf.aag02id) : null;
-        aag01 = eaa0101princ.eaa0101pais != null ? getSession().get(Aag01.class, Criterions.eq("aag01id", eaa0101princ.eaa0101pais.aag01id)) : null;
+        aag01 = idPaisEntidade != null ? getSession().get(Aag01.class, Criterions.eq("aag01id", idPaisEntidade)) : null;
 
         //Empresa
         aac10 = getSession().get(Aac10.class, obterEmpresaAtiva().aac10id);
@@ -188,6 +205,7 @@ public class Doc_Padrao_SaidaCupom extends FormulaBase {
         //Fatores de Conv. da Unid de Compra para Estoque
         abm1301 = abm13 == null ? null : eaa0103.eaa0103umComl == null ? null : getSession().get(Abm1301.class, Criterions.where("abm1301cc = " + abm13.abm13id + " AND abm1301umc = " + eaa0103.eaa0103umComl.aam06id));
         if (abm1301 == null) throw new ValidacaoException("Não foi informado fator de conversão no cadastro do item " + abm01.abm01codigo);
+
         //Unidade de Medida
         aam06 = abm13 != null && abm13.abm13umv != null ? getSession().get(Aam06.class, abm13.abm13umv.aam06id) : null;
 
@@ -219,26 +237,27 @@ public class Doc_Padrao_SaidaCupom extends FormulaBase {
         abe40 = eaa01.eaa01tp != null ? getSession().get(Abe40.class, eaa01.eaa01tp.abe40id) : null;
 
         // Verifica se tem itens repetidos na tabela de preço
-        if (abe40 != null) {
+        if(abe40 != null){
             Query tmItensTabela = getSession().createQuery("select abe4001id from abe4001 where abe4001tab = " + abe40.abe40id + " AND abe4001item = " + abm01.abm01id);
 
             List<TableMap> countItens = tmItensTabela.getListTableMap();
 
-            if (countItens != null && countItens.size() > 1) throw new ValidacaoException("O item " + abm01.abm01codigo + " foi inserido mais de uma vez na tabela de preço " + abe40.abe40codigo);
+            if(countItens != null && countItens.size() > 1) throw new ValidacaoException("O item " +abm01.abm01codigo+ " foi inserido mais de uma vez na tabela de preço " + abe40.abe40codigo);
         }
 
         //Itens da Tabela de Preço
         abe4001 = abe40 != null ? getSession().get(Abe4001.class, Criterions.where("abe4001tab = " + abe40.abe40id + " AND abe4001item = " + abm01.abm01id)) : null;
 
-        if (abe4001 == null && eaa01.eaa01tp != null) throw new ValidacaoException("Item " + abm01.abm01codigo + " Não Encontrado Na Tabela De Preço " + abe40.abe40codigo);
+        if(abe4001 == null && eaa01.eaa01tp != null) throw new ValidacaoException("Item "+ abm01.abm01codigo +" Não Encontrado Na Tabela De Preço "+abe40.abe40codigo);
 
         // Class. Trib CBS/IBS
         aaj07 = eaa0103.eaa0103clasTribCbsIbs != null ? getSession().get(Aaj07.class, eaa0103.eaa0103clasTribCbsIbs.aaj07id) : null;
-        if (aaj07 == null) throw new ValidacaoException("É nescessário informar a Classificação tribtária de CBS/IBS do item: " + abm01.abm01codigo + " - " + abm01.abm01na);
+        if(aaj07 == null) throw new ValidacaoException("É nescessário informar a Classificação tribtária de CBS/IBS do item: " + abm01.abm01codigo + " - " + abm01.abm01na);
 
         // CST IBS/CBS
         aaj09 = eaa0103.eaa0103cstCbsIbs != null ? getSession().get(Aaj09.class, eaa0103.eaa0103cstCbsIbs.aaj09id) : null;
-        if (aaj09 == null) interromper("Necessário informar o CST de CBS/IBS no item: " + abm01.abm01codigo + " - " + abm01.abm01na);
+        if(aaj09 == null) interromper("Necessário informar o CST de CBS/IBS no item: " + abm01.abm01codigo + " - " + abm01.abm01na);
+
 
         //CAMPOS LIVRES
         jsonAac10 = aac10.aac10json != null ? aac10.aac10json : new TableMap();
@@ -288,20 +307,16 @@ public class Doc_Padrao_SaidaCupom extends FormulaBase {
 
             if(eaa0103.eaa0103unit == 0) definirPrecoUnitarioItem();
 
-
             // Conserva Qt.Original do documento (Qt.Faturamento original)
             if (jsonEaa0103.getBigDecimal_Zero("qt_original") == 0) {
-                jsonEaa0103.put("qt_original", eaa0103.eaa0103qtComl);
+                jsonEaa0103.put("qt_original", eaa0103.eaa0103qtComl)
             }
 
-            //Qtde SCE
-            eaa0103.eaa0103qtUso = (eaa0103.eaa0103qtComl * abm13.abm13fcVU).round(3);
-
-            // Converte Qt.Documento para Qt.Convertida (Unidade específica da empresa)
-            jsonEaa0103.put("qt_convertida", eaa0103.eaa0103qtComl * jsonAbm0101.getBigDecimal_Zero("icms_orig").round(3));
+            //  Qtde SCE
+            eaa0103.eaa0103qtUso = eaa0103.eaa0103qtComl.round(3);
 
             // Converte Qt.Documento para Volume
-            if (jsonEaa0103.getBigDecimal_Zero("volumes") >= 0) {
+            if (jsonEaa0103.getBigDecimal_Zero("volumes") == 0) {
                 jsonEaa0103.put("volumes", eaa0103.eaa0103qtComl * abm13.abm13fcVW);
                 BigDecimal volume = jsonEaa0103.getBigDecimal_Zero("volumes");
                 BigDecimal volumes = new BigDecimal(volume).setScale(0, BigDecimal.ROUND_UP);
@@ -317,44 +332,32 @@ public class Doc_Padrao_SaidaCupom extends FormulaBase {
             // Total do item = Qt.Documento * Unitário
             eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
 
-            // Total Documento
-            eaa0103.eaa0103totDoc = eaa0103.eaa0103total +
-                                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                                    jsonEaa0103.getBigDecimal_Zero("acrescimo_inc_") -
-                                    jsonEaa0103.getBigDecimal_Zero("desconto");
-
-
             // Preenche o CST de ICMS do Item
-            String cstIcms = buscarCstICMS();
+            preencherCSTICMS();
 
-            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cstIcms));
+            // calcularIcmsSTRetido
+            calcularIcmsSTRetido();
+
+            // Total do Documento = Total do item
+            eaa0103.eaa0103totDoc = (eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("acrescimo_inc_") +
+                    jsonEaa0103.getBigDecimal_Zero("frete_dest") -
+                    jsonEaa0103.getBigDecimal_Zero("desconto")).round(2);
 
             // Calcula ICMS Itens
             calcularICMS(contribICMS);
 
-            // ICMS Isento
-            if (eaa0103.eaa0103cstIcms.aaj10codigo == '040' || eaa0103.eaa0103cstIcms.aaj10codigo == '240' ||
-                    eaa0103.eaa0103cstIcms.aaj10codigo == '041' || eaa0103.eaa0103cstIcms.aaj10codigo == '241' || eaa0103.eaa0103cstIcms.aaj10codigo == '090') {
-
-                jsonEaa0103.put("icms_isento_sped", eaa0103.eaa0103totDoc);
-                jsonEaa0103.put("bc_icms", new BigDecimal(0));
-                jsonEaa0103.put("aliq_reduc_bc_icms", new BigDecimal(0));
-                jsonEaa0103.put("aliq_icms", new BigDecimal(0));
-                jsonEaa0103.put("icms", new BigDecimal(0));
-                jsonEaa0103.put("icms_outras", new BigDecimal(0));
-
-            }
-
+            // Calcular Carga Tributaria
             calcularCargaTributaria();
 
+            // calcula Cupom Fiscal
             calculaCupomFiscal(dentroEstado);
 
             definirCFOP(dentroEstado);
 
-            //CalculoPIS
+            // Calcula PIS dos itens
             calculaPIS();
 
-            //CalculoCOFINS
+            // Calcula COFINS dos itens
             calculaCOFINS();
 
             //Total finaceiro
@@ -363,29 +366,275 @@ public class Doc_Padrao_SaidaCupom extends FormulaBase {
             calcularCBSIBS();
 
             preencherSPEDS();
+
         }
 
     }
 
-    private void definirPrecoUnitarioItem() {
-        if (eaa01.eaa01tp != null) {
-            if (jsonAbe4001 != null) {
-                if (jsonAbe4001.getString("data_promo_ini") != null && jsonAbe4001.getString("data_promo_fin") != null && jsonAbe4001.getBigDecimal_Zero("preco_promocao") > 0) {
+    private void definirPrecoUnitarioItem(){
+        if(eaa01.eaa01tp != null){
+            if(jsonAbe4001 != null){
+                if(jsonAbe4001.getString("data_promo_ini") != null && jsonAbe4001.getString("data_promo_fin") != null && jsonAbe4001.getBigDecimal_Zero("preco_promocao") > 0){
                     DateTimeFormatter formato2 = DateTimeFormatter.ofPattern("yyyyMMdd");
                     LocalDate dataIniPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_ini"), formato2);
                     LocalDate dataFinPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_fin"), formato2);
                     LocalDate dataAtual = LocalDate.now();
                     def precoPromocao = jsonAbe4001.getBigDecimal_Zero("preco_promocao");
-                    if (dataAtual >= dataIniPromo && dataAtual <= dataFinPromo) {
+                    if(dataAtual >= dataIniPromo && dataAtual <= dataFinPromo){
                         eaa0103.eaa0103unit = precoPromocao.round(4);
-                    } else {
+                    }else{
                         eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
                     }
-                } else {
+                }else{
                     eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
                 }
-            } else {
+            }else{
                 eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
+            }
+        }
+    }
+
+    // Trocar CFOP (Dentro ou fora do estado)
+    private void definirCFOP(Boolean dentroEstado) {
+        String cfop = "5102";
+        if(dentroEstado){
+            if (eaa0103.eaa0103cstIcms.aaj10codigo == "000" || eaa0103.eaa0103cstIcms.aaj10codigo == "040" || eaa0103.eaa0103cstIcms.aaj10codigo == "041" || eaa0103.eaa0103cstIcms.aaj10codigo == "090" || eaa0103.eaa0103cstIcms.aaj10codigo == "200" ||
+            eaa0103.eaa0103cstIcms.aaj10codigo == "240" || eaa0103.eaa0103cstIcms.aaj10codigo == "241") {
+                cfop = "5102";
+            } else {
+                cfop = "5405";
+            }
+        }
+
+        aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
+        if(aaj15_cfop == null) throw new ValidacaoException("Não foi encontrado CFOP com o código " + cfop);
+
+        eaa0103.eaa0103cfop = aaj15_cfop;
+    }
+
+    private void calcularIcmsSTRetido() {
+        // ********  ICMS ST Retido - Regime "Substituto Tributário" ********
+
+        if (eaa0103.eaa0103cstIcms.aaj10codigo == '060' && abe01.abe01contribIcms == 1) {
+
+            BigDecimal ivaST = 0;
+
+            if (jsonEaa0103.getBigDecimal_Zero("vlr_icms_ret") == 0) {
+                jsonEaa0103.put("icms_ret", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms_ret"));
+                ivaST = jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_iva_st_ret");
+
+                if (ivaST > 0) {
+                    jsonEaa0103.put("bc_icms_ret", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest") +
+                            jsonEaa0103.getBigDecimal_Zero("seguro") +
+                            jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
+                            jsonEaa0103.getBigDecimal_Zero("ipi"));
+
+                    jsonEaa0103.put("bc_icms_ret", (jsonEaa0103.getBigDecimal_Zero("bc_icms_ret") * ((ivaST / 100)) + 1).round(2));
+
+                    jsonEaa0103.put("vlr_icms_ret", (jsonEaa0103.getBigDecimal_Zero("bc_icms_ret") *
+                            (jsonEaa0103.getBigDecimal_Zero("icms_ret") / 100)) - jsonEaa0103.getBigDecimal_Zero("icms_sped").round(2));
+
+                } else {
+                    jsonEaa0103.put("bc_icms_ret", new BigDecimal(0));
+                    jsonEaa0103.put("icms_ret", new BigDecimal(0));
+                    jsonEaa0103.put("vlr_icms_ret", new BigDecimal(0));
+                }
+            }
+        }
+    }
+
+    private void preencherCSTICMS() {
+        // Busca primeiramente o CST de ICMS no cadastro do item, caso não econcontrado, busca no cadastro do PCD
+        String cst = "";
+
+        if (abm12 != null && abm12.abm12cstIcms != null) {
+            aaj10_cstIcms = getSession().get(Aaj10.class, abm12.abm12cstIcms.aaj10id);
+            cst = aaj10_cstIcms.aaj10codigo;
+
+        }else if (abd02 != null && abd02.abd02cstIcmsB != null) {
+            aaj10_cstIcms = getSession().get(Aaj10.class, abd02.abd02cstIcmsB.aaj10id);
+            cst = aaj10_cstIcms.aaj10codigo;
+        } else {
+            throw new ValidacaoException("Necessário preencher o CST de ICMS no cadastro do item " + abm01.abm01codigo + " ou no cadastro do PCD " + abd01.abd01codigo)
+        }
+
+        eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cst));
+    }
+
+    private void calcularICMS (Integer contribICMS) {
+        Integer vlrReducao = 0;
+
+        if ((jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) || jsonEaa0103.getBigDecimal_Zero("aliq_icms_manual") > 0) {
+            // BC ICMS
+            jsonEaa0103.put("bc_icms", eaa0103.eaa0103total +
+                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
+                    jsonEaa0103.getBigDecimal_Zero("seguro") +
+                    jsonEaa0103.getBigDecimal_Zero("outras_despesas") -
+                    jsonEaa0103.getBigDecimal_Zero("desconto"));
+
+            jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms").round(2));
+
+            if (contribICMS) jsonEaa0103.put("bc_icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") + jsonEaa0103.getBigDecimal_Zero("ipi")).round(2));
+
+            // ICMS Isento
+            jsonEaa0103.put("icms_isento", (jsonEaa0103.getBigDecimal_Zero("bc_icms") * jsonEaa0103.getBigDecimal_Zero("aliq_icms") / 100).round(2));
+
+            // Calculo da Redução
+            if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_reduc_bc_icms") > 0) {
+                jsonEaa0103.put("aliq_reduc_bc_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_reduc_bc_icms"));
+                vlrReducao = (jsonEaa0103.getBigDecimal_Zero("bc_icms") * (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_reduc_bc_icms") / 100)).round(2);
+                jsonEaa0103.put("bc_icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") - vlrReducao).round(2));
+            }
+
+            // Aliquota de ICMS
+            if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
+                jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
+            }
+
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_icms_manual") > 0) jsonEaa0103.put("aliq_icms", jsonEaa0103.getBigDecimal_Zero("aliq_icms_manual"));
+
+            // Zerando icms outras quando tiver valor no aliq icms
+            jsonEaa0103.put("icms_outras", new BigDecimal(0));
+
+            // Calculo ICMS
+            jsonEaa0103.put("icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") * (jsonEaa0103.getBigDecimal_Zero("aliq_icms") / 100)).round(2));
+
+        } else {
+            jsonEaa0103.put("bc_icms", new BigDecimal(0));
+            jsonEaa0103.put("aliq_icms", new BigDecimal(0));
+            jsonEaa0103.put("icms", new BigDecimal(0));
+            jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
+        }
+    }
+
+    private calculaPIS() {
+        if (eaa0103.eaa0103cstPis != null && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_pis") > 0) {
+
+            if (eaa0103.eaa0103cstPis.aaj12codigo == '01') {
+                // BC PIS
+                jsonEaa0103.put("bc_pis", eaa0103.eaa0103totDoc - jsonEaa0103.getBigDecimal_Zero("icms"));
+
+                // Aliquota
+                jsonEaa0103.put("aliq_pis", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_pis"));
+
+                // PIS
+                jsonEaa0103.put("pis", jsonEaa0103.getBigDecimal_Zero("bc_pis") * jsonEaa0103.getBigDecimal_Zero("aliq_pis") / 100);
+                jsonEaa0103.put("pis", jsonEaa0103.getBigDecimal_Zero("pis").round(2));
+            }
+
+        } else {
+            jsonEaa0103.put("aliq_pis", new BigDecimal(0));
+            jsonEaa0103.put("bc_pis", new BigDecimal(0));
+            jsonEaa0103.put("pis", new BigDecimal(0));
+        }
+
+    }
+
+    private calculaCOFINS() {
+        if (eaa0103.eaa0103cstCofins && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_cofins") > 0) {
+
+            if (eaa0103.eaa0103cstCofins != null) {
+                if (eaa0103.eaa0103cstCofins.aaj13codigo == '01') {
+                    // BC COFINS
+                    jsonEaa0103.put("bc_cofins", eaa0103.eaa0103totDoc - jsonEaa0103.getBigDecimal_Zero("icms"));
+
+                    // Aliquota
+                    jsonEaa0103.put("aliq_cofins", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_cofins"));
+
+                    // COFINS
+                    jsonEaa0103.put("cofins", jsonEaa0103.getBigDecimal_Zero("bc_cofins") * jsonEaa0103.getBigDecimal_Zero("aliq_cofins") / 100);
+                    jsonEaa0103.put("cofins", jsonEaa0103.getBigDecimal_Zero("cofins").round(2));
+                }
+            }
+
+        } else {
+            jsonEaa0103.put("aliq_cofins", new BigDecimal(0));
+            jsonEaa0103.put("bc_cofins", new BigDecimal(0));
+            jsonEaa0103.put("cofins", new BigDecimal(0));
+        }
+    }
+
+    private void calcularCargaTributaria() {
+        if (abm0101.abm0101ncm == null || eaa0103.eaa0103ncm == null) throw new ValidacaoException("Não foi informado NCM no cadastro do item " + abm01.abm01codigo + " ou na linha do item do documento, para calculo da carga tributária.  ");
+
+        if(abm12 != null){
+            Integer origemItem = abm12.abm12cstA;
+            String aliqCargaTrib
+
+            if(origemItem == 0 || origemItem == 3 || origemItem == 4 || origemItem == 5 || origemItem == 8){
+                aliqCargaTrib = abg01.abg01vatFedNac_Zero;
+            }else{
+                aliqCargaTrib = abg01.abg01vatFedImp_Zero;
+            }
+
+            if(aliqCargaTrib == 0) throw new ValidacaoException("Aliquota para calculo da carga tributária no NCM"+abg01.abg01codigo+ " - " + abg01.abg01descr +" não é válida.");
+
+            jsonEaa0103.put("aliq_carga_trib", aliqCargaTrib);
+
+            //BC Carga Tributaria
+            jsonEaa0103.put("bc_carga_trib", eaa0103.eaa0103total);
+
+            // Carga Tributaria
+            if (jsonEaa0103.getBigDecimal_Zero("aliq_carga_trib") > 0) {
+                jsonEaa0103.put("vlr_carga_trib", jsonEaa0103.getBigDecimal_Zero("bc_carga_trib") * jsonEaa0103.getBigDecimal_Zero("aliq_carga_trib") / 100);
+                jsonEaa0103.put("vlr_carga_trib", jsonEaa0103.getBigDecimal_Zero("vlr_carga_trib").round(2));
+            }
+        }
+    }
+
+    private calculaCupomFiscal(Boolean dentroEstado) {
+        // Simples Nacional
+        if (aaj01.aaj01codigo == "04") {
+
+            if (abm01.abm01tipo == 3) { // Item Serviço
+                jsonEaa0103.put("aliq_ecf", "SI");
+
+            } else {
+                if (jsonAbm0101.getBigDecimal_Zero("aliq_pis") < 0) {
+                    jsonEaa0103.put("aliq_ecf", "II");
+
+                } else if (jsonAbm0101.getBigDecimal_Zero("aliq_iss") > 0) {
+                    jsonEaa0103.put("aliq_ecf", "FF");
+
+                } else {
+                    jsonEaa0103.put("aliq_ecf", "NN");
+                }
+            }
+
+        } else {
+            BigDecimal txICM = 0;
+
+            String cstICMS = aaj10_cstIcms.aaj10codigo;
+
+            if (cstICMS == '000' || cstICMS == "200") {
+                txICM = jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms");
+            }
+
+            // Isento
+            if (cstICMS == '040' || cstICMS == '041' || cstICMS == '240' || cstICMS == '140') {
+                jsonEaa0103.put("aliq_ecf", "II");
+                jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
+                jsonEaa0103.put("bc_icms", new BigDecimal(0));
+                jsonEaa0103.put("aliq_reduc_bc_icms", new BigDecimal(0));
+                jsonEaa0103.put("aliq_icms", new BigDecimal(0));
+                jsonEaa0103.put("icms", new BigDecimal(0));
+                jsonEaa0103.put("icms_isento", new BigDecimal(0));
+            }
+
+            //Substituição Tributária
+            if (cstICMS == "060" || cstICMS == "260") {
+                jsonEaa0103.put("aliq_ecf", "FF");
+                jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
+                jsonEaa0103.put("bc_icms", new BigDecimal(0));
+                jsonEaa0103.put("aliq_reduc_bc_icms", new BigDecimal(0));
+                jsonEaa0103.put("aliq_icms", new BigDecimal(0));
+                jsonEaa0103.put("icms", new BigDecimal(0));
+                jsonEaa0103.put("icms_isento", new BigDecimal(0));
+            }
+
+            if (txICM != 0) {
+                txICM = txICM.round(2);
+                jsonEaa0103.put("aliq_ecf", String.format("%04d", txICM.multiply(100).intValue()));
             }
         }
     }
@@ -560,218 +809,6 @@ public class Doc_Padrao_SaidaCupom extends FormulaBase {
             jsonEaa0103.put("cbs_ibs_bc", new BigDecimal(0));
         }
     }
-    // Trocar CFOP (Dentro ou fora do estado)
-    private void definirCFOP(Boolean dentroEstado) {
-        String cfop = "";
-
-        // Atribui o CFOP 5102
-        if (dentroEstado) {
-            if (eaa0103.eaa0103cstIcms != null) {
-
-                if (eaa0103.eaa0103cstIcms.aaj10codigo == "000" || eaa0103.eaa0103cstIcms.aaj10codigo == "040" || eaa0103.eaa0103cstIcms.aaj10codigo == "041" || eaa0103.eaa0103cstIcms.aaj10codigo == "090" || eaa0103.eaa0103cstIcms.aaj10codigo == "200" ||
-                        eaa0103.eaa0103cstIcms.aaj10codigo == "240" || eaa0103.eaa0103cstIcms.aaj10codigo == "241") {
-
-                    cfop = "5102";
-
-                } else {
-                    cfop = "5405";
-                }
-            }
-        }
-
-        aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
-        eaa0103.eaa0103cfop = aaj15_cfop;
-    }
-
-    private String buscarCstICMS() {
-        // Busca primeiramente o CST de ICMS no cadastro do PCD, caso não econcontrado, busca no cadastro do item
-        String cst = "";
-
-        if (abd02 != null && abd02.abd02cstIcmsB != null) {
-            aaj10_cstIcms = getSession().get(Aaj10.class, abd02.abd02cstIcmsB.aaj10id);
-            cst = aaj10_cstIcms.aaj10codigo;
-
-        } else if (abm12 != null && abm12.abm12cstIcms != null) {
-            aaj10_cstIcms = getSession().get(Aaj10.class, abm12.abm12cstIcms.aaj10id);
-            cst = aaj10_cstIcms.aaj10codigo;
-
-        } else {
-            throw new ValidacaoException("Necessário preencher o CST de ICMS no cadastro do item " + abm01.abm01codigo + " ou no cadastro do PCD " + abd01.abd01codigo)
-        }
-
-        return cst;
-    }
-
-    private void calcularICMS(Integer contribICMS) {
-        Integer vlrReducao = 0;
-
-        if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
-            // BC ICMS
-            jsonEaa0103.put("bc_icms", eaa0103.eaa0103total +
-                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                    jsonEaa0103.getBigDecimal_Zero("seguro") +
-                    jsonEaa0103.getBigDecimal_Zero("outras_despesas") -
-                    jsonEaa0103.getBigDecimal_Zero("desconto"));
-
-            jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms").round(2));
-
-            if (contribICMS) jsonEaa0103.put("bc_icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") + jsonEaa0103.getBigDecimal_Zero("ipi")).round(2));
-
-            // Calculo da Redução
-            if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_reduc_bc_icms") > 0) {
-                jsonEaa0103.put("aliq_reduc_bc_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_reduc_bc_icms"));
-                vlrReducao = (jsonEaa0103.getBigDecimal_Zero("bc_icms") * (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_reduc_bc_icms") / 100)).round(2);
-                jsonEaa0103.put("bc_icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") - vlrReducao).round(2));
-            }
-
-            // Zerando icms outras quando tiver valor na aliq icms
-            jsonEaa0103.put("icms_outras", new BigDecimal(0));
-
-            // Aliquota de ICMS
-            if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
-                jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
-            }
-
-            // Calculo ICMS
-            jsonEaa0103.put("icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") * (jsonEaa0103.getBigDecimal_Zero("aliq_icms") / 100)).round(2));
-
-        } else {
-            jsonEaa0103.put("bc_icms", new BigDecimal(0));
-            jsonEaa0103.put("aliq_icms", new BigDecimal(0));
-            jsonEaa0103.put("icms", new BigDecimal(0));
-            jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
-        }
-    }
-
-    private calculaPIS() {
-        if (jsonAbm0101.getBigDecimal_Zero("aliq_pis") > 0) {
-
-            if (eaa0103.eaa0103cstPis.aaj12codigo == '01') {
-                // BC PIS
-                jsonEaa0103.put("bc_pis", eaa0103.eaa0103totDoc - jsonEaa0103.getBigDecimal_Zero("icms"));
-
-                // Aliquota
-                jsonEaa0103.put("aliq_pis", jsonAbm0101.getBigDecimal_Zero("aliq_pis"));
-
-                // PIS
-                jsonEaa0103.put("pis", jsonEaa0103.getBigDecimal_Zero("bc_pis") * jsonEaa0103.getBigDecimal_Zero("aliq_pis") / 100);
-                jsonEaa0103.put("pis", jsonEaa0103.getBigDecimal_Zero("pis").round(2));
-            }
-
-        } else {
-            jsonEaa0103.put("aliq_pis", new BigDecimal(0));
-            jsonEaa0103.put("bc_pis", new BigDecimal(0));
-            jsonEaa0103.put("pis", new BigDecimal(0));
-        }
-
-    }
-
-    private calculaCOFINS() {
-        if (jsonAbm0101.getBigDecimal_Zero("aliq_cofins") > 0) {
-
-            if (eaa0103.eaa0103cstCofins != null) {
-                if (eaa0103.eaa0103cstCofins.aaj13codigo == '01') {
-                    // BC COFINS
-                    jsonEaa0103.put("bc_cofins", jsonEaa0103.getBigDecimal_Zero("bc_pis"));
-
-                    // Aliquota
-                    jsonEaa0103.put("aliq_cofins", jsonAbm0101.getBigDecimal_Zero("aliq_cofins"));
-
-                    // COFINS
-                    jsonEaa0103.put("cofins", jsonEaa0103.getBigDecimal_Zero("bc_cofins") * jsonEaa0103.getBigDecimal_Zero("aliq_cofins") / 100);
-                    jsonEaa0103.put("cofins", jsonEaa0103.getBigDecimal_Zero("cofins").round(2));
-                }
-            }
-
-        } else {
-            jsonEaa0103.put("aliq_cofins", new BigDecimal(0));
-            jsonEaa0103.put("bc_cofins", new BigDecimal(0));
-            jsonEaa0103.put("cofins", new BigDecimal(0));
-        }
-    }
-    private void calcularCargaTributaria() {
-        if (abm0101.abm0101ncm == null || eaa0103.eaa0103ncm == null) throw new ValidacaoException("Não foi informado NCM no cadastro do item " + abm01.abm01codigo + " ou na linha do item do documento, para calculo da carga tributária.  ");
-
-        if(abm12 != null){
-            Integer origemItem = abm12.abm12cstA;
-            String aliqCargaTrib
-
-            if(origemItem == 0 || origemItem == 3 || origemItem == 4 || origemItem == 5 || origemItem == 8){
-                aliqCargaTrib = abg01.abg01vatFedNac_Zero;
-            }else{
-                aliqCargaTrib = abg01.abg01vatFedImp_Zero;
-            }
-
-            if(aliqCargaTrib == 0) throw new ValidacaoException("Aliquota para calculo da carga tributária no NCM"+abg01.abg01codigo+ " - " + abg01.abg01descr +" não é válida.");
-
-            jsonEaa0103.put("aliq_carga_trib", aliqCargaTrib);
-
-            //BC Carga Tributaria
-            jsonEaa0103.put("bc_carga_trib", eaa0103.eaa0103total);
-
-            // Carga Tributaria
-            if (jsonEaa0103.getBigDecimal_Zero("aliq_carga_trib") > 0) {
-                jsonEaa0103.put("vlr_carga_trib", jsonEaa0103.getBigDecimal_Zero("bc_carga_trib") * jsonEaa0103.getBigDecimal_Zero("aliq_carga_trib") / 100);
-                jsonEaa0103.put("vlr_carga_trib", jsonEaa0103.getBigDecimal_Zero("vlr_carga_trib").round(2));
-            }
-        }
-    }
-    private calculaCupomFiscal(Boolean dentroEstado) {
-        // Simples Nacional
-        if (aaj01.aaj01codigo == "04") {
-
-            if (abm01.abm01tipo == 3) { // Item Serviço
-                jsonEaa0103.put("aliq_ecf", "SI");
-
-            } else {
-                if (jsonAbm0101.getBigDecimal_Zero("aliq_pis") < 0) {
-                    jsonEaa0103.put("aliq_ecf", "II");
-
-                } else if (jsonAbm0101.getBigDecimal_Zero("aliq_iss") > 0) {
-                    jsonEaa0103.put("aliq_ecf", "FF");
-
-                } else {
-                    jsonEaa0103.put("aliq_ecf", "NN");
-                }
-            }
-
-        } else {
-            BigDecimal txICM = 0;
-
-            String cstICMS = aaj10_cstIcms.aaj10codigo;
-
-            if (cstICMS == '000' || cstICMS == "200") {
-                txICM = jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms");
-            }
-
-            // Isento
-            if (cstICMS == '040' || cstICMS == '041' || cstICMS == '240' || cstICMS == '140') {
-                jsonEaa0103.put("aliq_ecf", "II");
-                jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
-                jsonEaa0103.put("bc_icms", new BigDecimal(0));
-                jsonEaa0103.put("aliq_reduc_bc_icms", new BigDecimal(0));
-                jsonEaa0103.put("aliq_icms", new BigDecimal(0));
-                jsonEaa0103.put("icms", new BigDecimal(0));
-                jsonEaa0103.put("icms_isento", new BigDecimal(0));
-            }
-
-            //Substituição Tributária
-            if (cstICMS == "060" || cstICMS == "260") {
-                jsonEaa0103.put("aliq_ecf", "FF");
-                jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
-                jsonEaa0103.put("bc_icms", new BigDecimal(0));
-                jsonEaa0103.put("aliq_reduc_bc_icms", new BigDecimal(0));
-                jsonEaa0103.put("aliq_icms", new BigDecimal(0));
-                jsonEaa0103.put("icms", new BigDecimal(0));
-                jsonEaa0103.put("icms_isento", new BigDecimal(0));
-            }
-
-            if (txICM != 0) {
-                txICM = txICM.round(2);
-                jsonEaa0103.put("aliq_ecf", String.format("%04d", txICM.multiply(100).intValue()));
-            }
-        }
-    }
     private void preencherSPEDS() {
 
         // ========================================================================================
@@ -853,13 +890,10 @@ public class Doc_Padrao_SaidaCupom extends FormulaBase {
         //IPI SPED = IPI
         jsonEaa0103.put("ipi_sped", jsonEaa0103.getBigDecimal_Zero("ipi"));
     }
-
     @Override
     public FormulaTipo obterTipoFormula() {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
