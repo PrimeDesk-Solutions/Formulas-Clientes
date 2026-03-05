@@ -65,8 +65,7 @@ public class SRF_Danfe extends RelatorioBase {
 			eaa01ids = buscarIdsDocumentos(tipo, numeroInicial, numeroFinal, entidade, emissao, entraSai);
 		}else {
 			eaa01ids = new ArrayList<>();
-			eaa01ids.add(id)
-			;
+			eaa01ids.add(id);
 		}
 
 		for(eaa01id in eaa01ids) {
@@ -348,6 +347,7 @@ public class SRF_Danfe extends RelatorioBase {
 		List<Eaa0113> eaa0113s = getSession().createCriteria(Eaa0113.class)
 				.addWhere(Criterions.eq("eaa0113doc", eaa01.getEaa01id()))
 				.addWhere(Criterions.eq("eaa0113clasParc", Eaa0113.CLASPARC_PARCELA_DO_DOCUMENTO))
+                .addWhere(Criterions.in("eaa0113docFin", List.of(1,2)))
 				.setOrder("eaa0113dtVctoN").getList(ColumnType.ENTITY);
 
 		if (!Utils.isEmpty(eaa0113s)) {
