@@ -14,7 +14,7 @@ import sam.server.scf.service.SCFService;
 
 /**
  *
- * Fórmula para manipular o documento financeiro no programa SCF0155 - Caixa Financeiro
+ * Fórmula para manipular o documento financeiro no programa SCF0150 - Movimento
  *
  */
 public class Movimento extends FormulaBase{
@@ -48,11 +48,13 @@ public class Movimento extends FormulaBase{
         }
 
         LocalDate dtLimDesc = mapJson.getDate("dt_limite_desc");
-        if (dtLimDesc == null  || DateUtils.dateDiff(dtLimDesc, daa1001.daa1001dtPgto, ChronoUnit.DAYS) <= 0) { // Negativo -> Está dentro da data de desconto. Positivo -> Passou da data
-            desconto = mapJson.getBigDecimal_Zero("desconto");
-            juros = new BigDecimal(0);
-            multa = new BigDecimal(0);
-        }
+//        if (dtLimDesc == null  || DateUtils.dateDiff(dtLimDesc, daa1001.daa1001dtPgto, ChronoUnit.DAYS) <= 0) { // Negativo -> Está dentro da data de desconto. Positivo -> Passou da data
+//            desconto = mapJson.getBigDecimal_Zero("desconto");
+//            juros = new BigDecimal(0);
+//            multa = new BigDecimal(0);
+//        }
+
+        if(mapJson.getBigDecimal_Zero("juros_manual")) juros = mapJson.getBigDecimal_Zero("juros_manual");
 
         //Se documento está com valor parcial, ajusta os valores de JMED também parcialmente
         if(daa01 != null && !valor.equals(daa01.getDaa01valor())) {
