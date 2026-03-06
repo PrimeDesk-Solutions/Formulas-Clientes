@@ -94,7 +94,9 @@ class SCF_Boleto_Itau extends RelatorioBase {
         if(eaa01id != null){ // Impressão SRF1009
             daa01ids = buscarIdsDocsSCFPeloIdDocSRF(eaa01id);
 
-            if(daa01ids == null) return null;
+            if(daa01ids == null || daa01ids.size() == 0) daa01ids = buscarIdsDocDerivados(eaa01id) // Busca os documentos derivados do transmutado
+
+            if(daa01ids == null || daa01ids.size() == 0) return
 
             daa01s = buscarDadosBoletoPelosIds(daa01ids);
         }else if(daa01id != null){ // Impressão SCF0101
@@ -307,24 +309,50 @@ class SCF_Boleto_Itau extends RelatorioBase {
                 " LEFT JOIN Aah01 ON aah01id = abb01tipo " +
                 " LEFT JOIN daa0102 daa0102 on daa0102.daa0102doc = daa01id " +
                 getSamWhere().getWherePadrao(" WHERE ", Daa01.class) +
-                "and daa01id in (:daa01id) "
-        " order by abb01.abb01num, abb01.abb01parcela"
+                "and daa01id in (:daa01id) "+
+                " order by abb01.abb01num, abb01.abb01parcela"
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("daa01id", daa01id));
     }
 
     private List<Long> buscarIdsDocsSCFPeloIdDocSRF(Long eaa01id) {
         String sql = " SELECT daa01id " +
-                " FROM Daa01 " +
-                " INNER JOIN Abb0102 ON daa01central = abb0102doc " +
-                " INNER JOIN Abb01 ON daa01central = abb01id " +
-                getSamWhere().getWherePadrao(" WHERE ", Daa01.class) +
-                " AND abb0102central = (SELECT eaa01central FROM Eaa01 WHERE eaa01id = :eaa01id) " +
-                " AND daa01rp = 0 AND daa01previsao = 0 AND daa01banco IS NOT NULL " +
-                " AND abb01quita = 0 ";
+                    " FROM Daa01 " +
+                    " INNER JOIN Abb0102 ON daa01central = abb0102doc " +
+                    " INNER JOIN Abb01 ON daa01central = abb01id " +
+                    getSamWhere().getWherePadrao(" WHERE ", Daa01.class) +
+                    " AND abb0102central = (SELECT eaa01central FROM Eaa01 WHERE eaa01id = :eaa01id) " +
+                    " AND daa01rp = 0 AND daa01previsao = 0 AND daa01banco IS NOT NULL " +
+                    "AND abb01status <> 2";
 
         List<Long> daa01ids = getAcessoAoBanco().obterListaDeLong(sql, Parametro.criar("eaa01id", eaa01id));
         return daa01ids;
+    }
+    private List<Long> buscarIdsDocDerivados(Long eaa01id){
+        // Documento transmutado
+        String sql = " SELECT abb01id " +
+                        " FROM Daa01 " +
+                        " INNER JOIN Abb0102 ON daa01central = abb0102doc " +
+                        " INNER JOIN Abb01 ON daa01central = abb01id " +
+                        getSamWhere().getWherePadrao(" WHERE ", Daa01.class) +
+                        " AND abb0102central = (SELECT eaa01central FROM Eaa01 WHERE eaa01id = :eaa01id) " +
+                        " AND daa01rp = 0 AND daa01previsao = 0 " +
+                        "AND abb01status = 2";
+
+        List<Long> daa01ids = getAcessoAoBanco().obterListaDeLong(sql, Parametro.criar("eaa01id", eaa01id));
+
+        if(daa01ids == null || daa01ids.size() == 0) return
+
+        String sqlDerivados = " SELECT DISTINCT daa01id " +
+                                " FROM Daa01 " +
+                                " INNER JOIN Abb0102 ON daa01central = abb0102doc " +
+                                " INNER JOIN Abb01 ON daa01central = abb01id " +
+                                getSamWhere().getWherePadrao(" WHERE ", Daa01.class) +
+                                " AND abb0102central IN (:idDocsOrigem) " +
+                                " AND daa01rp = 0 AND daa01previsao = 0 AND daa01banco IS NOT NULL ";
+
+        return getAcessoAoBanco().obterListaDeLong(sqlDerivados, Parametro.criar("idDocsOrigem", daa01ids));
+
     }
 
 
