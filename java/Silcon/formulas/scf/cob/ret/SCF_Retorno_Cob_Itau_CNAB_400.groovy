@@ -74,6 +74,12 @@ class SCF_Retorno_Cob_Itau_CNAB_400 extends FormulaBase {
                         }
                     }
 
+                    if(daa01.daa0102s == null || daa01.daa0102s.size() == 0){
+                        String inconsistencia = "Documento número: " + daa01.daa01central.abb01num + ", série: " + daa01.daa01central.abb01serie + ", parcela: " + daa01.daa01central.abb01parcela + " não foi enviado ao banco, porém consta no retorno.";
+						inconsistencias.add(inconsistencia);
+						validouDocumento = false;
+                    }
+
                     String descricaoOcor = buscarDescricaoOcorrencia(txt.getSubString(108, 110));
                     if(descricaoOcor == null){
                         String inconsistencia = "A ocorrência " + txt.getSubString(108, 110) + " informada no retorno para o documento número: " + daa01.daa01central.abb01num + ", série: " + daa01.daa01central.abb01serie + ", parcela: " + daa01.daa01central.abb01parcela + " não foi encontrada nos parâmetros de retorno do banco.";
