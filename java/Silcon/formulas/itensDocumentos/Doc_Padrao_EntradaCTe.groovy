@@ -4,7 +4,8 @@
 package Silcon.formulas.itensDocumentos
 
 import sam.model.entities.aa.Aac13;
-import sam.model.entities.ab.Abd02;
+import sam.model.entities.ab.Abd02
+import sam.model.entities.ab.Abe0101;
 import sam.server.samdev.utils.Parametro;
 import br.com.multiorm.criteria.criterion.Criterions
 import br.com.multitec.utils.ValidacaoException
@@ -70,6 +71,7 @@ public class Doc_Padrao_EntradaCTe extends FormulaBase {
     private Abd01 abd01;
     private Abd02 abd02;
     private Abe01 abe01;
+    private Abe0101 abe0101principal;
     private Abe02 abe02;
     private Abg01 abg01;
     private Abm01 abm01;
@@ -127,18 +129,23 @@ public class Doc_Padrao_EntradaCTe extends FormulaBase {
         //Dados da Entidade
         abe01 = getSession().get(Abe01.class, abb01.abb01ent.abe01id);
 
+        // Endereço principal entidade
+        abe0101principal = getSession().get(Abe0101.class, Criterions.where("abe0101principal = 1 and abe0101ent = " + abe01.abe01id));
+
+        if(abe0101principal == null) throw new ValidacaoException("Não foi encontrado endereço principal no cadastro da entidade.");
+
         //Endereço principal da entidade no documento
         for (Eaa0101 eaa0101 : eaa01.eaa0101s) {
             if (eaa0101.eaa0101principal == 1) {
                 eaa0101princ = eaa0101;
             }
         }
-        
-        if (eaa0101princ == null) throw new ValidacaoException("Não foi encontrado o endereço principal da entidade no documento.");
 
-        municipioEnt = eaa0101princ.eaa0101municipio != null ? getSession().get(Aag0201.class, Criterions.eq("aag0201id", eaa0101princ.eaa0101municipio.aag0201id)) : null;
+        Long idMunicipioPrincipalEntidade = abe0101principal.abe0101municipio.aag0201id;//eaa0101princ == null ? abe0101principal.abe0101municipio.aag0201id : eaa0101princ.eaa0101municipio.aag0201id;        Long idPaisEntidade = eaa0101princ == null ? abe0101principal.abe0101pais.aag01id : eaa0101princ.eaa0101pais != null ? eaa0101princ.eaa0101pais.aag01id : null;
+        Long idPaisEntidade = abe0101principal.abe0101pais != null ? abe0101principal.abe0101pais.aag01id : null;//eaa0101princ == null ? abe0101principal.abe0101pais.aag01id : eaa0101princ.eaa0101pais != null ? eaa0101princ.eaa0101pais.aag01id : null;
+        municipioEnt = idMunicipioPrincipalEntidade != null ? getSession().get(Aag0201.class, Criterions.eq("aag0201id", idMunicipioPrincipalEntidade)) : null;
         ufEnt = municipioEnt != null ? getSession().get(Aag02.class, municipioEnt.aag0201uf.aag02id) : null;
-        aag01 = eaa0101princ.eaa0101pais != null ? getSession().get(Aag01.class, Criterions.eq("aag01id", eaa0101princ.eaa0101pais.aag01id)) : null;
+        aag01 = idPaisEntidade != null ? getSession().get(Aag01.class, Criterions.eq("aag01id", idPaisEntidade)) : null;
 
         //Empresa
         aac10 = getSession().get(Aac10.class, obterEmpresaAtiva().aac10id);
@@ -162,16 +169,16 @@ public class Doc_Padrao_EntradaCTe extends FormulaBase {
 
         //Dados Fiscais do item
         abm12 = abm0101 != null && abm0101.abm0101fiscal != null ? getSession().get(Abm12.class, abm0101.abm0101fiscal.abm12id) : null;
-        if (abm12 == null) throw new ValidacaoException("Não foi encontrada a configuração fiscal do item: " + abm01.abm01codigo);
-        if (abm12.abm12tipo == null) throw new ValidacaoException("Necessário informar o tipo fiscal do item: " + abm01.abm01codigo);
+//        if (abm12 == null) throw new ValidacaoException("Não foi encontrada a configuração fiscal do item: " + abm01.abm01codigo);
+//        if (abm12.abm12tipo == null) throw new ValidacaoException("Necessário informar o tipo fiscal do item: " + abm01.abm01codigo);
 
         //Dados Comerciais do item
         abm13 = abm0101 != null && abm0101.abm0101comercial != null ? getSession().get(Abm13.class, abm0101.abm0101comercial.abm13id) : null;
-        if (abm13 == null) throw new ValidacaoException("Não foi encontrada as configurações comerciais do item: " + abm01.abm01codigo);
+//        if (abm13 == null) throw new ValidacaoException("Não foi encontrada as configurações comerciais do item: " + abm01.abm01codigo);
 
         //Fatores de Conv. da Unid de Compra para Estoque
         abm1301 = abm13 == null ? null : eaa0103.eaa0103umComl == null ? null : getSession().get(Abm1301.class, Criterions.where("abm1301cc = " + abm13.abm13id + " AND abm1301umc = " + eaa0103.eaa0103umComl.aam06id));
-        if (abm1301 == null) throw new ValidacaoException("Não foi informado fator de conversão no cadastro do item " + abm01.abm01codigo);
+//        if (abm1301 == null) throw new ValidacaoException("Não foi informado fator de conversão no cadastro do item " + abm01.abm01codigo);
         //Unidade de Medida
         aam06 = abm13 != null && abm13.abm13umv != null ? getSession().get(Aam06.class, abm13.abm13umv.aam06id) : null;
 
@@ -252,12 +259,12 @@ public class Doc_Padrao_EntradaCTe extends FormulaBase {
             }
 
             // Converte Qt.Documento para Volume
-            if (jsonEaa0103.getBigDecimal_Zero("volumes") >= 0) {
-                jsonEaa0103.put("volumes", eaa0103.eaa0103qtComl * abm13.abm13fcVW);
-                BigDecimal volume = jsonEaa0103.getBigDecimal_Zero("volumes");
-                BigDecimal volumes = new BigDecimal(volume).setScale(0, BigDecimal.ROUND_UP);
-                jsonEaa0103.put("volumes", volumes);
-            }
+//            if (jsonEaa0103.getBigDecimal_Zero("volumes") >= 0) {
+//                jsonEaa0103.put("volumes", eaa0103.eaa0103qtComl * abm13.abm13fcVW);
+//                BigDecimal volume = jsonEaa0103.getBigDecimal_Zero("volumes");
+//                BigDecimal volumes = new BigDecimal(volume).setScale(0, BigDecimal.ROUND_UP);
+//                jsonEaa0103.put("volumes", volumes);
+//            }
 
             // Peso Bruto
             jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto).round(3));

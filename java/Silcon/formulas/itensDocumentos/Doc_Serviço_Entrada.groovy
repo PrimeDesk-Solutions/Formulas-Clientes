@@ -308,28 +308,28 @@ public class Doc_Serviço_Entrada extends FormulaBase {
 
             eaa0103.eaa0103totDoc = eaa0103.eaa0103totDoc.round(2);
 
-            // Preenche o CST de ICMS do Item
-            String cstIcms = buscarCstICMS();
-
-            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cstIcms));
+//            // Preenche o CST de ICMS do Item
+//            String cstIcms = buscarCstICMS();
+//
+//            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cstIcms));
 
             // Calcula ICMS Itens
             calcularICMS(contribICMS);
 
-            // ICMS Isento
-            if (eaa0103.eaa0103cstIcms.aaj10codigo == '040' || eaa0103.eaa0103cstIcms.aaj10codigo == '240' ||
-                eaa0103.eaa0103cstIcms.aaj10codigo == '041' || eaa0103.eaa0103cstIcms.aaj10codigo == '241' || eaa0103.eaa0103cstIcms.aaj10codigo == '090') {
-
-                jsonEaa0103.put("icms_isento", eaa0103.eaa0103totDoc);
-                jsonEaa0103.put("bc_icms", new BigDecimal(0));
-                jsonEaa0103.put("_reduc_bc_icms", new BigDecimal(0));
-                jsonEaa0103.put("aliq_icms", new BigDecimal(0));
-                jsonEaa0103.put("icms", new BigDecimal(0));
-                jsonEaa0103.put("icms_outras", new BigDecimal(0));
-            }
+//            // ICMS Isento
+//            if (eaa0103.eaa0103cstIcms.aaj10codigo == '040' || eaa0103.eaa0103cstIcms.aaj10codigo == '240' ||
+//                eaa0103.eaa0103cstIcms.aaj10codigo == '041' || eaa0103.eaa0103cstIcms.aaj10codigo == '241' || eaa0103.eaa0103cstIcms.aaj10codigo == '090') {
+//
+//                jsonEaa0103.put("icms_isento", eaa0103.eaa0103totDoc);
+//                jsonEaa0103.put("bc_icms", new BigDecimal(0));
+//                jsonEaa0103.put("_reduc_bc_icms", new BigDecimal(0));
+//                jsonEaa0103.put("aliq_icms", new BigDecimal(0));
+//                jsonEaa0103.put("icms", new BigDecimal(0));
+//                jsonEaa0103.put("icms_outras", new BigDecimal(0));
+//            }
 
             // Total Item + Serviço
-            if (abm01.abm01tipo == 2) {
+            if (abm01.abm01tipo == 3) {
                 jsonEaa0103.put("totitensservico", eaa0103.eaa0103qtComl * eaa0103.eaa0103unit);
                 eaa0103.eaa0103total = jsonEaa0103.getBigDecimal_Zero("totitensservico");
                 jsonEaa0103.put("total_servico", jsonEaa0103.getBigDecimal_Zero("totitensservico") + jsonEaa0103.getBigDecimal_Zero("outras_despesas"));
@@ -458,7 +458,7 @@ public class Doc_Serviço_Entrada extends FormulaBase {
 
     private void calularImpostos() {
         // Total do item + serviço
-        if (abm01.abm01tipo == 2) {
+        if (abm01.abm01tipo == 3) {
             jsonEaa0103.put("totitensservico", eaa0103.eaa0103qtComl * eaa0103.eaa0103unit);
             eaa0103.eaa0103total = jsonEaa0103.getBigDecimal_Zero("totitensservico");
             jsonEaa0103.put("total_servico", jsonEaa0103.getBigDecimal_Zero("totitensservico") + jsonEaa0103.getBigDecimal_Zero("outras_despesas"));
