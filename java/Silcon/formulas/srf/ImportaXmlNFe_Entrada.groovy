@@ -286,7 +286,7 @@ class ImportaXmlNFe_Entrada extends FormulaBase {
 
                 //Grupo Tributação do ICMSSN202
                 ElementXml elementICMSSN202 = elementICMS.getChildNode("ICMSSN202");
-                if(elementICMSSN201 != null) {
+                if(elementICMSSN202 != null) {
                     setarValorJson(eaa0103json, getCampo("245.42-N19","pMVAST"), obterValorXml(elementICMSSN202, "pMVAST", 2));
                     setarValorJson(eaa0103json, getCampo("245.43-N20","pRedBCST"), obterValorXml(elementICMSSN202, "pRedBCST", 2));
                     setarValorJson(eaa0103json, getCampo("245.44-N21","vBCST"), obterValorXml(elementICMSSN202, "vBCST", 2));
