@@ -142,49 +142,49 @@ class ImportaXmlCTe_Entrada extends FormulaBase {
 
     private void setarMunicipiosNosEnderecosSaidaEntrega(ElementXml elementinfCte) {
         ElementXml elementide = elementinfCte.getChildNode("ide");
-        if(elementide == null) return null;
-
-        //Removendo endereços de saída e entrega
-        List<Eaa0101> eaa0101sRemover = new ArrayList<>();
-        if(eaa01.eaa0101s != null && eaa01.eaa0101s.size() > 0) {
-            for(Eaa0101 eaa0101 : eaa01.eaa0101s) {
-                if(eaa0101.getEaa0101saida_Zero() == 1 || eaa0101.getEaa0101entrega_Zero() == 1) {
-                    eaa0101sRemover.add(eaa0101);
+        if(elementide != null){
+            //Removendo endereços de saída e entrega
+            List<Eaa0101> eaa0101sRemover = new ArrayList<>();
+            if(eaa01.eaa0101s != null && eaa01.eaa0101s.size() > 0) {
+                for(Eaa0101 eaa0101 : eaa01.eaa0101s) {
+                    if(eaa0101.getEaa0101saida_Zero() == 1 || eaa0101.getEaa0101entrega_Zero() == 1) {
+                        eaa0101sRemover.add(eaa0101);
+                    }
                 }
             }
-        }
-        if(eaa0101sRemover != null && eaa0101sRemover.size() > 0) {
-            eaa01.eaa0101s.removeAll(eaa0101sRemover);
-        }
+            if(eaa0101sRemover != null && eaa0101sRemover.size() > 0) {
+                eaa01.eaa0101s.removeAll(eaa0101sRemover);
+            }
 
-        //Município de saída
-        String cMunIni = elementide.getChildValue("cMunIni");
-        Aag0201 aag0201Saida = buscarMunicipioPeloCodigoIBGE(cMunIni);
-        if(aag0201Saida != null) {
-            Eaa0101 eaa0101Saida = new Eaa0101();
-            eaa0101Saida.eaa0101municipio = aag0201Saida;
-            eaa0101Saida.eaa0101ti = 0;
-            eaa0101Saida.eaa0101saida = 1;
-            eaa0101Saida.eaa0101principal = 0;
-            eaa0101Saida.eaa0101entrega = 0;
-            eaa0101Saida.eaa0101cobranca = 0;
-            eaa0101Saida.eaa0101outros = 0;
-            eaa01.addToEaa0101s(eaa0101Saida);
-        }
+            //Município de saída
+            String cMunIni = elementide.getChildValue("cMunIni");
+            Aag0201 aag0201Saida = buscarMunicipioPeloCodigoIBGE(cMunIni);
+            if(aag0201Saida != null) {
+                Eaa0101 eaa0101Saida = new Eaa0101();
+                eaa0101Saida.eaa0101municipio = aag0201Saida;
+                eaa0101Saida.eaa0101ti = 0;
+                eaa0101Saida.eaa0101saida = 1;
+                eaa0101Saida.eaa0101principal = 0;
+                eaa0101Saida.eaa0101entrega = 0;
+                eaa0101Saida.eaa0101cobranca = 0;
+                eaa0101Saida.eaa0101outros = 0;
+                eaa01.addToEaa0101s(eaa0101Saida);
+            }
 
-        //Município de entrega
-        String cMunFim = elementide.getChildValue("cMunFim");
-        Aag0201 aag0201Entrega = buscarMunicipioPeloCodigoIBGE(cMunFim);
-        if(aag0201Entrega != null) {
-            Eaa0101 eaa0101Entrega = new Eaa0101();
-            eaa0101Entrega.eaa0101municipio = aag0201Entrega;
-            eaa0101Entrega.eaa0101ti = 0;
-            eaa0101Entrega.eaa0101saida = 0;
-            eaa0101Entrega.eaa0101principal = 0;
-            eaa0101Entrega.eaa0101entrega = 1;
-            eaa0101Entrega.eaa0101cobranca = 0;
-            eaa0101Entrega.eaa0101outros = 0;
-            eaa01.addToEaa0101s(eaa0101Entrega);
+            //Município de entrega
+            String cMunFim = elementide.getChildValue("cMunFim");
+            Aag0201 aag0201Entrega = buscarMunicipioPeloCodigoIBGE(cMunFim);
+            if(aag0201Entrega != null) {
+                Eaa0101 eaa0101Entrega = new Eaa0101();
+                eaa0101Entrega.eaa0101municipio = aag0201Entrega;
+                eaa0101Entrega.eaa0101ti = 0;
+                eaa0101Entrega.eaa0101saida = 0;
+                eaa0101Entrega.eaa0101principal = 0;
+                eaa0101Entrega.eaa0101entrega = 1;
+                eaa0101Entrega.eaa0101cobranca = 0;
+                eaa0101Entrega.eaa0101outros = 0;
+                eaa01.addToEaa0101s(eaa0101Entrega);
+            }
         }
     }
 
