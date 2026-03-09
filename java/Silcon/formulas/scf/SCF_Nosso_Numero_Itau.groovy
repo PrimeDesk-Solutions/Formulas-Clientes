@@ -1,6 +1,9 @@
 package Silcon.formulas.scf
 
+import br.com.multiorm.criteria.criterion.Criterion
+import br.com.multiorm.criteria.criterion.Criterions
 import sam.dicdados.FormulaTipo
+import sam.model.entities.ab.Abb01
 import sam.model.entities.ab.Abf01
 import sam.model.entities.da.Daa01
 import sam.server.samdev.formula.FormulaBase
@@ -16,12 +19,43 @@ class SCF_Nosso_Numero_Itau extends FormulaBase {
 
     @Override
     public void executar() {
-        Daa01 daa01 = get("daa01");
         Abf01 abf01 = get("abf01");
         Long ultimoNossoNumero = get("ultimoNossoNumero");
-        Long nossoNumero = 0;
-        //Nosso número sequencialsb
-        nossoNumero = ++ultimoNossoNumero;
+
+
+        Daa01 daa01 = get("daa01");
+
+        Abb01 abb01 = getSession().createCriteria(Abb01.class).addWhere(Criterions.eq("abb01id", daa01.daa01central.abb01id)).get();
+        Integer numDoc = abb01.abb01num;
+        String parcela = abb01.abb01parcela.trim();
+        String complemento = "000";
+
+        if(!"0".equals(parcela) && parcela != null ){
+            if(parcela != null && parcela.contains("/")){
+                Integer index = parcela.indexOf("/");
+                String parcelas = parcela.substring(0, index);
+
+                if(parcelas.length() == 1){
+                    complemento = "00" + parcelas;
+                }else if(parcelas.length() == 2){
+                    complemento = "0" + parcelas;
+                }else{
+                    complemento = parcelas
+                }
+            }else{
+                if(parcela != null && parcela.matches("\\d+")){
+                    if(parcela.length() == 1){
+                        complemento = "00" + parcela;
+                    }else if(parcela.length() == 2){
+                        complemento = "0" + parcela
+                    }else{
+                        complemento = parcela;
+                    }
+                }
+            }
+        }
+
+        Long nossoNumero = Long.parseLong(numDoc + complemento)
 
         put("nossoNumero", nossoNumero);
 
