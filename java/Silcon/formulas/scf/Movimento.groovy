@@ -1,4 +1,10 @@
-package Silcon.formulas.scf;
+package multitec.formulas.scf
+
+import br.com.multiorm.ColumnType
+import br.com.multiorm.criteria.criterion.Criterion
+import br.com.multiorm.criteria.criterion.Criterions
+import sam.model.entities.ab.Abb0101
+import sam.model.entities.da.Daa0101;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -13,8 +19,7 @@ import sam.server.samdev.utils.Parametro;
 import sam.server.scf.service.SCFService;
 
 /**
- *
- * Fórmula para manipular o documento financeiro no programa SCF0150 - Movimento
+ * Fórmula para manipular Movimento Financeiro
  *
  */
 public class Movimento extends FormulaBase{
@@ -31,57 +36,78 @@ public class Movimento extends FormulaBase{
         if(daa1001.daa1001central != null && daa1001.daa1001central.abb01id != null)daa01 = getAcessoAoBanco().buscarRegistroUnico("SELECT * FROM Daa01 WHERE daa01central = :abb01id ", Parametro.criar("abb01id", daa1001.daa1001central.abb01id));
 
         def valor = daa1001.daa1001valor;
-        BigDecimal juros = round(mapJson.getBigDecimal_Zero("juros"),2);
-        BigDecimal multa = round(mapJson.getBigDecimal_Zero("multa"),2);
-        BigDecimal encargos = round(mapJson.getBigDecimal_Zero("encargos"),2);
-        BigDecimal desconto = round(mapJson.getBigDecimal_Zero("desconto"),2);
-
 
         //Juros = juros * qtd dias em atraso
         //Multa: considerar multa somente se estiver em atraso
-        def diasAtraso = scfService.calculaDiasDeAtraso(daa1001);
-        if (diasAtraso > 0 && mapJson.getInteger("calculouJuros") != 1 ) {
-            juros = round(mapJson.getBigDecimal_Zero("juros") * diasAtraso,2);
-            multa = round(mapJson.getBigDecimal_Zero("multa"),2);
-
-            mapJson.put("calculouJuros", 1)
+        def juros = null;
+        def multa = null;
+        def diasAtraso = scfService.calculaDiasDeAtraso(daa1001);//calculaDiasDeAtraso(daa1001);
+        if (diasAtraso > 0) {
+            juros = mapJson.getBigDecimal("juros") == null ? null : round(mapJson.getBigDecimal("juros") * diasAtraso, 2);
+            multa = mapJson.getBigDecimal("multa") == null ? null : round(mapJson.getBigDecimal("multa"), 2);
         }
 
-        LocalDate dtLimDesc = mapJson.getDate("dt_limite_desc");
-//        if (dtLimDesc == null  || DateUtils.dateDiff(dtLimDesc, daa1001.daa1001dtPgto, ChronoUnit.DAYS) <= 0) { // Negativo -> Está dentro da data de desconto. Positivo -> Passou da data
-//            desconto = mapJson.getBigDecimal_Zero("desconto");
-//            juros = new BigDecimal(0);
-//            multa = new BigDecimal(0);
-//        }
+        //Encargos
+        def encargos = mapJson.getBigDecimal("encargos") == null ? null : round(mapJson.getBigDecimal("encargos"), 2);
 
-        if(mapJson.getBigDecimal_Zero("juros_manual")) juros = mapJson.getBigDecimal_Zero("juros_manual");
+        //Desconto: considerar desconto somente quando a data de pagamento for menor ou igual a data limite para desconto
+        def desconto = mapJson.getBigDecimal("desconto") == null ? null : round(mapJson.getBigDecimal("desconto"), 2);
+        LocalDate dtLimDesc = mapJson.getDate("dtlimdesc");
+//        if (dtLimDesc == null  || DateUtils.dateDiff(dtLimDesc, daa1001.daa1001dtPgto, ChronoUnit.DAYS) <= 0) {
+//            desconto = mapJson.getBigDecimal("desconto") == null ? null : round(mapJson.getBigDecimal("desconto"), 2);
+//        }
 
         //Se documento está com valor parcial, ajusta os valores de JMED também parcialmente
         if(daa01 != null && !valor.equals(daa01.getDaa01valor())) {
             def fatorParcial = round(valor / daa01.getDaa01valor(), 6);
 
-            juros = round(juros * fatorParcial, 2);
-            multa = round(multa * fatorParcial, 2);
-            encargos = round(encargos * fatorParcial, 2);
-            desconto = round(desconto * fatorParcial, 2);
+            if(juros != null) juros = round(juros * fatorParcial, 2);
+            if(multa != null) multa = round(multa * fatorParcial, 2);
+            if(encargos != null) encargos = round(encargos * fatorParcial, 2);
+            if(desconto != null) desconto = round(desconto * fatorParcial, 2);
         }
 
-        desconto = desconto.abs() * -1;
-
         //Setar JMED calculados, nos campos livres de quitação
-        mapJson.put("juros", round(juros,2));
-        mapJson.put("multa", round(multa,2));
-        mapJson.put("encargos", round(encargos,2));
-        mapJson.put("desconto", round(desconto,2));
+        def jurosq = mapJson.getBigDecimal("jurosq") == null ? juros : round(mapJson.getBigDecimal("jurosq"), 2);
+        mapJson.put("jurosq", jurosq);
+
+        def multaq = mapJson.getBigDecimal("multaq") == null ? multa : round(mapJson.getBigDecimal("multaq"), 2);
+        mapJson.put("multaq", multaq);
+
+        def encargosq = mapJson.getBigDecimal("encargosq") == null ? encargos : round(mapJson.getBigDecimal("encargosq"), 2);
+        mapJson.put("encargosq", encargosq);
+
+        BigDecimal descontoq = mapJson.getBigDecimal("descontoq") == null ? desconto : round(mapJson.getBigDecimal("descontoq"), 2);
+        if(descontoq != null) descontoq = descontoq.abs() * -1
+        mapJson.put("descontoq", descontoq);
 
         //def valorLiquido = valor + jurosq + encargosq + multaq + descontoq;
-        BigDecimal valorLiquido = valor + juros + multa + encargos + desconto;
+        def valorLiquido = valor;
+        if(jurosq != null) valorLiquido = valorLiquido + jurosq;
+        if(multaq != null) valorLiquido = valorLiquido + multaq;
+        if(encargosq != null) valorLiquido = valorLiquido + encargosq;
+        if(descontoq != null) valorLiquido = valorLiquido + descontoq;
 
         daa1001.daa1001liquido = round(valorLiquido, 2);
+    }
+    public Integer calculaDiasDeAtraso(Daa1001 daa1001) {
+        if (daa1001.getDaa1001central() == null) {
+            return 0;
+        } else {
+            Long abb01id = daa1001.getDaa1001central().getAbb01id();
+            Abb0101 buscarInteracaoPelaUK = getSession().createCriteria(Abb0101.class).addWhere(Criterions.where("abb0101central = " + abb01id + " AND abb0101tabela = 'Daa01'")).get(ColumnType.ENTITY)
+            if (buscarInteracaoPelaUK != null) {
+                Daa01 daa01 = getSession().createCriteria(Daa01.class).addFields(new String[]{"daa01id, daa01dtVctoR"}).addWhere(Criterions.eq("daa01central", abb01id)).get(ColumnType.ENTITY);
+                Long days = DateUtils.dateDiff(daa01.getDaa01dtVctoR(), daa1001.getDaa1001dtPgto(), ChronoUnit.DAYS);
+                return days.intValue();
+            } else {
+                return 0;
+            }
+        }
     }
     @Override
     public FormulaTipo obterTipoFormula() {
         return FormulaTipo.SCF_LCTOS_DE_MOVIMENTO;
     }
 }
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNDAifQ==
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNDgifQ==
