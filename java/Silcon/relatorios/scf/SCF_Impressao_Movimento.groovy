@@ -46,10 +46,11 @@ public class SCF_Impressao_Movimento extends RelatorioBase {
     private List<TableMap> buscarDadosRelatorio(Long idMovimento){
         String sql = "SELECT daa1001mov AS mov, daa1001valor AS valor, daa1001liquido AS liquido, " +
                 "aah01codigo AS codTipoDoc, aah01nome AS tipoDoc, abb01num AS numDoc, abb01parcela AS parcela, " +
-                "abe01codigo AS codEntidade, abe01nome AS nomeEntidade, CAST(daa1001json ->> 'desconto' AS NUMERIC(18,6)) AS desconto, " +
-                "CAST(daa1001json ->> 'multa' AS NUMERIC(18,6)) AS multa, " +
-                "CAST(daa1001json ->> 'juros' AS NUMERIC(18,6)) AS juros, " +
-                "CAST(daa1001json ->> 'encargos' AS NUMERIC(18,6)) AS encargos, daa10nome AS nomeMovimento " +
+                "abe01codigo AS codEntidade, abe01nome AS nomeEntidade, " +
+                "CAST(daa1001json ->> 'descontoq' AS NUMERIC(18,6)) AS desconto, " +
+                "CAST(daa1001json ->> 'multaq' AS NUMERIC(18,6)) AS multa, " +
+                "CAST(daa1001json ->> 'jurosq' AS NUMERIC(18,6)) AS juros, " +
+                "CAST(daa1001json ->> 'encargosq' AS NUMERIC(18,6)) AS encargos, daa10nome AS nomeMovimento " +
                 "FROM daa10 " +
                 "INNER JOIN daa1001 ON daa1001movim = daa10id " +
                 "INNER JOIN abb01 ON abb01id = daa1001central " +
