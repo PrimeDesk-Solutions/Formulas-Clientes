@@ -194,7 +194,7 @@ public class SCF_Documentos extends RelatorioBase{
         String orderBy = agrup == "D" ? " order by abb11.abb11codigo ASC,daa01011.daa01011valor, abf10.abf10codigo ASC, " + orderSeq :
                 agrup == "N" ? " order by abf10.abf10codigo ASC, abb11.abb11codigo ASC, " + orderSeq :
                         agrup == "Nu" ? "order by "  + orderSeq :
-                                agrup == "E" ? "order by abe01.abe01codigo ASC, abb01.abb01parcela ASC, "  + orderSeq :
+                                agrup == "E" ? "order by abe01.abe01na, abb01.abb01parcela ASC, "  + orderSeq :
                                         agrup == "T" ? "order by aah01.aah01codigo ASC, abb01.abb01parcela ASC, "  + orderSeq :
                                                 agrup == "V" ? "order by daa01.daa01dtVctoN ASC,daa01id, abb01.abb01parcela ASC, "  + orderSeq :
                                                         agrup == "R" ? "order by abe01Rep.abe01codigo ASC, "  + orderSeq :
@@ -247,6 +247,16 @@ public class SCF_Documentos extends RelatorioBase{
             }
         }
 
+        String campoJuros = ""
+        if(classe.equals(0) || classe.equals(2)){ // Receber ou A pagar
+            campoJuros = "CAST(daa01json ->> 'juros' AS numeric(18,6)) AS juros, ";
+        }else if(classe.equals(1) || classe.equals(3)){ // Recebidos ou pagos
+            campoJuros = "CAST(daa01json ->> 'jurosq' AS numeric(18,6)) AS juros, ";
+        }else { // Receber/Recebidos ou A pagar/pagos
+            campoJuros = "CASE WHEN daa01.daa01dtBaixa IS NULL THEN CAST(daa01json ->> 'juros' AS numeric(18,6)) ELSE CAST(daa01json ->> 'jurosq' AS numeric(18,6)) END AS juros, ";
+        }
+
+
         Parametro paramOpc = Parametro.criar("opc", opc)
         Parametro paramEmpresa = Emprs != null &&   Emprs.size() > 0 ? Parametro.criar("idEmprs",   Emprs) : Parametro.criar("idEmprs", idsGc);
         Parametro paramDepartamento = departamento != null && departamento.size() > 0 ? Parametro.criar("idDepartamento", departamento) : null;
@@ -267,10 +277,12 @@ public class SCF_Documentos extends RelatorioBase{
                 " daa01.daa01dtVctoN, daa01.daa01dtVctoR, daa01.daa01dtPgto, daa01.daa01dtBaixa,  "+
                 (agrup == "D" || agrup == "N" || agrup == "NE" || agrup == "DN" ? "daa01011.daa01011valor AS valor, " : "daa01valor AS valor, ")+
                 " aac10.aac10codigo as codemp, aac10.aac10na as nomeemp, abf15codigo, abf15nome, abf16codigo, abf16nome, " +
-                " abe01Rep.abe01codigo as repcodigo, abe01Rep.abe01na as repna, daa01previsao, daa01json, cast(daa01json ->> 'juros' as numeric(18,6)) AS juros, "+
+                " abe01Rep.abe01codigo as repcodigo, abe01Rep.abe01na as repna, daa01previsao, daa01json, "+ campoJuros +
                 " cast(daa01json ->> 'juros' as numeric(18,6)) + cast(daa01json ->> 'multa' as numeric(18,6)) + cast(daa01json ->> 'encargos' as numeric(18,6)) as jme, "+
-                "case when cast(daa01json ->> 'desconto' as numeric(18,6)) is null then 0.000000 else cast(daa01json ->> 'desconto' as numeric(18,6)) end as desconto, "+
-                (agrup == "D" || agrup == "N" ? "case when cast(daa01json ->> 'desconto' as numeric(18,6)) is null then daa01011.daa01011valor + 0.000000 else daa01011.daa01011valor + cast(daa01json ->> 'desconto' as numeric(18,6)) end AS liquido " : "case when cast(daa01json ->> 'desconto' as numeric(18,6)) is null then daa01valor + 0.000000 else daa01valor + cast(daa01json ->> 'desconto' as numeric(18,6)) end AS liquido ")+
+                " CASE WHEN daa01.daa01dtBaixa IS NULL THEN COALESCE(CAST(daa01json ->> 'desconto' as numeric(18,6)), 0.000000) ELSE COALESCE(CAST(daa01json ->> 'desconto' as numeric(18,6)), 0.000000) END AS desconto, "+
+                (agrup == "D" || agrup == "N" ?
+                "CASE WHEN daa01.daa01dtBaixa IS NULL THEN COALESCE(cast(daa01json ->> 'desconto' as numeric(18,6)), 0) + daa01011.daa01011valor ELSE COALESCE(cast(daa01json ->> 'descontoq' as numeric(18,6)), 0) + daa01011.daa01011valor end AS liquido " :
+                "CASE WHEN daa01.daa01dtBaixa IS NULL THEN COALESCE(cast(daa01json ->> 'desconto' as numeric(18,6)), 0) + daa01.daa01valor ELSE COALESCE(cast(daa01json ->> 'descontoq' as numeric(18,6)), 0) + daa01.daa01valor end AS liquido")+
                 " FROM Daa01 daa01 " +
                 //" INNER JOIN aac01 as aac01 ON daa01gc = aac01id" +
                 " INNER JOIN aac10 as aac10 ON daa01eg = aac10id "+
