@@ -1,5 +1,7 @@
 package Silcon.formulas.scf.cob.ret
 
+import br.com.multitec.utils.DateUtils
+
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -11,6 +13,8 @@ import sam.model.entities.da.Daa01
 import sam.server.samdev.formula.FormulaBase
 import sam.server.samdev.utils.Parametro
 import sam.server.scf.service.SCFService
+
+import java.time.temporal.ChronoUnit
 
 class SCF_Retorno_Cob_Itau_CNAB_400 extends FormulaBase {
 
@@ -76,8 +80,8 @@ class SCF_Retorno_Cob_Itau_CNAB_400 extends FormulaBase {
 
                     if(daa01.daa0102s == null || daa01.daa0102s.size() == 0){
                         String inconsistencia = "Documento número: " + daa01.daa01central.abb01num + ", série: " + daa01.daa01central.abb01serie + ", parcela: " + daa01.daa01central.abb01parcela + " não foi enviado ao banco, porém consta no retorno.";
-						inconsistencias.add(inconsistencia);
-						validouDocumento = false;
+                        inconsistencias.add(inconsistencia);
+                        validouDocumento = false;
                     }
 
                     String descricaoOcor = buscarDescricaoOcorrencia(txt.getSubString(108, 110));
@@ -93,48 +97,28 @@ class SCF_Retorno_Cob_Itau_CNAB_400 extends FormulaBase {
                         LocalDate dtPgto = LocalDate.parse( txt.getSubString(110, 116), formatter);
                         daa01.daa01dtPgto = dtPgto
                         daa01.daa01dtBaixa = dtBaixa
-                    }else {
-//                        String inconsistencia = "No Documento número: " + daa01.daa01central.abb01num + ", série: " + (daa01.daa01central.abb01serie == null ? "" : daa01.daa01central.abb01serie) + ", parcela: " + daa01.daa01central.abb01parcela + " não foi encontrada data de pagamento.";
-//                        inconsistencias.add(inconsistencia);
-                        LocalDate dtAtual = LocalDate.now()
-                        daa01.daa01dtPgto = dtAtual;
-                    }
 
+                        TableMap jsonDaa01 = daa01.daa01json == null ? new TableMap() : daa01.daa01json;
+                        Integer difDias = DateUtils.dateDiff(daa01.getDaa01dtVctoR(), daa01.getDaa01dtPgto(), ChronoUnit.DAYS);
+                        BigDecimal descontoQ = new BigDecimal(txt.getSubString(240, 253)) / 100;
+                        BigDecimal multaQ = new BigDecimal(txt.getSubString(266, 279)) / 100;
+                        BigDecimal jurosQ = difDias > 0 ? difDias * jsonDaa01.getBigDecimal_Zero("juros") : null;
+                        if(multaQ > 0) multaQ = multaQ - jurosQ
+
+                        jsonDaa01.put("multa", multaQ > 0 ? multaQ : null);
+                        jsonDaa01.put("juros", jurosQ != null ? jurosQ : null);
+                        jsonDaa01.put("desconto", descontoQ > 0 ? descontoQ : null);
+                        jsonDaa01.put("dias", difDias);
+
+                        daa01.daa01json = jsonDaa01
+                    }
 
                     BigDecimal vlrLiq = new BigDecimal(txt.getSubString(253, 266))
                     daa01.daa01liquido =   vlrLiq / 100
-
-                    TableMap jsons = daa01.daa01json == null ? new TableMap() : daa01.daa01json
-
-                    BigDecimal vlrDesconto = new BigDecimal(txt.getSubString(240, 253));
-                    BigDecimal vlrMulta = new BigDecimal(txt.getSubString(266, 279));
-                    vlrMulta = vlrMulta / 100;
-                    LocalDate dtLimiteDesc = daa01.daa01dtVctoN
-                    LocalDate dtPgto = daa01.daa01dtPgto;
-
-                    // Retira o Juros que vem somado a multa
-                    if(vlrMulta > 0){
-                        Integer difDias = dtPgto.compareTo(dtLimiteDesc);
-                        BigDecimal juros = jsons.getBigDecimal_Zero("juros")
-                        BigDecimal jurosPorDia = difDias * juros
-                        vlrMulta = vlrMulta - jurosPorDia
-                    }
-                    
-                    // Taxa Bancária
-                    //BigDecimal txBanco = new BigDecimal(txt.getSubString(175, 188));
-
-
-                    jsons.put("multa", vlrMulta)
-                    if(vlrMulta == 0) jsons.put("juros", new BigDecimal(0));
-                    jsons.put("desconto", vlrDesconto/100)
-                    jsons.put("dt_limite_desc", dtLimiteDesc)
-                    //jsons.put("tx_bancaria", txBanco/100);
-
-                    daa01.daa01json = jsons
-
                 }
 
                 tm.put("inconsistencias", inconsistencias);
+
                 /**
                  * Exibindo documentos
                  */
