@@ -33,16 +33,16 @@ public class Caixa extends FormulaBase{
         def juros = null;
         def multa = null;
         def diasAtraso = scfService.calculaDiasDeAtraso(daa01)//calculaDiasDeAtraso(daa01);
-        if (diasAtraso > 0) {
-            juros = mapJson.getBigDecimal("juros") == null ? null : mapJson.getBigDecimal("juros") * diasAtraso;
-            multa = mapJson.getBigDecimal("multa") == null ? null : mapJson.getBigDecimal("multa");
-        }
+//        if (diasAtraso > 0) {
+//            juros = mapJson.getBigDecimal("juros") == null ? null : mapJson.getBigDecimal("juros") * diasAtraso;
+//            multa = mapJson.getBigDecimal("multa") == null ? null : mapJson.getBigDecimal("multa");
+//        }
 
         //Encargos
-        def encargos = mapJson.getBigDecimal("encargos") == null ? null : mapJson.getBigDecimal("encargos");
+        def encargos = mapJson.getBigDecimal("encargosq") == null ? null : mapJson.getBigDecimal("encargos");
 
         //Desconto: considerar desconto somente quando a data de pagamento for menor ou igual a data limite para desconto
-        def desconto = mapJson.getBigDecimal("desconto") == null ? null : mapJson.getBigDecimal("desconto");
+        def desconto = mapJson.getBigDecimal("descontoq") == null ? null : mapJson.getBigDecimal("desconto");
         LocalDate dtLimDesc = mapJson.getDate("dtlimdesc");
 //        if (dtLimDesc == null  || DateUtils.dateDiff(dtLimDesc, daa01.daa01dtPgto, ChronoUnit.DAYS) <= 0) {
 //            desconto = mapJson.getBigDecimal("desconto") == null ? null : mapJson.getBigDecimal("desconto");
