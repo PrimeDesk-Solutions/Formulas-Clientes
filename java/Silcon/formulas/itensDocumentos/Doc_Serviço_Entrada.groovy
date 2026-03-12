@@ -275,13 +275,13 @@ public class Doc_Serviço_Entrada extends FormulaBase {
             jsonEaa0103.put("icms_outras", eaa0103.eaa0103total);
 
             //CalculoPIS
-            calculaPIS();
+            //calculaPIS();
 
             //CalculoCOFINS
-            calculaCOFINS();
+            //calculaCOFINS();
 
             // Total do Documento
-            if (abm01.abm01tipo == 2) {
+            if (abm01.abm01tipo == 3) {
                 eaa0103.eaa0103totDoc = (jsonEaa0103.getBigDecimal_Zero("frete_dest") +
                                         jsonEaa0103.getBigDecimal_Zero("total_servico") -
                                         jsonEaa0103.getBigDecimal_Zero("pis") -
@@ -307,6 +307,8 @@ public class Doc_Serviço_Entrada extends FormulaBase {
             }
 
             eaa0103.eaa0103totDoc = eaa0103.eaa0103totDoc.round(2);
+
+            eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
 
 //            // Preenche o CST de ICMS do Item
 //            String cstIcms = buscarCstICMS();
@@ -464,172 +466,89 @@ public class Doc_Serviço_Entrada extends FormulaBase {
             jsonEaa0103.put("total_servico", jsonEaa0103.getBigDecimal_Zero("totitensservico") + jsonEaa0103.getBigDecimal_Zero("outras_despesas"));
 
             // ********** Impostos Serviços *************
-            // BC ISS
-            if (jsonEaa0103.getBigDecimal_Zero("bc_iss") < 0) {
-                jsonEaa0103.put("bc_iss", new BigDecimal(-1));
+            // ISS
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_iss") == 0) jsonEaa0103.put("aliq_iss", jsonAbm0101.getBigDecimal_Zero("aliq_iss"));
 
-            } else if (jsonEaa0103.getBigDecimal_Zero("bc_iss") == 0) {
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_iss") != -1){
                 jsonEaa0103.put("bc_iss", jsonEaa0103.getBigDecimal_Zero("total_servico"));
-            }
-
-            // Alíquota
-            if (jsonEaa0103.getBigDecimal_Zero("aliq_iss") < 0) {
-                jsonEaa0103.put("aliq_iss", new BigDecimal(-1));
-
-            } else if (jsonEaa0103.getBigDecimal_Zero("aliq_iss") == 0){
-                jsonEaa0103.put("aliq_iss", jsonAbm0101.getBigDecimal_Zero("_iss"));
-            }
-
-            // Cálculo
-            if (jsonEaa0103.getBigDecimal_Zero("aliq_iss") < 0) {
-                jsonEaa0103.put("iss", new BigDecimal(0));
-
-            } else {
                 jsonEaa0103.put("iss", ((jsonEaa0103.getBigDecimal_Zero("bc_iss") * jsonEaa0103.getBigDecimal_Zero("aliq_iss")) / 100).round(2));
+            }else{
+                jsonEaa0103.put("aliq_iss", new BigDecimal(0));
+                jsonEaa0103.put("bc_iss", new BigDecimal(0));
+                jsonEaa0103.put("iss", new BigDecimal(0));
             }
 
-            // BC PIS
-            if (jsonEaa0103.getBigDecimal_Zero("bc_pis") < 0) {
-                jsonEaa0103.put("bc_pis", new BigDecimal(-1));
+            // PIS
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_pis") == 0) jsonEaa0103.put("aliq_pis", jsonAbm0101.getBigDecimal_Zero("aliq_pis"));
 
-            } else if (jsonEaa0103.getBigDecimal_Zero("bc_pis") == 0) {
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_pis") != -1){
                 jsonEaa0103.put("bc_pis", jsonEaa0103.getBigDecimal_Zero("total_servico"));
-            }
-
-            // Alíquota PIS
-            if (jsonEaa0103.getBigDecimal_Zero("aliq_pis") < 0) {
-                jsonEaa0103.put("aliq_pis", new BigDecimal(-1));
-
-            } else if (jsonEaa0103.getBigDecimal_Zero("aliq_pis") == 0) {
-                jsonEaa0103.put("aliq_pis", jsonAbm0101.getBigDecimal_Zero("tx_desc_incond"));
-            }
-
-            // Cálculo
-            if (jsonEaa0103.getBigDecimal_Zero("aliq_pis") < 0) {
-                jsonEaa0103.put("pis", new BigDecimal(0));
-
-            } else {
                 jsonEaa0103.put("pis", ((jsonEaa0103.getBigDecimal_Zero("bc_pis") * jsonEaa0103.getBigDecimal_Zero("aliq_pis")) / 100).round(2));
+            }else{
+                jsonEaa0103.put("aliq_pis", new BigDecimal(0));
+                jsonEaa0103.put("bc_pis", new BigDecimal(0));
+                jsonEaa0103.put("pis", new BigDecimal(0));
             }
 
-            // BC COFINS
-            if (jsonEaa0103.getBigDecimal_Zero("bc_cofins") < 0) {
-                jsonEaa0103.put("bc_cofins", new BigDecimal(-1));
+            // COFINS
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_cofins") == 0) jsonEaa0103.put("aliq_cofins", jsonAbm0101.getBigDecimal_Zero("aliq_cofins"));
 
-            } else if (jsonEaa0103.getBigDecimal_Zero("bc_cofins") == 0) {
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_cofins") != -1){
                 jsonEaa0103.put("bc_cofins", jsonEaa0103.getBigDecimal_Zero("total_servico"));
-            }
-
-            // Alíquota COFINS
-            if (jsonEaa0103.getBigDecimal_Zero("aliq_cofins") < 0) {
-                jsonEaa0103.put("aliq_cofins", new BigDecimal(-1));
-
-            } else if (jsonEaa0103.getBigDecimal_Zero("aliq_cofins") == 0) {
-                jsonEaa0103.put("aliq_cofins", jsonAbm0101.getBigDecimal_Zero("aliq_cofins"));
-            }
-
-            // Cálculo
-            if (jsonEaa0103.getBigDecimal_Zero("aliq_cofins") < 0) {
-                jsonEaa0103.put("cofins", new BigDecimal(0));
-
-            } else {
                 jsonEaa0103.put("cofins", ((jsonEaa0103.getBigDecimal_Zero("bc_cofins") * jsonEaa0103.getBigDecimal_Zero("aliq_cofins")) / 100).round(2));
+            }else{
+                jsonEaa0103.put("aliq_cofins", new BigDecimal(0));
+                jsonEaa0103.put("bc_cofins", new BigDecimal(0));
+                jsonEaa0103.put("cofins", new BigDecimal(0));
             }
 
-            // BC CSLL
-            if (jsonEaa0103.getBigDecimal_Zero("bc_csll") < 0) {
-                jsonEaa0103.put("bc_csll", new BigDecimal(-1));
+            // COFINS
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_csll") == 0) jsonEaa0103.put("aliq_csll", jsonAbm0101.getBigDecimal_Zero("aliq_csll"));
 
-            } else if (jsonEaa0103.getBigDecimal_Zero("bc_csll") == 0) {
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_csll") != -1){
                 jsonEaa0103.put("bc_csll", jsonEaa0103.getBigDecimal_Zero("total_servico"));
-            }
-
-            // Alíquota CSLL
-            if (jsonEaa0103.getBigDecimal_Zero("aliq_csll") < 0) {
-                jsonEaa0103.put("aliq_csll", new BigDecimal(-1));
-
-            } else if (jsonEaa0103.getBigDecimal_Zero("aliq_csll") == 0) {
-                jsonEaa0103.put("aliq_csll", jsonAbm0101.getBigDecimal_Zero("csll"));
-            }
-
-            // Cálculo
-            if (jsonEaa0103.getBigDecimal_Zero("aliq_csll") < 0) {
-                jsonEaa0103.put("csll", new BigDecimal(0));
-
-            } else {
                 jsonEaa0103.put("csll", ((jsonEaa0103.getBigDecimal_Zero("bc_csll") * jsonEaa0103.getBigDecimal_Zero("aliq_csll")) / 100).round(2));
+            }else{
+                jsonEaa0103.put("aliq_csll", new BigDecimal(0));
+                jsonEaa0103.put("bc_csll", new BigDecimal(0));
+                jsonEaa0103.put("csll", new BigDecimal(0));
             }
 
-            //BC INSS
-            if (jsonEaa0103.getBigDecimal_Zero("bc_inss") < 0) {
-                jsonEaa0103.put("bc_inss", new BigDecimal(-1));
+            // INSS
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_inss") == 0) jsonEaa0103.put("aliq_inss", jsonAbm0101.getBigDecimal_Zero("aliq_inss"));
 
-            } else if (jsonEaa0103.getBigDecimal_Zero("bc_inss") == 0) {
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_inss") != -1){
                 jsonEaa0103.put("bc_inss", jsonEaa0103.getBigDecimal_Zero("total_servico"));
-            }
-
-            // Alíquota INSS
-            if (jsonEaa0103.getBigDecimal_Zero("aliq__inss") < 0) {
-                jsonEaa0103.put("aliq__inss", new BigDecimal(-1));
-
-            } else if (jsonEaa0103.getBigDecimal_Zero("aliq__inss") == 0) {
-                jsonEaa0103.put("aliq__inss", jsonAbm0101.getBigDecimal_Zero("inss_ret_"));
-            }
-
-            // Cálculo
-            if (jsonEaa0103.getBigDecimal_Zero("aliq__inss") < 0) {
+                jsonEaa0103.put("inss", ((jsonEaa0103.getBigDecimal_Zero("bc_inss") * jsonEaa0103.getBigDecimal_Zero("aliq_inss")) / 100).round(2));
+            }else{
+                jsonEaa0103.put("aliq_inss", new BigDecimal(0));
+                jsonEaa0103.put("bc_inss", new BigDecimal(0));
                 jsonEaa0103.put("inss", new BigDecimal(0));
-
-            } else {
-                jsonEaa0103.put("inss", ((jsonEaa0103.getBigDecimal_Zero("bc_inss") * jsonEaa0103.getBigDecimal_Zero("aliq__inss")) / 100).round(2));
             }
 
-            //BC IR
-            if (jsonEaa0103.getBigDecimal_Zero("bc_ir") < 0) {
-                jsonEaa0103.put("bc_ir", new BigDecimal(-1));
+            // INSS
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_ir") == 0) jsonEaa0103.put("aliq_ir", jsonAbm0101.getBigDecimal_Zero("aliq_ir"));
 
-            } else if (jsonEaa0103.getBigDecimal_Zero("bc_ir") == 0){
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_ir") != -1){
                 jsonEaa0103.put("bc_ir", jsonEaa0103.getBigDecimal_Zero("total_servico"));
+                jsonEaa0103.put("ir", ((jsonEaa0103.getBigDecimal_Zero("bc_ir") * jsonEaa0103.getBigDecimal_Zero("aliq_ir")) / 100).round(2));
+            }else{
+                jsonEaa0103.put("aliq_ir", new BigDecimal(0));
+                jsonEaa0103.put("bc_ir", new BigDecimal(0));
+                jsonEaa0103.put("ir", new BigDecimal(0));
             }
-
-            // Alíquota IR
-            if (jsonEaa0103.getBigDecimal_Zero("aliq__ir") < 0) {
-                jsonEaa0103.put("aliq__ir", new BigDecimal(-1));
-
-            } else if (jsonEaa0103.getBigDecimal_Zero("aliq__ir") == 0) {
-                jsonEaa0103.put("aliq__ir", jsonAbm0101.getBigDecimal_Zero("ir"));
-            }
-
-            // Cálculo PIS/COFINS/CSLL
-            jsonEaa0103.put("ir", (((jsonEaa0103.getBigDecimal_Zero("bc_ir")) * jsonEaa0103.getBigDecimal_Zero("icmsproprio")) / 100).round(2));
 
             //PIS/Cofins/CSLL
-            if (jsonEaa0103.getBigDecimal_Zero("bc_pis_cof_csll") < 0) {
-                jsonEaa0103.put("bc_pis_cof_csll", new BigDecimal(-1));
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_pis_c_csll") == 0) jsonEaa0103.put("aliq_pis_c_csll", jsonAbm0101.getBigDecimal_Zero("pis_cofins_csll"));
 
-            } else if (jsonEaa0103.getBigDecimal_Zero("bc_pis_cof_csll") == 0){
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_pis_c_csll") != -1){
                 jsonEaa0103.put("bc_pis_cof_csll", jsonEaa0103.getBigDecimal_Zero("total_servico"));
-            }
-
-            //Alíquota PIS/COFINS/CSLL
-            if (jsonEaa0103.getBigDecimal_Zero("aliq_pis_c_csll") < 0) {
-                jsonEaa0103.put("aliq_pis_c_csll", new BigDecimal(-1));
-
-            } else if (jsonEaa0103.getBigDecimal_Zero("aliq_pis_c_csll") == 0){
-                jsonEaa0103.put("aliq_pis_c_csll", jsonAbm0101.getBigDecimal_Zero("pis_cofins_csll"));
-            }
-
-            //Cálculo
-            if (jsonEaa0103.getBigDecimal_Zero("aliq_pis_c_csll") < 0) {
-                jsonEaa0103.put("pis_cofins_csll", new BigDecimal(0));
-
-            } else {
                 jsonEaa0103.put("pis_cofins_csll", ((jsonEaa0103.getBigDecimal_Zero("bc_pis_cof_csll") * jsonEaa0103.getBigDecimal_Zero("aliq_pis_c_csll")) / 100).round(2));
+            }else{
+                jsonEaa0103.put("aliq_pis_c_csll", new BigDecimal(0));
+                jsonEaa0103.put("bc_pis_cof_csll", new BigDecimal(0));
+                jsonEaa0103.put("pis_cofins_csll", new BigDecimal(0));
             }
-
-            jsonEaa0103.put("bc_pis", new BigDecimal(0));
-            jsonEaa0103.put("bc_cofins", new BigDecimal(0));
-            jsonEaa0103.put("bc_csll", new BigDecimal(0));
         }
     }
 

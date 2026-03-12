@@ -168,7 +168,7 @@ public class Doc_Serviço_Entrada_Telecomunicacoes extends FormulaBase {
 
         //Fatores de Conv. da Unid de Compra para Estoque
         abm1301 = abm13 == null ? null : eaa0103.eaa0103umComl == null ? null : getSession().get(Abm1301.class, Criterions.where("abm1301cc = " + abm13.abm13id + " AND abm1301umc = " + eaa0103.eaa0103umComl.aam06id));
-        if (abm1301 == null) throw new ValidacaoException("Não foi informado fator de conversão no cadastro do item " + abm01.abm01codigo);
+        //if (abm1301 == null) throw new ValidacaoException("Não foi informado fator de conversão no cadastro do item " + abm01.abm01codigo);
         //Unidade de Medida
         aam06 = abm13 != null && abm13.abm13umv != null ? getSession().get(Aam06.class, abm13.abm13umv.aam06id) : null;
 
@@ -264,12 +264,16 @@ public class Doc_Serviço_Entrada_Telecomunicacoes extends FormulaBase {
             eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
 
             // Total do Documento
-            eaa0103.eaa0103totDoc = eaa0103.eaa0103total;
+            eaa0103.eaa0103totDoc = eaa0103.eaa0103total.round(2);
+
+            eaa0103.eaa0103totFinanc = eaa0103.eaa0103total;
 
             // Preenche o CST de ICMS do Item
-            String cstIcms = buscarCstICMS();
+            if(abm01.abm01tipo != 3){
+                String cstIcms = buscarCstICMS();
 
-            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cstIcms));
+                eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cstIcms));
+            }
 
             // Calcula ICMS Itens
             calcularICMS(contribICMS);

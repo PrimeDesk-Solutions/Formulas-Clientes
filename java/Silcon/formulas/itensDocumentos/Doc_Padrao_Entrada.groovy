@@ -299,9 +299,12 @@ public class Doc_Padrao_Entrada extends FormulaBase {
             eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
 
             // Preenche o CST de ICMS do Item
-            String cstIcms = buscarCstICMS();
+            if(abm01.abm01tipo != 3){
+                String cstIcms = buscarCstICMS();
 
-            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cstIcms));
+                eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cstIcms));
+            }
+
 
             // Calcula ICMS Itens
             calcularICMS(contribICMS);

@@ -1,4 +1,4 @@
-package Atilatte.formulas.itensdocumento;
+package Silcon.formulas.itensdocumento;
 import sam.model.entities.ab.Abe02;
 import br.com.multiorm.Query
 import sam.server.samdev.utils.Parametro;
@@ -130,6 +130,7 @@ public class SCV_SRF_ImportacaoXML extends FormulaBase {
         ufEnt = municipioEnt != null ? getSession().get(Aag02.class, municipioEnt.aag0201uf.aag02id) : null;
         aag01 = eaa0101princ.eaa0101pais != null ? getSession().get(Aag01.class, Criterions.eq("aag01id", eaa0101princ.eaa0101pais.aag01id)) : null;
 
+
         //Empresa
         aac10 = getSession().get(Aac10.class, obterEmpresaAtiva().aac10id);
         municipioEmpr = aac10.aac10municipio != null ? getSession().get(Aag0201.class, Criterions.eq("aag0201id", aac10.aac10municipio.aag0201id)) : null;
@@ -220,6 +221,15 @@ public class SCV_SRF_ImportacaoXML extends FormulaBase {
     private void calcularItem() {
         if(eaa0103.eaa0103qtComl > 0){
 
+            // Determina se a operação é dentro ou fora do estado
+            Boolean dentroEstado = true;
+
+            if (ufEmpr != null && ufEnt != null) {
+                dentroEstado = ufEmpr.aag02uf == ufEnt.aag02uf;
+            }
+
+            definirCFOP(dentroEstado)
+
             calcularSPED();
 
             // Total Item
@@ -240,6 +250,36 @@ public class SCV_SRF_ImportacaoXML extends FormulaBase {
             // Total Financeiro
             eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
 
+        }
+
+    }
+    private void definirCFOP(Boolean dentroEstado) {
+
+        String cfop = aaj15_cfop.aaj15codigo;
+        String segundoDigito = cfop.substring(1,2);
+
+        if (segundoDigito == "0" || segundoDigito == "1" || segundoDigito =="9") {
+            cfop = "1102";
+            eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
+            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.in("aaj10codigo", "000"));
+        }
+
+        if (segundoDigito == "4" || segundoDigito == "6") {
+            cfop = "1403";
+            eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
+            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", "060"));
+        }
+
+        String primeiroDigito = cfop.substring(0, 1);
+
+        if(!dentroEstado){
+            primeiroDigito = "2";
+            cfop = primeiroDigito + cfop.substring(1);
+            aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
+        }else{
+            primeiroDigito = "1";
+            cfop = primeiroDigito + cfop.substring(1);
+            aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
         }
 
     }

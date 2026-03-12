@@ -287,51 +287,47 @@ public class DevolucaoNfe_Desconto_Proporcional extends FormulaBase {
             //CalculoCOFINS
             calculaCOFINS();
 
-		  // preencherSPEDS
+            // Calcular PIS
+            calculaPIS();
+
+		    // preencherSPEDS
             preencherSPEDS();
 
         }
 
     }
 
-    // Trocar CFOP (Dentro ou fora do estado)
-    private void definirCFOP (Boolean dentroEstado) {
-        if (eaa0103.eaa0103cfop != null) {
-            String cfop = aaj15_cfop.aaj15codigo;
+    private void definirCFOP(Boolean dentroEstado) {
+        String cfop = aaj15_cfop.aaj15codigo;
+        String primeiroDigito = cfop.substring(0,1);
 
-            String primeiroDigito = cfop.substring(0, 1);
+        if(!dentroEstado){
+            primeiroDigito = "2";
+        }
 
-            if (!dentroEstado) {
-                if (primeiroDigito == "1") {
-                    primeiroDigito = "2";
+        cfop = primeiroDigito + aaj15_cfop.aaj15codigo.substring(1);
+
+        //Atribuir CFOP 1202
+        if(dentroEstado){
+            if(eaa0103.eaa0103cstIcms != null){
+                if(eaa0103.eaa0103cstIcms.aaj10codigo == "000" || eaa0103.eaa0103cstIcms.aaj10codigo == "040" || eaa0103.eaa0103cstIcms.aaj10codigo == "041" || eaa0103.eaa0103cstIcms.aaj10codigo == "090" || eaa0103.eaa0103cstIcms.aaj10codigo == "200" ||eaa0103.eaa0103cstIcms.aaj10codigo == "240" || eaa0103.eaa0103cstIcms.aaj10codigo == "241"){
+                    cfop = "1202"
+                }else{
+                    cfop = "1411"
                 }
-
-                if (primeiroDigito == "5") {
-                    primeiroDigito = "6";
-                }
-
-                //Atribuir CFOP 1202
-                if (dentroEstado) {
-                    if (eaa0103.eaa0103cstIcms != null) {
-
-                        if (eaa0103.eaa0103cstIcms.aaj10codigo == "000" || eaa0103.eaa0103cstIcms.aaj10codigo == "040" || eaa0103.eaa0103cstIcms.aaj10codigo == "041" || eaa0103.eaa0103cstIcms.aaj10codigo == "090" || eaa0103.eaa0103cstIcms.aaj10codigo == "200" ||
-                            eaa0103.eaa0103cstIcms.aaj10codigo == "240" || eaa0103.eaa0103cstIcms.aaj10codigo == "241") {
-
-                            cfop = "1202";
-
-                        } else {
-                            cfop = "1411";
-                        }
-                    }
-                }
-
-                cfop = primeiroDigito + cfop.substring(1);
 
                 aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
+                if(aaj15_cfop == null) throw new ValidacaoException("Não foi encontrado CFOP com o código " + cfop);
 
                 eaa0103.eaa0103cfop = aaj15_cfop;
             }
+
         }
+
+        aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
+        if(aaj15_cfop == null) throw new ValidacaoException("Não foi encontrado CFOP com o código " + cfop);
+
+        eaa0103.eaa0103cfop = aaj15_cfop;
     }
 
     private void calcularIcmsSTRetido() {
@@ -481,27 +477,38 @@ public class DevolucaoNfe_Desconto_Proporcional extends FormulaBase {
                 }
             }
     }
-
     private calculaCOFINS() {
-        if (jsonAbm0101.getBigDecimal_Zero("aliq_cofins") > 0) {
+        if(jsonEaa0103.getBigDecimal_Zero("aliq_cofins") == 0) jsonEaa0103.put("aliq_cofins", jsonAbm0101.getBigDecimal_Zero("aliq_cofins"));
 
-            if (eaa0103.eaa0103cstCofins.aaj13codigo == '01') {
-                // BC COFINS
-                jsonEaa0103.put("bc_cofins", jsonEaa0103.getBigDecimal_Zero("bc_pis") - jsonEaa0103.getBigDecimal_Zero("desconto"));
+        if(jsonEaa0103.getBigDecimal_Zero("aliq_cofins") != -1){
+            // BC COFINS
+            jsonEaa0103.put("bc_cofins", eaa0103.eaa0103total - jsonEaa0103.getBigDecimal_Zero("desconto") - jsonEaa0103.getBigDecimal_Zero("icms"));
 
-                // Aliquota
-                jsonEaa0103.put("aliq_cofins", jsonAbm0101.getBigDecimal_Zero("aliq_cofins"));
-
-                // COFINS
-                jsonEaa0103.put("cofins", jsonEaa0103.getBigDecimal_Zero("bc_cofins") * jsonEaa0103.getBigDecimal_Zero("aliq_cofins") / 100);
-                jsonEaa0103.put("cofins", jsonEaa0103.getBigDecimal_Zero("cofins").round(2));
-            }
-
-        } else {
-            jsonEaa0103.put("cofins", ((jsonEaa0103.getBigDecimal_Zero("bc_cofins") * jsonEaa0103.getBigDecimal_Zero("aliq_cofins")) / 100).round(2));
+            // COFINS
+            jsonEaa0103.put("cofins", jsonEaa0103.getBigDecimal_Zero("bc_cofins") * jsonEaa0103.getBigDecimal_Zero("aliq_cofins") / 100);
+            jsonEaa0103.put("cofins", jsonEaa0103.getBigDecimal_Zero("cofins").round(2));
+        }else{
+            jsonEaa0103.put("aliq_cofins", BigDecimal.ZERO);
+            jsonEaa0103.put("bc_cofins", BigDecimal.ZERO);
+            jsonEaa0103.put("cofins", BigDecimal.ZERO);
         }
     }
+    private calculaPIS() {
+        if(jsonEaa0103.getBigDecimal_Zero("aliq_pis") == 0) jsonEaa0103.put("aliq_pis", jsonAbm0101.getBigDecimal_Zero("aliq_pis"));
 
+        if(jsonEaa0103.getBigDecimal_Zero("aliq_pis") != -1){
+            // BC COFINS
+            jsonEaa0103.put("bc_pis", eaa0103.eaa0103total - jsonEaa0103.getBigDecimal_Zero("desconto") - jsonEaa0103.getBigDecimal_Zero("icms"));
+
+            // COFINS
+            jsonEaa0103.put("pis", jsonEaa0103.getBigDecimal_Zero("bc_pis") * jsonEaa0103.getBigDecimal_Zero("aliq_pis") / 100);
+            jsonEaa0103.put("pis", jsonEaa0103.getBigDecimal_Zero("pis").round(2));
+        }else{
+            jsonEaa0103.put("aliq_pis", BigDecimal.ZERO);
+            jsonEaa0103.put("bc_pis", BigDecimal.ZERO);
+            jsonEaa0103.put("pis", BigDecimal.ZERO);
+        }
+    }
     private void preencherSPEDS() {
 
         // ========================================================================================
@@ -512,7 +519,7 @@ public class DevolucaoNfe_Desconto_Proporcional extends FormulaBase {
         jsonEaa0103.put("bc_cofins_sped", jsonEaa0103.getBigDecimal_Zero("bc_cofins"));
 
         //Aliq Cofins SPED = Aliq Cofins
-        jsonEaa0103.put("_cofins_sped", jsonEaa0103.getBigDecimal_Zero("aliq_cofins"));
+        jsonEaa0103.put("aliq_cofins_sped", jsonEaa0103.getBigDecimal_Zero("aliq_cofins"));
 
         // Cofins SPED = Cofins
         jsonEaa0103.put("cofins_sped", jsonEaa0103.getBigDecimal_Zero("cofins"));
@@ -521,7 +528,7 @@ public class DevolucaoNfe_Desconto_Proporcional extends FormulaBase {
         jsonEaa0103.put("bc_pis_sped", jsonEaa0103.getBigDecimal_Zero("bc_pis"));
 
         // Aliq PIS SPED = Aliq SPED
-        jsonEaa0103.put("_pis_sped", jsonEaa0103.getBigDecimal_Zero("aliq_pis"));
+        jsonEaa0103.put("aliq_pis_sped", jsonEaa0103.getBigDecimal_Zero("aliq_pis"));
 
         // PIS SPED = PIS
         jsonEaa0103.put("pis", jsonEaa0103.getBigDecimal_Zero("pis"));
@@ -531,20 +538,20 @@ public class DevolucaoNfe_Desconto_Proporcional extends FormulaBase {
         // ========================================================================================
 
         //BC ICMS SPED = BC ICMS
-        jsonEaa0103.put("bcicms_sped", jsonEaa0103.getBigDecimal_Zero("bc_icms"));
+        jsonEaa0103.put("bc_icms_sped", jsonEaa0103.getBigDecimal_Zero("bc_icms"));
 
         //Aliq ICMS SPED = Aliq ICMS
         jsonEaa0103.put("aliq_icms_sped", jsonEaa0103.getBigDecimal_Zero("aliq_icms"));
 
 
         //Aliq Reduc BC ICMS SPED = Aliq Reduc BC ICMS
-        jsonEaa0103.put("redbcicms_sped", jsonEaa0103.getBigDecimal_Zero("_red_bc_icms"));
+        jsonEaa0103.put("red_bc_icms_sped", jsonEaa0103.getBigDecimal_Zero("_red_bc_icms"));
 
         //ICMS Outras SPED = ICMS Outras
-        jsonEaa0103.put("icmsoutras_sped", jsonEaa0103.getBigDecimal_Zero("icms_outras"));
+        jsonEaa0103.put("icms_outras_sped", jsonEaa0103.getBigDecimal_Zero("icms_outras"));
 
         //ICMS Isento SPED = ICMS Isento
-        jsonEaa0103.put("icmsisento_sped", jsonEaa0103.getBigDecimal_Zero("icms_isento"));
+        jsonEaa0103.put("icms_isento_sped", jsonEaa0103.getBigDecimal_Zero("icms_isento"));
 
         //ICMS SPED = ICMS
         jsonEaa0103.put("icms_sped", jsonEaa0103.getBigDecimal_Zero("icms"));
@@ -558,7 +565,7 @@ public class DevolucaoNfe_Desconto_Proporcional extends FormulaBase {
         jsonEaa0103.put("bc_icms_st_sped", jsonEaa0103.getBigDecimal_Zero("bc_icms_st"));
 
         //Aliq ICMS ST SPED = Aliq ICMS ST
-        jsonEaa0103.put("_icms_st_sped", jsonEaa0103.getBigDecimal_Zero("_icms_st"));
+        jsonEaa0103.put("aliq_icms_st_sped", jsonEaa0103.getBigDecimal_Zero("aliq_icms_st"));
 
         //ICMS ST SPED = ICMS ST
         jsonEaa0103.put("icms_st_sped", jsonEaa0103.getBigDecimal_Zero("icms_st"));
@@ -569,16 +576,16 @@ public class DevolucaoNfe_Desconto_Proporcional extends FormulaBase {
         // ========================================================================================
 
         //BC IPI SPED = BC IPI
-        jsonEaa0103.put("bcipi_sped", jsonEaa0103.getBigDecimal_Zero("bc_ipi"));
+        jsonEaa0103.put("bc_ipi_sped", jsonEaa0103.getBigDecimal_Zero("bc_ipi"));
 
         //Aliq IPI SPED = Aliq IPI
-        jsonEaa0103.put("_ipi_sped", jsonEaa0103.getBigDecimal_Zero("aliq_ipi"));
+        jsonEaa0103.put("aliq_ipi_sped", jsonEaa0103.getBigDecimal_Zero("aliq_ipi"));
 
         //IPI Outras SPED = IPI Outras
-        jsonEaa0103.put("ipioutras_sped", jsonEaa0103.getBigDecimal_Zero("ipi_outras"));
+        jsonEaa0103.put("ipi_outras_sped", jsonEaa0103.getBigDecimal_Zero("ipi_outras"));
 
         //IPI Isento SPED = IPI Isento
-        jsonEaa0103.put("ipiisento_sped", jsonEaa0103.getBigDecimal_Zero("ipi_isento"));
+        jsonEaa0103.put("ipi_isento_sped", jsonEaa0103.getBigDecimal_Zero("ipi_isento"));
 
         //IPI SPED = IPI
         jsonEaa0103.put("ipi_sped", jsonEaa0103.getBigDecimal_Zero("ipi"));

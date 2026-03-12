@@ -311,9 +311,8 @@ public class DocImportaXMLRevenda extends FormulaBase {
     private void definirCFOP (Boolean dentroEstado) {
 
 
-        if (eaa0103.eaa0103cfop != null) {
+        if (eaa0103.eaa0103cfop == null) {
             String cfop = aaj15_cfop.aaj15codigo;
-            String primeiroDigito = cfop.substring(0, 1);
             String segundoDigito = cfop.substring(1,2);
 
             if (segundoDigito == "0" || segundoDigito == "1" || segundoDigito =="9") {
@@ -327,6 +326,8 @@ public class DocImportaXMLRevenda extends FormulaBase {
                 eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
                 eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", "060"));
             }
+
+            String primeiroDigito = cfop.substring(0, 1);
 
             if(!dentroEstado){
                 primeiroDigito = "2";

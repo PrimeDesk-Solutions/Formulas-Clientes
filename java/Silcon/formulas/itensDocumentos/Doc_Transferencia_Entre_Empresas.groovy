@@ -1,8 +1,9 @@
 /*
  * Desenvolvido por: ROGER.
  */
-package Silcon.formulas.itensDocumentos;
+package Silcon.formulas.itensDocumentos
 
+import br.com.multiorm.Query;
 import sam.model.entities.ab.Abd02;
 import sam.server.samdev.utils.Parametro;
 import br.com.multiorm.criteria.criterion.Criterions
@@ -64,6 +65,8 @@ public class Doc_Transferencia_Entre_Empresas extends FormulaBase {
     private Abb10 abb10;
     private Abd01 abd01;
     private Abd02 abd02;
+    private Abe40 abe40;
+    private Abe4001 abe4001;
     private Abe01 abe01;
     private Abe02 abe02;
     private Abg01 abg01;
@@ -192,6 +195,22 @@ public class Doc_Transferencia_Entre_Empresas extends FormulaBase {
         //CST COFINS
         aaj13_cstCof = eaa0103.eaa0103cstCofins != null ? getSession().get(Aaj13.class, eaa0103.eaa0103cstCofins.aaj13id) : null;
 
+        //Tabela Preço
+        abe40 = eaa01.eaa01tp != null ? getSession().get(Abe40.class, eaa01.eaa01tp.abe40id) : null;
+
+        // Verifica se tem itens repetidos na tabela de preço
+        if(abe40 != null){
+            Query tmItensTabela = getSession().createQuery("select abe4001id from abe4001 where abe4001tab = " + abe40.abe40id + " AND abe4001item = " + abm01.abm01id);
+
+            List<TableMap> countItens = tmItensTabela.getListTableMap();
+
+            if(countItens != null && countItens.size() > 1) throw new ValidacaoException("O item " +abm01.abm01codigo+ " foi inserido mais de uma vez na tabela de preço " + abe40.abe40codigo);
+        }
+
+        //Itens da Tabela de Preço
+        abe4001 = abe40 != null ? getSession().get(Abe4001.class, Criterions.where("abe4001tab = " + abe40.abe40id + " AND abe4001item = " + abm01.abm01id)) : null;
+
+        if(abe4001 == null && eaa01.eaa01tp != null) throw new ValidacaoException("Item "+ abm01.abm01codigo +" Não Encontrado Na Tabela De Preço "+abe40.abe40codigo);
 
         //CAMPOS LIVRES
         jsonAac10 = aac10.aac10json != null ? aac10.aac10json : new TableMap();
@@ -263,15 +282,7 @@ public class Doc_Transferencia_Entre_Empresas extends FormulaBase {
             // Peso Líquido
             jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(3));
 
-            // Unitario = Preço de Custo
-            if (jsonAbm0101.getBigDecimal_Zero("preco_atual") > 0) {
-                jsonEaa0103.put("unitario", jsonAbm0101.getBigDecimal_Zero("preco_atual") * 0.69);
-
-            } else {
-                jsonEaa0103.put("unitario", jsonAbm0101.getBigDecimal_Zero("preco_livre"));
-            }
-
-            jsonEaa0103.put("unitario", jsonEaa0103.getBigDecimal_Zero("unitario").round(2));
+            eaa0103.eaa0103unit = (abe4001.abe4001preco * 0.70).round(2);
 
             // Total do item
             eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
