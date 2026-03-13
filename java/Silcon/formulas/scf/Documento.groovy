@@ -1,4 +1,4 @@
-package multitec.formulas.scf;
+package Silcon.formulas.scf;
 
 import java.time.DayOfWeek;
 
@@ -23,15 +23,15 @@ public class Documento extends FormulaBase{
 		TableMap mapJson = daa01.daa01json == null ? new TableMap() : daa01.daa01json;
 		
 		DayOfWeek diaDaSemanaDoVcto = daa01.daa01dtVctoN.getDayOfWeek();
-		if(diaDaSemanaDoVcto.equals(DayOfWeek.SATURDAY) ) {
-			daa01.daa01dtVctoN = daa01.daa01dtVctoN.plusDays(2);
-			daa01.daa01dtVctoR = daa01.daa01dtVctoR.plusDays(2);
-		} else if (diaDaSemanaDoVcto.equals(DayOfWeek.SUNDAY)) {
-			daa01.daa01dtVctoN = daa01.daa01dtVctoN.plusDays(1);
-			daa01.daa01dtVctoR = daa01.daa01dtVctoR.plusDays(2);
-		}
+//		if(diaDaSemanaDoVcto.equals(DayOfWeek.SATURDAY) ) {
+//			daa01.daa01dtVctoN = daa01.daa01dtVctoN.plusDays(2);
+//			daa01.daa01dtVctoR = daa01.daa01dtVctoR.plusDays(2);
+//		} else if (diaDaSemanaDoVcto.equals(DayOfWeek.SUNDAY)) {
+//			daa01.daa01dtVctoN = daa01.daa01dtVctoN.plusDays(1);
+//			daa01.daa01dtVctoR = daa01.daa01dtVctoR.plusDays(2);
+//		}
 
-		mapJson.put("dtlimdesc", daa01.daa01dtVctoN);
+		mapJson.put("juros", (daa01.daa01valor * 0.17 / 100).round(2));
 	}
 	@Override 
 	public FormulaTipo obterTipoFormula() { 

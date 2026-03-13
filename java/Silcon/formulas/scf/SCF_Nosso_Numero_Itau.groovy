@@ -28,16 +28,13 @@ class SCF_Nosso_Numero_Itau extends FormulaBase {
         Abb01 abb01 = getSession().createCriteria(Abb01.class).addWhere(Criterions.eq("abb01id", daa01.daa01central.abb01id)).get();
         Integer numDoc = abb01.abb01num;
         String parcela = abb01.abb01parcela.trim();
-        String complemento = "000";
+        String complemento = "00";
 
         if(!"0".equals(parcela) && parcela != null ){
             if(parcela != null && parcela.contains("/")){
                 Integer index = parcela.indexOf("/");
                 String parcelas = parcela.substring(0, index);
-
                 if(parcelas.length() == 1){
-                    complemento = "00" + parcelas;
-                }else if(parcelas.length() == 2){
                     complemento = "0" + parcelas;
                 }else{
                     complemento = parcelas
@@ -45,9 +42,7 @@ class SCF_Nosso_Numero_Itau extends FormulaBase {
             }else{
                 if(parcela != null && parcela.matches("\\d+")){
                     if(parcela.length() == 1){
-                        complemento = "00" + parcela;
-                    }else if(parcela.length() == 2){
-                        complemento = "0" + parcela
+                        complemento = "0" + parcela;
                     }else{
                         complemento = parcela;
                     }
@@ -55,7 +50,8 @@ class SCF_Nosso_Numero_Itau extends FormulaBase {
             }
         }
 
-        Long nossoNumero = Long.parseLong(numDoc + complemento)
+        String numParc = numDoc + complemento;
+        Long nossoNumero = Long.parseLong(numParc.length() > 8 ? numParc.substring(1) : numParc);
 
         put("nossoNumero", nossoNumero);
 
