@@ -27,184 +27,123 @@ public class SCF_LancamentosFinanceiros extends RelatorioBase {
 
     @Override
     public Map<String, Object> criarValoresIniciais() {
-        return criarFiltros("periodo", DateUtils.getStartAndEndMonth(MDate.date()), "imprimir", "1");
-
+        Map<String, Object> filtrosDefault = new HashMap<String, Object>();
+        filtrosDefault.put("periodo", DateUtils.getStartAndEndMonth(MDate.date()));
+        filtrosDefault.put("impressao", "0")
+        return Utils.map("filtros", filtrosDefault);
     }
 
     @Override
     public DadosParaDownload executar() {
-
         List<Long> idContaCorrente = getListLong("contaCorrente");
         LocalDate[] dataPeriodo = getIntervaloDatas("periodo");
-        Integer imprimir = getInteger("imprimir")
         boolean isSaltarPagina = get("isSaltarPagina");
+        Integer impressao = getInteger("impressao")
+        List<Long> idsEmpresas
 
         List<TableMap> dados = new ArrayList<>();
-        params.put("TITULO_RELATORIO", "Lançamentos");
+        params.put("TITULO_RELATORIO", "Lançamentos Financeiros");
         params.put("EMPRESA", getVariaveis().getAac10().getAac10na());
         params.put("PERIODO", "Período: " + dataPeriodo[0].format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString() + " à " + dataPeriodo[1].format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
 
         List<TableMap> dab10s = obterDadosRelatorio(idContaCorrente, dataPeriodo);
-        String codigoConta = "0";
-        BigDecimal saldo = BigDecimal.ZERO;
-        for (TableMap dab10 : dab10s) {
-            TableMap tm = new TableMap();
-            if (tm.getBigDecimal("SALDOINICIAL") == null) tm.put("SALDOINICIAL", BigDecimal.ZERO);
+        Integer i = 0;
+        String codigoConta = "";
+        def saldoInicial = buscarSaldoAnteriorConta(idContaCorrente, dataPeriodo, idsEmpresas);
+        def saldoAtual = saldoInicial;
 
-            tm.put("dab10id", dab10.getLong("dab10id"));
-            tm.put("codigoConta", dab10.getString("dab01codigo"));
-            if (tm.getString("codigoConta") != codigoConta) {
-                saldo = BigDecimal.ZERO;
-                BigDecimal valorSaldo = buscarSaldoInicial(dab10.getLong("dab01id"), dataPeriodo[0]);
-                tm.put("SALDOINICIAL", valorSaldo);
+        for (dado in dab10s){
+
+            Integer movi = dado.getInteger("dab10mov");
+
+            dado.put("SALDOINICIAL", saldoInicial);
+
+
+            // Verifica se é recebimento ou pagamento
+            if(movi == 0 ){
+                dado.put("receber", dado.getBigDecimal_Zero("dab1002valor"));
+                dado.put("pagar", new BigDecimal(0));
+                dado.put("movimentacao", "0-Recebimento");
+            }else{
+                dado.put("receber", new BigDecimal(0));
+                dado.put("pagar", dado.getBigDecimal_Zero("dab1002valor"));
+                dado.put("movimentacao", "1-Pagamento");
             }
 
+            saldoAtual = (saldoAtual + dado.getBigDecimal_Zero("receber")) - dado.getBigDecimal_Zero("pagar");
 
-            tm.put("aac10na", dab10.getString("aac10na"));
-
-            tm.put("dab01codigo", dab10.getString("dab01codigo"));
-            tm.put("dab01nome", dab10.getString("dab01nome"));
-
-            tm.put("dab10data", dab10.getDate("dab10data"));
-            tm.put("dab10historico", dab10.getString("dab10historico"));
-            tm.put("dab10mov", dab10.getInteger("dab10mov"));
-            tm.put("dab10valor", dab10.getBigDecimal("dab10valor"));
-
-            if (saldo == BigDecimal.ZERO) {
-                tm.put("SALDO", tm.getBigDecimal("SALDOINICIAL"));
-                saldo = tm.getBigDecimal("SALDO");
-            }
-
-            if (tm.getInteger("dab10mov").equals(0)) {
-                tm.put("SALDO", saldo.add(tm.getBigDecimal("dab10valor")));
-            } else {
-                tm.put("SALDO", saldo.subtract(tm.getBigDecimal("dab10valor")));
-            }
-            saldo = tm.getBigDecimal("SALDO");
-
-
-            codigoConta = dab10.getString("dab01codigo")
-
-            dados.add(tm)
+            dado.put("dab10valor", dado.getBigDecimal_Zero("dab1002valor") )
+            dado.put("SALDO", saldoAtual);
         }
 
-        if(imprimir == 0) {
-            return gerarXLSX("SCF_LancamentosXLS", dados)
-        }else {
-            return gerarPDF("SCF_Lancamentos", dados, "codigoConta", isSaltarPagina)
-        }
+
+        if(impressao == 1 ) return gerarXLSX("SCF_LancamentosFinanceiros", dab10s)
+        return gerarPDF("SCF_LancamentosFinanceiros", dab10s, "codigoConta", isSaltarPagina)
+    }
+
+    private BigDecimal buscarSaldoAnteriorConta(List<Long> idsContas, LocalDate[] dtLancamentos, List<Long> idsEmpresas){
+        BigDecimal saldoInicial = buscarSaldoInicial(idsContas, idsEmpresas );
+
+        BigDecimal entradas = obterTotalLancamentos(dtLancamentos, idsContas, 0);
+        BigDecimal saidas = obterTotalLancamentos(dtLancamentos, idsContas, 1);
+
+        BigDecimal saldoAnterior = (saldoInicial + entradas) - saidas;
+
+        return saldoAnterior
+    }
+
+    private BigDecimal buscarSaldoInicial(List<Long> idsContas, List<Long> idsEmpresas){
+        String whereContas = idsContas != null && idsContas.size() > 0 ? "AND dab0101cc IN (:idsContas)  "  : "";
+        String whereEmpresa = idsEmpresas != null && idsEmpresas.size() > 0 ? "and dab01gc in (:idsEmpresa) " : "and dab01gc = :idEmpresa " ;
+
+        Parametro parametroContas = idsContas != null && idsContas.size() > 0 ? Parametro.criar("idsContas", idsContas) : null;
+        Parametro parametroEmpresa = idsEmpresas != null && idsEmpresas.size() > 0 ? Parametro.criar("idsContas", idsContas) : Parametro.criar("idEmpresa", obterEmpresaAtiva().getAac10id());
+
+        String sql = "SELECT SUM(dab0101saldo) "+
+                "FROM dab01 " +
+                "INNER JOIN dab0101 ON dab0101cc = dab01id "+
+                "WHERE dab0101mes = 0 AND dab0101ano = 0 "+
+                whereContas +
+                whereEmpresa;
+
+        return getAcessoAoBanco().obterBigDecimal(sql, parametroContas, parametroEmpresa);
+    }
+
+    private BigDecimal obterTotalLancamentos(LocalDate[] dtLancamentos, List<Long> idsContas, Integer mov){
+        String whereContas = idsContas != null && idsContas.size() > 0 ? "AND dab1002cc IN (:idsContas)  "  : "";
+        String whereMov = "AND dab10mov = :mov ";
+        String whereDtInicial = "AND dab10data < :dtInicial";
+
+        Parametro parametroContas = idsContas != null && idsContas.size() > 0 ? Parametro.criar("idsContas", idsContas) : null;
+        Parametro parametroMov = Parametro.criar("mov", mov);
+        Parametro parametroDtInicial = Parametro.criar("dtInicial", dtLancamentos[0]);
+
+        String sql = "SELECT SUM(dab1002valor) " +
+                "FROM dab10 " +
+                "INNER JOIN dab1002 ON dab1002lct = dab10id " +
+                "WHERE TRUE " +
+                whereContas +
+                whereMov +
+                whereDtInicial;
+
+        return getAcessoAoBanco().obterBigDecimal(sql, parametroContas, parametroMov, parametroDtInicial);
 
     }
 
-    private BigDecimal buscarSaldoInicial(Long dab01id, LocalDate data) {
+    public List<TableMap> obterDadosRelatorio (List<Long> idContaCorrente, LocalDate[] dataPeriodo)  {
 
-
-        BigDecimal valorSaldo = null
-
-
-        valorSaldo = buscarValorInicialDoMes(dab01id, data) + (somarValorEntrada(dab01id, data) - somarValorSaida(dab01id, data))
-
-
-        Parametro paramId = dab01id != null ? Parametro.criar("id", dab01id) : null
-
-        return valorSaldo == null ? BigDecimal.ZERO : valorSaldo
-
-
-    }
-
-    private BigDecimal somarValorEntrada(Long dab01id, LocalDate data) {
-
-        String whereId = dab01id != null ? " and dab01id in (:id) " : ""
-        LocalDate diaAnterior = data.getDayOfMonth() != 1 ? (data.minusDays(1)) : data
-
-        String sql = " SELECT distinct sum(dab10valor) " +
-                " FROM dab10 " +
-                " INNER JOIN dab1002 ON dab1002lct = dab10id "+
-                " LEFT JOIN dab01 ON dab1002cc = dab01id " +
-                obterWherePadrao("dab10011", "where") +
-                " AND dab10mov = '0' " +
-                " AND dab10data between '" +
-                data.getYear() + "-" + data.getMonthValue() + "-01' and '" +
-                diaAnterior + "' " +
-                whereId;
-
-        Parametro paramId = dab01id != null ? Parametro.criar("id", dab01id) : null
-
-        return getAcessoAoBanco().obterBigDecimal(sql, paramId)
-
-    }
-
-    private BigDecimal somarValorSaida(Long dab01id, LocalDate data) {
-
-        String whereId = dab01id != null ? " AND dab01id IN (:id) " : ""
-        LocalDate diaAnterior = data.getDayOfMonth() != 1 ? (data.minusDays(1)) : data
-
-        String sql = " SELECT DISTINCT SUM(dab10valor) " +
-                " FROM dab10 " +
-                " INNER JOIN dab1002 ON dab1002lct = dab10id "+
-                " LEFT JOIN dab01 on dab1002cc = dab01id " +
-                obterWherePadrao("dab10011", "WHERE") +
-                " AND dab10mov = '1' " +
-                " AND dab10data BETWEEN '" + data.getYear() + "-" + data.getMonthValue() + "-01' AND '" +
-                diaAnterior + "' " +
-                whereId
-
-        Parametro paramId = dab01id != null ? Parametro.criar("id", dab01id) : null
-
-        return getAcessoAoBanco().obterBigDecimal(sql, paramId)
-
-    }
-
-    private BigDecimal buscarValorInicialDoMes(Long dab01id, LocalDate data) {
-
-        Integer mesAnterior = data.getMonthValue() - 1
-        BigDecimal valor = 0
-
-        while(valor == 0 || mesAnterior < 0) { //Verificar o valor inicial antes do mes selecionado
-
-            String whereId = dab01id != null ? " and dab01id in (:id) " : ""
-            String whereMes = mesAnterior != 1 ? " and dab0101mes = '" + mesAnterior + "' " : " and dab0101mes = 0"
-            String whereAno = mesAnterior > 1 ? " and dab0101ano = '" + data.getYear() + "' " : " and dab0101ano = 0 "
-
-            String sql = " SELECT dab0101saldo " +
-                    " FROM dab01 " +
-                    " INNER JOIN dab0101 on dab0101cc = dab01id " +
-                    obterWherePadrao("dab01", "WHERE") +
-                    whereAno +
-                    whereMes +
-                    whereId
-
-            Parametro paramId = dab01id != null ? Parametro.criar("id", dab01id) : null
-
-            valor = getAcessoAoBanco().obterBigDecimal(sql, paramId)
-
-            if (valor != 0 || mesAnterior < 0) {
-                return valor
-            }
-            else {
-                mesAnterior = mesAnterior - 1
-            }
-        }
-    }
-
-    public List<TableMap> obterDadosRelatorio ( List<Long> idContaCorrente, LocalDate[] dataPeriodo)  {
-
-        String wherePeriodoData = " WHERE dab10.dab10data >= '" + dataPeriodo[0] + "' AND dab10.dab10data <= '" + dataPeriodo[1] + "'"
-        String whereIdsContaCorrente = idContaCorrente != null && idContaCorrente.size() > 0 ? " AND dab01.dab01id IN (:idContaCorrente)": "";
+        String wherePeriodoData = dataPeriodo != null && dataPeriodo.size() > 0 ? " where dab10.dab10data >= '" + dataPeriodo[0] + "' and dab10.dab10data <= '" + dataPeriodo[1] + "'": "";
+        String whereIdsContaCorrente = idContaCorrente != null && idContaCorrente.size() > 0 ? " and dab01.dab01id IN (:idContaCorrente)": "";
         Parametro parametro = idContaCorrente != null && idContaCorrente.size() > 0 ? Parametro.criar("idContaCorrente", idContaCorrente) : null;
-
-
-        String sql = " SELECT aac10.aac10na, Dab01.dab01id, Dab01.dab01codigo, Dab01.dab01nome, Dab10.dab10id, Dab10.dab10data, " +
-                " Dab10.dab10cc, Dab10.dab10mov, Dab10.dab10historico, Dab10.dab10valor" +
-                " FROM Dab10 Dab10" +
-                " INNER JOIN dab1002 ON dab1002lct = dab10id "+
-                " LEFT JOIN dab01 on dab1002cc = dab01id " +
-                " LEFT JOIN Abb01 ON abb01id = dab10central " +
-                " INNER JOIN aac01 AS aac01 ON dab10gc = aac01id "+
-                " INNER JOIN aac10 AS aac10 ON dab10eg = aac10id "+
+        String sql = " select abb01num,  Dab01.dab01id, Dab01.dab01codigo, Dab01.dab01nome, Dab10.dab10id, Dab10.dab10data, Dab10.dab10cc, Dab10.dab10mov, Dab10.dab10historico, dab1002valor " +
+                " from Dab10 Dab10 " +
+                " left join abb01 on abb01id = Dab10.dab10central "+
+                " INNER JOIN dab1002 ON dab1002lct = Dab10.dab10id " +
+                " LEFT JOIN dab01 ON dab01id = dab1002cc "+
                 wherePeriodoData +
                 whereIdsContaCorrente +
-                " ORDER BY Dab01.dab01codigo, Dab10.dab10data";
+                " order by Dab10.dab10data, dab10id "
+
 
         List<TableMap> receberDadosRelatorio = getAcessoAoBanco().buscarListaDeTableMap(sql, parametro);
         return receberDadosRelatorio;
@@ -212,4 +151,3 @@ public class SCF_LancamentosFinanceiros extends RelatorioBase {
 
 
 }
-//meta-sis-eyJkZXNjciI6IlNDRiAtIExhbsOnYW1lbnRvcyBGaW5hbmNlaXJvcyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
