@@ -111,22 +111,22 @@ class SRF_ComporEmailsNFe extends FormulaBase {
             emails.add(emailFat);
 
             //E-mail para REPRESENTANTES
-            Set<String> emailsReps = obterEmailsRepresentantes(eaa01);
-            if(emailsReps != null && emailsReps.size() > 0) {
-                EmailNFeDto emailRep = new EmailNFeDto();
-                emailRep.assunto = assunto;
-                emailRep.corpo = corpo;
-                emailRep.enviarXML = false;
-                emailRep.enviarDanfe = true;
-                emailRep.enviarBoleto = false;
-                emailRep.emailRemetente = 2;
-
-                for(String emailDestinoRep : emailsReps) {
-                    emailRep.addEmailDestinoPara(emailDestinoRep);
-                }
-
-                emails.add(emailRep);
-            }
+//            Set<String> emailsReps = obterEmailsRepresentantes(eaa01);
+//            if(emailsReps != null && emailsReps.size() > 0) {
+//                EmailNFeDto emailRep = new EmailNFeDto();
+//                emailRep.assunto = assunto;
+//                emailRep.corpo = corpo;
+//                emailRep.enviarXML = false;
+//                emailRep.enviarDanfe = true;
+//                emailRep.enviarBoleto = false;
+//                emailRep.emailRemetente = 2;
+//
+//                for(String emailDestinoRep : emailsReps) {
+//                    emailRep.addEmailDestinoPara(emailDestinoRep);
+//                }
+//
+//                emails.add(emailRep);
+//            }
 
             //E-mail para TRANSPORTADORA
             String emailDestinoTransp = obterEmailTransportadoraDespacho(eaa0102);
