@@ -14,6 +14,7 @@ import sam.model.entities.ea.Eaa0101
 import sam.model.entities.ea.Eaa0102
 import sam.model.entities.ea.Eaa0114
 import sam.server.samdev.formula.FormulaBase
+import sam.server.samdev.utils.Parametro
 
 class SRF_ComporEmailsNFe extends FormulaBase {
 
@@ -60,14 +61,16 @@ class SRF_ComporEmailsNFe extends FormulaBase {
 
         Eaa0102 eaa0102 = getSession().get(Eaa0102.class, "eaa0102id, eaa0102eMail, eaa0102despacho", Criterions.eq("eaa0102doc", eaa01.eaa01id));
 
-        if(eaa0102.eaa0102eMail == null) return;
+        String emailFaturamento = buscarEmailCustomizado(abe01);
+
+        if(emailFaturamento == null || emailFaturamento.isEmpty()) return;
 
         if(aaa16.getAaa16tipo().equals("2") || aaa16.getAaa16tipo().equals("1")) {
             //E-mail de CANCELAMENTO ou CARTA DE CORREÇÃO
             EmailNFeDto email = new EmailNFeDto();
             email.assunto = assunto;
             email.corpo = corpo;
-            email.addEmailDestinoPara(eaa0102.eaa0102eMail);
+            email.addEmailDestinoPara(emailFaturamento);
             email.enviarXML = true;
             email.enviarDanfe = false;
             email.enviarBoleto = false;
@@ -80,71 +83,21 @@ class SRF_ComporEmailsNFe extends FormulaBase {
             EmailNFeDto emailFat = new EmailNFeDto();
             emailFat.assunto = assunto;
             emailFat.corpo = corpo;
-            emailFat.addEmailDestinoPara(eaa0102.eaa0102eMail);
+            emailFat.addEmailDestinoPara(emailFaturamento);
             emailFat.enviarXML = true;
             emailFat.enviarDanfe = true;
-            emailFat.enviarBoleto = false;
+            emailFat.enviarBoleto = true;
             emailFat.emailRemetente = 2;
 
-
-            EmailNFeDto emailCob = new EmailNFeDto();
-            String emailDestinoCob = obterEmailCobranca(eaa01.eaa01id, abe01.abe01id, eaa0102);
-            if(eaa0102.eaa0102eMail != emailDestinoCob) {
-                //E-mail de COBRANÇA, destinatário para faturamento é diferente do de cobrança.
-                //Então o boleto será enviado somente para o destinatário de cobrança
-                emailCob.assunto = assunto;
-                emailCob.corpo = corpo;
-                emailCob.addEmailDestinoPara(emailDestinoCob);
-                emailCob.enviarXML = false;
-                emailCob.enviarDanfe = false;
-                emailCob.enviarBoleto = true;
-                emailCob.emailRemetente = 1;
-
-                emails.add(emailCob);
-            }else {
-                //Destinatário para faturamento e cobrança é o mesmo ou não existe um específico para cobrança.
-                //Então o boleto será enviado junto com o de faturamento (com xml e danfe).
-                emailFat.enviarBoleto = true;
-                emailCob.enviarXML = true;
-            }
-
             emails.add(emailFat);
-
-            //E-mail para REPRESENTANTES
-//            Set<String> emailsReps = obterEmailsRepresentantes(eaa01);
-//            if(emailsReps != null && emailsReps.size() > 0) {
-//                EmailNFeDto emailRep = new EmailNFeDto();
-//                emailRep.assunto = assunto;
-//                emailRep.corpo = corpo;
-//                emailRep.enviarXML = false;
-//                emailRep.enviarDanfe = true;
-//                emailRep.enviarBoleto = false;
-//                emailRep.emailRemetente = 2;
-//
-//                for(String emailDestinoRep : emailsReps) {
-//                    emailRep.addEmailDestinoPara(emailDestinoRep);
-//                }
-//
-//                emails.add(emailRep);
-//            }
-
-            //E-mail para TRANSPORTADORA
-            String emailDestinoTransp = obterEmailTransportadoraDespacho(eaa0102);
-            if(emailDestinoTransp != null) {
-                EmailNFeDto emailTransp = new EmailNFeDto();
-                emailTransp.assunto = assunto;
-                emailTransp.corpo = corpo;
-                emailTransp.addEmailDestinoPara(emailDestinoTransp);
-                emailTransp.enviarXML = true;
-                emailTransp.enviarDanfe = false;
-                emailTransp.enviarBoleto = false;
-                emailTransp.emailRemetente = 2;
-
-                emails.add(emailTransp);
-            }
         }
 
         put("emails", emails);
+    }
+    private String buscarEmailCustomizado(Abe01 abe01){
+        String sql = "SELECT CAST(abe01json ->> 'email_faturamento' AS text) AS email FROM abe01 WHERE abe01id = :abe01id";
+
+        return getAcessoAoBanco().obterString(sql, Parametro.criar("abe01id", abe01.abe01id));
     }
 
     private String comporCorpoMsg(Aaa16 aaa16, Eaa01 eaa01, Abe01 abe01, Abb01 abb01, Long eaa0114id) {
