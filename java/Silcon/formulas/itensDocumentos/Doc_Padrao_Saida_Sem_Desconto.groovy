@@ -282,6 +282,8 @@ public class Doc_Padrao_Saida_Sem_Desconto extends FormulaBase {
 
         if (eaa0103.eaa0103qtComl > 0) {
 
+            jsonEaa0103.put("desconto", BigDecimal.ZERO)
+
             //Define se a entidade é ou não contribuinte de ICMS
             Integer contribICMS = 0;
 
