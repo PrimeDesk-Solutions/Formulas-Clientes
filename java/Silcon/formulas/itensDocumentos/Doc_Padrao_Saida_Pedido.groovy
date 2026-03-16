@@ -690,7 +690,7 @@ public class Doc_Padrao_Saida_Pedido extends FormulaBase {
 
         if (abm12 != null) {
             Integer origemItem = abm12.abm12cstA;
-            String aliqCargaTrib
+            BigDecimal aliqCargaTrib
 
             if (origemItem == 0 || origemItem == 3 || origemItem == 4 || origemItem == 5 || origemItem == 8) {
                 aliqCargaTrib = abg01.abg01vatFedNac_Zero;

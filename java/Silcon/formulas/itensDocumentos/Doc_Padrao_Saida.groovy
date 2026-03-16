@@ -84,7 +84,7 @@ public class Doc_Padrao_Saida extends FormulaBase {
     private Abd02 abd02;
     private Abe01 abe01;
     private Abe40 abe40;
-    private Abe4001 abe4001;	
+    private Abe4001 abe4001;
     private Abe0101 abe0101principal;
     private Abe02 abe02;
     private Abg01 abg01;
@@ -233,7 +233,7 @@ public class Doc_Padrao_Saida extends FormulaBase {
         //CST COFINS
         aaj13_cstCof = eaa0103.eaa0103cstCofins != null ? getSession().get(Aaj13.class, eaa0103.eaa0103cstCofins.aaj13id) : null;
 
-	   //Tabela Preço
+        //Tabela Preço
         abe40 = eaa01.eaa01tp != null ? getSession().get(Abe40.class, eaa01.eaa01tp.abe40id) : null;
 
         // Verifica se tem itens repetidos na tabela de preço
@@ -271,7 +271,7 @@ public class Doc_Padrao_Saida extends FormulaBase {
         jsonEaa0103 = eaa0103.eaa0103json != null ? eaa0103.eaa0103json : new TableMap();
         jsonAbe4001 = abe4001 != null ? abe4001.abe4001json : new TableMap();
         jsonAaj07clasTrib = aaj07.aaj07json != null ? aaj07.aaj07json : new TableMap();
-        	
+
         calcularItem();
 
         eaa0103.eaa0103json = jsonEaa0103;
@@ -339,9 +339,10 @@ public class Doc_Padrao_Saida extends FormulaBase {
             calcularIcmsSTRetido();
 
             // Total do Documento = Total do item
-            eaa0103.eaa0103totDoc = (eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("acrescimo_inc_") +
-                                                            jsonEaa0103.getBigDecimal_Zero("frete_dest") -
-                                                            jsonEaa0103.getBigDecimal_Zero("desconto")).round(2);
+            eaa0103.eaa0103totDoc = (eaa0103.eaa0103total +
+                                    jsonEaa0103.getBigDecimal_Zero("acrescimo_inc_") +
+                                    jsonEaa0103.getBigDecimal_Zero("frete_dest") -
+                                    jsonEaa0103.getBigDecimal_Zero("desconto")).round(2);
             // Calcula ICMS Itens
             calcularICMS(contribICMS);
 
@@ -384,26 +385,26 @@ public class Doc_Padrao_Saida extends FormulaBase {
     }
 
     private void definirPrecoUnitarioItem(){
-       if(eaa01.eaa01tp != null){
-           if(jsonAbe4001 != null){
-               if(jsonAbe4001.getString("data_promo_ini") != null && jsonAbe4001.getString("data_promo_fin") != null && jsonAbe4001.getBigDecimal_Zero("preco_promocao") > 0){
-                   DateTimeFormatter formato2 = DateTimeFormatter.ofPattern("yyyyMMdd");
-                   LocalDate dataIniPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_ini"), formato2);
-                   LocalDate dataFinPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_fin"), formato2);
-                   LocalDate dataAtual = LocalDate.now();
-                   def precoPromocao = jsonAbe4001.getBigDecimal_Zero("preco_promocao");
-                   if(dataAtual >= dataIniPromo && dataAtual <= dataFinPromo){
-                       eaa0103.eaa0103unit = precoPromocao.round(4);
-                   }else{
-                       eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
-                   }
-               }else{
-                   eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
-               }
-           }else{
-               eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
-           }
-       }
+        if(eaa01.eaa01tp != null){
+            if(jsonAbe4001 != null){
+                if(jsonAbe4001.getString("data_promo_ini") != null && jsonAbe4001.getString("data_promo_fin") != null && jsonAbe4001.getBigDecimal_Zero("preco_promocao") > 0){
+                    DateTimeFormatter formato2 = DateTimeFormatter.ofPattern("yyyyMMdd");
+                    LocalDate dataIniPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_ini"), formato2);
+                    LocalDate dataFinPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_fin"), formato2);
+                    LocalDate dataAtual = LocalDate.now();
+                    def precoPromocao = jsonAbe4001.getBigDecimal_Zero("preco_promocao");
+                    if(dataAtual >= dataIniPromo && dataAtual <= dataFinPromo){
+                        eaa0103.eaa0103unit = precoPromocao.round(4);
+                    }else{
+                        eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
+                    }
+                }else{
+                    eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
+                }
+            }else{
+                eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
+            }
+        }
     }
 
     // Trocar CFOP (Dentro ou fora do estado)
@@ -447,14 +448,14 @@ public class Doc_Padrao_Saida extends FormulaBase {
 
                 if (ivaST > 0) {
                     jsonEaa0103.put("bc_icms_ret", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                                                    jsonEaa0103.getBigDecimal_Zero("seguro") +
-                                                    jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
-                                                    jsonEaa0103.getBigDecimal_Zero("ipi"));
+                            jsonEaa0103.getBigDecimal_Zero("seguro") +
+                            jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
+                            jsonEaa0103.getBigDecimal_Zero("ipi"));
 
                     jsonEaa0103.put("bc_icms_ret", (jsonEaa0103.getBigDecimal_Zero("bc_icms_ret") * ((ivaST / 100)) + 1).round(2));
 
                     jsonEaa0103.put("vlr_icms_ret", (jsonEaa0103.getBigDecimal_Zero("bc_icms_ret") *
-                                                    (jsonEaa0103.getBigDecimal_Zero("icms_ret") / 100)) - jsonEaa0103.getBigDecimal_Zero("icms_sped").round(2));
+                            (jsonEaa0103.getBigDecimal_Zero("icms_ret") / 100)) - jsonEaa0103.getBigDecimal_Zero("icms_sped").round(2));
 
                 } else {
                     jsonEaa0103.put("bc_icms_ret", new BigDecimal(0));
@@ -491,10 +492,10 @@ public class Doc_Padrao_Saida extends FormulaBase {
         if ((jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) || jsonEaa0103.getBigDecimal_Zero("aliq_icms_manual") > 0) {
             // BC ICMS
             jsonEaa0103.put("bc_icms", eaa0103.eaa0103total +
-                                        jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                                        jsonEaa0103.getBigDecimal_Zero("seguro") +
-                                        jsonEaa0103.getBigDecimal_Zero("outras_despesas") -
-                                        jsonEaa0103.getBigDecimal_Zero("desconto"));
+                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
+                    jsonEaa0103.getBigDecimal_Zero("seguro") +
+                    jsonEaa0103.getBigDecimal_Zero("outras_despesas") -
+                    jsonEaa0103.getBigDecimal_Zero("desconto"));
 
             jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms").round(2));
 
@@ -618,7 +619,7 @@ public class Doc_Padrao_Saida extends FormulaBase {
                     jsonEaa0103.put("aliq_ecf", "II");
 
                 } else if (jsonAbm0101.getBigDecimal_Zero("aliq_iss") > 0) {
-                           jsonEaa0103.put("aliq_ecf", "FF");
+                    jsonEaa0103.put("aliq_ecf", "FF");
 
                 } else {
                     jsonEaa0103.put("aliq_ecf", "NN");

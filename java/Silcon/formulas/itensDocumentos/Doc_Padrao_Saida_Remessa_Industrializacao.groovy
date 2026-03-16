@@ -302,10 +302,7 @@ public class Doc_Padrao_Saida_Remessa_Industrializacao extends FormulaBase {
             // Calcular ICMS ST RETIDO
 		    calcularIcmsSTRetido();
 
-            // Preenche o CST de ICMS do Item
-            String cstIcms = buscarCstICMS();
-
-            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cstIcms));
+            preencherCSTICMS();
 
 		    // Calcula ICMS Itens
             calcularICMS(contribICMS);
@@ -322,24 +319,24 @@ public class Doc_Padrao_Saida_Remessa_Industrializacao extends FormulaBase {
         }
 
     }
+    private void preencherCSTICMS() {
+        if(eaa0103.eaa0103cstIcms == null){
+            // Busca primeiramente o CST de ICMS no cadastro do item, caso não econcontrado, busca no cadastro do PCD
+            String cst = "";
 
-    private String buscarCstICMS() {
-        // Busca primeiramente o CST de ICMS no cadastro do PCD, caso não econcontrado, busca no cadastro do item
-        String cst = "";
+            if (abm12 != null && abm12.abm12cstIcms != null) {
+                aaj10_cstIcms = getSession().get(Aaj10.class, abm12.abm12cstIcms.aaj10id);
+                cst = aaj10_cstIcms.aaj10codigo;
 
-        if (abd02.abd02cstIcmsB != null) {
-            aaj10_cstIcms = getSession().get(Aaj10.class, abd02.abd02cstIcmsB.aaj10id);
-            cst = aaj10_cstIcms.aaj10codigo;
+            }else if (abd02 != null && abd02.abd02cstIcmsB != null) {
+                aaj10_cstIcms = getSession().get(Aaj10.class, abd02.abd02cstIcmsB.aaj10id);
+                cst = aaj10_cstIcms.aaj10codigo;
+            } else {
+                throw new ValidacaoException("Necessário preencher o CST de ICMS no cadastro do item " + abm01.abm01codigo + " ou no cadastro do PCD " + abd01.abd01codigo)
+            }
 
-        } else if (abm12.abm12cstIcms != null) {
-            aaj10_cstIcms = getSession().get(Aaj10.class, abm12.abm12cstIcms.aaj10id);
-            cst = aaj10_cstIcms.aaj10codigo;
-
-        } else {
-            throw new ValidacaoException("Necessário preencher o CST de ICMS no cadastro do item " + abm01.abm01codigo + " ou no cadastro do PCD " + abd01.abd01codigo)
+            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cst));
         }
-
-        return cst;
     }
    
     private void calcularICMS (Integer contribICMS) {
@@ -463,35 +460,33 @@ public class Doc_Padrao_Saida_Remessa_Industrializacao extends FormulaBase {
     }
 
     private void calcularCargaTributaria() {
-        // Busca campo customizado no cadastro de NCM para encontrar aliquota da carga tributária
-        String sql = "select abg01camposcustom from abg01 " +
-                "inner join abm0101 on abm0101ncm = abg01id " +
-                "inner join abm01 on abm01id = abm0101item " +
-                "where abm01id = :abm01id " +
-                "AND abm01tipo = :eaa0103tipo " +
-                "AND abm0101empresa = :aac10id";
+        if (abm0101.abm0101ncm == null || eaa0103.eaa0103ncm == null) throw new ValidacaoException("Não foi informado NCM no cadastro do item " + abm01.abm01codigo + " ou na linha do item do documento, para calculo da carga tributária.  ");
 
-        String aliqCargaTrib;
+        if (abm12 != null) {
+            Integer origemItem = abm12.abm12cstA;
+            BigDecimal aliqCargaTrib
 
-        if (abm0101.abm0101ncm == null) throw new ValidacaoException("Não foi informado NCM no cadastro do item " + abm01.abm01codigo + " para calculo da carga tributária.  ");
+            if (origemItem == 0 || origemItem == 3 || origemItem == 4 || origemItem == 5 || origemItem == 8) {
+                aliqCargaTrib = abg01.abg01vatFedNac_Zero;
+            } else {
+                aliqCargaTrib = abg01.abg01vatFedImp_Zero;
+            }
 
-        TableMap abg01camposCustom = getAcessoAoBanco().buscarUnicoTableMap(sql, Parametro.criar("abm01id", abm01.abm01id), Parametro.criar("eaa0103tipo", eaa0103.eaa0103tipo), Parametro.criar("aac10id", aac10.aac10id)).getTableMap("abg01camposcustom");
+            if (aliqCargaTrib == 0) throw new ValidacaoException("Aliquota para calculo da carga tributária no NCM " + abg01.abg01codigo + " - " + abg01.abg01descr + " não é válida.");
 
-        if (abg01camposCustom == null) throw new ValidacaoException("Valor da aliquota dos tributos no cadastro do NCM " + abg01.abg01codigo + " não é válido para cálculo da carga tributária.");
+            jsonEaa0103.put("aliq_carga_trib", aliqCargaTrib);
 
-        //Alíquota Carga Tributária
-        aliqCargaTrib = abg01camposCustom.getBigDecimal_Zero("aliq_carga_trib");
-        jsonEaa0103.put("aliq_carga_trib", aliqCargaTrib);
+            //BC Carga Tributaria
+            jsonEaa0103.put("bc_carga_trib", eaa0103.eaa0103total);
 
-        //BC Carga Tributaria
-        jsonEaa0103.put("bc_carga_trib", eaa0103.eaa0103total);
-
-        // Carga Tributaria
-        if (jsonEaa0103.getBigDecimal_Zero("aliq_carga_trib") > 0) {
-            jsonEaa0103.put("vlr_carga_trib", jsonEaa0103.getBigDecimal_Zero("bc_carga_trib") * jsonEaa0103.getBigDecimal_Zero("aliq_carga_trib") / 100);
-            jsonEaa0103.put("vlr_carga_trib", jsonEaa0103.getBigDecimal_Zero("vlr_carga_trib").round(2));
+            // Carga Tributaria
+            if (jsonEaa0103.getBigDecimal_Zero("aliq_carga_trib") > 0) {
+                jsonEaa0103.put("vlr_carga_trib", jsonEaa0103.getBigDecimal_Zero("bc_carga_trib") * jsonEaa0103.getBigDecimal_Zero("aliq_carga_trib") / 100);
+                jsonEaa0103.put("vlr_carga_trib", jsonEaa0103.getBigDecimal_Zero("vlr_carga_trib").round(2));
+            }
         }
     }
+
 
     private calculaCupomFiscal (Boolean dentroEstado) {
         // Simples Nacional
