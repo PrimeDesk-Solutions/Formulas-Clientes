@@ -40,6 +40,7 @@ public class Altera_Representante_Documento extends FormulaBase{
     public void executar() {
         eaa01 = get("eaa01");
         alterarRepresentante(eaa01);
+        validarQuantidadeItem(eaa01);
 
         put("gravar", gravar);
     }
@@ -58,6 +59,19 @@ public class Altera_Representante_Documento extends FormulaBase{
                 .addJoin(Joins.join("Aab10", "aab10id = abe05user"))
                 .addWhere(Criterions.eq("aab10id", userLogado)).setMaxResults(1)
                 .get(ColumnType.ENTITY);
+    }
+    private validarQuantidadeItem(Eaa01 eaa01){
+        if(eaa01.eaa0103s.size() == 0) throw new ValidacaoException("Não é permitido salvar documento sem itens informado. Insira pelo menos um item para continuar ");
+
+        for(Eaa0103 eaa0103 : eaa01.eaa0103s){
+
+            // Itens
+            Abm01 abm01 = getSession().get(Abm01.class, eaa0103.eaa0103item.abm01id);
+
+            if(eaa0103.eaa0103unit == 0) throw new ValidacaoException("Unitário inválido para o item " + abm01.abm01codigo)
+
+            if(eaa0103.eaa0103qtComl == 0 ) throw new ValidacaoException("Quantidade inválida para o item "+abm01.abm01codigo+" necessário um valor maior que zero")
+        }
     }
 }
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiOTcifQ==
