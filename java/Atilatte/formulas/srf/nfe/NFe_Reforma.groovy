@@ -1254,6 +1254,7 @@ class NFe_Reforma extends FormulaBase {
                             ICMS10 = ICMS.addNode("ICMS10");
                             ICMS10.addNode("orig", orig, true);
                             ICMS10.addNode("CST", cst, true);
+                            ICMS10.addNode("cBenef", jsonEaa0103.getString("cbenef"));
                             ICMS10.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, true);
                             ICMS10.addNode("vBC", getCampo("176-N15","vBC") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("176-N15","vBC")), 2, false), true);
                             ICMS10.addNode("pICMS", getCampo("177-N16","pICMS") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("177-N16","pICMS")), 2, false), true);
@@ -1270,7 +1271,6 @@ class NFe_Reforma extends FormulaBase {
                             ICMS10.addNode("vBCFCPST", getCampo("184.1-N23a","vBCFCPST") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("184.1-N23a","vBCFCPST")), 2, true), false);
                             ICMS10.addNode("pFCPST", getCampo("184.2-N23b","pFCPST") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("184.2-N23b","pFCPST")), 4, true), false);
                             ICMS10.addNode("vFCPST", getCampo("184.4-N23d","vFCPST") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("184.4-N23d","vFCPST")), 2, true), false);
-
                         }else if(cst.equals("20")) {
                             /** ICMS20 - CST = 20 - Com redução de base de cálculo (N04) */
                             ICMS20 = ICMS.addNode("ICMS20");
@@ -1374,6 +1374,7 @@ class NFe_Reforma extends FormulaBase {
                             ICMS70 = ICMS.addNode("ICMS70");
                             ICMS70.addNode("orig", orig, true);
                             ICMS70.addNode("CST", cst, true);
+                            ICMS70.addNode("cBenef", jsonEaa0103.getString("cbenef"));
                             ICMS70.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, true);
                             ICMS70.addNode("pRedBC", getCampo("222-N14","pRedBC") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("222-N14","pRedBC")), 2, false), true);
                             ICMS70.addNode("vBC", getCampo("223-N15","vBC") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("223-N15","vBC")), 2, false), true);

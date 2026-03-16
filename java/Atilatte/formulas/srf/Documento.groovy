@@ -341,7 +341,7 @@ class Documento extends FormulaBase {
 
 			// Redespacho - Fornecedor
 			Abe03 abe03 = getSession().get(Abe03.class, Criterions.eq("abe03ent", abe01redesp.abe01id));
-			if(abe03 == null) interromper(abe01redesp.abe01codigo)
+			if(abe03 == null) interromper("Não foi encontrado configuração de frete (Fornecedor) no cadastro da entidade " + abe01redesp.abe01codigo);
 			if(eaa01.eaa01clasDoc == 1 && abe03.abe03frete != 1 ){
 				// Calcula frete redespacho
 
