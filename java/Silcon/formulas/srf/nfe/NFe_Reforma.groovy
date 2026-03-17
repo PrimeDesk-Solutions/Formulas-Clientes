@@ -533,13 +533,15 @@ class NFe_Reforma extends FormulaBase {
             /** dup - Duplicata (Y07) */
             Integer nDup = 1;
             for(Eaa0113 eaa0113 : eaa0113s) {
-                if(!eaa0113.eaa0113clasParc.equals(0)) continue;
-                if(eaa0113.eaa0113valor.compareTo(new BigDecimal(0)) < 0) continue;
-                ElementXml dup = cobr.addNode("dup");
-                dup.addNode("nDup", StringUtils.ajustString(nDup, 3, '0', true), false);
-                dup.addNode("dVenc", NFeUtils.formatarData(eaa0113.eaa0113dtVctoN, "yyyy-MM-dd"), false);
-                dup.addNode("vDup", NFeUtils.formatarDecimal(eaa0113.eaa0113valor, 2, false), true);
-                nDup++;
+                if (eaa0113.eaa0113dtVctoN != eaa01.eaa01central.abb01data) {
+                    if(!eaa0113.eaa0113clasParc.equals(0)) continue;
+                    if(eaa0113.eaa0113valor.compareTo(new BigDecimal(0)) < 0) continue;
+                    ElementXml dup = cobr.addNode("dup");
+                    dup.addNode("nDup", StringUtils.ajustString(nDup, 3, '0', true), false);
+                    dup.addNode("dVenc", NFeUtils.formatarData(eaa0113.eaa0113dtVctoN, "yyyy-MM-dd"), false);
+                    dup.addNode("vDup", NFeUtils.formatarDecimal(eaa0113.eaa0113valor, 2, false), true);
+                    nDup++;
+                }
             }
         }
 
