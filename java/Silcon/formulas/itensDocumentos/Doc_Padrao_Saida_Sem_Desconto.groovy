@@ -483,16 +483,19 @@ public class Doc_Padrao_Saida_Sem_Desconto extends FormulaBase {
 
         eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cst));
     }
-
-    private void calcularICMS (Integer contribICMS) {
+    private void calcularICMS(Integer contribICMS) {
         Integer vlrReducao = 0;
 
-        if ((jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) || jsonEaa0103.getBigDecimal_Zero("aliq_icms_manual") > 0) {
+        if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1) {
+
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_icms") == 0) jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
+
             // BC ICMS
             jsonEaa0103.put("bc_icms", eaa0103.eaa0103total +
                     jsonEaa0103.getBigDecimal_Zero("frete_dest") +
                     jsonEaa0103.getBigDecimal_Zero("seguro") +
-                    jsonEaa0103.getBigDecimal_Zero("outras_despesas"));
+                    jsonEaa0103.getBigDecimal_Zero("outras_despesas") -
+                    jsonEaa0103.getBigDecimal_Zero("desconto"));
 
             jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms").round(2));
 
@@ -508,10 +511,6 @@ public class Doc_Padrao_Saida_Sem_Desconto extends FormulaBase {
                 jsonEaa0103.put("bc_icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") - vlrReducao).round(2));
             }
 
-            // Aliquota de ICMS
-            if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
-                jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
-            }
 
             if(jsonEaa0103.getBigDecimal_Zero("aliq_icms_manual") > 0) jsonEaa0103.put("aliq_icms", jsonEaa0103.getBigDecimal_Zero("aliq_icms_manual"));
 
@@ -527,6 +526,7 @@ public class Doc_Padrao_Saida_Sem_Desconto extends FormulaBase {
             jsonEaa0103.put("icms", new BigDecimal(0));
             jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
         }
+
     }
 
     private calculaPIS() {

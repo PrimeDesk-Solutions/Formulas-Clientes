@@ -618,7 +618,11 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
     }
     private void calcularICMS(Integer contribICMS) {
         Integer vlrReducao = 0;
-        if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
+
+        if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1) {
+
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_icms") == 0) jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
+
             // BC ICMS
             jsonEaa0103.put("bc_icms", eaa0103.eaa0103total +
                     jsonEaa0103.getBigDecimal_Zero("frete_dest") +
@@ -630,6 +634,9 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
 
             if (contribICMS) jsonEaa0103.put("bc_icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") + jsonEaa0103.getBigDecimal_Zero("ipi")).round(2));
 
+            // ICMS Isento
+            jsonEaa0103.put("icms_isento", (jsonEaa0103.getBigDecimal_Zero("bc_icms") * jsonEaa0103.getBigDecimal_Zero("aliq_icms") / 100).round(2));
+
             // Calculo da Redução
             if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_reduc_bc_icms") > 0) {
                 jsonEaa0103.put("aliq_reduc_bc_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_reduc_bc_icms"));
@@ -637,16 +644,14 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
                 jsonEaa0103.put("bc_icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") - vlrReducao).round(2));
             }
 
-            // Aliquota de ICMS
-            if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
-                jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
-            }
+
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_icms_manual") > 0) jsonEaa0103.put("aliq_icms", jsonEaa0103.getBigDecimal_Zero("aliq_icms_manual"));
+
+            // Zerando icms outras quando tiver valor no aliq icms
+            jsonEaa0103.put("icms_outras", new BigDecimal(0));
 
             // Calculo ICMS
             jsonEaa0103.put("icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") * (jsonEaa0103.getBigDecimal_Zero("aliq_icms") / 100)).round(2));
-
-            // Zera ICMS OUtras
-            jsonEaa0103.put("icms_outras", new BigDecimal(0));
 
         } else {
             jsonEaa0103.put("bc_icms", new BigDecimal(0));
@@ -654,8 +659,8 @@ public class Doc_Padrao_Saida_PDV extends FormulaBase {
             jsonEaa0103.put("icms", new BigDecimal(0));
             jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
         }
-    }
 
+    }
     private void calcularIcmsSTRetido() {
         // ********  ICMS ST Retido - Regime "Substituto Tributário" ********
 
