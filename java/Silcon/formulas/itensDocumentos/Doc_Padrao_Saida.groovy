@@ -339,10 +339,9 @@ public class Doc_Padrao_Saida extends FormulaBase {
             calcularIcmsSTRetido();
 
             // Total do Documento = Total do item
-            eaa0103.eaa0103totDoc = (eaa0103.eaa0103total +
-                                    jsonEaa0103.getBigDecimal_Zero("acrescimo_inc_") +
-                                    jsonEaa0103.getBigDecimal_Zero("frete_dest") -
-                                    jsonEaa0103.getBigDecimal_Zero("desconto")).round(2);
+            eaa0103.eaa0103totDoc = (eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("acrescimo_inc_") +
+                    jsonEaa0103.getBigDecimal_Zero("frete_dest") -
+                    jsonEaa0103.getBigDecimal_Zero("desconto")).round(2);
             // Calcula ICMS Itens
             calcularICMS(contribICMS);
 
