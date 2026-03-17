@@ -1666,10 +1666,11 @@ class NFe_Reforma extends FormulaBase {
             }
 
             Aaj07 aaj07 = eaa0103.eaa0103clasTribCbsIbs
+            Aaj09 aaj09 = getSession().createCriteria(Aaj09.class).addFields("aaj09id, aaj09codigo").addWhere(Criterions.eq("aaj09id", eaa0103.eaa0103cstCbsIbs.aaj09id)).get(ColumnType.ENTITY) //aqui
             if(aaj07 != null && aaj07.getAaj07json() != null) {
                 algumItemComCbsIbs = true;
                 IBSCBS = imposto.addNode("IBSCBS");
-                IBSCBS.addNode("CST", aaj07.aaj07codigo.substring(0, 3) , true);
+                IBSCBS.addNode("CST", aaj09.aaj09codigo.substring(0, 3) , true);
                 IBSCBS.addNode("cClassTrib", aaj07.aaj07codigo, true);
 
                 def doacao = jsonEaa0103.getBoolean(getCampo("324.14a-UB14a", "indDoacao"));
