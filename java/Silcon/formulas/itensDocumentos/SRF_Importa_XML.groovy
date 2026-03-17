@@ -256,31 +256,20 @@ public class SCV_SRF_ImportacaoXML extends FormulaBase {
     private void definirCFOP(Boolean dentroEstado) {
 
         String cfop = aaj15_cfop.aaj15codigo;
-        String segundoDigito = cfop.substring(1,2);
-
-        if (segundoDigito == "0" || segundoDigito == "1" || segundoDigito =="9") {
-            cfop = "1102";
-            eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
-            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.in("aaj10codigo", "000"));
-        }
-
-        if (segundoDigito == "4" || segundoDigito == "6") {
-            cfop = "1403";
-            eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
-            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", "060"));
-        }
-
         String primeiroDigito = cfop.substring(0, 1);
 
         if(!dentroEstado){
-            primeiroDigito = "2";
             cfop = primeiroDigito + cfop.substring(1);
-            aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
+            aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", "2403"));
         }else{
             primeiroDigito = "1";
             cfop = primeiroDigito + cfop.substring(1);
             aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
         }
+
+        if(aaj15_cfop == null) throw new ValidacaoException("Não foi encontrado CFOP com o código " + cfop);
+
+        eaa0103.eaa0103cfop = aaj15_cfop;
 
     }
     private void calcularSPED(){

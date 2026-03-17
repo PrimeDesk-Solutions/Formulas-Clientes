@@ -282,6 +282,8 @@ public class Doc_Padrao_Saida extends FormulaBase {
 
         if (eaa0103.eaa0103qtComl > 0) {
 
+            eaa0102.eaa0102modFrete = 9;
+
             //Define se a entidade é ou não contribuinte de ICMS
             Integer contribICMS = 0;
 
