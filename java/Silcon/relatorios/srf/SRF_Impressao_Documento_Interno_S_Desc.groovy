@@ -1,1 +1,284 @@
+package Silcon.relatorios.srf;
 
+import br.com.multitec.utils.Utils
+import br.com.multitec.utils.collections.TableMap
+import sam.server.samdev.relatorio.TableMapDataSource
+import sam.server.samdev.utils.Parametro
+
+import java.time.LocalDate
+import sam.server.samdev.relatorio.DadosParaDownload
+import sam.server.samdev.relatorio.RelatorioBase
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
+class SRF_Impressao_Documento_Interno extends RelatorioBase {
+
+    @Override
+    public String getNomeTarefa() {
+        return "SRF - Impressão Documento Interno";
+    }
+
+    @Override
+    public Map<String, Object> criarValoresIniciais() {
+        Map<String, Object> filtrosDefault = new HashMap();
+        filtrosDefault.put("numeroInicial", "000000001");
+        filtrosDefault.put("numeroFinal", "999999999");
+        filtrosDefault.put("impressao", "0");
+
+        return Utils.map("filtros", filtrosDefault);
+    }
+
+    @Override
+    public DadosParaDownload executar() {
+        def tipos = getListLong("tipo");
+        def numeroInicial = getInteger("numeroInicial");
+        def numeroFinal = getInteger("numeroFinal");
+        def entidades = getListLong("entidade");
+        def dtEmissao = getIntervaloDatas("dataEmissao");
+        def dtEntradaSaida = getIntervaloDatas("dtEntSai");
+        def id = getLong("eaa01id");
+
+        List<TableMap> dados = new ArrayList<>();
+
+        if (id == null) {
+            dados = buscarDocumentos(tipos, numeroInicial, numeroFinal, entidades, dtEmissao, dtEntradaSaida);
+        } else {
+            dados = buscarDocumentoById(id);
+        }
+
+        List<TableMap> listItens = new ArrayList<>();
+
+        for (dado in dados) {
+            Long idCentral = dado.getLong("abb01id");
+            Long idDoc = dado.getLong("eaa01id");
+            Long idEntidade = dado.getLong("abe01id");
+            String codEntidade = dado.getLong("codEntidade");
+            List<TableMap> itensDoc = buscarItensDoc(idDoc);
+            List<TableMap> parcelamento = buscarParcelamentosDocumentos(idDoc) //buscarParcelamentosDocumentos2(idCentral);//buscarParcelamentosDocumentos(idDoc);
+            TableMap tmEnderecoEntrega = buscarEnderecoEntregaDocumento(idDoc);
+            TableMap tmEnderecoPrincipal = buscarEnderecoPrincipalEntidade(idEntidade);
+            String obsInterno = dado.getString("obsInterno");
+            Integer countItens = 0;
+            Integer countParcela = 0;
+
+            if(tmEnderecoEntrega != null && tmEnderecoEntrega.size() > 0) dado.putAll(tmEnderecoEntrega);
+            if(tmEnderecoPrincipal != null && tmEnderecoPrincipal.size() > 0) dado.putAll(tmEnderecoPrincipal);
+
+            if(obsInterno != null ){
+                if(obsInterno.toUpperCase().contains("COM NOTA")) dado.put("comNota", 1);
+            }
+
+            if(dado.getInteger("comNota") == 1){ // Documentos gerados direto pela tarefa SRF1002 (Elaboração)
+                dado.put("comNota", 1);
+            }
+
+            for (item in itensDoc) {
+                countItens++;
+
+                if(item.getInteger("eaa0103entrega") == 1){
+                    item.put("entrega", "RETIRA")
+                }else if(item.getInteger("eaa0103entrega") == 0){
+                    item.put("entrega", "ENTREGAR")
+                }
+
+                item.put("seq", countItens.toString() + "º ")
+                item.put("key", idDoc);
+                listItens.add(item);
+            }
+            for (parcela in parcelamento) {
+                countParcela++;
+                dado.put("parcela" + countParcela.toString(), countParcela);
+                dado.put("valorParcela" + countParcela, parcela.getBigDecimal("eaa0113valor"));
+                dado.put("data" + countParcela, parcela.getDate("eaa0113dtVctoN"));
+                dado.putAll(parcela);
+            }
+
+            preencherFormaCondicaoPagamento(dado);
+
+            if(codEntidade == "9999999100"){ // Consumidor
+                if(tmEnderecoEntrega != null && tmEnderecoEntrega.size() > 0){
+                    dado.put("dddEntidade", tmEnderecoEntrega.getString("eaa0101ddd"));
+                    dado.put("foneEntidade", tmEnderecoEntrega.getString("eaa0101fone"));
+                }
+                String comprador = buscarComprador(idDoc);
+                dado.put("comprador", comprador);
+            }else{
+                dado.put("comprador", dado.getString("nomeEntidade"))
+            }
+
+            dado.put("key", idDoc);
+        }
+
+        adicionarParametro("empresa", obterEmpresaAtiva().getAac10rs());
+        adicionarParametro("telefoneEmpresa", "Telefone: " + "(" + obterEmpresaAtiva().getAac10dddFone() + ")" + " " + obterEmpresaAtiva().getAac10fone());
+        adicionarParametro("dataIni", dtEmissao == null ? null : dtEmissao[0].format("dd/MM/yyyy"));
+        adicionarParametro("dataFim", dtEmissao == null ? null : dtEmissao[1].format("dd/MM/yyyy"));
+
+        // Cria os sub-relatórios
+        TableMapDataSource dsPrincipal = new TableMapDataSource(dados);
+        dsPrincipal.addSubDataSource("dsItens", listItens, "key", "key");
+        adicionarParametro("StreamSub1", carregarArquivoRelatorio("SRF_Impressao_Documento_Interno_S_Desc_S1"));
+
+        return gerarPDF("SRF_Impressao_Documento_Interno_S_Desc", dsPrincipal);
+    }
+
+    private List<TableMap> buscarDocumentos(List<Long> tipos, Integer numeroInicial, Integer numeroFinal, List<Long> entidades, LocalDate[] dtEmissao, LocalDate[] dtEntradaSaida) {
+
+        def whereTipos = tipos != null && tipos.size() > 0 ? " and abb01tipo in (:tipos) " : ""
+        def whereEntidades = entidades != null && entidades.size() > 0 ? " and abb01ent in (:entidades) " : ""
+        def wheredtEmissao = dtEmissao != null && dtEmissao.size() > 0 ? " and abb01data between :dataIni and :dataFim " : ""
+        def wheredtEntradaSaida = dtEntradaSaida != null && dtEntradaSaida.size() > 0 ? " and eaa01esData between :dataEntSaidaIni and :dataEntSaidaFin " : ""
+        def whereNumIni = " and abb01num >= :numeroInicial "
+        def whereNumFim = " and abb01num <= :numeroFinal "
+        def whereEmpresa = "AND eaa01gc = :idEmpresa ";
+
+        def sql = "SELECT abb01id, eaa01id, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, abb01num AS numDoc, " +
+                " ent.abe01codigo AS codEntidade, ent.abe01nome AS nomeEntidade, " +
+                " aab10nome AS usuarioLogado, abb01data AS dtVenda, " +
+                " abe30codigo AS codCondPgto, abe30nome AS descrCondPgto, eaa01totItens AS totalItem, CAST(eaa01json ->> 'desconto' AS numeric(18,6)) AS desconto, eaa01totDoc AS totDoc, " +
+                " eaa01obsUsoInt AS obsInterno, CAST(eaa01json ->> 'com_nota' AS INTEGER) AS comNota, ent.abe01id AS abe01id, abe01nome AS usuario " +
+                " FROM eaa01 " +
+                " INNER JOIN abb01 ON abb01id = eaa01central " +
+                " INNER JOIN aab10 ON aab10id = abb01operUser " +
+                " INNER JOIN abe01 AS ent ON ent.abe01id = abb01ent  " +
+                " INNER JOIN aah01 ON abb01tipo = aah01id " +
+                " LEFT JOIN abe30 ON eaa01cp = abe30id " +
+                " LEFT JOIN abe01 AS user user.abe01id = eaa01rep0 " +
+                "WHERE eaa01cancData IS NULL " +
+                whereTipos +
+                whereEntidades +
+                wheredtEmissao +
+                whereNumIni +
+                whereNumFim+
+                wheredtEntradaSaida +
+                whereEmpresa +
+                "ORDER BY abb01num"
+
+
+        def parametroTipo = tipos != null && tipos.size() > 0 ? criarParametroSql("tipos", tipos) : null
+        def parametroEntidade = entidades != null && entidades.size() > 0 ? criarParametroSql("entidades", entidades) : null
+        def parametroDtEmissaoIni = dtEmissao != null && dtEmissao.size() > 0 ? criarParametroSql("dataIni", dtEmissao[0]) : null
+        def parametroDtEmissaoFin = dtEmissao != null && dtEmissao.size() > 0 ? criarParametroSql("dataFim", dtEmissao[1]) : null
+        def parametroDtEntSaiIni = dtEntradaSaida != null && dtEntradaSaida.size() > 0 ? criarParametroSql("dataEntSaidaIni", dtEntradaSaida[0]) : null
+        def parametroDtEntSaiFin = dtEntradaSaida != null && dtEntradaSaida.size() > 0 ? criarParametroSql("dataEntSaidaFin", dtEntradaSaida[1]) : null
+        def parametroNumIni = criarParametroSql("numeroInicial", numeroInicial);
+        def parametroNumFin = criarParametroSql("numeroFinal", numeroFinal);
+        def parametroEmpresa = criarParametroSql("idEmpresa", obterEmpresaAtiva().getAac10id());
+
+
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroTipo, parametroEntidade, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroNumIni, parametroNumFin, parametroDtEntSaiIni, parametroDtEntSaiFin, parametroEmpresa);
+
+    }
+
+    private List<TableMap> buscarDocumentoById(Long idDoc) {
+        def sql = "SELECT abb01id, eaa01id, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, abb01num AS numDoc, " +
+                " ent.abe01codigo AS codEntidade, ent.abe01nome AS nomeEntidade, " +
+                " aab10nome AS usuarioLogado, abb01data AS dtVenda, " +
+                " abe30codigo AS codCondPgto, abe30nome AS descrCondPgto, eaa01totItens AS totalItem, CAST(eaa01json ->> 'desconto' AS numeric(18,6)) AS desconto, eaa01totDoc AS totDoc, " +
+                " eaa01obsUsoInt AS obsInterno, CAST(eaa01json ->> 'com_nota' AS INTEGER) AS comNota, ent.abe01id AS abe01id, rep0.abe01nome AS usuario " +
+                " FROM eaa01 " +
+                " INNER JOIN abb01 ON abb01id = eaa01central " +
+                " INNER JOIN aab10 ON aab10id = abb01operUser " +
+                " INNER JOIN abe01 AS ent ON ent.abe01id = abb01ent  " +
+                " INNER JOIN aah01 ON abb01tipo = aah01id " +
+                " LEFT JOIN abe30 ON eaa01cp = abe30id " +
+                " LEFT JOIN abe01 AS rep0 ON rep0.abe01id = eaa01rep0 " +
+                " WHERE eaa01id = :idDoc " +
+                " ORDER BY abb01num"
+
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idDoc", idDoc))
+    }
+    private buscarEnderecoPrincipalEntidade(Long idEntidade){
+        return getSession().createQuery(
+                " SELECT abe0101endereco AS enderecoEntidade, abe0101numero AS numEndEntidade, " +
+                        " abe0101complem AS complemEntidade, abe0101bairro AS bairroEntidade," +
+                        " abe0101cep AS cepEntidade, " +
+                        " abe0101ddd1 AS dddEntidade, abe0101fone1 AS foneEntidade, aag0201nome AS cidadeEntidade, aag02uf AS ufEntidade "+
+                        " FROM abe0101 " +
+                        " LEFT JOIN aag0201 ON aag0201id = abe0101municipio " +
+                        " LEFT JOIN aag02 ON aag0201uf = aag02id " +
+                        " WHERE abe0101ent = :idEntidade "+
+                        " AND abe0101principal = 1 ").setParameter("idEntidade", idEntidade)
+                .setMaxResult(1).getUniqueTableMap();
+
+    }
+    private buscarEnderecoEntregaDocumento(Long idDoc){
+        return getSession().createQuery("SELECT eaa0101local AS localEntrega, eaa0101bairro AS bairroEntregaEnt, eaa0101endereco AS enderecoEntregaEnt, " +
+                "eaa0101numero AS numeroEntregaEnt, eaa0101cep AS cepEntregaEnt, eaa0101complem AS complemEntregaEnt, " +
+                "aag0201nome AS cidadeEntregaEnt, aag02uf AS ufEntregaEntidade, eaa0101ddd, eaa0101fone " +
+                "FROM eaa0101 " +
+                "LEFT JOIN aag0201 ON aag0201id = eaa0101municipio " +
+                "LEFT JOIN aag02 ON aag0201uf = aag02id " +
+                "WHERE eaa0101doc = :idDoc "+
+                "AND eaa0101entrega = 1").setParameter("idDoc", idDoc)
+                .setMaxResult(1).getUniqueTableMap();
+    }
+    private String buscarComprador(idDoc){
+        String sql = "SELECT DISTINCT eaa0102pvComprador FROM eaa0102 WHERE eaa0102doc = :idDoc ";
+        return getAcessoAoBanco().obterString(sql, Parametro.criar("idDoc", idDoc));
+    }
+
+    private List<TableMap> buscarItensDoc(Long id) {
+        return getSession().createQuery(" SELECT abm01codigo AS codItem, eaa0103descr AS descrItem, aam06codigo AS umu, eaa0103qtComl AS qtdItem, eaa0103unit AS unitItem, " +
+                "eaa0103total AS totItem,eaa0103totDoc AS totDocItem, CAST(eaa0103json ->>'desconto' AS numeric(18,6)) AS descontoItem, abg01codigo AS codNcm, eaa0103entrega " +
+                " FROM eaa0103 " +
+                " INNER JOIN abm01 ON abm01id = eaa0103item " +
+                " LEFT JOIN aam06 on aam06id = eaa0103umComl " +
+                " LEFT JOIN abg01 ON abg01id = eaa0103ncm "+
+                " WHERE eaa0103doc = :id " +
+                " ORDER BY eaa0103seq").setParameters("id", id)
+                .getListTableMap();
+    }
+    private List<TableMap> buscarParcelamentosDocumentos(Long idDoc) {
+        String sql = "SELECT eaa0113dtVctoN, eaa0113valor " +
+                "FROM eaa0113 " +
+                "WHERE eaa0113doc = :idDoc " +
+                "ORDER BY eaa0113dtVctoN"
+
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idDoc", idDoc));
+    }
+    private List<TableMap> buscarParcelamentosDocumentos2(Long idCentral) {
+        String sql = "SELECT  daa01dtVctoR AS eaa0113dtVctoN, daa01valor AS eaa0113valor " +
+                "FROM abb0102 " +
+                "INNER JOIN abb01 ON abb01id = abb0102doc " +
+                "INNER JOIN daa01 ON daa01central = abb01id " +
+                "WHERE abb0102central = :idCentral " +
+                "ORDER BY daa01dtVcton"
+
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idCentral", idCentral));
+    }
+    private void preencherFormaCondicaoPagamento(TableMap dado){
+        Long idDocumento = dado.getLong("eaa01id");
+        String condicaoPagamento = dado.getString("descrCondPgto");
+        StringBuilder listCondicao = new StringBuilder();
+        DecimalFormat df = new DecimalFormat("#,##0.00");
+        df.setDecimalFormatSymbols(
+                DecimalFormatSymbols.getInstance(new Locale("pt", "BR"))
+        );
+
+        if(condicaoPagamento != null){
+            listCondicao.append(condicaoPagamento);
+        }else{
+            List<TableMap> formasPgto = buscarFormasPagamentoDocumento(idDocumento);
+            for(formaPgto in formasPgto){
+                String descricao = formaPgto.getString("abf40descr");
+                BigDecimal valor = formaPgto.getBigDecimal_Zero("eaa01131valor");
+
+                listCondicao.append(descricao).append("                  ").append(df.format(valor)).append("\n")
+            }
+        }
+
+        dado.put("pagamentos", listCondicao);
+    }
+    private List<TableMap> buscarFormasPagamentoDocumento(Long idDocumento){
+        String sql = "SELECT DISTINCT abf40descr, eaa01131valor FROM eaa01131 "+
+                "INNER JOIN eaa0113 ON eaa0113id = eaa01131fin "+
+                "INNER JOIN abf40 ON abf40id = eaa01131fp "+
+                "WHERE eaa0113doc = :idDocumento";
+
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idDocumento", idDocumento));
+    }
+}
+//meta-sis-eyJkZXNjciI6IlNSRiAtIEltcHJlc3PDo28gRG9jdW1lbnRvIEludGVybm8iLCJ0aXBvIjoicmVsYXRvcmlvIn0=
+//meta-sis-eyJkZXNjciI6IlNSRiAtIEltcHJlc3PDo28gRG9jdW1lbnRvIEludGVybm8iLCJ0aXBvIjoicmVsYXRvcmlvIn0=
