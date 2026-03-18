@@ -1666,8 +1666,9 @@ class NFe_Reforma extends FormulaBase {
             }
 
             Aaj07 aaj07 = eaa0103.eaa0103clasTribCbsIbs
-            Aaj09 aaj09 = getSession().createCriteria(Aaj09.class).addFields("aaj09id, aaj09codigo").addWhere(Criterions.eq("aaj09id", eaa0103.eaa0103cstCbsIbs.aaj09id)).get(ColumnType.ENTITY) //aqui
             if(aaj07 != null && aaj07.getAaj07json() != null) {
+                if(eaa0103.eaa0103cstCbsIbs == null) interromper("Não foi informado CST de IBS/CBS no item " + eaa0103.eaa0103seq + " do documento.");
+                Aaj09 aaj09 = getSession().createCriteria(Aaj09.class).addFields("aaj09id, aaj09codigo").addWhere(Criterions.eq("aaj09id", eaa0103.eaa0103cstCbsIbs.aaj09id)).get(ColumnType.ENTITY) //aqui
                 algumItemComCbsIbs = true;
                 IBSCBS = imposto.addNode("IBSCBS");
                 IBSCBS.addNode("CST", aaj09.aaj09codigo.substring(0, 3) , true);
