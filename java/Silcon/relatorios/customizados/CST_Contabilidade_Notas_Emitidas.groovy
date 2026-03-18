@@ -137,8 +137,7 @@ public class CST_Contabilidade_Notas_Emitidas extends RelatorioBase {
             whereStatus = "AND eaa01nfeStat = 6"
         }
         String whereNumDoc = " AND abb01num BETWEEN :numDocIni AND :numDocFin ";
-        String whereClassDoc = " AND eaa01clasDoc = " + Eaa01.CLASDOC_SRF;
-        String whereCancelamento = " AND eaa01cancData IS NULL ";
+        String whereClassDoc = " AND eaa01clasDoc = " + Eaa01.CLASDOC_SRF + " ";
         String whereEntidades = idsEntidades != null && idsEntidades.size() > 0 ? " AND abe01id IN (:idsEntidades) " : "";
         String whereTipoDoc = idsTiposDoc != null && idsTiposDoc.size() > 0 ? " AND aah01id IN (:idsTiposDoc) " : "";
         String whereDtEmissao = dtEmissao != null ? " AND abb01data BETWEEN :dtEmissaoIni AND :dtEmissaoFin " : "";
@@ -156,19 +155,19 @@ public class CST_Contabilidade_Notas_Emitidas extends RelatorioBase {
         Parametro parametroEmpresa = Parametro.criar("idEmpresa", obterEmpresaAtiva().getAac10id());
 
         String sql = "SELECT eaa01id, abb01num, abe01nome, aaj03descr, abe01ni, abe01ie, abb01data, eaa01nfestat, " +
-                    "TRIM(UPPER(REPLACE(aaj03descr,'Documento',''))) AS situacao, eaa0103json, eaa01cancdata, " +
+                    "CASE WHEN eaa01nfestat = 7 THEN 'CANCELADO' ELSE TRIM(UPPER(REPLACE(aaj03descr,'Documento',''))) END AS situacao, "+
+                    "eaa0103json, eaa01cancdata, " +
                     " eaa0103qtUso AS eaa0103qtuso, eaa0103qtComl AS eaa0103qtcoml, eaa0103unit AS eaa0103unit, eaa0103total AS eaa0103total, eaa0103totDoc AS eaa0103totdoc, eaa0103totFinanc AS eaa0103totfinanc, eaa0103json  "+
                     "FROM eaa01 " +
                     "INNER JOIN abb01 ON abb01id = eaa01central " +
                     "INNER JOIN abe01 ON abe01id = abb01ent " +
-                    "INNER JOIN aaj03 ON aaj03id = eaa01sitDoc " +
+                    "LEFT JOIN aaj03 ON aaj03id = eaa01sitDoc " +
                     "INNER JOIN eaa0103 ON eaa0103doc = eaa01id " +
                     "INNER JOIN aah01 ON aah01id = abb01tipo "+
                     "WHERE eaa01clasDoc = 1 " +
                     whereStatus +
                     whereNumDoc +
                     whereClassDoc +
-                    whereCancelamento +
                     whereEntidades +
                     whereTipoDoc +
                     whereDtEmissao +
