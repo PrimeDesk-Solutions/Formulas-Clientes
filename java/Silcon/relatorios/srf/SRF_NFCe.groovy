@@ -118,7 +118,7 @@ class SRF_NFCe extends RelatorioBase {
         String whereNumFim = " and abb01num <= :numeroFinal "
         String whereEmpresa = "AND eaa01gc = :idEmpresa ";
 
-        String sql = "SELECT DISTINCT eaa01id, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, abb01num AS numDoc, eaa01obsContrib, CAST(eaa01json -> 'vlr_carga_trib' AS NUMERIC(18,6)) AS cargaTrib,    " +
+        String sql = "SELECT DISTINCT eaa0102pvCPF, eaa01id, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, abb01num AS numDoc, eaa01obsContrib, CAST(eaa01json -> 'vlr_carga_trib' AS NUMERIC(18,6)) AS cargaTrib,    " +
                 "abe01codigo AS codEntidade, abe01na AS nomeEntidade, abe0101Principal.abe0101endereco AS enderecoEntidade, abe0101Principal.abe0101numero AS numEndEntidade, eaa01obsFisco,     " +
                 "abe0101Principal.abe0101complem AS complemEntidade, abe0101Principal.abe0101bairro AS bairroEntidade, aag0201Principal.aag0201nome AS cidadeEntidade, aag02Principal.aag02uf AS ufEntidade,    " +
                 "abe0101Principal.abe0101cep AS cepEntidade, abe0101Principal.abe0101ddd1 AS dddEntidade, abe0101Principal.abe0101fone1 AS foneEntidade, aab10nome AS usuario, abb01data AS dataEmissao, abb01operHora AS horaEmissao,    " +
@@ -163,7 +163,7 @@ class SRF_NFCe extends RelatorioBase {
     private List<TableMap> buscarDocumentoById(Long idDoc) {
 
         String sql =
-                "SELECT DISTINCT eaa01id, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, abb01num AS numDoc, eaa01obsContrib, CAST(eaa01json -> 'vlr_carga_trib' AS NUMERIC(18,6)) AS cargaTrib,    " +
+                "SELECT DISTINCT eaa0102pvCPF, eaa01id, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, abb01num AS numDoc, eaa01obsContrib, CAST(eaa01json -> 'vlr_carga_trib' AS NUMERIC(18,6)) AS cargaTrib,    " +
                         "abe01codigo AS codEntidade, abe01na AS nomeEntidade, abe0101Principal.abe0101endereco AS enderecoEntidade, abe0101Principal.abe0101numero AS numEndEntidade, eaa01obsFisco,     " +
                         "abe0101Principal.abe0101complem AS complemEntidade, abe0101Principal.abe0101bairro AS bairroEntidade, aag0201Principal.aag0201nome AS cidadeEntidade, aag02Principal.aag02uf AS ufEntidade,    " +
                         "abe0101Principal.abe0101cep AS cepEntidade, abe0101Principal.abe0101ddd1 AS dddEntidade, abe0101Principal.abe0101fone1 AS foneEntidade, aab10nome AS usuario, abb01data AS dataEmissao, abb01operHora AS horaEmissao,    " +
@@ -250,4 +250,3 @@ class SRF_NFCe extends RelatorioBase {
     }
 }
 //meta-sis-eyJkZXNjciI6IlNSRiAtIEltcHJlc3PDo28gRG9jdW1lbnRvIEludGVybm8iLCJ0aXBvIjoicmVsYXRvcmlvIn0=
-//meta-sis-eyJkZXNjciI6IlNSRiAtIE5GQ2UiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
