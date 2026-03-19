@@ -309,9 +309,10 @@ class NFCe_Reforma extends FormulaBase {
         emitente();
 
         /** dest - Identificação do Destinatário da Nota Fiscal Eletrônica (E01) */
-        if (!"65".equals(modelo)) {
-            destinatario();
-        }
+//        if (!"65".equals(modelo)) {
+//            destinatario();
+//        }
+        destinatario();
 
         /** det - Detalhamento de Produtos e Serviços da NF-e (H01) */
         item();
@@ -734,7 +735,7 @@ class NFCe_Reforma extends FormulaBase {
             // Montar a URL completa
             String qrCodeURL = "${urlqrCode}?p=${chave}|2|${tpAmb}|${idCSC}|${hash}";
             eaa0102.setEaa0102pvQrCodeVenda(qrCodeURL)
-            getSession().persist(eaa0102)
+            if(obterUsuarioLogado().getAab10id() != 1895862) getSession().persist(eaa0102)
 
             // Criar o bloco infNFeSupl
             xmlInfNFeSupl = "<infNFeSupl><qrCode><![CDATA[" + qrCodeURL + "]]></qrCode><urlChave>" + urlConsulta + "</urlChave></infNFeSupl>"
@@ -794,6 +795,7 @@ class NFCe_Reforma extends FormulaBase {
 
     private void destinatario() {
         /** dest - Identificação do Destinatário da Nota Fiscal Eletrônica (E01) */
+        if(eaa0102.eaa0102pvCPF == null) return;
         indIEDest = 1;
         if(modelo.equals("55") || modelo.equals("65") || endPrincipal != null) {
             dest = infNfe.addNode("dest");
@@ -802,41 +804,45 @@ class NFCe_Reforma extends FormulaBase {
                 dest.addNode("idEstrangeiro");
                 dest.addNode("xNome", eaa0102.eaa0102nome, true);
             }else {
-                if (isProducao != false) {
-                    if(eaa0102.eaa0102ti == 0) {
-                        dest.addNode("CNPJ", StringUtils.ajustString(StringUtils.extractNumbers(eaa0102.eaa0102ni), 14), true);
-                    }else {
-                        dest.addNode("CPF", StringUtils.ajustString(StringUtils.extractNumbers(eaa0102.eaa0102ni), 11), true);
+                if (isProducao) {
+                    if(eaa0102.eaa0102pvCPF != null){
+                        if(eaa0102.eaa0102pvCPF.length() == 14){
+                            dest.addNode("CNPJ", StringUtils.ajustString(StringUtils.extractNumbers(eaa0102.eaa0102pvCPF), 14), true);
+                        }else{
+                            dest.addNode("CPF", StringUtils.ajustString(StringUtils.extractNumbers(eaa0102.eaa0102pvCPF), 11), true);
+                        }
                     }
                     dest.addNode("xNome", eaa0102.eaa0102nome, true);
+
                 }else {
                     dest.addNode("CNPJ", "99999999000191", true);
                     dest.addNode("xNome", "NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL", true);
                 }
             }
 
-            /** enderDest - Endereço do destinatário (E05) */
-            enderDest = dest.addNode("enderDest");
-            enderDest.addNode("xLgr", endPrincipal.eaa0101endereco, true, 60);
-            enderDest.addNode("nro", endPrincipal.eaa0101numero, true);
-            enderDest.addNode("xCpl", endPrincipal.eaa0101complem, false, 60);
-            enderDest.addNode("xBairro", endPrincipal.eaa0101bairro, true, 60);
+            if(!modelo.equals("65")){
+                /** enderDest - Endereço do destinatário (E05) */
+                enderDest = dest.addNode("enderDest");
+                enderDest.addNode("xLgr", endPrincipal.eaa0101endereco, true, 60);
+                enderDest.addNode("nro", endPrincipal.eaa0101numero, true);
+                enderDest.addNode("xCpl", endPrincipal.eaa0101complem, false, 60);
+                enderDest.addNode("xBairro", endPrincipal.eaa0101bairro, true, 60);
 
-            if(aag02.aag02uf.equalsIgnoreCase("EX")) {
-                enderDest.addNode("cMun", 9999999, true);
-                enderDest.addNode("xMun", "EXTERIOR", true);
-                enderDest.addNode("UF", "EX", true);
-            }else {
-                enderDest.addNode("cMun", endPrincipal.eaa0101municipio.aag0201ibge, true);
-                enderDest.addNode("xMun", endPrincipal.eaa0101municipio.aag0201nome, true, 60);
-                enderDest.addNode("UF", aag02.aag02uf, true);
+                if(aag02.aag02uf.equalsIgnoreCase("EX")) {
+                    enderDest.addNode("cMun", 9999999, true);
+                    enderDest.addNode("xMun", "EXTERIOR", true);
+                    enderDest.addNode("UF", "EX", true);
+                }else {
+                    enderDest.addNode("cMun", endPrincipal.eaa0101municipio.aag0201ibge, true);
+                    enderDest.addNode("xMun", endPrincipal.eaa0101municipio.aag0201nome, true, 60);
+                    enderDest.addNode("UF", aag02.aag02uf, true);
+                }
+
+                enderDest.addNode("CEP", endPrincipal.eaa0101cep, false);
+                enderDest.addNode("cPais", endPrincipal.eaa0101pais == null ? null : endPrincipal.eaa0101pais.aag01bacen, false);
+                enderDest.addNode("xPais", endPrincipal.eaa0101pais == null ? null : endPrincipal.eaa0101pais.aag01nome, false, 60);
+                enderDest.addNode("fone", NFeUtils.ajustarFone(endPrincipal.eaa0101ddd, endPrincipal.eaa0101fone), false);
             }
-
-            enderDest.addNode("CEP", endPrincipal.eaa0101cep, false);
-            enderDest.addNode("cPais", endPrincipal.eaa0101pais == null ? null : endPrincipal.eaa0101pais.aag01bacen, false);
-            enderDest.addNode("xPais", endPrincipal.eaa0101pais == null ? null : endPrincipal.eaa0101pais.aag01nome, false, 60);
-            enderDest.addNode("fone", NFeUtils.ajustarFone(endPrincipal.eaa0101ddd, endPrincipal.eaa0101fone), false);
-
             String IE = NFeUtils.formatarIE(eaa0102.eaa0102ie);
 
             if(modelo.equals("65") || eaa0102.eaa0102contribIcms == 0 || aag02.aag02uf.equalsIgnoreCase("EX")) {
