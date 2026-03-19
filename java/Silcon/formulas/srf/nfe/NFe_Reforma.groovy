@@ -1995,6 +1995,7 @@ class NFe_Reforma extends FormulaBase {
                     if(endEntrega.eaa0101bairro == null) validations.addToValidations(new ValidationMessage("Necessário informar o bairro do local de entrega no " + documento + "."));
                     if(endEntrega.eaa0101municipio == null) validations.addToValidations(new ValidationMessage("Necessário informar o município do local de entrega no " + documento + "."));
 
+                    if(endEntrega.eaa0101municipio == null) interromper("Não foi informado o municipio no endereço de entrega do documento");
                     Aag02 aag02 = getAcessoAoBanco().buscarRegistroUnicoById("Aag02", endEntrega.eaa0101municipio.aag0201uf.aag02id);
                     if(aag02 != null && !aag02.aag02uf.equalsIgnoreCase("EX")) {
                         if(endEntrega != null && endEntrega.eaa0101municipio != null && endEntrega.eaa0101municipio.aag0201ibge == null) validations.addToValidations(new ValidationMessage("Necessário informar o código IBGE do município do local de entrega no " + documento + "."));
