@@ -260,9 +260,12 @@ public class SCV_SRF_ImportacaoXML extends FormulaBase {
 
         if(segundoDigito == '0' || segundoDigito == '1' || segundoDigito == '9'){
             cfop = '1102'
+            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", "000"));
         }
         if(segundoDigito == '4' || segundoDigito == '6'){
-            cfop = '1403'
+            cfop = '1403';
+            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", "060"));
+
         }
 
         String primeiroDigito = cfop.substring(0, 1)
