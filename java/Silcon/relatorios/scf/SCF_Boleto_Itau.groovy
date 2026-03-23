@@ -113,6 +113,8 @@ class SCF_Boleto_Itau extends RelatorioBase {
 
         DecimalFormat df = new DecimalFormat("00000000");
         for (TableMap daa01 : daa01s) {
+            DAC = 0
+            peso = 2
             TableMap tm = new TableMap();
 
             String campoLivre = campoLivrePorBanco(daa01.getString("abf01numero"), daa01.getString("abf01agencia"), daa01.getString("abf01conta"), daa01.getLong("daa01nossoNum"));
@@ -317,18 +319,18 @@ class SCF_Boleto_Itau extends RelatorioBase {
 
     private List<Long> buscarIdsDocsSCFPeloIdDocSRF(Long eaa01id) {
         String sql = "SELECT DISTINCT daa01id " +
-                        "FROM daa01 " +
-                        "INNER JOIN abb01 AS central ON central.abb01id = daa01central " +
-                        "INNER JOIN abb0102 ON abb0102doc = central.abb01id " +
-                        "INNER JOIN abb01 AS centralSRF ON centralSRF.abb01id = abb0102central " +
-                        "INNER JOIN eaa01 ON eaa01central = centralSRF.abb01id " +
-                        "INNER JOIN eaa0113 ON eaa0113doc = eaa01id " +
-                        "WHERE eaa01id = :eaa01id  " +
-                        "AND central.abb01quita = 0 " +
-                        "AND daa01cashback2 IS NULL " +
-                        "AND daa01rp = 0 " +
-                        "AND daa01previsao = 0 " +
-                        "AND daa01banco IS NOT NULL"
+                "FROM daa01 " +
+                "INNER JOIN abb01 AS central ON central.abb01id = daa01central " +
+                "INNER JOIN abb0102 ON abb0102doc = central.abb01id " +
+                "INNER JOIN abb01 AS centralSRF ON centralSRF.abb01id = abb0102central " +
+                "INNER JOIN eaa01 ON eaa01central = centralSRF.abb01id " +
+                "INNER JOIN eaa0113 ON eaa0113doc = eaa01id " +
+                "WHERE eaa01id = :eaa01id  " +
+                "AND central.abb01quita = 0 " +
+                "AND daa01cashback2 IS NULL " +
+                "AND daa01rp = 0 " +
+                "AND daa01previsao = 0 " +
+                "AND daa01banco IS NOT NULL"
 
         List<Long> daa01ids = getAcessoAoBanco().obterListaDeLong(sql, Parametro.criar("eaa01id", eaa01id));
         return daa01ids;
@@ -336,25 +338,25 @@ class SCF_Boleto_Itau extends RelatorioBase {
     private List<Long> buscarIdsDocDerivados(Long eaa01id){
         // Documento transmutado
         String sql = " SELECT abb01id " +
-                        " FROM Daa01 " +
-                        " INNER JOIN Abb0102 ON daa01central = abb0102doc " +
-                        " INNER JOIN Abb01 ON daa01central = abb01id " +
-                        getSamWhere().getWherePadrao(" WHERE ", Daa01.class) +
-                        " AND abb0102central = (SELECT eaa01central FROM Eaa01 WHERE eaa01id = :eaa01id) " +
-                        " AND daa01rp = 0 AND daa01previsao = 0 " +
-                        "AND abb01status = 2";
+                " FROM Daa01 " +
+                " INNER JOIN Abb0102 ON daa01central = abb0102doc " +
+                " INNER JOIN Abb01 ON daa01central = abb01id " +
+                getSamWhere().getWherePadrao(" WHERE ", Daa01.class) +
+                " AND abb0102central = (SELECT eaa01central FROM Eaa01 WHERE eaa01id = :eaa01id) " +
+                " AND daa01rp = 0 AND daa01previsao = 0 " +
+                "AND abb01status = 2";
 
         List<Long> daa01ids = getAcessoAoBanco().obterListaDeLong(sql, Parametro.criar("eaa01id", eaa01id));
 
         if(daa01ids == null || daa01ids.size() == 0) return
 
         String sqlDerivados = " SELECT DISTINCT daa01id " +
-                                " FROM Daa01 " +
-                                " INNER JOIN Abb0102 ON daa01central = abb0102doc " +
-                                " INNER JOIN Abb01 ON daa01central = abb01id " +
-                                getSamWhere().getWherePadrao(" WHERE ", Daa01.class) +
-                                " AND abb0102central IN (:idDocsOrigem) " +
-                                " AND daa01rp = 0 AND daa01previsao = 0 AND daa01banco IS NOT NULL ";
+                " FROM Daa01 " +
+                " INNER JOIN Abb0102 ON daa01central = abb0102doc " +
+                " INNER JOIN Abb01 ON daa01central = abb01id " +
+                getSamWhere().getWherePadrao(" WHERE ", Daa01.class) +
+                " AND abb0102central IN (:idDocsOrigem) " +
+                " AND daa01rp = 0 AND daa01previsao = 0 AND daa01banco IS NOT NULL ";
 
         return getAcessoAoBanco().obterListaDeLong(sqlDerivados, Parametro.criar("idDocsOrigem", daa01ids));
 
