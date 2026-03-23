@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_Impressao_Documento_Interno_subreport1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="2f874a86-11e9-44a8-8e76-3e6a3a390ca1">
 	<property name="ireport.zoom" value="3.1384283767210035"/>
-	<property name="ireport.x" value="290"/>
+	<property name="ireport.x" value="511"/>
 	<property name="ireport.y" value="0"/>
 	<field name="codItem" class="java.lang.String"/>
 	<field name="descrItem" class="java.lang.String"/>
@@ -65,32 +65,25 @@
 				<textFieldExpression><![CDATA[$F{qtdItem}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="378" y="0" width="28" height="13" uuid="19e485e3-bd54-47bd-8645-b7b6f14ae3d5"/>
+				<reportElement x="410" y="0" width="36" height="13" uuid="19e485e3-bd54-47bd-8645-b7b6f14ae3d5"/>
 				<textElement>
 					<font fontName="Arial" size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{unitItem}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="410" y="0" width="31" height="13" uuid="85832e9d-f72f-45e1-ab4b-fc2e2a785f5a"/>
+				<reportElement x="446" y="0" width="31" height="13" uuid="85832e9d-f72f-45e1-ab4b-fc2e2a785f5a"/>
 				<textElement>
 					<font fontName="Arial" size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totItem}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="468" y="0" width="32" height="14" uuid="25f95893-e4ef-432d-9c41-f47625e2b7f6"/>
-				<textElement textAlignment="Right">
-					<font fontName="Arial" size="7"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{totDocItem}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
-				<reportElement x="441" y="0" width="27" height="14" uuid="e670f9b9-14d3-4629-8346-7ffa84d110cb"/>
+				<reportElement x="477" y="-1" width="32" height="14" uuid="25f95893-e4ef-432d-9c41-f47625e2b7f6"/>
 				<textElement>
 					<font fontName="Arial" size="7"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{descontoItem} == null ? new BigDecimal(0) : $F{descontoItem}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totDocItem}]]></textFieldExpression>
 			</textField>
 			<rectangle radius="2">
 				<reportElement x="278" y="1" width="17" height="12" uuid="72a257bb-af70-423c-955b-13c1f3a9dbeb"/>
@@ -109,14 +102,14 @@
 				<textFieldExpression><![CDATA[$F{seq}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="335" y="0" width="44" height="17" uuid="a4bd7971-734f-4a68-a7d1-4d4cea7ef2bd"/>
+				<reportElement x="345" y="0" width="44" height="17" uuid="a4bd7971-734f-4a68-a7d1-4d4cea7ef2bd"/>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{codNcm}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="511" y="1" width="44" height="13" uuid="d360a368-0f67-48a2-9745-76eaa2cb5171"/>
+				<reportElement x="509" y="0" width="44" height="13" uuid="d360a368-0f67-48a2-9745-76eaa2cb5171"/>
 				<textElement>
 					<font fontName="Arial" size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>

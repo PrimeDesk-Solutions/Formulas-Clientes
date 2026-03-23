@@ -230,14 +230,7 @@ DATA ____/____/____            R.G. ____________________________]]></text>
 					<text><![CDATA[Total do Item]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="413" y="16" width="73" height="15" uuid="d94bce24-4e23-4bef-8260-3ef7de763153"/>
-					<textElement>
-						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
-					</textElement>
-					<text><![CDATA[Desconto R$]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="413" y="31" width="73" height="15" uuid="064bce00-ebd1-443b-8d41-6a03f3725df0"/>
+					<reportElement x="413" y="16" width="73" height="15" uuid="064bce00-ebd1-443b-8d41-6a03f3725df0"/>
 					<textElement>
 						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
@@ -251,14 +244,7 @@ DATA ____/____/____            R.G. ____________________________]]></text>
 					<textFieldExpression><![CDATA[$F{totalItem}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00;-#,##0.00">
-					<reportElement x="486" y="16" width="68" height="15" uuid="ae76fda8-99e9-4a0f-8983-83c3423733ea"/>
-					<textElement textAlignment="Right">
-						<font fontName="Arial" size="8"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{desconto}]]></textFieldExpression>
-				</textField>
-				<textField pattern="#,##0.00;-#,##0.00">
-					<reportElement x="486" y="31" width="68" height="15" uuid="cd41618d-2d42-4916-bef7-bf2aaa72d1c6"/>
+					<reportElement x="486" y="16" width="68" height="15" uuid="cd41618d-2d42-4916-bef7-bf2aaa72d1c6"/>
 					<textElement textAlignment="Right">
 						<font fontName="Arial" size="8"/>
 					</textElement>
@@ -975,24 +961,17 @@ DATA ____/____/____            R.G. ____________________________]]></text>
 				<text><![CDATA[CF]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="375" y="249" width="30" height="10" uuid="e2b8e5ba-bf2f-400e-95e5-623639f63224"/>
+				<reportElement x="399" y="249" width="39" height="10" uuid="e2b8e5ba-bf2f-400e-95e5-623639f63224"/>
 				<textElement>
 					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[V. Unit.]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="443" y="249" width="40" height="10" uuid="538875e9-fd86-4195-83e4-9767c6a653fc"/>
-				<textElement>
-					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<text><![CDATA[Desconto]]></text>
-			</staticText>
 			<line>
 				<reportElement x="2" y="263" width="557" height="1" uuid="89fe4bb8-4e62-4bf2-a8d1-0566392688b3"/>
 			</line>
 			<staticText>
-				<reportElement x="410" y="249" width="30" height="10" uuid="2bebd7ef-8aaf-497d-a3d3-c7382686e5d9"/>
+				<reportElement x="438" y="249" width="35" height="10" uuid="2bebd7ef-8aaf-497d-a3d3-c7382686e5d9"/>
 				<textElement>
 					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
@@ -1006,7 +985,7 @@ DATA ____/____/____            R.G. ____________________________]]></text>
 				<textFieldExpression><![CDATA[$F{obsInterno}.replace("COM NOTA.", "")]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="334" y="249" width="37" height="10" uuid="2701b4d8-cadc-4f85-91a7-bd7b2750049f"/>
+				<reportElement x="334" y="249" width="65" height="10" uuid="2701b4d8-cadc-4f85-91a7-bd7b2750049f"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
@@ -1052,7 +1031,7 @@ DATA ____/____/____            R.G. ____________________________]]></text>
 				<text><![CDATA[NF]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="486" y="249" width="54" height="10" uuid="cd27c0de-af83-4542-bc4a-4a1abe6e32ea"/>
+				<reportElement x="473" y="249" width="54" height="10" uuid="cd27c0de-af83-4542-bc4a-4a1abe6e32ea"/>
 				<textElement>
 					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>

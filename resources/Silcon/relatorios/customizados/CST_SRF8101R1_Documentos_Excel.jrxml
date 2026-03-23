@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_SRF8101R1_Documentos_PDF" language="groovy" pageWidth="1275" pageHeight="595" orientation="Landscape" columnWidth="1235" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fc11d8b5-949d-4d0e-bde2-dfd5ad493788">
 	<property name="ireport.zoom" value="1.9487171000000025"/>
-	<property name="ireport.x" value="1795"/>
+	<property name="ireport.x" value="1259"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="TITULO_RELATORIO" class="java.lang.String"/>
 	<parameter name="PERIODO" class="java.lang.String"/>
@@ -32,11 +32,12 @@
 	<field name="valorCampo2" class="java.math.BigDecimal"/>
 	<field name="valorCampo3" class="java.math.BigDecimal"/>
 	<field name="valorCampo4" class="java.math.BigDecimal"/>
-	<field name="field23" class="java.lang.String"/>
+	<field name="docDerivado" class="java.lang.String"/>
 	<field name="field1" class="java.lang.String"/>
 	<field name="field2" class="java.lang.String"/>
 	<field name="field3" class="java.lang.String"/>
 	<field name="field4" class="java.lang.String"/>
+	<field name="field5" class="java.lang.String"/>
 	<variable name="totalCampo1" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{valorCampo1}]]></variableExpression>
 	</variable>
@@ -169,75 +170,68 @@
 	</columnHeader>
 	<detail>
 		<band height="13" splitType="Stretch">
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="0" width="60" height="13" uuid="58080ad1-222d-49d3-b99d-f5dc1bca4231"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{codTipoDocNota}]]></textFieldExpression>
 			</textField>
-			<textField pattern="000000">
+			<textField pattern="000000" isBlankWhenNull="true">
 				<reportElement x="60" y="0" width="60" height="13" uuid="279ed028-7494-45ae-b3c1-ae0d4d4c8e43"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{numDocNota}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="120" y="0" width="42" height="13" uuid="b29c5efa-99e8-4418-bd54-f01f95b07dcc"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dtEmissaoNota}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="162" y="0" width="48" height="13" uuid="9359aa37-60b7-4165-b9a5-c587c807c796"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dtEntradaSaidaNota}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="210" y="0" width="47" height="13" uuid="ba827027-af19-4eab-a80f-6a21b13d5039"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{descrSituacao}.replaceAll("Documento","").toUpperCase()]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="257" y="0" width="71" height="13" uuid="ab4c749e-6dba-4471-8be8-edda63557428"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{codEntidade}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="328" y="0" width="201" height="13" uuid="85d8abd8-1647-494e-a67b-ade224434e09"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nomeEntidade}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="529" y="0" width="20" height="13" uuid="2c5c2db5-d269-4b42-9e61-5df816625af0"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ufEntidade}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="549" y="0" width="75" height="13" uuid="3c9afa40-0526-4270-a8f8-c8eb785cfcb1"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{descrCondPgto}]]></textFieldExpression>
-			</textField>
-			<textField pattern="000000" isBlankWhenNull="true">
-				<reportElement x="724" y="0" width="141" height="13" uuid="1a8288c0-f5d7-448d-b3ae-461bfbdcf7de"/>
-				<textElement>
-					<font fontName="Arial" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{numDocRef}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="624" y="0" width="100" height="13" uuid="bfbae127-d9b2-4fb5-8fba-afd4968c8e63"/>
@@ -274,6 +268,13 @@ $F{descrTipoDocRef} != null ? $F{descrTipoDocRef} : ""]]></textFieldExpression>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{valorCampo4}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="724" y="0" width="141" height="13" uuid="32fa225c-7691-484a-a07f-07c73b497c9c"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{docDerivado}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

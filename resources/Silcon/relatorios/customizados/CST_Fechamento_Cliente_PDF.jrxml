@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CST_Fechamento_Cliente_PDF" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="813b5c33-b783-4a77-b586-0b575d25c9a3">
 	<property name="ireport.zoom" value="1.24184264611831"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="54"/>
+	<property name="ireport.x" value="48"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="DATA" class="java.util.Date">
 		<defaultValueExpression><![CDATA[new Date()]]></defaultValueExpression>
 	</parameter>
@@ -70,42 +70,42 @@
 					<text><![CDATA[Operação]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="172" y="50" width="62" height="13" uuid="72a7bec9-e115-4f9d-9cb2-661e7a44a2c0"/>
+					<reportElement x="172" y="50" width="47" height="13" uuid="72a7bec9-e115-4f9d-9cb2-661e7a44a2c0"/>
 					<textElement>
 						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
-					<text><![CDATA[Doc/Parc]]></text>
+					<text><![CDATA[Doc.]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="234" y="50" width="50" height="13" uuid="14b20b57-67e8-472b-ba40-82a02b9b5f83"/>
+					<reportElement x="262" y="50" width="50" height="13" uuid="14b20b57-67e8-472b-ba40-82a02b9b5f83"/>
 					<textElement>
 						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[Data]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="284" y="50" width="69" height="13" uuid="1cf64760-55ef-4eb7-8bb5-8d66bd055f6b"/>
+					<reportElement x="312" y="50" width="69" height="13" uuid="1cf64760-55ef-4eb7-8bb5-8d66bd055f6b"/>
 					<textElement>
 						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[Vencimento]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="353" y="50" width="47" height="13" uuid="8da09ca7-0fd6-4d1b-a231-44fe3da2541e"/>
+					<reportElement x="381" y="50" width="47" height="13" uuid="8da09ca7-0fd6-4d1b-a231-44fe3da2541e"/>
 					<textElement textAlignment="Right">
 						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[Valor]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="400" y="50" width="61" height="13" uuid="66354344-4791-4785-9067-38ef437243cc"/>
+					<reportElement x="428" y="50" width="61" height="13" uuid="66354344-4791-4785-9067-38ef437243cc"/>
 					<textElement textAlignment="Right">
 						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[Juros]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="461" y="50" width="94" height="13" uuid="539900c9-9c82-46d1-82e7-6628c54a76a8"/>
+					<reportElement x="489" y="50" width="66" height="13" uuid="539900c9-9c82-46d1-82e7-6628c54a76a8"/>
 					<textElement textAlignment="Right">
 						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
@@ -114,6 +114,13 @@
 				<line>
 					<reportElement x="0" y="63" width="555" height="1" uuid="5bbc57f3-29fb-477f-b4b8-3bab93c9688e"/>
 				</line>
+				<staticText>
+					<reportElement x="219" y="51" width="43" height="13" uuid="98259891-b421-4e72-b73b-212a83103586"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Parc.]]></text>
+				</staticText>
 			</band>
 		</groupHeader>
 		<groupFooter>
@@ -329,46 +336,53 @@
 				<textFieldExpression><![CDATA[$F{codOper} != null && $F{nomeOper} != null ? $F{codOper} + " " + $F{nomeOper} : ""]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="172" y="0" width="62" height="13" uuid="58f8a426-ee9c-4878-b477-27b3f0c9a5f3"/>
+				<reportElement x="172" y="0" width="47" height="13" uuid="58f8a426-ee9c-4878-b477-27b3f0c9a5f3"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{numDoc} + "/" + $F{parcela}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{numDoc}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="234" y="0" width="50" height="13" uuid="099764f3-41da-4d9a-973e-a12d8cf877ad"/>
+				<reportElement x="262" y="0" width="50" height="13" uuid="099764f3-41da-4d9a-973e-a12d8cf877ad"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dtLcto}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="284" y="0" width="69" height="13" uuid="b169140f-8f6f-423a-8407-e55f750c9544"/>
+				<reportElement x="312" y="0" width="69" height="13" uuid="b169140f-8f6f-423a-8407-e55f750c9544"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dtVctoR}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
-				<reportElement x="353" y="0" width="47" height="13" uuid="cf6ae3db-d59a-426c-af8d-3baa1c5f3fea"/>
+				<reportElement x="381" y="0" width="47" height="13" uuid="cf6ae3db-d59a-426c-af8d-3baa1c5f3fea"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
-				<reportElement x="400" y="0" width="61" height="13" uuid="31a052e3-d60f-459c-8dbd-b6d5b20ca8fd"/>
+				<reportElement x="428" y="0" width="61" height="13" uuid="31a052e3-d60f-459c-8dbd-b6d5b20ca8fd"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{juros}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
-				<reportElement x="461" y="0" width="94" height="13" uuid="1cae4ba4-16e9-4368-8b56-3ad9c997e837"/>
+				<reportElement x="489" y="0" width="66" height="13" uuid="1cae4ba4-16e9-4368-8b56-3ad9c997e837"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{vlrFinal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="219" y="0" width="43" height="13" uuid="a2cc0b46-f768-4222-8814-ddc3ae5deff7"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{parcela}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

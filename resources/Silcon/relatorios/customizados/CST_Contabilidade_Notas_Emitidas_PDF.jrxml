@@ -94,7 +94,9 @@
 				<textFieldExpression><![CDATA[$P{PERIODO_FINAL}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="13" y="3" width="133" height="79" uuid="8c916748-3923-4f0c-b19e-e61c10e333d5"/>
+				<reportElement x="13" y="3" width="133" height="79" uuid="8c916748-3923-4f0c-b19e-e61c10e333d5">
+					<printWhenExpression><![CDATA[1 == 2]]></printWhenExpression>
+				</reportElement>
 				<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\customizados\\Logo Silcon.png"]]></imageExpression>
 			</image>
 		</band>

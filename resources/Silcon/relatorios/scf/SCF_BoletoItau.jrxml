@@ -17,7 +17,7 @@
 	<field name="aac10rs" class="java.lang.String"/>
 	<field name="abe01nome" class="java.lang.String"/>
 	<field name="abe01ni" class="java.lang.String"/>
-	<field name="daa01dtVctoN" class="java.util.Date"/>
+	<field name="daa01dtVctoR" class="java.util.Date"/>
 	<field name="daa01valor" class="java.math.BigDecimal"/>
 	<field name="abb01data" class="java.util.Date"/>
 	<field name="abb01num" class="java.lang.Integer"/>
@@ -110,7 +110,7 @@
 					<textElement textAlignment="Right">
 						<font fontName="Arial" size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{daa01dtVctoN}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{daa01dtVctoR}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00;(#,##0.00)">
 					<reportElement x="474" y="82" width="79" height="10" uuid="2e4baef6-b21e-4890-b3d0-5af6908393bd"/>
@@ -235,7 +235,9 @@ BANCÁRIO.]]></text>
 					<textFieldExpression><![CDATA[$F{codigoLinhaDigitavel}]]></textFieldExpression>
 				</textField>
 				<image>
-					<reportElement x="2" y="2" width="39" height="42" uuid="0b8076bc-db37-4ae2-bb81-6c8891b84e6b"/>
+					<reportElement x="2" y="2" width="39" height="42" uuid="0b8076bc-db37-4ae2-bb81-6c8891b84e6b">
+						<printWhenExpression><![CDATA[1 == 2]]></printWhenExpression>
+					</reportElement>
 					<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\scf\\LogoItau.png"]]></imageExpression>
 				</image>
 			</band>
@@ -423,7 +425,7 @@ BANCÁRIO.]]></text>
 				<textElement textAlignment="Right">
 					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{daa01dtVctoN}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{daa01dtVctoR}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="425" y="49" width="128" height="10" uuid="82c876a1-4168-4a40-aa92-551f2f5536ad"/>
@@ -648,7 +650,9 @@ BANCÁRIO.]]></text>
 				<textFieldExpression><![CDATA[$F{instrucao4}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="0" y="4" width="39" height="42" uuid="faa1b1f1-2fa3-45ed-aefd-296c04d4e440"/>
+				<reportElement x="0" y="4" width="39" height="42" uuid="faa1b1f1-2fa3-45ed-aefd-296c04d4e440">
+					<printWhenExpression><![CDATA[1 == 2]]></printWhenExpression>
+				</reportElement>
 				<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\scf\\LogoItau.png"]]></imageExpression>
 			</image>
 			<textField pattern="#,##0.00;-#,##0.00">
