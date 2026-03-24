@@ -290,7 +290,7 @@ public class Doc_Transferencia_Entre_Empresas extends FormulaBase {
             calcularIcmsSTRetido();
 
             // Total do Documento = Total do item	
-            eaa0103.eaa0103totDoc = eaa0103.eaa0103total;
+            eaa0103.eaa0103totDoc = (eaa0103.eaa0103total - jsonEaa0103.getBigDecimal_Zero("desconto")).round(2);
 
             // Calcula ICMS Itens
             calcularICMS(contribICMS);
