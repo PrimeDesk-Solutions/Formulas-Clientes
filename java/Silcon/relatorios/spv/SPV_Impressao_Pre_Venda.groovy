@@ -170,6 +170,12 @@ public class SPV_Impressao_Pre_Venda extends RelatorioBase {
     private List<TableMap> buscarItensPreVenda(Long id){
         String whereId = "WHERE ccb0101pv = :id ";
         Parametro parametroId = Parametro.criar("id", id);
+        String nomeUser = obterUsuarioLogado().getAab10user().toUpperCase();
+        String orderBy = "ORDER BY ccb0101seq";
+
+        if( nomeUser == "NANY" || nomeUser == "DIANA" || nomeUser == "FILIPE" || nomeUser == "PRISCILA" || nomeUser == "SHIRLEI" || nomeUser == "MASTER2"){
+            orderBy = "ORDER BY CAST(ccb0101json ->> 'ambiente' AS text)"
+        }
 
         String sql = "SELECT DISTINCT ccb0101seq, aam06codigo AS umu, abm01codigo AS codItem, abm01descr AS naItem, ccb0101unit AS unit, " +
                     "ccb0101desc AS desconto, ccb0101totDoc AS totDoc, ccb0101qtComl AS qtd, ccb0101entregar AS entrega, abg01codigo AS codNcm, " +
@@ -180,7 +186,8 @@ public class SPV_Impressao_Pre_Venda extends RelatorioBase {
                     "LEFT JOIN aam06 ON aam06id = abm01umu "+
                     "LEFT JOIN abg01 ON abg01id = abm0101ncm "+
                     whereId +
-                    "ORDER BY ccb0101seq";
+                    orderBy;
+
 
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroId);
