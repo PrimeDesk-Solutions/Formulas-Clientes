@@ -240,7 +240,7 @@ public class SRF_Importa_XML_Revenda extends FormulaBase {
             }
 
             // Total Item
-            eaa0103.eaa0103total = (eaa0103.eaa0103unit * eaa0103.eaa0103qtComl - jsonEaa0103.getBigDecimal_Zero("desconto") + jsonEaa0103.getBigDecimal_Zero("ipi_sped")).round(2);
+            eaa0103.eaa0103total = (eaa0103.eaa0103unit * eaa0103.eaa0103qtComl - jsonEaa0103.getBigDecimal_Zero("desconto") + jsonEaa0103.getBigDecimal_Zero("ipi_sped") + jsonEaa0103.getBigDecimal_Zero("frete_dest") + jsonEaa0103.getBigDecimal_Zero("seguro") + jsonEaa0103.getBigDecimal_Zero("outras_despesas") ).round(2);
 
             calcularICMSST(dentroEstado);
 
@@ -248,20 +248,20 @@ public class SRF_Importa_XML_Revenda extends FormulaBase {
             eaa0103.eaa0103totDoc = eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("icms_st_sped");
             eaa0103.eaa0103totDoc = round(eaa0103.eaa0103totDoc, 2);
 
+            // Total Financeiro
+            if(jsonAbm1001_UF_Item == null || jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms_st") == 0){
+                eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
+            }else{
+                eaa0103.eaa0103totFinanc = eaa0103.eaa0103total;
+            }
+
             definirCFOP(dentroEstado);
 
             //Zera ST quando CFOP 1405 / CST 060
-            if(eaa0103.eaa0103cfop.aaj15codigo == '1405' || eaa0103.eaa0103cstIcms.aaj10codigo == '060'){
+            if(eaa0103.eaa0103cfop.aaj15codigo == '1405' && eaa0103.eaa0103cstIcms.aaj10codigo == '060'){
                 jsonEaa0103.put("bc_icms_st_sped", BigDecimal.ZERO);
                 jsonEaa0103.put("aliq_icms_st_sped", BigDecimal.ZERO);
                 jsonEaa0103.put("icms_st_sped", BigDecimal.ZERO);
-            }
-
-            // Total Financeiro
-            if(jsonEaa0103.getBigDecimal_Zero("icms_st_sped") == 0){
-                eaa0103.eaa0103totFinanc = eaa0103.eaa0103total;
-            }else{
-                eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
             }
 
             calcularSPED();
