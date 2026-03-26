@@ -194,7 +194,7 @@ public class SCF_Documentos extends RelatorioBase{
         String orderBy = agrup == "D" ? " order by abb11.abb11codigo ASC,daa01011.daa01011valor, abf10.abf10codigo ASC, " + orderSeq :
                 agrup == "N" ? " order by abf10.abf10codigo ASC, abb11.abb11codigo ASC, " + orderSeq :
                         agrup == "Nu" ? "order by "  + orderSeq :
-                                agrup == "E" ? "order by abe01.abe01na, abb01.abb01parcela ASC, "  + orderSeq :
+                                agrup == "E" ? "order by abe01.abe01nome, abb01.abb01parcela ASC, "  + orderSeq :
                                         agrup == "T" ? "order by aah01.aah01codigo ASC, abb01.abb01parcela ASC, "  + orderSeq :
                                                 agrup == "V" ? "order by daa01.daa01dtVctoN ASC,daa01id, abb01.abb01parcela ASC, "  + orderSeq :
                                                         agrup == "R" ? "order by abe01Rep.abe01codigo ASC, "  + orderSeq :
@@ -270,7 +270,7 @@ public class SCF_Documentos extends RelatorioBase{
         Parametro parametroOper = oper != null && oper.size() != 0 ? Parametro.criar("idOper", oper) : null;
 
 
-        String sql = " SELECT DISTINCT daa01id,abe01.abe01codigo, abe01.abe01na, abb01.abb01num, abb01.abb01parcela, abb01.abb01data, " +
+        String sql = " SELECT DISTINCT abb01serie, abe01.abe01nome, abb01parcela, abb01quita, daa01id,abe01.abe01codigo, abe01.abe01na, abb01.abb01num, abb01.abb01parcela, abb01.abb01data, " +
                 (agrup == "D" || agrup == "N" || agrup == "NE" || agrup == "DN" ? "abb11.abb11codigo, abb11.abb11nome, abf10.abf10codigo, abf10.abf10nome, " :
                         agrup == "DE" ? "abb11.abb11codigo, abb11.abb11nome, " :  "")+
                 "aah01.aah01codigo, aah01.aah01nome, abe01.abe01ni as cnpj, "+
