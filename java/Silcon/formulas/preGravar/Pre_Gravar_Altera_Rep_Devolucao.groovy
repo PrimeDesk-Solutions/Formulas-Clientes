@@ -37,10 +37,11 @@ public class Pre_Gravar_Altera_Rep_Devolucao extends FormulaBase{
 
         Eaa01 eaa01origem = eaa0103origem.eaa0103doc;
 
-        Abe01 rep0 = buscarIdRepresentanteDocOrigem(eaa01origem.eaa01id)
+        if(eaa01origem != null){
+            Abe01 rep0 = buscarIdRepresentanteDocOrigem(eaa01origem.eaa01id)
 
-        eaa01.setEaa01rep0(rep0);
-
+            eaa01.setEaa01rep0(rep0);
+        }
     }
     private Abe01 buscarIdRepresentanteDocOrigem(Long idDoc){
         return getSession().createCriteria(Abe01.class)
