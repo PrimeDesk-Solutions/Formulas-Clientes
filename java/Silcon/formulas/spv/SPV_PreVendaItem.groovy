@@ -1,5 +1,4 @@
 package Silcon.formulas.spv
-
 import br.com.multiorm.criteria.criterion.Criterions
 import br.com.multitec.utils.ValidacaoException
 import br.com.multitec.utils.collections.TableMap
@@ -49,6 +48,8 @@ class SPV_PreVendaItem extends FormulaBase {
                     throw new ValidacaoException("Valor do desconto não pode ser maior que o total do item.");
                 }
             }
+
+            if(ccb0101.ccb0101total_Zero == 0) throw new ValidacaoException("O total do item " + ccb0101.ccb0101seq + " não pode ser zero.");
 
             percDesc = (ccb0101.ccb0101desc_Zero * 100) / ccb0101.ccb0101total_Zero;
 
