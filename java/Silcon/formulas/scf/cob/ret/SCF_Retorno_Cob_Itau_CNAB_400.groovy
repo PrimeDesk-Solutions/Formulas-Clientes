@@ -105,16 +105,16 @@ class SCF_Retorno_Cob_Itau_CNAB_400 extends FormulaBase {
                         BigDecimal jurosQ = difDias > 0 ? difDias * jsonDaa01.getBigDecimal_Zero("juros") : null;
                         if(multaQ > 0) multaQ = multaQ - jurosQ
 
-                        jsonDaa01.put("multa", multaQ > 0 ? multaQ : null);
-                        jsonDaa01.put("juros", jurosQ != null ? jurosQ : null);
-                        jsonDaa01.put("desconto", descontoQ > 0 ? descontoQ : null);
+                        jsonDaa01.put("multaq", multaQ > 0 ? multaQ : null);
+                        jsonDaa01.put("jurosq", jurosQ != null ? jurosQ : null);
+                        jsonDaa01.put("descontoq", descontoQ > 0 ? descontoQ : null);
                         jsonDaa01.put("dias", difDias);
 
                         daa01.daa01json = jsonDaa01
                     }
 
                     BigDecimal vlrLiq = new BigDecimal(txt.getSubString(253, 266))
-                    daa01.daa01liquido =   vlrLiq / 100
+                    daa01.daa01liquido = vlrLiq / 100
                 }
 
                 tm.put("inconsistencias", inconsistencias);
