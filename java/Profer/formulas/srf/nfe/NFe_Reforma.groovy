@@ -373,7 +373,7 @@ class NFe_Reforma extends FormulaBase {
                 gEstornoCred.addNode("vCBSEstCred", getDecimalReq(jsonEaa01, "355.29g-W59g", "vCBSEstCred"))
             }
 
-            total.addNode("vNFTot", eaa01.eaa01totDoc)
+            if(eaa01.eaa01totDoc > 0) total.addNode("vNFTot", eaa01.eaa01totDoc)
         }
 
 		/** ISSQNtot - Totais referentes ao ISSQN (W01) */
