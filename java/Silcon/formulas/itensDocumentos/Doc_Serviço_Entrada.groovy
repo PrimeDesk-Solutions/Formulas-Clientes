@@ -529,13 +529,15 @@ public class Doc_Serviço_Entrada extends FormulaBase {
             // INSS
             if(jsonEaa0103.getBigDecimal_Zero("aliq_ir") == 0) jsonEaa0103.put("aliq_ir", jsonAbm0101.getBigDecimal_Zero("aliq_ir"));
 
-            if(jsonEaa0103.getBigDecimal_Zero("aliq_ir") != -1){
-                jsonEaa0103.put("bc_ir", jsonEaa0103.getBigDecimal_Zero("total_servico"));
-                jsonEaa0103.put("ir", ((jsonEaa0103.getBigDecimal_Zero("bc_ir") * jsonEaa0103.getBigDecimal_Zero("aliq_ir")) / 100).round(2));
-            }else{
-                jsonEaa0103.put("aliq_ir", new BigDecimal(0));
-                jsonEaa0103.put("bc_ir", new BigDecimal(0));
-                jsonEaa0103.put("ir", new BigDecimal(0));
+            if(jsonEaa0103.getBigDecimal_Zero("ir") == 0){
+                if(jsonEaa0103.getBigDecimal_Zero("aliq_ir") != -1){
+                    jsonEaa0103.put("bc_ir", jsonEaa0103.getBigDecimal_Zero("total_servico"));
+                    jsonEaa0103.put("ir", ((jsonEaa0103.getBigDecimal_Zero("bc_ir") * jsonEaa0103.getBigDecimal_Zero("aliq_ir")) / 100).round(2));
+                }else{
+                    jsonEaa0103.put("aliq_ir", new BigDecimal(0));
+                    jsonEaa0103.put("bc_ir", new BigDecimal(0));
+                    jsonEaa0103.put("ir", new BigDecimal(0));
+                }
             }
 
             //PIS/Cofins/CSLL
