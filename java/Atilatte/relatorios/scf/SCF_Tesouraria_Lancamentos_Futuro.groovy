@@ -191,7 +191,7 @@ public class SCF_Tesouraria_Lancamentos_Futuro extends RelatorioBase {
         Parametro parametroTipoDoc = tipoDoc != null && tipoDoc.size() > 0 ? Parametro.criar("tipoDoc", tipoDoc) : null;
 
 
-        String sql = "select aab10user, daa01011valor as valorDoc,abb01data as dtEmissao, daa01dtvcton as vencimentoNominal,  " +
+        String sql = "select abb01id, daa01011valor as valorDoc,abb01data as dtEmissao, daa01dtvcton as vencimentoNominal,  " +
                 "daa01dtvctor as vencimentoReal, daa01dtpgto as dataPagamento,abb01num as numDoc, abb10codigo as codOper, abb10descr as descrOper, " +
                 "abf10codigo as codNat, abf10nome as descrNat,abe01codigo as codEnt, abe01na as naEntidade, " +
                 "abf15codigo as codPortador, abf15nome as naPortador, abf16codigo as codOperFinanc, abf16nome as descrOperFinanc, aah01codigo as codTipoDoc, aah01na as descrTipoDoc, " +
@@ -204,8 +204,6 @@ public class SCF_Tesouraria_Lancamentos_Futuro extends RelatorioBase {
                 "from daa01 " +
                 "left join abb01 on abb01id = daa01central " +
                 "left join abb10 on abb10id = abb01operCod " +
-                "LEFT JOIN abb0103 ON abb0103central = abb01id "+
-                "LEFT JOIN aab10 ON aab10id = abb0103user "+
                 "left join daa0101 on daa0101doc = daa01id " +
                 "left join daa01011 on daa01011depto = daa0101id " +
                 "left join abf10 on abf10id = daa01011nat " +
