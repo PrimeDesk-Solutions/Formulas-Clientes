@@ -60,6 +60,20 @@ public class SCF_Tesouraria_Lancamentos_Futuro extends RelatorioBase {
 
             dado.put("saldoInicial", saldoIni);
 
+            Long idCentral = dado.getLong("abb01id");
+            List<String> usersAprovacao = buscarInformacoesAprovacoes(idCentral);
+
+            String aprovadores = "";
+            if(usersAprovacao != null && usersAprovacao.size() > 0){
+                for(user in usersAprovacao){
+                    if(user == null) continue;
+
+                    aprovadores = aprovadores + user + ";";
+                }
+            }
+
+            dado.put("aprovadores", aprovadores);
+
 
             // Verifica se é recebimento ou pagamento
             if(movi == 0 ){
@@ -119,7 +133,7 @@ public class SCF_Tesouraria_Lancamentos_Futuro extends RelatorioBase {
         Parametro parametroTipoDoc = tipoDoc != null && tipoDoc.size() > 0 ? Parametro.criar("tipoDoc", tipoDoc) : null;
 
 
-        String sql = "select aab10user, daa01id,daa01dtlcto as dtLancamento,abb01data as dtEmissao, daa01dtvcton as vencimentoNominal,  " +
+        String sql = "select abb01id, daa01id,daa01dtlcto as dtLancamento,abb01data as dtEmissao, daa01dtvcton as vencimentoNominal,  " +
                 "daa01dtvctor as vencimentoReal, daa01dtpgto as dataPagamento, " +
                 "abb01num as numDoc, abb10codigo as codOper, abb10descr as descrOper, " +
                 "abe01codigo as codEnt, abe01na as naEntidade, " +
@@ -134,8 +148,6 @@ public class SCF_Tesouraria_Lancamentos_Futuro extends RelatorioBase {
                 "from daa01  " +
                 "left join abb01 on abb01id = daa01central  " +
                 "left join abb10 on abb10id = abb01operCod " +
-                "LEFT JOIN abb0103 ON abb0103central = abb01id "+
-                "LEFT JOIN aab10 ON aab10id = abb0103user "+
                 "left join abe01 on abe01id = abb01ent " +
                 "left join abf15 on abf15id = daa01port " +
                 "left join abf16 on abf16id = daa01oper " +
@@ -214,6 +226,14 @@ public class SCF_Tesouraria_Lancamentos_Futuro extends RelatorioBase {
                 "order by daa01dtvctor, daa01id";
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, pararamEmpresa, pararamDtLancamentoIni, pararamDtLancamentoFin, pararamDtVctonIni, pararamDtVctonFin, pararamDtVctorIni, pararamDtVctorFin, pararamNaturezas, pararamEntidades, parametroTipoDoc)
+    }
+    private List<TableMap> buscarInformacoesAprovacoes(Long idCentral) {
+        String sql = "SELECT aab10user " +
+                "FROM abb0103 " +
+                "LEFT JOIN aab10 ON aab10id = abb0103user "+
+                "WHERE abb0103central = :idCentral";
+
+        return getAcessoAoBanco().obterListaDeString(sql, Parametro.criar("idCentral", idCentral));
     }
 }
 //meta-sis-eyJkZXNjciI6IlNDRiAtIFRlc291cmFyaWEgTGFuw6dhbWVudG9zIEZ1dHVyb3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
