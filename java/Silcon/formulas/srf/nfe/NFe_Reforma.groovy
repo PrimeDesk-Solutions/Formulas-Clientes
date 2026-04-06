@@ -189,9 +189,10 @@ class NFe_Reforma extends FormulaBase {
 //			}
 //		}
 
+        Aag0201 aag0201 = eaa01.eaa01municConsumo == null ? null : getAcessoAoBanco().buscarRegistroUnicoById("Aag0201", eaa01.eaa01municConsumo.aag0201id);
         ide.addNode("idDest", idDest, true);
         ide.addNode("cMunFG", empresa.aac10municipio.aag0201ibge, true);
-        ide.addNode("cMunFGIBS", eaa01.eaa01municConsumo == null ? null : eaa01.eaa01municConsumo.aag0201ibge, false);
+        ide.addNode("cMunFGIBS", aag0201 == null ? null : aag0201.aag0201ibge, false);
         ide.addNode("tpImp", 0, true);
         ide.addNode("tpEmis", formaEmissao, true);
         ide.addNode("cDV", chaveNfe.substring(43), true);
@@ -866,7 +867,7 @@ class NFe_Reforma extends FormulaBase {
 
     private void item() {
         /** autXML - Autorização para obter XML (GA) */
-        String niDest = StringUtils.extractNumbers(endPrincipal.eaa0101ni);
+        String niDest = StringUtils.extractNumbers(eaa0102.eaa0102ni);
         if(empresa.aac10cCnpj != null && !niDest.equals(StringUtils.extractNumbers(empresa.aac10cCnpj))) {
             autXML = infNfe.addNode("autXML");
             autXML.addNode("CNPJ", StringUtils.ajustString(StringUtils.extractNumbers(empresa.aac10cCnpj), 14), true);
