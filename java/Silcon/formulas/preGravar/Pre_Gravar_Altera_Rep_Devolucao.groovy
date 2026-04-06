@@ -33,6 +33,8 @@ public class Pre_Gravar_Altera_Rep_Devolucao extends FormulaBase{
 
         Eaa0103 eaa0103dev = eaa01.eaa0103s[0];
 
+        if(eaa0103dev.eaa01033s[0] == null) return;
+
         Eaa0103 eaa0103origem = eaa0103dev.eaa01033s[0].eaa01033itemDoc;
 
         Eaa01 eaa01origem = eaa0103origem.eaa0103doc;
