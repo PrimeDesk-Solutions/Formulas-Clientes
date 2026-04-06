@@ -217,7 +217,7 @@ class SRF_Resumo_Por_Itens extends RelatorioBase {
         Parametro parametroEmissaoDataIni = dataEmissao != null && dataEmissao.size() > 1 ? Parametro.criar("emissaoDataIni", dataEmissao[0]) : null
         Parametro parametroEmissaodataFim = dataEmissao != null && dataEmissao.size() > 1 ? Parametro.criar("emissaoDataFim", dataEmissao[1]) : null
         Parametro parametroPcd = pcds != null && pcds.size() > 0 ? Parametro.criar("pcds", pcds) : null
-        Parametro parametroItens = idsItens != null && idsItens.size() > 0 ? Parametro.criar("idsItens", idsItens) : null
+        Parametro parametroItens = idsItens != null && idsItens.size() > 0 ? Parametro.criar("idItens", idsItens) : null
         Parametro parametroEntidade = idEntidade != null && idEntidade.size() > 0 ? Parametro.criar("idEntidade", idEntidade) : null
         Parametro parametroTipoDoc = idTipoDocumento != null && idTipoDocumento.size() > 0 ? Parametro.criar("idTipoDocumento", idTipoDocumento) : null
         Parametro parametroMps = mps != null && !mps.contains(-1) ? Parametro.criar("mps", mps) : null;
@@ -273,7 +273,7 @@ class SRF_Resumo_Por_Itens extends RelatorioBase {
         Parametro parametroEmissaoDataIni = dataEmissao != null && dataEmissao.size() > 1 ? Parametro.criar("emissaoDataIni", dataEmissao[0]) : null
         Parametro parametroEmissaodataFim = dataEmissao != null && dataEmissao.size() > 1 ? Parametro.criar("emissaoDataFim", dataEmissao[1]) : null
         Parametro parametroPcd = pcds != null && pcds.size() > 0 ? Parametro.criar("pcds", pcds) : null
-        Parametro parametroItens = idsItens != null && idsItens.size() > 0 ? Parametro.criar("idsItens", idsItens) : null
+        Parametro parametroItens = idsItens != null && idsItens.size() > 0 ? Parametro.criar("idItens", idsItens) : null
         Parametro parametroEntidade = idEntidade != null && idEntidade.size() > 0 ? Parametro.criar("idEntidade", idEntidade) : null
         Parametro parametroTipoDoc = idTipoDocumento != null && idTipoDocumento.size() > 0 ? Parametro.criar("idTipoDocumento", idTipoDocumento) : null
         Parametro parametroMps = mps != null && !mps.contains(-1) ? Parametro.criar("mps", mps) : null;
