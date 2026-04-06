@@ -41,7 +41,7 @@ public class Movimento extends FormulaBase{
         //Multa: considerar multa somente se estiver em atraso
         def juros = null;
         def multa = null;
-        def diasAtraso = scfService.calculaDiasDeAtraso(daa1001);//calculaDiasDeAtraso(daa1001);
+        def diasAtraso = calculaDiasDeAtraso(daa1001)//scfService.calculaDiasDeAtraso(daa1001);//calculaDiasDeAtraso(daa1001);
         if (diasAtraso > 0) {
             juros = mapJson.getBigDecimal("juros") == null ? null : round(mapJson.getBigDecimal("juros") * diasAtraso, 2);
             multa = mapJson.getBigDecimal("multa") == null ? null : round(mapJson.getBigDecimal("multa"), 2);
