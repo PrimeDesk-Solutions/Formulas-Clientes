@@ -185,6 +185,11 @@ class Documento extends FormulaBase {
 
 		if(abd01 == null) return;
 		if(abd01 == null) return;
+        Boolean algumItemComMsgNcm = false;
+
+        for(eaa0103 in eaa01.eaa0103s){
+            if(eaa0103.eaa0103json.getString("msg_ncm") != null) algumItemComMsgNcm = true;
+        }
 
 		//Endereço principal da entidade no documento
 		for(Eaa0101 eaa0101 : eaa01.eaa0101s) {
@@ -263,6 +268,10 @@ class Documento extends FormulaBase {
 //		if(aag02.aag02uf == 'RJ'){
 //			obsFisco = obsFisco + "\nSubstituição tributária suspensa conforme o Recurso extraordinário com agravo nº 1.487.482 do Decreto nº 48.039/2022. "
 //		}
+
+        if(algumItemComMsgNcm){
+            obsFisco = obsFisco + "\nOperação conforme IN nº 2305, sujeita ao disposto na Lei Complementar nº 224, de 2025."
+        }
 
 
 		if(eaa01.eaa01obsUsoInt == null || eaa01.eaa01obsUsoInt.length() == 0) eaa01.eaa01obsUsoInt = obsUsoInt;
