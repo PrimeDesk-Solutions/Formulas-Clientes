@@ -426,6 +426,8 @@ public class FormulaGeral extends FormulaBase {
                 // Calcula Difal dos Itens
                 calcularDifal(dentroEstado);
 
+                preencherCBenefItem();
+
                 calcularCBSIBS()
 
                 // Preenche os SPEDs dos Itens
@@ -509,6 +511,8 @@ public class FormulaGeral extends FormulaBase {
                 //OutrasIPI = TotalDocumento
                 jsonEaa0103.put("ipi_outras", eaa0103.eaa0103totDoc);
 
+                preencherCBenefItem();
+
                 calcularCBSIBS();
 
                 // Preenche os SPEDs dos Itens
@@ -524,6 +528,8 @@ public class FormulaGeral extends FormulaBase {
 
                 // Zera Unitário caso quantidade comercial 0
                 if(eaa0103.eaa0103qtComl == 0) eaa0103.eaa0103unit = 0;
+
+                insereMsgNCM();
 
                 // Altera o Gtin do item caso entidade compra em caixa
                 if(jsonAbe01.getBigDecimal_Zero("unidade_caixa") == 1 && aam06.aam06codigo == 'FR') eaa0103.eaa0103gtin = jsonAbm0101.getString("descricao_livre");
@@ -616,6 +622,8 @@ public class FormulaGeral extends FormulaBase {
                 // Calcula Difal dos itens
                 calcularDifal(dentroEstado);
 
+                preencherCBenefItem();
+
                 calcularCBSIBS();
 
                 // Preenche os SPEDs dos Itens
@@ -623,6 +631,12 @@ public class FormulaGeral extends FormulaBase {
 
             }
         }
+    }
+    private void preencherCBenefItem(){
+        jsonEaa0103.put("cbenef", jsonAbm0101.getString("cbenef"));
+    }
+    private void insereMsgNCM(){
+        if(abg01 != null && abg01.abg01codigo.startsWith("0403")) jsonEaa0103.put("msg_ncm", "Operação conforme IN nº 2305, sujeita ao disposto na Lei Complementar nº 224, de 2025.");
     }
     private void calcularCBSIBS() {
         // *********************************************
