@@ -1,4 +1,4 @@
-package Atilatte.formulas.cas
+package Silcon.formulas.cas
 
 import br.com.multiorm.ColumnType
 import br.com.multiorm.criteria.criterion.Criterions
@@ -71,15 +71,15 @@ class CAS_ImportarAlinhamento extends FormulaBase {
                             .addWhere(Criterions.eq("aah02nome", row.getCell(3).getStringCellValue()))
                             .get(ColumnType.ENTITY)
 
+                    if (!aah02) interromper("Linha " + row.getRowNum().plus(1) + " - Campo livre (" + row.getCell(1).getStringCellValue() + ") informado não consta no banco de dados!")
+
                     // Busca o registro de campo do alinhamento
                     Aba6001 aba6001existe = getSession().createCriteria(Aba6001.class)
                             .addJoin(Joins.join("aba60", "aba60id = aba6001alin"))
                             .addWhere(Criterions.eq("aba6001alin", aba60.getAba60id()))
-                            .addWhere(Criterions.eq("aba6001reg", row.getCell(0).getStringCellValue()))
+                            .addWhere(Criterions.eq("aba6001cpoVlr", aah02.getAah02id()))
                             .setMaxResults(1)
                             .get(ColumnType.ENTITY)
-
-                    if (!aah02) interromper("Linha " + row.getRowNum().plus(1) + " - Campo livre informado não consta no banco de dados!")
 
                     // Se o registro não existir no alinhamento, faz o persist
                     if (!aba6001existe) {
@@ -96,4 +96,3 @@ class CAS_ImportarAlinhamento extends FormulaBase {
         }
     }
 }
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiMTAwIn0=
