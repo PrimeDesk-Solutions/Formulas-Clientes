@@ -72,12 +72,16 @@ public class Caixa extends FormulaBase{
         if(descontoq != null) descontoq = descontoq.abs() * -1
         mapJson.put("descontoq", descontoq);
 
+        // Vale Consumidor
+        if(mapJson.getBigDecimal("vale_consumidor") != null) mapJson.put("vale_consumidor", mapJson.getBigDecimal("vale_consumidor").abs() * -1);
+
         //def valorLiquido = valor + jurosq + encargosq + multaq + descontoq;
         def valorLiquido = valor;
         if(jurosq != null) valorLiquido = valorLiquido + jurosq;
         if(multaq != null) valorLiquido = valorLiquido + multaq;
         if(encargosq != null) valorLiquido = valorLiquido + encargosq;
         if(descontoq != null) valorLiquido = valorLiquido + descontoq;
+        if(mapJson.getBigDecimal("vale_consumidor") != null) valorLiquido = valorLiquido + mapJson.getBigDecimal("vale_consumidor")
 
         daa01.daa01liquido = valorLiquido;
     }
