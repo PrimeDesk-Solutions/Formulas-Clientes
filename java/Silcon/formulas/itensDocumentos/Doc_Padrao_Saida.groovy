@@ -115,9 +115,13 @@ public class Doc_Padrao_Saida extends FormulaBase {
     private TableMap jsonAbe4001;
     private TableMap jsonAaj07clasTrib;
 
+    private String procInvoc;
+
 
     @Override
     public void executar() {
+
+        procInvoc = get("procInvoc");
 
         //Item do documento
         eaa0103 = get("eaa0103");
@@ -126,6 +130,32 @@ public class Doc_Padrao_Saida extends FormulaBase {
 
         //Documento
         eaa01 = eaa0103.eaa0103doc;
+
+        //Item
+        abm01 = eaa0103.eaa0103item != null ? getSession().get(Abm01.class, eaa0103.eaa0103item.abm01id) : null;
+
+        //Tabela Preço
+        abe40 = eaa01.eaa01tp != null ? getSession().get(Abe40.class, eaa01.eaa01tp.abe40id) : null;
+
+        // Verifica se tem itens repetidos na tabela de preço
+        if(abe40 != null){
+            Query tmItensTabela = getSession().createQuery("select abe4001id from abe4001 where abe4001tab = " + abe40.abe40id + " AND abe4001item = " + abm01.abm01id);
+
+            List<TableMap> countItens = tmItensTabela.getListTableMap();
+
+            if(countItens != null && countItens.size() > 1) throw new ValidacaoException("O item " +abm01.abm01codigo+ " foi inserido mais de uma vez na tabela de preço " + abe40.abe40codigo);
+        }
+
+        //Itens da Tabela de Preço
+        abe4001 = abe40 != null ? getSession().get(Abe4001.class, Criterions.where("abe4001tab = " + abe40.abe40id + " AND abe4001item = " + abm01.abm01id)) : null;
+
+        if(abe4001 == null && eaa01.eaa01tp != null) throw new ValidacaoException("Item "+ abm01.abm01codigo +" Não Encontrado Na Tabela De Preço "+abe40.abe40codigo);
+
+
+        if(procInvoc == "CAS0242"){
+            definirPrecoUnitarioItem();
+            return
+        }
 
         for (Eaa0102 dadosGerais : eaa01.eaa0102s) {
             eaa0102 = dadosGerais;
@@ -178,8 +208,6 @@ public class Doc_Padrao_Saida extends FormulaBase {
         if (aac13.aac13classTrib == null) throw new ValidacaoException("Necessário informar a classificação tributária da empresa " + aac10.aac10codigo + " - " + aac10.aac10na)
         aaj01 = getSession().get(Aaj01.class, aac13.aac13classTrib.aaj01id);
 
-        //Item
-        abm01 = eaa0103.eaa0103item != null ? getSession().get(Abm01.class, eaa0103.eaa0103item.abm01id) : null;
 
         //Configurações do item, por empresa
         abm0101 = abm01 != null ? getSession().get(Abm0101.class, Criterions.where("abm0101item = " + abm01.abm01id + " AND abm0101empresa = " + aac10.aac10id)) : null;
@@ -232,23 +260,6 @@ public class Doc_Padrao_Saida extends FormulaBase {
 
         //CST COFINS
         aaj13_cstCof = eaa0103.eaa0103cstCofins != null ? getSession().get(Aaj13.class, eaa0103.eaa0103cstCofins.aaj13id) : null;
-
-        //Tabela Preço
-        abe40 = eaa01.eaa01tp != null ? getSession().get(Abe40.class, eaa01.eaa01tp.abe40id) : null;
-
-        // Verifica se tem itens repetidos na tabela de preço
-        if(abe40 != null){
-            Query tmItensTabela = getSession().createQuery("select abe4001id from abe4001 where abe4001tab = " + abe40.abe40id + " AND abe4001item = " + abm01.abm01id);
-
-            List<TableMap> countItens = tmItensTabela.getListTableMap();
-
-            if(countItens != null && countItens.size() > 1) throw new ValidacaoException("O item " +abm01.abm01codigo+ " foi inserido mais de uma vez na tabela de preço " + abe40.abe40codigo);
-        }
-
-        //Itens da Tabela de Preço
-        abe4001 = abe40 != null ? getSession().get(Abe4001.class, Criterions.where("abe4001tab = " + abe40.abe40id + " AND abe4001item = " + abm01.abm01id)) : null;
-
-        if(abe4001 == null && eaa01.eaa01tp != null) throw new ValidacaoException("Item "+ abm01.abm01codigo +" Não Encontrado Na Tabela De Preço "+abe40.abe40codigo);
 
         // Class. Trib CBS/IBS
         aaj07 = eaa0103.eaa0103clasTribCbsIbs != null ? getSession().get(Aaj07.class, eaa0103.eaa0103clasTribCbsIbs.aaj07id) : null;
