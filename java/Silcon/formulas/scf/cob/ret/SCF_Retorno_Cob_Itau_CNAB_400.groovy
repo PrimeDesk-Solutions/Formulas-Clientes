@@ -2,6 +2,7 @@ package Silcon.formulas.scf.cob.ret
 
 import br.com.multitec.utils.DateUtils
 
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -103,9 +104,14 @@ class SCF_Retorno_Cob_Itau_CNAB_400 extends FormulaBase {
                         BigDecimal descontoQ = new BigDecimal(txt.getSubString(240, 253)) / 100;
                         BigDecimal multaQ = new BigDecimal(txt.getSubString(266, 279)) / 100;
                         BigDecimal jurosQ = difDias > 0 ? difDias * jsonDaa01.getBigDecimal_Zero("juros") : null;
-                        if(multaQ > 0) multaQ = multaQ - jurosQ
+                        multaQ = multaQ > 0 ? multaQ - jurosQ : null;
 
-                        jsonDaa01.put("multaq", multaQ > 0 ? multaQ : null);
+                        if(daa01.daa01dtVctoR.getDayOfWeek().isWeekend() && dtPgto.getDayOfWeek() == DayOfWeek.MONDAY){
+                            multaQ = null;
+                            jurosQ = null;
+                        }
+
+                        jsonDaa01.put("multaq", multaQ != null ? multaQ : null);
                         jsonDaa01.put("jurosq", jurosQ != null ? jurosQ : null);
                         jsonDaa01.put("descontoq", descontoQ > 0 ? descontoQ : null);
                         jsonDaa01.put("dias", difDias);
