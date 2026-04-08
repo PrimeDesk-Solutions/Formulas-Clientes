@@ -426,7 +426,7 @@ public class FormulaGeral extends FormulaBase {
                 // Calcula Difal dos Itens
                 calcularDifal(dentroEstado);
 
-                preencherCBenefItem();
+                preencherCBenefItem(grupo);
 
                 calcularCBSIBS()
 
@@ -511,7 +511,7 @@ public class FormulaGeral extends FormulaBase {
                 //OutrasIPI = TotalDocumento
                 jsonEaa0103.put("ipi_outras", eaa0103.eaa0103totDoc);
 
-                preencherCBenefItem();
+                preencherCBenefItem(grupo);
 
                 calcularCBSIBS();
 
@@ -622,7 +622,7 @@ public class FormulaGeral extends FormulaBase {
                 // Calcula Difal dos itens
                 calcularDifal(dentroEstado);
 
-                preencherCBenefItem();
+                preencherCBenefItem(grupo);
 
                 calcularCBSIBS();
 
@@ -632,8 +632,28 @@ public class FormulaGeral extends FormulaBase {
             }
         }
     }
-    private void preencherCBenefItem(){
-        jsonEaa0103.put("cbenef", jsonAbm0101.getString("cbenef"));
+    private void preencherCBenefItem(String grupo){
+        if(aaj10_cstIcms.aaj10codigo == "000" || aaj10_cstIcms.aaj10codigo == "010" || aaj10_cstIcms == null) return;
+
+        if(grupo == "LEITE"){
+            if(aaj10_cstIcms.aaj10codigo == "051"){
+                eaa0103.eaa0103codBenef = "SP053890";
+            }else if(aaj10_cstIcms.aaj10codigo == "040"){
+                eaa0103.eaa0103codBenef = "SP010840";
+            }
+        }else if(grupo.contains("IOGURTE") || grupo.contains("BAUNILHA") ){
+            if(aaj10_cstIcms.aaj10codigo == "040"){
+                eaa0103.eaa0103codBenef = "SP010840"
+            }else if(aaj10_cstIcms.aaj10codigo == "070"){
+                eaa0103.eaa0103codBenef = "SP020390"
+            }
+        }else{
+            if(aaj10_cstIcms.aaj10codigo == "040"){
+                eaa0103.eaa0103codBenef = "SP010840";
+            }else if(aaj10_cstIcms.aaj10codigo == "020"){
+                eaa0103.eaa0103codBenef = "SP020390"
+            }
+        }
     }
     private void insereMsgNCM(){
         if(abg01 != null && abg01.abg01codigo.startsWith("0403")) jsonEaa0103.put("msg_ncm", "Operação conforme IN nº 2305, sujeita ao disposto na Lei Complementar nº 224, de 2025.");
