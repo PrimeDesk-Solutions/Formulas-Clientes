@@ -1276,6 +1276,7 @@ class NFe_Reforma extends FormulaBase {
                             ICMS20 = ICMS.addNode("ICMS20");
                             ICMS20.addNode("orig", orig, true);
                             ICMS20.addNode("CST", cst, true);
+                            ICMS20.addNode("cBenef", eaa0103.eaa0103codBenef, false);
                             ICMS20.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, true);
                             ICMS20.addNode("pRedBC", getCampo("189-N14","pRedBC") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("189-N14","pRedBC")), 2, false), true);
                             ICMS20.addNode("vBC", getCampo("190-N15","vBC") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("190-N15","vBC")), 2, false), true);
@@ -1314,6 +1315,8 @@ class NFe_Reforma extends FormulaBase {
                             ICMS40 = ICMS.addNode("ICMS40");
                             ICMS40.addNode("orig", orig, true);
                             ICMS40.addNode("CST", cst, true);
+                            ICMS40.addNode("cBenef", eaa0103.eaa0103codBenef, false);
+
 
                             if(eaa0103.eaa0103motDesIcms > 0){
                                 ICMS40.addNode("vICMSDeson", getCampo("204.01-N28a","vICMSDeson") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("204.01-N28a","vICMSDeson")), 2, false), true);
@@ -1326,6 +1329,7 @@ class NFe_Reforma extends FormulaBase {
                             ICMS51 = ICMS.addNode("ICMS51");
                             ICMS51.addNode("orig", orig, true);
                             ICMS51.addNode("CST", cst, true);
+                            ICMS51.addNode("cBenef", eaa0103.eaa0103codBenef, false);
                             ICMS51.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, false);
 
                             Boolean temDiferimento = getCampo("211.02-N16b","pDif") != null && !jsonEaa0103.getBigDecimal(getCampo("211.02-N16b","pDif")).equals(0); //Se houver % de diferimento, gerar as tag mesmo que seja zero
@@ -1374,7 +1378,7 @@ class NFe_Reforma extends FormulaBase {
                             ICMS70 = ICMS.addNode("ICMS70");
                             ICMS70.addNode("orig", orig, true);
                             ICMS70.addNode("CST", cst, true);
-                            ICMS70.addNode("cBenef", jsonEaa0103.getString("cbenef"));
+                            ICMS70.addNode("cBenef", eaa0103.eaa0103codBenef, false);
                             ICMS70.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, true);
                             ICMS70.addNode("pRedBC", getCampo("222-N14","pRedBC") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("222-N14","pRedBC")), 2, false), true);
                             ICMS70.addNode("vBC", getCampo("223-N15","vBC") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("223-N15","vBC")), 2, false), true);
