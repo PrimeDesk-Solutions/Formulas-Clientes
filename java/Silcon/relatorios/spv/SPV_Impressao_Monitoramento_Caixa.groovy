@@ -129,7 +129,7 @@ public class SPV_Impressao_Monitoramento_Caixa extends RelatorioBase {
                 "INNER JOIN aah01 ON aah01id = abb01tipo " +
                 "INNER JOIN dab1002 ON dab1002lct = dab10id "+
                 "WHERE dab10id IN (:idsLctos) " +
-                "ORDER BY dab10data";
+                "ORDER BY dab10data, dab10id";
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idsLctos", idsLctos));
     }
