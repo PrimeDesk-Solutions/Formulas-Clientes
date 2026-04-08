@@ -1254,7 +1254,6 @@ class NFe_Reforma extends FormulaBase {
                             ICMS10 = ICMS.addNode("ICMS10");
                             ICMS10.addNode("orig", orig, true);
                             ICMS10.addNode("CST", cst, true);
-                            ICMS10.addNode("cBenef", jsonEaa0103.getString("cbenef"));
                             ICMS10.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, true);
                             ICMS10.addNode("vBC", getCampo("176-N15","vBC") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("176-N15","vBC")), 2, false), true);
                             ICMS10.addNode("pICMS", getCampo("177-N16","pICMS") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("177-N16","pICMS")), 2, false), true);
