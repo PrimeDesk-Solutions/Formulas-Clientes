@@ -126,7 +126,7 @@ public class SPV_Impressao_Monitoramento_Caixa extends RelatorioBase {
                 "aah01nome AS nomeTipoDoc, abb01num AS numLcto, dab10mov AS mov, dab1002valor AS valor " +
                 "FROM dab10 " +
                 "INNER JOIN abb01 ON abb01id = dab10central " +
-                "INNER JOIN aah01 ON aah01id = abb01tipo " +
+                "LEFT JOIN aah01 ON aah01id = abb01tipo " +
                 "INNER JOIN dab1002 ON dab1002lct = dab10id "+
                 "WHERE dab10id IN (:idsLctos) " +
                 "ORDER BY dab10data, dab10id";
