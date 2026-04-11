@@ -337,13 +337,13 @@ public class Doc_Padrao_Saida extends FormulaBase {
             }
 
             // Peso Bruto
-            jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto).round(3));
+            jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto_Zero).round(3));
 
             // Peso Líquido
-            jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(3));
+            jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq_Zero).round(3));
 
             // Total do item = Qt.Documento * Unitário
-            eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
+            eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit_Zero).round(2);
 
             // Preenche o CST de ICMS do Item
             preencherCSTICMS();
