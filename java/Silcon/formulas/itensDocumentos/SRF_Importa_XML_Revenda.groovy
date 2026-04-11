@@ -298,7 +298,7 @@ public class SRF_Importa_XML_Revenda extends FormulaBase {
     }
     private void calcularICMSST(Boolean dentroEstado){
         if(jsonEaa0103.getBigDecimal_Zero("icms_st_sped") == 0 ){
-            if(jsonEaa0103.getBigDecimal_Zero("aliq_icms_st") != -1 && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_iva_st") > 0){
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_icms_st") != -1 && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_iva_st") > 0 && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms_st") > 0){
                 jsonEaa0103.put("aliq_icms_st_sped", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms_st"));
                 jsonEaa0103.put("bc_icms_st_sped", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("seguro") + jsonEaa0103.getBigDecimal_Zero("outras_despesas") + jsonEaa0103.getBigDecimal_Zero("ipi"))
                 jsonEaa0103.put("bc_icms_st_sped", jsonEaa0103.getBigDecimal_Zero("bc_icms_st_sped") + (jsonEaa0103.getBigDecimal_Zero("bc_icms_st_sped") * (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_iva_st") / 100)));
