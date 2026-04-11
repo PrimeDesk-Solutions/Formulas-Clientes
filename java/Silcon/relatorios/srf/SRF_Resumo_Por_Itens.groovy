@@ -64,6 +64,7 @@ class SRF_Resumo_Por_Itens extends RelatorioBase {
         Boolean totalizar6 = getBoolean("total6")
         Boolean devolucoes = getBoolean("devolucao");
         List<Integer> mps = getListInteger("mps")
+        List<Long> criterios = getListLong("criteriosItem")
 
         if (campoLivre1 != null && camposFixo1 != null) interromper("Selecione apenas 1 valor por campo!")
         if (campoLivre2 != null && camposFixo2 != null) interromper("Selecione apenas 1 valor por campo!")
@@ -99,11 +100,11 @@ class SRF_Resumo_Por_Itens extends RelatorioBase {
         params.put("totalizar6", totalizar6);
 
 
-        List<TableMap> dados = buscarItensDoc(idEntidade, idTipoDocumento, dataEmissao, dataEntSai, numeroInicial, numeroFinal, resumoOperacao, idsItens, idsPcd, mps);
+        List<TableMap> dados = buscarItensDoc(idEntidade, idTipoDocumento, dataEmissao, dataEntSai, numeroInicial, numeroFinal, resumoOperacao, idsItens, idsPcd, mps, criterios);
 
         if (dados.size() == 0) interromper("Não foram encontrado dados com os filtros selecionados.");
 
-        List<Long> idsItensDoc = obterIdsItensDoc(idEntidade, idTipoDocumento, dataEmissao, dataEntSai, numeroInicial, numeroFinal, resumoOperacao, idsItens, idsPcd, mps);
+        List<Long> idsItensDoc = obterIdsItensDoc(idEntidade, idTipoDocumento, dataEmissao, dataEntSai, numeroInicial, numeroFinal, resumoOperacao, idsItens, idsPcd, mps, criterios);
 
         List<TableMap> dadosRelatorio = new ArrayList();
         List<TableMap> listDevolucoesGeral = new ArrayList();
@@ -196,7 +197,7 @@ class SRF_Resumo_Por_Itens extends RelatorioBase {
     }
 
     private List<TableMap> buscarItensDoc(List<Long> idEntidade, List<Long> idTipoDocumento, LocalDate[] dataEmissao, LocalDate[] dataEntSai, Integer numeroInicial, Integer numeroFinal,
-                                          Integer resumoOperacao, List<Long> idsItens, List<Long> pcds, List<Integer> mps) {
+                                          Integer resumoOperacao, List<Long> idsItens, List<Long> pcds, List<Integer> mps, List<Long> criterios) {
 
         String whereNumIni = numeroInicial != null ? " AND abb01num >= :numeroInicial " : ""
         String whereNumFim = numeroFinal != null ? " AND abb01num <= :numeroFinal " : ""
@@ -207,8 +208,9 @@ class SRF_Resumo_Por_Itens extends RelatorioBase {
         String whereEntidade = idEntidade != null && idEntidade.size() > 0 ? " AND abe01id IN (:idEntidade) " : ""
         String whereTipoDoc = idTipoDocumento != null && idTipoDocumento.size() > 0 ? " AND abb01tipo in (:idTipoDocumento) " : ""
         String whereClassDoc = " AND eaa01clasDoc = 1 "
-        String whereES = resumoOperacao == 1 ? " AND eaa01esMov = 1 " : " AND eaa01esMov = 0"
+        String whereES = resumoOperacao == 1 ? " AND eaa01esMov = 1 " : " AND eaa01esMov = 0 "
         String whereMps = mps != null && !mps.contains(-1) ? "AND abm01tipo IN (:mps) " : "";
+        String whereCriterios = criterios != null && criterios.size() > 0 ? "AND abm0102criterio IN (:criterios) " : "";
 
         Parametro parametroNumIni = numeroInicial != null ? Parametro.criar("numeroInicial", numeroInicial) : null
         Parametro parametroNumFim = numeroFinal != null ? Parametro.criar("numeroFinal", numeroFinal) : null
@@ -221,9 +223,9 @@ class SRF_Resumo_Por_Itens extends RelatorioBase {
         Parametro parametroEntidade = idEntidade != null && idEntidade.size() > 0 ? Parametro.criar("idEntidade", idEntidade) : null
         Parametro parametroTipoDoc = idTipoDocumento != null && idTipoDocumento.size() > 0 ? Parametro.criar("idTipoDocumento", idTipoDocumento) : null
         Parametro parametroMps = mps != null && !mps.contains(-1) ? Parametro.criar("mps", mps) : null;
+        Parametro prametroCriterios = criterios != null && criterios.size() > 0 ? Parametro.criar("criterios", criterios) : null;
 
-
-        String sql = " SELECT abm01id,abm01tipo, abm01codigo,abm01descr,aam06codigo, eaa0103qtuso, " +
+        String sql = " SELECT DISTINCT abm01id,abm01tipo, abm01codigo,abm01descr,aam06codigo, eaa0103qtuso, " +
                         " eaa0103qtcoml,eaa0103unit,eaa0103total,eaa0103totdoc ,eaa0103totfinanc, eaa0103id, eaa0103json, eaa01id " +
                         " FROM eaa0103 " +
                         " INNER JOIN eaa01 on eaa01id = eaa0103doc " +
@@ -231,6 +233,7 @@ class SRF_Resumo_Por_Itens extends RelatorioBase {
                         " INNER JOIN abm01 on abm01id = eaa0103item " +
                         " LEFT JOIN aam06 on aam06id = abm01umu " +
                         " LEFT JOIN abe01 on abe01id = abb01ent " +
+                        " LEFT JOIN abm0102 ON abm0102item = abm01id "+
                         " WHERE eaa01clasDoc = 1 " +
                         " AND eaa01cancData IS NULL " +
                         " AND eaa01nfestat <> 5 " +
@@ -245,14 +248,14 @@ class SRF_Resumo_Por_Itens extends RelatorioBase {
                         whereClassDoc +
                         whereES +
                         whereMps +
+                        whereCriterios +
                         "ORDER BY abm01codigo, abm01tipo"
 
-
-        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroNumIni, parametroNumFim, parametroEsDataIni, parametroEsdataFim, parametroEmissaoDataIni, parametroEmissaodataFim, parametroPcd, parametroItens, parametroEntidade, parametroTipoDoc, parametroMps)
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroNumIni, parametroNumFim, parametroEsDataIni, parametroEsdataFim, parametroEmissaoDataIni, parametroEmissaodataFim, parametroPcd, parametroItens, parametroEntidade, parametroTipoDoc, parametroMps, prametroCriterios)
     }
 
     private List<Long> obterIdsItensDoc(List<Long> idEntidade, List<Long> idTipoDocumento, LocalDate[] dataEmissao, LocalDate[] dataEntSai, Integer numeroInicial, Integer numeroFinal,
-                                          Integer resumoOperacao, List<Long> idsItens, List<Long> pcds, List<Integer> mps) {
+                                          Integer resumoOperacao, List<Long> idsItens, List<Long> pcds, List<Integer> mps, List<Long> criterios) {
 
         String whereNumIni = numeroInicial != null ? " AND abb01num >= :numeroInicial " : ""
         String whereNumFim = numeroFinal != null ? " AND abb01num <= :numeroFinal " : ""
@@ -263,8 +266,10 @@ class SRF_Resumo_Por_Itens extends RelatorioBase {
         String whereEntidade = idEntidade != null && idEntidade.size() > 0 ? " AND abe01id IN (:idEntidade) " : ""
         String whereTipoDoc = idTipoDocumento != null && idTipoDocumento.size() > 0 ? " AND abb01tipo in (:idTipoDocumento) " : ""
         String whereClassDoc = " AND eaa01clasDoc = 1 "
-        String whereES = resumoOperacao == 1 ? " AND eaa01esMov = 1 " : " AND eaa01esMov = 0"
+        String whereES = resumoOperacao == 1 ? " AND eaa01esMov = 1 " : " AND eaa01esMov = 0 "
         String whereMps = mps != null && !mps.contains(-1) ? "AND abm01tipo IN (:mps) " : "";
+        String whereCriterios = criterios != null && criterios.size() > 0 ? "AND abm0102criterio IN (:criterios) " : "";
+
 
         Parametro parametroNumIni = numeroInicial != null ? Parametro.criar("numeroInicial", numeroInicial) : null
         Parametro parametroNumFim = numeroFinal != null ? Parametro.criar("numeroFinal", numeroFinal) : null
@@ -277,7 +282,7 @@ class SRF_Resumo_Por_Itens extends RelatorioBase {
         Parametro parametroEntidade = idEntidade != null && idEntidade.size() > 0 ? Parametro.criar("idEntidade", idEntidade) : null
         Parametro parametroTipoDoc = idTipoDocumento != null && idTipoDocumento.size() > 0 ? Parametro.criar("idTipoDocumento", idTipoDocumento) : null
         Parametro parametroMps = mps != null && !mps.contains(-1) ? Parametro.criar("mps", mps) : null;
-
+        Parametro prametroCriterios = criterios != null && criterios.size() > 0 ? Parametro.criar("criterios", criterios) : null;
 
         String sql = " SELECT eaa0103id " +
                 " FROM eaa0103 " +
@@ -286,6 +291,7 @@ class SRF_Resumo_Por_Itens extends RelatorioBase {
                 " INNER JOIN abm01 on abm01id = eaa0103item " +
                 " LEFT JOIN aam06 on aam06id = abm01umu " +
                 " LEFT JOIN abe01 on abe01id = abb01ent " +
+                " LEFT JOIN abm0102 ON abm0102item = abm01id " +
                 " WHERE eaa01clasDoc = 1 " +
                 " AND eaa01cancData IS NULL " +
                 " AND eaa01nfestat <> 5 " +
@@ -300,10 +306,10 @@ class SRF_Resumo_Por_Itens extends RelatorioBase {
                 whereClassDoc +
                 whereES +
                 whereMps +
+                whereCriterios +
                 "ORDER BY abm01codigo, abm01tipo"
 
-
-        return getAcessoAoBanco().obterListaDeLong(sql, parametroNumIni, parametroNumFim, parametroEsDataIni, parametroEsdataFim, parametroEmissaoDataIni, parametroEmissaodataFim, parametroPcd, parametroItens, parametroEntidade, parametroTipoDoc, parametroMps)
+        return getAcessoAoBanco().obterListaDeLong(sql, parametroNumIni, parametroNumFim, parametroEsDataIni, parametroEsdataFim, parametroEmissaoDataIni, parametroEmissaodataFim, parametroPcd, parametroItens, parametroEntidade, parametroTipoDoc, parametroMps, prametroCriterios)
     }
 
     private void somarValores(TableMap valoresDocumento, TableMap valoresTotais, Map<String, String> campos) {
