@@ -30,6 +30,8 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
         LocalDate[] dataLcto = getIntervaloDatas("data");
         Integer agrupamento = getInteger("agrupamento");
         Integer detalhamento = getInteger("detalhamento");
+        List<Long> entidades = getListLong("entidade");
+        List<Long> documentos = getListLong("documento");
         Integer impressao = getInteger("impressao");
 
 
@@ -42,7 +44,7 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
         params.put("empresa", obterEmpresaAtiva().getAac10codigo() + " - " + obterEmpresaAtiva().getAac10na())
 
 
-        List<TableMap> dados = buscarDadosRelatorioAnalitico(idsDeptos, idsNaturezas, dataLcto, agrupamento, detalhamento);
+        List<TableMap> dados = buscarDadosRelatorioAnalitico(idsDeptos, idsNaturezas, dataLcto, agrupamento, detalhamento, entidades, documentos);
         List<TableMap> dadosSintetico = new ArrayList<>()
 
         if(detalhamento == 1){
@@ -113,17 +115,22 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
 
 
     }
-    private List<TableMap> buscarDadosRelatorioAnalitico(List<Long> idsDeptos, List<Long> idsNaturezas, LocalDate[] dataLcto, Integer agrupamento, Integer detalhamento){
+    private List<TableMap> buscarDadosRelatorioAnalitico(List<Long> idsDeptos, List<Long> idsNaturezas, LocalDate[] dataLcto, Integer agrupamento, Integer detalhamento, List<Long> entidades, List<Long> documentos){
         String whereDeptos = idsDeptos != null && idsDeptos.size() > 0 ? "AND abb11id IN (:idsDeptos) " : "";
         String whereNat = idsNaturezas != null && idsNaturezas.size() > 0 ? "AND abf10id IN (:idsNaturezas) " : "";
         String whereDtLcto = dataLcto != null ? "AND dab10data between :dtInicial AND :dtFinal " : "";
         String whereEmpresa = "WHERE dab10gc = :idEmpresa ";
+        String whereTipoDoc = documentos != null && documentos.size() > 0 ? "AND abb01tipo IN (:documentos) " : "";
+        String whereEntidades = entidades != null && entidades.size() > 0 ? "AND abb01ent IN (:entidades) " : "";
 
         Parametro parametroDeptos = idsDeptos != null && idsDeptos.size() > 0 ? Parametro.criar("idsDeptos", idsDeptos) : null;
         Parametro parametroNat = idsNaturezas != null && idsNaturezas.size() > 0 ? Parametro.criar("idsNaturezas", idsNaturezas) : null;
         Parametro parametroDtInicial = dataLcto != null ? Parametro.criar("dtInicial", dataLcto[0]) : null;
         Parametro parametroDtFinal = dataLcto != null ? Parametro.criar("dtFinal", dataLcto[1]) : null;
         Parametro parametroEmpresa = Parametro.criar("idEmpresa", obterEmpresaAtiva().getAac10id());
+        Parametro parametroTipoDoc = documentos != null && documentos.size() > 0 ? Parametro.criar("documentos", documentos) : null;
+        Parametro parametroEntidades = entidades != null && entidades.size() > 0 ? Parametro.criar("entidades", entidades) : null;
+
 
         String orderBy = agrupamento == 0 ? "ORDER BY abb11codigo" : "ORDER BY abf10codigo"
 
@@ -132,6 +139,7 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
                 "CASE WHEN dab10mov = 0 THEN 'C' ELSE 'D' END AS movimentacao, abf10codigo AS codNatureza, abf10nome AS descrNat, " +
                 "CASE WHEN dab10mov = 1 THEN dab10011valor * (-1) ELSE dab10011valor END AS valor " +
                 "FROM dab10 " +
+                "LEFT JOIN abb01 ON abb01id = dab10central "+
                 "INNER JOIN dab1001 ON dab1001lct = dab10id " +
                 "INNER JOIN abb11 ON abb11id = dab1001depto " +
                 "INNER JOIN dab1002 ON dab1002lct = dab10id " +
@@ -142,9 +150,11 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
                 whereNat+
                 whereDtLcto+
                 whereEmpresa +
+                whereTipoDoc +
+                whereEntidades +
                 orderBy
 
-        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroDeptos, parametroNat, parametroDtInicial, parametroDtFinal, parametroEmpresa)
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroDeptos, parametroNat, parametroDtInicial, parametroDtFinal, parametroEmpresa, parametroTipoDoc, parametroEntidades)
 
     }
     private List<TableMap> buscarDadosRelatorioSintetico(List<Long> idsDeptos, List<Long> idsNaturezas, LocalDate[] dataLcto, Integer agrupamento, Integer detalhamento){
