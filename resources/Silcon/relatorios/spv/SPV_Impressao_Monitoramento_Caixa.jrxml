@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SPV_Impressao_Monitoramento_Caixa" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ab325c5a-3894-487a-ac07-a74e9a812478">
 	<property name="ireport.zoom" value="2.0000000000000027"/>
-	<property name="ireport.x" value="223"/>
-	<property name="ireport.y" value="143"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="TITULO" class="java.lang.String"/>
 	<parameter name="EMPRESA" class="java.lang.String"/>
 	<parameter name="LOGO_EMPRESA" class="java.lang.String"/>
@@ -25,7 +25,9 @@
 	<title>
 		<band height="51" splitType="Stretch">
 			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="0" y="0" width="95" height="51" uuid="42697e99-bcd8-48f8-b6f0-56ed042ac1fa"/>
+				<reportElement x="0" y="0" width="95" height="51" uuid="42697e99-bcd8-48f8-b6f0-56ed042ac1fa">
+					<printWhenExpression><![CDATA[1 == 2]]></printWhenExpression>
+				</reportElement>
 				<imageExpression><![CDATA[$P{LOGO_EMPRESA}]]></imageExpression>
 			</image>
 			<textField>
@@ -236,7 +238,9 @@
 	<pageFooter>
 		<band height="39" splitType="Stretch">
 			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="480" y="3" width="75" height="36" uuid="e165b93c-33b3-4230-bdad-ff9b529b5776"/>
+				<reportElement x="480" y="3" width="75" height="36" uuid="e165b93c-33b3-4230-bdad-ff9b529b5776">
+					<printWhenExpression><![CDATA[1 == 2]]></printWhenExpression>
+				</reportElement>
 				<imageExpression><![CDATA[$P{LOGO_REVENDA}]]></imageExpression>
 			</image>
 			<staticText>

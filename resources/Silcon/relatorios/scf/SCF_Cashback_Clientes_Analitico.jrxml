@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF_Cashback_Clientes_Sintetico" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b8eb7c23-610d-4774-a527-f802e5ea77e3">
+	<property name="ireport.zoom" value="1.9487171000000014"/>
+	<property name="ireport.x" value="157"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="EMPRESA" class="java.lang.String"/>
+	<parameter name="TITULO" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\SAM-Servidor\\Formulas\\src\\main\\resources\\Silcon\\relatorios\\scf\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="StreamSub1" class="java.lang.Object"/>
+	<field name="abe01codigo" class="java.lang.String"/>
+	<field name="abe01nome" class="java.lang.String"/>
+	<field name="dad01saldo" class="java.math.BigDecimal"/>
+	<field name="dad01id" class="java.lang.String"/>
+	<field name="dsLctos" class="java.lang.Object"/>
+	<field name="field6" class="java.lang.String"/>
+	<field name="field7" class="java.lang.String"/>
+	<field name="field8" class="java.lang.String"/>
+	<field name="field9" class="java.lang.String"/>
+	<field name="field1" class="java.lang.String"/>
+	<group name="cashback" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{dad01id}]]></groupExpression>
+		<groupHeader>
+			<band height="16">
+				<textField>
+					<reportElement x="0" y="0" width="100" height="13" uuid="57a88be0-a328-476c-a7f4-16e5a8291247"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{abe01codigo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="100" y="0" width="355" height="13" uuid="dab788ec-00ab-4903-99a7-5e8bca60833c"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{abe01nome}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="455" y="0" width="100" height="13" uuid="9e902260-6ec6-4634-9b67-98088963010e"/>
+					<textElement textAlignment="Right">
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dad01saldo}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="13" width="555" height="1" uuid="34392936-950d-4161-9a39-fa232f258c73"/>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="194" y="0" width="201" height="13" uuid="b14529d0-b018-410a-be48-e3d8e831f36c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{EMPRESA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="174" height="13" uuid="21badacc-fbc3-4ab5-9792-5e6fce307f25"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TITULO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="16" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="13" uuid="b7d34d15-b535-4754-aa67-b1ad712ca06a"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="355" height="13" uuid="8039b14b-29e3-42ed-87fc-c6a66822ad4d"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="455" y="0" width="100" height="13" uuid="1494143e-0306-4ac5-ace4-aeaaf417b802"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Saldo]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="13" width="555" height="1" uuid="cfe451ce-9e6c-41ad-8b79-2cfbb568f10e"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<subreport>
+				<reportElement x="29" y="0" width="499" height="23" uuid="0c5dacc2-d8a6-45d2-b4e2-2500b4c3d020"/>
+				<dataSourceExpression><![CDATA[$F{dsLctos}]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{StreamSub1}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
