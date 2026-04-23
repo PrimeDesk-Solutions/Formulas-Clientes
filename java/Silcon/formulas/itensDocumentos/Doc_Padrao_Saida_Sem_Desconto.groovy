@@ -1,5 +1,5 @@
 package Silcon.formulas.itensDocumentos
-
+import java.math.RoundingMode;
 import sam.model.entities.aa.Aac13
 import sam.model.entities.aa.Aaj01;
 import sam.model.entities.ab.Abd02
@@ -50,6 +50,8 @@ import sam.server.samdev.formula.FormulaBase;
 import sam.model.entities.ab.Abe40;
 import sam.model.entities.ab.Abe4001;
 import br.com.multiorm.Query
+
+import java.math.RoundingMode
 import java.time.Month;
 import java.time.DayOfWeek;
 import java.time.format.DateTimeFormatter;
@@ -332,7 +334,10 @@ public class Doc_Padrao_Saida_Sem_Desconto extends FormulaBase {
             jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(3));
 
             // Total do item = Qt.Documento * Unitário
-            eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
+            eaa0103.eaa0103total = eaa0103.eaa0103qtComl * eaa0103.eaa0103unit_Zero;
+
+            eaa0103.eaa0103total = eaa0103.eaa0103total.setScale(2, RoundingMode.DOWN);
+
 
             // Preenche o CST de ICMS do Item
             preencherCSTICMS();
