@@ -11,6 +11,7 @@ import sam.model.entities.ab.Abb01
 import sam.model.entities.ab.Abe01
 import sam.model.entities.ab.Abe0101
 import sam.model.entities.ab.Abe02
+import sam.model.entities.ab.Abd01
 import sam.model.entities.ab.Abm01
 import sam.model.entities.ab.Abm0101
 import sam.model.entities.ea.Eaa01
@@ -79,6 +80,12 @@ public class Altera_Representante_Documento extends FormulaBase{
     private void verificarDataVctoLimiteCredito(Eaa01 eaa01){
 
         Abb01 abb01 = eaa01.eaa01central;
+
+        Abe01 abe01 = abb01.abb01ent;
+
+        Abd01 abd01 = getSession().createCriteria(Abd01.class).addWhere(Criterions.eq("abd01id", eaa01.eaa01pcd.abd01id)).get(ColumnType.ENTITY);
+
+        if(abe01.abe01codigo == "9999999100" || (abd01.abd01codigo != "60001" && abd01.abd01codigo != "70001")) return // CONSUMIDOR OU PCD VENDA
 
         TableMap jsonAbe01 = getSession().createQuery("SELECT abe01json FROM abe01 WHERE abe01id = :idEntidade")
                 .setParameter("idEntidade", abb01.abb01ent.abe01id)
