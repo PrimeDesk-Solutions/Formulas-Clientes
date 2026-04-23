@@ -17,6 +17,8 @@ import sam.model.entities.ea.Eaa01
 import sam.model.entities.ea.Eaa0103;
 import sam.server.samdev.formula.FormulaBase
 import sam.dicdados.FormulaTipo
+import java.time.format.DateTimeFormatter;
+
 
 import java.time.LocalDate
 
@@ -41,6 +43,7 @@ public class Altera_Representante_Documento extends FormulaBase{
         eaa01 = get("eaa01");
         alterarRepresentante(eaa01);
         validarQuantidadeItem(eaa01);
+        verificarDataVctoLimiteCredito(eaa01);
 
         put("gravar", gravar);
     }
@@ -72,6 +75,24 @@ public class Altera_Representante_Documento extends FormulaBase{
 
             if(eaa0103.eaa0103qtComl == 0 ) throw new ValidacaoException("Quantidade inválida para o item "+abm01.abm01codigo+" necessário um valor maior que zero")
         }
+    }
+    private void verificarDataVctoLimiteCredito(Eaa01 eaa01){
+
+        Abb01 abb01 = eaa01.eaa01central;
+
+        TableMap jsonAbe01 = getSession().createQuery("SELECT abe01json FROM abe01 WHERE abe01id = :idEntidade")
+                .setParameter("idEntidade", abb01.abb01ent.abe01id)
+                .getUniqueResult(ColumnType.JSON);
+
+        LocalDate dataAtual = LocalDate.now();
+        LocalDate dtVencLimCredito = jsonAbe01.getDate("dt_vcto_lim_credito");
+
+        if(dtVencLimCredito == null) interromper("Não foi informado data de vencimento de limite de crédito no cadastro da entidade.");
+
+        if(dtVencLimCredito < dataAtual){ // Data de vencimento de crédito menor que data atual, significa que expirou
+            interromper("Data de vencimento do limite de crédito do cliente venceu em " + dtVencLimCredito.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString() + ".")
+        }
+
     }
 }
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiOTcifQ==
