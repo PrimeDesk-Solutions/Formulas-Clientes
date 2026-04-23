@@ -92,9 +92,12 @@ public class SCF_Documentos extends RelatorioBase{
             LocalDate dtVctoN = tm.getDate("daa01dtVctoN");
             Integer dias = ChronoUnit.DAYS.between(dtAtual, dtVctoN);
             BigDecimal juros = tm.getBigDecimal_Zero("juros");
+            LocalDate dtBaixa = tm.getDate("dtBaixa");
 
-            tm.put("dias", dias);
-            tm.put("jme", (juros * dias).round(2));
+            if(dtBaixa == null){
+                tm.put("dias", dias);
+                tm.put("jme", (juros * dias).round(2));
+            }
 
             TableMap daa01Json = tm.getTableMap("daa01json");
             if (daa01Json != null) {
@@ -247,13 +250,17 @@ public class SCF_Documentos extends RelatorioBase{
             }
         }
 
-        String campoJuros = ""
+        String campoJuros = "";
+        String campoJME = "";
         if(classe.equals(0) || classe.equals(2)){ // Receber ou A pagar
             campoJuros = "CAST(daa01json ->> 'juros' AS numeric(18,6)) AS juros, ";
+            campoJME =   "COALESCE(CAST(daa01json ->> 'juros' AS numeric(18,6)), 0) + COALESCE(CAST(daa01json ->> 'multa' AS numeric(18,6)), 0) + COALESCE(CAST(daa01json ->> 'encargos' AS numeric(18,6)), 0) AS jme, ";
         }else if(classe.equals(1) || classe.equals(3)){ // Recebidos ou pagos
             campoJuros = "CAST(daa01json ->> 'jurosq' AS numeric(18,6)) AS juros, ";
+            campoJME =   "COALESCE(CAST(daa01json ->> 'jurosq' AS numeric(18,6)), 0) + COALESCE(CAST(daa01json ->> 'multaq' AS numeric(18,6)), 0) + COALESCE(CAST(daa01json ->> 'encargosq' AS numeric(18,6)), 0) AS jme,";
         }else { // Receber/Recebidos ou A pagar/pagos
             campoJuros = "CASE WHEN daa01.daa01dtBaixa IS NULL THEN CAST(daa01json ->> 'juros' AS numeric(18,6)) ELSE CAST(daa01json ->> 'jurosq' AS numeric(18,6)) END AS juros, ";
+            campoJME =   "COALESCE(CAST(daa01json ->> 'juros' AS numeric(18,6)), 0) + COALESCE(CAST(daa01json ->> 'multa' AS numeric(18,6)), 0) + COALESCE(CAST(daa01json ->> 'encargos' AS numeric(18,6)), 0) ELSE COALESCE(CAST(daa01json ->> 'jurosq' AS numeric(18,6)), 0) + COALESCE(CAST(daa01json ->> 'multaq' AS numeric(18,6)), 0) + COALESCE(CAST(daa01json ->> 'encargosq' AS numeric(18,6)), 0) END AS jme, ";
         }
 
 
@@ -273,16 +280,15 @@ public class SCF_Documentos extends RelatorioBase{
         String sql = " SELECT DISTINCT abb01serie, abe01.abe01nome, abb01parcela, abb01quita, daa01id,abe01.abe01codigo, abe01.abe01na, abb01.abb01num, abb01.abb01parcela, abb01.abb01data, " +
                 (agrup == "D" || agrup == "N" || agrup == "NE" || agrup == "DN" ? "abb11.abb11codigo, abb11.abb11nome, abf10.abf10codigo, abf10.abf10nome, " :
                         agrup == "DE" ? "abb11.abb11codigo, abb11.abb11nome, " :  "")+
-                "aah01.aah01codigo, aah01.aah01nome, abe01.abe01ni as cnpj, "+
+                "aah01.aah01codigo, aah01.aah01nome, abe01.abe01ni as cnpj, daa01.daa01dtBaixa AS dtBaixa,  "+
                 " daa01.daa01dtVctoN, daa01.daa01dtVctoR, daa01.daa01dtPgto, daa01.daa01dtBaixa,  "+
                 (agrup == "D" || agrup == "N" || agrup == "NE" || agrup == "DN" ? "daa01011.daa01011valor AS valor, " : "daa01valor AS valor, ")+
                 " aac10.aac10codigo as codemp, aac10.aac10na as nomeemp, abf15codigo, abf15nome, abf16codigo, abf16nome, " +
-                " abe01Rep.abe01codigo as repcodigo, abe01Rep.abe01na as repna, daa01previsao, daa01json, "+ campoJuros +
-                " cast(daa01json ->> 'juros' as numeric(18,6)) + cast(daa01json ->> 'multa' as numeric(18,6)) + cast(daa01json ->> 'encargos' as numeric(18,6)) as jme, "+
-                " CASE WHEN daa01.daa01dtBaixa IS NULL THEN COALESCE(CAST(daa01json ->> 'desconto' as numeric(18,6)), 0.000000) ELSE COALESCE(CAST(daa01json ->> 'desconto' as numeric(18,6)), 0.000000) END AS desconto, "+
+                " abe01Rep.abe01codigo as repcodigo, abe01Rep.abe01na as repna, daa01previsao, daa01json, "+ campoJuros + campoJME +
+                " CASE WHEN daa01.daa01dtBaixa IS NULL THEN COALESCE(CAST(daa01json ->> 'desconto' as numeric(18,6)), 0.000000) ELSE COALESCE(CAST(daa01json ->> 'descontoq' as numeric(18,6)), 0.000000) END AS desconto, "+
                 (agrup == "D" || agrup == "N" ?
-                "CASE WHEN daa01.daa01dtBaixa IS NULL THEN COALESCE(cast(daa01json ->> 'desconto' as numeric(18,6)), 0) + daa01011.daa01011valor ELSE COALESCE(cast(daa01json ->> 'descontoq' as numeric(18,6)), 0) + daa01011.daa01011valor end AS liquido " :
-                "CASE WHEN daa01.daa01dtBaixa IS NULL THEN COALESCE(cast(daa01json ->> 'desconto' as numeric(18,6)), 0) + daa01.daa01valor ELSE COALESCE(cast(daa01json ->> 'descontoq' as numeric(18,6)), 0) + daa01.daa01valor end AS liquido")+
+                        "CASE WHEN daa01.daa01dtBaixa IS NULL THEN COALESCE(cast(daa01json ->> 'desconto' as numeric(18,6)), 0) + daa01011.daa01011valor ELSE COALESCE(cast(daa01json ->> 'descontoq' as numeric(18,6)), 0) + daa01011.daa01011valor end AS liquido " :
+                        "CASE WHEN daa01.daa01dtBaixa IS NULL THEN daa01.daa01valor ELSE daa01liquido end AS liquido")+
                 " FROM Daa01 daa01 " +
                 //" INNER JOIN aac01 as aac01 ON daa01gc = aac01id" +
                 " INNER JOIN aac10 as aac10 ON daa01eg = aac10id "+
