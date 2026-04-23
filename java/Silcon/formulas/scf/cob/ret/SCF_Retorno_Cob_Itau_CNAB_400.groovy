@@ -111,9 +111,17 @@ class SCF_Retorno_Cob_Itau_CNAB_400 extends FormulaBase {
                             jurosQ = null;
                         }
 
-                        jsonDaa01.put("multaq", multaQ != null ? multaQ : null);
-                        jsonDaa01.put("jurosq", jurosQ != null ? jurosQ : null);
-                        jsonDaa01.put("descontoq", descontoQ > 0 ? descontoQ : null);
+                        /*
+                            Apagar essa validação após desenvolver a regra de feriado
+                         */
+                        if(daa01.daa01dtVctoR.isEqual(LocalDate.of(2026,4,21)) && dtPgto.isEqual(LocalDate.of(2026,4,22))){
+                            multaQ = null;
+                            jurosQ = null;
+                        }
+
+                        jsonDaa01.put("multaq", multaQ != null ? multaQ : BigDecimal.ZERO);
+                        jsonDaa01.put("jurosq", jurosQ != null ? jurosQ : BigDecimal.ZERO);
+                        jsonDaa01.put("descontoq", descontoQ > 0 ? descontoQ : BigDecimal.ZERO);
                         jsonDaa01.put("dias", difDias);
 
                         daa01.daa01json = jsonDaa01
