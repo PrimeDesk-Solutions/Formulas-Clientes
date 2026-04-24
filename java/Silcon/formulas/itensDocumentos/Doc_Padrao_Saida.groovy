@@ -345,7 +345,7 @@ public class Doc_Padrao_Saida extends FormulaBase {
             // Total do item = Qt.Documento * Unitário
             eaa0103.eaa0103total = eaa0103.eaa0103qtComl * eaa0103.eaa0103unit_Zero;
 
-            eaa0103.eaa0103total = eaa0103.eaa0103total.setScale(2, RoundingMode.DOWN);
+            eaa0103.eaa0103total = eaa0103.eaa0103total.round(2)//.setScale(2, RoundingMode.DOWN);
 
             // Preenche o CST de ICMS do Item
             preencherCSTICMS();
