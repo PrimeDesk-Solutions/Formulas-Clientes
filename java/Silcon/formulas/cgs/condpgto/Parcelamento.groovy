@@ -5,6 +5,8 @@ import sam.model.entities.ab.Abf40
 import sam.model.entities.ab.Abf4001
 import sam.model.entities.ea.Eaa0113
 import sam.model.entities.ea.Eaa01131
+import sam.server.samdev.utils.Parametro
+
 import java.time.DayOfWeek
 import java.time.LocalDate
 import br.com.multiorm.ColumnType
@@ -20,7 +22,6 @@ import sam.model.entities.ab.Abf4001
 import sam.model.entities.ea.Eaa01131;
 import sam.model.entities.ea.Eaa0113
 import br.com.multitec.utils.collections.TableMap;
-
 
 public class Parcelamento extends FormulaBase {
 
@@ -89,6 +90,23 @@ public class Parcelamento extends FormulaBase {
 
                 //Adicionando dias a data de vencimento nominal
                 vctoN = vctoN.plusDays(diasAdicionaisVctoN);
+
+                // Verifica se a data de vencimento é feriado, se sim busca uma data no repositório que não seja feriado
+                Boolean isFeriado = verificarDataFeriado(vctoN);
+                LocalDate dtAux = vctoN
+                if(isFeriado){
+                    Boolean feriadoAux = true
+                    def count = 0
+                    while (feriadoAux){
+                        dtAux = dtAux.plusDays(1)
+                        if(!dtAux.dayOfWeek.weekday) continue
+                        feriadoAux = verificarDataFeriado(dtAux)
+                        count++
+                        if (count > 10) interromper("Formula Parcelamento: Processo interrompido")
+                    }
+                }
+
+                vctoN = dtAux;
 
                 BigDecimal txMulta = jsonAbe30.getBigDecimal_Zero("taxa_multa_atraso");
                 BigDecimal txJuros = jsonAbe30.getBigDecimal_Zero("taxa_juros_diario");
@@ -164,6 +182,20 @@ public class Parcelamento extends FormulaBase {
                 .addWhere(Criterions.eq("abe3001cp", abe30id))
                 .setOrder("abe3001dias")
                 .getList(ColumnType.ENTITY);
+    }
+
+    private Boolean verificarDataFeriado(LocalDate vctoN){
+
+        String dtVcto = vctoN.toString().replace("-", "")
+
+        String sql = "SELECT aba2001json " +
+                "FROM aba2001 " +
+                "WHERE aba2001rd = 46247404 " +
+                "AND CAST(aba2001json ->> 'data' AS text) = :dtVcto"
+
+        TableMap tmJson = getAcessoAoBanco().buscarUnicoTableMap(sql, Parametro.criar("dtVcto", dtVcto));
+
+        return tmJson != null
     }
 
     @Override
