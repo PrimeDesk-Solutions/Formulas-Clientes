@@ -2,6 +2,7 @@ package Silcon.formulas.preGravar
 
 import br.com.multiorm.ColumnType
 import br.com.multiorm.Query
+import br.com.multiorm.criteria.criterion.Criterion
 import br.com.multiorm.criteria.criterion.Criterions
 import br.com.multiorm.criteria.join.Joins
 import br.com.multitec.utils.ValidacaoException
@@ -45,6 +46,7 @@ public class Altera_Representante_Documento extends FormulaBase{
         alterarRepresentante(eaa01);
         validarQuantidadeItem(eaa01);
         verificarDataVctoLimiteCredito(eaa01);
+        verificarInscricaoEntidades(eaa01);
 
         put("gravar", gravar);
     }
@@ -99,7 +101,14 @@ public class Altera_Representante_Documento extends FormulaBase{
         if(dtVencLimCredito < dataAtual){ // Data de vencimento de crédito menor que data atual, significa que expirou
             interromper("Data de vencimento do limite de crédito do cliente venceu em " + dtVencLimCredito.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString() + ".")
         }
+    }
+    private void verificarInscricaoEntidades(Eaa01 eaa01){
+        Abb01 abb01 = eaa01.eaa01central;
 
+        Abe01 abe01 = getSession().createCriteria(Abe01.class).addWhere(Criterions.eq("abe01id", abb01.abb01ent.abe01id)).get(ColumnType.ENTITY);
+
+        if(abe01.abe01codigo == "9999999100") return;
+        if(abe01.abe01ti == 2 && !(abe01.abe01ni.length() == 11 || abe01.abe01ni.length() == 14)) interromper("Número da inscrição da entidade é inválido. Verifique o cadastro antes de prosseguir.");
     }
 }
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiOTcifQ==
