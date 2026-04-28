@@ -4,8 +4,9 @@ import br.com.multiorm.ColumnType
 import br.com.multiorm.criteria.criterion.Criterion
 import br.com.multiorm.criteria.criterion.Criterions
 import sam.model.entities.ab.Abb0101
-import sam.model.entities.da.Daa0101;
+import sam.model.entities.da.Daa0101
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -65,6 +66,12 @@ public class Movimento extends FormulaBase{
             if(multa != null) multa = round(multa * fatorParcial, 2);
             if(encargos != null) encargos = round(encargos * fatorParcial, 2);
             if(desconto != null) desconto = round(desconto * fatorParcial, 2);
+        }
+
+        //Zera juros e multa se vence no final de semana e foi pago na segunda
+        if(daa01.daa01dtVctoR.getDayOfWeek().isWeekend() && daa1001.getDaa1001dtPgto().getDayOfWeek() == DayOfWeek.MONDAY){
+            juros = null;
+            multa = null;
         }
 
         //Setar JMED calculados, nos campos livres de quitação
