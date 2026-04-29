@@ -102,8 +102,8 @@ class SCF_Retorno_Cob_Itau_CNAB_400 extends FormulaBase {
                         TableMap jsonDaa01 = daa01.daa01json == null ? new TableMap() : daa01.daa01json;
                         Integer difDias = DateUtils.dateDiff(daa01.getDaa01dtVctoR(), daa01.getDaa01dtPgto(), ChronoUnit.DAYS);
                         BigDecimal descontoQ = new BigDecimal(txt.getSubString(240, 253)) / 100;
-                        BigDecimal multaQ = new BigDecimal(txt.getSubString(266, 279)) / 100;
-                        BigDecimal jurosQ = difDias > 0 ? difDias * jsonDaa01.getBigDecimal_Zero("juros") : null;
+                        BigDecimal multaQ = null //new BigDecimal(txt.getSubString(266, 279)) / 100;
+                        BigDecimal jurosQ = new BigDecimal(txt.getSubString(266, 279)) / 100//difDias > 0 ? difDias * jsonDaa01.getBigDecimal_Zero("juros") : null;
                         multaQ = multaQ > 0 ? multaQ - jurosQ : null;
 
                         if(daa01.daa01dtVctoR.getDayOfWeek().isWeekend() && dtPgto.getDayOfWeek() == DayOfWeek.MONDAY){
