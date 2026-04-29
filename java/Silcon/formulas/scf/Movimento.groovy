@@ -69,9 +69,11 @@ public class Movimento extends FormulaBase{
         }
 
         //Zera juros e multa se vence no final de semana e foi pago na segunda
-        if(daa01.daa01dtVctoR.getDayOfWeek().isWeekend() && daa1001.getDaa1001dtPgto().getDayOfWeek() == DayOfWeek.MONDAY){
-            juros = null;
-            multa = null;
+        if(daa01 != null){
+            if(daa01.daa01dtVctoR.getDayOfWeek().isWeekend() && daa1001.getDaa1001dtPgto().getDayOfWeek() == DayOfWeek.MONDAY){
+                juros = null;
+                multa = null;
+            }
         }
 
         //Setar JMED calculados, nos campos livres de quitação
