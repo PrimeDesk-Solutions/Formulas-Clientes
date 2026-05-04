@@ -515,6 +515,15 @@ public class FormulaGeral extends FormulaBase {
 
                 calcularCBSIBS();
 
+                // Altera CST de ICMS do LEITE
+                if(dentroEstado){
+                    aaj10_cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", "040"));
+                    eaa0103.eaa0103cstIcms = aaj10_cstIcms;
+                }else{
+                    aaj10_cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", "000"));
+                    eaa0103.eaa0103cstIcms = aaj10_cstIcms;
+                }
+
                 // Preenche os SPEDs dos Itens
                 preencherSPED();
 
