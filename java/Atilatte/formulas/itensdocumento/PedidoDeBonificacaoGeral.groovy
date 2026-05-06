@@ -305,6 +305,10 @@ public class PedidoDeBonificacaoGeral extends FormulaBase {
                 if (criterio.getString("aba3001descr").toUpperCase().contains("IOGURTE") || criterio.getString("aba3001descr").toUpperCase().contains("BAUNILHA")) {
                     grupo = "Iogurte"
                 }
+
+                if(criterio.getString("aba3001descr").toUpperCase().contains("REQUEIJÃO")){
+                    grupo = "Requeijão"
+                }
             }
 
 
@@ -855,7 +859,7 @@ public class PedidoDeBonificacaoGeral extends FormulaBase {
                 
                 calcularCBSIBS();
             }
-            if (grupo == "Queijo") {
+            if (grupo == "Queijo" || grupo == "Requeijão") {
 
 
                 //Define Quantidade Comercial como Quantidade Convertida
@@ -1235,6 +1239,12 @@ public class PedidoDeBonificacaoGeral extends FormulaBase {
                 // Volume Fat. Frasco
                 if (jsonEaa0103.getString("umv") != 'UN' && jsonEaa0103.getString("umv") != 'CX' && jsonEaa0103.getString("umv") != 'KG') {
                     jsonEaa0103.put("volumes", jsonEaa0103.getBigDecimal_Zero("qt_convertida"));
+                }
+
+                // Troca CST requeijão
+                if(grupo == "REQUEIJÃO" && dentroEstado){
+                    aaj10_cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", "070"));
+                    eaa0103.eaa0103cstIcms = aaj10_cstIcms;
                 }
 
                 //*******Calculo para SPED ICMS*******

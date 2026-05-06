@@ -418,7 +418,7 @@ public class PedidoDeAmostraGratisGeral extends FormulaBase {
             //============================================= CALCULO PARA OS ITENS COM CRITERIO DE SELEÇÃO "QUEIJO" =============================================
             //==================================================================================================================================================
 
-            if(grupo == "QUEIJO"){
+            if(grupo == "QUEIJO" || grupo == "REQUEIJÃO"){
 
                 // Quantidade Convertida
                 converterQuantidadeItem(grupo);
@@ -495,6 +495,12 @@ public class PedidoDeAmostraGratisGeral extends FormulaBase {
 
                 // Calcula Difal dos Itens
                 calcularDifal(dentroEstado)
+
+                // Troca CST requeijão
+                if(grupo == "REQUEIJÃO" && dentroEstado){
+                    aaj10_cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", "070"));
+                    eaa0103.eaa0103cstIcms = aaj10_cstIcms;
+                }
 
                 // Preenche os SPEDs dos Itens
                 preencherSPED();
@@ -604,6 +610,10 @@ public class PedidoDeAmostraGratisGeral extends FormulaBase {
 
             if(criterio.getString("aba3001descr").toUpperCase().contains("IOGURTE") || criterio.getString("aba3001descr").toUpperCase().contains("BAUNILHA")){
                 grupo = "IOGURTE"
+            }
+
+            if(criterio.getString("aba3001descr").toUpperCase().contains("REQUEIJÃO")){
+                grupo = "REQUEIJÃO"
             }
         }
 
