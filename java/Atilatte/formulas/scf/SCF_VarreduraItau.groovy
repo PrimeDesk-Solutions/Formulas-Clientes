@@ -174,6 +174,8 @@ public class SCF_VarreduraItau extends FormulaBase{
                 .addWhere(Criterions.eq("daa01valor", vlrDoc))
                 .addWhere(Criterions.eq("abe01ni",niEntidade))
                 .addWhere(Criterions.eq("daa01dtVctoR", dtVencimentoFormatada))
+                .setOrder("daa01dtVctoR")
+                .setMaxResults(1)
                 .get(ColumnType.ENTITY)
     }
     private void gravarInformacoesRepositorio(TableMap tmRepositorio){
