@@ -20,13 +20,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.HashMap;
 import sam.server.samdev.relatorio.TableMapDataSource
+import sam.model.entities.ea.Eaa01
 
 
-public class SRF_Documentos_Por_Representantes extends RelatorioBase {
+
+public class SRF_Resumo_Por_Representantes extends RelatorioBase {
 
     @Override
     public String getNomeTarefa() {
-        return "SRF - Documentos Por Representantes";
+        return "SRF - Resumo por Representantes";
     }
 
     @Override
@@ -38,6 +40,9 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
         filtrosDefault.put("total1", true);
         filtrosDefault.put("total2", true);
         filtrosDefault.put("total3", true);
+        filtrosDefault.put("total4", true);
+        filtrosDefault.put("total5", true);
+        filtrosDefault.put("total6", true);
         filtrosDefault.put("devolucao", true);
         filtrosDefault.put("chkDevolucao", true);
         filtrosDefault.put("numeroInicial", "000000001");
@@ -47,8 +52,6 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
         filtrosDefault.put("impressao", "0");
         filtrosDefault.put("resumo", "0");
         filtrosDefault.put("resumoOperacao", "1")
-
-
         return Utils.map("filtros", filtrosDefault);
     }
 
@@ -98,11 +101,12 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
         params.put("totalizar4", totalizar4);
         params.put("totalizar5", totalizar5);
         params.put("totalizar6", totalizar6);
-        params.put("title", "SRF - Documento por Representantes");
+        params.put("title", "SRF - Resumo por Representantes");
         params.put("empresa", empresa.aac10codigo + "-" + empresa.aac10na);
         params.put("periodo", periodo);
-        params.put("LOGO_EMPRESA", "C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\srf\\Logo Silcon.png");
-        params.put("LOGO_REVENDA", "C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\srf\\logoPrimeDesk.png");
+//        params.put("LOGO_EMPRESA", "C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\srf\\Logo Silcon.png");
+//        params.put("LOGO_REVENDA", "C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\srf\\logoPrimeDesk.png");
+
 
         if (campoLivre1 != null && campoFixo1 != null) interromper("Selecione apenas 1 valor por campo!");
         if (campoLivre2 != null && campoFixo2 != null) interromper("Selecione apenas 1 valor por campo!");
@@ -110,6 +114,7 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
         if (campoLivre4 != null && campoFixo4 != null) interromper("Selecione apenas 1 valor por campo!");
         if (campoLivre5 != null && campoFixo5 != null) interromper("Selecione apenas 1 valor por campo!");
         if (campoLivre6 != null && campoFixo6 != null) interromper("Selecione apenas 1 valor por campo!");
+
 
         Map<String, String> campos = new HashMap();
 
@@ -120,12 +125,14 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
         campos.put("5", campoLivre5 != null ? campoLivre5 : campoFixo5 != null ? campoFixo5 : null);
         campos.put("6", campoLivre6 != null ? campoLivre6 : campoFixo6 != null ? campoFixo6 : null);
 
+
         List<TableMap> representantes = buscarRepresentantes(idsReps);
         List<TableMap> dadosRelatorio = new ArrayList();
-        List<TableMap> dados = buscarDadosDocumentos(idsReps, numDocIni, numDocFin, idsTipoDoc, idsPcd, resumoOperacao, dtEmissao, dtEntradaSaida);
-        if (dados == null || dados.size() == 0) interromper("Não foram encontrados registros com os filtros informados.");
+        List<TableMap> dados = buscarDadosDocumentos(idsReps, numDocIni, numDocFin, idsTipoDoc, idsPcd, resumoOperacao, dtEmissao, dtEntradaSaida, idEmpresa);
 
-        List<Long> idsItensDoc = obterIdsItensDoc(idsReps, numDocIni, numDocFin, idsTipoDoc, idsPcd, resumoOperacao, dtEmissao, dtEntradaSaida);
+        if(dados == null || dados.size() == 0) interromper("Não foram encontrados registros com os filtros informados.");
+
+        List<TableMap> idsItensDoc = obterIdsItensDoc(idsReps, numDocIni, numDocFin, idsTipoDoc, idsPcd, resumoOperacao, dtEmissao, dtEntradaSaida, idEmpresa);
 
         List<TableMap> listDevolucoesGeral = new ArrayList();
         def idControleDevolucao = null;
@@ -183,12 +190,14 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
                 Long idRep2 = dado.getLong("eaa01rep2");
                 Long idRep3 = dado.getLong("eaa01rep3");
                 Long idRep4 = dado.getLong("eaa01rep4");
+
                 if(idRep != idRep0 && idRep != idRep1 && idRep != idRep2 && idRep != idRep3 && idRep != idRep4) continue;
+
                 Long idItem = dado.getLong("eaa0103id");
                 dado.putAll(dado.getTableMap("eaa0103json"));
                 dado.put("codRep", codRep);
                 dado.put("naRep", nomeRep);
-                dado.put("txComis", txComissao);
+                dado.put("txComis", txComissao );
                 //dado.remove("eaa0103json");
 
                 for (devolucao in listDevolucoesAjustado) {
@@ -200,9 +209,9 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
 
                 if (idControle == null) {
                     dadosTmp.putAll(dado);
-                    idControle = dado.getLong("eaa01id")
+                    idControle = idRep;
                     somarValores(dado, valoresTotais, campos);
-                } else if (idControle == dado.getLong("eaa01id")) {
+                } else if (idControle == idRep) {
                     somarValores(dado, valoresTotais, campos);
                 } else {
                     TableMap tmp = new TableMap();
@@ -214,7 +223,7 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
                     dadosTmp = new TableMap();
                     dadosTmp.putAll(dado);
                     valoresTotais = new TableMap()
-                    idControle = dado.getLong("eaa01id");
+                    idControle = idRep;
                     somarValores(dado, valoresTotais, campos);
                 }
             }
@@ -229,11 +238,12 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
             }
         }
 
-        if (impressao == 0) return gerarPDF("SRF_Documentos_Por_Representantes_PDF", dadosRelatorio);
-        return gerarXLSX("SRF_Documentos_Por_Representantes_Excel", dadosRelatorio);
+        if (impressao == 0) return gerarPDF("SRF_Resumo_Por_Representantes_PDF", dadosRelatorio);
+
+        return gerarXLSX("SRF_Resumo_Por_Representantes_Excel", dadosRelatorio);
     }
 
-    private List<TableMap> buscarDadosDocumentos(List<Long> idsReps, Integer numDocIni, Integer numDocFin, List<Long> idsTipoDoc, List<Long> idsPcd, Integer resumoOperacao, LocalDate[] dtEmissao, LocalDate[] dtEntradaSaida) {
+    private List<TableMap> buscarDadosDocumentos(List<Long> idsReps, Integer numDocIni, Integer numDocFin, List<Long> idsTipoDoc, List<Long> idsPcd, Integer resumoOperacao, LocalDate[] dtEmissao, LocalDate[] dtEntradaSaida, Long idEmpresa) {
         // Data Emissao
         LocalDate dtEmissaoIni = null;
         LocalDate dtEmissaoFin = null
@@ -254,84 +264,7 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
 
         List<Long> idsGc = obterGCbyEmpresa(idsEmpresa, "Ea");
 
-        String whereNumDoc = "AND abb01nota.abb01num BETWEEN :numDocIni and :numDocFin ";
-        String whereMov = resumoOperacao == 0 ? "AND eaa01nota.eaa01esmov = 0 " : "AND eaa01nota.eaa01esmov = 1 ";
-        String whereClasDoc = "AND eaa01nota.eaa01clasdoc = 1 "
-        String whereTipoDoc = idsTipoDoc != null && idsTipoDoc.size() > 0 ? "AND aah01nota.aah01id IN (:idsTipoDoc) " : "";
-        String wherePCD = idsPcd != null && idsPcd.size() > 0 ? "AND eaa01nota.eaa01pcd IN (:idsPcd) " : "";
-        String whereDataEmissao = dtEmissao != null ? "AND abb01nota.abb01data BETWEEN :dtEmissaoIni AND :dtEmissaoFin " : "";
-        String whereDataEntradaSaida = dtEntradaSaida != null ? "AND eaa01nota.eaa01esdata BETWEEN :esDataIni AND :esDataFin " : "";
-        String whereRepresentantes = idsReps != null && idsReps.size() > 0 ? "AND (eaa01nota.eaa01rep0 IN (:idsReps) OR eaa01nota.eaa01rep1 IN (:idsReps) OR eaa01nota.eaa01rep2 IN (:idsReps) OR eaa01nota.eaa01rep3 IN (:idsReps) OR eaa01nota.eaa01rep4 IN (:idsReps)) " : "";
-        String whereEmpresa = idsGc != null && idsGc.size() > 0 ? "AND eaa01nota.eaa01gc IN (:idsGc) " : getSamWhere().getWherePadrao("WHERE", Eaa01.class);
-
-        Parametro parametroNumDocIni = numDocIni != null ? Parametro.criar("numDocIni", numDocIni) : null;
-        Parametro parametroNumDocFin = numDocFin != null ? Parametro.criar("numDocFin", numDocFin) : null;
-        Parametro parametroTipoDoc = idsTipoDoc != null && idsTipoDoc.size() > 0 ? Parametro.criar("idsTipoDoc", idsTipoDoc) : null;
-        Parametro parametroPCD = idsPcd != null && idsPcd.size() > 0 ? Parametro.criar("idsPcd", idsPcd) : null;
-        Parametro parametroDataEmissaoIni = dtEmissao != null ? Parametro.criar("dtEmissaoIni", dtEmissaoIni) : null;
-        Parametro parametroDataEmissaoFin = dtEmissao != null ? Parametro.criar("dtEmissaoFin", dtEmissaoFin) : null;
-        Parametro parametroDataEntradaSaidaIni = dtEntradaSaida != null ? Parametro.criar("esDataIni", esDataIni) : null;
-        Parametro parametroDataEntradaSaidaFin = dtEntradaSaida != null ? Parametro.criar("esDataFin", esDataFin) : null;
-        Parametro parametroRepresentantes = idsReps != null && idsReps.size() > 0 ? Parametro.criar("idsReps", idsReps) : null;
-        Parametro parametroEmpresa = idsGc != null && idsGc.size() > 0 ? Parametro.criar("idsGc", idsGc) : null;
-
-
-        String sql = " SELECT eaa01nota.eaa01rep0, eaa01nota.eaa01rep1, eaa01nota.eaa01rep2, eaa01nota.eaa01rep3, eaa01nota.eaa01rep4, eaa01nota.eaa01id AS eaa01id, eaa0103nota.eaa0103id AS eaa0103id, aah01nota.aah01codigo AS tipoDocNota, abb01nota.abb01num AS numNota, abb01nota.abb01data AS dtEmissaoNota, eaa01nota.eaa01esdata AS esDataNota, " +
-                        " aah01pedido.aah01codigo AS tipoDocPedido,abb01pedido.abb01num AS numPedido, abe01codigo AS codEnt,abe01na AS naEnt, abe30codigo AS codCondPgto, abe30nome AS nomeCondPgto, " +
-                        " abe40nome AS tabelaPreco, eaa0103nota.eaa0103qtuso AS eaa0103qtuso,eaa0103nota.eaa0103qtcoml AS eaa0103qtcoml, eaa0103nota.eaa0103unit AS eaa0103unit,eaa0103nota.eaa0103total AS eaa0103total,eaa0103nota.eaa0103totdoc AS eaa0103totdoc, eaa0103nota.eaa0103totfinanc AS eaa0103totfinanc, eaa0103nota.eaa0103json AS eaa0103json " +
-                        " FROM eaa01 AS eaa01nota " +
-                        " INNER JOIN abb01 AS abb01nota ON eaa01central = abb01nota.abb01id " +
-                        " INNER JOIN aah01 AS aah01nota ON abb01nota.abb01tipo = aah01nota.aah01id " +
-                        " INNER JOIN eaa0103 AS eaa0103nota ON eaa0103nota.eaa0103doc = eaa01id " +
-                        " LEFT JOIN eaa01032 ON eaa01032itemsrf = eaa0103id " +
-                        " LEFT JOIN eaa0103 AS eaa0103pedido on eaa01032itemscv = eaa0103pedido.eaa0103id " +
-                        " LEFT JOIN eaa01 AS eaa01pedido ON eaa01pedido.eaa01id = eaa0103pedido.eaa0103doc " +
-                        " LEFT JOIN abb01 AS abb01pedido ON abb01pedido.abb01id = eaa01pedido.eaa01central " +
-                        " LEFT JOIN aah01 AS aah01pedido ON aah01pedido.aah01id = abb01pedido.abb01tipo " +
-                        " INNER JOIN abe01 ON abb01nota.abb01ent = abe01id " +
-                        " LEFT JOIN abe30 ON eaa01nota.eaa01cp = abe30id " +
-                        " LEFT JOIN abe40 ON eaa01nota.eaa01tp = abe40id " +
-                        " WHERE eaa01nota.eaa01clasDoc = " + Eaa01.CLASDOC_SRF +
-                        " AND eaa01nota.eaa01cancData IS NULL " +
-                        " AND eaa01nota.eaa01nfestat <> 5 " +
-                        " WHERE TRUE "+
-                        whereNumDoc +
-                        whereMov +
-                        whereTipoDoc +
-                        wherePCD +
-                        whereDataEmissao +
-                        whereDataEntradaSaida +
-                        whereRepresentantes +
-                        whereClasDoc +
-                        whereEmpresa +
-                        "ORDER BY abb01nota.abb01num ";
-
-        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroNumDocIni, parametroNumDocFin, parametroTipoDoc, parametroPCD, parametroDataEmissaoIni, parametroDataEmissaoFin,
-                parametroDataEntradaSaidaIni, parametroDataEntradaSaidaFin, parametroRepresentantes, parametroEmpresa);
-    }
-
-    private List<TableMap> obterIdsItensDoc(List<Long> idsReps, Integer numDocIni, Integer numDocFin, List<Long> idsTipoDoc, List<Long> idsPcd, Integer resumoOperacao, LocalDate[] dtEmissao, LocalDate[] dtEntradaSaida) {
-        // Data Emissao
-        LocalDate dtEmissaoIni = null;
-        LocalDate dtEmissaoFin = null
-        if (dtEmissao != null) {
-            dtEmissaoIni = dtEmissao[0];
-            dtEmissaoFin = dtEmissao[1];
-        }
-
-        // Data Entrada Saída
-        LocalDate esDataIni = null;
-        LocalDate esDataFin = null
-        if (dtEntradaSaida != null) {
-            esDataIni = dtEntradaSaida[0];
-            esDataFin = dtEntradaSaida[1];
-        }
-
-        List<Long> idsEmpresa = [obterEmpresaAtiva().getAac10id()]
-
-        List<Long> idsGc = obterGCbyEmpresa(idsEmpresa, "Ea");
-
-        String whereNumDoc = "AND abb01num BETWEEN :numDocIni and :numDocFin ";
+        String whereNumDoc = "AND abb01num BETWEEN :numDocIni AND :numDocFin ";
         String whereMov = resumoOperacao == 0 ? "AND eaa01esmov = 0 " : "AND eaa01esmov = 1 ";
         String whereClasDoc = "AND eaa01clasdoc = 1 "
         String whereTipoDoc = idsTipoDoc != null && idsTipoDoc.size() > 0 ? "AND aah01id IN (:idsTipoDoc) " : "";
@@ -341,7 +274,6 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
         String whereRepresentantes = idsReps != null && idsReps.size() > 0 ? "AND (eaa01rep0 IN (:idsReps) OR eaa01rep1 IN (:idsReps) OR eaa01rep2 IN (:idsReps) OR eaa01rep3 IN (:idsReps) OR eaa01rep4 IN (:idsReps)) " : "";
         String whereEmpresa = idsGc != null && idsGc.size() > 0 ? "AND eaa01gc IN (:idsGc) " : getSamWhere().getWherePadrao("WHERE", Eaa01.class);
 
-
         Parametro parametroNumDocIni = numDocIni != null ? Parametro.criar("numDocIni", numDocIni) : null;
         Parametro parametroNumDocFin = numDocFin != null ? Parametro.criar("numDocFin", numDocFin) : null;
         Parametro parametroTipoDoc = idsTipoDoc != null && idsTipoDoc.size() > 0 ? Parametro.criar("idsTipoDoc", idsTipoDoc) : null;
@@ -353,14 +285,11 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
         Parametro parametroRepresentantes = idsReps != null && idsReps.size() > 0 ? Parametro.criar("idsReps", idsReps) : null;
         Parametro parametroEmpresa = idsGc != null && idsGc.size() > 0 ? Parametro.criar("idsGc", idsGc) : null;
 
-
-        String sql = "SELECT DISTINCT eaa0103id " +
+        String sql = "SELECT eaa01rep0, eaa01rep1, eaa01rep2, eaa01rep3, eaa01rep4, eaa01id, eaa0103id, eaa0103qtuso,eaa0103qtcoml, eaa0103unit, eaa0103unit,eaa0103total,eaa0103totdoc, eaa0103totfinanc, eaa0103json " +
                     " FROM eaa01 " +
                     " INNER JOIN abb01 ON eaa01central = abb01id " +
                     " INNER JOIN aah01 ON abb01tipo = aah01id " +
                     " INNER JOIN eaa0103 ON eaa0103doc = eaa01id " +
-                    " LEFT JOIN abe30 ON eaa01cp = abe30id " +
-                    " LEFT JOIN abe40 ON eaa01tp = abe40id " +
                     " WHERE eaa01clasDoc = " + Eaa01.CLASDOC_SRF +
                     " AND eaa01cancData IS NULL " +
                     " AND eaa01nfestat <> 5 " +
@@ -371,7 +300,71 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
                     whereDataEmissao +
                     whereDataEntradaSaida +
                     whereRepresentantes +
-                    whereClasDoc+
+                    whereClasDoc +
+                    whereEmpresa +
+                    "ORDER BY eaa01id";
+
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroNumDocIni, parametroNumDocFin, parametroTipoDoc, parametroPCD, parametroDataEmissaoIni, parametroDataEmissaoFin,
+                parametroDataEntradaSaidaIni, parametroDataEntradaSaidaFin, parametroRepresentantes, parametroEmpresa);
+    }
+    private List<Long> obterIdsItensDoc(List<Long> idsReps, Integer numDocIni, Integer numDocFin, List<Long> idsTipoDoc, List<Long> idsPcd, Integer resumoOperacao, LocalDate[] dtEmissao, LocalDate[] dtEntradaSaida, Long idEmpresa) {
+        // Data Emissao
+        LocalDate dtEmissaoIni = null;
+        LocalDate dtEmissaoFin = null
+        if (dtEmissao != null) {
+            dtEmissaoIni = dtEmissao[0];
+            dtEmissaoFin = dtEmissao[1];
+        }
+
+        // Data Entrada Saída
+        LocalDate esDataIni = null;
+        LocalDate esDataFin = null
+        if (dtEntradaSaida != null) {
+            esDataIni = dtEntradaSaida[0];
+            esDataFin = dtEntradaSaida[1];
+        }
+
+        List<Long> idsEmpresa = [obterEmpresaAtiva().getAac10id()]
+
+        List<Long> idsGc = obterGCbyEmpresa(idsEmpresa, "Ea");
+
+        String whereNumDoc = "AND abb01num BETWEEN :numDocIni AND :numDocFin ";
+        String whereMov = resumoOperacao == 0 ? "AND eaa01esmov = 0 " : "AND eaa01esmov = 1 ";
+        String whereClasDoc = "AND eaa01clasdoc = 1 "
+        String whereTipoDoc = idsTipoDoc != null && idsTipoDoc.size() > 0 ? "AND aah01id IN (:idsTipoDoc) " : "";
+        String wherePCD = idsPcd != null && idsPcd.size() > 0 ? "AND eaa01pcd IN (:idsPcd) " : "";
+        String whereDataEmissao = dtEmissao != null ? "AND abb01data BETWEEN :dtEmissaoIni AND :dtEmissaoFin " : "";
+        String whereDataEntradaSaida = dtEntradaSaida != null ? "AND eaa01esdata BETWEEN :esDataIni AND :esDataFin " : "";
+        String whereRepresentantes = idsReps != null && idsReps.size() > 0 ? "AND (eaa01rep0 IN (:idsReps) OR eaa01rep1 IN (:idsReps) OR eaa01rep2 IN (:idsReps) OR eaa01rep3 IN (:idsReps) OR eaa01rep4 IN (:idsReps)) " : "";
+        String whereEmpresa = idsGc != null && idsGc.size() > 0 ? "AND eaa01gc IN (:idsGc) " : getSamWhere().getWherePadrao("WHERE", Eaa01.class);
+
+        Parametro parametroNumDocIni = numDocIni != null ? Parametro.criar("numDocIni", numDocIni) : null;
+        Parametro parametroNumDocFin = numDocFin != null ? Parametro.criar("numDocFin", numDocFin) : null;
+        Parametro parametroTipoDoc = idsTipoDoc != null && idsTipoDoc.size() > 0 ? Parametro.criar("idsTipoDoc", idsTipoDoc) : null;
+        Parametro parametroPCD = idsPcd != null && idsPcd.size() > 0 ? Parametro.criar("idsPcd", idsPcd) : null;
+        Parametro parametroDataEmissaoIni = dtEmissao != null ? Parametro.criar("dtEmissaoIni", dtEmissaoIni) : null;
+        Parametro parametroDataEmissaoFin = dtEmissao != null ? Parametro.criar("dtEmissaoFin", dtEmissaoFin) : null;
+        Parametro parametroDataEntradaSaidaIni = dtEntradaSaida != null ? Parametro.criar("esDataIni", esDataIni) : null;
+        Parametro parametroDataEntradaSaidaFin = dtEntradaSaida != null ? Parametro.criar("esDataFin", esDataFin) : null;
+        Parametro parametroRepresentantes = idsReps != null && idsReps.size() > 0 ? Parametro.criar("idsReps", idsReps) : null;
+        Parametro parametroEmpresa = idsGc != null && idsGc.size() > 0 ? Parametro.criar("idsGc", idsGc) : null;
+
+        String sql = "SELECT DISTINCT eaa0103id " +
+                    "FROM eaa01 " +
+                    "INNER JOIN abb01 ON eaa01central = abb01id " +
+                    "INNER JOIN aah01 ON abb01tipo = aah01id " +
+                    "INNER JOIN eaa0103 ON eaa0103doc = eaa01id " +
+                    " WHERE eaa01clasDoc = " + Eaa01.CLASDOC_SRF +
+                    " AND eaa01cancData IS NULL " +
+                    " AND eaa01nfestat <> 5 " +
+                    whereNumDoc +
+                    whereMov +
+                    whereTipoDoc +
+                    wherePCD +
+                    whereDataEmissao +
+                    whereDataEntradaSaida +
+                    whereRepresentantes +
+                    whereClasDoc +
                     whereEmpresa;
 
         return getAcessoAoBanco().obterListaDeLong(sql, parametroNumDocIni, parametroNumDocFin, parametroTipoDoc, parametroPCD, parametroDataEmissaoIni, parametroDataEmissaoFin,
@@ -381,12 +374,12 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
     private List<TableMap> buscarRepresentantes(List<Long> ids) {
         String whereReps = ids != null && ids.size() > 0 ? "and abe01id in (:ids) " : "";
 
-        String sql = " SELECT abe01id,abe01na, abe01codigo, abe05taxa " +
-                " FROM abe01 " +
-                " LEFT JOIN abe05 ON abe05ent = abe01id " +
-                " WHERE abe01rep = 1  " +
+        String sql = " select abe01id,abe01na, abe01codigo, abe05taxa " +
+                " from abe01 " +
+                " left join abe05 on abe05ent = abe01id " +
+                " where abe01rep = 1  " +
                 whereReps +
-                " ORDER BY abe01codigo";
+                " order by abe01codigo";
 
         Parametro p1 = Parametro.criar("ids", ids);
 
@@ -488,7 +481,6 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
         if(abe01user == null) interromper("Não foi encontrado entidade cadastrada para o usuário logado.")
 
         filtrosDefault.put("idRepresentantes", abe01user.abe01id);
-
     }
     private Integer buscarCamposCustomUser(idUser){
         String sql = "SELECT CAST(aab10camposCustom ->> 'setor' AS INTEGER) AS setor FROM aab10 WHERE aab10id = :idUser";
@@ -503,6 +495,11 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
                 .addJoin(Joins.join("Aab10", "aab10id = abe05user"))
                 .addWhere(Criterions.eq("aab10id", idUser)).setMaxResults(1)
                 .get(ColumnType.ENTITY);
+    }
+
+    public String buscarNomeCampoLivre(String campo) {
+        def sql = " SELECT aah02descr FROM aah02 WHERE aah02nome = :nome "
+        return getAcessoAoBanco().obterString(sql, criarParametroSql("nome", campo))
 
     }
     public List<Long> obterGCbyEmpresa(List<Long> empresa, String tabela) {
@@ -516,11 +513,7 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
                 .getList(ColumnType.LONG);
     }
 
-    public String buscarNomeCampoLivre(String campo) {
-        def sql = " SELECT aah02descr FROM aah02 WHERE aah02nome = :nome "
-        return getAcessoAoBanco().obterString(sql, criarParametroSql("nome", campo))
 
-    }
 }
 //meta-sis-eyJkZXNjciI6IlNSRiBEb2N1bWVudG9zIFBvciBSZXByZXNlbnRhbnRlcyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
-//meta-sis-eyJkZXNjciI6IlNSRiBEb2N1bWVudG9zIFBvciBSZXByZXNlbnRhbnRlcyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
+//meta-sis-eyJkZXNjciI6IlNSRiBSZXN1bW8gUG9yIFJlcHJlc2VudGFudGVzIiwidGlwbyI6InJlbGF0b3JpbyJ9
