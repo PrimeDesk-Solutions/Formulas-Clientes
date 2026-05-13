@@ -38,7 +38,7 @@ public class SPV_Impressao_Monitoramento_Caixa extends RelatorioBase {
         Long idConta = getLong("idConta");
         LocalDate data = LocalDate.parse(getString("data"))
 
-        List<TableMap> dados = buscarLancamentos(idsLctos);
+        List<TableMap> dados = buscarLancamentos(idsLctos, idConta);
 
         BigDecimal saldoAnterior = buscarSaldoAnterior(idConta, data);
 
@@ -121,7 +121,7 @@ public class SPV_Impressao_Monitoramento_Caixa extends RelatorioBase {
         return valor == null ? BigDecimal.ZERO : valor;
     }
 
-    private List<TableMap> buscarLancamentos(List<Long> idsLctos) {
+    private List<TableMap> buscarLancamentos(List<Long> idsLctos, Long idConta) {
         String sql = "SELECT dab10data AS dtLcto, dab10historico AS historico, aah01codigo AS codTipoDoc, " +
                 "aah01nome AS nomeTipoDoc, abb01num AS numLcto, dab10mov AS mov, dab1002valor AS valor " +
                 "FROM dab10 " +
@@ -129,8 +129,12 @@ public class SPV_Impressao_Monitoramento_Caixa extends RelatorioBase {
                 "LEFT JOIN aah01 ON aah01id = abb01tipo " +
                 "INNER JOIN dab1002 ON dab1002lct = dab10id "+
                 "WHERE dab10id IN (:idsLctos) " +
+                "AND dab1002cc = :idConta"
                 "ORDER BY dab10data, dab10id";
 
-        return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idsLctos", idsLctos));
+        Parametro parametroLctos = Parametro.criar("idsLctos", idsLctos);
+        Parametro parametroCC = Parametro.criar("idConta", idConta);
+
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroLctos, parametroCC);
     }
 }
