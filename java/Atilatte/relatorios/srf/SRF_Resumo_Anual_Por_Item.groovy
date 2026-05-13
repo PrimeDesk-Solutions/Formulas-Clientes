@@ -15,10 +15,10 @@ import java.util.HashMap;
 
 
 
-public class SRF_ResumoDocumentosAnuais extends RelatorioBase {
+public class SRF_Resumo_Anual_Por_Item extends RelatorioBase {
 	@Override
 	public String getNomeTarefa() {
-		return "SRF Resumo Documentos Anuais ";
+		return "SRF Resumo Anual por Item ";
 	}
  	@Override
 	public Map<String, Object> criarValoresIniciais() {
@@ -71,7 +71,7 @@ public class SRF_ResumoDocumentosAnuais extends RelatorioBase {
 
         campos.put("1", campoLivre != null ? campoLivre : campoFixo != null ? campoFixo : null);
 
-        List<TableMap> dados = buscarDocumentos(numDocIni, numDocFin, idsTipoDoc, idsPcd, resumoOperacao, idsItens, ano, idEmpresa, mps);
+        List<TableMap> dados = buscarDocumentos(numDocIni, numDocFin, idsTipoDoc, idsPcd, resumoOperacao, idsItens, ano, idEmpresa, mps, campoLivre);
 
         if (dados.size() == 0) interromper("Não foram encontrado dados com os filtros selecionados.");
 
@@ -118,12 +118,11 @@ public class SRF_ResumoDocumentosAnuais extends RelatorioBase {
 
         dadosRelatorio.add(tmp);
 
-
-        if (impressao == 1) return gerarXLSX("SRF_ResumoAnualPorItens(Excel)",dadosRelatorio);
-        return gerarPDF("SRF_ResumoAnualPorItens(PDF)",dadosRelatorio)
+        if (impressao == 1) return gerarXLSX("SRF_Resumo_Anual_Por_Item_Excel",dadosRelatorio);
+        return gerarPDF("SRF_Resumo_Anual_Por_Item_PDF",dadosRelatorio)
 
 	}
-    private List<TableMap> buscarDocumentos(Integer numDocIni, Integer numDocFin, List<Long> idsTipoDoc, List<Long> idsPcd, Integer resumoOperacao, List<Long> idsItens, Integer ano, Long idEmpresa, List<Integer> mps ){
+    private List<TableMap> buscarDocumentos(Integer numDocIni, Integer numDocFin, List<Long> idsTipoDoc, List<Long> idsPcd, Integer resumoOperacao, List<Long> idsItens, Integer ano, Long idEmpresa, List<Integer> mps, String campoLivre ){
         String whereNumIni = numDocIni != null ? "AND abb01num >= :numDocIni " : "";
         String whereNumFin = numDocFin != null ? "AND abb01num <= :numDocFin " : "";
         String whereTipoDoc = idsTipoDoc != null && idsTipoDoc.size() > 0 ? "AND aah01id IN (:idsTipoDoc) " : "";
@@ -145,9 +144,11 @@ public class SRF_ResumoDocumentosAnuais extends RelatorioBase {
         Parametro parametroMps = mps != null && !mps.contains(-1) ? Parametro.criar("mps", mps) : null;
         Parametro parametroItens = idsItens != null && idsItens.size() > 0 ? Parametro.criar("idsItens", idsItens) : null;
 
+        String whereCampoLivre = campoLivre != null ? ", SUM(CAST(eaa0103json ->> '" + campoLivre + "' AS NUMERIC(18,6))) AS " + campoLivre : "";
+
         String sql = "SELECT abm01codigo, abm01descr, abm01id, abb01data, " +
                 " SUM(eaa0103qtuso) AS eaa0103qtuso ,SUM(eaa0103qtcoml) AS eaa0103qtcoml, SUM(eaa0103unit) AS eaa0103unit, " +
-                " SUM(eaa0103total) AS eaa0103total,SUM(eaa0103totdoc) AS eaa0103totdoc, SUM(eaa0103totfinanc) AS eaa0103totfinanc "+
+                " SUM(eaa0103total) AS eaa0103total,SUM(eaa0103totdoc) AS eaa0103totdoc, SUM(eaa0103totfinanc) AS eaa0103totfinanc "+ whereCampoLivre +
                 " FROM eaa01 " +
                 " INNER JOIN eaa0103 ON eaa0103doc = eaa01id " +
                 " INNER JOIN abm01 ON abm01id = eaa0103item " +
