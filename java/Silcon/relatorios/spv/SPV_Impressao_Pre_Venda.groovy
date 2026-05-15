@@ -75,6 +75,7 @@ public class SPV_Impressao_Pre_Venda extends RelatorioBase {
                 }else{
                     item.put("entrega", "ENTREGAR");
                 }
+
                 item.put("key", idPreVenda);
 
                 listItens.add(item);
@@ -98,11 +99,19 @@ public class SPV_Impressao_Pre_Venda extends RelatorioBase {
 
         // Cria os sub-relatórios
         TableMapDataSource dsPrincipal = new TableMapDataSource(dados);
-        dsPrincipal.addSubDataSource("dsItens", listItens, "key", "key");
-        adicionarParametro("StreamSub1", carregarArquivoRelatorio("SPV_Impressao_Pre_Venda_S1"));
 
-        return gerarPDF("SPV_Impressao_Pre_Venda", dsPrincipal);
+        String nomeUser = obterUsuarioLogado().getAab10user().toUpperCase();
+        if( nomeUser == "NANY" || nomeUser == "DIANA" || nomeUser == "FILIPE" || nomeUser == "PRISCILA" || nomeUser == "SHIRLEI" || nomeUser == "MASTER2"){
+            dsPrincipal.addSubDataSource("dsItens", listItens, "key", "key");
+            adicionarParametro("StreamSub1", carregarArquivoRelatorio("SPV_Impressao_Pre_Venda_Lustre_S1"));
 
+            return gerarPDF("SPV_Impressao_Pre_Venda_Lustre", dsPrincipal);
+        }else{
+            dsPrincipal.addSubDataSource("dsItens", listItens, "key", "key");
+            adicionarParametro("StreamSub1", carregarArquivoRelatorio("SPV_Impressao_Pre_Venda_S1"));
+
+            return gerarPDF("SPV_Impressao_Pre_Venda", dsPrincipal);
+        }
     }
 
     private List<TableMap> buscarDocumentosPreVenda(Integer numeroInicial, Integer numeroFinal, List<Long> entidades,LocalDate[] dtEmissao){
@@ -147,22 +156,22 @@ public class SPV_Impressao_Pre_Venda extends RelatorioBase {
         String whereId = "WHERE ccb01id = :id";
         Parametro parametroID = Parametro.criar("id", id);
 
-        String sql = "SELECT ccb01id, ccb01num AS numDoc, abe01nome AS nomeEntidade, abe0101endereco AS enderecoEntidade, " +
-                    "abe0101numero AS numEndEntidade, abe0101complem AS complemEntidade, abe0101bairro AS bairroEntidade, " +
-                    "abe0101cep AS cepEntidade, abe0101ddd1 AS dddEntidade, abe0101fone1 AS foneEntidade, aab10user AS usuario, " +
-                    "ccb01obs AS observacao, ccb01eeDdd1 AS dddConsumidor, ccb01eeFone1 AS foneConsumidor, ccb01comprador AS comprador, ccb01status, " +
-                    "abe30nome AS codPgto, ccb01eeEndereco AS enderecoEntrega, ccb01eeNumero AS numeroEntrega, ccb01eeBairro AS bairroEntrega, ccb01eeComplem AS complemEntrega, " +
-                    "ccb01eeCep AS CEPEntrega, aag0201entrega.aag0201nome AS cidadeEntrega, aag02entrega.aag02uf AS ufEntrega  "+
-                    "FROM ccb01 " +
-                    "INNER JOIN abe01 ON abe01id = ccb01ent " +
-                    "LEFT JOIN abe0101 ON abe0101ent = abe01id AND abe0101principal = 1 " +
-                    "LEFT JOIN aag0201 AS aag0201princ ON aag0201princ.aag0201id = abe0101municipio  " +
-                    "LEFT JOIN aag02 AS aag02princ ON aag02princ.aag02id = aag0201princ.aag0201uf " +
-                    "INNER JOIN aab10 ON aab10id = ccb01user " +
-                    "LEFT JOIN abe30 ON abe30id = ccb01cp "+
-                    "LEFT JOIN aag0201 AS aag0201entrega ON aag0201entrega.aag0201id = ccb01eeMunicipio "+
-                    "LEFT JOIN aag02 AS aag02entrega ON aag02entrega.aag02id = aag0201entrega.aag0201uf "+
-                    whereId;
+        String sql = "SELECT ccb01data, ccb01hora, ccb01id, ccb01num AS numDoc, abe01nome AS nomeEntidade, abe0101endereco AS enderecoEntidade, " +
+                "abe0101numero AS numEndEntidade, abe0101complem AS complemEntidade, abe0101bairro AS bairroEntidade, " +
+                "abe0101cep AS cepEntidade, abe0101ddd1 AS dddEntidade, abe0101fone1 AS foneEntidade, aab10user AS usuario, " +
+                "ccb01obs AS observacao, ccb01eeDdd1 AS dddConsumidor, ccb01eeFone1 AS foneConsumidor, ccb01comprador AS comprador, ccb01status, " +
+                "abe30nome AS codPgto, ccb01eeEndereco AS enderecoEntrega, ccb01eeNumero AS numeroEntrega, ccb01eeBairro AS bairroEntrega, ccb01eeComplem AS complemEntrega, " +
+                "ccb01eeCep AS CEPEntrega, aag0201entrega.aag0201nome AS cidadeEntrega, aag02entrega.aag02uf AS ufEntrega  "+
+                "FROM ccb01 " +
+                "INNER JOIN abe01 ON abe01id = ccb01ent " +
+                "LEFT JOIN abe0101 ON abe0101ent = abe01id AND abe0101principal = 1 " +
+                "LEFT JOIN aag0201 AS aag0201princ ON aag0201princ.aag0201id = abe0101municipio  " +
+                "LEFT JOIN aag02 AS aag02princ ON aag02princ.aag02id = aag0201princ.aag0201uf " +
+                "INNER JOIN aab10 ON aab10id = ccb01user " +
+                "LEFT JOIN abe30 ON abe30id = ccb01cp "+
+                "LEFT JOIN aag0201 AS aag0201entrega ON aag0201entrega.aag0201id = ccb01eeMunicipio "+
+                "LEFT JOIN aag02 AS aag02entrega ON aag02entrega.aag02id = aag0201entrega.aag0201uf "+
+                whereId;
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroID);
     }
@@ -173,22 +182,20 @@ public class SPV_Impressao_Pre_Venda extends RelatorioBase {
         String nomeUser = obterUsuarioLogado().getAab10user().toUpperCase();
         String orderBy = "ORDER BY ccb0101seq";
 
-        if( nomeUser == "NANY" || nomeUser == "DIANA" || nomeUser == "FILIPE" || nomeUser == "PRISCILA" || nomeUser == "SHIRLEI" || nomeUser == "MASTER2"){
+        if( nomeUser == "NANY" || nomeUser == "DIANA" || nomeUser == "FILIPE" || nomeUser == "PRISCILA" || nomeUser == "SHIRLEI" || nomeUser == "MASTER2" || nomeUser == "LUIS"){
             orderBy = "ORDER BY CAST(ccb0101json ->> 'ambiente' AS text)"
         }
 
         String sql = "SELECT DISTINCT ccb0101seq, aam06codigo AS umu, abm01codigo AS codItem, abm01descr AS naItem, ccb0101unit AS unit, " +
-                    "ccb0101desc AS desconto, ccb0101totDoc AS totDoc, ccb0101qtComl AS qtd, ccb0101entregar AS entrega, abg01codigo AS codNcm, " +
-                    "abg01descr AS descrNcm, abg01codigo AS codNcm, CAST(ccb0101json ->> 'ambiente' AS text) AS ambiente " +
-                    "FROM ccb0101 " +
-                    "INNER JOIN abm01 ON abm01id = ccb0101item " +
-                    "INNER JOIN abm0101 ON abm0101item = abm01id "+
-                    "LEFT JOIN aam06 ON aam06id = abm01umu "+
-                    "LEFT JOIN abg01 ON abg01id = abm0101ncm "+
-                    whereId +
-                    orderBy;
-
-
+                "ccb0101desc AS desconto, ccb0101totDoc AS totDoc, ccb0101qtComl AS qtd, ccb0101entregar AS entrega, abg01codigo AS codNcm, " +
+                "abg01descr AS descrNcm, abg01codigo AS codNcm, CAST(ccb0101json ->> 'ambiente' AS text) AS ambiente, abm01arqFig AS imagem " +
+                "FROM ccb0101 " +
+                "INNER JOIN abm01 ON abm01id = ccb0101item " +
+                "INNER JOIN abm0101 ON abm0101item = abm01id "+
+                "LEFT JOIN aam06 ON aam06id = abm01umu "+
+                "LEFT JOIN abg01 ON abg01id = abm0101ncm "+
+                whereId +
+                orderBy;
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroId);
 
@@ -199,9 +206,9 @@ public class SPV_Impressao_Pre_Venda extends RelatorioBase {
         Parametro parametroId = Parametro.criar("id", id);
 
         String sql = "SELECT SUM(ccb0101total) AS totalItem, " +
-                    "SUM(ccb0101desc) AS desconto, SUM(ccb0101totDoc) AS totDoc " +
-                    "FROM ccb0101 " +
-                    whereId;
+                "SUM(ccb0101desc) AS desconto, SUM(ccb0101totDoc) AS totDoc " +
+                "FROM ccb0101 " +
+                whereId;
 
         return getAcessoAoBanco().buscarUnicoTableMap(sql, parametroId);
 
