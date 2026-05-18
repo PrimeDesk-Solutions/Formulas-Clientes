@@ -51,7 +51,7 @@ class SCF_Nosso_Numero_Itau extends FormulaBase {
         }
 
         String numParc = numDoc + complemento;
-        Long nossoNumero = Long.parseLong(numParc.length() > 8 ? numParc.substring(1) : numParc);
+        Long nossoNumero = Long.parseLong(numParc.length() > 8 ? numParc.substring(numParc.length() - 8) : numParc);
 
         put("nossoNumero", nossoNumero);
 
