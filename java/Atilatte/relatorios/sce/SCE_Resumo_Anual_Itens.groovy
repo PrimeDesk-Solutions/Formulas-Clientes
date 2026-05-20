@@ -28,12 +28,12 @@ public class SCE_Resumo_Anual_Itens extends RelatorioBase {
     public DadosParaDownload executar() {
         List<Long> idsItens = getListLong("itens");
         List<Integer> mps = getListInteger("mps");
-        List<Long> idsPLF = getListLong("plf");
+        List<Long> idsPLE = getListLong("ple");
         Integer movimentacao = getInteger("movimentacao");
         Integer impressao = getInteger("impressao");
         LocalDate[] data = getIntervaloDatas("data");
 
-        List<TableMap> dados = buscarDadosRelatorio(idsItens, mps, idsPLF, movimentacao, data);
+        List<TableMap> dados = buscarDadosRelatorio(idsItens, mps, idsPLE, movimentacao, data);
 
         if (dados.size() == 0) interromper("Não foram encontrado dados com os filtros selecionados.");
 
@@ -87,11 +87,11 @@ public class SCE_Resumo_Anual_Itens extends RelatorioBase {
 
     }
 
-    private List<TableMap> buscarDadosRelatorio(List<Long> idsItens, List<Integer> mps, List<Long> idsPLF, Integer movimentacao, LocalDate[] data) {
+    private List<TableMap> buscarDadosRelatorio(List<Long> idsItens, List<Integer> mps, List<Long> idsPLE, Integer movimentacao, LocalDate[] data) {
         String whereItens = idsItens != null && idsItens.size() > 0 ? "AND abm01id IN (:idsItens) " : "";
         String whereMps = mps != null && !mps.contains(-1) ? "AND abm01tipo IN (:mps) " : "";
         String whereGC = "AND bcc01gc = :idGC ";
-        String wherePLF = idsPLF != null && idsPLF.size() > 0 ? "AND abf20id IN (:idsPlf) " : "";
+        String wherePLF = idsPLE != null && idsPLE.size() > 0 ? "AND abf20id IN (:idsPLE) " : "";
         String whereMovimentacao = movimentacao == 0 ? "AND bcc01mov = 0 " : "AND bcc01mov = 1 ";
         String whereDatas = data != null ? "AND bcc01data BETWEEN :dtInicial AND :dtFinal " : "";
 
@@ -111,7 +111,7 @@ public class SCE_Resumo_Anual_Itens extends RelatorioBase {
         Parametro parametroItens = idsItens != null && idsItens.size() > 0 ? Parametro.criar("idsItens", idsItens) : null;
         Parametro parametroMps = mps != null && !mps.contains(-1) ? Parametro.criar("mps", mps) : null;
         Parametro parametroGC = Parametro.criar("idGC", obterEmpresaAtiva().getAac10id());
-        Parametro parametroPLF = idsPLF != null && idsPLF.size() > 0 ? Parametro.criar("idsPlf", idsPLF) : null;
+        Parametro parametroPLF = idsPLE != null && idsPLE.size() > 0 ? Parametro.criar("idsPLE", idsPLE) : null;
         Parametro dtInicial = data != null ? Parametro.criar("dtInicial", data[0]) : null;
         Parametro dtFinal = data != null ? Parametro.criar("dtFinal", data[1]) : null;
 
