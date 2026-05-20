@@ -197,7 +197,7 @@ public class SCF_Documentos extends RelatorioBase{
         String orderBy = agrup == "D" ? " order by abb11.abb11codigo ASC,daa01011.daa01011valor, abf10.abf10codigo ASC, " + orderSeq :
                 agrup == "N" ? " order by abf10.abf10codigo ASC, abb11.abb11codigo ASC, " + orderSeq :
                         agrup == "Nu" ? "order by "  + orderSeq :
-                                agrup == "E" ? "order by abe01.abe01nome, abb01.abb01parcela ASC, "  + orderSeq :
+                                agrup == "E" ? "order by abe01.abe01nome, abe01.abe01codigo, abb01.abb01parcela ASC, "  + orderSeq :
                                         agrup == "T" ? "order by aah01.aah01codigo ASC, abb01.abb01parcela ASC, "  + orderSeq :
                                                 agrup == "V" ? "order by daa01.daa01dtVctoN ASC,daa01id, abb01.abb01parcela ASC, "  + orderSeq :
                                                         agrup == "R" ? "order by abe01Rep.abe01codigo ASC, "  + orderSeq :
