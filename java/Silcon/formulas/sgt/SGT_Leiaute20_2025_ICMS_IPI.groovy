@@ -491,7 +491,7 @@ public class SGT_Leiaute20_2025_ICMS_IPI extends FormulaBase {
                         if(id == eaa01.eaa01id) documentoJaProcessado = true;
                     }
 
-                    if(documentoJaProcessado) continue;
+                    //if(documentoJaProcessado) continue;
 
                     if(eaa01.eaa01obsFisco != null){
                         eaa01.eaa01obsFisco = eaa01.eaa01obsFisco.replace("|", "");
