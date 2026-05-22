@@ -50,7 +50,7 @@ public class SCF_Impressao_Movimento extends RelatorioBase {
                 "CAST(daa1001json ->> 'descontoq' AS NUMERIC(18,6)) AS desconto, " +
                 "CAST(daa1001json ->> 'multaq' AS NUMERIC(18,6)) AS multa, " +
                 "CAST(daa1001json ->> 'jurosq' AS NUMERIC(18,6)) AS juros, " +
-                "CAST(daa1001json ->> 'encargosq' AS NUMERIC(18,6)) AS encargos, daa10nome AS nomeMovimento " +
+                "CAST(daa1001json ->> 'encargosq' AS NUMERIC(18,6)) AS encargos, daa10nome AS nomeMovimento, daa1001dtBaixa AS dtBaixa " +
                 "FROM daa10 " +
                 "INNER JOIN daa1001 ON daa1001movim = daa10id " +
                 "INNER JOIN abb01 ON abb01id = daa1001central " +
