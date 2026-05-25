@@ -856,7 +856,7 @@ class NFCe_Reforma extends FormulaBase {
             if(!isProducao) indIEDest = 2;
 
             dest.addNode("indIEDest", indIEDest, true);
-            dest.addNode("IE", indIEDest == 2 ? null : IE, false);
+            if(indIEDest != 9) dest.addNode("IE", indIEDest == 2 ? null : IE, false);
 
             dest.addNode("ISUF", eaa0102.eaa0102suframa == null ? null : StringUtils.extractNumbers(eaa0102.eaa0102suframa), false);
             dest.addNode("IM", eaa0102.eaa0102im == null ? null : NFeUtils.formatarIE(eaa0102.eaa0102im), false);
