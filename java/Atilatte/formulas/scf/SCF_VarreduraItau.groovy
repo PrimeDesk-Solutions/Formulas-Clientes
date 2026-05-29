@@ -21,7 +21,7 @@ import br.com.multitec.utils.TextFileLeitura
 import org.apache.commons.io.FileUtils
 import br.com.multitec.utils.collections.TableMap
 import sam.server.samdev.utils.Parametro;
-
+import br.com.multiorm.criteria.criterion.Criterion
 import javax.swing.text.html.parser.Entity
 import java.sql.SQLException
 import java.time.LocalDate;
@@ -57,9 +57,9 @@ public class SCF_VarreduraItau extends FormulaBase{
 
         // Documentos no repositorio de dados
         List<Aba2001> aba2001s = getSession().createCriteria(Aba2001.class)
-                                            .addFields("aba2001id, aba2001json")
-                                            .addWhere(Criterions.eq("aba2001rd", aba20.aba20id))
-                                            .getList(ColumnType.ENTITY);
+                .addFields("aba2001id, aba2001json")
+                .addWhere(Criterions.eq("aba2001rd", aba20.aba20id))
+                .getList(ColumnType.ENTITY);
 
         // Verifica se tem registros de um arquivo anterior no repositório de dados
         if(aba2001s != null && aba2001s.size() > 0){
@@ -68,11 +68,13 @@ public class SCF_VarreduraItau extends FormulaBase{
                 def tmAba2001 = aba2001.aba2001json;
                 BigDecimal vlrDoc = tmAba2001.getBigDecimal_Zero("valor");
                 String niEntidade = tmAba2001.getString("inscricao_entidade");
+                Integer tipoInscricao = tmAba2001.getInteger("tipo_inscricao");
                 String codBarras = tmAba2001.getString("cod_barras");
                 String dtVencimento = tmAba2001.getString("dt_vencimento");
                 LocalDate dtVencimentoFormatada = formatarData(dtVencimento, "yyyyMMdd");
 
-                Daa01 daa01 = buscarDocumentoFinanceiro(vlrDoc, niEntidade, dtVencimentoFormatada);
+
+                Daa01 daa01 = buscarDocumentoFinanceiro(vlrDoc, niEntidade, dtVencimentoFormatada, tipoInscricao);
 
                 // Atualiza o código de barras do documento financeiro
                 if(daa01 != null){
@@ -95,15 +97,15 @@ public class SCF_VarreduraItau extends FormulaBase{
                 LocalDate dtVencimentoFormatado = formatarData(dtVencimento, "ddMMyyyy");
                 BigDecimal valorTituloFormatado = Integer.parseInt(valorTitulo) / 100;
 
-                Abe01 abe01 = session.createCriteria(Abe01.class).addWhere(samWhere.getCritPadrao(Abe01.class)).addWhere(Criterions.eq("abe01ni", niEntidadeFormatado)).get(ColumnType.ENTITY);
+                Abe01 abe01 = buscarEntidade(niEntidadeFormatado);
 
                 // Monta o código de barras do documento
                 String codBarras = txt.getSubString(17,61);
 
                 // Busca o documento financeiro no banco
-                Daa01 daa01 = buscarDocumentoFinanceiro(valorTituloFormatado, niEntidadeFormatado, dtVencimentoFormatado);
+                Daa01 daa01 = buscarDocumentoFinanceiro(valorTituloFormatado, niEntidadeFormatado, dtVencimentoFormatado, tipoInscricao);
 
-                // Documento não existente no sistema
+                // Documento não existente no sistema, grava no repositorio
                 if(daa01 == null){
                     TableMap jsonRepositorio = new TableMap();
                     jsonRepositorio.put("codigo_entidade", abe01 != null ? abe01.abe01codigo : "CÓDIGO NÃO ENCONTRADO");
@@ -113,6 +115,7 @@ public class SCF_VarreduraItau extends FormulaBase{
                     jsonRepositorio.put("dt_vencimento", formatarData(dtVencimento, "ddMMyyyy"));
                     jsonRepositorio.put("nome_arquivo", nomeArquivo);
                     jsonRepositorio.put("cod_barras", codBarras);
+                    jsonRepositorio.put("tipo_inscricao", tipoInscricao.toInteger());
 
                     gravarInformacoesRepositorio(jsonRepositorio);
 
@@ -134,6 +137,13 @@ public class SCF_VarreduraItau extends FormulaBase{
         LocalDate data = LocalDate.parse(txtData, formato);
 
         return data;
+    }
+    private Abe01 buscarEntidade(String niEntidadeFormatado){
+        try{
+            return session.createCriteria(Abe01.class).addWhere(samWhere.getCritPadrao(Abe01.class)).addWhere(Criterions.eq("abe01ni", niEntidadeFormatado)).get(ColumnType.ENTITY);
+        }catch (Exception e){
+            interromper("Erro ao buscar entidade com Número de Inscrição " + niEntidadeFormatado +  " " + e.getMessage())
+        }
     }
 
     private String formatarInscricaoEntidade(String inscricaoEntidade, String tipoInscricao) {
@@ -165,14 +175,16 @@ public class SCF_VarreduraItau extends FormulaBase{
         return inscricaoEntidade
     }
 
-    private Daa01 buscarDocumentoFinanceiro(def vlrDoc, def niEntidade, def dtVencimentoFormatada ){
+    private Daa01 buscarDocumentoFinanceiro(def vlrDoc, String niEntidade, def dtVencimentoFormatada, def tipoInscricao ){
+
+        Criterion criterionsNI = tipoInscricao == 1 ? Criterions.eq("abe01ni",niEntidade) : Criterions.like("abe01ni",niEntidade.substring(0, niEntidade.indexOf("/")) + "%");
 
         return getSession().createCriteria(Daa01.class)
                 .addFields("daa01id, abe01codigo, abe01na, abe01ni, abb01num")
                 .addJoin(Joins.join("abb01", "daa01central = abb01id"))
                 .addJoin(Joins.join("abe01", "abe01id = abb01ent"))
                 .addWhere(Criterions.eq("daa01valor", vlrDoc))
-                .addWhere(Criterions.eq("abe01ni",niEntidade))
+                .addWhere(criterionsNI)
                 .addWhere(Criterions.eq("daa01dtVctoR", dtVencimentoFormatada))
                 .setOrder("daa01dtVctoR")
                 .setMaxResults(1)
