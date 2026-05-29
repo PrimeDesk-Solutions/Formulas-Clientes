@@ -106,6 +106,9 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
             // Campos Livre Entidade
             TableMap tmAbe01 = abe01.abe01json != null ? abe01.abe01json : new TableMap();
 
+            if(tmAbe01.getInteger("tipo_inscricao") == null) interromper("Necessário preencher o tipo de inscrição nos campos livres da entidade " + abe01.abe01codigo + " - " + abe01.abe01nome);
+            if(tmAbe01.getString("inscricao_entidade") == null) interromper("Necessário preencher CPF/CNPJ nos campos livres da entidade " + abe01.abe01codigo + " - " + abe01.abe01nome)
+
             Daa0102 daa0102 = scfService.buscarUltimaIntegracao(abf01.abf01id, daa01.daa01id, movimento);
 
             if (!fpAnterior.equals(tmAbe01.getString("forma_pagamento"))) { // Novo Lote
@@ -244,8 +247,8 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                     txt.print(aac10.aac10ti == 0 ? "2" : "1" , 1);                                                                                                                                    //020-020
                     txt.print(StringUtils.extractNumbers(aac10.aac10ni), 15, "0", true);                                                                        //021-035
                     txt.print(aac10.aac10rs, 40);                                                                                                         //036-075
-                    txt.print(abe01.abe01ti == 0 ? "2" : "1");                                                                                                                                 //076-076
-                    txt.print(StringUtils.extractNumbers(abe01.abe01ni), 15, "0", true);                                                                         //077-091
+                    txt.print(tmAbe01.getInteger("tipo_inscricao").toString());                                                                                                                                 //076-076
+                    txt.print(StringUtils.extractNumbers(tmAbe01.getString("inscricao_entidade")), 15, "0", true);                                                                         //077-091
                     txt.print(abe01.abe01nome, 40, true, true)                                                                                                                                         //092-131
                     txt.print(StringUtils.space(1));                                                                                                                                      //132-132
                     txt.print(StringUtils.space(15));                                                                                                                                     //133-147
@@ -270,8 +273,8 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                     txt.print(aac10.aac10ti == "0" ? "2" : "1", 1 );                                                                                                                                    //020-020
                     txt.print(StringUtils.extractNumbers(aac10.aac10ni), 15, "0", true);                                                                        //021-035
                     txt.print(aac10.aac10rs, 40);                                                                                                         //036-075
-                    txt.print(abe01.abe01ti == 0 ? "2" : "1");                                                                                                                                          //076-076
-                    txt.print(StringUtils.extractNumbers(abe01.abe01ni), 15, "0", true);                                                                         //077-091
+                    txt.print(tmAbe01.getInteger("tipo_inscricao").toString());                                                                                                                                          //076-076
+                    txt.print(StringUtils.extractNumbers(tmAbe01.getString("inscricao_entidade")), 15, "0", true);                                                                         //077-091
                     txt.print(abe01.abe01nome, 40, true, true);                                                                                                                                         //092-131
                     txt.print(tmAbe01.getString("chave_pix"), 77, "0", true);                                                                               //132-208
                     txt.print(StringUtils.space(32));                                                                                                                                     //188-240
@@ -324,7 +327,7 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                 txt.print(daa01.daa01valor.multiply(new BigDecimal(100)).intValue(), 15);                                                                                         //163-177
                 txt.print(StringUtils.space(20));                                                                                                                                     //178-197
                 txt.print("000000");                                                                                                                                                          //198-203
-                txt.print(StringUtils.extractNumbers(abe01.abe01ni), 14, '0', true);                                                                         //204-217
+                txt.print(StringUtils.extractNumbers(tmAbe01.getString("inscricao_entidade")), 14, '0', true);                                                                         //204-217
                 txt.print(tmAbe01.getString("finalidade_doc"), 2, '0', true);                                                                           //218-219
                 txt.print(StringUtils.space(5));                                                                                                                                       //220-224
                 txt.print(StringUtils.space(5));                                                                                                                                       //225-229
@@ -379,7 +382,7 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                 txt.print(daa01.daa01valor.multiply(new BigDecimal(100)).intValue(), 15);                                                                                         //163-177
                 txt.print(StringUtils.space(20));                                                                                                                                     //178-197
                 txt.print("000000");                                                                                                     //198-203
-                txt.print(StringUtils.extractNumbers(abe01.abe01ni), 14, '0', true);                                                                                                     //204-217
+                txt.print(StringUtils.extractNumbers(tmAbe01.getString("inscricao_entidade")), 14, '0', true);                                                                                                     //204-217
                 txt.print(tmAbe01.getString("finalidade_doc"), 2, '0', true);                                                                           //218-219
                 txt.print(StringUtils.space(5));                                                                           //220-224
                 txt.print(StringUtils.space(5));                                                                                                                                       //225-229
@@ -403,8 +406,8 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                 txt.print(aac10.aac10ti == 0 ? "2" : "1" , 1);                                                                                                                                    //020-020
                 txt.print(StringUtils.extractNumbers(aac10.aac10ni), 15, "0", true);                                                                        //021-035
                 txt.print(aac10.aac10rs, 40);                                                                                                         //036-075
-                txt.print(abe01.abe01ti == 0 ? "2" : "1");                                                                                                                                          //076-076
-                txt.print(StringUtils.extractNumbers(abe01.abe01ni), 15, "0", true);                                                                         //077-091
+                txt.print(tmAbe01.getInteger("tipo_inscricao").toString());                                                                                                                                          //076-076
+                txt.print(StringUtils.extractNumbers(tmAbe01.getString("inscricao_entidade")), 15, "0", true);                                                                         //077-091
                 txt.print(abe01.abe01nome, 40, true, true)                                                                                                                                         //092-131
                 txt.print(StringUtils.space(1));                                                                                                                                      //132-132
                 txt.print(StringUtils.space(15));                                                                                                                                     //133-147
