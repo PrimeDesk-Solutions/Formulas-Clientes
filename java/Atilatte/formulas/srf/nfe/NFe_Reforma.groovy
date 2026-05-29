@@ -316,7 +316,7 @@ class NFe_Reforma extends FormulaBase {
         ICMSTot.addNode("vICMS", getCampo("329-W04","vICMS") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("329-W04","vICMS")), 2, false), true);
         ICMSTot.addNode("vICMSDeson", getCampo("329.01-W04a","vICMSDeson") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("329.01-W04a","vICMSDeson")), 2, false), true);
         ICMSTot.addNode("vFCPUFDest", getCampo("329.03-W04c","vFCPUFDest") == null ? null : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("329.03-W04c","vFCPUFDest")), 2, true), false);
-        ICMSTot.addNode("vICMSUFDest", getCampo("245a.15-NA15","vICMSUFDest") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("245a.15-NA15","vICMSUFDest")), 2, false), true);
+        if(eaa01.eaa01esMov == 1) ICMSTot.addNode("vICMSUFDest", getCampo("245a.15-NA15","vICMSUFDest") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("245a.15-NA15","vICMSUFDest")), 2, false), true);
         ICMSTot.addNode("vICMSUFRemet", getCampo("329.07-W04g","vICMSUFRemet") == null ? null : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("329.07-W04g","vICMSUFRemet")), 2, true), false);
         ICMSTot.addNode("vFCP", getCampo("329.02-W04b","vFCP") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("329.02-W04b","vFCP")), 2, false), true);
         ICMSTot.addNode("vBCST", getCampo("330-W05","vBCST") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("330-W05","vBCST")), 2, false), true);
@@ -939,6 +939,7 @@ class NFe_Reforma extends FormulaBase {
 
             prod.addNode("qCom",  NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal("qt_convertida"),4, false), true);
             prod.addNode("vUnCom",  NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal("unitario_conv"),5, false), true);
+            //prod.addNode("vUnCom",  NFeUtils.formatarDecimal(eaa0103.eaa0103unit,7, false), true)
             prod.addNode("vProd", jsonEaa0103.getBigDecimal_Zero("total_conv") == 0 ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal("total_conv"), 2, false), true);
             prod.addNode("cEANTrib", eaa0103.eaa0103gtinTrib == null ? "SEM GTIN" : eaa0103.eaa0103gtinTrib, true);
 
@@ -947,6 +948,7 @@ class NFe_Reforma extends FormulaBase {
 
             prod.addNode("qTrib", jsonEaa0103.getBigDecimal("qt_convertida") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal("qt_convertida"),4, false), true);
             prod.addNode("vUnTrib",jsonEaa0103.getBigDecimal("unitario_conv") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal("unitario_conv"),5, false), true);
+            //prod.addNode("vUnTrib",eaa0103.eaa0103unit == null ? 0 : NFeUtils.formatarDecimal(eaa0103.eaa0103unit,7, false), true);
             prod.addNode("vFrete", getCampo("114-I15","vFrete") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("114-I15","vFrete")), 2, true), false);
             prod.addNode("vSeg", getCampo("115-I16","vSeg") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("115-I16","vSeg")), 2, true), false);
             prod.addNode("vDesc", getCampo("116-I17","vDesc") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("116-I17","vDesc")), 2, true), false);
