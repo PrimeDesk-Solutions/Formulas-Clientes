@@ -323,10 +323,10 @@ public class DevolucaoDeVendaPropria extends FormulaBase {
                 def cfop = aaj15_cfop.aaj15codigo;
 
                 if(jsonEaa0103.getBigDecimal_Zero("icms_st") == 0){
-                    cfop = "5101"
+                    cfop = "1201"
                     eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop))
                 }else{
-                    cfop = "5401"
+                    cfop = "1410"
                     eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop))
                 }
 
