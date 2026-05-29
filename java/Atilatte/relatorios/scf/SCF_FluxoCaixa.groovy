@@ -114,7 +114,7 @@ class SCF_FluxoCaixa extends RelatorioBase {
             def parcela = lcto.getString("abb01parcela");
             tm.put("parcela", parcela);
 
-            def rp = lcto.getInteger("daa01previsao") == 0 ? "R" : "P";
+            def rp = lcto.getInteger("daa01rp") == 0 ? "R" : "P";
             tm.put("rp", rp);
 
             if (lcto.getInteger("daa01rp") == 1) {
@@ -129,6 +129,8 @@ class SCF_FluxoCaixa extends RelatorioBase {
             tm.put("saldoAtual", saldoAtual);
 
             tm.put("aab10user", lcto.getString("aab10user"));
+            tm.put("codBarras", lcto.getString("codBarras") ? "SIM" : "NÃO");
+            tm.put("formaPagamento", buscarInformacaoCampoLivre(lcto.getString("formaPagamento")));
 
             dados.add(tm);
         }
@@ -154,7 +156,8 @@ class SCF_FluxoCaixa extends RelatorioBase {
         def whereVen = periodo != null ? " AND daa01dtVctoR BETWEEN :dtIni AND :dtFin " : "";
         def whereTipoDoc = tipoDoc != null && tipoDoc.size() > 0 ? " AND abb01tipo IN (:tipoDoc) " : "";
 
-        def sql = " SELECT daa01dtVctoR, abe01codigo, abe01na, abb01num, aah01codigo, aah01nome, daa01previsao, daa01rp, daa01valor, abb01parcela, abb01id " +
+        def sql = " SELECT daa01dtVctoR, abe01codigo, abe01na, abb01num, aah01codigo, aah01nome, daa01previsao, daa01rp, daa01valor, abb01parcela, abb01id, " +
+                "daa01codBarras AS codBarras, CAST(abe01json ->> 'forma_pagamento' AS TEXT) AS formaPagamento "+
                 " FROM Daa01 " +
                 " INNER JOIN Abb01 ON abb01id = daa01central " +
                 " INNER JOIN Aah01 ON aah01id = abb01tipo " +
@@ -164,6 +167,7 @@ class SCF_FluxoCaixa extends RelatorioBase {
                 " WHERE TRUE " + whereGcs + whereEnt + whereVen + whereTipoDoc +
                 " AND daa01dtPgto IS NULL " +
                 " ORDER BY daa01dtVctoR,daa01id";
+
 
         def p1 = idEmps != null && idEmps.size() > 0 ? criarParametroSql("idEmprs", idEmps) : criarParametroSql("idEmprs", idsGc);
         def p2 = idCcs != null && idCcs.size() > 0 ? criarParametroSql("idCcs", idCcs) : null;
@@ -203,6 +207,12 @@ class SCF_FluxoCaixa extends RelatorioBase {
                 .addWhere(whereEmpresa)
                 .addWhere(whereTabela)
                 .getList(ColumnType.LONG);
+    }
+    private String buscarInformacaoCampoLivre(String valorCampo){
+        String sql = "SELECT aah0201texto FROM aah0201 WHERE aah0201valor = :valorCampo AND aah0201campo = 83200630 "
+
+
+        return getAcessoAoBanco().obterString(sql, Parametro.criar("valorCampo", valorCampo));
     }
 }
 //meta-sis-eyJkZXNjciI6IlNDRiAtIEZsdXhvIGRlIENhaXhhIC0gTENSIiwidGlwbyI6InJlbGF0b3JpbyJ9
