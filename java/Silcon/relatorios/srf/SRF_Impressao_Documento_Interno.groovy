@@ -176,7 +176,7 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
                 " ent.abe01codigo AS codEntidade, ent.abe01nome AS nomeEntidade, " +
                 " aab10nome AS usuarioLogado, abb01data AS dtVenda, " +
                 " abe30codigo AS codCondPgto, abe30nome AS descrCondPgto, eaa01totItens AS totalItem, CAST(eaa01json ->> 'desconto' AS numeric(18,6)) AS desconto, eaa01totDoc AS totDoc, " +
-                " eaa01obsUsoInt AS obsInterno, CAST(eaa01json ->> 'com_nota' AS INTEGER) AS comNota, ent.abe01id AS abe01id, rep0.abe01nome AS usuario " +
+                " eaa01obsUsoInt AS obsInterno, CAST(eaa01json ->> 'com_nota' AS INTEGER) AS comNota, ent.abe01id AS abe01id, rep0.abe01na AS usuario " +
                 " FROM eaa01 " +
                 " INNER JOIN abb01 ON abb01id = eaa01central " +
                 " INNER JOIN aab10 ON aab10id = abb01operUser " +
