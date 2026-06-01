@@ -53,6 +53,7 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
         String campoLivre4 = getString("campoLivre4");
         String campoLivre5 = getString("campoLivre5");
         String campoLivre6 = getString("campoLivre6");
+        boolean analitico = getBoolean("analitico");
 
         String periodo = ""
         if (dataEmissao != null) {
@@ -98,6 +99,7 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
             String codItem = dado.getString("codItem");
             String naItem = dado.getString("naItem");
             String uf = dado.getString("uf");
+            String controleLinha = analitico ? dado.getString("eaa01id") : dado.getString("categoria") + dado.getString("uf");
 
             if(categoria == null) interromper("O item " + codItem + " - " + naItem + " encontra-se sem o critério de seleção SIF");
             if(fatorQuilo == 0) interromper("O item " + codItem + " - " + naItem + " encontra-se sem um fator de conversão para quilo");
@@ -107,9 +109,9 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
 
             if(idcontrole == null){
                 dadosTmp.putAll(dado);
-                idcontrole = dado.getString("categoria") + dado.getString("uf");
+                idcontrole = analitico ? dado.getString("eaa01id") : dado.getString("categoria") + dado.getString("uf");
                 somarValores(dado, valoresTotais, campos);
-            }else if(dado.getString("categoria") + dado.getString("uf") == idcontrole){
+            }else if(controleLinha == idcontrole){
                 somarValores(dado, valoresTotais, campos);
             }else{
                 TableMap tmp = new TableMap();
@@ -121,7 +123,7 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
                 dadosTmp = new TableMap();
                 dadosTmp.putAll(dado);
                 valoresTotais = new TableMap();
-                idcontrole = dado.getString("categoria") + dado.getString("uf");
+                idcontrole = analitico ? dado.getString("eaa01id") : dado.getString("categoria") + dado.getString("uf");
                 somarValores(dado, valoresTotais, campos);
             }
         }
@@ -130,11 +132,18 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
         tmp.putAll(dadosTmp);
         tmp.putAll(valoresTotais);
         comporValores(tmp, campos, tmp.getBigDecimal_Zero("fatorQuilo"), impressaoQuilo);
-        dadosRelatorio.add(tmp)
+        dadosRelatorio.add(tmp);
 
-        if(impressao == 1) return gerarXLSX("SRF_Devolucoes_Por_Categoria_Estado_SIF_Excel", dadosRelatorio);
+        if(impressao == 0 && !analitico){
+            return gerarPDF("SIF_Devolucoes_Por_Categoria_Estado_Sintetetico_PDF", dadosRelatorio); // SRF_Devolucoes_Por_Categoria_Estado_SIF_PDF
+        }else if(impressao == 1 && !analitico){
+            return gerarXLSX("SIF_Devolucoes_Por_Categoria_Estado_Sintetico_Excel", dadosRelatorio); /// SRF_Devolucoes_Por_Categoria_Estado_SIF_Excel
+        }else if(impressao == 0 && analitico){
+            return gerarPDF("SIF_Devolucoes_Por_Categoria_Estado_Analitico_PDF", dadosRelatorio);
+        }else{
+            return gerarXLSX("SIF_Devolucoes_Por_Categoria_Estado_Analitico_Excel", dadosRelatorio);
+        }
 
-        return gerarPDF("SRF_Devolucoes_Por_Categoria_Estado_SIF_PDF", dadosRelatorio);
     }
 
     private List<TableMap> buscarDadosRelatorio(LocalDate[] dataEmissao, List<Long> idEstados, List<Long> idItens, List<Long> idCategoria, List<Long> tipoDoc){
@@ -148,7 +157,7 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
         String whereCategoria = idCategoria != null && idCategoria.size() > 0 ? "AND aba3001id IN (:idCategoria) " : "";
         String whereCancData = "AND eaa01cancData IS NULL ";
         String whereMovEst = "AND eaa01iSce = 0 AND abd01isce = 0 ";
-        String orderBy = "ORDER BY aba3001descr, aag02uf ";
+        String orderBy = "ORDER BY aba3001descr, aag02uf, abb01num ";
 
         Parametro parametroDtEmissaoIni = dataEmissao != null ? Parametro.criar("dtEmissaoIni", dataEmissao[0]) : null;
         Parametro parametroDtEmissaoFin = dataEmissao != null ? Parametro.criar("dtEmissaoFin", dataEmissao[1]) : null;
@@ -157,34 +166,34 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
         Parametro parametroTipoDoc = tipoDoc != null && tipoDoc.size() > 0 ? Parametro.criar("tipoDoc", tipoDoc) : null;
         Parametro parametroCategoria = idCategoria != null && idCategoria.size() > 0 ? Parametro.criar("idCategoria", idCategoria) : null;
 
-        String sql = "SELECT abm01codigo AS codItem, abm01na AS naItem, aba3001descr AS categoria, aag02uf AS uf, " +
-                    "CAST(abm0101json ->> 'fator_litro' AS numeric(18,6)) as fatorQuilo, " +
-                    "eaa0103qtcoml, eaa0103total, eaa0103unit, eaa0103qtuso, eaa0103json, eaa0103totdoc, eaa0103totfinanc " +
-                    "FROM eaa01 " +
-                    "INNER JOIN eaa0103 ON eaa0103doc = eaa01id " +
-                    "INNER JOIN abm01 ON abm01id = eaa0103item " +
-                    "INNER JOIN abm0101 ON abm0101item = abm01id " +
-                    "INNER JOIN abb01 ON abb01id = eaa01central " +
-                    "INNER JOIN abe01 ON abe01id = abb01ent " +
-                    "LEFT  JOIN abe0101 ON abe0101ent = abe01id AND abe0101principal = 1 " +
-                    "LEFT JOIN aag0201 ON aag0201id = abe0101municipio " +
-                    "LEFT JOIN aag02 ON aag02id = aag0201uf " +
-                    "LEFT JOIN abm0102 ON abm0102item = abm01id " +
-                    "LEFT JOIN aba3001 ON aba3001id = abm0102criterio " +
-                    "LEFT JOIN aba30 ON aba3001criterio = aba30id " +
-                    "INNER JOIN abd01 ON abd01id = eaa01pcd " +
-                    "INNER JOIN aah01 ON aah01id = abb01tipo " +
-                    whereCriterio +
-                    whereClasDoc +
-                    whereEsMov +
-                    whereDtEmissao +
-                    whereItens +
-                    whereEstados +
-                    whereTipoDoc +
-                    whereCategoria +
-                    whereCancData +
-                    whereMovEst +
-                    orderBy
+        String sql = "SELECT eaa01id, abm01codigo AS codItem, abm01na AS naItem, aba3001descr AS categoria, aag02uf AS uf, " +
+                "CAST(abm0101json ->> 'fator_litro' AS numeric(18,6)) as fatorQuilo, aah01codigo, aah01nome, abb01num, " +
+                "eaa0103qtcoml, eaa0103total, eaa0103unit, eaa0103qtuso, eaa0103json, eaa0103totdoc, eaa0103totfinanc " +
+                "FROM eaa01 " +
+                "INNER JOIN eaa0103 ON eaa0103doc = eaa01id " +
+                "INNER JOIN abm01 ON abm01id = eaa0103item " +
+                "INNER JOIN abm0101 ON abm0101item = abm01id " +
+                "INNER JOIN abb01 ON abb01id = eaa01central " +
+                "INNER JOIN abe01 ON abe01id = abb01ent " +
+                "LEFT  JOIN abe0101 ON abe0101ent = abe01id AND abe0101principal = 1 " +
+                "LEFT JOIN aag0201 ON aag0201id = abe0101municipio " +
+                "LEFT JOIN aag02 ON aag02id = aag0201uf " +
+                "LEFT JOIN abm0102 ON abm0102item = abm01id " +
+                "LEFT JOIN aba3001 ON aba3001id = abm0102criterio " +
+                "LEFT JOIN aba30 ON aba3001criterio = aba30id " +
+                "INNER JOIN abd01 ON abd01id = eaa01pcd " +
+                "INNER JOIN aah01 ON aah01id = abb01tipo " +
+                whereCriterio +
+                whereClasDoc +
+                whereEsMov +
+                whereDtEmissao +
+                whereItens +
+                whereEstados +
+                whereTipoDoc +
+                whereCategoria +
+                whereCancData +
+                whereMovEst +
+                orderBy
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroItens, parametroEstados, parametroTipoDoc, parametroCategoria);
     }
@@ -259,4 +268,3 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
 
     }
 }
-//meta-sis-eyJkZXNjciI6IlNSRiAtIERldm9sdcOnw7VlcyBwb3IgQ2F0ZWdvcmlhL0VzdGFkbyAoU0lGKSIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

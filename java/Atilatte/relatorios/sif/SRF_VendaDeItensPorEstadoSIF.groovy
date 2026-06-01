@@ -68,6 +68,7 @@ public class SRF_VendaDeItensPorEstado extends RelatorioBase {
         Integer impressao = getInteger("impressao");
         Boolean agroupCategoria = getBoolean("agrupaCategoria");
         Boolean imprimirEmQuilo = getBoolean("imprimeQuilo");
+        Boolean analitico = getBoolean("analitico");
         def empresa = obterEmpresaAtiva();
         def idEmpresa = empresa.getAac10id();
 
@@ -84,7 +85,7 @@ public class SRF_VendaDeItensPorEstado extends RelatorioBase {
         if(dados.size() == 0) interromper("Não foram encontrado dados com os filtros selecionados.");
 
         List<TableMap> dadosRelatorio = new ArrayList<>();
-        List<Long> idsItensDoc = obterIdsItensDoc(entradaSaida,emissao, idsEstados, idsItens, idsCategorias,idEmpresa,agroupCategoria);
+        List<Long> idsItensDoc = new ArrayList<>();
         List<TableMap> listDevolucoesGeral = new ArrayList<>();
         List<TableMap> listDevolucoesAjustado = new ArrayList<>();
         String idControle = null;
@@ -97,6 +98,10 @@ public class SRF_VendaDeItensPorEstado extends RelatorioBase {
 
         // Agrupa as devoluções por item
         if(chkDevolucao){
+            for(dado in dados){ // Armazena os Ids dos itens para buscar devolução
+                idsItensDoc.add(dado.getLong("eaa0103id"));
+            }
+
             listDevolucoesGeral = obterDevolucao(idsItensDoc);
             if(listDevolucoesGeral != null && listDevolucoesGeral.size() > 0){
                 for(devolucao in listDevolucoesGeral){
@@ -127,7 +132,7 @@ public class SRF_VendaDeItensPorEstado extends RelatorioBase {
                 if(!tmpDev.isEmpty()) listDevolucoesAjustado.add(tmpDev);
             }
         }
-        
+
         for(dado in dados){
             Long idItem = dado.getLong("eaa0103id");
             BigDecimal fatorQuilo = dado.getBigDecimal("fatorQuilo");
@@ -149,7 +154,7 @@ public class SRF_VendaDeItensPorEstado extends RelatorioBase {
             grupoControle = grupoControle + dado.getString("estado");
 
 
-            if(imprimirEmQuilo) dado.put("eaa0103qtComl", dado.getBigDecimal_Zero("eaa0103QtComl") * fatorQuilo);
+            if(imprimirEmQuilo) dado.put("eaa0103qtComl", dado.getBigDecimal_Zero("eaa0103qtComl") * fatorQuilo);
 
             if(idControle == null){
                 dadosTmp.putAll(dado);
@@ -178,16 +183,24 @@ public class SRF_VendaDeItensPorEstado extends RelatorioBase {
         dadosRelatorio.add(tmp);
 
 
-        if(impressao == 0 && !agroupCategoria){
-            params.put("titulo","SRF - Vendas de Itens Por Estado (SIF) Analítico");
-            return gerarPDF("SRF_VendaDeItensPorEstadoAnaliticoSIF(PDF)", dadosRelatorio)
-        }else if(impressao == 0 && agroupCategoria){
-            params.put("titulo","SRF - Vendas de Itens Por Estado (SIF) Sintético");
-            return gerarPDF("SRF_VendaDeItensPorEstadoSinteticoSIF(PDF)", dadosRelatorio)
-        }else if(impressao == 1 && !agroupCategoria){
-            return gerarXLSX("SRF_VendaDeItensPorEstadoAnaliticoSIF(Excel)", dadosRelatorio)
+        if(impressao == 0 && !agroupCategoria && !analitico){
+            params.put("titulo","SIF - Vendas de Itens Por Estado (Sintético)");
+            return gerarPDF("SIF_VendaDeItensPorEstadoSintetico(PDF)", dadosRelatorio); //SRF_VendaDeItensPorEstadoAnaliticoSIF(PDF)
+        }else if(impressao == 0 && agroupCategoria && !analitico){
+            params.put("titulo","SIF - Vendas de Itens Por Estado e Categoria (Sintético)");
+            return gerarPDF("SIF_VendaDeItensPorEstadoCategSintetico(PDF)", dadosRelatorio); // SRF_VendaDeItensPorEstadoSinteticoSIF(PDF)
+        }else if(impressao == 1 && !agroupCategoria && !analitico){
+            return gerarXLSX("SIF_VendaDeItensPorEstadoSintetico(Excel)", dadosRelatorio); // SRF_VendaDeItensPorEstadoAnaliticoSIF(Excel)
+        }else if(impressao == 1 && agroupCategoria && !analitico){
+            return gerarXLSX("SIF_VendaDeItensPorEstadoCategSintetico(Excel)", dadosRelatorio); // SRF_VendaDeItensPorEstadoSinteticoSIF(Excel)
+        }else if(impressao == 0 && !agroupCategoria && analitico){
+            return gerarPDF("SIF_VendaDeItensPorEstadoAnalitico(PDF)", dados);
+        }else if(impressao == 1 && !agroupCategoria && analitico){
+            return gerarXLSX("SIF_VendaDeItensPorEstadoAnalitico(Excel)", dados);
+        }else if(impressao == 0 && agroupCategoria && analitico){
+            return gerarPDF("SIF_VendaDeItensPorEstadoCategAnalitico(PDF)", dados);
         }else{
-            return gerarXLSX("SRF_VendaDeItensPorEstadoSinteticoSIF(Excel)", dadosRelatorio)
+            return gerarXLSX("SIF_VendaDeItensPorEstadoCategAnalitico(Excel)", dados);
         }
 
     }
@@ -211,7 +224,7 @@ public class SRF_VendaDeItensPorEstado extends RelatorioBase {
         String whereCategoria = idsCategorias != null && idsCategorias.size() > 0 ?  "and aba3001id IN (:idsCategorias) " : ""
         String whereEstados = idsEstados != null && idsEstados.size() > 0 ?  "and aag02id IN (:idsEstados) " : ""
         String whereItens = idsItens != null && idsItens.size() > 0 ?  "and abm01id IN (:idsItens) " : ""
-        String orderBy = !agroupCategoria ? "order by abm01codigo, aag02uf  " : "order by aba3001descr, aag02uf "
+        String orderBy = !agroupCategoria ? "order by abm01codigo, aag02uf, abb01num " : "order by aba3001descr, aag02uf, abb01num "
 
         Parametro paramEmissaoIni = emissao != null ? Parametro.criar("dtEmissaoIni", dtEmissaoIni) : null;
         Parametro paramEmissaoFin = emissao != null ? Parametro.criar("dtEmissaoFin", dtEmissaoFin) : null;
@@ -220,68 +233,15 @@ public class SRF_VendaDeItensPorEstado extends RelatorioBase {
         Parametro paramItens = idsItens != null && idsItens.size() > 0 ? Parametro.criar("idsItens", idsItens) : null;
         Parametro paramEmpresa = Parametro.criar("idEmpresa", idEmpresa);
 
-        String sql = "SELECT eaa0103id, abm01id AS idItem, abm01codigo AS codItem, abm01na AS naItem, CAST(abm0101json ->> 'fator_litro' AS numeric(18,6)) as fatorQuilo, " +
-                    "aba3001descr AS categoria, aag02uf AS estado, eaa0103qtComl " +
-                    "FROM eaa01 " +
-                    "INNER JOIN abd01 on eaa01pcd = abd01id "+
-                    "INNER JOIN eaa0103 ON eaa0103doc = eaa01id " +
-                    "INNER JOIN abb01 ON abb01id = eaa01central " +
-                    "INNER JOIN abm01 ON abm01id = eaa0103item " +
-                    "INNER JOIN abm0101 ON abm0101item = abm01id "+
-                    "LEFT JOIN abm0102 ON abm0102item = abm01id " +
-                    "INNER JOIN aba3001 ON aba3001id = abm0102criterio " +
-                    "INNER JOIN abe01 ON abe01id = abb01ent " +
-                    "INNER JOIN abe0101 ON abe0101ent = abe01id AND abe0101principal = 1 " +
-                    "INNER JOIN aag0201 ON aag0201id = abe0101municipio " +
-                    "INNER JOIN aag02 ON aag02id = aag0201uf " +
-                    whereClasDoc  +
-                    whereCriterio +
-                    whereEmpresa +
-                    whereEsMov +
-                    whereEmissao +
-                    whereCategoria +
-                    whereEstados +
-                    whereItens +
-                    "and eaa01cancdata is null "+ 
-				"and abd01isce = 1 " +
-				"and eaa01isce = 1 " +
-				"and abb01tipo in (69744) "+ 
-                    orderBy
-
-        return getAcessoAoBanco().buscarListaDeTableMap(sql, paramEmissaoIni, paramEmissaoFin, paramCategoria, paramEstados, paramItens, paramEmpresa );
-    }
-
-    private List<Long> obterIdsItensDoc(Integer entradaSaida,LocalDate[] emissao, List<Long> idsEstados, List<Long> idsItens, List<Long> idsCategorias,Long idEmpresa, Boolean agroupCategoria){
-        // Datas Emissão
-        LocalDate dtEmissaoIni = null;
-        LocalDate dtEmissaoFin = null;
-
-        if(emissao != null){
-            dtEmissaoIni = emissao[0];
-            dtEmissaoFin = emissao[1];
-        }
-
-        String whereClasDoc = "WHERE eaa01clasdoc = 1 ";
-        String whereCriterio = "AND aba3001criterio = 35610617 ";
-        String whereEmpresa = "AND eaa01gc = :idEmpresa ";
-        String whereEsMov = entradaSaida == 0 ? "AND eaa01esMov = 0 " : "AND eaa01esMov = 1 ";
-        String whereEmissao = emissao != null ? "AND eaa01esData between :dtEmissaoIni and :dtEmissaoFin " : "";
-        String whereCategoria = idsCategorias != null && idsCategorias.size() > 0 ?  "and aba3001id IN (:idsCategorias) " : ""
-        String whereEstados = idsEstados != null && idsEstados.size() > 0 ?  "and aag02id IN (:idsEstados) " : ""
-        String whereItens = idsItens != null && idsItens.size() > 0 ?  "and abm01id IN (:idsItens) " : ""
-
-        Parametro paramEmissaoIni = emissao != null ? Parametro.criar("dtEmissaoIni", dtEmissaoIni) : null;
-        Parametro paramEmissaoFin = emissao != null ? Parametro.criar("dtEmissaoFin", dtEmissaoFin) : null;
-        Parametro paramCategoria = idsCategorias != null && idsCategorias.size() > 0 ? Parametro.criar("idsCategorias", idsCategorias) : null;
-        Parametro paramEstados = idsEstados != null && idsEstados.size() > 0 ? Parametro.criar("idsEstados", idsEstados) : null;
-        Parametro paramItens = idsItens != null && idsItens.size() > 0 ? Parametro.criar("idsItens", idsItens) : null;
-        Parametro paramEmpresa = Parametro.criar("idEmpresa", idEmpresa);
-
-        String sql = "SELECT DISTINCT eaa0103id " +
+        String sql = "SELECT eaa01id, eaa0103id, abm01id AS idItem, abm01codigo AS codItem, abm01na AS naItem, CAST(abm0101json ->> 'fator_litro' AS numeric(18,6)) as fatorQuilo, " +
+                "aba3001descr AS categoria, aag02uf AS estado, eaa0103qtComl, abb01num, aah01codigo, aah01nome " +
                 "FROM eaa01 " +
+                "INNER JOIN abd01 on eaa01pcd = abd01id "+
                 "INNER JOIN eaa0103 ON eaa0103doc = eaa01id " +
                 "INNER JOIN abb01 ON abb01id = eaa01central " +
+                "INNER JOIN aah01 ON aah01id = abb01tipo "+
                 "INNER JOIN abm01 ON abm01id = eaa0103item " +
+                "INNER JOIN abm0101 ON abm0101item = abm01id "+
                 "LEFT JOIN abm0102 ON abm0102item = abm01id " +
                 "INNER JOIN aba3001 ON aba3001id = abm0102criterio " +
                 "INNER JOIN abe01 ON abe01id = abb01ent " +
@@ -295,9 +255,13 @@ public class SRF_VendaDeItensPorEstado extends RelatorioBase {
                 whereEmissao +
                 whereCategoria +
                 whereEstados +
-                whereItens;
-
-        return getAcessoAoBanco().obterListaDeLong(sql, paramEmissaoIni, paramEmissaoFin, paramCategoria, paramEstados, paramItens, paramEmpresa )
+                whereItens +
+                "and eaa01cancdata is null "+
+                "and abd01isce = 1 " +
+                "and eaa01isce = 1 " +
+                "and abb01tipo in (69744) "+
+                orderBy
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, paramEmissaoIni, paramEmissaoFin, paramCategoria, paramEstados, paramItens, paramEmpresa );
     }
 
     private void somarValores(TableMap valoresDocumento, TableMap valoresTotais){
