@@ -242,7 +242,7 @@ public class SRF_Itens_Por_Documento extends RelatorioBase {
                 "CASE WHEN abm01tipo = 0 THEN 'M'  " +
                 "WHEN abm01tipo = 1 THEN 'P'  " +
                 "WHEN abm01tipo = 2 THEN 'S'  " +
-                "ELSE 'MER' END AS mps, abm01codigo, abm01na, aam06codigo,abe30codigo, abe30nome,abe40codigo, " +
+                "ELSE 'MER' END AS mps, abm01codigo, abm01descr, aam06codigo,abe30codigo, abe30nome,abe40codigo, " +
                 "abe40nome,abg01codigo,eaa0103qtuso,eaa0103qtcoml, eaa0103unit, eaa0103total, eaa0103totdoc, eaa0103totfinanc " +
                 "FROM eaa01  " +
                 "INNER JOIN abd01 on abd01id = eaa01pcd  " +
@@ -459,4 +459,3 @@ public class SRF_Itens_Por_Documento extends RelatorioBase {
 }
 // Formula corrigida 24/10/2024
 //meta-sis-eyJkZXNjciI6IlNSRiBJdGVucyBQb3IgRG9jdW1lbnRvIiwidGlwbyI6InJlbGF0b3JpbyJ9
-//meta-sis-eyJkZXNjciI6IlNSRiAtIEl0ZW5zIFBvciBEb2N1bWVudG8iLCJ0aXBvIjoicmVsYXRvcmlvIn0=
