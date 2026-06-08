@@ -23,8 +23,12 @@ public class SCF_Cashback_Clientes extends RelatorioBase {
     public DadosParaDownload executar() {
         List<Long> idsEntidades = getListLong("entidades");
         Boolean exibirLancamentos = getBoolean("lancamentos");
+        Long id = getLong("id") // ID retornado da tarefa SCF0210
 
-        List<TableMap> dados = buscarDadosRelatorio(idsEntidades);
+        if(id != null) exibirLancamentos = true;
+
+        List<TableMap> dados = id == null ? buscarDadosRelatorio(idsEntidades) : buscarDadosById(id);
+
         List<TableMap> listLctos = new ArrayList();
 
         for(dado in dados){
@@ -82,5 +86,18 @@ public class SCF_Cashback_Clientes extends RelatorioBase {
                     "ORDER BY dad0101id DESC"
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idCashback", idCashback));
+    }
+    private List<TableMap> buscarDadosById(Long id){
+        String whereId = "WHERE dad01id = :id ";
+
+        Parametro parametroId = Parametro.criar("id", id);
+
+        String sql = "SELECT abe01codigo, abe01nome, dad01saldo, dad01id " +
+                "FROM dad01 " +
+                "INNER JOIN abe01 ON abe01id = dad01ent " +
+                whereId +
+                "ORDER BY abe01codigo";
+
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroId);
     }
 }
