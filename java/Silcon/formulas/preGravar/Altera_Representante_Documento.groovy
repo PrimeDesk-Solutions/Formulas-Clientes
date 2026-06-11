@@ -93,6 +93,8 @@ public class Altera_Representante_Documento extends FormulaBase{
                 .setParameter("idEntidade", abb01.abb01ent.abe01id)
                 .getUniqueResult(ColumnType.JSON);
 
+        if(jsonAbe01 == null ) throw new ValidacaoException("Campos de limite de crédito não preenchido no cadastro da entidade " + abe01.abe01codigo);
+
         LocalDate dataAtual = LocalDate.now();
         LocalDate dtVencLimCredito = jsonAbe01.getDate("dt_vcto_lim_credito");
 
