@@ -90,6 +90,8 @@ public class Movimento extends FormulaBase{
         if(descontoq != null) descontoq = descontoq.abs() * -1
         mapJson.put("descontoq", descontoq);
 
+        mapJson.put("user_baixa", obterUsuarioLogado().getAab10id());
+
         //def valorLiquido = valor + jurosq + encargosq + multaq + descontoq;
         def valorLiquido = valor;
         if(jurosq != null) valorLiquido = valorLiquido + jurosq;
