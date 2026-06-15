@@ -1,5 +1,6 @@
-package RenatoRappa.formulas.scv;
+package RenatoRappa.formulas.scv
 
+import br.com.multiorm.Query;
 import sam.model.entities.ab.Abm1301;
 
 import sam.server.samdev.utils.Parametro;
@@ -179,7 +180,7 @@ public class DocPadraoSaidaFunRuralNOVO extends FormulaBase {
         aaj14_cstCsosn = eaa0103.eaa0103csosn != null ? getSession().get(Aaj14.class, eaa0103.eaa0103csosn.aaj14id) : null;
 
         //CST ICMS
-        aaj10_cstIcms = abm12.abm12cstIcms != null ? getSession().get(Aaj10.class, abm12.abm12cstIcms.aaj10id) : null;
+        aaj10_cstIcms = eaa0103.eaa0103cstIcms != null ? getSession().get(Aaj10.class, eaa0103.eaa0103cstIcms.aaj10id) : null;
 
         //CST IPI
         aaj11_cstIpi = eaa0103.eaa0103cstIpi != null ? getSession().get(Aaj11.class, eaa0103.eaa0103cstIpi.aaj11id) : null;
@@ -300,7 +301,7 @@ public class DocPadraoSaidaFunRuralNOVO extends FormulaBase {
             if (abm01.abm01pesoBruto_Zero >= 0) jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(4));
 
 
-            // *** Processa Valores 
+            // *** Processa Valores
             //Desconto Incondicional
             if (jsonEaa0103.getBigDecimal_Zero("_desc_incond") < 0) {
                 jsonEaa0103.put("desconto", 0);
@@ -354,7 +355,7 @@ public class DocPadraoSaidaFunRuralNOVO extends FormulaBase {
             }
 
 
-            // Calculo da Redução 
+            // Calculo da Redução
             if (jsonEaa0103.getBigDecimal_Zero("_reduc_bc_icms") > 0) {
                 vlrReducao = ((jsonEaa0103.getBigDecimal_Zero("bc_icms") * jsonEaa0103.getBigDecimal_Zero("_reduc_bc_icms")) / 100).round(2);
                 jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms") - vlrReducao);
@@ -423,10 +424,10 @@ public class DocPadraoSaidaFunRuralNOVO extends FormulaBase {
                 }
             }
 
-            //BC de FunRural 
+            //BC de FunRural
             jsonEaa0103.put("bc_fun_rural", eaa0103.eaa0103total);
 
-            //Aliquota FunRural 
+            //Aliquota FunRural
             if (jsonEaa0103.getBigDecimal_Zero("_fun_rural") == 0) {
                 jsonEaa0103.put("_fun_rural", 1.5);
             }
@@ -464,10 +465,13 @@ public class DocPadraoSaidaFunRuralNOVO extends FormulaBase {
 
             calcularCBSIBS();
 
+            String categoria = buscarCategoriaItem(abm01.abm01codigo);
+
+            definirCbenefItem(categoria);
 
             //*******Calculo para SPED ICMS*******
 
-            //BC ICMS SPED = BC ICMS 
+            //BC ICMS SPED = BC ICMS
             jsonEaa0103.put("bc_icms_sped", jsonEaa0103.getBigDecimal_Zero("bc_icms"));
 
             //Aliq ICMS SPED = Aliq ICMS
@@ -681,6 +685,56 @@ public class DocPadraoSaidaFunRuralNOVO extends FormulaBase {
             jsonEaa0103.put("vlr_ibsmun", new BigDecimal(0));
             jsonEaa0103.put("vlr_ibsuf", new BigDecimal(0));
             jsonEaa0103.put("vlr_ibs", new BigDecimal(0));
+        }
+    }
+    private String buscarCategoriaItem(codItem){
+
+        Query descrCriterios = getSession().createQuery("SELECT aba3001descr FROM aba3001 "+
+                "INNER JOIN abm0102 ON abm0102criterio = aba3001id AND aba3001criterio = 115498513 " +
+                "INNER JOIN abm01 ON abm0102item = abm01id "+
+                "WHERE abm01codigo = '"+codItem+"'"+
+                "AND abm01tipo = " + abm01.abm01tipo);
+
+        List<TableMap> listCriterios = descrCriterios.getListTableMap();
+
+        if (listCriterios == null && listCriterios.size() == 0) throw new ValidacaoException("Não foi encontrado critério de seleção de grupo para o item " + codItem);
+
+        String grupo = "";
+
+        for(TableMap criterio : listCriterios){
+            if(criterio.getString("aba3001descr").toUpperCase().contains("LEITE")){
+                grupo = "LEITE CRU"
+            }
+            if(criterio.getString("aba3001descr").toUpperCase().contains("GADO")){
+                grupo = "GADO"
+            }
+
+            if(criterio.getString("aba3001descr").toUpperCase().contains("FRANGO")){
+                grupo = "FRANGO"
+            }
+
+            if(criterio.getString("aba3001descr").toUpperCase().contains("CARNE")){
+                grupo = "CARNE E AVES"
+            }
+
+            if(criterio.getString("aba3001descr").toUpperCase().contains("MADEIRA")){
+                grupo = "MADEIRA"
+            }
+        }
+
+        return grupo;
+    }
+    private definirCbenefItem(String categoria){
+        if(categoria == "LEITE CRU" && aaj10_cstIcms.getAaj10codigo() == "041"){
+            eaa0103.eaa0103codBenef = "SP052600";
+        }else if(categoria == "GADO" && aaj10_cstIcms.getAaj10codigo() == "040"){
+            eaa0103.eaa0103codBenef = "SP011020";
+        }else if(categoria == "FRANGO" && aaj10_cstIcms.aaj10codigo == "050"){
+            eaa0103.eaa0103codBenef = "SP099999";
+        }else if(categoria == "CARNE E AVES" && aaj10_cstIcms.getAaj10codigo() == "051"){
+            eaa0103.eaa0103codBenef = "SP053630";
+        }else if(categoria == "MADEIRA"){
+            eaa0103.eaa0103codBenef = "SP020560";
         }
     }
 
