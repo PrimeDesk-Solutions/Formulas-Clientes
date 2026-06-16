@@ -1,6 +1,7 @@
-package Silcon.formulas.itensDocumentos
+package Inova.formulas.itensDocumentos
 
-import sam.model.entities.aa.Aac13;
+import sam.model.entities.aa.Aac13
+import sam.model.entities.aa.Aah01;
 import sam.model.entities.ab.Abd02;
 import sam.server.samdev.utils.Parametro;
 import br.com.multiorm.criteria.criterion.Criterions
@@ -28,6 +29,7 @@ import sam.model.entities.ab.Abd01;
 import sam.model.entities.ab.Abe01;
 import sam.model.entities.ab.Abe02;
 import sam.model.entities.ab.Abe40;
+import sam.model.entities.ab.Abe30;
 import sam.model.entities.ab.Abe4001;
 import sam.model.entities.ab.Abg01
 import sam.model.entities.ab.Abm01;
@@ -44,7 +46,7 @@ import sam.model.entities.ea.Eaa0102;
 import sam.model.entities.ea.Eaa0103;
 import sam.server.samdev.formula.FormulaBase;
 
-public class SRF_DocServicoConjugadaEntrada extends FormulaBase {
+public class SRF_DocComplementoIcmsST extends FormulaBase {
 
     private Aac10 aac10;
     private Aac13 aac13;
@@ -54,6 +56,7 @@ public class SRF_DocServicoConjugadaEntrada extends FormulaBase {
     private Aag02 ufEmpr;
     private Aag0201 municipioEnt;
     private Aag0201 municipioEmpr;
+    private Aah01 aah01;
     private Aaj07 aaj07;
     private Aaj09 aaj09;
     private Aaj10 aaj10_cstIcms;
@@ -70,6 +73,7 @@ public class SRF_DocServicoConjugadaEntrada extends FormulaBase {
     private Abd02 abd02;
     private Abe01 abe01;
     private Abe02 abe02;
+    private Aac10 abe30;
     private Abg01 abg01;
     private Abm01 abm01;
     private Abm0101 abm0101;
@@ -145,7 +149,10 @@ public class SRF_DocServicoConjugadaEntrada extends FormulaBase {
         municipioEmpr = aac10.aac10municipio != null ? getSession().get(Aag0201.class, Criterions.eq("aag0201id", aac10.aac10municipio.aag0201id)) : null;
         ufEmpr = municipioEmpr != null ? getSession().get(Aag02.class, municipioEmpr.aag0201uf.aag02id) : null;
 
-        //Item
+        //Tipo de Documento
+        aah01 = abb01.abb01tipo != null ? getSession().get(Aah01.class, abb01.abb01tipo.aah01id) : null;
+
+
         abm01 = eaa0103.eaa0103item != null ? getSession().get(Abm01.class, eaa0103.eaa0103item.abm01id) : null;
 
         //Configurações do item, por empresa
@@ -207,6 +214,9 @@ public class SRF_DocServicoConjugadaEntrada extends FormulaBase {
         aaj09 = eaa0103.eaa0103cstCbsIbs != null ? getSession().get(Aaj09.class, eaa0103.eaa0103cstCbsIbs.aaj09id) : null;
         if (aaj09 == null) interromper("Necessário informar o CST de CBS/IBS no item: " + abm01.abm01codigo + " - " + abm01.abm01na);
 
+        // Condição de pagamento
+        abe30 = eaa01.eaa01cp != null ? getSession().get(Abe30.class, eaa01.eaa01cp.abe30id) : null;
+
         //CAMPOS LIVRES
         jsonAac10 = aac10.aac10json != null ? aac10.aac10json : new TableMap();
         jsonAag02 = aag02 != null ? aag02.aag02json : new TableMap();
@@ -253,90 +263,23 @@ public class SRF_DocServicoConjugadaEntrada extends FormulaBase {
                 dentroEstado = ufEmpr.aag02uf == ufEnt.aag02uf;
             }
 
-            definirCFOP(dentroEstado);
+            zerarCamposLivres(aah01);
 
-            // Conserva Qt.Original do documento (Qt.Faturamento original)
-            if (jsonEaa0103.getBigDecimal_Zero("qt_original") == 0) {
-                jsonEaa0103.put("qt_original", eaa0103.eaa0103qtComl);
-            }
-
-            // Qtde SCE
-            if (abm1301.abm1301fcCU_Zero == 0) throw new ValidacaoException("O item " + abm01.abm01codigo + " - " + abm01.abm01descr + " encontra-se sem fator de conversão de uso. ")
-            eaa0103.eaa0103qtUso = (eaa0103.eaa0103qtComl * abm1301.abm1301fcCU_Zero).round(3);
-
-            // Converte Qt.Documento para Volume
-            if (jsonEaa0103.getBigDecimal_Zero("volumes") >= 0) {
-                jsonEaa0103.put("volumes", eaa0103.eaa0103qtComl * abm13.abm13fcVW);
-                BigDecimal volume = jsonEaa0103.getBigDecimal_Zero("volumes");
-                BigDecimal volumes = new BigDecimal(volume).setScale(0, BigDecimal.ROUND_UP);
-                jsonEaa0103.put("volumes", volumes);
-            }
-
-            // Total item  + serviços
-            if(abm01.abm01tipo == 3){
-                jsonEaa0103.put("servicos_item", (eaa0103.eaa0103qtComl_Zero * eaa0103.eaa0103unit).round(2));
-                jsonEaa0103.put("total_servicos", (eaa0103.eaa0103qtComl_Zero * eaa0103.eaa0103unit).round(2));
-            }
-
-            // Peso Bruto
-            jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto).round(3));
-
-            // Peso Líquido
-            jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(3));
-
-            // Total do item
-            eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
-
-            calcularImpostosServicos();
-
-            jsonEaa0103.put("ipi_isento", BigDecimal.ZERO);
-            jsonEaa0103.put("ipi_outras", jsonEaa0103.getBigDecimal_Zero("bc_ipi"));
-            jsonEaa0103.put("icms_outras", eaa0103.eaa0103total);
-
-            calculaPIS();
-
-            calculaCOFINS();
-
-            if(abm01.abm01tipo != 3){
-                eaa0103.eaa0103totDoc = eaa0103.eaa0103total +
-                                        jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                                        jsonEaa0103.getBigDecimal_Zero("seguro") +
-                                        jsonEaa0103.getBigDecimal_Zero("outras_despesas") -
-                                        jsonEaa0103.getBigDecimal_Zero("pis") -
-                                        jsonEaa0103.getBigDecimal_Zero("cofins") -
-                                        jsonEaa0103.getBigDecimal_Zero("csll") -
-                                        jsonEaa0103.getBigDecimal_Zero("inss") -
-                                        jsonEaa0103.getBigDecimal_Zero("desconto")
-            }else{
-                eaa0103.eaa0103totDoc = jsonEaa0103.getBigDecimal_Zero("total_servicos") - jsonEaa0103.getBigDecimal_Zero("desconto");
-            }
-
-            eaa0103.eaa0103totDoc = eaa0103.eaa0103totDoc.round(2);
-
-           if(abm01.abm01tipo == 3){
-               jsonEaa0103.put("bc_pis", BigDecimal.ZERO);
-               jsonEaa0103.put("aliq_pis", BigDecimal.ZERO);
-               jsonEaa0103.put("pis", BigDecimal.ZERO);
-               jsonEaa0103.put("bc_cofins", BigDecimal.ZERO);
-               jsonEaa0103.put("aliq_cofins", BigDecimal.ZERO);
-               jsonEaa0103.put("cofins", BigDecimal.ZERO);
-               jsonEaa0103.put("ipi_outras", eaa0103.eaa0103totDoc);
-               jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
-           }
-
-            if (eaa0103.eaa0103retInd == 0) {
-                eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
-            } else {
-                eaa0103.eaa0103totFinanc = BigDecimal.ZERO
-            }
-
-
-            definirCodigoBeneficioFiscal()
+            calcularCBSIBS();
 
             preencherSPEDS();
 
         }
 
+    }
+    private void zerarCamposLivres(Aah01 aah01){
+        String sql = "SELECT aah02nome FROM aah0101 INNER JOIN aah02 ON aah02id = aah0101campo WHERE aah0101tipoDoc = :id";
+
+        List<Strin> campos = getAcessoAoBanco().obterListaDeString(sql, Parametro.criar("id", aah01.aah01id));
+
+        for(campo in campos){
+            jsonEaa0103.put("campo", BigDecimal.ZERO);
+        }
     }
 
     // Trocar CFOP (Dentro ou fora do estado)
@@ -348,6 +291,10 @@ public class SRF_DocServicoConjugadaEntrada extends FormulaBase {
             String primeiroDigito = cfop.substring(0, 1);
 
             if (!dentroEstado) {
+                if (primeiroDigito == "5") {
+                    primeiroDigito = "6";
+                }
+
                 if (primeiroDigito == "1") {
                     primeiroDigito = "2";
                 }
@@ -360,6 +307,15 @@ public class SRF_DocServicoConjugadaEntrada extends FormulaBase {
 
                 eaa0103.eaa0103cfop = aaj15_cfop;
             }
+        }
+    }
+    private void calcularFCP(){
+        if(jsonEaa0103.getBigDecimal_Zero("aliq_fcp") != -1){
+            jsonEaa0103.put("aliq_fcp", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_fpc"));
+
+            jsonEaa0103.put("bc_fcp", jsonEaa0103.getBigDecimal_Zero("bc_icms"));
+            jsonEaa0103.put("fcp", jsonEaa0103.getBigDecimal_Zero("bc_fcp") * jsonEaa0103.getBigDecimal_Zero("aliq_fcp") / 100);
+            jsonEaa0103.put("fcp", jsonEaa0103.getBigDecimal_Zero("fcp").round(2));
         }
     }
     private String buscarCstICMS() {
@@ -381,111 +337,6 @@ public class SRF_DocServicoConjugadaEntrada extends FormulaBase {
         return cst;
     }
 
-    private void calcularICMS(Integer contribICMS) {
-        Integer vlrReducao = 0;
-
-        if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
-            // BC ICMS
-            jsonEaa0103.put("bc_icms", eaa0103.eaa0103total +
-                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                    jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
-                    jsonEaa0103.getBigDecimal_Zero("seguro"));
-
-            jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms").round(2));
-
-            if (contribICMS) jsonEaa0103.put("bc_icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") + jsonEaa0103.getBigDecimal_Zero("ipi")).round(2));
-
-            // Calculo da Redução
-            if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_reduc_bc_icms") > 0) {
-                jsonEaa0103.put("aliq_reduc_bc_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_reduc_bc_icms"));
-                vlrReducao = (jsonEaa0103.getBigDecimal_Zero("bc_icms") * (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_reduc_bc_icms") / 100)).round(2);
-                jsonEaa0103.put("bc_icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") - vlrReducao).round(2));
-            }
-
-            // Zerando icms outras quando tiver valor na aliq icms
-            jsonEaa0103.put("icms_outras", new BigDecimal(0));
-
-            // Aliquota de ICMS
-            if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
-                jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
-            }
-
-            // Calculo ICMS
-            jsonEaa0103.put("icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") * (jsonEaa0103.getBigDecimal_Zero("aliq_icms") / 100)).round(2));
-
-        } else {
-            jsonEaa0103.put("bc_icms", new BigDecimal(0));
-            jsonEaa0103.put("aliq_icms", new BigDecimal(0));
-            jsonEaa0103.put("icms", new BigDecimal(0));
-            jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
-        }
-    }
-
-    private void calcularImpostosServicos(){
-        // ISS
-        if(jsonEaa0103.getBigDecimal_Zero("aliq_iss") != -1){
-            if(jsonEaa0103.getBigDecimal_Zero("aliq_iss") == 0) jsonEaa0103.put("aliq_iss", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_iss"));
-
-            if(jsonEaa0103.getBigDecimal_Zero("aliq_iss") > 0){
-                jsonEaa0103.put("bc_iss", jsonEaa0103.getBigDecimal_Zero("total_servicos"));
-
-                jsonEaa0103.put("iss", jsonEaa0103.getBigDecimal_Zero("bc_iss") * jsonEaa0103.getBigDecimal_Zero("aliq_iss") / 100);
-                jsonEaa0103.put("iss", jsonEaa0103.getBigDecimal_Zero("iss").round(2));
-            }
-        }else{
-            jsonEaa0103.put("bc_iss", BigDecimal.ZERO);
-            jsonEaa0103.put("aliq_iss", BigDecimal.ZERO);
-            jsonEaa0103.put("iss", BigDecimal.ZERO);
-        }
-    }
-    private calculaPIS() {
-        if (jsonAbm0101.getBigDecimal_Zero("aliq_pis") > 0) {
-
-            // BC PIS
-            jsonEaa0103.put("bc_pis", eaa0103.eaa0103total +
-                                        jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                                        jsonEaa0103.getBigDecimal_Zero("seguro") +
-                                        jsonEaa0103.getBigDecimal_Zero("outras_despesas"));
-
-            jsonEaa0103.put("bc_pis", jsonEaa0103.getBigDecimal_Zero("bc_pis").round(2));
-
-            // Aliquota
-            jsonEaa0103.put("aliq_pis", jsonAbm0101.getBigDecimal_Zero("aliq_pis"));
-
-            // PIS
-            jsonEaa0103.put("pis", jsonEaa0103.getBigDecimal_Zero("bc_pis") * jsonEaa0103.getBigDecimal_Zero("aliq_pis") / 100);
-            jsonEaa0103.put("pis", jsonEaa0103.getBigDecimal_Zero("pis").round(2));
-
-
-        } else {
-            jsonEaa0103.put("aliq_pis", new BigDecimal(0));
-            jsonEaa0103.put("bc_pis", new BigDecimal(0));
-            jsonEaa0103.put("pis", new BigDecimal(0));
-        }
-
-    }
-
-    private calculaCOFINS() {
-        if (jsonAbm0101.getBigDecimal_Zero("aliq_cofins") > 0) {
-
-            if (eaa0103.eaa0103cstCofins.aaj13codigo == '01') {
-                // BC COFINS
-                jsonEaa0103.put("bc_cofins", jsonEaa0103.getBigDecimal_Zero("bc_pis"));
-
-                // Aliquota
-                jsonEaa0103.put("aliq_cofins", jsonAbm0101.getBigDecimal_Zero("aliq_cofins"));
-
-                // COFINS
-                jsonEaa0103.put("cofins", jsonEaa0103.getBigDecimal_Zero("bc_cofins") * jsonEaa0103.getBigDecimal_Zero("aliq_cofins") / 100);
-                jsonEaa0103.put("cofins", jsonEaa0103.getBigDecimal_Zero("cofins").round(2));
-            }
-
-        } else {
-            jsonEaa0103.put("aliq_cofins", new BigDecimal(0));
-            jsonEaa0103.put("bc_cofins", new BigDecimal(0));
-            jsonEaa0103.put("cofins", new BigDecimal(0));
-        }
-    }
 
     private void calcularCBSIBS() {
         // *********************************************
@@ -796,8 +647,3 @@ public class SRF_DocServicoConjugadaEntrada extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

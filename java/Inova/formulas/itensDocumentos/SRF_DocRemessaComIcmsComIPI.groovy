@@ -44,7 +44,7 @@ import sam.model.entities.ea.Eaa0102;
 import sam.model.entities.ea.Eaa0103;
 import sam.server.samdev.formula.FormulaBase;
 
-public class SRF_DocServicoConjugadaEntrada extends FormulaBase {
+public class SRF_DocRemessaComIcmsComIPI extends FormulaBase {
 
     private Aac10 aac10;
     private Aac13 aac13;
@@ -260,9 +260,10 @@ public class SRF_DocServicoConjugadaEntrada extends FormulaBase {
                 jsonEaa0103.put("qt_original", eaa0103.eaa0103qtComl);
             }
 
-            // Qtde SCE
-            if (abm1301.abm1301fcCU_Zero == 0) throw new ValidacaoException("O item " + abm01.abm01codigo + " - " + abm01.abm01descr + " encontra-se sem fator de conversão de uso. ")
-            eaa0103.eaa0103qtUso = (eaa0103.eaa0103qtComl * abm1301.abm1301fcCU_Zero).round(3);
+            // Converte Qt.Faturamento para Qt.Venda
+            if (abm13.abm13fcUV == null) throw new ValidacaoException("Fator de conversão para venda no cadastro do item " + abm01.abm01codigo + " é inválido.")
+            jsonEaa0103.put("qt_documento", eaa0103.eaa0103qtComl * abm13.abm13fcUV)
+
 
             // Converte Qt.Documento para Volume
             if (jsonEaa0103.getBigDecimal_Zero("volumes") >= 0) {
@@ -272,64 +273,40 @@ public class SRF_DocServicoConjugadaEntrada extends FormulaBase {
                 jsonEaa0103.put("volumes", volumes);
             }
 
-            // Total item  + serviços
-            if(abm01.abm01tipo == 3){
-                jsonEaa0103.put("servicos_item", (eaa0103.eaa0103qtComl_Zero * eaa0103.eaa0103unit).round(2));
-                jsonEaa0103.put("total_servicos", (eaa0103.eaa0103qtComl_Zero * eaa0103.eaa0103unit).round(2));
-            }
-
             // Peso Bruto
             jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto).round(3));
 
             // Peso Líquido
             jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(3));
 
+            jsonEaa0103.put("qtd_tributavel", eaa0103.eaa0103qtComl);
+
+            jsonEaa0103.put("unit_tributavel", eaa0103.eaa0103unit);
+
             // Total do item
             eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
 
-            calcularImpostosServicos();
+            calcularIPI();
 
-            jsonEaa0103.put("ipi_isento", BigDecimal.ZERO);
-            jsonEaa0103.put("ipi_outras", jsonEaa0103.getBigDecimal_Zero("bc_ipi"));
-            jsonEaa0103.put("icms_outras", eaa0103.eaa0103total);
+            // Total do Documento sem ST
+            eaa0103.eaa0103totDoc = (eaa0103.eaa0103total +
+                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
+                    jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
+                    jsonEaa0103.getBigDecimal_Zero("ipi") +
+                    jsonEaa0103.getBigDecimal_Zero("desconto")).round(2);
 
-            calculaPIS();
-
-            calculaCOFINS();
-
-            if(abm01.abm01tipo != 3){
-                eaa0103.eaa0103totDoc = eaa0103.eaa0103total +
-                                        jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                                        jsonEaa0103.getBigDecimal_Zero("seguro") +
-                                        jsonEaa0103.getBigDecimal_Zero("outras_despesas") -
-                                        jsonEaa0103.getBigDecimal_Zero("pis") -
-                                        jsonEaa0103.getBigDecimal_Zero("cofins") -
-                                        jsonEaa0103.getBigDecimal_Zero("csll") -
-                                        jsonEaa0103.getBigDecimal_Zero("inss") -
-                                        jsonEaa0103.getBigDecimal_Zero("desconto")
-            }else{
-                eaa0103.eaa0103totDoc = jsonEaa0103.getBigDecimal_Zero("total_servicos") - jsonEaa0103.getBigDecimal_Zero("desconto");
-            }
-
-            eaa0103.eaa0103totDoc = eaa0103.eaa0103totDoc.round(2);
-
-           if(abm01.abm01tipo == 3){
-               jsonEaa0103.put("bc_pis", BigDecimal.ZERO);
-               jsonEaa0103.put("aliq_pis", BigDecimal.ZERO);
-               jsonEaa0103.put("pis", BigDecimal.ZERO);
-               jsonEaa0103.put("bc_cofins", BigDecimal.ZERO);
-               jsonEaa0103.put("aliq_cofins", BigDecimal.ZERO);
-               jsonEaa0103.put("cofins", BigDecimal.ZERO);
-               jsonEaa0103.put("ipi_outras", eaa0103.eaa0103totDoc);
-               jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
-           }
 
             if (eaa0103.eaa0103retInd == 0) {
                 eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
             } else {
+                eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", "050"));
+
                 eaa0103.eaa0103totFinanc = BigDecimal.ZERO
             }
 
+            calcularFCP();
+
+            calcularCBSIBS();
 
             definirCodigoBeneficioFiscal()
 
@@ -362,6 +339,52 @@ public class SRF_DocServicoConjugadaEntrada extends FormulaBase {
             }
         }
     }
+
+    private void calcularFCP(){
+        if(jsonEaa0103.getBigDecimal_Zero("aliq_fcp") != -1){
+            jsonEaa0103.put("aliq_fcp", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_fpc"));
+
+            jsonEaa0103.put("bc_fcp", jsonEaa0103.getBigDecimal_Zero("bc_icms"));
+            jsonEaa0103.put("fcp", jsonEaa0103.getBigDecimal_Zero("bc_fcp") * jsonEaa0103.getBigDecimal_Zero("aliq_fcp") / 100);
+            jsonEaa0103.put("fcp", jsonEaa0103.getBigDecimal_Zero("fcp").round(2));
+        }
+    }
+
+    private void calcularIPI() {
+
+        // ============================================================================================
+        // ***************************************** IPI **********************************************
+        // ============================================================================================
+
+        // Valor do IPI
+        if (jsonEaa0103.getBigDecimal_Zero("aliq_ipi") != -1) {
+
+            //BC de IPI = Total do Item + Frete + Seguro + Despesas Acessorias
+            jsonEaa0103.put("bc_ipi", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest") + jsonEaa0103.getBigDecimal_Zero("seguro") + jsonEaa0103.getBigDecimal_Zero("outras_despesas") - jsonEaa0103.getBigDecimal_Zero("desconto"));
+
+            jsonEaa0103.put("bc_ipi", round(jsonEaa0103.getBigDecimal_Zero("bc_ipi"), 2));
+
+            //Alíquota de IPI do cadastro de NCM
+            if (abg01 != null && abg01.abg01txIpi_Zero > 0) {
+                jsonEaa0103.put("aliq_ipi", abg01.abg01txIpi);
+            }
+
+            //Valor do IPI
+            jsonEaa0103.put("ipi", ((jsonEaa0103.getBigDecimal_Zero("bc_ipi") * jsonEaa0103.getBigDecimal_Zero("aliq_ipi")) / 100).round(2));
+
+            // Aplica Aliquota para calcular IPI
+            jsonEaa0103.put("ipi", jsonEaa0103.getBigDecimal_Zero("bc_ipi") * (jsonEaa0103.getBigDecimal_Zero("aliq_ipi") / 100));
+            jsonEaa0103.put("ipi", jsonEaa0103.getBigDecimal_Zero("ipi").round(2));
+
+            jsonEaa0103.put("ipi_outras", BigDecimal.ZERO);
+
+        } else {
+            jsonEaa0103.put("bc_ipi", new BigDecimal(0));
+            jsonEaa0103.put("aliq_ipi", new BigDecimal(0));
+            jsonEaa0103.put("ipi", new BigDecimal(0));
+        }
+    }
+
     private String buscarCstICMS() {
         // Busca primeiramente o CST de ICMS no cadastro do PCD, caso não econcontrado, busca no cadastro do item
         String cst = "";
@@ -389,7 +412,8 @@ public class SRF_DocServicoConjugadaEntrada extends FormulaBase {
             jsonEaa0103.put("bc_icms", eaa0103.eaa0103total +
                     jsonEaa0103.getBigDecimal_Zero("frete_dest") +
                     jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
-                    jsonEaa0103.getBigDecimal_Zero("seguro"));
+                    jsonEaa0103.getBigDecimal_Zero("seguro") -
+                    jsonEaa0103.getBigDecimal_Zero("desconto"));
 
             jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms").round(2));
 
@@ -421,33 +445,49 @@ public class SRF_DocServicoConjugadaEntrada extends FormulaBase {
         }
     }
 
-    private void calcularImpostosServicos(){
-        // ISS
-        if(jsonEaa0103.getBigDecimal_Zero("aliq_iss") != -1){
-            if(jsonEaa0103.getBigDecimal_Zero("aliq_iss") == 0) jsonEaa0103.put("aliq_iss", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_iss"));
+    private void calcularIcmsST() {
+        // Valor de ICMS ST - Campo 32 // Verifica Parâmetros Fiscais
 
-            if(jsonEaa0103.getBigDecimal_Zero("aliq_iss") > 0){
-                jsonEaa0103.put("bc_iss", jsonEaa0103.getBigDecimal_Zero("total_servicos"));
+        if (abd01.abd01operCod == 0) {
+            throw new ValidacaoException("PCD não identifica operação com ST - Verifique PCD/Parâm.Fiscais");
+        }
 
-                jsonEaa0103.put("iss", jsonEaa0103.getBigDecimal_Zero("bc_iss") * jsonEaa0103.getBigDecimal_Zero("aliq_iss") / 100);
-                jsonEaa0103.put("iss", jsonEaa0103.getBigDecimal_Zero("iss").round(2));
+        Integer ivaST = 0;
+
+        if (jsonAbm1001_UF_Item != null) { //Cálculo do ICMS ST considera os percentuais por estado (item - Estado)
+
+            // Alíquota ICMS_ST = Aliquota para operações internas do cadastro de Estados da entidade destino
+            jsonEaa0103.put("aliq_icms_st", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms_interna"));
+
+            if (abe01.abe01ti == 0) {
+                ivaST = jsonAbm1001_UF_Item.getBigDecimal_Zero("_iva_st_var_ou");
             }
-        }else{
-            jsonEaa0103.put("bc_iss", BigDecimal.ZERO);
-            jsonEaa0103.put("aliq_iss", BigDecimal.ZERO);
-            jsonEaa0103.put("iss", BigDecimal.ZERO);
+
+            if (abe01.abe01ti == 1) {
+                ivaST = jsonAbm1001_UF_Item.getBigDecimal_Zero("_iva_st_atac");
+            }
+        }
+
+        if (ivaST > 0) {
+            // Adicionar IVA_ST à base
+            jsonEaa0103.put("bc_icms_st", jsonEaa0103.getBigDecimal_Zero("bc_icms_st") * ((ivaST / 100) + 1).round(2));
+
+            // Base * Alíquota Interna Estado Destino - Vlr ICMS Normal
+            jsonEaa0103.put("icms_st", (jsonEaa0103.getBigDecimal_Zero("bc_icms_st") * ((jsonEaa0103.getBigDecimal_Zero("aliq_icms_st") / 100)) -
+                    jsonEaa0103.getBigDecimal_Zero("icms").round(2)));
+
+        } else {
+            jsonEaa0103.put("bc_icms_st", new BigDecimal(0));
+            jsonEaa0103.put("aliq_icms_st", new BigDecimal(0));
+            jsonEaa0103.put("icms_st", new BigDecimal(0));
         }
     }
+
     private calculaPIS() {
         if (jsonAbm0101.getBigDecimal_Zero("aliq_pis") > 0) {
 
             // BC PIS
-            jsonEaa0103.put("bc_pis", eaa0103.eaa0103total +
-                                        jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                                        jsonEaa0103.getBigDecimal_Zero("seguro") +
-                                        jsonEaa0103.getBigDecimal_Zero("outras_despesas"));
-
-            jsonEaa0103.put("bc_pis", jsonEaa0103.getBigDecimal_Zero("bc_pis").round(2));
+            jsonEaa0103.put("bc_pis", eaa0103.eaa0103totDoc - jsonEaa0103.getBigDecimal_Zero("desconto"));
 
             // Aliquota
             jsonEaa0103.put("aliq_pis", jsonAbm0101.getBigDecimal_Zero("aliq_pis"));
@@ -455,7 +495,6 @@ public class SRF_DocServicoConjugadaEntrada extends FormulaBase {
             // PIS
             jsonEaa0103.put("pis", jsonEaa0103.getBigDecimal_Zero("bc_pis") * jsonEaa0103.getBigDecimal_Zero("aliq_pis") / 100);
             jsonEaa0103.put("pis", jsonEaa0103.getBigDecimal_Zero("pis").round(2));
-
 
         } else {
             jsonEaa0103.put("aliq_pis", new BigDecimal(0));
@@ -467,18 +506,16 @@ public class SRF_DocServicoConjugadaEntrada extends FormulaBase {
 
     private calculaCOFINS() {
         if (jsonAbm0101.getBigDecimal_Zero("aliq_cofins") > 0) {
+            // BC COFINS
+            jsonEaa0103.put("bc_cofins", jsonEaa0103.getBigDecimal_Zero("bc_pis"));
 
-            if (eaa0103.eaa0103cstCofins.aaj13codigo == '01') {
-                // BC COFINS
-                jsonEaa0103.put("bc_cofins", jsonEaa0103.getBigDecimal_Zero("bc_pis"));
+            // Aliquota
+            jsonEaa0103.put("aliq_cofins", jsonAbm0101.getBigDecimal_Zero("aliq_cofins"));
 
-                // Aliquota
-                jsonEaa0103.put("aliq_cofins", jsonAbm0101.getBigDecimal_Zero("aliq_cofins"));
+            // COFINS
+            jsonEaa0103.put("cofins", jsonEaa0103.getBigDecimal_Zero("bc_cofins") * jsonEaa0103.getBigDecimal_Zero("aliq_cofins") / 100);
+            jsonEaa0103.put("cofins", jsonEaa0103.getBigDecimal_Zero("cofins").round(2));
 
-                // COFINS
-                jsonEaa0103.put("cofins", jsonEaa0103.getBigDecimal_Zero("bc_cofins") * jsonEaa0103.getBigDecimal_Zero("aliq_cofins") / 100);
-                jsonEaa0103.put("cofins", jsonEaa0103.getBigDecimal_Zero("cofins").round(2));
-            }
 
         } else {
             jsonEaa0103.put("aliq_cofins", new BigDecimal(0));
@@ -672,7 +709,7 @@ public class SRF_DocServicoConjugadaEntrada extends FormulaBase {
         // ************************** CÓDIGO BENEFICIO FISCAL **************************
         // =============================================================================
 
-        if(eaa0103.eaa0103cstIcms == null || eaa0103.eaa0103cfop == null) return;
+        if (eaa0103.eaa0103cstIcms == null || eaa0103.eaa0103cfop == null) return;
 
         def cst = eaa0103.eaa0103cstIcms.aaj10codigo;
         def cfop = eaa0103.eaa0103cfop.aaj15codigo;

@@ -368,7 +368,7 @@ public class SRF_DocCompraInsumoImportacao60 extends FormulaBase {
                 jsonEaa0103.put("ipi_outras", BigDecimal.ZERO);
             }
 
-            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", 100));
+            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", "100"));
 
             calcularCBSIBS();
 
