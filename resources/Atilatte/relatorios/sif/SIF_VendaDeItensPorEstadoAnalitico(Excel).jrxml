@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_VendaDeItensPorEstado" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b2163ada-415c-412c-8e6b-78e47d6a67c4">
+	<property name="ireport.zoom" value="1.8181818181818203"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="titulo" class="java.lang.String"/>
+	<parameter name="periodo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<field name="codItem" class="java.lang.String"/>
+	<field name="naItem" class="java.lang.String"/>
+	<field name="categoria" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="eaa0103qtComl" class="java.math.BigDecimal"/>
+	<field name="controle" class="java.lang.String"/>
+	<field name="abb01num" class="java.lang.String"/>
+	<field name="aah01codigo" class="java.lang.String"/>
+	<field name="aah01nome" class="java.lang.String"/>
+	<variable name="totalgeral" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{eaa0103qtComl}]]></variableExpression>
+	</variable>
+	<variable name="totalEstado" class="java.math.BigDecimal" resetType="Group" resetGroup="itens" calculation="Sum">
+		<variableExpression><![CDATA[$F{eaa0103qtComl}]]></variableExpression>
+	</variable>
+	<group name="itens">
+		<groupExpression><![CDATA[$F{naItem} + $F{estado}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="geral">
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<staticText>
+				<reportElement x="188" y="0" width="22" height="13" uuid="6bc7da1c-8783-4cbf-babf-8bb85b5bc970"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[UF]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="269" y="0" width="167" height="13" uuid="f1c9a82f-4cdd-456f-bfa2-8a8ed63abbdb"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Tipo Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="436" y="0" width="119" height="13" uuid="b5457cb7-0203-4996-975d-c875674dd8f9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="55" height="13" uuid="4c8b4203-4c1a-4fe4-a003-c23beed8f660"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Codigo Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="55" y="0" width="133" height="13" uuid="dd4ec9df-2844-49fa-8d39-21f73df6abe7"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Descrição Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="210" y="0" width="59" height="13" uuid="597668f8-57fa-4d33-8652-9607f1771373"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Número]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="210" y="0" width="59" height="13" uuid="1f0db14f-89c8-4959-a6c3-f7a781fd357a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abb01num}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="292" y="0" width="144" height="13" uuid="dc8895c3-d71d-43d2-b552-52bd8376203f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{aah01nome}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="436" y="0" width="119" height="13" uuid="9331b9e4-8088-406f-b145-98f32061655b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{eaa0103qtComl}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="269" y="0" width="23" height="13" uuid="608e4fa5-eb0b-4da9-aef2-cbde45f0b12a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{aah01codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="55" height="13" uuid="75a1ab4f-5a41-4212-a2ac-317cce5a6cc3"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codItem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="55" y="0" width="133" height="13" uuid="d796ff07-7123-429f-9e2c-33e586081ab0"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naItem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="188" y="0" width="22" height="13" uuid="31ce5715-576f-41ef-a509-15ae47fbecd8"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

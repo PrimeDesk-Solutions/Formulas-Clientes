@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCV_ImpressaoPedidoCompra_subreport1" language="groovy" pageWidth="822" pageHeight="651" orientation="Landscape" columnWidth="822" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8af94f00-0b1b-41a9-9704-69f2a7489f0b">
-	<property name="ireport.zoom" value="1.9487171000000039"/>
-	<property name="ireport.x" value="1115"/>
+	<property name="ireport.zoom" value="2.357947691000008"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="eaa0103seq" class="java.lang.Integer"/>
 	<field name="descrItem" class="java.lang.String"/>
@@ -107,9 +107,10 @@
 			<staticText>
 				<reportElement x="235" y="-1" width="62" height="21" uuid="2a539101-765f-4fa2-9aa7-cb3ff1bf40ea"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+					<font size="6" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
-				<text><![CDATA[COMPRIM UNIT. P/TUBOS]]></text>
+				<text><![CDATA[COMPRIM UNIT. P/TUBOS E PERFIS
+]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="334" y="-1" width="35" height="21" uuid="55f1651b-298c-4759-a85a-06587a4d687a"/>
@@ -302,7 +303,260 @@
 		<band splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band splitType="Stretch"/>
+		<band height="78" splitType="Stretch">
+			<rectangle>
+				<reportElement x="40" y="0" width="195" height="13" uuid="11b8eb0d-949a-4a4f-a655-201aa55a33ef"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="13" y="0" width="27" height="13" uuid="18a17fc7-67b3-4345-8cf8-f9ba0c6f70d6"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="235" y="0" width="62" height="13" uuid="ba3e8924-9ec3-41b6-ae68-97a13c1f0b80"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="297" y="0" width="37" height="13" uuid="56c4e93f-694c-4ee1-951d-3f3a5f49b87a"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="334" y="0" width="35" height="13" uuid="d761ab22-1e2f-4e00-97f9-1fccb141521d"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="369" y="0" width="60" height="13" uuid="3de928aa-776c-4c5a-a8b5-3a5e8738fa71"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="429" y="0" width="59" height="13" uuid="81901a58-8e47-41ff-a8cd-54750df1b0ed"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="488" y="0" width="106" height="13" uuid="cd3a9768-def7-46e7-ad5e-9a25885f9e7a"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="594" y="0" width="33" height="13" uuid="8e8a2210-d07c-4101-87fc-717d6855d1e8"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="627" y="0" width="50" height="13" uuid="cf03de84-4a4a-466d-8b03-72643e528832"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="677" y="0" width="59" height="13" uuid="3a6cf094-f1a6-487a-ac6a-3d82e72d31c1"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="736" y="0" width="30" height="13" uuid="92c5d2ba-4a19-4170-bb88-42b2771634ab"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="766" y="0" width="36" height="13" uuid="03a3255b-5424-4212-b366-21dd32dafea7"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="429" y="13" width="59" height="13" uuid="88639b59-3d60-42ad-88a2-1ee5d0ae593d"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="594" y="13" width="33" height="13" uuid="1d0b0df4-a366-4cc0-a3cb-7ce60be95385"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="297" y="13" width="37" height="13" uuid="6f6a3ad2-076b-4eba-a425-78f3afd8ae89"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="766" y="13" width="36" height="13" uuid="d48dea55-3b91-4b9e-9c8e-db6154ee00de"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="235" y="13" width="62" height="13" uuid="6bdd2b11-702d-4e3b-97b5-4be83656c3a3"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="736" y="13" width="30" height="13" uuid="e179ee2f-d04c-4955-8c50-1724dd4ad12e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="334" y="13" width="35" height="13" uuid="00ee3348-1c4c-47cd-abbb-680d338d07ae"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="488" y="13" width="106" height="13" uuid="cfec433c-bbd1-452c-a93b-6735deac8efa"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="677" y="13" width="59" height="13" uuid="12c58e94-653c-4d1e-b1b1-eed6c0896577"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="40" y="13" width="195" height="13" uuid="5d878a76-a4d2-4043-8d46-294e30cbf6c7"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="13" y="13" width="27" height="13" uuid="194e6f3f-1ad7-49dd-ba9a-d95c451ad4b9"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="627" y="13" width="50" height="13" uuid="d83c9054-0f07-48bc-bdd1-e8c6ad1efdfe"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="13" width="13" height="13" uuid="958d8ee2-17ee-4135-a53a-7f2131a5331b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="369" y="13" width="60" height="13" uuid="d0e0cb19-2a15-4b0e-84de-58e84b508673"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="0" width="13" height="13" uuid="6cad6db1-1091-40a2-85f3-3da3669f544e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="429" y="26" width="59" height="13" uuid="3304ed0b-d086-402f-bd7c-8c1f5b9ab95c"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="594" y="26" width="33" height="13" uuid="9b643ba0-2e2d-40cd-b673-94ef16da0820"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="297" y="26" width="37" height="13" uuid="cec1ce0f-bad1-4ef1-93cd-eb19fb4920b9"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="766" y="26" width="36" height="13" uuid="c5c33c0d-9f23-45fb-b5d7-41c59bd7c5b1"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="235" y="26" width="62" height="13" uuid="d9fd33ce-59d4-4eb0-8330-de175893c8ce"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="736" y="26" width="30" height="13" uuid="b28205e9-9a47-4656-8370-17c2eb31f02c"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="334" y="26" width="35" height="13" uuid="ceef6a3d-47c3-4218-80ac-7cbce281eddb"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="488" y="26" width="106" height="13" uuid="058293fa-37a1-4188-a5fd-e3ee908cfcde"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="677" y="26" width="59" height="13" uuid="24af2fff-ca4d-40d9-85bf-76eafe1c016b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="40" y="26" width="195" height="13" uuid="3302a521-283a-4b51-8019-e91d0f439fa4"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="13" y="26" width="27" height="13" uuid="dffe683d-f2f2-4d66-ac4e-fa0df5c9ca9b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="627" y="26" width="50" height="13" uuid="0153bbe5-0a45-4f2a-ac57-e713b0049b86"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="26" width="13" height="13" uuid="49b957ba-6af3-4ac1-9d53-083581cfa5a8"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="369" y="26" width="60" height="13" uuid="e8b665d8-3c58-42a3-a306-5a4a77254058"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="429" y="39" width="59" height="13" uuid="17a1018e-56af-4f3a-a774-86845d7c3803"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="334" y="65" width="35" height="13" uuid="510fd838-2ba1-422d-9aab-51966974ad52"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="369" y="52" width="60" height="13" uuid="856c17ca-c426-4606-9cfd-c65b9696f341"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="488" y="65" width="106" height="13" uuid="f268c97c-2189-43e8-a50a-69e27f3e4f1f"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="369" y="65" width="60" height="13" uuid="c57b6714-a79a-4341-b75f-17ac57ee7400"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="627" y="65" width="50" height="13" uuid="e3bf8719-fa2c-46df-b910-b0031fb2c7b3"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="594" y="39" width="33" height="13" uuid="c3ef6783-b3e6-406e-a135-1f0f2d293e85"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="766" y="52" width="36" height="13" uuid="be2ff62e-d129-4d1b-ab4b-9832dd667388"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="334" y="52" width="35" height="13" uuid="d332e850-cdee-4138-b1b0-9c615e736c9a"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="297" y="39" width="37" height="13" uuid="f61c4bbc-2a88-433d-87a9-73afe7ed3d20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="677" y="65" width="59" height="13" uuid="e0e4c189-93fe-435b-b333-602259084502"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="736" y="39" width="30" height="13" uuid="0b04e399-99b2-433a-a755-5e06a8826c77"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="736" y="65" width="30" height="13" uuid="59518f5f-505e-4ba3-9eae-b3cd53e669c9"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="235" y="65" width="62" height="13" uuid="5d23cc3d-d9da-4b72-9f26-dd32f3223332"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="488" y="39" width="106" height="13" uuid="dd9f3cf8-e628-4e75-b454-d10495aef4d2"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="235" y="52" width="62" height="13" uuid="c0e4973f-b382-4284-a9b1-5680a012a9e5"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="627" y="39" width="50" height="13" uuid="230a44ec-9dc1-4948-aafb-fbdd5c19f2ff"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="736" y="52" width="30" height="13" uuid="57a29323-f866-4b24-9f36-8bf890efe2a0"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="13" y="52" width="27" height="13" uuid="20a46eed-a4f3-4c02-85da-785fbac4caad"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="429" y="52" width="59" height="13" uuid="a1ced4b3-4851-460b-b13f-2418833a1ed0"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="39" width="13" height="13" uuid="79ac9bb5-7629-452a-bf6d-bde256938d4e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="297" y="65" width="37" height="13" uuid="ec41331f-e2cf-411e-a8aa-1b0024590303"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="369" y="39" width="60" height="13" uuid="d09ca0c2-3fac-4304-b27c-8c347a8d13b6"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="297" y="52" width="37" height="13" uuid="cb452571-06c2-4e61-96a6-8dfb02dce0a1"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="13" y="65" width="27" height="13" uuid="b1795fdf-1f32-491b-b159-4591c57d3424"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="594" y="52" width="33" height="13" uuid="16743136-7faa-4b72-be93-3f84eb057e2e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="677" y="52" width="59" height="13" uuid="ab9a9c45-369b-456d-9657-e5a1f2d8efaa"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="766" y="39" width="36" height="13" uuid="4d8bb59d-44fb-41b2-b494-66a205da9599"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="235" y="39" width="62" height="13" uuid="f9e7a943-5b8d-49fe-9fa3-51ccf8921b94"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="40" y="65" width="195" height="13" uuid="56344144-c0e6-4ed3-bd2c-51a6d54a4e96"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="627" y="52" width="50" height="13" uuid="82b399b1-69e1-4587-aae1-2651943329f7"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="594" y="65" width="33" height="13" uuid="d4777088-ed66-4adc-9299-b1f5cb02cc16"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="488" y="52" width="106" height="13" uuid="b0b29c60-2ffd-4a64-a462-20bf3b4fc8e2"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="334" y="39" width="35" height="13" uuid="b201884e-0589-423f-81b0-de31b7d7b3db"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="677" y="39" width="59" height="13" uuid="d9a91dc5-461a-44c2-812f-46b0d9ff7fa2"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="40" y="39" width="195" height="13" uuid="69c94e85-3a05-4946-b699-f6a92c6800ef"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="766" y="65" width="36" height="13" uuid="8a74efac-e726-46a5-9ab7-7a347da64051"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="52" width="13" height="13" uuid="7fd40bd8-757d-4cf3-971e-cb684f3b0b65"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="13" y="39" width="27" height="13" uuid="4ad3ca54-83e2-4f76-aefa-f9b0208a9569"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="40" y="52" width="195" height="13" uuid="f939abbe-cbb9-4c05-8ca6-dece8264db4c"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="429" y="65" width="59" height="13" uuid="3e9eeccb-5494-4a60-b3f8-6b4892439c74"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="65" width="13" height="13" uuid="56b85457-8320-4e55-af17-a768e884433f"/>
+			</rectangle>
+		</band>
 	</pageFooter>
 	<summary>
 		<band splitType="Stretch"/>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SPP_Programacao_Fabrica_S1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="7c1a726b-bef9-4987-a642-6338b873ebdf">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="abm01codigo" class="java.lang.String"/>
+	<field name="abm01descr" class="java.lang.String"/>
+	<field name="qtd" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="100" height="15" uuid="03274cdf-f913-42b2-9de4-a1bf6070f18a"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="100" y="0" width="244" height="15" uuid="de4d3539-ed3f-41f0-a0fd-9fdd61c096b1"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="344" y="0" width="211" height="15" uuid="2ba73a7f-9bde-44b1-a595-120821b31fe9"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="15" uuid="eb2c9e50-ef30-4328-a25f-0d780198bf78"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="244" height="15" uuid="2956e6a4-bbc4-4e60-b49f-694f89e1169b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Descrição]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="344" y="0" width="211" height="15" uuid="c33a2b6c-1927-42dd-aac4-ef712b883c3e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Qtd. Leite]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="100" height="15" uuid="f9ce524b-482b-4272-abc4-914d02a7a257"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="100" y="0" width="244" height="15" uuid="40024576-eaa5-4ed5-8fe7-183079a688cc"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="344" y="0" width="211" height="15" uuid="9bd22470-1a06-4fbb-956a-d3b9ede6f1a0"/>
+			</rectangle>
+			<textField>
+				<reportElement x="0" y="0" width="100" height="15" uuid="788e30f9-ff8d-410d-8d80-fda404bc2069"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abm01codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="244" height="15" uuid="e2b73775-36ea-447a-b013-0e7e65bba6d3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abm01descr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="344" y="0" width="211" height="15" uuid="b5366a7f-6adf-4f9b-844c-109620e4b76f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtd}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="36" splitType="Stretch"/>
+	</summary>
+</jasperReport>
