@@ -1,4 +1,4 @@
-package Silcon.formulas.itensDocumentos
+package Inova.formulas.itensDocumentos
 
 import sam.model.entities.aa.Aac13;
 import sam.model.entities.ab.Abd02;
@@ -44,7 +44,7 @@ import sam.model.entities.ea.Eaa0102;
 import sam.model.entities.ea.Eaa0103;
 import sam.server.samdev.formula.FormulaBase;
 
-public class SRF_Doc_Padrao_Entrada extends FormulaBase {
+public class SRF_DocPadraoIndustrializacaoSemRetorno extends FormulaBase {
 
     private Aac10 aac10;
     private Aac13 aac13;

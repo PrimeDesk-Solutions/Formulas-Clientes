@@ -23,7 +23,7 @@ class ImportaXmlCTe_Entrada extends FormulaBase {
 		eaa01 = get("eaa01");
 		elementXmlCte = get("elementXmlCte");
 		
-		selecionarAlinhamento("0013");
+		selecionarAlinhamento("0005");
 		
 		eaa0103 = obterItemDoDocumento(eaa01);
 		if(eaa0103 == null) return;

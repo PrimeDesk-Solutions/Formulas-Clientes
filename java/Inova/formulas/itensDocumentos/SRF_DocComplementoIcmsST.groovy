@@ -275,7 +275,7 @@ public class SRF_DocComplementoIcmsST extends FormulaBase {
     private void zerarCamposLivres(Aah01 aah01){
         String sql = "SELECT aah02nome FROM aah0101 INNER JOIN aah02 ON aah02id = aah0101campo WHERE aah0101tipoDoc = :id";
 
-        List<Strin> campos = getAcessoAoBanco().obterListaDeString(sql, Parametro.criar("id", aah01.aah01id));
+        List<String> campos = getAcessoAoBanco().obterListaDeString(sql, Parametro.criar("id", aah01.aah01id));
 
         for(campo in campos){
             jsonEaa0103.put("campo", BigDecimal.ZERO);

@@ -1,4 +1,4 @@
-package Silcon.F8;
+package Silcon.f8;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +28,7 @@ public class F8_CGS2001 extends FormulaBase {
         colunas.add(ColunaF8.criarAPartirDaColunaDoSAM("abe01na"));
         colunas.add(ColunaF8.criarAPartirDaColunaDoSAM("abe01nome"));
         colunas.add(ColunaF8.criarAPartirDaColunaDoSAM("abe01ni"));
-        colunas.add(ColunaF8.criarAPartirDaColunaDoSAM("abe01ie"));
-        colunas.add(ColunaF8.criarAPartirDaColunaDoSAM("abe01contribicms"));
+        colunas.add(new ColunaF8("email", "Email"));
 
         //Lista de parâmetros para os wheres dos Filtros e o da Busca
         List<Parametro> parametros = new ArrayList<Parametro>();
@@ -56,9 +55,11 @@ public class F8_CGS2001 extends FormulaBase {
                     .collect(Collectors.joining(" OR ")) + ") ";
         }
 
+        whereBusca = whereBusca.replace("email", "CAST(abe01json ->> 'email_faturamento' AS text)");
+
         //Monta a SQL para obter os dados da página atual (NÃO ESQUECER DA COLUNA ID)
         String sql =
-                " SELECT abe01id as id, abe01codigo, abe01na, abe01nome, abe01ni, abe01ie, abe01contribicms" +
+                " SELECT abe01id as id, abe01codigo, abe01na, abe01nome, abe01ni, CAST(abe01json ->> 'email_faturamento' AS text) AS email" +
                         " FROM Abe01 AS abe01" +
                         " WHERE true " +
                         obterWherePadrao("Abe01") +

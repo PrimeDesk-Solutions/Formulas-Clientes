@@ -54,8 +54,8 @@ import java.time.format.DateTimeFormatter;
 public class SRF_DocCompraInsumoImportacaoAliqFixa60 extends FormulaBase {
 
     private Aac10 aac10;
-    private Aac10 aag10;
-    private Aac10 aag1001;
+    private Aag10 aag10;
+    private Aag1001 aag1001;
     private Aac13 aac13;
     private Aag01 aag01;
     private Aag02 aag02;
@@ -217,12 +217,11 @@ public class SRF_DocCompraInsumoImportacaoAliqFixa60 extends FormulaBase {
         if (aaj09 == null) interromper("Necessário informar o CST de CBS/IBS no item: " + abm01.abm01codigo + " - " + abm01.abm01na);
 
         // Moeda Estrangeira
-        Aag10 aag10 = eaa01.eaa01moeda != null ? getSession().get(Aag10.class, eaa01.eaa01moeda.aag10id) : null;
+        aag10 = eaa01.eaa01moeda != null ? getSession().get(Aag10.class, eaa01.eaa01moeda.aag10id) : null;
 
         // Cotações
-        Aag1001 aag1001 = aag10 != null ? getSession().get(Aag1001.class, Criterions.where("aag1001moeda = " + aag10.aag10id + " AND aag1001data = " + LocalDate.now())) : null;
-        if(aag1001 == null) throw new ValidacaoException("Não foi informado cotação para a data " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
-
+        aag1001 = aag10 != null ? getSession().get(Aag1001.class, Criterions.where("aag1001moeda = " + aag10.aag10id + " AND aag1001data = " + LocalDate.now())) : null;
+        if(aag10 != null && aag1001 == null) throw new ValidacaoException("Não foi informado cotação para a data " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
 
         //CAMPOS LIVRES
         jsonAac10 = aac10.aac10json != null ? aac10.aac10json : new TableMap();

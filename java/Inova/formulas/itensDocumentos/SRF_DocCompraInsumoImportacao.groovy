@@ -1,4 +1,4 @@
-package Silcon.formulas.itensDocumentos
+package Inova.formulas.itensDocumentos
 
 import br.com.multiorm.criteria.criterion.Criterion
 import sam.model.entities.aa.Aac13
@@ -46,7 +46,6 @@ import sam.model.entities.ea.Eaa0101;
 import sam.model.entities.ea.Eaa0102;
 import sam.model.entities.ea.Eaa0103;
 import sam.server.samdev.formula.FormulaBase
-
 import java.text.Format
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter;
@@ -54,8 +53,8 @@ import java.time.format.DateTimeFormatter;
 public class SRF_DocCompraInsumoImportacao extends FormulaBase {
 
     private Aac10 aac10;
-    private Aac10 aag10;
-    private Aac10 aag1001;
+    private Aag10 aag10;
+    private Aag1001 aag1001;
     private Aac13 aac13;
     private Aag01 aag01;
     private Aag02 aag02;
@@ -217,10 +216,10 @@ public class SRF_DocCompraInsumoImportacao extends FormulaBase {
         if (aaj09 == null) interromper("Necessário informar o CST de CBS/IBS no item: " + abm01.abm01codigo + " - " + abm01.abm01na);
 
         // Moeda Estrangeira
-        Aag10 aag10 = eaa01.eaa01moeda != null ? getSession().get(Aag10.class, eaa01.eaa01moeda.aag10id) : null;
+        aag10 = eaa01.eaa01moeda != null ? getSession().get(Aag10.class, eaa01.eaa01moeda.aag10id) : null;
 
         // Cotações
-        Aag1001 aag1001 = aag10 != null ? getSession().get(Aag1001.class, Criterions.where("aag1001moeda = " + aag10.aag10id + " AND aag1001data = " + LocalDate.now())) : null;
+        aag1001 = aag10 != null ? getSession().get(Aag1001.class, Criterions.where("aag1001moeda = " + aag10.aag10id + " AND aag1001data = " + LocalDate.now())) : null;
         if(aag1001 == null) throw new ValidacaoException("Não foi informado cotação para a data " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
 
 

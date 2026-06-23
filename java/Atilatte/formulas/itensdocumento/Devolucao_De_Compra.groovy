@@ -525,12 +525,14 @@ public class Devolucao_De_Compra extends FormulaBase {
                     jsonEaa0103.getBigDecimal_Zero("seguro") +
                     jsonEaa0103.getBigDecimal_Zero("outras_despesas"));
 
-            // Tratar redução da base de cálculo
-            if (abe01.abe01contribIcms == 1) {
-                if (jsonAbm1001_UF_Item.getBigDecimal_Zero("_red_bc_icms") != 0) {
-                    jsonEaa0103.put("_red_bc_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("_red_bc_icms"));
-                }
-            }
+//            // Tratar redução da base de cálculo
+//            if (abe01.abe01contribIcms == 1) {
+//                if (jsonAbm1001_UF_Item.getBigDecimal_Zero("_red_bc_icms") != 0) {
+//                    jsonEaa0103.put("_red_bc_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("_red_bc_icms"));
+//                }
+//            }
+
+            if(jsonEaa0103.getBigDecimal_Zero("_red_bc_icms_sped") > 0) jsonEaa0103.put("_red_bc_icms", jsonEaa0103.getBigDecimal_Zero("_red_bc_icms_sped"));
 
             // Calculo da Redução
             if (jsonEaa0103.getBigDecimal_Zero("_red_bc_icms") > 0) {

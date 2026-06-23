@@ -49,6 +49,7 @@ public class SceCompraInsumoImportacaoDireta extends FormulaBase {
                 jsonBcc01.getBigDecimal_Zero("outras_despesas") +
                 jsonBcc01.getBigDecimal_Zero("icms_st") +
                 jsonBcc01.getBigDecimal_Zero("frete_transp") +
+                jsonBcc01.getBigDecimal_Zero("frete_dest") +
                 jsonBcc01.getBigDecimal_Zero("frete_inova") -
                 jsonBcc01.getBigDecimal_Zero("desconto");
 
@@ -73,22 +74,18 @@ public class SceCompraInsumoImportacaoDireta extends FormulaBase {
         }
 
         // Maior preço
-        if (jsonBcc01.getBigDecimal_Zero("unitario_estoque") > jsonAbm0101.getBigDecimal_Zero("preco_diverso_maior")) {
-            jsonBcc01.put("preco_diverso_maior", (jsonBcc01.getBigDecimal_Zero("unitario_estoque") + jsonBcc01.getBigDecimal_Zero("custo_indust")) / bcc01.bcc01qt);
-        } else {
-            jsonBcc01.put("preco_diverso_maior", jsonAbm0101.getBigDecimal_Zero("preco_diverso_maior"));
+        if(jsonBcc01.getBigDecimal_Zero("unitario_estoque") > jsonAbm0101.getBigDecimal_Zero("preco_diverso_maior")){
+            jsonBcc01.put("preco_diverso_maior", jsonBcc01.getBigDecimal_Zero("unitario_estoque"));
         }
-
 
         //Menor Preço
-        if (jsonAbm0101.getBigDecimal_Zero("preco_diverso_menor") == 0 || jsonBcc01.getBigDecimal_Zero("unitario_estoque") < (jsonBcc01.getBigDecimal_Zero("unitario_estoque") + jsonBcc01.getBigDecimal_Zero("custo_indust"))) {
-            jsonBcc01.put("preco_diverso_menor", (jsonBcc01.getBigDecimal_Zero("unitario_estoque") + jsonBcc01.getBigDecimal_Zero("custo_indust")) / bcc01.bcc01qt);
-        } else {
-            jsonBcc01.put("preco_diverso_menor", jsonAbm0101.getBigDecimal_Zero("preco_diverso_menor"));
+        if(jsonAbm0101.getBigDecimal_Zero("preco_diverso_menor") == 0 || jsonBcc01.getBigDecimal_Zero("unitario_estoque") < jsonAbm0101.getBigDecimal_Zero("preco_diverso_menor")){
+            jsonBcc01.put("preco_diverso_menor", jsonBcc01.getBigDecimal_Zero("unitario_estoque"));
         }
-
         // Ultimo Preço
-        jsonAbm0101.put("preco_diverso_ultimo", jsonBcc01.getBigDecimal_Zero("unitario_estoque"));
+        if(jsonBcc01.getBigDecimal_Zero("unitario_estoque") > 0 )
+            jsonAbm0101.put("preco_diverso_ultimo", jsonBcc01.getBigDecimal_Zero("unitario_estoque"));
+
 
         // Custo Simples
         if(jsonBcc01.getBigDecimal_Zero("custo_unitario") > 0){

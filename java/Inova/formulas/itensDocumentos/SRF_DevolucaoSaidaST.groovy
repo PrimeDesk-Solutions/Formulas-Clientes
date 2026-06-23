@@ -44,7 +44,7 @@ import sam.model.entities.ea.Eaa0102;
 import sam.model.entities.ea.Eaa0103;
 import sam.server.samdev.formula.FormulaBase;
 
-public class DevolucaoSaidaST extends FormulaBase {
+public class SRF_DevolucaoSaidaST extends FormulaBase {
 
     private Aac10 aac10;
     private Aac13 aac13;

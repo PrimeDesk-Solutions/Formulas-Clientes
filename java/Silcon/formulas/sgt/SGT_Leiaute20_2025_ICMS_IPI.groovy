@@ -515,6 +515,7 @@ public class SGT_Leiaute20_2025_ICMS_IPI extends FormulaBase {
                     def serie = formatarSerie(abb01.abb01serie, modelo);
 
                     //Se a situação for 02, 03, 04, 05, 06 ou 07 os registros filhos não precisam ser gerados
+                    if(eaa01.eaa01sitDoc == null) interromper("O documento " + abb01.abb01num + " encontra-se sem situação de documento.")
                     Aaj03 aaj03 = getSession().get(Aaj03.class, eaa01.eaa01sitDoc.aaj03id);
                     boolean isSit06ou07 = "06".equals(aaj03.aaj03efd) || "07".equals(aaj03.aaj03efd);
                     boolean geraFilhos = !"02".equals(aaj03.aaj03efd) && !"03".equals(aaj03.aaj03efd) && !"04".equals(aaj03.aaj03efd) && !"05".equals(aaj03.aaj03efd);
