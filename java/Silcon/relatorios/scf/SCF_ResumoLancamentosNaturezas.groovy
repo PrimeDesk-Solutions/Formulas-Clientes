@@ -19,6 +19,7 @@ import sam.model.entities.da.Dab10
 import sam.server.samdev.relatorio.DadosParaDownload;
 import sam.server.samdev.relatorio.RelatorioBase;
 import sam.server.samdev.utils.Parametro;
+import java.util.Arrays;
 
 public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
     @Override
@@ -30,6 +31,9 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
         Map<String, Object> filtrosDefault = new HashMap<String, Object>();
         LocalDate[] datas = DateUtils.getStartAndEndMonth(MDate.date());
         filtrosDefault.put("periodo", datas);
+        filtrosDefault.put("grau1", true);
+        filtrosDefault.put("grau2", true);
+        filtrosDefault.put("grau3", true);
         return Utils.map("filtros", filtrosDefault);
     }
 
@@ -40,11 +44,16 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
         List<Long> idNaturezas = getListLong("naturezas");
         LocalDate[] dataPeriodo = getIntervaloDatas("periodo");
         List<TableMap> dados = new ArrayList<>();
+        Boolean grau1 = getBoolean("grau1");
+        Boolean grau2 = getBoolean("grau2");
+        Boolean grau3 = getBoolean("grau3");
         params.put("TITULO_RELATORIO", "Resumo dos Lançamentos por Naturezas");
         params.put("EMPRESA", getVariaveis().getAac10().getAac10na());
         params.put("PERIODO", "Período: " + dataPeriodo[0].format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString() + " à " + dataPeriodo[1].format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
 
         Integer[] qtDigGrau = verificarGraus("ABF10", "ESTRNATUREZA");
+
+        qtDigGrau = filtrarGrausPorChecks(qtDigGrau, grau1, grau2, grau3);
 
         BigDecimal saldo = BigDecimal.ZERO;
         BigDecimal saldoAnterior = BigDecimal.ZERO;
@@ -53,7 +62,18 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
         List<TableMap> dadosRel =   obterDadosRelatorio(idNaturezas, idContaCorrente, dataPeriodo, exibeTotalGeral)
         List<String> graus = new ArrayList<>();
 
-        Integer controle = 0
+        if(exibeTotalGeral){
+            //Sem filtro de conta corrente, busca o saldo todo
+            String whereIdsContaCorrente = !Utils.isEmpty(idContaCorrente) ? " and dab01.dab01id IN (:idContaCorrente)": "";
+            String sqlSaldoContas = " SELECT dab01id FROM Dab01 " + getSamWhere().getWherePadrao("WHERE", Dab01.class) + whereIdsContaCorrente;
+            List<Long> dab01ids = getAcessoAoBanco().obterListaDeLong(sqlSaldoContas, !Utils.isEmpty(idContaCorrente) ? Parametro.criar("idContaCorrente", idContaCorrente) : null);
+            saldoAnterior = BigDecimal.ZERO;
+            for (dab01id in dab01ids) {
+                BigDecimal saldoTotal = buscarSaldoAnteriorConta(dab01id, dataPeriodo, null);
+                saldoAnterior = saldoAnterior.add(saldoTotal);
+            }
+        }
+
         for (TableMap mapDados : dadosRel) {
             for(int k = 0; k < qtDigGrau.size(); k++) {
                 Integer indexOfTm = null;
@@ -88,20 +108,6 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
                             saldoAnterior = buscarSaldoInicial(mapDados.getLong("dab01id"), null);
                         }
                     }
-                } else {
-                    //Sem filtro de conta corrente, busca o saldo todo
-                    String whereIdsContaCorrente = !Utils.isEmpty(idContaCorrente) ? " and dab01.dab01id IN (:idContaCorrente)": "";
-                    String sqlSaldoContas = " SELECT dab01id FROM Dab01 " + getSamWhere().getWherePadrao("WHERE", Dab01.class) + whereIdsContaCorrente;
-                    List<Long> dab01ids = getAcessoAoBanco().obterListaDeLong(sqlSaldoContas, !Utils.isEmpty(idContaCorrente) ? Parametro.criar("idContaCorrente", idContaCorrente) : null);
-                    saldoAnterior = BigDecimal.ZERO;
-                    if(controle == 0){ // Garante que busca o saldo todo apenas uma vez
-                        for (dab01id in dab01ids) {
-                            BigDecimal saldoTotal = buscarSaldoAnteriorConta(dab01id, dataPeriodo, null);
-                            saldoAnterior = saldoAnterior.add(saldoTotal);
-                        }
-                    }
-
-                    controle++
                 }
 
                 if (mapDados.getString("abf10codigo") != grauNatureza) {
@@ -296,12 +302,12 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
         Parametro parametroDtInicial = Parametro.criar("dtInicial", dtLancamentos[0]);
 
         String sql = "SELECT SUM(dab1002valor) " +
-                    "FROM dab10 " +
-                    "INNER JOIN dab1002 ON dab1002lct = dab10id " +
-                    "WHERE TRUE " +
-                    whereContas +
-                    whereMov +
-                    whereDtInicial;
+                "FROM dab10 " +
+                "INNER JOIN dab1002 ON dab1002lct = dab10id " +
+                "WHERE TRUE " +
+                whereContas +
+                whereMov +
+                whereDtInicial;
 
         return getAcessoAoBanco().obterBigDecimal(sql, parametroContas, parametroMov, parametroDtInicial);
 
@@ -323,7 +329,6 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
 
     private Integer[] verificarGraus(String aplic, String param) {
         String parametros = getAcessoAoBanco().buscarParametro(param, aplic)
-
         int qtGrau;
         int[] qtDig;
         int tamanhoMaxGrau = 0;
@@ -331,6 +336,7 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
         if (parametros != null) {
             StringTokenizer strToken = new StringTokenizer(parametros, "|");
             qtGrau = strToken.countTokens();
+
 
             if(qtGrau < 2 || qtGrau > 12)throw new ValidacaoException("A estrutura de código de contas deve ser no mínimo 2 e no máximo 12 graus.");
 
@@ -350,6 +356,23 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
         }
 
         return qtDig;
+    }
+
+    private Integer[] filtrarGrausPorChecks(Integer[] qtDig, boolean grau1, boolean grau2, boolean grau3) {
+        def resultado = new Integer[qtDig.length];
+        Integer index = 0;
+        for(int i = 0; i < qtDig.length; i++){
+
+            if(!grau1 && i == 0) continue;
+            if(!grau2 && i == 1) continue;
+            if(!grau3 && i == 2) continue;
+
+            resultado[index] = qtDig[i];
+
+            index++;
+        }
+
+        return resultado.findAll{it != null}
     }
 }
 //meta-sis-eyJkZXNjciI6IlNDRiAtIFJlc3VtbyBkb3MgTGFuw6dhbWVudG9zIFBvciBOYXR1cmV6YSIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
