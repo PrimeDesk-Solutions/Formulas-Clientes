@@ -106,6 +106,7 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
             // Campos Livre Entidade
             TableMap tmAbe01 = abe01.abe01json != null ? abe01.abe01json : new TableMap();
 
+            if(tmAbe01.getString("forma_pagamento") == "99") continue;
             if(tmAbe01.getInteger("tipo_inscricao") == null) interromper("Necessário preencher o tipo de inscrição nos campos livres da entidade " + abe01.abe01codigo + " - " + abe01.abe01nome);
             if(tmAbe01.getString("inscricao_entidade") == null) interromper("Necessário preencher CPF/CNPJ nos campos livres da entidade " + abe01.abe01codigo + " - " + abe01.abe01nome)
 
