@@ -36,18 +36,12 @@ public class SCE_ComplementoIndustrializacao extends FormulaBase {
         jsonBcc01 = bcc01.bcc01json != null ? bcc01.bcc01json : new TableMap();
         jsonAbm0101 = abm0101.abm0101json != null ? abm0101.abm0101json : new TableMap();
 
-        // Define se irá recuperar os impostos
-        boolean recuperaICMS = true
-        boolean recuperaPIS = false
-        boolean recuperaCOFINS = false
-        boolean recuperaIPI = true
-
         // Custo Total
         bcc01.bcc01custo = jsonBcc01.getBigDecimal_Zero("total_item_estoque") +
                             jsonBcc01.getBigDecimal_Zero("icms_st") +
                             jsonBcc01.getBigDecimal_Zero("frete_transp") +
-                            jsonBcc01.getBigDecimal_Zero("frete_inova") +
-                            jsonBcc01.getBigDecimal_Zero("pis") +
+                            jsonBcc01.getBigDecimal_Zero("frete_inova") -
+                            jsonBcc01.getBigDecimal_Zero("pis") -
                             jsonBcc01.getBigDecimal_Zero("cofins");
 
         bcc01.bcc01custo = bcc01.bcc01custo.round(2);
@@ -55,7 +49,7 @@ public class SCE_ComplementoIndustrializacao extends FormulaBase {
         // Custo Unitario
         jsonBcc01.put("custo_unitario", bcc01.bcc01custo / bcc01.bcc01qt);
 
-        jsonBcc01.put("unitario_estoque", jsonBcc01.getBigDecimal_Zero("total_item_estoque") / bcc01.bcc01qt)
+        jsonBcc01.put("unitario_estoque", jsonBcc01.getBigDecimal_Zero("total_item_estoque") / bcc01.bcc01qt);
 
         // Preco Médio Unitário
         def saldoAtual = sceUtils.saldoEstoque(bcc01.bcc01item.abm01id, bcc01.bcc01data, bcc01.bcc01id);
@@ -78,10 +72,9 @@ public class SCE_ComplementoIndustrializacao extends FormulaBase {
         if(jsonBcc01.getBigDecimal_Zero("unitario_estoque") > 0 )
             jsonAbm0101.put("preco_diverso_ultimo", jsonBcc01.getBigDecimal_Zero("unitario_estoque"));
 
-
         // Custo Simples
         if(jsonBcc01.getBigDecimal_Zero("custo_unitario") > 0){
-            jsonBcc01.put("preco_livre", jsonBcc01.getBigDecimal_Zero("preco_livre") + jsonBcc01.getBigDecimal_Zero("unitario_estoque"))
+            jsonBcc01.put("preco_livre", jsonAbm0101.getBigDecimal_Zero("preco_livre") + jsonBcc01.getBigDecimal_Zero("unitario_estoque"))
         }else{
             jsonBcc01.put("preco_livre", jsonAbm0101.getBigDecimal_Zero("preco_livre"));
         }

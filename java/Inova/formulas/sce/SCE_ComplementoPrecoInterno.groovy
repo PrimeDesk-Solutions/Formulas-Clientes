@@ -32,11 +32,11 @@ public class SCE_ComplementoPrecoInterno extends FormulaBase {
         bcc01 = (Bcc01) get("bcc01");
         abm0101 = (Abm0101) get("abm0101");
 
-        bcc01.bcc01qt = new BigDecimal(0);
-
         // Campos Livres Lançamento
         jsonBcc01 = bcc01.bcc01json != null ? bcc01.bcc01json : new TableMap();
         jsonAbm0101 = abm0101.abm0101json != null ? abm0101.abm0101json : new TableMap();
+
+        bcc01.bcc01qt = new BigDecimal(0);
 
         // Custo Total
         bcc01.bcc01custo = jsonBcc01.getBigDecimal_Zero("unitario_estoque") +
@@ -48,9 +48,9 @@ public class SCE_ComplementoPrecoInterno extends FormulaBase {
 
         // Custo Unitario
         if (bcc01.bcc01qt > 0) {
-            jsonBcc01.put("custo_unitario", jsonBcc01.getBigDecimal_Zero("unitario_estoque") / bcc01.bcc01qt);
+            jsonBcc01.put("custo_unitario", bcc01.bcc01custo / bcc01.bcc01qt);
         } else {
-            jsonBcc01.put("custo_unitario", jsonBcc01.getBigDecimal_Zero("unitario_estoque"));
+            jsonBcc01.put("custo_unitario", bcc01.bcc01custo);
         }
 
         // Preco Médio Unitário
@@ -63,23 +63,16 @@ public class SCE_ComplementoPrecoInterno extends FormulaBase {
         }
 
         // Maior preço
-        if(jsonBcc01.getBigDecimal_Zero("unitario_estoque") > jsonAbm0101.getBigDecimal_Zero("preco_diverso_maior")){
-            jsonBcc01.put("preco_diverso_maior", jsonBcc01.getBigDecimal_Zero("unitario_estoque"));
-        }
+        jsonBcc01.put("preco_diverso_maior", jsonAbm0101.getBigDecimal_Zero("preco_diverso_maior"));
 
         //Menor Preço
-        if(jsonAbm0101.getBigDecimal_Zero("preco_diverso_menor") == 0 || jsonBcc01.getBigDecimal_Zero("unitario_estoque") < jsonAbm0101.getBigDecimal_Zero("preco_diverso_menor")){
-            jsonBcc01.put("preco_diverso_menor", jsonBcc01.getBigDecimal_Zero("unitario_estoque"));
-        }
-        // Ultimo Preço
-        if(jsonBcc01.getBigDecimal_Zero("unitario_estoque") > 0 )
-            jsonAbm0101.put("preco_diverso_ultimo", jsonBcc01.getBigDecimal_Zero("unitario_estoque"));
+        jsonBcc01.put("preco_diverso_menor", jsonAbm0101.getBigDecimal_Zero("preco_diverso_menor"));
 
+        // Ultimo Preço
+        jsonAbm0101.put("preco_diverso_ultimo", jsonAbm0101.getBigDecimal_Zero("preco_diverso_ultimo"));
 
         // Custo Simples
-        if(jsonBcc01.getBigDecimal_Zero("custo_unitario") > 0)
-            jsonBcc01.put("preco_livre", jsonBcc01.getBigDecimal_Zero("preco_livre"))
-
+        jsonBcc01.put("preco_livre", jsonAbm0101.getBigDecimal_Zero("preco_livre"))
 
         jsonBcc01.put("custo_presumido", jsonBcc01.getBigDecimal_Zero("preco_livre") - (jsonBcc01.getBigDecimal_Zero("ipi") / bcc01.bcc01qt) - (jsonBcc01.getBigDecimal_Zero("icms") / bcc01.bcc01qt));
         jsonBcc01.put("custo_presumido", jsonBcc01.getBigDecimal_Zero("custo_presumido").round(2));

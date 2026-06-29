@@ -36,18 +36,11 @@ public class SCE_CompraInsumo extends FormulaBase {
         jsonBcc01 = bcc01.bcc01json != null ? bcc01.bcc01json : new TableMap();
         jsonAbm0101 = abm0101.abm0101json != null ? abm0101.abm0101json : new TableMap();
 
-        // Define se irá recuperar os impostos
-        boolean recuperaICMS = true
-        boolean recuperaPIS = false
-        boolean recuperaCOFINS = false
-        boolean recuperaIPI = true
-
         // Custo Total
         bcc01.bcc01custo = jsonBcc01.getBigDecimal_Zero("total_item_estoque") +
                 jsonBcc01.getBigDecimal_Zero("frete_dest") +
                 jsonBcc01.getBigDecimal_Zero("outras_despesas") +
                 jsonBcc01.getBigDecimal_Zero("seguro") +
-                jsonBcc01.getBigDecimal_Zero("custo_indust") +
                 jsonBcc01.getBigDecimal_Zero("icms_st") +
                 jsonBcc01.getBigDecimal_Zero("frete_transp") +
                 jsonBcc01.getBigDecimal_Zero("frete_inova") -

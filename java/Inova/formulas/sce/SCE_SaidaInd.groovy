@@ -40,7 +40,7 @@ public class SCE_SaidaInd extends FormulaBase {
         jsonBcc01.put("custo_unitario", jsonAbm0101.getBigDecimal_Zero("preco_medio_atual"));
 
         // Custo Total
-        if(bcc01.bcc01custo > 0){
+        if(bcc01.bcc01qt > 0){
             bcc01.bcc01custo = jsonBcc01.getBigDecimal_Zero("custo_unitario") * bcc01.bcc01qt +
                     jsonBcc01.getBigDecimal_Zero("frete_transp") +
                     jsonBcc01.getBigDecimal_Zero("frete_inova");
@@ -57,21 +57,24 @@ public class SCE_SaidaInd extends FormulaBase {
 
         // Maior preço
         if(jsonBcc01.getBigDecimal_Zero("unitario_estoque") > jsonAbm0101.getBigDecimal_Zero("preco_diverso_maior")){
-            jsonBcc01.put("preco_diverso_maior", jsonBcc01.getBigDecimal_Zero("unitario_estoque"));
+            jsonBcc01.put("preco_diverso_maior", jsonBcc01.getBigDecimal_Zero("custo_unitario"));
+        }else{
+            jsonBcc01.put("preco_diverso_maior", jsonAbm0101.getBigDecimal_Zero("preco_diverso_maior"));
         }
 
         //Menor Preço
         if(jsonAbm0101.getBigDecimal_Zero("preco_diverso_menor") == 0 || jsonBcc01.getBigDecimal_Zero("unitario_estoque") < jsonAbm0101.getBigDecimal_Zero("preco_diverso_menor")){
-            jsonBcc01.put("preco_diverso_menor", jsonBcc01.getBigDecimal_Zero("unitario_estoque"));
+            jsonBcc01.put("preco_diverso_menor", jsonBcc01.getBigDecimal_Zero("custo_unitario"));
+        }else{
+            jsonBcc01.put("preco_diverso_menor", jsonAbm0101.getBigDecimal_Zero("preco_diverso_menor"));
         }
         // Ultimo Preço
-        if(jsonBcc01.getBigDecimal_Zero("unitario_estoque") > 0 )
-            jsonAbm0101.put("preco_diverso_ultimo", jsonBcc01.getBigDecimal_Zero("unitario_estoque"));
+        jsonAbm0101.put("preco_diverso_ultimo", jsonAbm0101.getBigDecimal_Zero("preco_diverso_ultimo"));
 
         // Custo Simples
         jsonBcc01.put("preco_livre", jsonAbm0101.getBigDecimal_Zero("preco_livre"));
 
-        jsonBcc01.put("custo_presumido", jsonBcc01.getBigDecimal_Zero("preco_livre"));
+        jsonBcc01.put("custo_presumido", jsonBcc01.getBigDecimal_Zero("custo_presumido"));
     }
 }
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNTAifQ==

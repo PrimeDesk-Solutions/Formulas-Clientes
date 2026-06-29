@@ -55,6 +55,7 @@ public class SCE_EntradaIndustrializacao extends FormulaBase {
         // Custo Unitario
         jsonBcc01.put("custo_unitario", bcc01.bcc01custo / bcc01.bcc01qt);
 
+        jsonBcc01.put("unitario_estoque", jsonBcc01.getBigDecimal_Zero("total_item_estoque") / bcc01.bcc01qt )
 
         // Preco Médio Unitário
         def saldoAtual = sceUtils.saldoEstoque(bcc01.bcc01item.abm01id, bcc01.bcc01data, bcc01.bcc01id);
@@ -68,11 +69,15 @@ public class SCE_EntradaIndustrializacao extends FormulaBase {
         // Maior preço
         if(jsonBcc01.getBigDecimal_Zero("unitario_estoque") > jsonAbm0101.getBigDecimal_Zero("preco_diverso_maior")){
             jsonBcc01.put("preco_diverso_maior", jsonBcc01.getBigDecimal_Zero("unitario_estoque"));
+        }else{
+            jsonBcc01.put("preco_diverso_maior", jsonAbm0101.getBigDecimal_Zero("preco_diverso_maior"));
         }
 
         //Menor Preço
         if(jsonAbm0101.getBigDecimal_Zero("preco_diverso_menor") == 0 || jsonBcc01.getBigDecimal_Zero("unitario_estoque") < jsonAbm0101.getBigDecimal_Zero("preco_diverso_menor")){
             jsonBcc01.put("preco_diverso_menor", jsonBcc01.getBigDecimal_Zero("unitario_estoque"));
+        }else{
+            jsonBcc01.put("preco_diverso_menor", jsonAbm0101.getBigDecimal_Zero("preco_diverso_menor"));
         }
         // Ultimo Preço
         if(jsonBcc01.getBigDecimal_Zero("unitario_estoque") > 0 )
@@ -80,7 +85,7 @@ public class SCE_EntradaIndustrializacao extends FormulaBase {
 
         // Custo Simples
         if(jsonBcc01.getBigDecimal_Zero("custo_unitario") > 0){
-            jsonBcc01.put("preco_livre", jsonBcc01.getBigDecimal_Zero("preco_livre") + jsonBcc01.getBigDecimal_Zero("custo_unitario"))
+            jsonBcc01.put("preco_livre", jsonBcc01.getBigDecimal_Zero("unitario_estoque"))
         }else{
             jsonBcc01.put("preco_livre", jsonAbm0101.getBigDecimal_Zero("preco_livre"));
         }

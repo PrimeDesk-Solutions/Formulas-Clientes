@@ -40,7 +40,7 @@ public class SCE_Saida extends FormulaBase {
         jsonBcc01.put("custo_unitario", jsonAbm0101.getBigDecimal_Zero("preco_medio_atual"));
 
         // Custo Total
-        if(bcc01.bcc01custo > 0){
+        if(bcc01.bcc01qt > 0){
             bcc01.bcc01custo = jsonBcc01.getBigDecimal_Zero("custo_unitario") * bcc01.bcc01qt +
                     jsonBcc01.getBigDecimal_Zero("frete_transp") +
                     jsonBcc01.getBigDecimal_Zero("frete_inova");
@@ -66,7 +66,7 @@ public class SCE_Saida extends FormulaBase {
         // Custo Simples
         jsonBcc01.put("preco_livre", jsonAbm0101.getBigDecimal_Zero("preco_livre"));
 
-        jsonBcc01.put("custo_presumido", jsonBcc01.getBigDecimal_Zero("preco_livre"));
+        jsonBcc01.put("custo_presumido", jsonAbm0101.getBigDecimal_Zero("custo_presumido"));
     }
 }
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNTAifQ==
