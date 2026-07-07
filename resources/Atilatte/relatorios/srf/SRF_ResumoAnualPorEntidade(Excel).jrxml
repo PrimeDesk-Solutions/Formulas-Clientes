@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF Resumo Anual por Entidade" language="groovy" pageWidth="1587" pageHeight="595" orientation="Landscape" columnWidth="1547" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c2614e2e-0f4b-4a35-86dc-f8cf9cf6c5c6">
 	<property name="ireport.zoom" value="1.0000000000000036"/>
-	<property name="ireport.x" value="536"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="totalizar" class="java.lang.Boolean"/>
 	<parameter name="title" class="java.lang.String"/>
 	<parameter name="campoFiltro" class="java.lang.String"/>
-	<field name="abm01codigo" class="java.lang.String"/>
-	<field name="abm01descr" class="java.lang.String"/>
+	<field name="abe01codigo" class="java.lang.String"/>
+	<field name="abe01na" class="java.lang.String"/>
 	<field name="valor1" class="java.math.BigDecimal"/>
 	<field name="valor2" class="java.math.BigDecimal"/>
 	<field name="valor3" class="java.math.BigDecimal"/>
@@ -131,13 +131,17 @@
 				<text><![CDATA[Novembro]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1372" y="0" width="175" height="20" uuid="367ba40e-c539-4fb3-a64a-a700c6cbc97c"/>
+				<reportElement x="1372" y="0" width="90" height="20" uuid="367ba40e-c539-4fb3-a64a-a700c6cbc97c"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[Dezembro]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="100" y="0" width="172" height="20" uuid="abfe75eb-a251-4ddf-9200-f48c60df7228"/>
-				<text><![CDATA[Item]]></text>
+				<reportElement x="1462" y="0" width="85" height="20" uuid="7d6a6a54-0eef-47d9-b9a6-fd5f9abcf922"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="172" height="20" uuid="8dca3596-bdb7-4ef0-b277-fc104531f23b"/>
+				<text><![CDATA[Entidade]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -148,71 +152,75 @@
 		<band height="20" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="100" height="20" uuid="92f75aed-1cec-4842-94fc-babe1ca75ebd"/>
-				<textFieldExpression><![CDATA[$F{abm01codigo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{abe01codigo}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="100" y="0" width="172" height="20" uuid="7fc6f362-ab03-4295-ad2a-073d84187a60"/>
-				<textFieldExpression><![CDATA[$F{abm01descr}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{abe01na}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="###0;-###0">
 				<reportElement x="272" y="0" width="100" height="20" uuid="3d63c580-1abb-4e81-8c07-614dd3e99ff6"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{valor1} == null ? 0 : $F{valor1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="###0;-###0">
 				<reportElement x="372" y="0" width="100" height="20" uuid="45f5bd55-aa7a-4bbc-a5f8-5ad2dd9c6d73"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{valor2} == null ? 0 : $F{valor2}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="###0;-###0">
 				<reportElement x="472" y="0" width="100" height="20" uuid="bee2875e-fd4d-426b-ae75-da734578f5e5"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{valor3} == null ? 0 : $F{valor3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="###0;-###0">
 				<reportElement x="572" y="0" width="100" height="20" uuid="e4a3e806-8eb8-42e3-b0b0-52f35b50c3b9"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{valor4} == null ? 0 : $F{valor4}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="###0;-###0">
 				<reportElement x="672" y="0" width="100" height="20" uuid="67265686-b4c5-48ed-926f-1c903c01134c"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{valor5} == null ? 0 : $F{valor5}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="###0;(###0)">
 				<reportElement x="772" y="0" width="100" height="20" uuid="5706ce7c-0668-4cf4-8faf-04c7d53c5940"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{valor6} == null ? 0 : $F{valor6}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="###0;-###0">
 				<reportElement x="872" y="0" width="100" height="20" uuid="06a77ac2-48d5-4b30-8690-5b6a5ae404c6"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{valor7} == null ? 0 : $F{valor7}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="#,##0.00;(-#,##0.00)">
 				<reportElement x="972" y="0" width="100" height="20" uuid="e9d615e7-29e9-4983-981d-65566a353174"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{valor8} == null ? 0 : $F{valor8}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="###0.00;-###0.00">
 				<reportElement x="1072" y="0" width="100" height="20" uuid="3c4a92da-4532-4799-b323-dcd046682c65"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{valor9} == null ? 0 : $F{valor9}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="###0;-###0">
 				<reportElement x="1172" y="0" width="100" height="20" uuid="c4663bcd-c79c-4761-8787-e9883d31149f"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{valor10} == null ? 0 : $F{valor10}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="###0;-###0">
 				<reportElement x="1272" y="0" width="100" height="20" uuid="d969860f-4a6a-467e-a3a8-8c9b4c1d9500"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{valor11} == null ? 0 : $F{valor11}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="1372" y="0" width="175" height="20" uuid="4f61bae6-1cf6-496f-bfc2-4ad059cee01a"/>
+			<textField pattern="###0;-###0">
+				<reportElement x="1372" y="0" width="90" height="20" uuid="4f61bae6-1cf6-496f-bfc2-4ad059cee01a"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{valor12} == null ? 0 : $F{valor12}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1462" y="0" width="85" height="20" uuid="b215dd7f-c6f6-48fb-82a2-ef7e63fc053b"/>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

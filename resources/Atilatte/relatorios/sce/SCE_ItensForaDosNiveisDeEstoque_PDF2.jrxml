@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCE_ItensForaDosNiveisDeEstoque_PDF" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ef0c0e17-4c98-4ea4-a6a0-bd6756525144">
 	<property name="ireport.zoom" value="1.4641000000000006"/>
-	<property name="ireport.x" value="535"/>
+	<property name="ireport.x" value="179"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="titulo" class="java.lang.String"/>
 	<parameter name="periodo" class="java.lang.String"/>
@@ -175,56 +175,56 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{aam06codigo}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00">
+			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="271" y="0" width="69" height="13" uuid="8f6e10a5-78f3-49cb-ba67-e932f94c7c1a"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{abm0101estMax}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00">
+			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="340" y="0" width="66" height="13" uuid="bf8e7416-d415-4f2c-9cb4-1ab89131a670"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{abm0101estMin}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00">
+			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="406" y="0" width="73" height="13" uuid="39c93259-9666-4fbc-aa99-d7dd2368476d"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{abm0101estSeg}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00">
+			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="479" y="0" width="54" height="13" uuid="6dcf1d89-3c08-4133-aa45-4920e0b262fb"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{abm0101ptoPed}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00">
+			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="600" y="0" width="78" height="13" uuid="0766cca7-88ac-428f-aad8-0ef6350cb4a8"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totCompra}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00">
+			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="533" y="0" width="67" height="13" uuid="765784df-9965-47e7-a63a-0006d30512a7"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{saldo}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00">
+			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="678" y="0" width="65" height="13" uuid="5de3245b-f531-4d06-a680-0e99864d9374"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totVenda}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00">
+			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="743" y="0" width="59" height="13" uuid="537dc8a7-59cb-457f-bda7-723830aa8f62"/>
 				<textElement>
 					<font size="8"/>

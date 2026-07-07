@@ -43,7 +43,7 @@
 	<field name="numDoc" class="java.lang.String"/>
 	<field name="field2" class="java.lang.String"/>
 	<field name="agrupamento" class="java.lang.Integer"/>
-	<field name="aab10user" class="java.lang.String"/>
+	<field name="aprovadores" class="java.lang.String"/>
 	<variable name="total_semana" class="java.math.BigDecimal" resetType="Group" resetGroup="semana" calculation="Sum">
 		<variableExpression><![CDATA[$F{valorDoc}]]></variableExpression>
 	</variable>
@@ -63,18 +63,18 @@
 		<groupFooter>
 			<band height="18">
 				<staticText>
-					<reportElement x="464" y="4" width="20" height="13" uuid="f50604e0-1572-4ade-be42-008936a779b1"/>
+					<reportElement x="382" y="4" width="20" height="13" uuid="f50604e0-1572-4ade-be42-008936a779b1"/>
 					<textElement>
 						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[Total ]]></text>
 				</staticText>
 				<line>
-					<reportElement x="464" y="4" width="88" height="1" uuid="db5aed5e-8d44-4ca8-8fba-748d8cbe33a2"/>
+					<reportElement x="382" y="4" width="88" height="1" uuid="db5aed5e-8d44-4ca8-8fba-748d8cbe33a2"/>
 				</line>
 				<textField pattern="#,##0.00;-#,##0.00">
-					<reportElement x="484" y="5" width="71" height="13" uuid="0d04dccc-be65-4031-9fb7-8776dfe4da37"/>
-					<textElement textAlignment="Right">
+					<reportElement x="402" y="5" width="58" height="13" uuid="0d04dccc-be65-4031-9fb7-8776dfe4da37"/>
+					<textElement>
 						<font size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{total_semana}]]></textFieldExpression>
@@ -129,8 +129,8 @@
 				<text><![CDATA[Movimentação]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="484" y="0" width="71" height="13" uuid="81298d8e-9ce7-4cae-9324-b08547d23fe2"/>
-				<textElement textAlignment="Right">
+				<reportElement x="402" y="0" width="58" height="13" uuid="81298d8e-9ce7-4cae-9324-b08547d23fe2"/>
+				<textElement>
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[Valor Liquido]]></text>
@@ -153,7 +153,7 @@
 				<text><![CDATA[Núm.Doc]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="402" y="0" width="82" height="13" uuid="b864be99-5b7d-4eaa-af0a-10d67424c358"/>
+				<reportElement x="460" y="0" width="95" height="13" uuid="b864be99-5b7d-4eaa-af0a-10d67424c358"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -181,8 +181,8 @@
 				<textFieldExpression><![CDATA[$F{movimentacao}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="484" y="0" width="71" height="13" uuid="ff743c92-9ed4-46d6-b2f4-a7db692ddf3a"/>
-				<textElement textAlignment="Right">
+				<reportElement x="402" y="0" width="58" height="13" uuid="ff743c92-9ed4-46d6-b2f4-a7db692ddf3a"/>
+				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{valorDoc}]]></textFieldExpression>
@@ -215,12 +215,12 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{numDoc}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="402" y="0" width="82" height="13" uuid="3c973485-52d9-4561-a3cd-90956ae56b0b"/>
+			<textField>
+				<reportElement x="460" y="0" width="100" height="13" uuid="fd62725c-a69a-4868-aa39-e27635516015"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{aab10user}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{aprovadores}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
