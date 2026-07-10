@@ -206,12 +206,8 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                 txt.print(daa01.daa01dtVctoN.format(PATTERN_DDMMYYYY));                                                                                                                         //092-099
                 txt.print(daa01.daa01valor.multiply(new BigDecimal(100)).intValue(), 15);                                                                                           //100-114
 
-                BigDecimal desconto = new BigDecimal(0);
-                if (daa01.daa01json != null && daa01.daa01json.getDate("dt_limite_desc") && daa0102.daa0102dtPgto.compareTo(daa01.daa01json.getDate("dt_limite_desc")) <= 0) {
-                    desconto = daa01.daa01json.getBigDecimal("desconto").abs() * -1;
-                }
-                txt.print(desconto.multiply(new BigDecimal(100)).intValue(), 15);                                                                                                   //115-129
-
+                BigDecimal desconto = daa01.daa01json.getBigDecimal("desconto").abs() * -1;
+                txt.print((desconto.multiply(new BigDecimal(100)).intValue() * -1), 15);                                                                                                   //115-129
                 Long dias = DateUtils.dateDiff(daa01.daa01dtVctoN, daa0102.daa0102dtPgto, ChronoUnit.DAYS);
                 BigDecimal jme = daa01.daa01json != null && daa01.daa01json.getBigDecimal("encargos") != null ? daa01.daa01json.getBigDecimal("encargos") : BigDecimal.ZERO;
                 if (dias > 0) {
