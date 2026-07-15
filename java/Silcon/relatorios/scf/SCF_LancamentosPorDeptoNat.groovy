@@ -22,7 +22,8 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
         filtrosDefault.put("agrupamento", "0");
         filtrosDefault.put("impressao", "0");
         filtrosDefault.put("detalhamento", "0");
-        return Utils.map("filtros", filtrosDefault);    }
+        return Utils.map("filtros", filtrosDefault);
+    }
     @Override
     public DadosParaDownload executar() {
         List<Long> idsDeptos = getListLong("departamento");
@@ -94,7 +95,6 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
         }
 
 
-
         if(agrupamento == 0 && detalhamento == 0 && impressao == 0){
             return gerarPDF("SCF_Lancamentos_Por_Depto_Nat_Analitico_PDF", dados);
         }else if(agrupamento == 0 && detalhamento == 0 && impressao == 1){
@@ -112,8 +112,6 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
         }else{
             return gerarXLSX("SCF_Lancamentos_Por_Nat_Depto_Sintetico_Excel", dados);
         }
-
-
     }
     private List<TableMap> buscarDadosRelatorioAnalitico(List<Long> idsDeptos, List<Long> idsNaturezas, LocalDate[] dataLcto, Integer agrupamento, Integer detalhamento, List<Long> entidades, List<Long> documentos){
         String whereDeptos = idsDeptos != null && idsDeptos.size() > 0 ? "AND abb11id IN (:idsDeptos) " : "";
@@ -134,7 +132,7 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
 
         String orderBy = agrupamento == 0 ? "ORDER BY abb11codigo" : "ORDER BY abf10codigo"
 
-        String sql = "SELECT DISTINCT abb11codigo AS codDepto, abb11nome AS nomeDepto, dab10data AS dtLcto, " +
+        String sql = "SELECT DISTINCT dab10id, abb11codigo AS codDepto, abb11nome AS nomeDepto, dab10data AS dtLcto, " +
                 "dab01codigo AS codCC, dab01nome AS nomeCC, dab10historico AS historico,  " +
                 "CASE WHEN dab10mov = 0 THEN 'C' ELSE 'D' END AS movimentacao, abf10codigo AS codNatureza, abf10nome AS descrNat, " +
                 "CASE WHEN dab10mov = 1 THEN dab10011valor * (-1) ELSE dab10011valor END AS valor " +
@@ -188,7 +186,6 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
                 orderBy
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroDeptos, parametroNat, parametroDtInicial, parametroDtFinal, parametroEmpresa)
-
     }
 }
 //meta-sis-eyJkZXNjciI6IlNDRiAtIExhbsOnYW1lbnRvcyBwb3IgQ2VudHJvIGRlIEN1c3RvcyBlIE5hdCIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
