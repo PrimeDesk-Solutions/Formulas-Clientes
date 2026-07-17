@@ -33,6 +33,7 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
         List<Long> idItens = getListLong("itens");
         List<Long> idCategoria = getListLong("categoria");
         List<Long> tipoDoc = getListLong("tipoDoc");
+        List<Long> pcd = getListLong("pcd");
         Integer impressao = getInteger("impressao");
         Boolean impressaoQuilo = getBoolean("imprimeQuilo");
         boolean totalizar1 = getBoolean("total1");
@@ -86,7 +87,9 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
         campos.put("5", campoLivre5 != null ? campoLivre5 : campoFixo5 != null ? campoFixo5 : null);
         campos.put("6", campoLivre6 != null ? campoLivre6 : campoFixo6 != null ? campoFixo6 : null);
 
-        List<TableMap> dados = buscarDadosRelatorio(dataEmissao, idEstados, idItens, idCategoria, tipoDoc);
+        List<TableMap> dados = buscarDadosRelatorio(dataEmissao, idEstados, idItens, idCategoria, tipoDoc, pcd);
+
+        if(dados == null || dados.size() == 0) interromper("Não foram encontrados registros para exibição.")
         List<TableMap> dadosRelatorio = new ArrayList<>();
 
         TableMap valoresTotais = new TableMap();
@@ -146,7 +149,7 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
 
     }
 
-    private List<TableMap> buscarDadosRelatorio(LocalDate[] dataEmissao, List<Long> idEstados, List<Long> idItens, List<Long> idCategoria, List<Long> tipoDoc){
+    private List<TableMap> buscarDadosRelatorio(LocalDate[] dataEmissao, List<Long> idEstados, List<Long> idItens, List<Long> idCategoria, List<Long> tipoDoc, List<Long> pcd){
         String whereCriterio = "WHERE aba30nome = 'SIF' ";
         String whereClasDoc = "AND eaa01clasDoc = 1 ";
         String whereEsMov = "AND eaa01esMov = 0 ";
@@ -158,6 +161,7 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
         String whereCancData = "AND eaa01cancData IS NULL ";
         String whereMovEst = "AND eaa01iSce = 0 AND abd01isce = 0 ";
         String orderBy = "ORDER BY aba3001descr, aag02uf, abb01num ";
+        String wherePcd = pcd != null && pcd.size() > 0 ? " AND abd01id IN (:pcd) " : "";
 
         Parametro parametroDtEmissaoIni = dataEmissao != null ? Parametro.criar("dtEmissaoIni", dataEmissao[0]) : null;
         Parametro parametroDtEmissaoFin = dataEmissao != null ? Parametro.criar("dtEmissaoFin", dataEmissao[1]) : null;
@@ -165,6 +169,7 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
         Parametro parametroEstados = idEstados != null && idEstados.size() > 0 ? Parametro.criar("idEstados", idEstados) : null;
         Parametro parametroTipoDoc = tipoDoc != null && tipoDoc.size() > 0 ? Parametro.criar("tipoDoc", tipoDoc) : null;
         Parametro parametroCategoria = idCategoria != null && idCategoria.size() > 0 ? Parametro.criar("idCategoria", idCategoria) : null;
+        Parametro parametroPCD = pcd != null && pcd.size() > 0 ? Parametro.criar("pcd", pcd) : null;
 
         String sql = "SELECT eaa01id, abm01codigo AS codItem, abm01na AS naItem, aba3001descr AS categoria, aag02uf AS uf, " +
                 "CAST(abm0101json ->> 'fator_litro' AS numeric(18,6)) as fatorQuilo, aah01codigo, aah01nome, abb01num, " +
@@ -193,9 +198,10 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
                 whereCategoria +
                 whereCancData +
                 whereMovEst +
+                wherePcd +
                 orderBy
 
-        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroItens, parametroEstados, parametroTipoDoc, parametroCategoria);
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroItens, parametroEstados, parametroTipoDoc, parametroCategoria, parametroPCD);
     }
     private void somarValores(TableMap valoresDocumento, TableMap valoresTotais, Map<String, String> campos){
         for(campo in campos){
