@@ -101,7 +101,7 @@ public class SCF_LancamentosPorNatureza extends RelatorioBase {
                 whereDataEmissao +
                 whereEmpresa +
                 whereContas +
-                "ORDER BY abb01num,aah01codigo, abf10codigo,abb01parcela, abb01data";
+                "ORDER BY abf10codigo, abb01data, abb01num,abb01parcela, aah01codigo ";
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroNumDocIni, parametroNumDocFin, parametroEmpresa, parametroContas, parametroTipoDoc, parametroPlf, parametroNatureza, parametroEntidade, parametroDataIni, parametroDataFin);
 
