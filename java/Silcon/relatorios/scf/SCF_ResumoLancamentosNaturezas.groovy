@@ -177,11 +177,11 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
         String orderBy = null;
         String groupBy = null;
         if (exibeTotalGeral) {
-            select = " SELECT abf10.abf10codigo, abf10.abf10nome, dab10.dab10mov, SUM(Dab10011.Dab10011valor) AS valorNatureza ";
+            select = " SELECT DISTINCT dab10id, abf10.abf10codigo, abf10.abf10nome, dab10.dab10mov, Dab10011.Dab10011valor AS valorNatureza ";
             orderBy = " ORDER BY abf10.abf10codigo, abf10.abf10nome ";
             groupBy = " GROUP BY abf10.abf10codigo, abf10.abf10nome, dab10.dab10mov ";
         } else {
-            select = " SELECT dab01.dab01id, dab01.dab01codigo, dab01.dab01nome, abf10.abf10codigo, abf10.abf10nome, dab10.dab10mov, SUM(Dab10011.Dab10011valor) AS valorNatureza ";
+            select = " SELECT DISTINCT dab10id, dab01.dab01id, dab01.dab01codigo, dab01.dab01nome, abf10.abf10codigo, abf10.abf10nome, dab10.dab10mov, Dab10011.Dab10011valor AS valorNatureza ";
             orderBy = " ORDER BY dab01.dab01codigo, abf10.abf10codigo ";
             groupBy = " GROUP BY dab01.dab01id, dab01.dab01codigo, dab01.dab01nome, abf10.abf10codigo, abf10.abf10nome, dab10.dab10mov ";
         }
@@ -198,8 +198,8 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
                 whereIdNatureza +
                 whereIdsContaCorrente +
                 getSamWhere().getWherePadrao("AND", Dab10.class) +
-                groupBy +
                 orderBy;
+
 
         List<TableMap> receberDadosRelatorio = getAcessoAoBanco().buscarListaDeTableMap(sql, paramCC, paramNatureza);
         return receberDadosRelatorio;
@@ -216,7 +216,7 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
         Parametro paramCodNat = grau != null ? Parametro.criar("codigo", codNat) : null;
         Parametro paramNatureza = idNatureza != null && idNatureza.size() > 0 ? Parametro.criar("idNatureza", idNatureza) : null;
 
-        String sql = " SELECT SUM(Dab10011.Dab10011valor) AS valorNatureza, dab10.dab10mov" +
+        String sql = " SELECT DISTINCT Dab10011.Dab10011valor AS valorNatureza, dab10.dab10mov" +
                 " FROM Dab10011 Dab10011 " +
                 " INNER JOIN Dab1001 dab1001 ON dab1001.dab1001id = dab10011.dab10011depto " +
                 " INNER JOIN Dab10 dab10 ON dab10.dab10id = dab1001.dab1001lct " +
@@ -228,8 +228,7 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
                 whereIdsContaCorrente +
                 whereCodNatureza +
                 whereIdNatureza +
-                getSamWhere().getWherePadrao("AND", Dab10.class) +
-                " GROUP BY dab10.dab10mov";
+                getSamWhere().getWherePadrao("AND", Dab10.class);
 
         List<TableMap> receberDadosRelatorio = getAcessoAoBanco().buscarListaDeTableMap(sql, paramCC, paramCodNat, paramNatureza);
         return receberDadosRelatorio;
@@ -246,7 +245,7 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
         Parametro paramCodNat = grau != null ? Parametro.criar("codigo", codNat) : null;
         Parametro paramNatureza = idNatureza != null && idNatureza.size() > 0 ? Parametro.criar("idNatureza", idNatureza) : null;
 
-        String sql = " select SUM(Dab10011.Dab10011valor) AS valorNatureza, dab10.dab10mov" +
+        String sql = " select DISTINCT Dab10011.Dab10011valor AS valorNatureza, dab10.dab10mov" +
                 " FROM Dab10011 Dab10011 " +
                 " INNER JOIN Dab1001 dab1001 ON dab1001.dab1001id = dab10011.dab10011depto " +
                 " INNER JOIN Dab10 dab10 ON dab10.dab10id = dab1001.dab1001lct " +
@@ -258,8 +257,7 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
                 whereIdsContaCorrente +
                 whereCodNatureza +
                 whereIdNatureza +
-                getSamWhere().getWherePadrao("AND", Dab10.class) +
-                " GROUP BY dab10.dab10mov";
+                getSamWhere().getWherePadrao("AND", Dab10.class);
 
         List<TableMap> receberDadosRelatorio = getAcessoAoBanco().buscarListaDeTableMap(sql, paramCC, paramCodNat, paramNatureza);
         return receberDadosRelatorio;
