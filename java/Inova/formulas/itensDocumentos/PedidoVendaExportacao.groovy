@@ -221,7 +221,7 @@ public class PedidoVendaExportacao extends FormulaBase {
         aag10 = eaa01.eaa01moeda != null ? getSession().get(Aag10.class, eaa01.eaa01moeda.aag10id) : null;
 
         // Cotações
-        aag1001 = aag10 != null ? getSession().get(Aag1001.class, Criterions.where("aag1001moeda = " + aag10.aag10id + " AND aag1001data = " + LocalDate.now())) : null;
+        aag1001 = aag10 != null ? getSession().get(Aag1001.class, Criterions.where("aag1001moeda = " + aag10.aag10id + " AND aag1001data = '" + LocalDate.now() + "'")) : null;
         if(aag10 != null && aag1001 == null) throw new ValidacaoException("Não foi informado cotação para a data " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
 
         //CAMPOS LIVRES
@@ -270,7 +270,7 @@ public class PedidoVendaExportacao extends FormulaBase {
                 dentroEstado = ufEmpr.aag02uf == ufEnt.aag02uf;
             }
 
-            jsonEaa0103.put("cotacao_dolar", aag1001.aag1001valor);
+            jsonEaa0103.put("cotacao_dolar", aag1001 != null ? aag1001.aag1001valor : BigDecimal.ZERO);
 
             definirCFOP(dentroEstado);
 
@@ -290,7 +290,7 @@ public class PedidoVendaExportacao extends FormulaBase {
             jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(3));
 
             // Novo Unitário
-            eaa0103.eaa0103unit = jsonEaa0103.getBigDecimal_Zero("unit_convertido") * jsonAbm0101.getBigDecimal_Zero("cotacao_dolar")
+            eaa0103.eaa0103unit = jsonEaa0103.getBigDecimal_Zero("unit_convertido") * jsonEaa0103.getBigDecimal_Zero("cotacao_dolar")
 
             // Total do item
             eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
@@ -329,7 +329,7 @@ public class PedidoVendaExportacao extends FormulaBase {
 
             calcularFCP();
 
-            calcularCBSIBS();
+            //calcularCBSIBS();
 
             definirCodigoBeneficioFiscal()
 

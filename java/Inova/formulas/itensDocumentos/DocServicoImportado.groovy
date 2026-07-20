@@ -268,7 +268,7 @@ public class DocServicoImportado extends FormulaBase {
                 dentroEstado = ufEmpr.aag02uf == ufEnt.aag02uf;
             }
 
-            jsonEaa0103.put("cotacao_dolar", aag1001.aag1001valor);
+            jsonEaa0103.put("cotacao_dolar", aag1001 != null ? aag1001.aag1001valor : BigDecimal.ZERO);
 
             definirCFOP(dentroEstado);
 

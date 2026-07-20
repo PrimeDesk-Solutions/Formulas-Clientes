@@ -54,8 +54,8 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpiPedidodolar50201 extends Formul
     private Aac10 aac10;
     private Aac13 aac13;
     private Aag01 aag01;
-    private Aac10 aag10;
-    private Aac10 aag1001;
+    private Aag10 aag10;
+    private Aag1001 aag1001;
     private Aag02 aag02;
     private Aag02 ufEnt;
     private Aag02 ufEmpr;
@@ -216,7 +216,7 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpiPedidodolar50201 extends Formul
 
         // Cotações
         Aag1001 aag1001 = aag10 != null ? getSession().get(Aag1001.class, Criterions.where("aag1001moeda = " + aag10.aag10id + " AND aag1001data = " + LocalDate.now())) : null;
-        if(aag1001 == null) throw new ValidacaoException("Não foi informado cotação para a data " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
+        if(aag10 != null && aag1001 == null) throw new ValidacaoException("Não foi informado cotação para a data " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
 
         //CAMPOS LIVRES
         jsonAac10 = aac10.aac10json != null ? aac10.aac10json : new TableMap();
@@ -264,7 +264,7 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpiPedidodolar50201 extends Formul
                 dentroEstado = ufEmpr.aag02uf == ufEnt.aag02uf;
             }
 
-            jsonEaa0103.put("cotacao_dolar", aag1001.aag1001valor);
+            jsonEaa0103.put("cotacao_dolar", aag1001 != null ? aag1001.aag1001valor : BigDecimal.ZERO);
 
 
             definirCFOP(dentroEstado);

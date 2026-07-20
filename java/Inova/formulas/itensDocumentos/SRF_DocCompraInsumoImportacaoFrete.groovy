@@ -272,7 +272,7 @@ public class SRF_DocCompraInsumoImportacaoFrete extends FormulaBase {
 
             definirCFOP(dentroEstado);
 
-            jsonEaa0103.put("cotacao_dolar", aag1001.aag1001valor);
+            jsonEaa0103.put("cotacao_dolar", aag1001 != null ? aag1001.aag1001valor : BigDecimal.ZERO)
 
             // Conserva Qt.Original do documento (Qt.Faturamento original)
             if (jsonEaa0103.getBigDecimal_Zero("qt_original") == 0) {
