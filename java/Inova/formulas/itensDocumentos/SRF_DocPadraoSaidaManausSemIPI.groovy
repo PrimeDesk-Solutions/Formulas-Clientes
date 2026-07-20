@@ -313,7 +313,9 @@ public class SRF_DocPadraoSaidaManausSemIPI extends FormulaBase {
 
             calcularCBSIBS();
 
-            definirCodigoBeneficioFiscal()
+            definirCodigoBeneficioFiscal();
+
+            preencherCamposEstoque();
 
             preencherSPEDS();
 
@@ -771,6 +773,11 @@ public class SRF_DocPadraoSaidaManausSemIPI extends FormulaBase {
         }
 
         eaa0103.eaa0103codBenef = cBenef;
+    }
+
+    private void preencherCamposEstoque(){
+        jsonEaa0103.put("total_item_estoque", eaa0103.eaa0103total);
+        jsonEaa0103.put("unitario_estoque", eaa0103.eaa0103unit);
     }
 
     private void preencherSPEDS() {

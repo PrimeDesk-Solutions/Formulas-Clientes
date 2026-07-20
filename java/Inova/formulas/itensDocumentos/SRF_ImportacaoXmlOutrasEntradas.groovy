@@ -242,7 +242,10 @@ public class SRF_ImportacaoXmlOutrasEntradas extends FormulaBase {
 
             definirCFOP(dentroEstado);
 
+            preencherCamposEstoque();
+
             calcularSPED();
+
         }
 
     }
@@ -266,6 +269,12 @@ public class SRF_ImportacaoXmlOutrasEntradas extends FormulaBase {
             eaa0103.eaa0103cfop = aaj15_cfop;
         }
     }
+
+    private void preencherCamposEstoque(){
+        jsonEaa0103.put("total_item_estoque", eaa0103.eaa0103total);
+        jsonEaa0103.put("unitario_estoque", eaa0103.eaa0103unit);
+    }
+
 
     private void calcularSPED(){
         //*******Calculo para SPED ICMS*******

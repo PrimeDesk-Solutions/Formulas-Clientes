@@ -325,6 +325,8 @@ public class SRF_DocServico extends FormulaBase {
 
             calcularCargaTributaria();
 
+            preencherCamposEstoque();
+
             preencherSPEDS();
 
         }
@@ -757,6 +759,10 @@ public class SRF_DocServico extends FormulaBase {
                 jsonEaa0103.put("vlr_carga_trib", jsonEaa0103.getBigDecimal_Zero("vlr_carga_trib").round(2));
             }
         }
+    }
+    private void preencherCamposEstoque(){
+        jsonEaa0103.put("total_item_estoque", eaa0103.eaa0103total);
+        jsonEaa0103.put("unitario_estoque", eaa0103.eaa0103unit);
     }
     private void preencherSPEDS() {
 

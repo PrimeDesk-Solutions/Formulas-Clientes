@@ -263,8 +263,9 @@ public class SRF_DocOutrasEntradasPropria extends FormulaBase {
             jsonEaa0103.put("qtd_tributavel", eaa0103.eaa0103qtComl);
             jsonEaa0103.put("unit_tributavel", eaa0103.eaa0103unit);
 
-            preencherSPEDS();
+            preencherCamposEstoque();
 
+            preencherSPEDS();
         }
 
     }
@@ -296,7 +297,10 @@ public class SRF_DocOutrasEntradasPropria extends FormulaBase {
             }
         }
     }
-
+    private void preencherCamposEstoque(){
+        jsonEaa0103.put("total_item_estoque", eaa0103.eaa0103total);
+        jsonEaa0103.put("unitario_estoque", eaa0103.eaa0103unit);
+    }
     private void preencherSPEDS() {
 
         // ========================================================================================

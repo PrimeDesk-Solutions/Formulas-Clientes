@@ -369,8 +369,9 @@ public class SRF_DocCompraInsumoImportacaoAliqFixa60DHL extends FormulaBase {
 
             calcularCBSIBS();
 
-            preencherSPEDS();
+            preencherCamposEstoque();
 
+            preencherSPEDS();
         }
 
     }
@@ -782,6 +783,10 @@ public class SRF_DocCompraInsumoImportacaoAliqFixa60DHL extends FormulaBase {
             jsonEaa0103.put("icms", new BigDecimal(0));
             jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
         }
+    }
+    private void preencherCamposEstoque(){
+        jsonEaa0103.put("total_item_estoque", eaa0103.eaa0103total);
+        jsonEaa0103.put("unitario_estoque", eaa0103.eaa0103unit);
     }
     private void preencherSPEDS() {
 

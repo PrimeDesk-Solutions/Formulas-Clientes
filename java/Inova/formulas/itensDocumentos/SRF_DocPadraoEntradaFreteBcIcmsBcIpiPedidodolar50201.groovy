@@ -343,6 +343,7 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpiPedidodolar50201 extends Formul
             jsonEaa0103.put("total_convertido", (eaa0103.eaa0103qtComl_Zero * eaa0103.eaa0103unit) + jsonEaa0103.getBigDecimal_Zero("frete_dest") + jsonEaa0103.getBigDecimal_Zero("seguro") + jsonEaa0103.getBigDecimal_Zero("outras_despesas") + jsonEaa0103.getBigDecimal_Zero("ipi"));
             jsonEaa0103.put("total_convertido", jsonEaa0103.getBigDecimal_Zero("total_convertido").round(2));
 
+            preencherCamposEstoque();
 
             preencherSPEDS();
 
@@ -771,6 +772,11 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpiPedidodolar50201 extends Formul
         }
 
         eaa0103.eaa0103codBenef = cBenef;
+    }
+
+    private void preencherCamposEstoque(){
+        jsonEaa0103.put("total_item_estoque", eaa0103.eaa0103total);
+        jsonEaa0103.put("unitario_estoque", eaa0103.eaa0103unit);
     }
 
     private void preencherSPEDS() {

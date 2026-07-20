@@ -295,6 +295,8 @@ public class SRF_Importacao_XML_Nova extends FormulaBase {
 
 
             eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
+
+            preencherCamposEstoque();
         }
 
     }
@@ -578,6 +580,12 @@ public class SRF_Importacao_XML_Nova extends FormulaBase {
 
         eaa0103.eaa0103codBenef = cBenef;
     }
+
+    private void preencherCamposEstoque(){
+        jsonEaa0103.put("total_item_estoque", eaa0103.eaa0103total);
+        jsonEaa0103.put("unitario_estoque", eaa0103.eaa0103unit);
+    }
+
 
     private void preencherSPED() {
         //*******Calculo para SPED ICMS*******
