@@ -107,10 +107,10 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
             TableMap tmAbe01 = abe01.abe01json != null ? abe01.abe01json : new TableMap();
 
             if(tmAbe01.getString("forma_pagamento") == "99") continue;
-            if(tmAbe01.getInteger("tipo_inscricao") == null) interromper("Necessário preencher o tipo de inscrição nos campos livres da entidade " + abe01.abe01codigo + " - " + abe01.abe01nome);
-            if(tmAbe01.getString("inscricao_entidade") == null) interromper("Necessário preencher CPF/CNPJ nos campos livres da entidade " + abe01.abe01codigo + " - " + abe01.abe01nome)
 
             Daa0102 daa0102 = scfService.buscarUltimaIntegracao(abf01.abf01id, daa01.daa01id, movimento);
+
+            if(daa01.daa01codBarras != null && daa01.daa01codBarras.startsWith("341")) tmAbe01.put("forma_pagamento", "30") // Titulos Itaú
 
             if (!fpAnterior.equals(tmAbe01.getString("forma_pagamento"))) { // Novo Lote
 
@@ -123,16 +123,16 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                 fpAnterior = tmAbe01.getString("forma_pagamento");
                 totalDocsLote = 0;
 
-                /*
-                    HEADER DE LOTE
-                 */
-                if (tmAbe01.getString("forma_pagamento") == "30" || tmAbe01.getString("forma_pagamento") == "31") {// header segmento J
+                if(tmAbe01.getString("forma_pagamento") == "30"){
+                    /*
+                        HEADER DE LOTE: SEGMENTO J - Banco Itaú
+                     */
                     txt.print("341");                                                                                                                //001-003
                     txt.print(++numLote, 4);                                                                                                 //004-007
                     txt.print("1");                                                                                                                  //008-008
                     txt.print("C");                                                                                                                  //009-009
                     txt.print("20");                                                                                                                 //010-011
-                    txt.print(tmAbe01.getString("forma_pagamento"), 2);                                                                 //012-013
+                    txt.print("30", 2);                                                                                                //012-013
                     txt.print("040");                                                                                                                //014-016
                     txt.print(StringUtils.space(1));                                                                                         //017-017
                     txt.print(aac10.aac10ti == 0 ? "2" : "1");                                                                                       //018-018
@@ -148,6 +148,39 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                     txt.print(StringUtils.space(10));                                                                                       //133-142
                     txt.print(aac10.aac10endereco, 30, true, true);                                                     //143-172
                     txt.print(aac10.aac10numero, 5, '0', true);                                                                                        //173-177
+                    txt.print(aac10.aac10complem, 15, true, true);                                                      //178-192
+                    txt.print(aac10.aac10municipio == null ? null : municEmpresa.aag0201nome, 20);                                          //193-212
+                    txt.print(aac10.aac10cep, 8);                                                                                           //213-220
+                    txt.print(aac10.aac10municipio == null ? null : ufEmpresa.aag02uf, 2);                                                  //221-222
+                    txt.print(StringUtils.space(8));                                                                                        //223-230
+                    txt.print(StringUtils.space(10));                                                                                       //231-240
+                    txt.newLine();
+                    contador++;
+                }else if(tmAbe01.getString("forma_pagamento") == "31") {
+                    /*
+                      HEADER DE LOTE: SEGMENTO J - Outros Bancos
+                   */
+                    txt.print("341");                                                                                                                //001-003
+                    txt.print(++numLote, 4);                                                                                                 //004-007
+                    txt.print("1");                                                                                                                  //008-008
+                    txt.print("C");                                                                                                                  //009-009
+                    txt.print("20");                                                                                                                 //010-011
+                    txt.print("31", 2);                                                                                                //012-013
+                    txt.print("040");                                                                                                                //014-016
+                    txt.print(StringUtils.space(1));                                                                                         //017-017
+                    txt.print(aac10.aac10ti == 0 ? "2" : "1");                                                                                       //018-018
+                    txt.print(StringUtils.extractNumbers(aac10.aac10ni), 14);                                                                //019-032
+                    txt.print(StringUtils.space(20));                                                                                        //033-052
+                    txt.print(abf01.abf01agencia, 5, '0', true);                                                   //053-057
+                    txt.print(StringUtils.space(1));                                                                                        //058-058
+                    txt.print(abf01.abf01conta, 12, '0', true);                                                    //059-070
+                    txt.print(StringUtils.space(1));                                                                                        //071-071
+                    txt.print(abf01.abf01digConta, 1, '0', true);                                                  //072-072
+                    txt.print(aac10.aac10rs, 30, true, true);                                                           //073-102
+                    txt.print(StringUtils.space(30));                                                                                       //103-132
+                    txt.print(StringUtils.space(10));                                                                                       //133-142
+                    txt.print(aac10.aac10endereco, 30, true, true);                                                     //143-172
+                    txt.print(aac10.aac10numero, 5, '0', true);                                                   //173-177
                     txt.print(aac10.aac10complem, 15, true, true);                                                      //178-192
                     txt.print(aac10.aac10municipio == null ? null : municEmpresa.aag0201nome, 20);                                          //193-212
                     txt.print(aac10.aac10cep, 8);                                                                                           //213-220
@@ -190,9 +223,11 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                 }
             }
 
-            if (tmAbe01.getString("forma_pagamento") == "30" || tmAbe01.getString("forma_pagamento") == "31") {
+            String codBarras = tmAbe01.getString("forma_pagamento") == "30" || tmAbe01.getString("forma_pagamento") == "31" ? verificarCodigoDeBarras(daa01.daa01codBarras) : "";
+
+            if(tmAbe01.getString("forma_pagamento") == "30"){
                 /*
-                    DETALHE - SEGMENTO J
+                    DETALHE - SEGMENTO J (Banco Itaú)
                 */
                 txt.print("341");                                                                                                                                                                //001-003
                 txt.print(numLote, 4);                                                                                                                                                 //004-007
@@ -200,13 +235,12 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                 txt.print(++qtdDetalheLote, 5);                                                                                                                                          //009-013
                 txt.print("J");                                                                                                                                                                  //014-014
                 txt.print("000");                                                                                                                                                               //015-017
-                String codBarras = verificarCodigoDeBarras(daa01.daa01codBarras)
                 txt.print(codBarras, 44);                                                                                                                                    //018-061
                 txt.print(abe01.abe01nome, 30, true, true);                                                                                                         //062-091
                 txt.print(daa01.daa01dtVctoN.format(PATTERN_DDMMYYYY));                                                                                                                         //092-099
                 txt.print(daa01.daa01valor.multiply(new BigDecimal(100)).intValue(), 15);                                                                                           //100-114
 
-                BigDecimal desconto = daa01.daa01json.getBigDecimal("desconto").abs() * -1;
+                BigDecimal desconto = daa01.daa01json != null ? daa01.daa01json.getBigDecimal("desconto").abs() * -1 : BigDecimal.ZERO;
                 txt.print((desconto.multiply(new BigDecimal(100)).intValue() * -1), 15);                                                                                                   //115-129
                 Long dias = DateUtils.dateDiff(daa01.daa01dtVctoN, daa0102.daa0102dtPgto, ChronoUnit.DAYS);
                 BigDecimal jme = daa01.daa01json != null && daa01.daa01json.getBigDecimal("encargos") != null ? daa01.daa01json.getBigDecimal("encargos") : BigDecimal.ZERO;
@@ -244,8 +278,8 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                     txt.print(aac10.aac10ti == 0 ? "2" : "1" , 1);                                                                                                                                    //020-020
                     txt.print(StringUtils.extractNumbers(aac10.aac10ni), 15, "0", true);                                                                        //021-035
                     txt.print(aac10.aac10rs, 40);                                                                                                         //036-075
-                    txt.print(tmAbe01.getInteger("tipo_inscricao").toString());                                                                                                                                 //076-076
-                    txt.print(StringUtils.extractNumbers(tmAbe01.getString("inscricao_entidade")), 15, "0", true);                                                                         //077-091
+                    txt.print(tmAbe01.getInteger("tipo_inscricao") != null ? tmAbe01.getInteger("tipo_inscricao").toString() : abe01.abe01ti);                                                                                                                                 //076-076
+                    txt.print(tmAbe01.getString("inscricao_entidade") != null ? StringUtils.extractNumbers(tmAbe01.getString("inscricao_entidade")) : StringUtils.extractNumbers(abe01.abe01ni), 15, "0", true);                                                                         //077-091
                     txt.print(abe01.abe01nome, 40, true, true)                                                                                                                                         //092-131
                     txt.print(StringUtils.space(1));                                                                                                                                      //132-132
                     txt.print(StringUtils.space(15));                                                                                                                                     //133-147
@@ -253,8 +287,6 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                     txt.print(StringUtils.space(53));                                                                                                                                     //188-240
                     txt.newLine();
                     contador++;
-
-
                 }else{
                     /**
                      * DETALHE - SEGMENTO J-52 PIX
@@ -270,8 +302,94 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                     txt.print(aac10.aac10ti == "0" ? "2" : "1", 1 );                                                                                                                                    //020-020
                     txt.print(StringUtils.extractNumbers(aac10.aac10ni), 15, "0", true);                                                                        //021-035
                     txt.print(aac10.aac10rs, 40);                                                                                                         //036-075
-                    txt.print(tmAbe01.getInteger("tipo_inscricao").toString());                                                                                                                                          //076-076
-                    txt.print(StringUtils.extractNumbers(tmAbe01.getString("inscricao_entidade")), 15, "0", true);                                                                         //077-091
+                    txt.print(tmAbe01.getInteger("tipo_inscricao") != null ? tmAbe01.getInteger("tipo_inscricao").toString() : abe01.abe01ti);                                                                                                                                          //076-076
+                    txt.print(tmAbe01.getString("inscricao_entidade") != null ? StringUtils.extractNumbers(tmAbe01.getString("inscricao_entidade")) : StringUtils.extractNumbers(abe01.abe01ni), 15, "0", true);                                                                         //077-091
+                    txt.print(abe01.abe01nome, 40, true, true);                                                                                                                                         //092-131
+                    txt.print(tmAbe01.getString("chave_pix"), 77, "0", true);                                                                               //132-208
+                    txt.print(StringUtils.space(32));                                                                                                                                     //188-240
+                    txt.newLine();
+                    contador++;
+
+                }
+            }else if (tmAbe01.getString("forma_pagamento") == "31") {
+                /*
+                    DETALHE - SEGMENTO J (Outros Bancos)
+                */
+                txt.print("341");                                                                                                                                                                //001-003
+                txt.print(numLote, 4);                                                                                                                                                 //004-007
+                txt.print("3");                                                                                                                                                                  //008-008
+                txt.print(++qtdDetalheLote, 5);                                                                                                                                          //009-013
+                txt.print("J");                                                                                                                                                                  //014-014
+                txt.print("000");                                                                                                                                                               //015-017
+                txt.print(codBarras, 44);                                                                                                                                    //018-061
+                txt.print(abe01.abe01nome, 30, true, true);                                                                                                         //062-091
+                txt.print(daa01.daa01dtVctoN.format(PATTERN_DDMMYYYY));                                                                                                                         //092-099
+                txt.print(daa01.daa01valor.multiply(new BigDecimal(100)).intValue(), 15);                                                                                           //100-114
+
+                BigDecimal desconto = daa01.daa01json != null ? daa01.daa01json.getBigDecimal("desconto").abs() * -1 : BigDecimal.ZERO;
+                txt.print((desconto.multiply(new BigDecimal(100)).intValue() * -1), 15);                                                                                                   //115-129
+                Long dias = DateUtils.dateDiff(daa01.daa01dtVctoN, daa0102.daa0102dtPgto, ChronoUnit.DAYS);
+                BigDecimal jme = daa01.daa01json != null && daa01.daa01json.getBigDecimal("encargos") != null ? daa01.daa01json.getBigDecimal("encargos") : BigDecimal.ZERO;
+                if (dias > 0) {
+                    BigDecimal multa = daa01.daa01json != null && daa01.daa01json.getBigDecimal("multa") != null ? daa01.daa01json.getBigDecimal("multa") : BigDecimal.ZERO;
+                    jme = jme.add(multa);
+                    BigDecimal juros = daa01.daa01json != null && daa01.daa01json.getBigDecimal("juros") != null ? daa01.daa01json.getBigDecimal("juros") : BigDecimal.ZERO;
+                    jme = jme.add(juros.multiply(new BigDecimal(dias)));
+                }
+                txt.print(jme.multiply(new BigDecimal(100)).intValue(), 15);                                                                                                        //130-144
+
+                txt.print(daa0102.daa0102dtPgto.format(PATTERN_DDMMYYYY));                                                                                                                          //145-152
+                txt.print(daa01.daa01valor.add(jme).add(desconto).multiply(new BigDecimal(100)).intValue(), 15);                                                                   //153-167
+                txt.print(0, 15);                                                                                                                                                 //168-182
+                txt.print(daa01.daa01id + "E" + movimento, 20);                                                                                                                         //183-202
+                txt.print(StringUtils.space(13));                                                                                                                                       //203-215
+                txt.print(StringUtils.space(15));                                                                                                                                       //216-230
+                txt.print(StringUtils.space(10));                                                                                                                                       //231-240
+
+                totalDocsLote = totalDocsLote + daa01.daa01valor + jme + desconto;
+
+                txt.newLine();
+                contador++;
+                if(tmAbe01.getString("forma_pagamento") != "47"){
+                    /**
+                     * DETALHE - SEGMENTO J-52
+                     */
+                    txt.print("341");                                                                                                                                                             //001-003
+                    txt.print(numLote, 4);                                                                                                                                                //004-007
+                    txt.print("3");                                                                                                                                                               //008-008
+                    txt.print(++qtdDetalheLote, 5);                                                                                                                                       //009-013
+                    txt.print("J");                                                                                                                                                               //014-014
+                    txt.print("000");                                                                                                                                                             //015-017
+                    txt.print("52");                                                                                                                                                              //018-019
+                    txt.print(aac10.aac10ti == 0 ? "2" : "1" , 1);                                                                                                                                    //020-020
+                    txt.print(StringUtils.extractNumbers(aac10.aac10ni), 15, "0", true);                                                                        //021-035
+                    txt.print(aac10.aac10rs, 40);                                                                                                         //036-075
+                    txt.print(tmAbe01.getInteger("tipo_inscricao") != null ? tmAbe01.getInteger("tipo_inscricao").toString() : abe01.abe01ti);                                                                                                                                 //076-076
+                    txt.print(tmAbe01.getString("inscricao_entidade") != null ? StringUtils.extractNumbers(tmAbe01.getString("inscricao_entidade")) : StringUtils.extractNumbers(abe01.abe01ni), 15, "0", true);                                                                         //077-091
+                    txt.print(abe01.abe01nome, 40, true, true)                                                                                                                                         //092-131
+                    txt.print(StringUtils.space(1));                                                                                                                                      //132-132
+                    txt.print(StringUtils.space(15));                                                                                                                                     //133-147
+                    txt.print(StringUtils.space(40));                                                                                                                                     //148-187
+                    txt.print(StringUtils.space(53));                                                                                                                                     //188-240
+                    txt.newLine();
+                    contador++;
+                }else{
+                    /**
+                     * DETALHE - SEGMENTO J-52 PIX
+                     */
+                    if(tmAbe01.getString("chave_pix") == null) interromper("Necessário informar a chave PIX na entidade " + abe01.abe01codigo + " - " + abe01.abe01na);
+                    txt.print("341");                                                                                                                                                             //001-003
+                    txt.print(numLote, 4);                                                                                                                                                //004-007
+                    txt.print("3");                                                                                                                                                               //008-008
+                    txt.print(++qtdDetalheLote, 5);                                                                                                                                       //009-013
+                    txt.print("J");                                                                                                                                                               //014-014
+                    txt.print("000");                                                                                                                                                             //015-017
+                    txt.print("52");                                                                                                                                                              //018-019
+                    txt.print(aac10.aac10ti == "0" ? "2" : "1", 1 );                                                                                                                                    //020-020
+                    txt.print(StringUtils.extractNumbers(aac10.aac10ni), 15, "0", true);                                                                        //021-035
+                    txt.print(aac10.aac10rs, 40);                                                                                                         //036-075
+                    txt.print(tmAbe01.getInteger("tipo_inscricao") != null ? tmAbe01.getInteger("tipo_inscricao").toString() : abe01.abe01ti);                                                                                                                                          //076-076
+                    txt.print(tmAbe01.getString("inscricao_entidade") != null ? StringUtils.extractNumbers(tmAbe01.getString("inscricao_entidade")) : StringUtils.extractNumbers(abe01.abe01ni), 15, "0", true);                                                                         //077-091
                     txt.print(abe01.abe01nome, 40, true, true);                                                                                                                                         //092-131
                     txt.print(tmAbe01.getString("chave_pix"), 77, "0", true);                                                                               //132-208
                     txt.print(StringUtils.space(32));                                                                                                                                     //188-240
@@ -403,8 +521,8 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                 txt.print(aac10.aac10ti == 0 ? "2" : "1" , 1);                                                                                                                                    //020-020
                 txt.print(StringUtils.extractNumbers(aac10.aac10ni), 15, "0", true);                                                                        //021-035
                 txt.print(aac10.aac10rs, 40);                                                                                                         //036-075
-                txt.print(tmAbe01.getInteger("tipo_inscricao").toString());                                                                                                                                          //076-076
-                txt.print(StringUtils.extractNumbers(tmAbe01.getString("inscricao_entidade")), 15, "0", true);                                                                         //077-091
+                txt.print(tmAbe01.getInteger("tipo_inscricao") != null ? tmAbe01.getInteger("tipo_inscricao").toString() : abe01.abe01ti);                                                                                                                                          //076-076
+                txt.print(tmAbe01.getString("inscricao_entidade") != null ? StringUtils.extractNumbers(tmAbe01.getString("inscricao_entidade")) : abe01.abe01ni, 15, "0", true);                                                                         //077-091
                 txt.print(abe01.abe01nome, 40, true, true)                                                                                                                                         //092-131
                 txt.print(StringUtils.space(1));                                                                                                                                      //132-132
                 txt.print(StringUtils.space(15));                                                                                                                                     //133-147
