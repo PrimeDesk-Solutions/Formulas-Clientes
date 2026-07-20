@@ -139,7 +139,7 @@ class SCF_FluxoCaixa extends RelatorioBase {
     }
 
     private List<TableMap> buscarInformacoesAprovacoes(Long idCentral) {
-        String sql = "SELECT aab10user " +
+        String sql = "SELECT DISTINCT aab10user " +
                 "FROM abb0103 " +
                 "LEFT JOIN aab10 ON aab10id = abb0103user "+
                 "WHERE abb0103central = :idCentral";
