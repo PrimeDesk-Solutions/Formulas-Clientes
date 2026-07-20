@@ -46,7 +46,7 @@ public class SRF_DefinirQuantidadeCaixas implements ORMInterceptor<sam.model.ent
         if(Utils.campoEstaCarregado(entity, "eaa01central") && Utils.campoEstaCarregado(entity, "eaa01esMov")){
             Abb01 abb01 = s.createCriteria(Abb01.class).addWhere(Criterions.eq("abb01id",entity.eaa01central.abb01id)).get();
             Aah01 aah01 = s.createCriteria(Aah01.class).addWhere(Criterions.eq("aah01id",abb01.abb01tipo.aah01id)).get();
-            
+
             if(abb01.abb01operAutor != "SRF1003"){ // Pedido de venda
                 for(Eaa0103 eaa0103 : entity.eaa0103s){
                     TableMap mapJson = eaa0103.eaa0103json;
@@ -61,7 +61,7 @@ public class SRF_DefinirQuantidadeCaixas implements ORMInterceptor<sam.model.ent
                 // Central de Documentos
                 def validaColeta = s.createQuery("select cast(abd01camposcustom ->> 'validar_coleta' as integer) from abd01 where abd01id = :idPcd ").setParameter("idPcd", entity.eaa01pcd.abd01id).getUniqueResult(ColumnType.INTEGER);
 
-			 if(abb01.abb01operAutor == "SRF1002" || abb01.abb01operAutor == "SRF1003") validaRomaneio(entity, s);
+                if(abb01.abb01operAutor == "SRF1002" || abb01.abb01operAutor == "SRF1003") validaRomaneio(entity, s);
 
                 def somaCaixa = 0;
                 def somaVolumes = 0;
@@ -89,16 +89,16 @@ public class SRF_DefinirQuantidadeCaixas implements ORMInterceptor<sam.model.ent
                                     if(jsonAbm0101.getInteger("realiza_coleta") == 1){
 
                                         // Busca quantidade de caixa por item
-                                        Query query = s.createQuery("select count(abm01codigo) as numEtiqueta from bfa01 " +
-                                                "inner join abb01 as romaneio on romaneio.abb01id = bfa01central " +
-                                                "inner join bfa0101 on bfa0101rom = bfa01id " +
-                                                "inner join bfa01011 on bfa01011item = bfa0101id " +
-                                                "inner join eaa0103 on eaa0103id = bfa0101item " +
-                                                "inner join abm01 on abm01id = eaa0103item " +
-                                                "inner join abm70 on abm70idunidrom = bfa01011id " +
-                                                "inner join  abb01 as pedido on pedido.abb01id= bfa01docscv " +
-                                                "where pedido.abb01num = :numPedido "+
-                                                "and abm01id = :idItem ");
+                                        Query query = s.createQuery("SELECT count(abm01codigo) AS numEtiqueta FROM bfa01 " +
+                                                "INNER JOIN abb01 AS romaneio ON romaneio.abb01id = bfa01central " +
+                                                "INNER JOIN bfa0101 ON bfa0101rom = bfa01id " +
+                                                "INNER JOIN bfa01011 ON bfa01011item = bfa0101id " +
+                                                "INNER JOIN eaa0103 ON eaa0103id = bfa0101item " +
+                                                "INNER JOIN abm01 ON abm01id = eaa0103item " +
+                                                "INNER JOIN abm70 ON abm70idunidrom = bfa01011id " +
+                                                "INNER JOIN  abb01 AS pedido ON pedido.abb01id= bfa01docscv " +
+                                                "WHERE pedido.abb01num = :numPedido "+
+                                                "AND abm01id = :idItem ");
 
                                         query.setParameter("numPedido", numPedido);
                                         query.setParameter("idItem", abm01.abm01id);
@@ -120,27 +120,11 @@ public class SRF_DefinirQuantidadeCaixas implements ORMInterceptor<sam.model.ent
                                         somaCaixa += qtdCaixa;
                                         somaVolumes += qtdCaixa;
                                     }
-
-                                    List<TableMap> etiquetas = buscarEtiquetaItens(numPedido, abm01.abm01id, s);
-
-                                    if(etiquetas != null && etiquetas.size() > 0){
-                                        for(etiqueta in etiquetas){
-                                            Long idUser = etiqueta.getLong("idUser");
-                                            Long idItem = etiqueta.getLong("idItem");
-                                            Long idEntidade = etiqueta.getLong("idEntidade");
-                                            etiqueta.put("num_nota", abb01.abb01num);
-                                            etiqueta.put("id_nota", abb01.abb01id);
-                                            gravarInformacoesEtiquetas(s,idUser, idItem, etiqueta, idEntidade)
-                                        }
-                                    }
                                 }
+                                jsonEaa01.put("caixa",somaCaixa);
+                                jsonEaa01.put("volumes",somaVolumes);
 
-                                //if(entity.eaa01json.getInteger("caixa") == 0 || entity.eaa01json.getInteger("volumes") == 0 ) {
-                                    jsonEaa01.put("caixa",somaCaixa);
-                                    jsonEaa01.put("volumes",somaVolumes);
-
-                                    entity.setEaa01json(jsonEaa01);
-                                //}
+                                entity.setEaa01json(jsonEaa01);
                             }
                         }
 
@@ -148,51 +132,10 @@ public class SRF_DefinirQuantidadeCaixas implements ORMInterceptor<sam.model.ent
                 }
             }
         }
-
-
-
     }
-
-    private List<TableMap> buscarEtiquetaItens(Integer numPedido, Long idItem, Session s){
-        Query query = s.createQuery("select abb01rom.abb01num as num_romaneio, abm70num as num_etiqueta, abm70uldata as data_coleta, abm70ulhora as hora_coleta, aab10id as idUser, abm01id as idItem, abm70id as id_etiquetas, "+
-                "bfb01lote as nome_lote, abe01ent.abe01id as idEntidade, abe01desp.abe01codigo as cod_despacho, abe01desp.abe01na as na_despacho, abe01redesp.abe01codigo as cod_redesp, abe01redesp.abe01na as na_redesp, "+
-                "abm70qt as qtd_etiqueta, abm70lote as lote_etiqueta, abm70data as dt_criacao_etiqueta, abm70validade as validade_etiqueta, abm70fabric as fabric_etiqueta "+
-                "from bfa01   "+
-                "inner join abb01 as abb01rom on abb01rom.abb01id = bfa01central  "+
-                "inner join bfa0101 on bfa0101rom = bfa01id  "+
-                "inner join bfa01011 on bfa01011item = bfa0101id  "+
-                "inner join eaa0103 on bfa0101item = eaa0103id  "+
-                "inner join eaa01 on eaa01id = eaa0103doc "+
-                "inner join abb01 as abb01pedido on abb01pedido.abb01id = eaa01central "+
-                "inner join abe01 as abe01ent on abe01ent.abe01id = abb01pedido.abb01ent "+
-                "inner join bfb0101 on bfb0101central = abb01pedido.abb01id "+
-                "inner join bfb01 on bfb01id = bfb0101lote "+
-                "inner join abm01 on abm01id = eaa0103item  "+
-                "inner join abm70 on abm70idunidrom = bfa01011id  "+
-                "inner join aab10 on aab10id = abm70uluser  "+
-                "left join abe01 as abe01desp on abe01desp.abe01id = bfb01despacho "+
-                "left join abe01 as abe01redesp on abe01redesp.abe01id = bfb01redespacho "+
-                "where cast(eaa0103json ->> 'pedido_interno' as integer) = :numPedido "+
-                "and abm01id = :idItem");
-
-        query.setParameter("numPedido",numPedido);
-        query.setParameter("idItem",idItem);
-
-        return query.getListTableMap()
-    }
-
-    private void gravarInformacoesEtiquetas(Session s, Long idUser, Long idItem, TableMap etiqueta, Long idEntidade){
-
-        String sql = "insert into aba2001 values (nextval('default_sequence'), 40347419, 1, 'Gravação etiqueta', " + idUser.toString() +","+idEntidade.toString()+"," +idItem.toString()+", null,null,null,'"+etiqueta.toString()+"',null,null,null,null ) "
-
-        s.connection.prepareStatement(sql).execute()
-
-    }
-
-	private void validaRomaneio(Eaa01 eaa01, Session s){
-        def contemRomaneio = s.createQuery("select cast(abd01camposcustom ->> 'contem_romaneio' as integer) from abd01 where abd01id = :idPcd ").setParameter("idPcd", eaa01.eaa01pcd.abd01id).getUniqueResult(ColumnType.INTEGER);
+    private void validaRomaneio(Eaa01 eaa01, Session s){
+        def contemRomaneio = s.createQuery("SELECT cast(abd01camposcustom ->> 'contem_romaneio' AS INTEGER) FROM abd01 WHERE abd01id = :idPcd ").setParameter("idPcd", eaa01.eaa01pcd.abd01id).getUniqueResult(ColumnType.INTEGER);
         if(contemRomaneio == 1){
-
             for(Eaa0103 eaa0103 in eaa01.eaa0103s){
 
                 // Item
@@ -204,12 +147,12 @@ public class SRF_DefinirQuantidadeCaixas implements ORMInterceptor<sam.model.ent
                 if (tipoDocPedido == null) throw new ValidacaoException("Interceptador: Não foi informado o tipo de documento do pedido interno no item " + abm01.abm01codigo + " do pedido " + numPedido.toString())
 
 
-                Query query = s.createQuery("select bfa01id " +
-                                            "from bfa01 " +
-                                            "inner join abb01 on abb01id = bfa01docscv " +
-                                            "inner join aah01 on aah01id = abb01tipo "+
-                                            "where abb01num = :numPedido "+
-                                            "and aah01codigo = :tipoDocPedido ");
+                Query query = s.createQuery("SELECT bfa01id " +
+                        "FROM bfa01 " +
+                        "INNER JOIN abb01 on abb01id = bfa01docscv " +
+                        "INNER JOIN aah01 on aah01id = abb01tipo "+
+                        "WHERE abb01num = :numPedido "+
+                        "AND aah01codigo = :tipoDocPedido ");
 
 
                 query.setParameter("numPedido", numPedido);
@@ -217,10 +160,8 @@ public class SRF_DefinirQuantidadeCaixas implements ORMInterceptor<sam.model.ent
 
                 Long idRomaneio = query.getUniqueResult(ColumnType.LONG);
 
-                if(idRomaneio == null) throw new ValidacaoException("Interceptador: Não foi encontrado romaneio para geração do documento " +numPedido.toString())
-
+                if(idRomaneio == null) throw new ValidacaoException("Interceptador: Não foi encontrado romaneio para geração do documento " + numPedido.toString())
             }
-
         }
     }
 
@@ -236,4 +177,3 @@ public class SRF_DefinirQuantidadeCaixas implements ORMInterceptor<sam.model.ent
     public void preDelete(List<Long> ids, Session s) {
     }
 }
-//meta-sis-eyJ0aXBvIjoiaW50ZXJjZXB0b3IiLCJlbnRpdHkiOiJzYW0ubW9kZWwuZW50aXRpZXMuZWEuRWFhMDEifQ==
