@@ -23,36 +23,41 @@ class SLM_QtdeMaxMinSeparacao extends FormulaBase {
 
 	@Override
 	public void executar() {
-
 		qtdeBase = get("qtdeBase");
 		abm01id = get("abm01id");
 		abe01id = get("abe01id");
 
+        TableMap jsonAbe01 = obterJsonEntidade(abe01id) != null ? obterJsonEntidade(abe01id) : new TableMap();
 		TableMap json = obterJsonItem(abm01id);
 		def percentualPermitido = json != null ? json.getBigDecimal_Zero("unidperc") : 0.0;
 
 		qtdeMin = qtdeBase;
 		qtdeMax = qtdeBase;
+        if(jsonAbe01.getInteger("coleta_livre") == 1){
+            qtdeMin = 0.000001;
+            qtdeMax = 99999.999999
+        }else{
+            if(percentualPermitido == 0) {
+                qtdeMin = 0.000001;
+                qtdeMax = qtdeBase
+            }else if(percentualPermitido > 0 && percentualPermitido != 100) {
+                BigDecimal percentualUtilizado = percentualPermitido;
+                if(percentualPermitido > 100) {
+                    percentualUtilizado = percentualUtilizado - 100;
+                }
 
-		if(percentualPermitido == 0) {
-			qtdeMin = 0.000001;
-			qtdeMax = qtdeBase
-		}else if(percentualPermitido > 0 && percentualPermitido != 100) {
-			BigDecimal percentualUtilizado = percentualPermitido;
-			if(percentualPermitido > 100) {
-				percentualUtilizado = percentualUtilizado - 100;
-			}
+                def qtVariavel = qtdeBase * percentualUtilizado;
+                qtVariavel = qtVariavel / 100;
+                qtVariavel = round(qtVariavel, 6);
 
-			def qtVariavel = qtdeBase * percentualUtilizado;
-			qtVariavel = qtVariavel / 100;
-			qtVariavel = round(qtVariavel, 6);
+                qtdeMin = qtdeMin - qtVariavel;
 
-			qtdeMin = qtdeMin - qtVariavel;
+                if(percentualPermitido < 100) {
+                    qtdeMax = qtdeMax + qtVariavel;
+                }
+            }
+        }
 
-			if(percentualPermitido < 100) {
-				qtdeMax = qtdeMax + qtVariavel;
-			}
-		}
 
 		put("qtdeMax", qtdeMax);
 		put("qtdeMin", 0.000001);
@@ -71,6 +76,13 @@ class SLM_QtdeMaxMinSeparacao extends FormulaBase {
 		query.setMaxResult(1);
 		return query.getUniqueResult(ColumnType.JSON);
 	}
-
+    private TableMap obterJsonEntidade(Long abe01id){
+        Query query = getSession().createQuery(" SELECT abe01json ",
+                                                        " FROM abe01 "+
+                                                        " WHERE abe01id = :abe01id ");
+        query.setParameter("abe01id", abe01id);
+        query.setMaxResult(1);
+        return query.getUniqueResult(ColumnType.JSON);
+    }
 }
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiOTYifQ==
