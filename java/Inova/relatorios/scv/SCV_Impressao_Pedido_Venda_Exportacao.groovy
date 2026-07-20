@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.HashMap;
 
-public class SCV_Impressao_Pedido_Venda extends RelatorioBase {
+public class SCV_Impressao_Pedido_Venda_Exportacao extends RelatorioBase {
     @Override
     public String getNomeTarefa() {
         return "SCV - Impressão Pedido Venda Exportação";
