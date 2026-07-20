@@ -63,19 +63,19 @@ public class SCF_LancamentosPorCentroCusto extends RelatorioBase {
         Parametro parametroEmpresa = Parametro.criar("idEmpresa", empresa.getAac10id());
 
         String sql = "SELECT abb11codigo AS codDepto, abb11nome AS nomeDepto, dab10data AS dtLcto, " +
-                    "dab01codigo AS codCC, dab01nome AS nomeCC, dab10historico AS historico,  " +
-                    "CASE WHEN dab10mov = 0 THEN 'C' ELSE 'D' END AS movimentacao, dab10valor AS valor " +
-                    "FROM dab10 " +
-                    "INNER JOIN dab1001 ON dab1001lct = dab10id " +
-                    "INNER JOIN abb11 ON abb11id = dab1001depto " +
-                    "INNER JOIN dab1002 ON dab1002lct = dab10id " +
-                    "LEFT JOIN dab01 ON dab01id = dab1002cc "+
-                    whereEmpresa +
-                    whereDepartamento +
-                    whereDatas +
-                    whereContasCorrentes +
-                    whereMovimentacao +
-                    "ORDER BY abb11codigo, dab10data ";
+                "dab01codigo AS codCC, dab01nome AS nomeCC, dab10historico AS historico,  " +
+                "CASE WHEN dab10mov = 0 THEN 'C' ELSE 'D' END AS movimentacao, dab1001valor AS valor " +
+                "FROM dab10 " +
+                "INNER JOIN dab1001 ON dab1001lct = dab10id " +
+                "INNER JOIN abb11 ON abb11id = dab1001depto " +
+                "INNER JOIN dab1002 ON dab1002lct = dab10id " +
+                "LEFT JOIN dab01 ON dab01id = dab1002cc "+
+                whereEmpresa +
+                whereDepartamento +
+                whereDatas +
+                whereContasCorrentes +
+                whereMovimentacao +
+                "ORDER BY abb11codigo, dab10data ";
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql,parametroEmpresa, parametroDepartamento, parametroDtInicial, parametroDtFinal, parametroContasCorrentes );
 
