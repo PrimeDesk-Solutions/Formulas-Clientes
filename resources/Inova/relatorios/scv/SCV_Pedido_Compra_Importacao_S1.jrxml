@@ -46,31 +46,22 @@
 				<reportElement stretchType="RelativeToTallestObject" x="16" y="0" width="50" height="15" isPrintWhenDetailOverflows="true" uuid="c0ed8e74-bb16-45c6-ab90-d8f47a925aba"/>
 			</rectangle>
 			<rectangle>
-				<reportElement stretchType="RelativeToTallestObject" x="66" y="0" width="204" height="15" isPrintWhenDetailOverflows="true" uuid="8321c832-f845-48e1-b2b1-93c8ee198ba0"/>
+				<reportElement stretchType="RelativeToTallestObject" x="66" y="0" width="222" height="15" isPrintWhenDetailOverflows="true" uuid="8321c832-f845-48e1-b2b1-93c8ee198ba0"/>
 			</rectangle>
 			<rectangle>
-				<reportElement stretchType="RelativeToTallestObject" x="270" y="0" width="28" height="15" isPrintWhenDetailOverflows="true" uuid="b30205a1-9025-4d11-b338-a2b4fd45b5d5"/>
+				<reportElement stretchType="RelativeToTallestObject" x="288" y="0" width="28" height="15" isPrintWhenDetailOverflows="true" uuid="b30205a1-9025-4d11-b338-a2b4fd45b5d5"/>
 			</rectangle>
 			<rectangle>
-				<reportElement stretchType="RelativeToTallestObject" x="298" y="0" width="28" height="15" isPrintWhenDetailOverflows="true" uuid="bcd6a897-45a3-4533-b9e6-3441275f8599"/>
+				<reportElement stretchType="RelativeToTallestObject" x="316" y="0" width="32" height="15" isPrintWhenDetailOverflows="true" uuid="bcd6a897-45a3-4533-b9e6-3441275f8599"/>
 			</rectangle>
 			<rectangle>
-				<reportElement stretchType="RelativeToTallestObject" x="327" y="0" width="40" height="15" isPrintWhenDetailOverflows="true" uuid="d0f0c0ee-59e5-48dd-8332-13075f027c42"/>
+				<reportElement stretchType="RelativeToTallestObject" x="348" y="0" width="73" height="15" isPrintWhenDetailOverflows="true" uuid="d0f0c0ee-59e5-48dd-8332-13075f027c42"/>
 			</rectangle>
 			<rectangle>
-				<reportElement stretchType="RelativeToTallestObject" x="367" y="0" width="43" height="15" isPrintWhenDetailOverflows="true" uuid="b3e4289a-797a-43fa-9662-5aab6b07e73a"/>
+				<reportElement stretchType="RelativeToTallestObject" x="421" y="0" width="54" height="15" isPrintWhenDetailOverflows="true" uuid="b3e4289a-797a-43fa-9662-5aab6b07e73a"/>
 			</rectangle>
 			<rectangle>
-				<reportElement stretchType="RelativeToTallestObject" x="410" y="0" width="37" height="15" isPrintWhenDetailOverflows="true" uuid="b28db0b2-f123-4cde-993f-1cb0f1b474a3"/>
-			</rectangle>
-			<rectangle>
-				<reportElement stretchType="RelativeToTallestObject" x="447" y="0" width="27" height="15" isPrintWhenDetailOverflows="true" uuid="4096f923-8425-43f0-8823-8e5d48f147fc"/>
-			</rectangle>
-			<rectangle>
-				<reportElement stretchType="RelativeToTallestObject" x="474" y="0" width="50" height="15" isPrintWhenDetailOverflows="true" uuid="c34f09a1-94b6-4fcb-8592-9b56e496adac"/>
-			</rectangle>
-			<rectangle>
-				<reportElement stretchType="RelativeToTallestObject" x="524" y="0" width="31" height="15" isPrintWhenDetailOverflows="true" uuid="88a2faa5-7b1a-4979-abf2-63d61281f659"/>
+				<reportElement stretchType="RelativeToTallestObject" x="475" y="0" width="79" height="15" isPrintWhenDetailOverflows="true" uuid="c34f09a1-94b6-4fcb-8592-9b56e496adac"/>
 			</rectangle>
 			<textField>
 				<reportElement x="17" y="0" width="49" height="15" uuid="1e7a4c89-68d8-4291-918f-754b040b6f07"/>
@@ -80,7 +71,7 @@
 				<textFieldExpression><![CDATA[$F{abm01codigo}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="67" y="0" width="203" height="15" uuid="dcd46e63-fcab-4dba-80ba-09aa1702f52d"/>
+				<reportElement x="67" y="0" width="221" height="15" isPrintWhenDetailOverflows="true" uuid="dcd46e63-fcab-4dba-80ba-09aa1702f52d"/>
 				<textElement verticalAlignment="Top">
 					<font fontName="Arial" size="8"/>
 					<paragraph lineSpacing="Single"/>
@@ -88,81 +79,40 @@
 				<textFieldExpression><![CDATA[$F{eaa0103complem}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="270" y="0" width="28" height="15" uuid="035d0e40-ace3-49c8-bf93-8bfc0b340c9f"/>
+				<reportElement x="288" y="0" width="28" height="15" uuid="035d0e40-ace3-49c8-bf93-8bfc0b340c9f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{aam06codigo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="298" y="0" width="29" height="15" uuid="b3021b15-3732-46cb-ac7d-442a7fecd95d"/>
+				<reportElement x="316" y="0" width="32" height="15" uuid="b3021b15-3732-46cb-ac7d-442a7fecd95d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{eaa0103qtComl}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="326" y="0" width="41" height="15" uuid="9f20662c-86b4-405d-af14-33d268abefb7"/>
+				<reportElement x="348" y="0" width="73" height="15" uuid="9f20662c-86b4-405d-af14-33d268abefb7"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{eaa0103unit}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="367" y="0" width="43" height="15" uuid="3e761b46-4dc8-46ec-a2dd-9a2e1ee09d53"/>
+				<reportElement x="421" y="0" width="54" height="15" uuid="3e761b46-4dc8-46ec-a2dd-9a2e1ee09d53"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{eaa0103total}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="410" y="0" width="37" height="15" uuid="3bc020c6-f7ef-48a1-9a11-349dbfb26059"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{aliqICMS}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="447" y="0" width="27" height="15" uuid="aa4e5a58-ccca-4be8-a858-373422c9b9e7"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{aliqIPI}]]></textFieldExpression>
-			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="474" y="0" width="50" height="15" uuid="57fb1d99-a39b-4806-abf4-223fb55cbb22"/>
+				<reportElement x="491" y="0" width="63" height="15" uuid="57fb1d99-a39b-4806-abf4-223fb55cbb22"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{eaa0103dtEntrega}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement key="staticText-3" x="524" y="0" width="31" height="15" forecolor="#FF0000" uuid="55417c21-b14d-431f-91fd-9c9db2d147df">
-					<printWhenExpression><![CDATA[$F{eaa0103pedAtend} == 0]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<text><![CDATA[X]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="staticText-5" x="524" y="0" width="31" height="15" uuid="be5adace-6445-4b1c-8b95-04db9ced65a6">
-					<printWhenExpression><![CDATA[$F{eaa0103pedAtend} == 1]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="8"/>
-				</textElement>
-				<text><![CDATA[Parcial]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="staticText-4" x="524" y="0" width="31" height="15" uuid="833477df-e1cf-435c-9aca-5df918d3e3ff">
-					<printWhenExpression><![CDATA[$F{eaa0103pedAtend} == 2]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial" size="8"/>
-				</textElement>
-				<text><![CDATA[OK]]></text>
-			</staticText>
 		</band>
 	</detail>
 	<columnFooter>
