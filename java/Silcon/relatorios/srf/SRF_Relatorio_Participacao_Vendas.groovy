@@ -250,7 +250,7 @@ public class SRF_Relatorio_Participacao_Vendas extends RelatorioBase {
         Parametro parametroRepositorio = Parametro.criar("repositorio", repositorio);
 
         String sql = "SELECT ent.abe01id AS abe01id, abb01num,abb01data, eaa01esdata, eaa0103id, eaa01id, aba20codigo, aba20descr, " +
-                " ent.abe01codigo AS codEnt, ent.abe01na AS naEnt,aah01codigo,abe30nome,abe40nome, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, " +
+                " ent.abe01codigo AS codEnt, ent.abe01nome AS naEnt,aah01codigo,abe30nome,abe40nome, aah01codigo AS codTipoDoc, aah01nome AS nomeTipoDoc, " +
                 " eaa0103qtuso,eaa0103qtcoml, eaa0103unit, eaa0103unit,eaa0103total,eaa0103totdoc, eaa0103totfinanc, eaa0103json " +
                 " FROM eaa01  " +
                 " INNER JOIN abb01 ON abb01id = eaa01central  " +
