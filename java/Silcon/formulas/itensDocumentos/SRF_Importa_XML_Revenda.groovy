@@ -244,14 +244,24 @@ public class SRF_Importa_XML_Revenda extends FormulaBase {
 
             calcularICMSST(dentroEstado);
 
+            definirCFOP(dentroEstado);
+
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_icms_st") == -1){
+                jsonEaa0103.put("bc_icms_st_sped", BigDecimal.ZERO);
+                jsonEaa0103.put("aliq_icms_st_sped", BigDecimal.ZERO);
+                jsonEaa0103.put("icms_st_sped", BigDecimal.ZERO);
+
+                jsonEaa0103.put("bc_icms_st", BigDecimal.ZERO);
+                jsonEaa0103.put("aliq_icms_st", BigDecimal.ZERO);
+                jsonEaa0103.put("icms_st", BigDecimal.ZERO);
+            }
+
             // Total Documento
             eaa0103.eaa0103totDoc = eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("icms_st_sped");
             eaa0103.eaa0103totDoc = eaa0103.eaa0103totDoc.round(2);
 
             // Total Financeiro
             eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
-
-            definirCFOP(dentroEstado);
 
             //Zera ST quando CFOP 1405 / CST 060
             if(eaa0103.eaa0103cfop.aaj15codigo == '1405' && eaa0103.eaa0103cstIcms.aaj10codigo == '060'){
