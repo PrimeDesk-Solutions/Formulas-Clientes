@@ -108,10 +108,15 @@ public class PedidoDeBonificacaoGeral extends FormulaBase {
     private TableMap jsonAac10;
     private TableMap jsonAbe4001;
     private TableMap jsonAaj07clasTrib;
+    private String procInvoc;
+
 
 
     @Override
     public void executar() {
+
+        procInvoc = get("procInvoc");
+
 
         //Item do documento
         eaa0103 = get("eaa0103");
@@ -283,58 +288,9 @@ public class PedidoDeBonificacaoGeral extends FormulaBase {
             // Define a Especie do Documento
             eaa0102.eaa0102especie = "Volumes";
 
+            String grupo = buscarCategoriaItem(abm01.abm01codigo);
 
-
-            def codItem = abm01.abm01codigo;
-            Query descrCriterios = getSession().createQuery("select aba3001descr from aba3001 " +
-                    "inner join abm0102 on abm0102criterio = aba3001id and aba3001criterio = 542858 " +
-                    "inner join abm01 on abm0102item = abm01id " +
-                    "where abm01codigo = '" + codItem + "'" +
-                    "and abm01tipo = 1 ");
-
-            List<TableMap> listCriterios = descrCriterios.getListTableMap();
-            String grupo = "";
-            for (TableMap criterio : listCriterios) {
-                if (criterio.getString("aba3001descr").toUpperCase().contains("QUEIJO")) {
-                    grupo = "Queijo"
-                }
-                if (criterio.getString("aba3001descr").toUpperCase().contains("LEITE")) {
-                    grupo = "Leite"
-                }
-
-                if (criterio.getString("aba3001descr").toUpperCase().contains("IOGURTE") || criterio.getString("aba3001descr").toUpperCase().contains("BAUNILHA")) {
-                    grupo = "Iogurte"
-                }
-
-                if(criterio.getString("aba3001descr").toUpperCase().contains("REQUEIJÃO")){
-                    grupo = "Requeijão"
-                }
-            }
-
-
-            if (abb01.abb01operAutor != "SRF") {
-                if (eaa01.eaa01tp != null) {
-                    if (jsonAbe4001 != null) {
-                        if (jsonAbe4001.getString("data_promo_ini") != null && jsonAbe4001.getString("data_promo_fin") != null && jsonAbe4001.getBigDecimal_Zero("preco_promocao") > 0) {
-                            DateTimeFormatter formato2 = DateTimeFormatter.ofPattern("yyyyMMdd");
-                            LocalDate dataIniPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_ini"), formato2);
-                            LocalDate dataFinPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_fin"), formato2);
-                            LocalDate dataAtual = LocalDate.now();
-                            def precoPromocao = jsonAbe4001.getBigDecimal_Zero("preco_promocao");
-                            if (dataAtual >= dataIniPromo && dataAtual <= dataFinPromo) {
-                                eaa0103.eaa0103unit = precoPromocao.round(4);
-                            } else {
-                                eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
-                            }
-                        } else {
-                            eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
-                        }
-                    } else {
-                        eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
-                    }
-                }
-            }
-
+            definirPrecoUnitarioItem();
 
             // Define o campo ordem de separação de acordo com o cadastro do item
             jsonEaa0103.put("ordem_separacao", jsonAbm0101.getBigDecimal_Zero("ordem_separacao"));
@@ -342,7 +298,7 @@ public class PedidoDeBonificacaoGeral extends FormulaBase {
             // Define CFOP
             if (eaa0103.eaa0103cfop == null) eaa0103.eaa0103cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", "5910"));
 
-            if (grupo == "Iogurte") {
+            if (grupo == "IOGURTE") {
 
                 //Define Quantidade Comercial como Quantidade Convertida
                 jsonEaa0103.put("qt_convertida", eaa0103.eaa0103qtComl);
@@ -856,10 +812,12 @@ public class PedidoDeBonificacaoGeral extends FormulaBase {
 
                 //IPI SPED = IPI
                 jsonEaa0103.put("ipi_sped", jsonEaa0103.getBigDecimal_Zero("ipi"));
-                
+
                 calcularCBSIBS();
+
+                preencherCBenefItem(grupo);
             }
-            if (grupo == "Queijo" || grupo == "Requeijão") {
+            if (grupo == "QUEIJO" || grupo == "REQUEIJÃO") {
 
 
                 //Define Quantidade Comercial como Quantidade Convertida
@@ -1301,9 +1259,10 @@ public class PedidoDeBonificacaoGeral extends FormulaBase {
 
                 calcularCBSIBS();
 
-            }
+                preencherCBenefItem(grupo);
 
-            if (grupo == "Leite") {
+            }
+            if (grupo == "LEITE") {
 
                 //Define Quantidade Comercial como Quantidade Convertida
                 jsonEaa0103.put("qt_convertida", eaa0103.eaa0103qtComl);
@@ -1636,6 +1595,8 @@ public class PedidoDeBonificacaoGeral extends FormulaBase {
                 jsonEaa0103.put("ipi_sped", jsonEaa0103.getBigDecimal_Zero("ipi"));
 
                 calcularCBSIBS();
+
+                preencherCBenefItem(grupo);
             }
         }
         // Calcula Difal dos itens
@@ -2084,6 +2045,84 @@ public class PedidoDeBonificacaoGeral extends FormulaBase {
                 // Valor diferencial aliquota destino
                 jsonEaa0103.put("vlr_icms_dest", jsonEaa0103.getBigDecimal_Zero("bc_icms_dest") * (difAliq / 100));
 
+            }
+        }
+    }
+    private void preencherCBenefItem(String grupo){
+        if(aaj10_cstIcms.aaj10codigo == "000" || aaj10_cstIcms.aaj10codigo == "010" || aaj10_cstIcms == null) return;
+
+        if(grupo == "LEITE"){
+            if(aaj10_cstIcms.aaj10codigo == "051"){
+                eaa0103.eaa0103codBenef = "SP053890";
+            }else if(aaj10_cstIcms.aaj10codigo == "040"){
+                eaa0103.eaa0103codBenef = "SP010840";
+            }
+        }else if(grupo.contains("IOGURTE") || grupo.contains("BAUNILHA") ){
+            if(aaj10_cstIcms.aaj10codigo == "040"){
+                eaa0103.eaa0103codBenef = "SP010840"
+            }else if(aaj10_cstIcms.aaj10codigo == "070"){
+                eaa0103.eaa0103codBenef = "SP020390"
+            }
+        }else{
+            if(aaj10_cstIcms.aaj10codigo == "040"){
+                eaa0103.eaa0103codBenef = "SP010840";
+            }else if(aaj10_cstIcms.aaj10codigo == "020"){
+                eaa0103.eaa0103codBenef = "SP020390"
+            }else if(aaj10_cstIcms.aaj10codigo == "070"){
+                eaa0103.eaa0103codBenef = "SP020390"
+            }
+        }
+    }
+    private String buscarCategoriaItem(codItem){
+
+        Query descrCriterios = getSession().createQuery("select aba3001descr from aba3001 "+
+                "inner join abm0102 on abm0102criterio = aba3001id and aba3001criterio = 542858 " +
+                "inner join abm01 on abm0102item = abm01id "+
+                "where abm01codigo = '"+codItem+"'"+
+                "and abm01tipo = 1 ");
+
+        List<TableMap> listCriterios = descrCriterios.getListTableMap();
+
+        if (listCriterios == null && listCriterios.size() == 0) throw new ValidacaoException("Não foi encontrado critério de seleção de grupo para o item " + codItem);
+
+        String grupo = "";
+
+        for(TableMap criterio : listCriterios){
+            if(criterio.getString("aba3001descr").toUpperCase().contains("QUEIJO")){
+                grupo = "QUEIJO"
+            }
+            if(criterio.getString("aba3001descr").toUpperCase().contains("LEITE")){
+                grupo = "LEITE"
+            }
+
+            if(criterio.getString("aba3001descr").toUpperCase().contains("IOGURTE") || criterio.getString("aba3001descr").toUpperCase().contains("BAUNILHA")){
+                grupo = "IOGURTE"
+            }
+
+            if(criterio.getString("aba3001descr").toUpperCase().contains("REQUEIJÃO")){
+                grupo = "REQUEIJÃO"
+            }
+        }
+
+        return grupo;
+
+    }
+    private void definirPrecoUnitarioItem(){
+        if(procInvoc == "SRF1003" || procInvoc == "SLM1001") return;
+        if(eaa01.eaa01tp == null) return;
+
+        eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
+
+        if(jsonAbe4001 == null) return;
+
+        if(jsonAbe4001.getString("data_promo_ini") != null && jsonAbe4001.getString("data_promo_fin") != null && jsonAbe4001.getBigDecimal_Zero("preco_promocao") > 0){
+            DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("yyyyMMdd");
+            LocalDate dataIniPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_ini"), formatoData);
+            LocalDate dataFinPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_fin"), formatoData);
+            LocalDate dataAtual = LocalDate.now();
+            def precoPromocao = jsonAbe4001.getBigDecimal_Zero("preco_promocao");
+            if(dataAtual >= dataIniPromo && dataAtual <= dataFinPromo){
+                eaa0103.eaa0103unit = precoPromocao.round(4);
             }
         }
     }

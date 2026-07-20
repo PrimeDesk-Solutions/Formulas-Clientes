@@ -121,9 +121,12 @@ public class FormulaGeral extends FormulaBase {
 
 
     private Eaa01032 eaa01032;
+    private String procInvoc;
+
 
     @Override
     public void executar() {
+        procInvoc = get("procInvoc");
 
         //Item do documento
         eaa0103 = get("eaa0103");
@@ -667,6 +670,8 @@ public class FormulaGeral extends FormulaBase {
                 eaa0103.eaa0103codBenef = "SP010840";
             }else if(aaj10_cstIcms.aaj10codigo == "020"){
                 eaa0103.eaa0103codBenef = "SP020390"
+            }else if(aaj10_cstIcms.aaj10codigo == "070"){
+                eaa0103.eaa0103codBenef = "SP020390"
             }
         }
     }
@@ -879,26 +884,21 @@ public class FormulaGeral extends FormulaBase {
 
     }
     private void definirPrecoUnitarioItem(){
-        if(abb01.abb01operAutor != "SRF"){
-            if(eaa01.eaa01tp != null){
-                if(jsonAbe4001 != null){
-                    if(jsonAbe4001.getString("data_promo_ini") != null && jsonAbe4001.getString("data_promo_fin") != null && jsonAbe4001.getBigDecimal_Zero("preco_promocao") > 0){
-                        DateTimeFormatter formato2 = DateTimeFormatter.ofPattern("yyyyMMdd");
-                        LocalDate dataIniPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_ini"), formato2);
-                        LocalDate dataFinPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_fin"), formato2);
-                        LocalDate dataAtual = LocalDate.now();
-                        def precoPromocao = jsonAbe4001.getBigDecimal_Zero("preco_promocao");
-                        if(dataAtual >= dataIniPromo && dataAtual <= dataFinPromo){
-                            eaa0103.eaa0103unit = precoPromocao.round(4);
-                        }else{
-                            eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
-                        }
-                    }else{
-                        eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
-                    }
-                }else{
-                    eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
-                }
+        if(procInvoc == "SRF1003" || procInvoc == "SLM1001") return;
+        if(eaa01.eaa01tp == null) return;
+
+        eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
+
+        if(jsonAbe4001 == null) return;
+
+        if(jsonAbe4001.getString("data_promo_ini") != null && jsonAbe4001.getString("data_promo_fin") != null && jsonAbe4001.getBigDecimal_Zero("preco_promocao") > 0){
+            DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("yyyyMMdd");
+            LocalDate dataIniPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_ini"), formatoData);
+            LocalDate dataFinPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_fin"), formatoData);
+            LocalDate dataAtual = LocalDate.now();
+            def precoPromocao = jsonAbe4001.getBigDecimal_Zero("preco_promocao");
+            if(dataAtual >= dataIniPromo && dataAtual <= dataFinPromo){
+                eaa0103.eaa0103unit = precoPromocao.round(4);
             }
         }
     }
