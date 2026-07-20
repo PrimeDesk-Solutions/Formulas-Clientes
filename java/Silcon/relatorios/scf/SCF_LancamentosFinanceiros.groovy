@@ -39,14 +39,15 @@ public class SCF_LancamentosFinanceiros extends RelatorioBase {
         LocalDate[] dataPeriodo = getIntervaloDatas("periodo");
         boolean isSaltarPagina = get("isSaltarPagina");
         Integer impressao = getInteger("impressao")
-        List<Long> idsEmpresas
+        List<Long> idsEmpresas;
+        Integer movimentacao = getInteger("movimentacao");
 
         List<TableMap> dados = new ArrayList<>();
         params.put("TITULO_RELATORIO", "Lançamentos Financeiros");
         params.put("EMPRESA", getVariaveis().getAac10().getAac10na());
         params.put("PERIODO", "Período: " + dataPeriodo[0].format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString() + " à " + dataPeriodo[1].format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
 
-        List<TableMap> dab10s = obterDadosRelatorio(idContaCorrente, dataPeriodo);
+        List<TableMap> dab10s = obterDadosRelatorio(idContaCorrente, dataPeriodo, movimentacao);
         Integer i = 0;
         String codigoConta = "";
         def saldoInicial = buscarSaldoAnteriorConta(idContaCorrente, dataPeriodo, idsEmpresas);
@@ -130,24 +131,27 @@ public class SCF_LancamentosFinanceiros extends RelatorioBase {
 
     }
 
-    public List<TableMap> obterDadosRelatorio (List<Long> idContaCorrente, LocalDate[] dataPeriodo)  {
+    public List<TableMap> obterDadosRelatorio (List<Long> idContaCorrente, LocalDate[] dataPeriodo, Integer movimentacao)  {
 
-        String wherePeriodoData = dataPeriodo != null && dataPeriodo.size() > 0 ? " where dab10.dab10data >= '" + dataPeriodo[0] + "' and dab10.dab10data <= '" + dataPeriodo[1] + "'": "";
-        String whereIdsContaCorrente = idContaCorrente != null && idContaCorrente.size() > 0 ? " and dab01.dab01id IN (:idContaCorrente)": "";
+        String wherePeriodoData = dataPeriodo != null ? " WHERE dab10.dab10data >= '" + dataPeriodo[0] + "' AND dab10.dab10data <= '" + dataPeriodo[1] + "'": "";
+        String whereIdsContaCorrente = idContaCorrente != null && idContaCorrente.size() > 0 ? " AND dab01.dab01id IN (:idContaCorrente)": "";
+        String whereMovimentacao = movimentacao == 0 ? "AND dab10mov = 0 " : movimentacao == 1 ? "AND dab10mov = 1 " : "";
+
         Parametro parametro = idContaCorrente != null && idContaCorrente.size() > 0 ? Parametro.criar("idContaCorrente", idContaCorrente) : null;
-        String sql = " select abb01num,  Dab01.dab01id, Dab01.dab01codigo, Dab01.dab01nome, Dab10.dab10id, Dab10.dab10data, Dab10.dab10cc, Dab10.dab10mov, Dab10.dab10historico, dab1002valor " +
-                " from Dab10 Dab10 " +
-                " left join abb01 on abb01id = Dab10.dab10central "+
+
+        String sql = " SELECT abb01num,  Dab01.dab01id, Dab01.dab01codigo, Dab01.dab01nome, Dab10.dab10id, Dab10.dab10data, " +
+                " Dab10.dab10cc, Dab10.dab10mov, Dab10.dab10historico, dab1002valor " +
+                " FROM Dab10 Dab10 " +
+                " LEFT JOIN abb01 ON abb01id = Dab10.dab10central "+
                 " INNER JOIN dab1002 ON dab1002lct = Dab10.dab10id " +
                 " LEFT JOIN dab01 ON dab01id = dab1002cc "+
                 wherePeriodoData +
                 whereIdsContaCorrente +
-                " order by Dab10.dab10data, dab10id "
+                whereMovimentacao +
+                " ORDER BY Dab10.dab10data, dab10id "
 
 
         List<TableMap> receberDadosRelatorio = getAcessoAoBanco().buscarListaDeTableMap(sql, parametro);
         return receberDadosRelatorio;
     }
-
-
 }
