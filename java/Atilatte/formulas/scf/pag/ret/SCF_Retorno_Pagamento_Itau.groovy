@@ -37,10 +37,10 @@ class SCF_Retorno_Pagamento_Itau extends FormulaBase {
         Abf01 abf01 = getSession().get(Abf01.class, Criterions.eq("abf01id", get("abf01id")))
         Long idDaa01 = null;
         int linha = 0;
-        TableMap tm = new TableMap();
         List<String> inconsistencias = new ArrayList();
 
         while(txt.nextLine()){
+            TableMap tm = new TableMap();
             if(txt.getSubString(7, 8).equals("3") && txt.getSubString(13, 14).equals("J")){
                 String posId = txt.getSubString(182, 202).trim();
                 int pos = posId.indexOf("E", -1);
