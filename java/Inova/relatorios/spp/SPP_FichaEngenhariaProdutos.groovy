@@ -28,8 +28,6 @@ public class SPP_FichaEngenhariaProdutos extends RelatorioBase {
     public DadosParaDownload executar() {
         List<Long> idsItens = getListLong("itens");
         Integer quantidade = getBigDecimal("quantidade");
-        Integer precoItem = getInteger("precoItem");
-        boolean chkPrecoItem = getBoolean("chkPrecoItem");
         Integer impressao = getInteger("impressao");
         String formula = getString("formula")
         List<TableMap> dados = new ArrayList();
@@ -37,11 +35,13 @@ public class SPP_FichaEngenhariaProdutos extends RelatorioBase {
         List<TableMap> tmComponentes = new ArrayList();
         List<TableMap> tmAtividades = new ArrayList();
         List<TableMap> tmRecurso = new ArrayList();
-        String wherePrecoItem = ""
 
         List<TableMap> listComposicoes = buscarComposicoes(idsItens, formula);
 
-        if(chkPrecoItem) wherePrecoItem = buscarWherePrecoItem(precoItem);
+        if(impressao == 1) {
+            List<TableMap> tmRegistros = buscarDadosGerais(idsItens, quantidade)
+            return gerarXLSX("SPP_FichaEngenhariaProdutos_Excel",tmRegistros )
+        }
 
         for(tmComposicao in listComposicoes ){
             Long idComposicao = tmComposicao.getLong("abp20id");
@@ -49,7 +49,7 @@ public class SPP_FichaEngenhariaProdutos extends RelatorioBase {
             tmComposicao.put("quantidade",quantidade)
 
             List<TableMap> processos = buscarProcessos(idComposicao);
-            List<TableMap> componentes = buscarComponentesComposicao(idComposicao,wherePrecoItem);
+            List<TableMap> componentes = buscarComponentesComposicao(idComposicao);
             List<TableMap> atividades = buscarAtividades(idComposicao);
             List<TableMap> recursos = buscarRecursos(idComposicao);
 
@@ -58,6 +58,7 @@ public class SPP_FichaEngenhariaProdutos extends RelatorioBase {
 
                 listProcessos.add(processo);
             }
+
             if(componentes != null && componentes.size() > 0){
                 for(componente in componentes){
                     String codProcesso = componente.getString("abp10codigo");
@@ -90,22 +91,17 @@ public class SPP_FichaEngenhariaProdutos extends RelatorioBase {
         params.put("empresa",obterEmpresaAtiva().aac10codigo+"-"+obterEmpresaAtiva().aac10na)
 
 
-        def sub1 = chkPrecoItem ? carregarArquivoRelatorio("SPP_FichaEngenhariaProdutos_s1_Unitario") : carregarArquivoRelatorio("SPP_FichaEngenhariaProdutos_s1")
-
         TableMapDataSource dsPrincipal = new TableMapDataSource(listComposicoes);
         dsPrincipal.addSubDataSource("dsComponentes", tmComponentes, "key", "key");
         dsPrincipal.addSubDataSource("dsAtividades", tmAtividades, "key", "key");
         dsPrincipal.addSubDataSource("dsRecursos", tmRecurso, "key", "key");
         dsPrincipal.addSubDataSource("dsProcessos", listProcessos, "key", "key");
-        adicionarParametro("SUBREPORT_DIR", sub1)
+        adicionarParametro("SUBREPORT_DIR", carregarArquivoRelatorio("SPP_FichaEngenhariaProdutos_s1"))
         adicionarParametro("SUBREPORT_DIR2", carregarArquivoRelatorio("SPP_FichaEngenhariaProdutos_s2"))
         adicionarParametro("SUBREPORT_DIR3", carregarArquivoRelatorio("SPP_FichaEngenhariaProdutos_s3"))
         adicionarParametro("SUBREPORT_DIR4", carregarArquivoRelatorio("SPP_FichaEngenhariaProdutos_s4"))
 
-        if(impressao == 1) {
-            List<TableMap> tmRegistros = buscarDadosGerais(idsItens, wherePrecoItem, quantidade)
-            return gerarXLSX("SPP_FichaEngenhariaProdutos_Excel",tmRegistros )
-        }
+        
         return gerarPDF("SPP_FichaEngenhariaProdutos",dsPrincipal)
     }
 
@@ -135,81 +131,83 @@ public class SPP_FichaEngenhariaProdutos extends RelatorioBase {
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idComposicao", idComposicao));
     }
 
-    private buscarComponentesComposicao(Long idComposicao,String wherePrecoItem){
-        String sql = "select abm01codigo, abm01na,abp10codigo, abp10descr,aam06codigo,abp20011perda as perda,abp20011qt as qtd, abp20011det, "+
-                "CASE WHEN abm01tipo = 0 THEN 'M' WHEN abm01tipo = 1 THEN 'P' WHEN abm01tipo = 2 THEN 'Merc' ELSE 'Serv' END AS tipoItem "+
-                wherePrecoItem+
-                "from abp2001  "+
-                "INNER JOIN abp20011 on abp20011proc = abp2001id  "+
-                "INNER JOIN abm01 on abm01id = abp20011item  "+
-                "INNER JOIN abm0101 as confComponente on confComponente.abm0101item = abm01id "+
-                "INNER JOIN abp10 on abp10id = abp2001proc  "+
-                "INNER JOIN aam06 on aam06id = abm01umu "+
-                "where abp2001comp = :idComposicao " +
-                "ORDER BY abp2001seq ";
+    private buscarComponentesComposicao(Long idComposicao){
+        String sql = " SELECT abm01codigo, abm01na,abp10codigo, abp10descr,aam06codigo,abp20011perda as perda,abp20011qt as qtd, abp20011det, "+
+                    " CASE WHEN abm01tipo = 0 THEN 'M' WHEN abm01tipo = 1 THEN 'P' WHEN abm01tipo = 2 THEN 'Merc' ELSE 'Serv' END AS tipoItem "+
+                    " FROM abp2001  "+
+                    " INNER JOIN abp20011 on abp20011proc = abp2001id  "+
+                    " INNER JOIN abm01 on abm01id = abp20011item  "+
+                    " INNER JOIN abm0101 as confComponente on confComponente.abm0101item = abm01id "+
+                    " INNER JOIN abp10 on abp10id = abp2001proc  "+
+                    " LEFT JOIN aam06 on aam06id = abm01umu "+
+                    " WHERE abp2001comp = :idComposicao " +
+                    " ORDER BY abp2001seq ";
+
         Parametro p1 = Parametro.criar("idComposicao",idComposicao);
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql,p1);
     }
 
     private buscarAtividades(Long idComposicao ){
-        String sql = "select abp1001seq,abp01codigo,abp01descr,abp10codigo,abp10descr,abp1001minativ as tempo,abp1001minsetup as tempoSetup "+
-                "from abp2001 "+
-                "INNER JOIN abp10 on abp10id = abp2001proc "+
-                "INNER JOIN abp1001 on abp1001proc = abp10id "+
-                "INNER JOIN abp01 on abp01id = abp1001ativ "+
-                "where abp2001comp = :idComposicao "+
-                "order by abp10codigo,abp1001seq "
+        String sql = " SELECT abp1001seq, abp01codigo, abp01descr, abp10codigo, abp10descr, abp1001minativ AS tempo, abp1001minsetup AS tempoSetup "+
+                " FROM abp2001 "+
+                " INNER JOIN abp10 ON abp10id = abp2001proc "+
+                " INNER JOIN abp1001 ON abp1001proc = abp10id "+
+                " INNER JOIN abp01 ON abp01id = abp1001ativ "+
+                " WHERE abp2001comp = :idComposicao "+
+                " ORDER BY abp10codigo, abp1001seq "
 
         Parametro p1 = Parametro.criar("idComposicao",idComposicao);
         return getAcessoAoBanco().buscarListaDeTableMap(sql,p1);
     }
 
     private buscarRecursos(Long idComposicao){
-        String sql = "select distinct abp2001seq,abp10codigo,abp10descr,abb20codigo, abb20nome "+
-                "from abp2001 "+
-                "INNER JOIN abp10 on abp10id = abp2001proc "+
-                "INNER JOIN abp1001 on abp1001proc = abp10id "+
-                "INNER JOIN abp01 on abp01id = abp1001ativ "+
-                "INNER JOIN abb20 on abb20id = abp01bem "+
-                "where abp2001comp = :idComposicao ";
+        String sql = " SELECT DISTINCT abp2001seq,abp10codigo,abp10descr,abb20codigo, abb20nome "+
+                        " FROM abp2001 "+
+                        " INNER JOIN abp10 on abp10id = abp2001proc "+
+                        " INNER JOIN abp1001 on abp1001proc = abp10id "+
+                        " INNER JOIN abp01 on abp01id = abp1001ativ "+
+                        " INNER JOIN abb20 on abb20id = abp01bem "+
+                        " WHERE abp2001comp = :idComposicao ";
 
         Parametro p1 = Parametro.criar("idComposicao",idComposicao);
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql,p1);
     }
 
-    private List<TableMap> buscarDadosGerais(List<TableMap> idsItens, String wherePrecoItem, Integer quantidade){
-        String whereItens = idsItens != null && idsItens.size() > 0 ? "where abp20item in (:idsItens) " : "";
+    private List<TableMap> buscarDadosGerais(List<Long> idsItens, Integer quantidade){
+        String whereItens = idsItens != null && idsItens.size() > 0 ? "WHERE abp20item IN (:idsItens) " : "";
         Parametro parametroItens = idsItens != null && idsItens.size() > 0 ? Parametro.criar("idsItens",idsItens) : null;
 
-        String sql = "select abp20id,itemComp.abm01id,itemComp.abm01codigo as codProdComp, itemComp.abm01na as descrProdComp, "+
-                "umuComp.aam06codigo as umuComp, umv.aam06codigo as umvComp, abp20id,abp20bomcodigo as formula, "+
-                "abp20bomdtcria as dtFormula, abp20bomnumrev as numRevisao, abp20bomdtrev as dtRevisao, "+
-                "itemComponente.abm01codigo as codItemComponente, itemComponente.abm01na as naItemComponente,abp10codigo as codProcesso, abp10descr as descrProcesso,umuComponente.aam06codigo as umuComponente,abp20011perda as perda,abp20011qt as qtd, "+
-                "case when itemComp.abm01tipo = 0 then 'M' when itemComp.abm01tipo = 1 then 'P' else 'S' end as mpsComp, "+
-                "case when itemComponente.abm01tipo = 0 then 'M' when itemComponente.abm01tipo = 1 then 'P' else 'S' end as mpsComponente, abp20011seq as seq, "+
-                "abp1001seq,abp01codigo as codAtiv,abp01descr as descrAtiv,abp10codigo as procProdutivo,abp10descr as descrProcProdutivo,abp1001minativ as tempo,abp1001minsetup as tempoSetup "+ wherePrecoItem +
-                "from abp20 "+
-                "INNER JOIN abm01 as itemComp on itemComp.abm01id = abp20item "+
-                "INNER JOIN aam06 as umuComp on umuComp.aam06id = itemComp.abm01umu "+
-                "INNER JOIN abm0101 as confCompo on abm0101item = itemComp.abm01id "+
-                "INNER JOIN abm13 on abm13id = abm0101comercial "+
-                "INNER JOIN aam06 as umv on umv.aam06id = abm13umv "+
-                "INNER JOIN abp2001 on abp2001comp = abp20id "+
-                "INNER JOIN abp20011 on abp20011proc = abp2001id "+
-                "INNER JOIN abm01 as itemComponente on itemComponente.abm01id = abp20011item "+
-                "INNER JOIN abm0101 as confComponente on confComponente.abm0101item = itemComponente.abm01id "+
-                "INNER JOIN abp10 on abp10id = abp2001proc "+
-                "INNER JOIN aam06 as umuComponente on umuComponente.aam06id = itemComponente.abm01umu "+
-                "INNER JOIN abp1001 on abp1001proc = abp10id "+
-                "left join abp01 on abp01id = abp1001ativ "+
-                "left join abb20 on abb20id = abp01bem "+
-                whereItens +
-                "order by  itemComp.abm01codigo,abp20bomcodigo, abp20011seq,abp10codigo,abp1001seq ";
+        String sql = "SELECT abp20id,itemComp.abm01id,itemComp.abm01codigo AS codProdComp, itemComp.abm01na AS descrProdComp, "+
+                    " umuComp.aam06codigo AS umuComp, umv.aam06codigo AS umvComp, abp20id,abp20bomcodigo AS formula, "+
+                    " abp20bomdtcria AS dtFormula, abp20bomnumrev AS numRevisao, abp20bomdtrev AS dtRevisao, "+
+                    " itemComponente.abm01codigo AS codItemComponente, itemComponente.abm01na AS naItemComponente,abp10codigo AS codProcesso, abp10descr AS descrProcesso, " +
+                    " umuComponente.aam06codigo AS umuComponente,abp20011perda AS perda,abp20011qt AS qtd, "+
+                    " CASE WHEN itemComp.abm01tipo = 0 THEN 'M' WHEN itemComp.abm01tipo = 1 THEN 'P' ELSE 'S' END AS mpsComp, "+
+                    " CASE WHEN itemComponente.abm01tipo = 0 then 'M' WHEN itemComponente.abm01tipo = 1 THEN 'P' ELSE 'S' END AS mpsComponente, abp20011seq AS seq, "+
+                    " abp1001seq,abp01codigo AS codAtiv,abp01descr AS descrAtiv,abp10codigo AS procProdutivo,abp10descr AS descrProcProdutivo,abp1001minativ AS tempo,abp1001minsetup AS tempoSetup "+
+                    " FROM abp20 "+
+                    " INNER JOIN abm01 AS itemComp ON itemComp.abm01id = abp20item "+
+                    " LEFT JOIN aam06 AS umuComp ON umuComp.aam06id = itemComp.abm01umu "+
+                    " INNER JOIN abm0101 AS confCompo ON abm0101item = itemComp.abm01id "+
+                    " LEFT JOIN abm13 ON abm13id = abm0101comercial "+
+                    " LEFT JOIN aam06 AS umv ON umv.aam06id = abm13umv "+
+                    " INNER JOIN abp2001 ON abp2001comp = abp20id "+
+                    " INNER JOIN abp20011 ON abp20011proc = abp2001id "+
+                    " INNER JOIN abm01 AS itemComponente ON itemComponente.abm01id = abp20011item "+
+                    " INNER JOIN abm0101 AS confComponente on confComponente.abm0101item = itemComponente.abm01id "+
+                    " INNER JOIN abp10 ON abp10id = abp2001proc "+
+                    " LEFT JOIN aam06 AS umuComponente ON umuComponente.aam06id = itemComponente.abm01umu "+
+                    " INNER JOIN abp1001 ON abp1001proc = abp10id "+
+                    " LEFT JOIN abp01 ON abp01id = abp1001ativ "+
+                    " LEFT JOIN abb20 ON abb20id = abp01bem "+
+                    whereItens +
+                    " ORDER BY  itemComp.abm01codigo,abp20bomcodigo, abp20011seq,abp10codigo,abp1001seq ";
 
         List<TableMap> dadosRelatorio = getAcessoAoBanco().buscarListaDeTableMap(sql,parametroItens)
         List<TableMap> registros = new ArrayList();
+
         for(dados in dadosRelatorio) {
             String codProcesso = dados.getString("abp10codigo");
             Long idComposicao = dados.getLong("abp10id")
@@ -225,15 +223,15 @@ public class SPP_FichaEngenhariaProdutos extends RelatorioBase {
         return registros;
     }
     private obterTotalGeralPorProcesso(Long idComposicao, String codProcesso){
-        String sql = "select sum(abp20011qt) as qtdTotal "+
-                "from abp2001   "+
-                "INNER JOIN abp20011 on abp20011proc = abp2001id   "+
-                "INNER JOIN abm01 on abm01id = abp20011item   "+
-                "INNER JOIN abp10 on abp10id = abp2001proc   "+
-                "INNER JOIN aam06 on aam06id = abm01umu  "+
-                "where abp2001comp = :idComposicao "+
-                "and abp10codigo = :codProcesso "+
-                "group by abp10codigo, abp10descr ";
+        String sql = "SELECT SUM(abp20011qt) AS qtdTotal "+
+                " FROM abp2001   "+
+                " INNER JOIN abp20011 ON abp20011proc = abp2001id   "+
+                " INNER JOIN abm01 ON abm01id = abp20011item   "+
+                " INNER JOIN abp10 ON abp10id = abp2001proc   "+
+                " INNER JOIN aam06 ON aam06id = abm01umu  "+
+                " WHERE abp2001comp = :idComposicao "+
+                " AND abp10codigo = :codProcesso "+
+                " GROUP BY abp10codigo, abp10descr ";
 
         Parametro p1 = Parametro.criar("idComposicao",idComposicao);
         Parametro p2 = Parametro.criar("codProcesso",codProcesso);
@@ -241,7 +239,7 @@ public class SPP_FichaEngenhariaProdutos extends RelatorioBase {
         return getAcessoAoBanco().obterBigDecimal(sql, p1,p2)
 
     }
-    private String buscarWherePrecoItem(precoItem){
+    private String buscarFieldPrecoItem(precoItem){
 
         switch(precoItem){
             case 0:
@@ -257,10 +255,9 @@ public class SPP_FichaEngenhariaProdutos extends RelatorioBase {
                 return ", CAST(confComponente.abm0101json ->> 'menor_preco_unit' AS NUMERIC(18,2)) AS valorItem ";
                 break;
             case 4:
-                return ", cast(confComponente.abm0101json ->> 'ultimo_preco' AS NUMERIC(18,2)) AS valorItem ";
+                return ", CAST(confComponente.abm0101json ->> 'ultimo_preco' AS NUMERIC(18,2)) AS valorItem ";
                 break;
         }
     }
 }
-//meta-sis-eyJkZXNjciI6IlNQUCAtIEZpY2hhIERlIEVuZ2VuaGFyaWEgZGUgUHJvZHV0b3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlNQUCAtIEZpY2hhIERlIEVuZ2VuaGFyaWEgZGUgUHJvZHV0b3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
