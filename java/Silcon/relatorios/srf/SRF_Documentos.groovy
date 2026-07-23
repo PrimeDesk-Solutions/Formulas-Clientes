@@ -229,33 +229,33 @@ class SRF_Documentos extends RelatorioBase {
 
 
         def sql = " SELECT eaa01id, eaa0103id, abd01codigo, abd01descr,abb01num, abb01data,eaa01id, eaa01esdata, aah01codigo, abe01codigo, abe30nome, abe40nome, abe01ni, " +
-                    "eaa0103qtUso as eaa0103qtuso, eaa0103qtComl as eaa0103qtcoml,  eaa0103unit as eaa0103unit," +
-                    "eaa0103total as eaa0103total, eaa0103totDoc as eaa0103totdoc, eaa0103totFinanc as eaa0103totfinanc, eaa0103json,  " + entidade +
-                    "FROM eaa0103 " +
-                    "INNER JOIN eaa01 ON eaa01id = eaa0103doc " +
-                    "INNER JOIN abd01 ON abd01id = eaa01pcd " +
-                    "INNER JOIN abb01 ON abb01id = eaa01central " +
-                    "INNER JOIN aah01 ON aah01id = abb01tipo " +
-                    "INNER JOIN abe01 ON abe01id = abb01ent " +
-                    "LEFT JOIN abe30 ON abe30id = eaa01cp  " +
-                    "LEFT JOIN abe40 ON abe40id = eaa01tp  " +
-                    "INNER JOIN abm01 ON abm01id = eaa0103item " +
-                    "LEFT JOIN abe0101 ON abe0101ent = abe01id AND abe0101principal = 1 " +
-                    "LEFT JOIN aag0201 ON aag0201id = abe0101municipio " +
-                    "LEFT JOIN aag02 ON aag02id = aag0201uf " +
-                    "WHERE eaa01clasDoc = " + Eaa01.CLASDOC_SRF + " " +
-                    "AND eaa01cancData IS NULL " +
-                    "AND eaa01nfestat <> 5 " +
-                    whereEmpresa +
-                    whereNumero +
-                    whereTipoDocumento +
-                    whereIdEntidade +
-                    whereData +
-                    whereResumoOperacao +
-                    whereCriterioPcd +
-                    whereEstados +
-                    whereMunicipios +
-                    orderBy;
+                "eaa0103qtUso as eaa0103qtuso, eaa0103qtComl as eaa0103qtcoml,  eaa0103unit as eaa0103unit," +
+                "eaa0103total as eaa0103total, eaa0103totDoc as eaa0103totdoc, eaa0103totFinanc as eaa0103totfinanc, eaa0103json,  " + entidade +
+                "FROM eaa0103 " +
+                "INNER JOIN eaa01 ON eaa01id = eaa0103doc " +
+                "INNER JOIN abd01 ON abd01id = eaa01pcd " +
+                "INNER JOIN abb01 ON abb01id = eaa01central " +
+                "INNER JOIN aah01 ON aah01id = abb01tipo " +
+                "INNER JOIN abe01 ON abe01id = abb01ent " +
+                "LEFT JOIN abe30 ON abe30id = eaa01cp  " +
+                "LEFT JOIN abe40 ON abe40id = eaa01tp  " +
+                "INNER JOIN abm01 ON abm01id = eaa0103item " +
+                "LEFT JOIN abe0101 ON abe0101ent = abe01id AND abe0101principal = 1 " +
+                "LEFT JOIN aag0201 ON aag0201id = abe0101municipio " +
+                "LEFT JOIN aag02 ON aag02id = aag0201uf " +
+                "WHERE eaa01clasDoc = " + Eaa01.CLASDOC_SRF + " " +
+                "AND eaa01cancData IS NULL " +
+                "AND eaa01nfestat <> 5 " +
+                whereEmpresa +
+                whereNumero +
+                whereTipoDocumento +
+                whereIdEntidade +
+                whereData +
+                whereResumoOperacao +
+                whereCriterioPcd +
+                whereEstados +
+                whereMunicipios +
+                orderBy;
 
         def dadosRelatorio = getAcessoAoBanco().buscarListaDeTableMap(sql, parametroEntidade, parametroTipoDocumento, parametroCriteriosPcd, parametroEstados, parametroMunicipios, parametroEmpresa);
 
@@ -304,30 +304,30 @@ class SRF_Documentos extends RelatorioBase {
 
 
         def sql = "SELECT DISTINCT eaa0103id " +
-                    "FROM eaa0103  " +
-                    "INNER JOIN eaa01 ON eaa01id = eaa0103doc " +
-                    "INNER JOIN abd01 ON abd01id = eaa01pcd  " +
-                    "INNER JOIN abb01 ON abb01id = eaa01central " +
-                    "INNER JOIN aah01 ON aah01id = abb01tipo " +
-                    "INNER JOIN abe01 ON abe01id = abb01ent " +
-                    "LEFT JOIN abe30 ON abe30id = eaa01cp  " +
-                    "LEFT JOIN abe40 ON abe40id = eaa01tp  " +
-                    "INNER JOIN abm01 ON abm01id = eaa0103item " +
-                    "LEFT JOIN abe0101 ON abe0101ent = abe01id AND abe0101principal = 1 " +
-                    "LEFT JOIN aag0201 ON aag0201id = abe0101municipio " +
-                    "LEFT JOIN aag02 on aag02id = aag0201uf " +
-                    "WHERE eaa01clasDoc = " + Eaa01.CLASDOC_SRF + " "+
-                    "AND eaa01cancData IS NULL " +
-                    "AND eaa01nfestat <> 5 " +
-                    whereEmpresa +
-                    whereNumero +
-                    whereTipoDocumento +
-                    whereIdEntidade +
-                    whereData +
-                    whereResumoOperacao +
-                    whereCriterioPcd +
-                    whereEstados +
-                    whereMunicipios
+                "FROM eaa0103  " +
+                "INNER JOIN eaa01 ON eaa01id = eaa0103doc " +
+                "INNER JOIN abd01 ON abd01id = eaa01pcd  " +
+                "INNER JOIN abb01 ON abb01id = eaa01central " +
+                "INNER JOIN aah01 ON aah01id = abb01tipo " +
+                "INNER JOIN abe01 ON abe01id = abb01ent " +
+                "LEFT JOIN abe30 ON abe30id = eaa01cp  " +
+                "LEFT JOIN abe40 ON abe40id = eaa01tp  " +
+                "INNER JOIN abm01 ON abm01id = eaa0103item " +
+                "LEFT JOIN abe0101 ON abe0101ent = abe01id AND abe0101principal = 1 " +
+                "LEFT JOIN aag0201 ON aag0201id = abe0101municipio " +
+                "LEFT JOIN aag02 on aag02id = aag0201uf " +
+                "WHERE eaa01clasDoc = " + Eaa01.CLASDOC_SRF + " "+
+                "AND eaa01cancData IS NULL " +
+                "AND eaa01nfestat <> 5 " +
+                whereEmpresa +
+                whereNumero +
+                whereTipoDocumento +
+                whereIdEntidade +
+                whereData +
+                whereResumoOperacao +
+                whereCriterioPcd +
+                whereEstados +
+                whereMunicipios
 
         return getAcessoAoBanco().obterListaDeLong(sql, parametroEntidade, parametroTipoDocumento, parametroCriteriosPcd, parametroEstados, parametroMunicipios, parametroEmpresa);
     }
@@ -428,6 +428,5 @@ class SRF_Documentos extends RelatorioBase {
         return "SRF - Documentos";
     }
 }
-//meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
