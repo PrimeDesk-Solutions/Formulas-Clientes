@@ -106,15 +106,7 @@ class SCF_Retorno_Cob_Itau_CNAB_400 extends FormulaBase {
                         BigDecimal jurosQ = new BigDecimal(txt.getSubString(266, 279)) / 100//difDias > 0 ? difDias * jsonDaa01.getBigDecimal_Zero("juros") : null;
                         multaQ = multaQ > 0 ? multaQ - jurosQ : null;
 
-                        if(daa01.daa01dtVctoR.getDayOfWeek().isWeekend() && dtPgto.getDayOfWeek() == DayOfWeek.MONDAY){
-                            multaQ = null;
-                            jurosQ = null;
-                        }
-
-                        /*
-                            Apagar essa validação após desenvolver a regra de feriado
-                         */
-                        if(daa01.daa01dtVctoR.isEqual(LocalDate.of(2026,4,21)) && dtPgto.isEqual(LocalDate.of(2026,4,22))){
+                        if((daa01.daa01dtVctoR.getDayOfWeek() == DayOfWeek.SATURDAY && difDias == 2) || (daa01.daa01dtVctoR.getDayOfWeek() == DayOfWeek.SUNDAY && difDias == 1)){
                             multaQ = null;
                             jurosQ = null;
                         }
