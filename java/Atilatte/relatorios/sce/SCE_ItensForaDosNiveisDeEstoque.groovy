@@ -195,8 +195,8 @@ public class SCE_ItensForaDosNiveisDeEstoque extends RelatorioBase {
         String whereInativo = "AND abm01di IS NULL ";
         String whereMovEst = !movEst.contains(-1) ? "AND abm11movEst IN (:movEst) " : "";
         String whereDatas = dtPedidos != null && dtEntrega != null ? "AND (abb01data BETWEEN :dtPedidosIni AND :dtPedidosFin OR eaa0103dtEntrega BETWEEN :dtEntregaIni AND :dtEntregaFin) " :
-                dtPedidos != null && dtEntrega == null ? "AND abb01data BETWEEN :dtPedidosIni AND :dtPedidosFin " :
-                        dtPedidos == null && dtEntrega != null ? "eaa0103dtEntrega BETWEEN :dtEntregaIni AND :dtEntregaFin " : "";
+                            dtPedidos != null && dtEntrega == null ? "AND abb01data BETWEEN :dtPedidosIni AND :dtPedidosFin " :
+                            dtPedidos == null && dtEntrega != null ? "eaa0103dtEntrega BETWEEN :dtEntregaIni AND :dtEntregaFin " : "";
         String whereAtendimento = atendimentos != null && atendimentos.size() > 0 ? "AND eaa01scvatend IN (:atendimentos) " : "AND eaa01scvatend IN (0,1) "
 
 
