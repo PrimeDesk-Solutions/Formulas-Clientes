@@ -368,9 +368,7 @@ public class SRF_Doc_Padrao_Entrada extends FormulaBase {
             jsonEaa0103.put("bc_ipi", round(jsonEaa0103.getBigDecimal_Zero("bc_ipi"), 2));
 
             //Alíquota de IPI do cadastro de NCM
-            if (abg01 != null && abg01.abg01txIpi_Zero > 0) {
-                jsonEaa0103.put("aliq_ipi", abg01.abg01txIpi);
-            }
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_ipi") == 0) jsonEaa0103.put("aliq_ipi", abg01.abg01txIpi_Zero);
 
             //Valor do IPI
             jsonEaa0103.put("ipi", ((jsonEaa0103.getBigDecimal_Zero("bc_ipi") * jsonEaa0103.getBigDecimal_Zero("aliq_ipi")) / 100).round(2));
