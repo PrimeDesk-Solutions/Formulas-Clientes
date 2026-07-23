@@ -260,7 +260,7 @@ public class SCF_Documentos extends RelatorioBase{
             campoJME =   "COALESCE(CAST(daa01json ->> 'jurosq' AS numeric(18,6)), 0) + COALESCE(CAST(daa01json ->> 'multaq' AS numeric(18,6)), 0) + COALESCE(CAST(daa01json ->> 'encargosq' AS numeric(18,6)), 0) AS jme,";
         }else { // Receber/Recebidos ou A pagar/pagos
             campoJuros = "CASE WHEN daa01.daa01dtBaixa IS NULL THEN CAST(daa01json ->> 'juros' AS numeric(18,6)) ELSE CAST(daa01json ->> 'jurosq' AS numeric(18,6)) END AS juros, ";
-            campoJME =   "COALESCE(CAST(daa01json ->> 'juros' AS numeric(18,6)), 0) + COALESCE(CAST(daa01json ->> 'multa' AS numeric(18,6)), 0) + COALESCE(CAST(daa01json ->> 'encargos' AS numeric(18,6)), 0) ELSE COALESCE(CAST(daa01json ->> 'jurosq' AS numeric(18,6)), 0) + COALESCE(CAST(daa01json ->> 'multaq' AS numeric(18,6)), 0) + COALESCE(CAST(daa01json ->> 'encargosq' AS numeric(18,6)), 0) END AS jme, ";
+            campoJME =   "CASE WHEN daa01.daa01dtBaixa IS NULL THEN COALESCE(CAST(daa01json ->> 'juros' AS numeric(18,6)), 0) + COALESCE(CAST(daa01json ->> 'multa' AS numeric(18,6)), 0) + COALESCE(CAST(daa01json ->> 'encargos' AS numeric(18,6)), 0) ELSE COALESCE(CAST(daa01json ->> 'jurosq' AS numeric(18,6)), 0) + COALESCE(CAST(daa01json ->> 'multaq' AS numeric(18,6)), 0) + COALESCE(CAST(daa01json ->> 'encargosq' AS numeric(18,6)), 0) END AS jme, ";
         }
 
 
