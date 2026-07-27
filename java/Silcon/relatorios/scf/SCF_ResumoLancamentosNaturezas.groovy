@@ -59,12 +59,12 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
         BigDecimal saldoAnterior = BigDecimal.ZERO;
         String codigoConta = null;
 
-        List<TableMap> dadosRel =   obterDadosRelatorio(idNaturezas, idContaCorrente, dataPeriodo, exibeTotalGeral)
+        List<TableMap> dadosRel = obterDadosRelatorio(idNaturezas, idContaCorrente, dataPeriodo, exibeTotalGeral)
         List<String> graus = new ArrayList<>();
 
         if(exibeTotalGeral){
             //Sem filtro de conta corrente, busca o saldo todo
-            String whereIdsContaCorrente = !Utils.isEmpty(idContaCorrente) ? " and dab01.dab01id IN (:idContaCorrente)": "";
+            String whereIdsContaCorrente = !Utils.isEmpty(idContaCorrente) ? " AND dab01.dab01id IN (:idContaCorrente)": "";
             String sqlSaldoContas = " SELECT dab01id FROM Dab01 " + getSamWhere().getWherePadrao("WHERE", Dab01.class) + whereIdsContaCorrente;
             List<Long> dab01ids = getAcessoAoBanco().obterListaDeLong(sqlSaldoContas, !Utils.isEmpty(idContaCorrente) ? Parametro.criar("idContaCorrente", idContaCorrente) : null);
             saldoAnterior = BigDecimal.ZERO;
@@ -97,7 +97,7 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
 
 
                 if (!exibeTotalGeral) {
-                    if(mapDados.getString("dab01codigo") == null) interromper("Existem lançamentos financeiros sem conta corrente.");
+                    if(mapDados.getString("dab01codigo") == null) continue//interromper("Existem lançamentos financeiros sem conta corrente.");
                     tm.put("codigoConta", mapDados.getString("dab01codigo"));
                     if (!tm.getString("codigoConta").equalsIgnoreCase(codigoConta)) {
                         saldo = BigDecimal.ZERO;
@@ -129,7 +129,7 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
                         if (map.getInteger("dab10mov").equals(0)){
                             tm.put("valorNatureza", tm.getBigDecimal("valorNatureza").add(map.getBigDecimal("valorNatureza")));
                         } else {
-                            tm.put("valorNatureza", tm.getBigDecimal("valorNatureza").subtract(map.getBigDecimal("valorNatureza")));
+                            tm.put("valorNatureza", tm.getBigDecimal("valorNatureza").add(map.getBigDecimal("valorNatureza") * -1));
                         }
                     }
                 } else {
@@ -200,7 +200,6 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
                 getSamWhere().getWherePadrao("AND", Dab10.class) +
                 orderBy;
 
-
         List<TableMap> receberDadosRelatorio = getAcessoAoBanco().buscarListaDeTableMap(sql, paramCC, paramNatureza);
         return receberDadosRelatorio;
     }
@@ -216,7 +215,7 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
         Parametro paramCodNat = grau != null ? Parametro.criar("codigo", codNat) : null;
         Parametro paramNatureza = idNatureza != null && idNatureza.size() > 0 ? Parametro.criar("idNatureza", idNatureza) : null;
 
-        String sql = " SELECT DISTINCT Dab10011.Dab10011valor AS valorNatureza, dab10.dab10mov" +
+        String sql = " SELECT DISTINCT dab10id, abf10codigo, Dab10011.Dab10011valor AS valorNatureza, dab10.dab10mov" +
                 " FROM Dab10011 Dab10011 " +
                 " INNER JOIN Dab1001 dab1001 ON dab1001.dab1001id = dab10011.dab10011depto " +
                 " INNER JOIN Dab10 dab10 ON dab10.dab10id = dab1001.dab1001lct " +
@@ -236,8 +235,8 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
 
     private List<TableMap> buscarTotalNaturezaGeral(List<Long> idContaCorrente, List<Long> idNatureza, LocalDate[] dataPeriodo, Integer grau, String codNat) {
 
-        String wherePeriodoData = dataPeriodo != null && dataPeriodo.size() > 0 ? " WHERE dab10.dab10data >= '" + dataPeriodo[0] + "' AND dab10.dab10data <= '" + dataPeriodo[1] + "'": "";
-        String whereIdsContaCorrente = idContaCorrente != null  ? " AND dab01.dab01id IN (:idContaCorrente)": "";
+        String wherePeriodoData = dataPeriodo != null ? " WHERE dab10.dab10data >= '" + dataPeriodo[0] + "' AND dab10.dab10data <= '" + dataPeriodo[1] + "'": "";
+        String whereIdsContaCorrente = idContaCorrente != null && idContaCorrente.size() > 0 ? " AND dab01.dab01id IN (:idContaCorrente)": "";
         String whereCodNatureza = grau != null ? " AND SUBSTRING(abf10codigo, 1, " + grau + ") = :codigo " : "";
         String whereIdNatureza = idNatureza != null && idNatureza.size() > 0 ? " AND abf10.abf10id IN (:idNatureza)": "";
 
@@ -245,7 +244,7 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
         Parametro paramCodNat = grau != null ? Parametro.criar("codigo", codNat) : null;
         Parametro paramNatureza = idNatureza != null && idNatureza.size() > 0 ? Parametro.criar("idNatureza", idNatureza) : null;
 
-        String sql = " select DISTINCT Dab10011.Dab10011valor AS valorNatureza, dab10.dab10mov" +
+        String sql = " SELECT DISTINCT dab10id, abf10codigo, Dab10011.Dab10011valor AS valorNatureza, dab10.dab10mov" +
                 " FROM Dab10011 Dab10011 " +
                 " INNER JOIN Dab1001 dab1001 ON dab1001.dab1001id = dab10011.dab10011depto " +
                 " INNER JOIN Dab10 dab10 ON dab10.dab10id = dab1001.dab1001lct " +
