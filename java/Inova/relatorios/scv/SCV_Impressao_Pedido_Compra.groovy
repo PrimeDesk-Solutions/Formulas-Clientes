@@ -46,9 +46,9 @@ public class SCV_Impressao_Pedido_Compra extends RelatorioBase {
         // Cria os sub-relatórios
         TableMapDataSource dsPrincipal = new TableMapDataSource(dados);
         dsPrincipal.addSubDataSource("dsItens", listItens, "key", "key");
-        adicionarParametro("StreamSub1", carregarArquivoRelatorio("SCV_Pedido_Venda_Exportacao_S1"));
+        adicionarParametro("StreamSub1", carregarArquivoRelatorio("SCV_Pedido_Compra_S1"));
 
-        return gerarPDF("SCV_Pedido_Venda_Exportacao", dsPrincipal);
+        return gerarPDF("SCV_Pedido_Compra", dsPrincipal);
     }
     private List<TableMap> buscarDocumentosPorID(Long eaa01id){
         String sql = " SELECT DISTINCT eaa01id, aah01nome AS nomeTipoDoc, abb01num AS numDoc, ent.abe01codigo AS codEntidade, ent.abe01nome AS nomeEntidade, eaa0101endereco AS enderecoEntidade, eaa0101numero AS numEnderecoEntidade, " +
