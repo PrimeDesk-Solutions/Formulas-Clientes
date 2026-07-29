@@ -126,7 +126,7 @@ class SCF_Retorno_Pagamento_Itau extends FormulaBase {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
                     daa01.daa01dtPgto = LocalDate.parse( txt.getSubString(144, 152), formatter);
 
-                    BigDecimal vlrLiq = new BigDecimal(txt.getSubString(99, 114));
+                    BigDecimal vlrLiq = new BigDecimal(txt.getSubString(152, 167));
                     daa01.daa01liquido =   vlrLiq / 100;
 
                     TableMap jsonDaa01 = daa01.daa01json != null ? daa01.daa01json : new TableMap();
@@ -149,8 +149,9 @@ class SCF_Retorno_Pagamento_Itau extends FormulaBase {
                  * Exibindo documentos
                  */
                 if(validouDocumento){
+                    String codPLF = buscarCodigoPLF(txt.getSubString(230, 240));
                     tm.put("daa01", daa01);
-                    tm.put("abf20id", buscarPLF("400"));
+                    tm.put("abf20id", buscarPLF(codPLF));
                     tm.put("ocorrencia",tratarDescricaoOcorrencia(txt.getSubString(230, 240).trim()));
                 }
 
@@ -341,16 +342,13 @@ class SCF_Retorno_Pagamento_Itau extends FormulaBase {
         return ocorrencias;
     }
 
-    private String codigoPLF(String codigoOcorrencia) {
-        switch(codigoOcorrencia) {
-            case "400": return "400";
-            default: return null;
-        }
+    private String buscarCodigoPLF(String codigoOcorrencia) {
+        return "00".equals(codigoOcorrencia) || "FC".equals(codigoOcorrencia)  || "FD".equals(codigoOcorrencia)  ? "400" : null;
     }
 
     private Long buscarPLF(String codigoPLF) {
         Abf20 abf20 = getAcessoAoBanco().buscarRegistroUnico("SELECT abf20id FROM Abf20 WHERE abf20codigo = :P1 " + getSamWhere().getWherePadrao("AND", Abf20.class) , Parametro.criar("P1", codigoPLF));
-        return abf20 == null ? null : abf20.abf20id;
+        return abf20 == null ? null : abf20.abf20id
     }
 
 }
