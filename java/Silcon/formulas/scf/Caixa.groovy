@@ -1,4 +1,8 @@
-package Silcon.formulas.scf;
+package Silcon.formulas.scf
+
+import br.com.multiorm.criteria.criterion.Criterions
+import sam.model.entities.ab.Abb01
+import sam.model.entities.da.Daa0101;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -7,6 +11,7 @@ import br.com.multitec.utils.DateUtils;
 import br.com.multitec.utils.collections.TableMap;
 import sam.dicdados.FormulaTipo;
 import sam.model.entities.da.Daa01;
+import sam.model.entities.da.Daa01011;
 import sam.server.samdev.formula.FormulaBase;
 import sam.server.scf.service.SCFService;
 
@@ -32,21 +37,13 @@ public class Caixa extends FormulaBase{
         //Multa: considerar multa somente se estiver em atraso
         def juros = null;
         def multa = null;
-        def diasAtraso = scfService.calculaDiasDeAtraso(daa01)//calculaDiasDeAtraso(daa01);
-//        if (diasAtraso > 0) {
-//            juros = mapJson.getBigDecimal("juros") == null ? null : mapJson.getBigDecimal("juros") * diasAtraso;
-//            multa = mapJson.getBigDecimal("multa") == null ? null : mapJson.getBigDecimal("multa");
-//        }
+        def diasAtraso = scfService.calculaDiasDeAtraso(daa01);
 
         //Encargos
         def encargos = mapJson.getBigDecimal("encargosq") == null ? null : mapJson.getBigDecimal("encargos");
 
         //Desconto: considerar desconto somente quando a data de pagamento for menor ou igual a data limite para desconto
         def desconto = mapJson.getBigDecimal("descontoq") == null ? null : mapJson.getBigDecimal("desconto");
-        LocalDate dtLimDesc = mapJson.getDate("dtlimdesc");
-//        if (dtLimDesc == null  || DateUtils.dateDiff(dtLimDesc, daa01.daa01dtPgto, ChronoUnit.DAYS) <= 0) {
-//            desconto = mapJson.getBigDecimal("desconto") == null ? null : mapJson.getBigDecimal("desconto");
-//        }
 
         //Se documento está com valor parcial, ajusta os valores de JMED também parcialmente
         if(daa01 != null && !valor.equals(daa01.getDaa01valor())) {
@@ -85,11 +82,51 @@ public class Caixa extends FormulaBase{
         if(descontoq != null) valorLiquido = valorLiquido + descontoq;
         if(mapJson.getBigDecimal("vale_consumidor") != null) valorLiquido = valorLiquido + mapJson.getBigDecimal("vale_consumidor")
 
+        trocarDepartamentos(daa01);
+
         daa01.daa01liquido = valorLiquido;
     }
-    public Integer calculaDiasDeAtraso(Daa01 daa01) {
-        Long days = DateUtils.dateDiff(daa01.getDaa01dtVctoN(), daa01.getDaa01dtPgto(), ChronoUnit.DAYS);
-        return days.intValue();
+    private void trocarDepartamentos(Daa01 daa01){
+
+        if(daa01.daa01central.abb01quita == 0) return;
+
+        TableMap jsonDaa01 = daa01.daa01json != null ? daa01.daa01json : new TableMap();
+
+        if(jsonDaa01.getInteger("quita_manual") > 0) return;
+
+        if(daa01.daa0101s != null && daa01.daa0101s.size() > 1){
+            List<Daa01011> daa01011s = new ArrayList<>();
+
+            Daa0101 daa0101novo = null;
+
+            for(Daa0101 daa0101 in daa01.daa0101s){
+                if(daa0101novo == null && daa0101.daa0101depto.abb11id != 295878){
+                    daa0101novo = daa0101;
+                }
+
+                for(Daa01011 daa01011 in daa0101.daa01011s){
+                    daa01011.daa01011depto = null;
+                    daa01011s.add(daa01011);
+                }
+            }
+
+            if(daa0101novo != null){
+                daa0101novo.daa0101id = null;
+                daa01.daa0101s = null;
+                daa0101novo.daa01011s = null;
+                daa0101novo.daa0101valor = new BigDecimal(0);
+
+                for(Daa01011 daa01011 in  daa01011s){
+                    daa01011.daa01011id = null;
+                    daa0101novo.addToDaa01011s(daa01011);
+
+                    daa0101novo.daa0101valor += daa01011.daa01011valor
+                }
+                daa01.addToDaa0101s(daa0101novo);
+            }
+
+            jsonDaa01.put("quita_manual", 1);
+        }
     }
     @Override
     public FormulaTipo obterTipoFormula() {
