@@ -32,6 +32,7 @@ public class Documento extends FormulaBase{
 //		}
 
 		mapJson.put("juros", (daa01.daa01valor * 0.17 / 100).round(2));
+        mapJson.put("quita_manual", 0);
 	}
 	@Override 
 	public FormulaTipo obterTipoFormula() { 
