@@ -105,7 +105,8 @@ public class SPV_Impressao_Pre_Venda extends RelatorioBase {
         TableMapDataSource dsPrincipal = new TableMapDataSource(dados);
 
         String nomeUser = obterUsuarioLogado().getAab10user().toUpperCase();
-        if( nomeUser == "NANY" || nomeUser == "DIANA" || nomeUser == "FILIPE" || nomeUser == "PRISCILA" || nomeUser == "SHIRLEI" || nomeUser == "MASTER2" || nomeUser == "LUIS"){
+        if( nomeUser == "NANY" || nomeUser == "DIANA" || nomeUser == "FILIPE" ||
+                nomeUser == "PRISCILA" || nomeUser == "SHIRLEI" || nomeUser == "MASTER2" || nomeUser == "LUIS" || nomeUser == "RICARDO"){
             dsPrincipal.addSubDataSource("dsItens", listItens, "key", "key");
             adicionarParametro("StreamSub1", carregarArquivoRelatorio("SPV_Impressao_Pre_Venda_Lustre_S1"));
 
