@@ -1,5 +1,6 @@
 package Inova.formulas.itensDocumentos
 
+import br.com.multiorm.ColumnType
 import sam.model.entities.aa.Aac13;
 import sam.model.entities.ab.Abd02;
 import sam.server.samdev.utils.Parametro;
@@ -230,6 +231,10 @@ public class SRF_DocPadraoSaida extends FormulaBase {
 
         if (eaa0103.eaa0103qtComl > 0) {
 
+            String categoria = buscarCategoriaItem(abm01.abm01id);
+
+            if(categoria != null && categoria.contains("INDUSTRIALIZAÇÃO") && abd01.abd01clasMov != 9) throw new ValidacaoException("PCD incorreto para item de Industrialização.")
+
             //Define se a entidade é ou não contribuinte de ICMS
             Integer contribICMS = 0;
 
@@ -321,6 +326,22 @@ public class SRF_DocPadraoSaida extends FormulaBase {
 
         }
 
+    }
+
+    private String buscarCategoriaItem(Long abm01id){
+        String sql = "SELECT aba3001descr " +
+                "FROM abm0102 " +
+                "INNER JOIN aba3001 ON aba3001id = abm0102criterio " +
+                "INNER JOIN abm01 ON abm01id = abm0102item " +
+                "WHERE aba3001criterio = 375104 " +
+                "AND abm01id = :abm01id"
+
+        List<String> categorias = getSession().createQuery(sql).setParameter("abm01id", abm01id).getList(ColumnType.STRING);
+
+        if(categorias != null && categorias.size() > 1) throw new ValidacaoException("O item " + abm01.abm01codigo + " - " + abm01.abm01descr + " está cadastrado com mais uma categoria.");
+
+
+        return categorias[0];
     }
 
     // Trocar CFOP (Dentro ou fora do estado)
