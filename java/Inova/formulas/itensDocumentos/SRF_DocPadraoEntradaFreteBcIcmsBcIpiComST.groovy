@@ -283,6 +283,8 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpi extends FormulaBase {
 
             calcularIPI();
 
+            calcularIcmsST();
+
             // Total do Documento sem ST
             eaa0103.eaa0103totDoc = (eaa0103.eaa0103total +
                     jsonEaa0103.getBigDecimal_Zero("ipi") +
@@ -350,6 +352,30 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpi extends FormulaBase {
 
                 eaa0103.eaa0103cfop = aaj15_cfop;
             }
+        }
+    }
+    private void calcularIcmsST() {
+
+        if(jsonEaa0103.getBigDecimal_Zero("aliq_icms_st") != -1){
+
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_icms_st") == 0) jsonEaa0103.put("aliq_icms_st", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms_st"));
+
+            jsonEaa0103.put("bc_icms_st", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest") + jsonEaa0103.getBigDecimal_Zero("seguro") + jsonEaa0103.getBigDecimal_Zero("outras_despesas") + jsonEaa0103.getBigDecimal_Zero("ipi"))
+            jsonEaa0103.put("bc_icms_st", jsonEaa0103.getBigDecimal_Zero("bc_icms_st").round(2));
+
+            if(jsonAbm1001_UF_Item.getBigDecimal_Zero("iva_st") > 0 ){
+                def iva = jsonAbm1001_UF_Item.getBigDecimal_Zero("iva_st");
+                jsonEaa0103.put("bc_icms_st", jsonEaa0103.getBigDecimal_Zero("bc_icms_st") + (jsonEaa0103.getBigDecimal_Zero("bc_icms_st") * iva / 100));
+                jsonEaa0103.put("bc_icms_st", jsonEaa0103.getBigDecimal_Zero("bc_icms_st").round(2));
+            }
+
+            jsonEaa0103.put("icms_st", (jsonEaa0103.getBigDecimal_Zero("bc_icms_st") * jsonEaa0103.getBigDecimal_Zero("aliq_icms_st") / 100) - jsonEaa0103.getBigDecimal_Zero("icms"))
+            jsonEaa0103.put("icms_st", jsonEaa0103.getBigDecimal_Zero("icms_st").round(2));
+
+        }else{
+            jsonEaa0103.put("bc_icms_st", BigDecimal.ZERO);
+            jsonEaa0103.put("aliq_icms_st", BigDecimal.ZERO);
+            jsonEaa0103.put("icms_st", BigDecimal.ZERO);
         }
     }
 
@@ -444,44 +470,6 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpi extends FormulaBase {
             jsonEaa0103.put("aliq_icms", new BigDecimal(0));
             jsonEaa0103.put("icms", new BigDecimal(0));
             jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
-        }
-    }
-
-    private void calcularIcmsST() {
-        // Valor de ICMS ST - Campo 32 // Verifica Parâmetros Fiscais
-
-        if (abd01.abd01operCod == 0) {
-            throw new ValidacaoException("PCD não identifica operação com ST - Verifique PCD/Parâm.Fiscais");
-        }
-
-        Integer ivaST = 0;
-
-        if (jsonAbm1001_UF_Item != null) { //Cálculo do ICMS ST considera os percentuais por estado (item - Estado)
-
-            // Alíquota ICMS_ST = Aliquota para operações internas do cadastro de Estados da entidade destino
-            jsonEaa0103.put("aliq_icms_st", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms_interna"));
-
-            if (abe01.abe01ti == 0) {
-                ivaST = jsonAbm1001_UF_Item.getBigDecimal_Zero("_iva_st_var_ou");
-            }
-
-            if (abe01.abe01ti == 1) {
-                ivaST = jsonAbm1001_UF_Item.getBigDecimal_Zero("_iva_st_atac");
-            }
-        }
-
-        if (ivaST > 0) {
-            // Adicionar IVA_ST à base
-            jsonEaa0103.put("bc_icms_st", jsonEaa0103.getBigDecimal_Zero("bc_icms_st") * ((ivaST / 100) + 1).round(2));
-
-            // Base * Alíquota Interna Estado Destino - Vlr ICMS Normal
-            jsonEaa0103.put("icms_st", (jsonEaa0103.getBigDecimal_Zero("bc_icms_st") * ((jsonEaa0103.getBigDecimal_Zero("aliq_icms_st") / 100)) -
-                    jsonEaa0103.getBigDecimal_Zero("icms").round(2)));
-
-        } else {
-            jsonEaa0103.put("bc_icms_st", new BigDecimal(0));
-            jsonEaa0103.put("aliq_icms_st", new BigDecimal(0));
-            jsonEaa0103.put("icms_st", new BigDecimal(0));
         }
     }
 
