@@ -39,6 +39,7 @@ public class SCF_Cashback_Clientes extends RelatorioBase {
                 for(lcto in lctos){
 
                     lcto.put("mov", lcto.getInteger("dad0101es") == 0 ? "0-Entrada" : "1-Saída");
+                    lcto.put("dad0101valor", lcto.getInteger("dad0101es") == 0 ? lcto.getBigDecimal_Zero("dad0101valor") : lcto.getBigDecimal_Zero("dad0101valor") * -1)
                     lcto.put("key", idCashback);
                     listLctos.add(lcto);
                 }
@@ -68,7 +69,7 @@ public class SCF_Cashback_Clientes extends RelatorioBase {
         String whereEntidades = idsEntidades != null && idsEntidades.size() > 0 ? "WHERE dad01ent IN (:idsEntidades) " : "";
         Parametro parametroEntidades = idsEntidades != null && idsEntidades.size() > 0 ? Parametro.criar("idsEntidades", idsEntidades) : null;
 
-        String sql = "SELECT abe01codigo, abe01nome, dad01saldo, dad01id " +
+        String sql = "SELECT abe01codigo, abe01nome, dad01saldo, dad01id, dad01obs " +
                         "FROM dad01 " +
                         "INNER JOIN abe01 ON abe01id = dad01ent " +
                         whereEntidades +
@@ -83,7 +84,7 @@ public class SCF_Cashback_Clientes extends RelatorioBase {
                     "FROM dad0101 " +
                     "INNER JOIN abb01 ON abb01id = dad0101central " +
                     "WHERE dad0101cb = :idCashback " +
-                    "ORDER BY dad0101id DESC"
+                    "ORDER BY dad0101data"
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idCashback", idCashback));
     }
@@ -92,7 +93,7 @@ public class SCF_Cashback_Clientes extends RelatorioBase {
 
         Parametro parametroId = Parametro.criar("id", id);
 
-        String sql = "SELECT abe01codigo, abe01nome, dad01saldo, dad01id " +
+        String sql = "SELECT abe01codigo, abe01nome, dad01saldo, dad01id, dad01obs " +
                 "FROM dad01 " +
                 "INNER JOIN abe01 ON abe01id = dad01ent " +
                 whereId +
