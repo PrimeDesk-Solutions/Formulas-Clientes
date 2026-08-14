@@ -1764,7 +1764,7 @@ class NFe_Reforma extends FormulaBase {
                         }
                     }
                 }
-                det.addNode("vItem", jsonEaa0103.getBigDecimal_Zero("total_conv"));
+                //det.addNode("vItem", jsonEaa0103.getBigDecimal_Zero("total_conv"));
 
                 List<Long> docsRef = buscarDocumentosReferenciados(eaa01.eaa01id, 2);
                 if(docsRef != null && docsRef.size() > 0) {
