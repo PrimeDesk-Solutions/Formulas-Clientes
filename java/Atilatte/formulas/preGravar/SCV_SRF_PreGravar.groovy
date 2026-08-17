@@ -246,6 +246,9 @@ class SCV_SRF_PreGravar extends FormulaBase {
             // Itens Valores
             Abm0101 abm0101 = abm01 != null ? getSession().get(Abm0101.class, Criterions.eq("abm0101item", abm01.abm01id)) : null;
 
+            // Unidade de Medida do Item
+            Aam06 aam06 = abm01.abm01umu != null ? getSession().get(Aam06.class, abm01.abm01umu.aam06id) : null;
+
             //Campo Livre itens
             TableMap jsonAbm0101 = abm0101.abm0101json != null ? abm0101.abm0101json : new TableMap();
 
@@ -253,7 +256,7 @@ class SCV_SRF_PreGravar extends FormulaBase {
 
             if (eaa0103.eaa0103dtEntrega == null) throw new ValidacaoException("Necessário informar a data de entrega para o item " + abm01.abm01codigo);
             if(jsonAbm0101.getBigDecimal_Zero("cvdnf") == 0 ) throw new ValidacaoException("Quantidade de itens por caixa no cadastro do item " + abm01.abm01codigo + " é inválida! Necessário um valor maior que zero!")
-            if(eaa0103.eaa0103qtComl.intValue() % jsonAbm0101.getInteger("cvdnf").intValue() != 0) throw new ValidacaoException("Quantidade inválida para o item " + abm01.abm01codigo + " necessário quantidade múltipla de " + jsonAbm0101.getBigDecimal_Zero("cvdnf").intValue().toString());
+            if(aam06.aam06codigo != 'KG' && eaa0103.eaa0103qtComl.intValue() % jsonAbm0101.getInteger("cvdnf").intValue() != 0) throw new ValidacaoException("Quantidade inválida para o item " + abm01.abm01codigo + " necessário quantidade múltipla de " + jsonAbm0101.getBigDecimal_Zero("cvdnf").intValue().toString());
 
         }
     }
