@@ -9,6 +9,8 @@ import sam.server.samdev.formula.FormulaBase;
 import sam.server.samdev.utils.FiltroDoF8;
 import sam.server.samdev.utils.Parametro;
 import sam.server.samdev.utils.RequisicaoDoF8;
+import java.util.stream.Collectors;
+
 
 
 class F8_SRF1001 extends FormulaBase {
@@ -36,11 +38,23 @@ class F8_SRF1001 extends FormulaBase {
         String whereFiltros = "";
         List<Parametro> parametros = new ArrayList<Parametro>();
         if (requisicao.getFiltros() != null && requisicao.getFiltros().size() > 0) {
-            for(FiltroDoF8 filtro : requisicao.getFiltros()){
-                whereFiltros += filtro.getWhere().contains("false") ? "" : filtro.getWhere() + " OR ";
-                parametros.addAll(filtro.getParametros());
+            if(requisicao.getFiltros().size() > 0) {
+                whereFiltros = " AND " + requisicao.getFiltros().stream()
+                        .peek(filtro -> parametros.addAll(filtro.getParametros()))
+                        .map(filtro -> filtro.getWhere())
+                        .collect(Collectors.joining(" AND "));
             }
-            whereFiltros = whereFiltros.isEmpty() ? "" : "AND ("+ whereFiltros.substring(0, whereFiltros.length() - 3) +")"
+
+        }
+
+        //Monta o WHERE a partir dos filtros montados pelo campo de busca
+        String whereBusca = "";
+        if(requisicao.getBuscas().size() > 0) {
+            whereBusca = " AND (" + requisicao.getBuscas()
+                    .stream()
+                    .peek(filtro -> parametros.addAll(filtro.getParametros()))
+                    .map(filtro -> filtro.getWhere())
+                    .collect(Collectors.joining(" OR ")) + ") ";
         }
 
         //Instrução para considerar somente Documentos de SRF de Entrada
@@ -59,7 +73,7 @@ class F8_SRF1001 extends FormulaBase {
                         " LEFT JOIN Abe01 ON abb01ent = abe01id " +
                         " LEFT JOIN Abb10 ON abb01operCod = abb10id " +
                         " WHERE true " + obterWherePadrao("Eaa01") +
-                        " " + whereFiltros;
+                        " " + whereFiltros + whereBusca;
 
         String sqlCount = " SELECT count(*) as qtdTotal " + baseDaSql;
 
