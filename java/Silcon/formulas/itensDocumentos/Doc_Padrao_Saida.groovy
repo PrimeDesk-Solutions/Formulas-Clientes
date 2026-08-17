@@ -321,6 +321,8 @@ public class Doc_Padrao_Saida extends FormulaBase {
                 dentroEstado = ufEmpr.aag02uf == ufEnt.aag02uf;
             }
 
+            if(eaa0102.eaa0102consPres == 1) dentroEstado = true;
+
             if(eaa0103.eaa0103unit == 0) definirPrecoUnitarioItem();
 
 //            eaa0103.eaa0103unit = eaa0103.eaa0103unit.round(2)
