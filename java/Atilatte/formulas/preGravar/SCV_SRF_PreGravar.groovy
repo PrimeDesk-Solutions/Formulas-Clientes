@@ -243,85 +243,17 @@ class SCV_SRF_PreGravar extends FormulaBase {
             // Itens
             Abm01 abm01 = getSession().get(Abm01.class, eaa0103.eaa0103item.abm01id);
 
-            // Unidade de Medida do Item
-            Aam06 aam06 = abm01.abm01umu != null ? getSession().get(Aam06.class, abm01.abm01umu.aam06id) : null;
-
             // Itens Valores
             Abm0101 abm0101 = abm01 != null ? getSession().get(Abm0101.class, Criterions.eq("abm0101item", abm01.abm01id)) : null;
 
             //Campo Livre itens
             TableMap jsonAbm0101 = abm0101.abm0101json != null ? abm0101.abm0101json : new TableMap();
 
-            // Central de Documentos
-            Abb01 abb01 = eaa01.eaa01central;
-
-            // Entidade
-            Abe01 abe01 = getSession().get(Abe01.class, abb01.abb01ent.abe01id);
-
-            // Campos Livres Entidade
-            TableMap jsonAbe01 = abe01.abe01json != null ? abe01.abe01json : new TableMap();
-
             if (eaa0103.eaa0103qtComl == 0) throw new ValidacaoException("Quantidade inválida para o item " + abm01.abm01codigo + " necessário um valor maior que zero")
 
             if (eaa0103.eaa0103dtEntrega == null) throw new ValidacaoException("Necessário informar a data de entrega para o item " + abm01.abm01codigo);
-
-
-            //Define o grupo do item
-            def codItem = abm01.abm01codigo;
-
-            Query descrCriterios = getSession().createQuery("select aba3001descr from aba3001 " +
-                    "inner join abm0102 on abm0102criterio = aba3001id and aba3001criterio = 542858 " +
-                    "inner join abm01 on abm0102item = abm01id " +
-                    "where abm01codigo = '" + codItem + "'" +
-                    "and abm01tipo = 1 ");
-
-            List<TableMap> listCriterios = descrCriterios.getListTableMap();
-
-            String grupo = "";
-
-            for (TableMap criterio : listCriterios) {
-                if (criterio.getString("aba3001descr").contains("Queijo")) {
-                    grupo = "Queijo";
-                }
-                if (criterio.getString("aba3001descr").contains("Leite")) {
-                    grupo = "Leite";
-                }
-
-                if (criterio.getString("aba3001descr").contains("Iogurte")) {
-                    grupo = "Iogurte";
-                }
-
-            }
-
-
-            def quantidade;
-
-            if (grupo == "Iogurte") {
-                if (jsonAbm0101.getBigDecimal_Zero("cvdnf") == 0) throw new ValidacaoException("Capacidade Volumetrica no cadastro do item " + abm01.abm01codigo + " é inválida! Necessário um valor maior que zero!")
-                quantidade = eaa0103.eaa0103qtComl.intValue() % jsonAbm0101.getBigDecimal_Zero("cvdnf").intValue();
-                if (quantidade != 0) throw new ValidacaoException("Quantidade inválida para o item " + abm01.abm01codigo + " necessário quantidade múltipla de " + jsonAbm0101.getBigDecimal_Zero("cvdnf").intValue().toString());
-            }
-
-            if (grupo == "Leite") {
-                if (abm01.abm01codigo == "0101002") {
-                    if (jsonAbm0101.getBigDecimal_Zero("volume_caixa") == 0) throw new ValidacaoException("Volume Caixa no cadastro do item " + abm01.abm01codigo + " é inválida! Necessário um valor maior que zero!")
-                    quantidade = eaa0103.eaa0103qtComl.intValue() % jsonAbm0101.getBigDecimal_Zero("volume_caixa").intValue();
-                    if (quantidade != 0) throw new ValidacaoException("Quantidade inválida para o item " + abm01.abm01codigo + " necessário quantidade múltipla de " + jsonAbm0101.getBigDecimal_Zero("volume_caixa").intValue());
-                } else {
-                    if (jsonAbm0101.getBigDecimal_Zero("cvdnf") == 0) throw new ValidacaoException("Capacidade Volumetrica no cadastro do item " + abm01.abm01codigo + " é inválida! Necessário um valor maior que zero!")
-                    quantidade = eaa0103.eaa0103qtComl.intValue() % jsonAbm0101.getBigDecimal_Zero("cvdnf").intValue();
-                    if (quantidade != 0) throw new ValidacaoException("Quantidade inválida para o item " + abm01.abm01codigo + " necessário quantidade múltipla de " + jsonAbm0101.getBigDecimal_Zero("cvdnf").intValue());
-                }
-            }
-
-            if (grupo == "Queijo") {
-                if (aam06.aam06codigo == 'UN') {
-                    if (jsonAbm0101.getBigDecimal_Zero("cvdnf") == 0) throw new ValidacaoException("Capacidade Volumetrica no cadastro do item " + abm01.abm01codigo + " é inválida! Necessário um valor maior que zero!")
-                    quantidade = eaa0103.eaa0103qtComl.intValue() % jsonAbm0101.getBigDecimal_Zero("cvdnf").intValue();
-                    if (quantidade != 0) throw new ValidacaoException("Quantidade inválida para o item " + abm01.abm01codigo + " necessário quantidade múltipla de " + jsonAbm0101.getBigDecimal_Zero("cvdnf").intValue());
-                }
-            }
-
+            if(jsonAbm0101.getBigDecimal_Zero("cvdnf") == 0 ) throw new ValidacaoException("Quantidade de itens por caixa no cadastro do item " + abm01.abm01codigo + " é inválida! Necessário um valor maior que zero!")
+            if(eaa0103.eaa0103qtComl.intValue() % jsonAbm0101.getInteger("cvdnf").intValue() != 0) throw new ValidacaoException("Quantidade inválida para o item " + abm01.abm01codigo + " necessário quantidade múltipla de " + jsonAbm0101.getBigDecimal_Zero("cvdnf").intValue().toString());
 
         }
     }
