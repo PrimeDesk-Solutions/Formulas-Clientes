@@ -226,7 +226,7 @@ public class SCF_Documentos extends RelatorioBase{
 
         String whereOpc = opc != 2 ? " AND daa01previsao IN(:opc) " : "";
         String whereNum = numeroInicial != null && numeroFinal != null ? " AND abb01num BETWEEN  :numeroInicial and :numeroFinal " : "";
-        String whereIdEmpresa = Emprs != null && Emprs.size() > 0 ? " WHERE daa01eg in(:idEmprs)" : "WHERE TRUE "; //idsGc != null && idsGc.size() > 0 ? " WHERE daa01eg in(:idEmprs)" : getSamWhere().getWherePadrao(" WHERE ", Daa01.class);
+        String whereIdEmpresa = Emprs != null && Emprs.size() > 0 ? " WHERE daa01eg IN (:idEmprs)" : "WHERE TRUE "; //idsGc != null && idsGc.size() > 0 ? " WHERE daa01eg in(:idEmprs)" : getSamWhere().getWherePadrao(" WHERE ", Daa01.class);
         String whereIdDepartamento = departamento != null && departamento.size() > 0 ? " AND abb11.abb11id IN (:idDepartamento)": "";
         String whereIdDocumento = documento != null && documento.size() > 0 ? " AND aah01.aah01id IN (:idDocumentos)": "";
         String whereIdNatureza = naturezas != null && naturezas.size() > 0 ? " AND abf10.abf10id IN (:idNaturezas)": "";

@@ -1,6 +1,12 @@
 package PrimeDesk.relatorios.scf
 
-import br.com.multitec.utils.collections.TableMap;
+import br.com.multiorm.ColumnType
+import br.com.multiorm.criteria.criterion.Criterion
+import br.com.multiorm.criteria.criterion.Criterions
+import br.com.multitec.utils.collections.TableMap
+import sam.model.entities.aa.Aac1001
+import sam.model.entities.da.Daa01
+import sam.model.entities.da.Dab10;
 import sam.server.samdev.relatorio.RelatorioBase;
 import sam.server.samdev.relatorio.DadosParaDownload
 import sam.server.samdev.utils.Parametro
@@ -37,9 +43,9 @@ public class SCF_LancamentosPorNatureza extends RelatorioBase {
         List<Long> entidades = getListLong("entidade");
         LocalDate[] dataEmissao = getIntervaloDatas("dataEmissao");
         Integer impressao = getInteger("impressao");
-        Long idEmpresa = obterEmpresaAtiva().getAac10id();
+        List<Long> idEmpresas = getListLong("empresas")
 
-        List<TableMap> dados = buscarLancamentos(numDocIni, numDocFin, tipoDoc, plf, naturezas, entidades, dataEmissao, idEmpresa, contasCorrentes);
+        List<TableMap> dados = buscarLancamentos(numDocIni, numDocFin, tipoDoc, plf, naturezas, entidades, dataEmissao, idEmpresas, contasCorrentes);
 
         if (impressao == 1) return gerarXLSX("SCF_LancamentosPorNatureza_Excel", dados);
         params.put("empresa", obterEmpresaAtiva().getAac10codigo() + "-" + obterEmpresaAtiva().getAac10na());
@@ -50,7 +56,7 @@ public class SCF_LancamentosPorNatureza extends RelatorioBase {
 
     }
 
-    private List<TableMap> buscarLancamentos(Integer numDocIni, Integer numDocFin, List<Long> tipoDoc, List<Long> plf, List<Long> naturezas, List<Long> entidades, LocalDate[] dataEmissao, Long idEmpresa, List<Long> contasCorrentes) {
+    private List<TableMap> buscarLancamentos(Integer numDocIni, Integer numDocFin, List<Long> tipoDoc, List<Long> plf, List<Long> naturezas, List<Long> entidades, LocalDate[] dataEmissao, List<Long> idEmpresas, List<Long> contasCorrentes) {
 
         // Data Inicial - Final
         LocalDate dataIni = null;
@@ -59,9 +65,9 @@ public class SCF_LancamentosPorNatureza extends RelatorioBase {
             dataIni = dataEmissao[0];
             dataFin = dataEmissao[1];
         }
-
-        String whereNumDoc = "WHERE abb01num BETWEEN :numDocIni AND :numDocFin ";
-        String whereEmpresa = "AND dab10gc = :idEmpresa ";
+        List<Long> idsGc = obterGCbyEmpresa(idEmpresas, "Da");
+        String whereNumDoc = "WHERE (abb01num BETWEEN :numDocIni AND :numDocFin OR abb01num IS NULL) ";
+        String whereGcs = idsGc != null && idsGc.size() > 0 ? " AND dab10gc IN (:idsGc) " : "";
         String whereContas = contasCorrentes != null && contasCorrentes.size() > 0 ? "AND dab01id IN (:contasCorrentes)" : "";
         String whereTipoDoc = tipoDoc != null && tipoDoc.size() > 0 ? "AND aah01id IN (:tipoDoc)" : "";
         String wherePlf = plf != null && plf.size() > 0 ? "AND dab10plf in (:plf) " : "";
@@ -71,7 +77,7 @@ public class SCF_LancamentosPorNatureza extends RelatorioBase {
 
         Parametro parametroNumDocIni = Parametro.criar("numDocIni", numDocIni);
         Parametro parametroNumDocFin = Parametro.criar("numDocFin", numDocFin);
-        Parametro parametroEmpresa = Parametro.criar("idEmpresa", idEmpresa);
+        Parametro parametroEmpresa = idsGc != null && idsGc.size() > 0 ? Parametro.criar("idsGc", idsGc) : null;
         Parametro parametroContas = contasCorrentes != null && contasCorrentes.size() > 0 ? Parametro.criar("contasCorrentes", contasCorrentes) : null;
         Parametro parametroTipoDoc = tipoDoc != null && tipoDoc.size() > 0 ? Parametro.criar("tipoDoc", tipoDoc) : null;
         Parametro parametroPlf = plf != null && plf.size() > 0 ? Parametro.criar("plf", plf) : null;
@@ -80,10 +86,10 @@ public class SCF_LancamentosPorNatureza extends RelatorioBase {
         Parametro parametroDataIni = dataIni != null ? Parametro.criar("dataIni", dataIni) : null;
         Parametro parametroDataFin = dataFin != null ? Parametro.criar("dataFin", dataFin) : null;
 
-        String sql = "SELECT dab01codigo AS codCC, dab01nome AS nomeCC, abf10codigo AS codNatureza,abf10nome AS nomeNatureza, " +
+        String sql = "SELECT DISTINCT dab10id, dab01codigo AS codCC, dab01nome AS nomeCC, abf10codigo AS codNatureza,abf10nome AS nomeNatureza, " +
                 " dab10data AS dtLancamento,abe01codigo AS codEnt, abe01na AS naEnt, aah01codigo AS codTipoDoc, aah01nome AS descrTipoDoc, " +
                 " abb01num AS numDoc, abb01parcela AS parcela, abb01quita AS quita, " +
-                " CASE WHEN dab10mov = 0 THEN '0-Entrada' ELSE '1-Saída' END AS movimentacao, dab10011valor AS valorDoc, dab10valor AS valorPago " +
+                " CASE WHEN dab10mov = 0 THEN '0-Entrada' ELSE '1-Saída' END AS movimentacao, dab10011valor AS valorDoc, dab10valor AS valorPago, abb01data " +
                 " FROM dab10 " +
                 " LEFT JOIN dab1002 ON dab1002lct = dab10id " +
                 " LEFT JOIN dab01 ON dab01id = dab1002cc " +
@@ -99,11 +105,22 @@ public class SCF_LancamentosPorNatureza extends RelatorioBase {
                 whereNaturezas +
                 whereEntidade +
                 whereDataEmissao +
-                whereEmpresa +
+                whereGcs +
                 whereContas +
                 "ORDER BY abf10codigo, abb01data, abb01num,abb01parcela, aah01codigo ";
 
+
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroNumDocIni, parametroNumDocFin, parametroEmpresa, parametroContas, parametroTipoDoc, parametroPlf, parametroNatureza, parametroEntidade, parametroDataIni, parametroDataFin);
 
+    }
+    private List<Long> obterGCbyEmpresa(List<Long> empresa, String tabela) {
+        Criterion whereEmpresa = empresa != null ? Criterions.in("aac1001empresa", empresa) : null;
+        Criterion whereTabela = tabela != null ? Criterions.eq("aac1001tabela", tabela) : null;
+
+        return getSession().createCriteria(Aac1001.class)
+                .addFields("aac1001gc")
+                .addWhere(whereEmpresa)
+                .addWhere(whereTabela)
+                .getList(ColumnType.LONG);
     }
 }

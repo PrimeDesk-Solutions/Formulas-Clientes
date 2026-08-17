@@ -33,6 +33,7 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
         Integer detalhamento = getInteger("detalhamento");
         List<Long> entidades = getListLong("entidade");
         List<Long> documentos = getListLong("documento");
+        List<Long> idsContas = getListLong("contas");
         Integer impressao = getInteger("impressao");
 
 
@@ -45,7 +46,7 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
         params.put("empresa", obterEmpresaAtiva().getAac10codigo() + " - " + obterEmpresaAtiva().getAac10na())
 
 
-        List<TableMap> dados = buscarDadosRelatorioAnalitico(idsDeptos, idsNaturezas, dataLcto, agrupamento, detalhamento, entidades, documentos);
+        List<TableMap> dados = buscarDadosRelatorio(idsDeptos, idsNaturezas, dataLcto, agrupamento, entidades, documentos, idsContas);
         List<TableMap> dadosSintetico = new ArrayList<>()
 
         if(detalhamento == 1){
@@ -53,6 +54,7 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
             String depto = ""
 
             for (dado in dados){
+                Long idLcto = dado.getLong("dab10id");
                 String natureza = dado.getString("codNatureza");
                 String departamento = dado.getString("codDepto");
                 String key = agrupamento == 0 ? departamento + "|" + natureza : natureza + "|" + departamento  ;
@@ -66,7 +68,6 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
                     BigDecimal vlrNatureza = dado.getBigDecimal_Zero("valor");
                     totaisNatureza.put(key, vlrNatureza)
                 }
-
                 depto = dado.getString("codDepto")
             }
 
@@ -94,6 +95,19 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
 
         }
 
+        List<Long> idsLcto = new ArrayList<>();
+        for(dado in dados){
+            idsLcto.add(dado.getLong("dab10id"));
+        }
+
+        List<TableMap> listContasCorrentes = buscarContasCorrentesLctos(idsLcto);
+        for(dado in dados){
+            Long idLcto = dado.getLong("dab10id");
+            TableMap tmContaCorrente = listContasCorrentes.stream().filter(t -> t.getLong("dab1002lct") == (idLcto)).findFirst().orElse(null);
+
+            if(tmContaCorrente != null && tmContaCorrente.size() > 0) dado.putAll(tmContaCorrente);
+        }
+
 
         if(agrupamento == 0 && detalhamento == 0 && impressao == 0){
             return gerarPDF("SCF_Lancamentos_Por_Depto_Nat_Analitico_PDF", dados);
@@ -113,13 +127,15 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
             return gerarXLSX("SCF_Lancamentos_Por_Nat_Depto_Sintetico_Excel", dados);
         }
     }
-    private List<TableMap> buscarDadosRelatorioAnalitico(List<Long> idsDeptos, List<Long> idsNaturezas, LocalDate[] dataLcto, Integer agrupamento, Integer detalhamento, List<Long> entidades, List<Long> documentos){
+    private List<TableMap> buscarDadosRelatorio(List<Long> idsDeptos, List<Long> idsNaturezas,
+                                                         LocalDate[] dataLcto, Integer agrupamento, List<Long> entidades, List<Long> documentos, List<Long> idsContas){
         String whereDeptos = idsDeptos != null && idsDeptos.size() > 0 ? "AND abb11id IN (:idsDeptos) " : "";
         String whereNat = idsNaturezas != null && idsNaturezas.size() > 0 ? "AND abf10id IN (:idsNaturezas) " : "";
-        String whereDtLcto = dataLcto != null ? "AND dab10data between :dtInicial AND :dtFinal " : "";
+        String whereDtLcto = dataLcto != null ? "AND dab10data BETWEEN :dtInicial AND :dtFinal " : "";
         String whereEmpresa = "WHERE dab10gc = :idEmpresa ";
         String whereTipoDoc = documentos != null && documentos.size() > 0 ? "AND abb01tipo IN (:documentos) " : "";
         String whereEntidades = entidades != null && entidades.size() > 0 ? "AND abb01ent IN (:entidades) " : "";
+        String whereContasCorrentes = idsContas != null && idsContas.size() > 0 ? "AND dab1002cc IN (:idsContas) " : "";
 
         Parametro parametroDeptos = idsDeptos != null && idsDeptos.size() > 0 ? Parametro.criar("idsDeptos", idsDeptos) : null;
         Parametro parametroNat = idsNaturezas != null && idsNaturezas.size() > 0 ? Parametro.criar("idsNaturezas", idsNaturezas) : null;
@@ -128,21 +144,21 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
         Parametro parametroEmpresa = Parametro.criar("idEmpresa", obterEmpresaAtiva().getAac10id());
         Parametro parametroTipoDoc = documentos != null && documentos.size() > 0 ? Parametro.criar("documentos", documentos) : null;
         Parametro parametroEntidades = entidades != null && entidades.size() > 0 ? Parametro.criar("entidades", entidades) : null;
+        Parametro parametroContas = idsContas != null && idsContas.size() > 0 ? Parametro.criar("idsContas", idsContas) : null;
 
 
         String orderBy = agrupamento == 0 ? "ORDER BY abb11codigo" : "ORDER BY abf10codigo"
 
         String sql = "SELECT DISTINCT dab10id, abb11codigo AS codDepto, abb11nome AS nomeDepto, dab10data AS dtLcto, " +
-                "dab01codigo AS codCC, dab01nome AS nomeCC, dab10historico AS historico,  " +
+                "dab10historico AS historico,  " +
                 "CASE WHEN dab10mov = 0 THEN 'C' ELSE 'D' END AS movimentacao, abf10codigo AS codNatureza, abf10nome AS descrNat, " +
-                "CASE WHEN dab10mov = 1 THEN dab10011valor * (-1) ELSE dab10011valor END AS valor " +
+                "dab10011valor AS valor " +
                 "FROM dab10 " +
                 "LEFT JOIN abb01 ON abb01id = dab10central "+
                 "INNER JOIN dab1001 ON dab1001lct = dab10id " +
                 "INNER JOIN abb11 ON abb11id = dab1001depto " +
-                "INNER JOIN dab1002 ON dab1002lct = dab10id " +
-                "LEFT JOIN dab01 ON dab01id = dab1002cc " +
                 "INNER JOIN dab10011 ON dab10011depto = dab1001id "+
+                "INNER JOIN dab1002 ON dab1002lct = dab10id "+
                 "INNER JOIN abf10 ON abf10id = dab10011nat "+
                 whereDeptos+
                 whereNat+
@@ -150,42 +166,21 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
                 whereEmpresa +
                 whereTipoDoc +
                 whereEntidades +
+                whereContasCorrentes +
                 orderBy
 
-        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroDeptos, parametroNat, parametroDtInicial, parametroDtFinal, parametroEmpresa, parametroTipoDoc, parametroEntidades)
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroDeptos, parametroNat,
+                parametroDtInicial, parametroDtFinal, parametroEmpresa, parametroTipoDoc, parametroEntidades, parametroContas)
 
     }
-    private List<TableMap> buscarDadosRelatorioSintetico(List<Long> idsDeptos, List<Long> idsNaturezas, LocalDate[] dataLcto, Integer agrupamento, Integer detalhamento){
-        String whereDeptos = idsDeptos != null && idsDeptos.size() > 0 ? "AND abb11id IN (:idsDeptos) " : "";
-        String whereNat = idsNaturezas != null && idsNaturezas.size() > 0 ? "AND abf10id IN (:idsNaturezas) " : "";
-        String whereDtLcto = dataLcto != null ? "AND dab10data between :dtInicial AND :dtFinal " : "";
-        String whereEmpresa = "WHERE dab10gc = :idEmpresa ";
+    private List<TableMap> buscarContasCorrentesLctos(List<Long> idLcto){
+        String sql = "SELECT dab1002lct, STRING_AGG(dab01codigo, ',') AS codCC, STRING_AGG(dab01nome, ',') AS nomeCC " +
+                "FROM dab1002 "+
+                "INNER JOIN dab01 ON dab01id = dab1002cc "+
+                "WHERE dab1002lct IN (:idLcto) "+
+                "GROUP BY dab1002lct"
 
-        Parametro parametroDeptos = idsDeptos != null && idsDeptos.size() > 0 ? Parametro.criar("idsDeptos", idsDeptos) : null;
-        Parametro parametroNat = idsDeptos != null && idsDeptos.size() > 0 ? Parametro.criar("idsDeptos", idsDeptos) : null;
-        Parametro parametroDtInicial = dataLcto != null ? Parametro.criar("dtInicial", dataLcto[0]) : null;
-        Parametro parametroDtFinal = dataLcto != null ? Parametro.criar("dtFinal", dataLcto[2]) : null;
-        Parametro parametroEmpresa = Parametro.criar("idEmpresa", obterEmpresaAtiva().getAac10id());
-
-        String orderBy = agrupamento == 0 ? "ORDER BY abb11codigo" : "ORDER BY abf10codigo"
-
-        String sql = "SELECT DISTINCT abb11codigo AS codDepto, abb11nome AS nomeDepto, " +
-                "CASE WHEN dab10mov = 0 THEN 'C' ELSE 'D' END AS movimentacao, abf10codigo AS codNatureza, abf10nome AS descrNat, " +
-                "dab10011valor AS valor " +
-                "FROM dab10 " +
-                "INNER JOIN dab1001 ON dab1001lct = dab10id " +
-                "INNER JOIN abb11 ON abb11id = dab1001depto " +
-                "INNER JOIN dab1002 ON dab1002lct = dab10id " +
-                "LEFT JOIN dab01 ON dab01id = dab1002cc " +
-                "INNER JOIN dab10011 ON dab10011depto = dab1001id "+
-                "INNER JOIN abf10 ON abf10id = dab10011nat "+
-                whereDeptos+
-                whereNat+
-                whereDtLcto+
-                whereEmpresa +
-                orderBy
-
-        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroDeptos, parametroNat, parametroDtInicial, parametroDtFinal, parametroEmpresa)
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idLcto", idLcto));
     }
 }
 //meta-sis-eyJkZXNjciI6IlNDRiAtIExhbsOnYW1lbnRvcyBwb3IgQ2VudHJvIGRlIEN1c3RvcyBlIE5hdCIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
