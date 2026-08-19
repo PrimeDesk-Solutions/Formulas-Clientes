@@ -1767,7 +1767,7 @@ class SRF_NFe extends FormulaBase {
                         }
                     }
                 }
-                det.addNode("vItem", eaa0103.eaa0103total);
+                det.addNode("vItem", eaa0103.eaa0103totDoc);
 
                 List<Long> docsRef = buscarDocumentosReferenciados(eaa01.eaa01id, 2);
                 if(docsRef != null && docsRef.size() > 0) {
@@ -1788,11 +1788,11 @@ class SRF_NFe extends FormulaBase {
             gDif.addNode("pDif", getDecimalReq(jsonEaa0103, "324.22-UB22", "pDif"));
             gDif.addNode("vDif", getDecimalReq4Dig(jsonEaa0103, "324.23-UB23", "vDif"));
         }
-        def vDevTrib = getDecimal(jsonEaa0103, "324.25-UB25", "vDevTrib");
-        if (vDevTrib != null) {
-            def gDevTrib = gIBSUF.addNode("gDevTrib");
-            gDevTrib.addNode("vDevTrib", vDevTrib);
-        }
+        //def vDevTrib = getDecimal(jsonEaa0103, "324.25-UB25", "vDevTrib");
+//        if (vDevTrib != null) {
+//            def gDevTrib = gIBSUF.addNode("gDevTrib");
+//            gDevTrib.addNode("vDevTrib", vDevTrib);
+//        }
         if (aaj07json.getBoolean("red_bc")) {
             def gRed = gIBSUF.addNode("gRed");
             gRed.addNode("pRedAliq", getDecimalReq4Dig(jsonEaa0103, "324.27-UB27", "pRedAliq"));
@@ -1811,11 +1811,11 @@ class SRF_NFe extends FormulaBase {
             gDif.addNode("vDif", getDecimalReq4Dig(jsonEaa0103, "324.42-UB42", "vDif"));
         }
 
-        def vDevTrib = getDecimal(jsonEaa0103, "324.44-UB44", "vDevTrib");
-        if (vDevTrib != null) {
-            def gDevTrib = gIBSMun.addNode("gDevTrib");
-            gDevTrib.addNode("vDevTrib", vDevTrib);
-        }
+        //def vDevTrib = getDecimal(jsonEaa0103, "324.44-UB44", "vDevTrib");
+//        if (vDevTrib != null) {
+//            def gDevTrib = gIBSMun.addNode("gDevTrib");
+//            gDevTrib.addNode("vDevTrib", vDevTrib);
+//        }
         if (aaj07json.getBoolean("red_bc") && aaj07json.getBigDecimal_Zero("perc_red_ibs_mun") > 0) {
             def gRed = gIBSMun.addNode("gRed");
             gRed.addNode("pRedAliq", getDecimalReq4Dig(jsonEaa0103, "324.46-UB46", "pRedAliq"));
@@ -1833,11 +1833,11 @@ class SRF_NFe extends FormulaBase {
             gDif.addNode("pDif", getDecimalReq(jsonEaa0103, "324.60-UB60", "pDif"));
             gDif.addNode("vDif", getDecimalReq4Dig(jsonEaa0103, "324.61-UB61", "vDif"));
         }
-        def vDevTrib = getDecimal(jsonEaa0103, "324.63-UB63", "vDevTrib");
-        if (vDevTrib != null) {
-            def gDevTrib = gCBS.addNode("gDevTrib");
-            gDevTrib.addNode("vDevTrib", vDevTrib);
-        }
+//        def vDevTrib = getDecimal(jsonEaa0103, "324.63-UB63", "vDevTrib");
+//        if (vDevTrib != null) {
+//            def gDevTrib = gCBS.addNode("gDevTrib");
+//            gDevTrib.addNode("vDevTrib", vDevTrib);
+//        }
         if (aaj07json.getBoolean("red_bc")) {
             def gRed = gCBS.addNode("gRed");
             gRed.addNode("pRedAliq", getDecimalReq4Dig(jsonEaa0103, "324.65-UB65", "pRedAliq"));
