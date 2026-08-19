@@ -256,7 +256,7 @@ class SCV_SRF_PreGravar extends FormulaBase {
 
             if (eaa0103.eaa0103dtEntrega == null) throw new ValidacaoException("Necessário informar a data de entrega para o item " + abm01.abm01codigo);
             if(jsonAbm0101.getBigDecimal_Zero("cvdnf") == 0 ) throw new ValidacaoException("Quantidade de itens por caixa no cadastro do item " + abm01.abm01codigo + " é inválida! Necessário um valor maior que zero!")
-            if(aam06.aam06codigo != 'KG' && eaa0103.eaa0103qtComl.intValue() % jsonAbm0101.getInteger("cvdnf").intValue() != 0) throw new ValidacaoException("Quantidade inválida para o item " + abm01.abm01codigo + " necessário quantidade múltipla de " + jsonAbm0101.getBigDecimal_Zero("cvdnf").intValue().toString());
+            if(aam06.aam06codigo != 'KG' && eaa0103.eaa0103qtComl.intValue() % jsonAbm0101.getInteger("cvdnf").intValue() != 0) throw new ValidacaoException("A quantidade " + eaa0103.eaa0103qtComl + " é inválida para o item " + abm01.abm01codigo + " - " + abm01.abm01descr +", necessário quantidade múltipla de " + jsonAbm0101.getBigDecimal_Zero("cvdnf").intValue().toString());
 
         }
     }
