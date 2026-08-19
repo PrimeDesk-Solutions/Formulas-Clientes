@@ -1,5 +1,6 @@
 package Inova.formulas.itensDocumentos
 
+import br.com.multiorm.ColumnType
 import sam.model.entities.aa.Aac13;
 import sam.model.entities.ab.Abd02;
 import sam.server.samdev.utils.Parametro;
@@ -201,11 +202,11 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpi extends FormulaBase {
 
         // Class. Trib CBS/IBS
         aaj07 = eaa0103.eaa0103clasTribCbsIbs != null ? getSession().get(Aaj07.class, eaa0103.eaa0103clasTribCbsIbs.aaj07id) : null;
-        //if (aaj07 == null) throw new ValidacaoException("É nescessário informar a Classificação tribtária de CBS/IBS do item: " + abm01.abm01codigo + " - " + abm01.abm01na);
+        if (aaj07 == null) throw new ValidacaoException("É nescessário informar a Classificação tribtária de CBS/IBS do item: " + abm01.abm01codigo + " - " + abm01.abm01na);
 
         // CST IBS/CBS
         aaj09 = eaa0103.eaa0103cstCbsIbs != null ? getSession().get(Aaj09.class, eaa0103.eaa0103cstCbsIbs.aaj09id) : null;
-        //if (aaj09 == null) interromper("Necessário informar o CST de CBS/IBS no item: " + abm01.abm01codigo + " - " + abm01.abm01na);
+        if (aaj09 == null) interromper("Necessário informar o CST de CBS/IBS no item: " + abm01.abm01codigo + " - " + abm01.abm01na);
 
         //CAMPOS LIVRES
         jsonAac10 = aac10.aac10json != null ? aac10.aac10json : new TableMap();
@@ -229,6 +230,8 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpi extends FormulaBase {
     private void calcularItem() {
 
         if (eaa0103.eaa0103qtComl > 0) {
+
+            definirPrecoUnitario();
 
             //Define se a entidade é ou não contribuinte de ICMS
             Integer contribICMS = 0;
@@ -273,10 +276,11 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpi extends FormulaBase {
             }
 
             // Peso Bruto
-            jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto).round(3));
+            if(jsonEaa0103.getBigDecimal_Zero("peso_bruto") == 0) jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto).round(6));
 
             // Peso Líquido
-            jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(3));
+            if(jsonEaa0103.getBigDecimal_Zero("peso_liquido") == 0) jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(6));
+
 
             // Total do item
             eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
@@ -327,6 +331,31 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpi extends FormulaBase {
 
         }
 
+    }
+
+    private void definirPrecoUnitario(){
+        if(eaa0103.eaa0103unit == 0){
+            String sql = " SELECT COALESCE(eaa0103unit, 0.00) AS unitario " +
+                            " FROM eaa0103 " +
+                            " WHERE eaa0103doc = (" +
+                            "    SELECT MAX(eaa01id)" +
+                            "    FROM eaa01 " +
+                            "    INNER JOIN eaa0103 ON eaa0103doc = eaa01id " +
+                            "    INNER JOIN abb01 ON abb01id = eaa01central " +
+                            "    WHERE abb01ent = :idEntidade " +
+                            "    AND eaa0103item = :idItem " +
+                            "    AND eaa01esMov = 0 " +
+                            "    AND eaa01clasDoc = 0 "+
+                            " )";
+
+
+            BigDecimal ultimoUnit = getSession()
+                                  .createQuery(sql)
+                                  .setParameters("idEntidade", abe01.abe01id, "idItem", abm01.abm01id)
+                                  .getUniqueResult(ColumnType.BIG_DECIMAL);
+
+            eaa0103.eaa0103unit = ultimoUnit == null || ultimoUnit == BigDecimal.ZERO ? BigDecimal.ZERO : ultimoUnit;
+        }
     }
 
     // Trocar CFOP (Dentro ou fora do estado)

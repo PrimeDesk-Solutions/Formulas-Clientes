@@ -230,6 +230,8 @@ public class SRF_Doc_Padrao_Entrada extends FormulaBase {
 
         if (eaa0103.eaa0103qtComl > 0) {
 
+            definirPrecoUnitario();
+
             //Define se a entidade é ou não contribuinte de ICMS
             Integer contribICMS = 0;
 
@@ -273,10 +275,11 @@ public class SRF_Doc_Padrao_Entrada extends FormulaBase {
             }
 
             // Peso Bruto
-            jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto).round(3));
+            if(jsonEaa0103.getBigDecimal_Zero("peso_bruto") == 0) jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto).round(3));
 
             // Peso Líquido
-            jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(3));
+            if(jsonEaa0103.getBigDecimal_Zero("peso_liquido") == 0) jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(3));
+
 
             // Total do item
             eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
@@ -327,6 +330,10 @@ public class SRF_Doc_Padrao_Entrada extends FormulaBase {
 
         }
 
+    }
+
+    private void definirPrecoUnitario(){
+        if(eaa0103.eaa0103unit == 0) eaa0103.eaa0103unit = jsonAbm0101.getBigDecimal_Zero("ultimo_preco");
     }
 
     // Trocar CFOP (Dentro ou fora do estado)

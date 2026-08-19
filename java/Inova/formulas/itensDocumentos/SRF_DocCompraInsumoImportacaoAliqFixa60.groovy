@@ -291,10 +291,11 @@ public class SRF_DocCompraInsumoImportacaoAliqFixa60 extends FormulaBase {
             }
 
             // Peso Bruto
-            jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto).round(6));
+            if(jsonEaa0103.getBigDecimal_Zero("peso_bruto") == 0) jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto).round(3));
 
             // Peso Líquido
-            jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(6));
+            if(jsonEaa0103.getBigDecimal_Zero("peso_liquido") == 0) jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(3));
+
 
             // Novo Unitário
             if(jsonEaa0103.getBigDecimal_Zero("calculou_unitario")){

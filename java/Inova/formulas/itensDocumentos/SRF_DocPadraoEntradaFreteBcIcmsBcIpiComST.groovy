@@ -44,7 +44,7 @@ import sam.model.entities.ea.Eaa0102;
 import sam.model.entities.ea.Eaa0103;
 import sam.server.samdev.formula.FormulaBase;
 
-public class SRF_DocPadraoEntradaFreteBcIcmsBcIpi extends FormulaBase {
+public class SRF_DocPadraoEntradaFreteBcIcmsBcIpiComST extends FormulaBase {
 
     private Aac10 aac10;
     private Aac13 aac13;
@@ -273,10 +273,11 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpi extends FormulaBase {
             }
 
             // Peso Bruto
-            jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto).round(3));
+            if(jsonEaa0103.getBigDecimal_Zero("peso_bruto") == 0) jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto).round(6));
 
             // Peso Líquido
-            jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(3));
+            if(jsonEaa0103.getBigDecimal_Zero("peso_liquido") == 0) jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(6));
+
 
             // Total do item
             eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
