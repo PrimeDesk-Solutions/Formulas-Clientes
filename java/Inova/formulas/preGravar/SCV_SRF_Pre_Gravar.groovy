@@ -8,6 +8,7 @@ import br.com.multitec.utils.collections.TableMap
 import jdk.jfr.Experimental
 import sam.model.entities.aa.Aam06
 import sam.model.entities.ab.Abb01
+import sam.model.entities.ab.Abd01
 import sam.model.entities.ab.Abe01
 import sam.model.entities.ab.Abe0101
 import sam.model.entities.ab.Abe02
@@ -50,10 +51,13 @@ public class SCV_SRF_Pre_Gravar extends FormulaBase {
 
     private void validarItensDoc(Eaa01 eaa01) {
         try {
+
+            Abd01 abd01 = getSession().get(Abd01.class, Criterions.eq("abd01id", eaa01.eaa01pcd.abd01id));
+
             Map<Long, Integer> contagemItens = new HashMap<>();
 
             if (eaa01.eaa0103s.size() == 0) throw new ValidacaoException("Não é permitido salvar documento sem itens informado. Insira pelo menos um item para continuar. ");
-            String msg = new StringBuilder();
+            String msg = "";
 
             for (Eaa0103 eaa0103 : eaa01.eaa0103s) {
                 Abm01 abm01 = getSession().get(Abm01.class, eaa0103.eaa0103item.abm01id);
@@ -74,43 +78,45 @@ public class SCV_SRF_Pre_Gravar extends FormulaBase {
 
                 if (eaa0103.eaa0103unit == 0) throw new ValidacaoException("O unitário do item " + abm01.abm01codigo + " - " + abm01.abm01descr + " deve ser maior que zero.")
                 if (eaa0103.eaa0103qtComl == 0) throw new ValidacaoException("A quantidade do item " + abm01.abm01codigo + " - " + abm01.abm01descr + " deve ser maior que zero.")
-                if (jsonEaa01.getBigDecimal_Zero("volumes") == BigDecimal.ZERO) throw new ValidacaoException("Documento sem volume informado.");
-                if (jsonEaa01.getBigDecimal_Zero("peso_bruto") == BigDecimal.ZERO) throw new ValidacaoException("Documento sem peso bruto informado.");
+                if (jsonEaa01.getBigDecimal_Zero("volumes") == BigDecimal.ZERO && abd01.abd01aplic == 1 && abd01.abd01es == 1 ) throw new ValidacaoException("Documento sem volume informado.");
+                if (jsonEaa01.getBigDecimal_Zero("peso_bruto") == BigDecimal.ZERO && abd01.abd01aplic == 1 && abd01.abd01es == 1) throw new ValidacaoException("Documento sem peso bruto informado.");
 
-                if (jsonAbm0101.getBigDecimal_Zero("preco_max_real") > 0 && eaa01.eaa01moeda == null) {
-                    if (eaa0103.eaa0103unit > jsonAbm0101.getBigDecimal_Zero("preco_max_real")) {
-                        msg = "O unitário do item " + abm01.abm01codigo + " " + abm01.abm01descr + " excedeu o limite de preço unitário real permitido que é: " + jsonAbm0101.getBigDecimal_Zero("preco_max_real");
-                        bloquearDocumento(eaa01, msg, "Pré-Gravar Unit. Real");
+                if(abd01.abd01aplic == 0){
+                    if (jsonAbm0101.getBigDecimal_Zero("preco_max_real") > 0 && eaa01.eaa01moeda == null) {
+                        if (eaa0103.eaa0103unit > jsonAbm0101.getBigDecimal_Zero("preco_max_real")) {
+                            msg = "O unitário do item " + abm01.abm01codigo + " " + abm01.abm01descr + " excedeu o limite de preço unitário real permitido que é: " + jsonAbm0101.getBigDecimal_Zero("preco_max_real");
+                            bloquearDocumento(eaa01, msg, "PréGravar Unit Real");
+                        }
+
                     }
 
-                }
-
-                if (eaa01.eaa01moeda != null && eaa01.eaa01moeda.aag10codigo == "01") {
-                    if (jsonAbm0101.getBigDecimal_Zero("preco_max_dolar") > 0 && eaa0103.eaa0103unit > jsonAbm0101.getBigDecimal_Zero("preco_max_dolar")) {
-                        msg = "O unitario do item " + abm01.abm01codigo + " " + abm01.abm01descr + " excedeu o limite de preço unitario dolar permitido que é: " + jsonAbm0101.getBigDecimal_Zero("preco_max_dolar");
-                        bloquearDocumento(eaa01, msg, "Pré-Gravar Unit. Dólar");
+                    if (eaa01.eaa01moeda != null && eaa01.eaa01moeda.aag10codigo == "01") {
+                        if (jsonAbm0101.getBigDecimal_Zero("preco_max_dolar") > 0 && eaa0103.eaa0103unit > jsonAbm0101.getBigDecimal_Zero("preco_max_dolar")) {
+                            msg = "O unitario do item " + abm01.abm01codigo + " " + abm01.abm01descr + " excedeu o limite de preço unitario dolar permitido que é: " + jsonAbm0101.getBigDecimal_Zero("preco_max_dolar");
+                            bloquearDocumento(eaa01, msg, "PréGravar Unit Dólar");
+                        }
                     }
-                }
 
-                if (eaa0103.eaa0103qtUso < jsonAbm0101.getBigDecimal_Zero("lote_min")) {
-                    msg = "O item " + abm01.abm01codigo + " " + abm01.abm01descr + " não atingiu o lote mínimo de compra."
-                    gravarInconsitencia(eaa01, msg, "Pré-Gravar Lote Min.");
-                }
+                    if (eaa0103.eaa0103qtUso < jsonAbm0101.getBigDecimal_Zero("lote_min")) {
+                        msg = "O item " + abm01.abm01codigo + " " + abm01.abm01descr + " não atingiu o lote mínimo de compra."
+                        gravarInconsitencia(eaa01, msg, "PréGravar Lote Min");
+                    }
 
-                BigDecimal saldoAtual = getSession().createQuery("SELECT SUM(bcc02qt) FROM bcc02 WHERE bcc02item = :idItem").setParameter("idItem", abm01.abm01id).getUniqueResult(ColumnType.BIG_DECIMAL);
-                saldoAtual = saldoAtual == null ? BigDecimal.ZERO : saldoAtual;
-                BigDecimal saldoLiquido = (saldoAtual + qtdPedido) - estqMax;
+                    BigDecimal saldoAtual = getSession().createQuery("SELECT SUM(bcc02qt) FROM bcc02 WHERE bcc02item = :idItem").setParameter("idItem", abm01.abm01id).getUniqueResult(ColumnType.BIG_DECIMAL);
+                    saldoAtual = saldoAtual == null ? BigDecimal.ZERO : saldoAtual;
+                    BigDecimal saldoLiquido = (saldoAtual + qtdPedido) - estqMax;
 
-                if (estqMax != 0 && saldoAtual > estqMax) {
-                    msg = "Item - " + eaa0103.eaa0103seq + " " + abm01.abm01codigo + "\n";
-                    msg += "A quantidade solicitada + Saldo do estoque não pode ser maior que o estoque máximo\n";
-                    msg += "Estoque Máximo: " + estqMax + "\n";
-                    msg += "Qtd Solicitada: " + qtdPedido + "\n";
-                    msg += "Saldo Estoque: " + saldoAtual + "\n";
-                    msg += "Total Excedido: " + saldoLiquido + "\n";
+                    if (estqMax != 0 && saldoAtual > estqMax) {
+                        msg = "Item - " + eaa0103.eaa0103seq + " " + abm01.abm01codigo + "\n";
+                        msg += "A quantidade solicitada + Saldo do estoque não pode ser maior que o estoque máximo\n";
+                        msg += "Estoque Máximo: " + estqMax + "\n";
+                        msg += "Qtd Solicitada: " + qtdPedido + "\n";
+                        msg += "Saldo Estoque: " + saldoAtual + "\n";
+                        msg += "Total Excedido: " + saldoLiquido + "\n";
 
-                    bloquearDocumento(eaa01, msg, "Pré-Gravar Est. Max");
+                        bloquearDocumento(eaa01, msg, "Pré-Gravar Est. Max");
 
+                    }
                 }
             }
 
@@ -138,7 +144,7 @@ public class SCV_SRF_Pre_Gravar extends FormulaBase {
         abe02 = getSession().get(Abe02.class, Criterions.eq("abe02ent", abe01.abe01id));
 
         // Campos Livres
-        TableMap jsonAbe02 = abe02.abe02json != null ? abe02.abe02json : new TableMap();
+        TableMap jsonAbe02 = abe02 != null && abe02.abe02json != null ? abe02.abe02json : new TableMap();
 
         if (jsonAbe02.size() == 0) {
             getSession().connection.prepareStatement("UPDATE abe02 SET abe02json = '{}' WHERE abe02ent = " + abe01.abe01id).execute();
@@ -176,7 +182,7 @@ public class SCV_SRF_Pre_Gravar extends FormulaBase {
         abe02 = getSession().get(Abe02.class, Criterions.eq("abe02ent", abe01.abe01id));
 
         // Campos Livres
-        TableMap jsonAbe02 = abe02.abe02json != null ? abe02.abe02json : new TableMap();
+        TableMap jsonAbe02 = abe02 != null && abe02.abe02json != null ? abe02.abe02json : new TableMap();
 
         if (eaa01.eaa01totDoc > jsonAbe02.getBigDecimal_Zero("maior_venda_valor")) {
             def numDoc = abb01.abb01num;
