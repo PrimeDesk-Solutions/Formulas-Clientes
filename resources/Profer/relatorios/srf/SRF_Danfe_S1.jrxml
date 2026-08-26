@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_Danfe_S1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="13004f47-607d-4587-8011-0d7d497aecd0">
 	<property name="ireport.zoom" value="4.50788880540947"/>
-	<property name="ireport.x" value="1565"/>
+	<property name="ireport.x" value="145"/>
 	<property name="ireport.y" value="0"/>
 	<field name="seq" class="java.lang.Integer"/>
 	<field name="eaa0103codigo" class="java.lang.String"/>
@@ -33,87 +33,87 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="16" splitType="Stretch">
+		<band height="24" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="0" width="13" height="16" uuid="99fc3906-41a0-46e8-8535-6e7b6c354f13"/>
+				<reportElement x="0" y="0" width="13" height="24" uuid="99fc3906-41a0-46e8-8535-6e7b6c354f13"/>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="13" y="0" width="42" height="16" uuid="d47cf579-81d9-4326-be96-05d91921d2df"/>
+				<reportElement x="13" y="0" width="42" height="24" uuid="d47cf579-81d9-4326-be96-05d91921d2df"/>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="55" y="0" width="186" height="16" uuid="c2db844d-8b7b-4995-9722-e6d57aefb402"/>
+				<reportElement x="55" y="0" width="186" height="24" uuid="c2db844d-8b7b-4995-9722-e6d57aefb402"/>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="241" y="0" width="26" height="16" uuid="a6d97b44-5bd1-4264-82a4-b7de14e10880"/>
+				<reportElement x="241" y="0" width="26" height="24" uuid="a6d97b44-5bd1-4264-82a4-b7de14e10880"/>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="267" y="0" width="13" height="16" uuid="4de69f65-8647-4405-92b8-64ee3cebf5cc"/>
+				<reportElement x="267" y="0" width="13" height="24" uuid="4de69f65-8647-4405-92b8-64ee3cebf5cc"/>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="280" y="0" width="15" height="16" uuid="3a7f5908-2f5c-453d-bb08-6bd5f05aec52"/>
+				<reportElement x="280" y="0" width="15" height="24" uuid="3a7f5908-2f5c-453d-bb08-6bd5f05aec52"/>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="295" y="0" width="20" height="16" uuid="5783ae3f-b19d-40a9-b03e-6826d88caf8a"/>
+				<reportElement x="295" y="0" width="20" height="24" uuid="5783ae3f-b19d-40a9-b03e-6826d88caf8a"/>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="315" y="0" width="31" height="16" uuid="e94455f8-3353-4feb-bcf7-1a948e46ea27"/>
+				<reportElement x="315" y="0" width="31" height="24" uuid="e94455f8-3353-4feb-bcf7-1a948e46ea27"/>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="346" y="0" width="31" height="16" uuid="710e7452-c715-457a-9931-e6a4d1d303b7"/>
+				<reportElement x="346" y="0" width="31" height="24" uuid="710e7452-c715-457a-9931-e6a4d1d303b7"/>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="377" y="0" width="31" height="16" uuid="5eadf3f1-7373-4e91-983b-3370742986b2"/>
+				<reportElement x="377" y="0" width="31" height="24" uuid="5eadf3f1-7373-4e91-983b-3370742986b2"/>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="436" y="0" width="31" height="16" uuid="55a0633e-d7b8-4d77-9323-1db7e75cfd02"/>
+				<reportElement x="436" y="0" width="31" height="24" uuid="55a0633e-d7b8-4d77-9323-1db7e75cfd02"/>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="467" y="0" width="31" height="16" uuid="7fb5be61-b6d2-4ab5-bb8b-f6be57aff712"/>
+				<reportElement x="467" y="0" width="31" height="24" uuid="7fb5be61-b6d2-4ab5-bb8b-f6be57aff712"/>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="498" y="0" width="31" height="16" uuid="dfe29957-b867-4a94-962d-a0da883e46d6"/>
+				<reportElement x="498" y="0" width="31" height="24" uuid="dfe29957-b867-4a94-962d-a0da883e46d6"/>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="529" y="0" width="26" height="16" uuid="27e39e86-42cf-47c5-957f-bed77b559184"/>
+				<reportElement x="529" y="0" width="26" height="24" uuid="27e39e86-42cf-47c5-957f-bed77b559184"/>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
 				</graphicElement>
@@ -133,8 +133,8 @@
 				<textFieldExpression><![CDATA[$F{eaa0103codigo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="57" y="1" width="184" height="15" uuid="fa632f74-f465-4242-9234-602ccd74690e"/>
-				<textElement verticalAlignment="Middle">
+				<reportElement x="57" y="1" width="184" height="23" uuid="fa632f74-f465-4242-9234-602ccd74690e"/>
+				<textElement verticalAlignment="Top">
 					<font fontName="Arial" size="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{eaa0103descr} + ". " + $F{complementoItem}]]></textFieldExpression>
@@ -224,7 +224,7 @@
 				<textFieldExpression><![CDATA[$F{aliq_icms} == null ? new BigDecimal(0) : $F{aliq_icms}]]></textFieldExpression>
 			</textField>
 			<rectangle>
-				<reportElement x="408" y="0" width="31" height="16" uuid="9c0039d4-51e5-4126-ab4c-ee2b153afd12"/>
+				<reportElement x="408" y="0" width="31" height="24" uuid="9c0039d4-51e5-4126-ab4c-ee2b153afd12"/>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
 				</graphicElement>

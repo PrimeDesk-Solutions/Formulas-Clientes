@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_Danfe" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6ac031a1-f8f7-421b-a30d-00814a4255e8">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<property name="ireport.zoom" value="1.6528925619834725"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="2.4200000000000035"/>
+	<property name="ireport.x" value="347"/>
+	<property name="ireport.y" value="120"/>
 	<style name="style1" hAlign="Center"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\FontesSam4\\formulas-multitec\\src\\main\\resources\\multitec\\relatorios\\srf\\"]]></defaultValueExpression>
@@ -89,7 +89,6 @@
 	<field name="bc_icms" class="java.math.BigDecimal"/>
 	<field name="icms" class="java.math.BigDecimal"/>
 	<field name="bc_icms_st" class="java.math.BigDecimal"/>
-	<field name="vlr_icms_st" class="java.math.BigDecimal"/>
 	<field name="total_prods" class="java.math.BigDecimal"/>
 	<field name="vlr_frete" class="java.math.BigDecimal"/>
 	<field name="vlr_seguro" class="java.math.BigDecimal"/>
@@ -124,6 +123,7 @@
 	<field name="eaa0102despacho_complem" class="java.lang.String"/>
 	<field name="volumes" class="java.math.BigDecimal"/>
 	<field name="documentosAtrelados" class="java.lang.String"/>
+	<field name="icms_st" class="java.math.BigDecimal"/>
 	<variable name="PEDCLI" class="java.lang.String"/>
 	<variable name="eaa01_NUMBER" class="java.lang.String"/>
 	<group name="eaa01" isStartNewPage="true" isResetPageNumber="true">
@@ -1145,7 +1145,7 @@
 					<textElement textAlignment="Right">
 						<font fontName="Arial" size="7"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{vlr_icms_st} == null ? new BigDecimal(0) : $F{vlr_icms_st}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{icms_st} == null ? new BigDecimal(0) : $F{icms_st}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
 					<reportElement x="425" y="136" width="125" height="10" uuid="9e9021ca-4c46-4b0d-a82b-e82bead32dfb"/>
@@ -1588,7 +1588,7 @@ www.nfe.fazenda.gov.br/portal ou no site da Sefaz Autorizadora.]]></text>
 				<textFieldExpression><![CDATA[$F{eaa01esMov}.intValue() == 1 || $F{eaa01esMov}.intValue() == 3 ? "1" : "0"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="51" width="224" height="26" uuid="6fa973b5-c6b9-4e95-b4e0-9825e86a8aa0"/>
+				<reportElement x="0" y="34" width="224" height="43" uuid="6fa973b5-c6b9-4e95-b4e0-9825e86a8aa0"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
@@ -1749,13 +1749,6 @@ $F{eaa01nfeProt}.substring(12,15)+" "   : ""]]></textFieldExpression>
 				</textElement>
 				<text><![CDATA[Página:]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="271" y="79" width="13" height="10" uuid="25ccf950-18f0-4f9d-87c0-346480d40e30"/>
-				<textElement textAlignment="Right">
-					<font fontName="Arial" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{eaa01_COUNT}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement x="284" y="79" width="4" height="10" uuid="d17c6f3d-581b-4010-a9a4-4e9aef0604c6"/>
 				<textElement>
@@ -1771,20 +1764,21 @@ $F{eaa01nfeProt}.substring(12,15)+" "   : ""]]></textFieldExpression>
 				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="0" y="15" width="66" height="35" uuid="b8991880-fa12-4cc9-b376-74d96d1a8ec0">
-					<printWhenExpression><![CDATA[1 == 2]]></printWhenExpression>
-				</reportElement>
+				<reportElement x="0" y="0" width="66" height="35" uuid="b8991880-fa12-4cc9-b376-74d96d1a8ec0"/>
 				<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\srf\\Logo Silcon.png"]]></imageExpression>
 			</image>
 			<textField isBlankWhenNull="true">
-				<reportElement x="82" y="17" width="143" height="32" uuid="88451dad-f160-4a32-aff8-77bad119e6e2"/>
+				<reportElement x="82" y="2" width="143" height="32" uuid="88451dad-f160-4a32-aff8-77bad119e6e2"/>
 				<textElement>
 					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{aac10rs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="117" y="0" width="100" height="20" uuid="6ae34773-63c7-4c92-bc7a-0aeeb64ba821"/>
+				<reportElement x="273" y="79" width="13" height="10" uuid="a5f0a04a-dd09-485b-b097-7b3983d267b8"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -1978,7 +1972,9 @@ $F{eaa01nfeProt}.substring(12,15)+" "   : ""]]></textFieldExpression>
     ? $F{eaa01obsContrib} : $F{eaa01obsFisco})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="6" y="68" width="372" height="10" uuid="1f34298d-377d-4bd0-8af9-87660caf7e08"/>
+				<reportElement x="6" y="68" width="372" height="10" uuid="1f34298d-377d-4bd0-8af9-87660caf7e08">
+					<printWhenExpression><![CDATA[1 == 2]]></printWhenExpression>
+				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="6"/>
 				</textElement>

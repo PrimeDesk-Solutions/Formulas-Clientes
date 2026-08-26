@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF_Lancamentos_Por_Depto_Nat_Analitico_PDF" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="61fdf3e8-4ad2-4d83-8c71-3307f90fa785">
 	<property name="ireport.zoom" value="1.771561000000001"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="317"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="titulo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
@@ -21,6 +21,55 @@
 	<variable name="tot_departamento" class="java.math.BigDecimal" resetType="Group" resetGroup="departamento" calculation="Sum">
 		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
 	</variable>
+	<variable name="totNaturezaGeral" class="java.math.BigDecimal" resetType="Group" resetGroup="GERAL" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+	</variable>
+	<variable name="totDeptoGeral" class="java.math.BigDecimal" resetType="Group" resetGroup="GERAL" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+	</variable>
+	<group name="GERAL">
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band height="34">
+				<staticText>
+					<reportElement x="375" y="4" width="78" height="12" uuid="1558f502-dd49-4292-b552-e647e2a32626"/>
+					<textElement>
+						<font size="8" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Total Geral Depto:]]></text>
+				</staticText>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="453" y="22" width="100" height="12" uuid="c380cf07-26d9-4cca-9828-d7265a49937a"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totNaturezaGeral}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="375" y="4" width="178" height="1" uuid="3b563f63-263d-4161-ac4a-78ffad39f4e6"/>
+				</line>
+				<staticText>
+					<reportElement x="375" y="22" width="78" height="12" uuid="a2d8e201-8c05-4431-b1ec-99d812f3b8b7"/>
+					<textElement>
+						<font size="8" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Total Geral Natureza:]]></text>
+				</staticText>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="453" y="4" width="100" height="12" uuid="fc867063-5ea3-4947-936e-2dbcbc931d75"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totDeptoGeral}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="375" y="21" width="178" height="1" uuid="c7fb6b0a-24c3-4467-89dc-e8e2c614f4be"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
 	<group name="departamento">
 		<groupExpression><![CDATA[$F{codDepto}]]></groupExpression>
 		<groupHeader>

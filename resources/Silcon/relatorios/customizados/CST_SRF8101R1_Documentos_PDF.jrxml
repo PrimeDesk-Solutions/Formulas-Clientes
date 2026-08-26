@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_SRF8101R1_Documentos_PDF" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fc11d8b5-949d-4d0e-bde2-dfd5ad493788">
 	<property name="ireport.zoom" value="1.9487171000000019"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="958"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="TITULO_RELATORIO" class="java.lang.String"/>
 	<parameter name="PERIODO" class="java.lang.String"/>
@@ -163,13 +163,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nomeCampo1}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="730" y="0" width="71" height="13" uuid="8e55acb3-574c-4d1e-a4bd-1c16706dfc80"/>
-				<textElement>
-					<font fontName="Arial" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{nomeCampo2}]]></textFieldExpression>
-			</textField>
 			<line>
 				<reportElement x="0" y="13" width="802" height="1" uuid="b8fe9304-8ed5-4191-84b6-61de06b56e06"/>
 			</line>
@@ -247,13 +240,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{valorCampo1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
-				<reportElement x="730" y="0" width="71" height="13" uuid="39da7737-58d8-4c4e-a3e2-bd28510faa17"/>
-				<textElement>
-					<font fontName="Arial" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{valorCampo2}]]></textFieldExpression>
-			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="474" y="0" width="191" height="13" uuid="ed5b67ed-f833-42d4-8233-37dea5252e51"/>
 				<textElement>
@@ -301,15 +287,6 @@
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalCampo1}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
-				<reportElement x="730" y="2" width="72" height="13" uuid="151b4a05-99fb-4a7a-8877-5f80c4d178dd">
-					<printWhenExpression><![CDATA[$P{totalizar2}]]></printWhenExpression>
-				</reportElement>
-				<textElement>
-					<font fontName="Arial" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{totalCampo2}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="637" y="2" width="28" height="13" uuid="bc1ed546-eff4-489c-ae29-b1adbee7d80f"/>

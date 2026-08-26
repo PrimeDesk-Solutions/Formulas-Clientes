@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF_LancamentosPorNatureza" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3124599d-0729-4fb5-a579-81ce87c5ff5f">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="513"/>
+	<property name="ireport.x" value="136"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="titulo" class="java.lang.String"/>
@@ -178,7 +178,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nomeCC}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="325" y="0" width="127" height="13" uuid="26bcb1c5-f390-4413-9ad0-72b05d070e27"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
@@ -192,14 +192,14 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dtLancamento}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="452" y="0" width="53" height="13" uuid="3afe9f4f-cf45-4e24-8f56-4f6840fa10e4"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{codTipoDoc}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="505" y="0" width="48" height="13" uuid="e10c18ea-758c-4d6b-ab87-8ac165074b6e"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>

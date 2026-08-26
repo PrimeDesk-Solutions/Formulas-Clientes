@@ -34,7 +34,7 @@
 			<band/>
 		</groupHeader>
 		<groupFooter>
-			<band height="30">
+			<band height="15">
 				<staticText>
 					<reportElement x="0" y="3" width="141" height="12" uuid="086b2bd9-5dfe-48c9-8166-0fbe5b1a6491"/>
 					<textElement>
@@ -42,26 +42,12 @@
 					</textElement>
 					<text><![CDATA[VALOR A PAGAR AO CLIENTE:]]></text>
 				</staticText>
-				<staticText>
-					<reportElement x="0" y="15" width="141" height="15" uuid="bd086492-fc1b-4c4e-a27e-9f4e8671a8f0"/>
-					<textElement>
-						<font size="8"/>
-					</textElement>
-					<text><![CDATA[VALOR A RECEBER DO CLIENTE:]]></text>
-				</staticText>
 				<textField pattern="#,##0.00;-#,##0.00">
 					<reportElement x="141" y="3" width="43" height="12" uuid="839d7513-121b-464c-ae5a-81e9c981ad17"/>
 					<textElement textAlignment="Right">
 						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{vlrDoc}]]></textFieldExpression>
-				</textField>
-				<textField pattern="#,##0.00;-#,##0.00">
-					<reportElement x="141" y="15" width="43" height="15" uuid="8615c259-cdcc-49e5-a7f0-a181eebee3f8"/>
-					<textElement textAlignment="Right">
-						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{totalDevolver}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -132,11 +118,16 @@
 				<textFieldExpression><![CDATA[$F{numDoc}]]></textFieldExpression>
 			</textField>
 			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="0" y="0" width="105" height="62" uuid="5175068c-3f18-4384-a01c-7fbdd937e513">
-					<printWhenExpression><![CDATA[1 == 2]]></printWhenExpression>
-				</reportElement>
+				<reportElement x="0" y="0" width="105" height="62" uuid="5175068c-3f18-4384-a01c-7fbdd937e513"/>
 				<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\customizados\\Logo Silcon.png"]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement x="492" y="0" width="63" height="20" uuid="0fdf3f24-7b62-4943-b86e-fc8ecc96d965"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -279,6 +270,41 @@
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[Item Devolvido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="338" y="138" width="22" height="15" uuid="0953ebc2-2e78-47dc-ad21-239d76e0a0c4"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[QTD.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="392" y="138" width="22" height="15" uuid="ed8d3603-573e-4f2f-af79-c08378d3aee8"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[UN.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="435" y="139" width="22" height="15" uuid="a49efefe-f654-4091-b6e7-b94e81fb90f1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[UNIT.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="474" y="138" width="32" height="15" uuid="552bc1ad-b1ba-4496-a4be-670806cafd20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DESC.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="520" y="138" width="32" height="15" uuid="5f416703-1cac-4115-83f7-44cd2732a1db"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[TOTAL.]]></text>
 			</staticText>
 		</band>
 	</pageHeader>

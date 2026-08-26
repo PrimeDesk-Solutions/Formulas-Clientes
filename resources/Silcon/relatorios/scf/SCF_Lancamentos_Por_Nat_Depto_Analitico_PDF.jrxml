@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF_Lancamentos_Por_Depto_Nat_Analitico_PDF" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="61fdf3e8-4ad2-4d83-8c71-3307f90fa785">
 	<property name="ireport.zoom" value="1.771561000000001"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="317"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="titulo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
@@ -21,6 +21,35 @@
 	<variable name="tot_departamento" class="java.math.BigDecimal" resetType="Group" resetGroup="departamento" calculation="Sum">
 		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
 	</variable>
+	<variable name="totNaturezaGeral" class="java.math.BigDecimal" resetType="Group" resetGroup="GERAL" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+	</variable>
+	<group name="GERAL">
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band height="25">
+				<staticText>
+					<reportElement x="378" y="12" width="77" height="13" uuid="ad1bd5c8-389d-471a-b8b8-87face94f047"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Total Natureza Geral:]]></text>
+				</staticText>
+				<line>
+					<reportElement x="376" y="11" width="176" height="1" uuid="24f2b0e5-879d-46ed-ba7e-4c375e273f32"/>
+				</line>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="455" y="12" width="100" height="13" uuid="c037fc96-6407-45f8-bedc-7e02b16f6674"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totNaturezaGeral}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
 	<group name="natureza">
 		<groupExpression><![CDATA[$F{codNatureza}]]></groupExpression>
 		<groupHeader>
@@ -42,7 +71,7 @@
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="16">
+			<band height="21">
 				<textField>
 					<reportElement x="378" y="3" width="108" height="13" uuid="d6a6ff74-fbc2-4af8-9ab6-9b4c9b677479"/>
 					<textElement>

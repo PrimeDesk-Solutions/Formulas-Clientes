@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF_DocumentosPorDepartamentosNaturezas_R1" language="groovy" pageWidth="1190" pageHeight="595" orientation="Landscape" columnWidth="1150" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1f67a61e-6a0a-4ade-8897-168f78801ff5">
-	<property name="ireport.zoom" value="3.215383215000006"/>
-	<property name="ireport.x" value="2774"/>
+	<property name="ireport.zoom" value="1.815000000000003"/>
+	<property name="ireport.x" value="1395"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="TITULO_RELATORIO" class="java.lang.String"/>
 	<parameter name="EMPRESA" class="java.lang.String"/>
@@ -39,6 +39,8 @@
 	<field name="abf16nome" class="java.lang.String"/>
 	<field name="daa01previsao" class="java.lang.Integer"/>
 	<field name="jme" class="java.math.BigDecimal"/>
+	<field name="liquido" class="java.math.BigDecimal"/>
+	<field name="field1" class="java.lang.String"/>
 	<field name="desconto" class="java.math.BigDecimal"/>
 	<variable name="totalGeral" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
@@ -49,7 +51,7 @@
 		<initialValueExpression><![CDATA[new BigDecimal(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalGeralDesconto" class="java.math.BigDecimal" calculation="Sum">
-		<variableExpression><![CDATA[$F{desconto}]]></variableExpression>
+		<variableExpression><![CDATA[]]></variableExpression>
 		<initialValueExpression><![CDATA[new BigDecimal(0)]]></initialValueExpression>
 	</variable>
 	<variable name="somaDocs" class="java.math.BigDecimal" resetType="Group" resetGroup="numero" calculation="Sum">
@@ -131,28 +133,28 @@
 			</staticText>
 			<staticText>
 				<reportElement x="882" y="0" width="53" height="10" uuid="83dbb715-95f5-4b00-b684-0ea1076f9479"/>
-				<textElement textAlignment="Right">
+				<textElement>
 					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[VALOR]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="935" y="0" width="54" height="10" uuid="e2f2c031-356e-421a-bd1d-4eef5eabf4b6"/>
-				<textElement textAlignment="Right">
+				<textElement>
 					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[J+M+E]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="989" y="0" width="54" height="10" uuid="4ec28e07-860a-4c38-89ec-471d66cbd645"/>
-				<textElement textAlignment="Right">
+				<textElement>
 					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[DESCONTO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1043" y="0" width="107" height="10" uuid="17819a7d-7dc2-47c0-b2f2-dde0cd4cc670"/>
-				<textElement textAlignment="Right">
+				<reportElement x="1109" y="0" width="41" height="10" uuid="17819a7d-7dc2-47c0-b2f2-dde0cd4cc670"/>
+				<textElement>
 					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[P/R]]></text>
@@ -170,6 +172,13 @@
 					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[NOME ENTIDADE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1043" y="0" width="66" height="10" uuid="9cae59d4-88a5-497d-8b24-466562e7f277"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LIQUIDO]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -240,28 +249,21 @@
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 				<reportElement x="936" y="0" width="53" height="10" isRemoveLineWhenBlank="true" uuid="a1b6dc24-1f40-417e-8b28-678868cbcd73"/>
-				<textElement textAlignment="Right">
+				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{jme} == null ? new BigDecimal(0) : $F{jme}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 				<reportElement x="882" y="0" width="54" height="10" isRemoveLineWhenBlank="true" uuid="d6b2a60a-3eb3-4095-bb19-dd2c65d4ddbe"/>
-				<textElement textAlignment="Right">
+				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
-				<reportElement x="989" y="0" width="54" height="10" isRemoveLineWhenBlank="true" uuid="053b9c5f-d7fb-4627-a270-46de8546e448"/>
-				<textElement textAlignment="Right">
-					<font fontName="Arial" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{desconto} == null ? new BigDecimal(0) : $F{desconto}]]></textFieldExpression>
-			</textField>
 			<textField>
-				<reportElement x="1043" y="0" width="107" height="10" uuid="55194c07-5d86-4731-98b5-3ef5bce2f786"/>
-				<textElement textAlignment="Right">
+				<reportElement x="1109" y="0" width="41" height="10" uuid="55194c07-5d86-4731-98b5-3ef5bce2f786"/>
+				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{PR}]]></textFieldExpression>
@@ -279,6 +281,20 @@
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{abe01na}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="1043" y="0" width="66" height="10" uuid="b980619b-0d4c-4c39-81fd-b1acba2e8f5d"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{liquido}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="989" y="0" width="54" height="10" uuid="d1fc31e4-1d6d-4ef3-a125-7f6329977531"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{desconto}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

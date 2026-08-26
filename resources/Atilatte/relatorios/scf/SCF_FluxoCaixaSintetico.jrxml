@@ -31,7 +31,7 @@
 	<field name="rp" class="java.lang.String"/>
 	<field name="entidade" class="java.lang.String"/>
 	<field name="abb01num" class="java.lang.Integer"/>
-	<field name="aab10user" class="java.lang.String"/>
+	<field name="aprovadores" class="java.lang.String"/>
 	<field name="formaPagamento" class="java.lang.String"/>
 	<field name="codBarras" class="java.lang.String"/>
 	<variable name="totalTes" class="java.math.BigDecimal" calculation="Sum">
@@ -381,7 +381,7 @@
 				<text><![CDATA[NUMERO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-6" x="419" y="3" width="155" height="11" uuid="8f535043-ac2e-4401-a35c-1fa8b4cc089e"/>
+				<reportElement key="staticText-6" x="421" y="3" width="149" height="11" uuid="8f535043-ac2e-4401-a35c-1fa8b4cc089e"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -468,11 +468,11 @@
 				<textFieldExpression><![CDATA[$F{abb01num}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="419" y="0" width="155" height="13" uuid="4f0c62a6-743d-42e1-8ead-661430eeb657"/>
+				<reportElement x="421" y="0" width="149" height="13" uuid="4f0c62a6-743d-42e1-8ead-661430eeb657"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{aab10user}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{aprovadores}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="287" y="0" width="68" height="13" uuid="6837f156-8bca-43b4-94d3-3dad60364e86"/>

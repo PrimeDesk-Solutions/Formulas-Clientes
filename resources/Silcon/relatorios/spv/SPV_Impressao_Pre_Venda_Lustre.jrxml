@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SPV_Impressao_Pre_Venda_Lustre" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1880fdfc-30ba-4c7a-80e9-1a648a6c9808">
-	<property name="ireport.zoom" value="1.0000000000000004"/>
+	<property name="ireport.zoom" value="1.464100000000001"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
@@ -28,7 +28,7 @@
 		<groupHeader>
 			<band height="241">
 				<image>
-					<reportElement x="7" y="9" width="159" height="76" uuid="8a553154-06a4-4704-a82f-deaf4044ff4b"/>
+					<reportElement x="7" y="4" width="109" height="58" uuid="8a553154-06a4-4704-a82f-deaf4044ff4b"/>
 					<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\srf\\Logo Silcon.png"]]></imageExpression>
 				</image>
 				<textField>
@@ -114,28 +114,28 @@
 					<reportElement x="0" y="211" width="555" height="1" uuid="cdf75288-a30c-472c-baa7-d7f02b08741e"/>
 				</line>
 				<staticText>
-					<reportElement x="159" y="221" width="35" height="20" uuid="55f2da80-a418-4b12-950b-bd9ac664d34a"/>
+					<reportElement x="102" y="221" width="22" height="20" uuid="55f2da80-a418-4b12-950b-bd9ac664d34a"/>
 					<textElement>
 						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[Qtd.]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="194" y="221" width="270" height="20" uuid="fe57b735-7b72-4e08-90b1-22c98cb8f7d5"/>
+					<reportElement x="129" y="221" width="334" height="20" uuid="fe57b735-7b72-4e08-90b1-22c98cb8f7d5"/>
 					<textElement>
 						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[Produto]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="464" y="221" width="43" height="20" uuid="9721a718-bb63-49c2-bea5-1de4a2294927"/>
+					<reportElement x="463" y="221" width="43" height="20" uuid="9721a718-bb63-49c2-bea5-1de4a2294927"/>
 					<textElement textAlignment="Center">
 						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[Unit.]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="507" y="221" width="48" height="20" uuid="fc3be6ca-842d-4142-bce1-816e1aba2b05"/>
+					<reportElement x="506" y="221" width="48" height="20" uuid="fc3be6ca-842d-4142-bce1-816e1aba2b05"/>
 					<textElement>
 						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
