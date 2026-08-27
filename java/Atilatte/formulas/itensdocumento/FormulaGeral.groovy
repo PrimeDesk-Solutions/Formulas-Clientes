@@ -1325,7 +1325,7 @@ public class FormulaGeral extends FormulaBase {
 
         // Calcula Redução da Base de ICMS ST
         // Calcula Redução da Base de ICMS ST
-        if(jsonAbm1001_UF_Item.getBigDecimal_Zero("_red_bc_icms_st") > 0){
+        if(jsonAbm1001_UF_Item.getBigDecimal_Zero("_red_bc_icms_st") > 0 && jsonEaa0103.getBigDecimal_Zero("_icms_st") > 0){
             aliqReducaoST = jsonAbm1001_UF_Item.getBigDecimal_Zero("_red_bc_icms_st");
 
             vlrReducaoST = jsonEaa0103.getBigDecimal_Zero("bc_icms_st") * (jsonAbm1001_UF_Item.getBigDecimal_Zero("_red_bc_icms_st") / 100);
@@ -1342,13 +1342,12 @@ public class FormulaGeral extends FormulaBase {
             // ICMS ST Com Reducao
             jsonEaa0103.put("icms_st", ((jsonEaa0103.getBigDecimal_Zero("bc_icms_st") * (jsonEaa0103.getBigDecimal_Zero("_icms_st")/ 100))- icmsAux ).round(2));
 
-        }
-
-        // Preenche a linha do item com a aliq. de redução de ICMS ST
+			// Preenche a linha do item com a aliq. de redução de ICMS ST
         jsonEaa0103.put("_red_bc_icms_st", aliqReducaoST);
 
         // Preenche a linha do item com a redução de ICMS ST
         jsonEaa0103.put("vlr_reduc_icms_st", vlrReducaoST.round(2));
+        }
     }
 
     private calcularIPI(){
@@ -1690,4 +1689,5 @@ public class FormulaGeral extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

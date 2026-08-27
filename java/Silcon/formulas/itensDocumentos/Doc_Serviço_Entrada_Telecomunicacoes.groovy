@@ -265,7 +265,7 @@ public class Doc_Serviço_Entrada_Telecomunicacoes extends FormulaBase {
 
             // Total do Documento
             eaa0103.eaa0103totDoc = eaa0103.eaa0103total.round(2);
-
+            
             eaa0103.eaa0103totFinanc = eaa0103.eaa0103total;
 
             // Preenche o CST de ICMS do Item
@@ -508,6 +508,7 @@ public class Doc_Serviço_Entrada_Telecomunicacoes extends FormulaBase {
     }
 
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

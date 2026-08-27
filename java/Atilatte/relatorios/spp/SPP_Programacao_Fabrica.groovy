@@ -122,3 +122,4 @@ public class SPP_Programacao_Fabrica extends RelatorioBase {
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroOrdens, parametroItens, parametroDataInicial, parametroDataFinal)
     }
 }
+//meta-sis-eyJkZXNjciI6IlNQUCAtIFByb2dyYW1hw6fDo28gRsOhYnJpY2EiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

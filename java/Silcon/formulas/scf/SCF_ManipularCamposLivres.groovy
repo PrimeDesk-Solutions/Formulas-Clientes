@@ -32,3 +32,4 @@ public class SCF_ManipularCamposLivres extends FormulaBase{
         daa01quitado.daa01json.put('multaq', BigDecimal.ZERO)
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiMTQwIn0=

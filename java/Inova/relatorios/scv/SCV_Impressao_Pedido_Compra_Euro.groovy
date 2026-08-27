@@ -114,3 +114,4 @@ public class SCV_Impressao_Pedido_Compra_Euro extends RelatorioBase {
         return getAcessoAoBanco().buscarUnicoTableMap(sql, Parametro.criar("idEmpresa", idEmpresa));
     }
 }
+//meta-sis-eyJkZXNjciI6IlNDViAtIEltcHJlc3PDo28gUGVkaWRvIENvbXByYSBFdXJvIiwidGlwbyI6InJlbGF0b3JpbyJ9

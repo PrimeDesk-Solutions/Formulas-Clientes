@@ -1614,9 +1614,8 @@ class NFe_Reforma extends FormulaBase {
                 }
 
                 /** ICMSUFDest - ICMS para UF do destinatário (NA) */
-                if((getCampo("245a.03-NA03","vBCUFDest") != null && !jsonEaa0103.getBigDecimal(getCampo("245a.03-NA03","vBCUFDest")).equals(0)) ||
-                        (getCampo("245a.04-NA04","vBCFCPUFDest") != null && !jsonEaa0103.getBigDecimal(getCampo("245a.04-NA04","vBCFCPUFDest")).equals(0))) {
-
+                if((getCampo("245a.03-NA03","vBCUFDest") != null && jsonEaa0103.getBigDecimal(getCampo("245a.03-NA03","vBCUFDest")) > 0 ) ||
+                        (getCampo("245a.04-NA04","vBCFCPUFDest") != null && jsonEaa0103.getBigDecimal(getCampo("245a.04-NA04","vBCFCPUFDest")) > 0)) {
                     if(idDest == 2 && eaa0102.eaa0102consFinal == 1 && indIEDest == 9 && !temISS){
                         ICMSUFDest = imposto.addNode("ICMSUFDest");
                         ICMSUFDest.addNode("vBCUFDest", getCampo("245a.03-NA03","vBCUFDest") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245a.03-NA03","vBCUFDest")), 2, false), true);
@@ -1764,7 +1763,8 @@ class NFe_Reforma extends FormulaBase {
                         }
                     }
                 }
-                //det.addNode("vItem", jsonEaa0103.getBigDecimal_Zero("total_conv"));
+                //det.addNode("vItem", jsonEaa0103.getBigDecimal_Zero("total_conv").round(6));
+
 
                 List<Long> docsRef = buscarDocumentosReferenciados(eaa01.eaa01id, 2);
                 if(docsRef != null && docsRef.size() > 0) {
@@ -2279,4 +2279,5 @@ class NFe_Reforma extends FormulaBase {
         return NFeUtils.formatarDecimal(valor, 4, true);
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjgifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjgifQ==

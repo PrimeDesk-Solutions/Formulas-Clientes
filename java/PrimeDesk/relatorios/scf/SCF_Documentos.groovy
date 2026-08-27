@@ -194,7 +194,15 @@ public class SCF_Documentos extends RelatorioBase{
 
         String orderSeq = ordem == 0 ? "abb01.abb01num" : ordem == 1 ? opcVcto == 0 ? "daa01.daa01dtVctoN" : "daa01.daa01dtVctoR" : ordem == 2 ? "abe01.abe01codigo" : "";
 
-        String orderBy = agrup == "D" ? " order by abb11.abb11codigo ASC,daa01011.daa01011valor, abf10.abf10codigo ASC, " + orderSeq :
+        if(ordem == 3){
+            if(agrup == "D" || agrup == "N" || agrup == "NE" || agrup == "DN"){
+                orderSeq = "daa01011.daa01011valor";
+            }else{
+                orderSeq = "daa01valor";
+            }
+        }
+
+        String orderBy = agrup == "D" ? " order by abb11.abb11codigo ASC, " + orderSeq :
                 agrup == "N" ? " order by abf10.abf10codigo ASC, abb11.abb11codigo ASC, " + orderSeq :
                         agrup == "Nu" ? "order by "  + orderSeq :
                                 agrup == "E" ? "order by abe01.abe01nome, abe01.abe01codigo, abb01.abb01parcela ASC, "  + orderSeq :
@@ -226,7 +234,7 @@ public class SCF_Documentos extends RelatorioBase{
 
         String whereOpc = opc != 2 ? " AND daa01previsao IN(:opc) " : "";
         String whereNum = numeroInicial != null && numeroFinal != null ? " AND abb01num BETWEEN  :numeroInicial and :numeroFinal " : "";
-        String whereIdEmpresa = Emprs != null && Emprs.size() > 0 ? " WHERE daa01eg IN (:idEmprs)" : "WHERE TRUE "; //idsGc != null && idsGc.size() > 0 ? " WHERE daa01eg in(:idEmprs)" : getSamWhere().getWherePadrao(" WHERE ", Daa01.class);
+        String whereIdEmpresa = Emprs != null && Emprs.size() > 0 ? " WHERE daa01eg in(:idEmprs)" : "WHERE TRUE "; //idsGc != null && idsGc.size() > 0 ? " WHERE daa01eg in(:idEmprs)" : getSamWhere().getWherePadrao(" WHERE ", Daa01.class);
         String whereIdDepartamento = departamento != null && departamento.size() > 0 ? " AND abb11.abb11id IN (:idDepartamento)": "";
         String whereIdDocumento = documento != null && documento.size() > 0 ? " AND aah01.aah01id IN (:idDocumentos)": "";
         String whereIdNatureza = naturezas != null && naturezas.size() > 0 ? " AND abf10.abf10id IN (:idNaturezas)": "";
@@ -290,7 +298,6 @@ public class SCF_Documentos extends RelatorioBase{
                         "CASE WHEN daa01.daa01dtBaixa IS NULL THEN COALESCE(cast(daa01json ->> 'desconto' as numeric(18,6)), 0) + daa01011.daa01011valor ELSE COALESCE(cast(daa01json ->> 'descontoq' as numeric(18,6)), 0) + daa01011.daa01011valor end AS liquido " :
                         "CASE WHEN daa01.daa01dtBaixa IS NULL THEN daa01.daa01valor ELSE daa01liquido end AS liquido")+
                 " FROM Daa01 daa01 " +
-                //" INNER JOIN aac01 as aac01 ON daa01gc = aac01id" +
                 " INNER JOIN aac10 as aac10 ON daa01eg = aac10id "+
                 " LEFT JOIN daa0101 as daa0101 on daa0101.daa0101doc = daa01.daa01id "+
                 " LEFT JOIN daa01011 as daa01011 on daa01011.daa01011depto = daa0101.daa0101id "+
@@ -361,3 +368,4 @@ public class SCF_Documentos extends RelatorioBase{
 }
 //meta-sis-eyJkZXNjciI6IlNDRiAtIERvY3VtZW50b3MgLSBMQ1IiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlNDRiAtIERvY3VtZW50b3MgLSBMQ1IiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
+//meta-sis-eyJkZXNjciI6IlNDRiAtIERvY3VtZW50b3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

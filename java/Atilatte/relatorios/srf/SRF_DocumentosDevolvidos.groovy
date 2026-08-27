@@ -76,7 +76,7 @@ public class SRF_DocumentosDevolvidos extends RelatorioBase {
         Parametro parametroMotivosDevolucao = idsMotivosDevolucao != null && idsMotivosDevolucao.size() > 0 ? Parametro.criar("idsMotivosDevolucao", idsMotivosDevolucao) : null;
 
         Long idGc = buscarGCEmpresaAtiva("Ea", obterEmpresaAtiva().getAac10id());
-
+        
         String sql = " SELECT eaa0103dev.eaa0103total as totDocDev, eaa0103dev.eaa0103qtComl as qtdDocDev, abd01dev.abd01codigo as pcdDev, abd01dev.abd01descr as descrPcdDev, eaa01dev.eaa01id AS eaa01idDev, aah01dev.aah01codigo AS aah01codigoDev, abb01dev.abb01num AS abb01numDev, abb01dev.abb01data AS abb01dataDev, " +
                 " eaa01orig.eaa01id AS eaa01idOrig, aah01orig.aah01codigo AS aah01codigoOrig, abb01orig.abb01num AS abb01numOrig, abb01orig.abb01data AS abb01dataOrig, " +
                 " abe01dev.abe01codigo AS abe01codigoDev, abe01dev.abe01nome AS abe01nomeDev, aae10codigo, aae10descr, " +
@@ -136,3 +136,4 @@ public class SRF_DocumentosDevolvidos extends RelatorioBase {
 
 
 }
+//meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MgRGV2b2x2aWRvcyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

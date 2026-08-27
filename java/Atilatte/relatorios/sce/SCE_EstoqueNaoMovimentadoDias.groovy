@@ -389,3 +389,4 @@ public class SCE_EstoqueNaoMovimentadoDias extends RelatorioBase {
         return nomeCampo;
     }
 }
+//meta-sis-eyJkZXNjciI6IlNDRSAtIEVzdG9xdWUgTsOjbyBNb3ZpbWVudGFkbyBFbSBEaWFzIiwidGlwbyI6InJlbGF0b3JpbyJ9

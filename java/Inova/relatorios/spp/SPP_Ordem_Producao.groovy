@@ -22,33 +22,25 @@ public class SPP_Ordem_Producao extends RelatorioBase {
     @Override
     public DadosParaDownload executar() {
         List<Long> idsTiposDoc = getListLong("tipos");
-        List<Long> ordens = getListLong("ordens");
+        List<Long> planos = getListLong("planos");
 
-        List<TableMap> dados = buscarOrdensProducao(idsTiposDoc, ordens);
+        List<TableMap> dados = buscarOrdensProducao(idsTiposDoc, planos);
         List<TableMap> listComponentes = new ArrayList<>();
-        List<TableMap> listRemove = new ArrayList<>();
 
         for(dado in dados){
-            Long idSemiAcabado = dado.getLong("idSemiAcabado");
-            BigDecimal qtd = dado.getBigDecimal_Zero("bab01qt");
+            Long idOrdem = dado.getLong("idOrdem");
+            BigDecimal qtd = dado.getBigDecimal_Zero("baa0101ap");
 
-            List<TableMap> componentes = buscarComponentesProdutos(idSemiAcabado);
-
-            if(componentes == null || componentes.size() == 0){
-                listRemove.add(dado);
-              continue;
-            }
+            List<TableMap> componentes = buscarComponentesOrdem(idOrdem);
 
             for(componente in componentes){
-                componente.put("key", idSemiAcabado);
-                componente.put("qtdComponente", componente.getBigDecimal_Zero("qtdComponente") * qtd);
+                componente.put("key", idOrdem);
                 listComponentes.add(componente);
             }
 
-            dado.put("key", idSemiAcabado);
+            dado.put("key", idOrdem);
         }
 
-        dados.removeAll(listRemove)
 
         // Cria os sub-relatórios
         TableMapDataSource dsPrincipal = new TableMapDataSource(dados);
@@ -57,46 +49,46 @@ public class SPP_Ordem_Producao extends RelatorioBase {
 
         return gerarPDF("SPP_Ordem_Producao", dsPrincipal);
     }
-    private List<TableMap> buscarOrdensProducao(List<Long> idsTiposDoc,  List<Long> ordens){
+    private List<TableMap> buscarOrdensProducao(List<Long> idsTiposDoc,  List<Long> planos){
         String whereTiposDoc = idsTiposDoc != null && idsTiposDoc.size() > 0 ? "AND abb01tipo IN (:idsTiposDoc) " : "";
-        String whereOrdens = ordens != null && ordens.size() > 0 ? "AND bab01id IN (:ordens) " : "";
+        String wherePlanos = planos != null && planos.size() > 0 ? "AND baa01id IN (:planos) " : "";
 
         Parametro parametroTipoDoc = idsTiposDoc != null && idsTiposDoc.size() > 0 ? Parametro.criar("idsTiposDoc", idsTiposDoc) : null;
-        Parametro parametroOrdens = ordens != null && ordens.size() > 0 ? Parametro.criar("ordens", ordens) : null;
+        Parametro parametroPlanos = planos != null && planos.size() > 0 ? Parametro.criar("planos", planos) : null;
 
-
-
-        String sql = "SELECT abm01compProduto.abm01id AS idItem, abb01num, acabado.abm01tipo AS tipoAcab, acabado.abm01codigo AS codAcab, acabado.abm01descr AS descrAcab, " +
-                    "abm01compProduto.abm01codigo AS codCompProduto, abm01compProduto.abm01descr AS descrCompProduto, abm01compProduto.abm01id AS idSemiAcabado, " +
-                    "abb01num, abb01data, bab01qt, bab01dtE, bab01obs, bab01ctDtI  " +
+        String sql = "SELECT baa01descr,abb01plano.abb01num AS numPlano, abb01plano.abb01data AS dataPlano, abb01ordem.abb01num AS numOrdem, bab01id AS idOrdem, " +
+                    "acabado.abm01codigo AS codAcab, acabado.abm01descr AS descrAcab, abb01ordem.abb01data, " +
+                    "baa0101ap, baa0101opDte, baa01obs, baa0101ctDtI, abm01principal.abm01codigo AS codItemPrincipal, abm01principal.abm01descr AS descrItemPrincipal, " +
+                    "abp10codigo, abp10descr, bab01opp "+
                     "FROM bab01 " +
-                    "INNER JOIN abb01 ON abb01id = bab01central " +
-                    "INNER JOIN abp20 ON abp20id = bab01comp " +
-                    "INNER JOIN abp2001 ON abp2001comp = abp20id " +
-                    "INNER JOIN abp20011 ON abp20011proc = abp2001id " +
-                    "INNER JOIN abm01 AS acabado ON acabado.abm01id = abp20item " +
-                    "INNER JOIN abm01 AS abm01compProduto ON abm01compProduto.abm01id = abp20011item " +
+                    "INNER JOIN abb01 AS abb01ordem ON abb01ordem.abb01id = bab01central " +
+                    "INNER JOIN abp10 ON abp10id = bab01proc "+
+                    "INNER JOIN abp20 AS abp20acabado ON abp20acabado.abp20id = bab01comp  " +
+                    "INNER JOIN bab0103 on bab0103op = bab01id " +
+                    "INNER JOIN baa0101 on baa0101id = bab0103itempp " +
+                    "INNER JOIN baa01 on baa01id = baa0101plano " +
+                    "INNER JOIN abm01 AS acabado ON acabado.abm01id = abp20acabado.abp20item " +
+                    "INNER JOIN abp20 AS abp20principal ON abp20principal.abp20id = baa0101comp " +
+                    "INNER JOIN abm01 AS abm01principal ON abm01principal.abm01id = abp20principal.abp20item " +
+                    "INNER JOIN abb01 AS abb01Plano ON abb01Plano.abb01id = baa01central " +
                     whereTiposDoc +
-                    whereOrdens +
-                    "AND abm01compProduto.abm01tipo = 1 " +
-                    "ORDER BY abb01num, abm01compProduto.abm01codigo"
+                    wherePlanos +
+                    "ORDER BY abb01plano.abb01num, descrItemPrincipal, acabado.abm01codigo, abp10codigo"
 
-
-        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroTipoDoc, parametroOrdens);
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroTipoDoc, parametroPlanos);
     }
-    private List<TableMap> buscarComponentesProdutos(Long idItem){
+    private List<TableMap> buscarComponentesOrdem(Long idOrdem){
         String sql = "SELECT abm01tipo AS tipoComponente, abm01codigo AS codComponente, " +
                     "abm01descr AS descrComponente, aam06codigo AS umuComponentes, " +
-                    "abp20011qt AS qtdComponente, abp20011seq AS seqComponentes " +
-                    "FROM abp20 "+
-                    "INNER JOIN abp2001 ON abp2001comp = abp20id " +
-                    "INNER JOIN abp20011 ON abp20011proc = abp2001id " +
-                    "INNER JOIN abm01 ON abp20011item = abm01id " +
+                    "bab0101qta AS qtdComponente, bab0101seq AS seqComponentes " +
+                    "FROM bab01 "+
+                    "INNER JOIN bab0101 ON bab0101op = bab01id " +
+                    "INNER JOIN abm01 ON bab0101item = abm01id " +
                     "LEFT JOIN aam06 ON aam06id = abm01umu " +
-                    "WHERE abp20item = :idItem "+
-                    "AND abp20di IS NULL "+
-                    "ORDER BY  abp20011seq"
+                    "WHERE bab01id = :idOrdem "+
+                    "ORDER BY bab0101seq "
 
-        return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idItem", idItem))
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idOrdem", idOrdem))
     }
 }
+//meta-sis-eyJkZXNjciI6IlNQUCAtIE9yZGVtIFByb2R1w6fDo28iLCJ0aXBvIjoicmVsYXRvcmlvIn0=

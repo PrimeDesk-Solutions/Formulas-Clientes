@@ -290,61 +290,13 @@ public class DocCestaBasica extends FormulaBase {
             if (abm01.abm01pesoBruto_Zero > 0) jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(4));
 
             // Total do item
-            eaa0103.eaa0103total = (eaa0103.eaa0103qtUso * eaa0103.eaa0103unit) - jsonEaa0103.getBigDecimal_Zero("desconto");
+            eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit) - jsonEaa0103.getBigDecimal_Zero("desconto");
 
 
             //Calcula IPI dos itens
-            calcularIPI()
+            calcularIPI();
 
-            //********* ICMS *********
-            // Base de Calculo do ICMS // Verifica Parametros Fiscais
-            def cdBCICMS = 0
-            def cdICMSIsento = 0
-            def cdICMS = 0
-            def vlrReducao = 0
-
-            //BC ICMS = Valor do Item + Frete + Seguro + Outras Desp. - Desconto Incondicional
-            jsonEaa0103.put("bc_icms", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                    jsonEaa0103.getBigDecimal_Zero("seguro") +
-                    jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
-                    jsonEaa0103.getBigDecimal_Zero("ipi"));
-            // Tratar redução da base de cálculo
-            //Aliquota de redução fixa no ítem (Valores por Estado)
-            if (jsonAbm1001_UF_Item.getBigDecimal_Zero("_red_bc_icms") != 0) {
-                jsonEaa0103.put("_red_bc_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("_red_bc_icms"));
-            }
-
-            // Calculo da Redução
-            if (jsonEaa0103.getBigDecimal_Zero("_red_bc_icms") >= 0) {
-                vlrReducao = ((jsonEaa0103.getBigDecimal_Zero("bc_icms") * jsonEaa0103.getBigDecimal_Zero("_red_bc_icms")) / 100).round(2);
-                jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms") - vlrReducao);
-            }
-
-            //Obter a Alíquota do ICMS
-            if (jsonEaa0103.getBigDecimal_Zero("_icms") == 0) {
-                if (jsonAag02Ent.getBigDecimal_Zero("txicmentrada") != null) {
-                    jsonEaa0103.put("_icms", jsonAag02Ent.getBigDecimal_Zero("txicmsaida"));
-                    // % ICMS para saída do Estado da entidade
-                } else {
-                    jsonEaa0103.put("_icms", 0);
-                }
-
-                if (jsonAbm1001_UF_Item.getBigDecimal_Zero("_fixa_icms") != 0) {
-                    jsonEaa0103.put("_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("_fixa_icms"));
-                    //Aliquota de ICMS fixa no cadastro do item (Valores por estado)
-                }
-            }
-
-            // Calcular valor do ICMS e Valor ICMS Isento
-            // Aliquota menor que zero = Isento
-            if (jsonEaa0103.getBigDecimal_Zero("_icms") < 0) {
-                jsonEaa0103.put("icms", 0);
-                jsonEaa0103.put("icms_isento", vlrReducao);
-                vlrReducao = 0
-
-            } else {
-                jsonEaa0103.put("icms", ((jsonEaa0103.getBigDecimal_Zero("bc_icms") * jsonEaa0103.getBigDecimal_Zero("_icms")) / 100).round(2));
-            }
+            calcularICMS();
 
             //ICMS Outras
             if (jsonEaa0103.getBigDecimal_Zero("icms") == 0) {
@@ -548,6 +500,42 @@ public class DocCestaBasica extends FormulaBase {
 
 
     }
+    private void calcularICMS(){
+
+        if(jsonEaa0103.getBigDecimal_Zero("_icms") == 0) jsonEaa0103.put("_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("_fixa_icms"));
+
+        if(jsonEaa0103.getBigDecimal_Zero("_icms") != -1){
+            def vlrReducao = 0;
+            // BC ICMS
+            jsonEaa0103.put("bc_icms", 	eaa0103.eaa0103total +
+                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
+                    jsonEaa0103.getBigDecimal_Zero("seguro") +
+                    jsonEaa0103.getBigDecimal_Zero("outras_despesas"));
+
+            // Tratar redução da base de cálculo
+            if (jsonAbm1001_UF_Item.getBigDecimal_Zero("_red_bc_icms") != 0) {
+                jsonEaa0103.put("_red_bc_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("_red_bc_icms"));
+            }
+
+
+            // Calculo da Redução
+            if(jsonEaa0103.getBigDecimal_Zero("_red_bc_icms") > 0){
+                vlrReducao = ((jsonEaa0103.getBigDecimal_Zero("bc_icms") * jsonEaa0103.getBigDecimal_Zero("_red_bc_icms")) / 100).round(2);
+                jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms") - vlrReducao);
+            }
+
+            // ICMS
+            jsonEaa0103.put("icms", ((jsonEaa0103.getBigDecimal_Zero("bc_icms") * jsonEaa0103.getBigDecimal_Zero("_icms")) / 100).round(2));
+
+        }else{
+            jsonEaa0103.put("icms", new BigDecimal(0));
+            jsonEaa0103.put("_icms", new BigDecimal(0));
+            jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
+            jsonEaa0103.put("bc_icms", new BigDecimal(0));
+            jsonEaa0103.put("_red_bc_icms", new BigDecimal(0));
+            jsonEaa0103.put("icms_isento", new BigDecimal(0));
+        }
+    }
     private void calcularCBSIBS() {
         // *********************************************
         // ************ REFORMA TRIBUTÁRIA *************
@@ -750,4 +738,5 @@ public class DocCestaBasica extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

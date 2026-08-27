@@ -100,7 +100,7 @@ public class SCV_SaldoDosPedidos extends RelatorioBase {
 				"INNER JOIN abm01 ON eaa0103item = abm01id "+
 				"INNER JOIN aah01 ON abb01tipo = aah01id "+
 				"INNER JOIN abe01 AS ent ON abb01ent = ent.abe01id "+
-				"INNER JOIN aam06 ON abm01umu = aam06id "+
+				"LEFT JOIN aam06 ON abm01umu = aam06id "+
 				"LEFT JOIN eaa0102 ON eaa0102doc = eaa01id "+
 				"LEFT JOIN abe01 AS desp ON desp.abe01id = eaa0102despacho "+
 				"LEFT JOIN abe01 AS redesp ON redesp.abe01id = eaa0102redespacho "+
@@ -231,7 +231,7 @@ public class SCV_SaldoDosPedidos extends RelatorioBase {
 
 		Query sql = getSession().createQuery("SELECT aah01codigo,abb01num,abb01data, ent.abe01codigo AS codEntidade,ent.abe01na AS naEntidade, " +
 				"eaa0103dtEntrega AS dtEntrega,SUM(eaa0103totDoc) AS totDoc, SUM(CAST(eaa0103json ->> 'peso_bruto' AS NUMERIC(18,2))) AS pesoBruto, SUM(CAST(eaa0103json ->> 'peso_liquido' AS NUMERIC(18,6))) AS pesoLiquido, "+
-				"SUM(eaa0103qtUso) AS qtdUsoPedido, SUM(eaa01032qtUso) AS qtdUsoEntregue, eaa0103pcnum AS pedCliente, "+
+				"SUM(eaa0103qtUso) AS qtdUsoPedido, SUM(eaa01032qtUso) AS entregue, eaa0103pcnum AS pedCliente, "+
 				"desp.abe01codigo AS codDesp, desp.abe01na AS naDesp,redesp.abe01codigo AS codRedesp, redesp.abe01na AS naRedesp, aag02uf AS uf, aag0201nome AS municipio,eaa01scvatend " +
 				"FROM eaa01 "+
 				"INNER JOIN abb01 ON eaa01central = abb01id "+
@@ -241,7 +241,7 @@ public class SCV_SaldoDosPedidos extends RelatorioBase {
 				"INNER JOIN abm01 ON eaa0103item = abm01id "+
 				"INNER JOIN aah01 ON abb01tipo = aah01id "+
 				"INNER JOIN abe01 as ent ON abb01ent = ent.abe01id "+
-				"INNER JOIN aam06 ON abm01umu = aam06id "+
+				"LEFT JOIN aam06 ON abm01umu = aam06id "+
 				"LEFT JOIN eaa0102 ON eaa0102doc = eaa01id "+
 				"LEFT JOIN abe01 AS desp ON desp.abe01id = eaa0102despacho "+
 				"LEFT JOIN abe01 AS redesp ON redesp.abe01id = eaa0102redespacho "+

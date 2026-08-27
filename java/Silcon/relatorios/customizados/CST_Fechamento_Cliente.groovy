@@ -20,7 +20,7 @@ public class CST_Fechamento_Cliente extends RelatorioBase {
     }
     @Override
     public DadosParaDownload executar() {
-
+   
         LocalDate[] dtEmissao = getIntervaloDatas("dtEmissao")
         LocalDate[] dtVencimento = getIntervaloDatas("dtVencimento");
         Long entidade = getLong("entidade");
@@ -58,7 +58,7 @@ public class CST_Fechamento_Cliente extends RelatorioBase {
 
     }
     private List<TableMap> buscarDocumentosFinanceiros(LocalDate[] dtEmissao,LocalDate[] dtVencimento, Long entidade){
-
+        
         if(entidade == null) interromper("Necessário atualizar a página do relatório.");
         String whereQuita = " WHERE abb01quita = 0 ";
         String whereRP = " AND daa01rp = 0 ";
@@ -206,5 +206,6 @@ public class CST_Fechamento_Cliente extends RelatorioBase {
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("entidade", entidade));
     }
 }
+//meta-sis-eyJkZXNjciI6IkNTVCAtIEZlY2hhbWVudG8gQ2xpZW50ZSIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
 //meta-sis-eyJkZXNjciI6IkNTVCAtIEZlY2hhbWVudG8gQ2xpZW50ZSIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
 //meta-sis-eyJkZXNjciI6IkNTVCAtIEZlY2hhbWVudG8gQ2xpZW50ZSIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

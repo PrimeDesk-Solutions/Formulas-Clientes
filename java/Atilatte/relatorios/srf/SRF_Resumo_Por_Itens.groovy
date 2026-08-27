@@ -224,35 +224,35 @@ class SRF_Resumo_Por_Itens extends RelatorioBase {
 
 
         String sql = " SELECT abm01id,abm01tipo, abm01codigo,abm01descr,aam06codigo, eaa0103qtuso, " +
-                " eaa0103qtcoml,eaa0103unit,eaa0103total,eaa0103totdoc ,eaa0103totfinanc, eaa0103id, eaa0103json, eaa01id " +
-                " FROM eaa0103 " +
-                " INNER JOIN eaa01 on eaa01id = eaa0103doc " +
-                " INNER JOIN abb01 on abb01id = eaa01central " +
-                " INNER JOIN abm01 on abm01id = eaa0103item " +
-                " LEFT JOIN aam06 on aam06id = abm01umu " +
-                " LEFT JOIN abe01 on abe01id = abb01ent " +
-                " WHERE eaa01clasDoc = 1 " +
-                " AND eaa01cancData IS NULL " +
-                " AND eaa01nfestat <> 5 " +
-                whereNumIni +
-                whereNumFim +
-                whereEsData +
-                whereEmissaoData +
-                wherePcd +
-                whereItens +
-                whereEntidade +
-                whereTipoDoc +
-                whereClassDoc +
-                whereES +
-                whereMps +
-                "ORDER BY abm01codigo, abm01tipo"
+                        " eaa0103qtcoml,eaa0103unit,eaa0103total,eaa0103totdoc ,eaa0103totfinanc, eaa0103id, eaa0103json, eaa01id " +
+                        " FROM eaa0103 " +
+                        " INNER JOIN eaa01 on eaa01id = eaa0103doc " +
+                        " INNER JOIN abb01 on abb01id = eaa01central " +
+                        " INNER JOIN abm01 on abm01id = eaa0103item " +
+                        " LEFT JOIN aam06 on aam06id = abm01umu " +
+                        " LEFT JOIN abe01 on abe01id = abb01ent " +
+                        " WHERE eaa01clasDoc = 1 " +
+                        " AND eaa01cancData IS NULL " +
+                        " AND eaa01nfestat <> 5 " +
+                        whereNumIni +
+                        whereNumFim +
+                        whereEsData +
+                        whereEmissaoData +
+                        wherePcd +
+                        whereItens +
+                        whereEntidade +
+                        whereTipoDoc +
+                        whereClassDoc +
+                        whereES +
+                        whereMps +
+                        "ORDER BY abm01codigo, abm01tipo"
 
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroNumIni, parametroNumFim, parametroEsDataIni, parametroEsdataFim, parametroEmissaoDataIni, parametroEmissaodataFim, parametroPcd, parametroItens, parametroEntidade, parametroTipoDoc, parametroMps)
     }
 
     private List<Long> obterIdsItensDoc(List<Long> idEntidade, List<Long> idTipoDocumento, LocalDate[] dataEmissao, LocalDate[] dataEntSai, Integer numeroInicial, Integer numeroFinal,
-                                        Integer resumoOperacao, List<Long> idsItens, List<Long> pcds, List<Integer> mps) {
+                                          Integer resumoOperacao, List<Long> idsItens, List<Long> pcds, List<Integer> mps) {
 
         String whereNumIni = numeroInicial != null ? " AND abb01num >= :numeroInicial " : ""
         String whereNumFim = numeroFinal != null ? " AND abb01num <= :numeroFinal " : ""
@@ -397,4 +397,5 @@ class SRF_Resumo_Por_Itens extends RelatorioBase {
 
     }
 }
+//meta-sis-eyJkZXNjciI6IlNSRiAtIFJlc3VtbyBQb3IgSXRlbnMiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlNSRiAtIFJlc3VtbyBQb3IgSXRlbnMiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

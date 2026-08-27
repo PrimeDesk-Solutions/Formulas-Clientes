@@ -262,7 +262,7 @@ public class PedidoSImpostoRemessa extends FormulaBase {
 		//=====================================
 		if (eaa0103.eaa0103qtComl > 0 ) {
 
-			eaa0103.eaa0103unit = eaa0103.eaa0103unit.round(5);
+			//eaa0103.eaa0103unit = eaa0103.eaa0103unit.round(6);
 
 			// UMV 
 			jsonEaa0103.put("umv", aam06.aam06codigo)
@@ -774,4 +774,5 @@ public class PedidoSImpostoRemessa extends FormulaBase {
 		return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
 	}
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

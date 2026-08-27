@@ -1,4 +1,3 @@
-
 package Silcon.formulas.cas;
 import br.com.multiorm.criteria.criterion.Criterions
 import org.apache.poi.ss.usermodel.Row
@@ -49,3 +48,4 @@ public class CAS_Importar_Abg01 extends FormulaBase{
         return getSession().createCriteria(Aac01.class).addWhere(Criterions.eq("aac01codigo", codGC)).get();
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiMTAwIn0=

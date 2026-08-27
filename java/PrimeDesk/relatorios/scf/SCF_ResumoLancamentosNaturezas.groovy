@@ -373,3 +373,4 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
     }
 }
 //meta-sis-eyJkZXNjciI6IlNDRiAtIFJlc3VtbyBkb3MgTGFuw6dhbWVudG9zIFBvciBOYXR1cmV6YSIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
+//meta-sis-eyJkZXNjciI6IlNDRiAtIFJlc3VtbyBkb3MgTGFuw6dhbWVudG9zIFBvciBOYXR1cmV6YSIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

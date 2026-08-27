@@ -193,10 +193,10 @@ public class Remessa extends FormulaBase {
 
         // Class. Trib CBS/IBS
         aaj07 = eaa0103.eaa0103clasTribCbsIbs != null ? getSession().get(Aaj07.class, eaa0103.eaa0103clasTribCbsIbs.aaj07id) : null;
-        if (aaj07 == null) throw new ValidacaoException("Necessário informar a Classificação tribtária de CBS/IBS do item: " + abm01.abm01codigo + " - " + abm01.abm01na);
+        //if (aaj07 == null) throw new ValidacaoException("Necessário informar a Classificação tribtária de CBS/IBS do item: " + abm01.abm01codigo + " - " + abm01.abm01na);
 
         aaj09 = eaa0103.eaa0103cstCbsIbs != null ? getSession().get(Aaj09.class, eaa0103.eaa0103cstCbsIbs.aaj09id) : null;
-        if (aaj09 == null) interromper("Necessário informar o CST de CBS/IBS no item: " + abm01.abm01codigo + " - " + abm01.abm01na);
+        //if (aaj09 == null) interromper("Necessário informar o CST de CBS/IBS no item: " + abm01.abm01codigo + " - " + abm01.abm01na);
 
 
         //CAMPOS LIVRES
@@ -209,7 +209,7 @@ public class Remessa extends FormulaBase {
         jsonAbm1001_UF_Item = abm1001 != null && abm1001.abm1001json != null ? abm1001.abm1001json : new TableMap();
         jsonAbm1003_Ent_Item = abm1003 != null && abm1003.abm1003json != null ? abm1003.abm1003json : new TableMap();
         jsonEaa0103 = eaa0103.eaa0103json != null ? eaa0103.eaa0103json : new TableMap();
-        jsonAaj07clasTrib = aaj07.aaj07json != null ? aaj07.aaj07json : new TableMap();
+        //jsonAaj07clasTrib = aaj07.aaj07json != null ? aaj07.aaj07json : new TableMap();
 
 
         calcularItem();
@@ -287,7 +287,7 @@ public class Remessa extends FormulaBase {
             //Verifica se o PCD Gera Financeiro
             jsonEaa0103.put("total_finan", eaa0103.eaa0103totDoc);
 
-            calcularCBSIBS();
+            //calcularCBSIBS();
 
 
             //*******Calculo para SPED ICMS*******
@@ -521,4 +521,5 @@ public class Remessa extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

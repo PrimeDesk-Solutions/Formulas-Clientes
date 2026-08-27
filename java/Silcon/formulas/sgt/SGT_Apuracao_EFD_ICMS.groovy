@@ -606,3 +606,4 @@ class SGT_Apuracao_EFD_ICMS extends FormulaBase {
     }
 }
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiMDEifQ==
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiMDEifQ==

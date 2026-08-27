@@ -45,7 +45,7 @@ public class CAS_Importar_Tarefas_Usuarios extends FormulaBase {
                 Aab1005 aab1005 = new Aab1005();
 
                 Aab10 aab10 = getSession().createCriteria(Aab10.class).addWhere(Criterions.eq("aab10id", Long.parseLong(txt.getCampo(2)))).get(ColumnType.ENTITY);
-                if(aab10 == null) continue;
+			if(aab10 == null) continue;
                 aab1005.setAab1005user(aab10);
                 aab1005.setAab1005ordem(txt.getCampo(3));
                 aab1005.setAab1005descr(txt.getCampo(4));
@@ -73,3 +73,4 @@ public class CAS_Importar_Tarefas_Usuarios extends FormulaBase {
         jsonAbe01.put("obs_lim_credito", txt.getCampo(32).replace("|", ""));
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiMTAwIn0=

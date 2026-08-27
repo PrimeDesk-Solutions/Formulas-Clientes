@@ -153,3 +153,4 @@ public class SCF_Resumo_Saldos_Conta_Corrente extends RelatorioBase {
     }
 
 }
+//meta-sis-eyJkZXNjciI6IlNDRiAtIFJlc3VtbyBkZSBDb250YSBDb3JyZW50ZSIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

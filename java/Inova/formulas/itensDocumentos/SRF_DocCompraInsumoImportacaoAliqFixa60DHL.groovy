@@ -218,10 +218,11 @@ public class SRF_DocCompraInsumoImportacaoAliqFixa60DHL extends FormulaBase {
 
         // Moeda Estrangeira
         aag10 = eaa01.eaa01moeda != null ? getSession().get(Aag10.class, eaa01.eaa01moeda.aag10id) : null;
+        if(aag10 == null) throw new ValidacaoException("Não foi informado a moeda do documento.");
 
         // Cotações
-        aag1001 = aag10 != null ? getSession().get(Aag1001.class, Criterions.where("aag1001moeda = " + aag10.aag10id + " AND aag1001data = " + LocalDate.now())) : null;
-        if(aag10 != null && aag1001 == null) throw new ValidacaoException("Não foi informado cotação para a data " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
+        if(eaa01.eaa01json.getDate("data_cambio") != null) aag1001 = aag10 != null ? getSession().get(Aag1001.class, Criterions.where("aag1001moeda = " + aag10.aag10id + " AND aag1001data = '" + eaa01.eaa01json.getDate("data_cambio") + "'")) : null;
+        if(aag1001 == null) throw new ValidacaoException("Não foi informado cotação para a data informada.");
 
         //CAMPOS LIVRES
         jsonAac10 = aac10.aac10json != null ? aac10.aac10json : new TableMap();
@@ -876,3 +877,4 @@ public class SRF_DocCompraInsumoImportacaoAliqFixa60DHL extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

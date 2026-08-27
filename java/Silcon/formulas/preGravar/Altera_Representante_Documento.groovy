@@ -92,9 +92,9 @@ public class Altera_Representante_Documento extends FormulaBase{
         TableMap jsonAbe01 = getSession().createQuery("SELECT abe01json FROM abe01 WHERE abe01id = :idEntidade")
                 .setParameter("idEntidade", abb01.abb01ent.abe01id)
                 .getUniqueResult(ColumnType.JSON);
-
+        
         if(jsonAbe01 == null ) throw new ValidacaoException("Campos de limite de crédito não preenchido no cadastro da entidade " + abe01.abe01codigo);
-
+        
         LocalDate dataAtual = LocalDate.now();
         LocalDate dtVencLimCredito = jsonAbe01.getDate("dt_vcto_lim_credito");
 
@@ -113,5 +113,6 @@ public class Altera_Representante_Documento extends FormulaBase{
         if(abe01.abe01ti == 2 && !(abe01.abe01ni.length() == 11 || abe01.abe01ni.length() == 14)) interromper("Número da inscrição da entidade é inválido. Verifique o cadastro antes de prosseguir.");
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiOTcifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiOTcifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiOTcifQ==

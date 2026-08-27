@@ -41,6 +41,7 @@ public class SCV_Pedidos extends RelatorioBase {
 		def atendimento = [get("atendimento") ? 0 : null, get("atendimento2") ? 1 : null, get("atendimento3") ? 2 : null]
 		atendimento.removeAll(Collections.singleton(null))
 		def numeroCliente = getString("numeroCliente");
+		List<Long> idsPcd = getListLong("pcds");
 		List<Long> redespacho = getListLong("redespacho");
 		String campoLivre1 = getString("campoLivre1");
 		String campoLivre2 = getString("campoLivre2");
@@ -66,7 +67,7 @@ public class SCV_Pedidos extends RelatorioBase {
 		adicionarParametro("total3", total3);
 		adicionarParametro("total4", total4);
 
-		List<TableMap> dados = buscarDocumentos(tipos, numeroInicial, numeroFinal, entidades, pedEntSai, emissao, entrega, atendimento, numeroCliente, redespacho, campoLivre1, campoLivre2, campoLivre3, campoLivre4);
+		List<TableMap> dados = buscarDocumentos(tipos, numeroInicial, numeroFinal, entidades, pedEntSai, emissao, entrega, atendimento, numeroCliente, redespacho,idsPcd, campoLivre1, campoLivre2, campoLivre3, campoLivre4);
 
 		for(dado in dados){
 			comporCamposLivres(dado, campos);
@@ -77,7 +78,7 @@ public class SCV_Pedidos extends RelatorioBase {
 		return gerarPDF("SCV_Pedidos_PDF", dados);
 
 	}
-	private List<TableMap> buscarDocumentos(List<Long> tipos, Integer numeroInicial, Integer numeroFinal, List<Long> entidades, Integer pedEntSai, LocalDate[] emissao, LocalDate[] entrega, List<Integer> atendimento, String numeroCliente, List<Long> redespacho,String campoLivre1,String campoLivre2,String campoLivre3,String campoLivre4) {
+	private List<TableMap> buscarDocumentos(List<Long> tipos, Integer numeroInicial, Integer numeroFinal, List<Long> entidades, Integer pedEntSai, LocalDate[] emissao, LocalDate[] entrega, List<Integer> atendimento, String numeroCliente, List<Long> redespacho,List<Long>idsPcd, String campoLivre1,String campoLivre2,String campoLivre3,String campoLivre4) {
 		def whereTipos = tipos != null && tipos.size() > 0 ? " AND abb01tipo IN (:tipos) " : ""
 		def whereEntidades = entidades != null && entidades.size() > 0 ? " AND abb01ent IN (:entidades) " : ""
 		def whereCompVenda = pedEntSai == 0 ? " AND eaa01esmov = 0 " : " AND eaa01esmov = 1 "
@@ -88,7 +89,7 @@ public class SCV_Pedidos extends RelatorioBase {
 		def whereAtendimento  = atendimento != null && atendimento.size() > 0 ? " AND eaa01scvAtend IN (:atendimento) " : ""
 		def whereNumCliente = numeroCliente != null && numeroCliente.length() > 0 ? " AND eaa0103pcnum = :numCli ": "";
 		def whereRedespacho = redespacho != null && redespacho.size() > 0 ? " AND redespacho.abe01id IN (:redespacho) ": "";
-
+		def wherePcd = idsPcd != null && idsPcd.size() > 0 ? "AND abd01id IN (:idsPcd) " : "";
 
 		String campo1 = campoLivre1 != null ? "CAST(eaa0103pedido.eaa0103json ->> '"+campoLivre1+"'"+" as NUMERIC(18,2)) AS " + campoLivre1 + ",  " : "";
 		String campo2 = campoLivre2 != null ? "CAST(eaa0103pedido.eaa0103json ->> '"+campoLivre2+"'"+" as NUMERIC(18,2)) AS " + campoLivre2 + ", " : "";
@@ -102,6 +103,7 @@ public class SCV_Pedidos extends RelatorioBase {
 				"eaa0103pedido.eaa0103totdoc, eaa0102doc "+
 				"FROM eaa01 " +
 				"INNER JOIN abb01 ON abb01id = eaa01central " +
+				"INNER JOIN abd01 ON abd01id = eaa01pcd "+
 				"INNER JOIN abe01 AS entidade ON entidade.abe01id = abb01ent " +
 				"INNER JOIN eaa0102 ON eaa0102doc = eaa01id " +
 				"LEFT JOIN abe01 AS redespacho ON eaa0102redespacho = redespacho.abe01id " +
@@ -114,7 +116,9 @@ public class SCV_Pedidos extends RelatorioBase {
 				" WHERE eaa01clasDoc = " + Eaa01.CLASDOC_SCV + " "+
 				" AND eaa01cancData IS NULL "+
 				obterWherePadrao("eaa01","AND") +
-				whereTipos + whereEntidades + whereCompVenda + whereEmissao + whereNumIni + whereNumFim + whereEntrega + whereAtendimento + whereNumCliente + whereRedespacho +
+				whereTipos + whereEntidades + whereCompVenda + whereEmissao +
+				whereNumIni + whereNumFim + whereEntrega + whereAtendimento +
+				whereNumCliente + whereRedespacho + wherePcd +
 				"ORDER BY abb01num ";
 
 		def p1 = tipos != null && tipos.size() > 0 ? criarParametroSql("tipos", tipos) : null
@@ -128,7 +132,8 @@ public class SCV_Pedidos extends RelatorioBase {
 		def p9 = atendimento != null && atendimento.size() > 0 ? criarParametroSql("atendimento", atendimento) : null;
 		def p10 = numeroCliente != null && numeroCliente.length() > 0 ? criarParametroSql("numCli", numeroCliente) : null;
 		def p11 = redespacho != null && redespacho.size() > 0 ? criarParametroSql("redespacho", redespacho) : null;
-		return getAcessoAoBanco().buscarListaDeTableMap(sql,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11);
+		def p12 = idsPcd != null && idsPcd.size() > 0 ? criarParametroSql("idsPcd", idsPcd) : null;
+		return getAcessoAoBanco().buscarListaDeTableMap(sql,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11, p12);
 	}
 
 	private void comporCamposLivres(TableMap dado, Map<String, String> campos){

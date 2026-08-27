@@ -264,12 +264,12 @@ public class SCV_SRF_VendaItensDiversos extends FormulaBase {
             jsonEaa0103.put("unitario_conv", eaa0103.eaa0103unit);
             jsonEaa0103.put("total_conv", eaa0103.eaa0103total);
             jsonEaa0103.put("qt_convertida", eaa0103.eaa0103qtComl);
-
+            
             //Total Item
             eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
 
             calcularIcmsST();
-
+            
             //Total Documento 
             eaa0103.eaa0103totDoc = eaa0103.eaa0103total +
                                     jsonEaa0103.getBigDecimal_Zero("ipi") +
@@ -279,7 +279,7 @@ public class SCV_SRF_VendaItensDiversos extends FormulaBase {
                                     jsonEaa0103.getBigDecimal_Zero("vlr_icms_fcp_") +
                                     jsonEaa0103.getBigDecimal_Zero("icms_st") -
                                     jsonEaa0103.getBigDecimal_Zero("desconto");
-
+            
             // ==============================================
             //                    ICMS
             // ==============================================
@@ -631,4 +631,5 @@ public class SCV_SRF_VendaItensDiversos extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

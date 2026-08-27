@@ -31,6 +31,7 @@ public class CST_romaneiocargaglobal extends RelatorioBase {
 	}
 	@Override 
 	public DadosParaDownload executar() {
+		interromper("Relatório em Manutenção")
 		LocalDate[] dataEmissao = getIntervaloDatas("dataEmissao");
 		LocalDate[] dataSaida = getIntervaloDatas("dataEntrega"); 
 		Boolean totalCaixas = get("totalCaixas");

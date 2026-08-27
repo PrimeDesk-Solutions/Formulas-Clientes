@@ -216,3 +216,4 @@ class SCF_FluxoCaixa extends RelatorioBase {
     }
 }
 //meta-sis-eyJkZXNjciI6IlNDRiAtIEZsdXhvIGRlIENhaXhhIC0gTENSIiwidGlwbyI6InJlbGF0b3JpbyJ9
+//meta-sis-eyJkZXNjciI6IlNDRiAtIEZsdXhvIGRlIENhaXhhIC0gTENSIiwidGlwbyI6InJlbGF0b3JpbyJ9

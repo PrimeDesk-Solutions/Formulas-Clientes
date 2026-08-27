@@ -235,3 +235,4 @@ public class SCF_Tesouraria_Lancamentos_Futuro extends RelatorioBase {
     }
 }
 //meta-sis-eyJkZXNjciI6IlNDRiAtIFRlc291cmFyaWEgTGFuw6dhbWVudG9zIEZ1dHVyb3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
+//meta-sis-eyJkZXNjciI6IlNDRiAtIFRlc291cmFyaWEgTGFuw6dhbWVudG9zIEZ1dHVyb3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

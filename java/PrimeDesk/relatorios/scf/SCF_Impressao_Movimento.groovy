@@ -37,8 +37,8 @@ public class SCF_Impressao_Movimento extends RelatorioBase {
 
         params.put("TITULO", "SCF - Movimento Financeiro");
         params.put("EMPRESA", obterEmpresaAtiva().getAac10codigo() + "-" + obterEmpresaAtiva().getAac10na());
-        params.put("LOGO_EMPRESA", "C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\spv\\Logo Silcon.png");
-        params.put("LOGO_REVENDA", "C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\spv\\logoPrimeDesk.png");
+        params.put("LOGO_EMPRESA", ""); //Informar caminho da logo da empresa do cliente
+        params.put("LOGO_REVENDA", "");
 
 
         return gerarPDF("SCF_Impressao_Movimento", dados);
@@ -62,3 +62,4 @@ public class SCF_Impressao_Movimento extends RelatorioBase {
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idMovimento", idMovimento));
     }
 }
+//meta-sis-eyJkZXNjciI6IlNDRiAtIEltcHJlc3PDo28gTW92aW1lbnRvIEZpbmFuY2Vpcm8iLCJ0aXBvIjoicmVsYXRvcmlvIn0=

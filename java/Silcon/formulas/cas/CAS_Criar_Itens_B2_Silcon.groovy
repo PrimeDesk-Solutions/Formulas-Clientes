@@ -40,3 +40,4 @@ public class CAS_Criar_Itens_B2_Silcon extends FormulaBase{
         return getSession().createQuery("SELECT abm01id, abm01tipo, abm01codigo, abm01descr FROM abm01 WHERE abm01tipo = 1 AND abm01gc = 1075797 AND abm01grupo <> 1 ORDER BY abm01tipo, abm01codigo").getList(ColumnType.ENTITY)
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiMTAwIn0=

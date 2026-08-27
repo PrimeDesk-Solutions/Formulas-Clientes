@@ -86,3 +86,4 @@ class SLM_QtdeMaxMinSeparacao extends FormulaBase {
     }
 }
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiOTYifQ==
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiOTYifQ==

@@ -138,3 +138,4 @@ public class SPV_Impressao_Monitoramento_Caixa extends RelatorioBase {
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroLctos, parametroCC);
     }
 }
+//meta-sis-eyJkZXNjciI6IlNQViAtIEltcHJlc3NhbyBNb25pdG9yYW1lbnRvIENhaXhhIiwidGlwbyI6InJlbGF0b3JpbyJ9

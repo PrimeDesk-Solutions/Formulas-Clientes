@@ -216,3 +216,4 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
     }
 }
 //meta-sis-eyJkZXNjciI6IlNDRiAtIExhbsOnYW1lbnRvcyBwb3IgQ2VudHJvIGRlIEN1c3RvcyBlIE5hdCIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
+//meta-sis-eyJkZXNjciI6IlNDRiAtIExhbsOnYW1lbnRvcyBwb3IgQ2VudHJvIGRlIEN1c3RvcyBlIE5hdCIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

@@ -1,5 +1,6 @@
 package Inova.formulas.itensDocumentos
 
+import br.com.multiorm.ColumnType
 import sam.model.entities.aa.Aac13;
 import sam.model.entities.ab.Abd02;
 import sam.server.samdev.utils.Parametro;
@@ -333,7 +334,28 @@ public class SRF_Doc_Padrao_Entrada extends FormulaBase {
     }
 
     private void definirPrecoUnitario(){
-        if(eaa0103.eaa0103unit == 0) eaa0103.eaa0103unit = jsonAbm0101.getBigDecimal_Zero("ultimo_preco");
+        if(eaa0103.eaa0103unit == 0){
+            String sql = " SELECT COALESCE(eaa0103unit, 0.00) AS unitario " +
+                    " FROM eaa0103 " +
+                    " WHERE eaa0103doc = (" +
+                    "    SELECT MAX(eaa01id)" +
+                    "    FROM eaa01 " +
+                    "    INNER JOIN eaa0103 ON eaa0103doc = eaa01id " +
+                    "    INNER JOIN abb01 ON abb01id = eaa01central " +
+                    "    WHERE abb01ent = :idEntidade " +
+                    "    AND eaa0103item = :idItem " +
+                    "    AND eaa01esMov = 0 " +
+                    "    AND eaa01clasDoc = 0 "+
+                    " )";
+
+
+            BigDecimal ultimoUnit = getSession()
+                    .createQuery(sql)
+                    .setParameters("idEntidade", abe01.abe01id, "idItem", abm01.abm01id)
+                    .getUniqueResult(ColumnType.BIG_DECIMAL);
+
+            eaa0103.eaa0103unit = ultimoUnit == null || ultimoUnit == BigDecimal.ZERO ? BigDecimal.ZERO : ultimoUnit;
+        }
     }
 
     // Trocar CFOP (Dentro ou fora do estado)
@@ -414,8 +436,10 @@ public class SRF_Doc_Padrao_Entrada extends FormulaBase {
 
     private void calcularICMS(Integer contribICMS) {
         Integer vlrReducao = 0;
+        
+        if(jsonEaa0103.getBigDecimal_Zero("aliq_icms") == 0) jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
 
-        if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
+        if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonEaa0103.getBigDecimal_Zero("aliq_icms") > 0) {
             // BC ICMS
             jsonEaa0103.put("bc_icms", eaa0103.eaa0103total +
                     jsonEaa0103.getBigDecimal_Zero("frete_dest") +
@@ -435,11 +459,6 @@ public class SRF_Doc_Padrao_Entrada extends FormulaBase {
 
             // Zerando icms outras quando tiver valor na aliq icms
             jsonEaa0103.put("icms_outras", new BigDecimal(0));
-
-            // Aliquota de ICMS
-            if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
-                jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
-            }
 
             // Calculo ICMS
             jsonEaa0103.put("icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") * (jsonEaa0103.getBigDecimal_Zero("aliq_icms") / 100)).round(2));
@@ -850,6 +869,7 @@ public class SRF_Doc_Padrao_Entrada extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

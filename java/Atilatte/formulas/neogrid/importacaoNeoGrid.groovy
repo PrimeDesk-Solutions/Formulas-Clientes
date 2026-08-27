@@ -308,32 +308,8 @@ public class importacaoNeoGrid extends FormulaBase {
 						//Quantidade
 						BigDecimal eaa0103qtComl = new BigDecimal(line.substring(99,114)) / 100;
 
-						//Converte Quantidade comercial para caixa, caso a entidade estiver caraterizada como unidade caixa
-						if(unidadeCaixa == 1){
-							if(grupo == "Iogurte"){
-								eaa0103qtComl = eaa0103qtComl * jsonAbm0101.getBigDecimal_Zero("cvdnf");
-							}
-							if(grupo == "Leite"){
-								if(abm01.abm01codigo == "0101002"){
-									if(jsonAbm0101.getBigDecimal_Zero("volume_caixa") == 0 || jsonAbm0101.getBigDecimal_Zero("volume_caixa") == null) throw new ValidacaoException("O volume caixa no cadastro do item " + abm01.abm01codigo + " é inválido. ");
-									eaa0103qtComl = eaa0103qtComl * jsonAbm0101.getBigDecimal_Zero("volume_caixa");
-								}else{
-									if(jsonAbm0101.getBigDecimal_Zero("cvdnf") == 0 || jsonAbm0101.getBigDecimal_Zero("cvdnf") == null) throw new ValidacaoException("A capacidade volumétrica no cadastro do item " + abm01.abm01codigo + " é inválido.");
-									eaa0103qtComl = eaa0103qtComl * jsonAbm0101.getBigDecimal_Zero("cvdnf");
-								}
-							}
-
-							if(grupo == "Queijo"){
-								if(aam06.aam06codigo == 'UN'){
-									if(jsonAbm0101.getBigDecimal_Zero("cvdnf") == 0 || jsonAbm0101.getBigDecimal_Zero("cvdnf") == null) throw new ValidacaoException("A capacidade volumétrica no cadastro do item " + abm01.abm01codigo + " é inválida.")
-									eaa0103qtComl = eaa0103qtComl * jsonAbm0101.getBigDecimal_Zero("cvdnf");
-								}
-//								if(aam06.aam06codigo == 'KG'){
-//									if(jsonAbm0101.getBigDecimal_Zero("peso_caixa") == 0 || jsonAbm0101.getBigDecimal_Zero("peso_caixa") == null) throw new ValidacaoException("O peso caixa no cadastro do item " + abm01.abm01codigo + " é inválido.");
-//									eaa0103qtComl = eaa0103qtComl * jsonAbm0101.getBigDecimal_Zero("peso_caixa");
-//								}
-							}
-						}
+                        if(jsonAbm0101.getBigDecimal_Zero("cvdnf") == 0) throw new ValidacaoException("Quantidade de itens por caixa no cadastro do item " + abm01.abm01codigo + " - " + abm01.abm01descr + " é inválida.");
+                        if(unidadeCaixa == 1 && aam06.aam06codigo != 'KG' ) eaa0103qtComl = eaa0103qtComl * jsonAbm0101.getBigDecimal_Zero("cvdnf");
 
 						//Sequencia dos Itens
 						Integer eaa0103seq = Integer.parseInt(line.substring(2,6).trim());
@@ -379,4 +355,5 @@ public class importacaoNeoGrid extends FormulaBase {
 	}
 
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjYifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjYifQ==

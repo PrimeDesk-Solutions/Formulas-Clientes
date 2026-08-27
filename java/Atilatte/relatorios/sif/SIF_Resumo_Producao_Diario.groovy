@@ -93,3 +93,4 @@ public class SIF_Resumo_Producao_Diario extends RelatorioBase {
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroDataInicial, parametroDataFinal, parametroItens)
     }
 }
+//meta-sis-eyJkZXNjciI6IlNJRiAtIFJlc3VtbyBQcm9kdcOnw6NvIERpw6FyaW8iLCJ0aXBvIjoicmVsYXRvcmlvIn0=

@@ -114,3 +114,4 @@ public class SCV_Impressao_Pedido_Compra_Importacao_Nacional extends RelatorioBa
         return getAcessoAoBanco().buscarUnicoTableMap(sql, Parametro.criar("idEmpresa", idEmpresa));
     }
 }
+//meta-sis-eyJkZXNjciI6IlNDViAtIEltcHJlc3PDo28gUGVkaWRvIENvbXByYSBJbXBvcnRhZG8gTmFjaW9uYWwiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

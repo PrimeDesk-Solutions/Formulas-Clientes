@@ -486,12 +486,6 @@ public class SGT_Leiaute20_2025_ICMS_IPI extends FormulaBase {
             while(eaa01s.size() > 0) {
                 verificarProcessoCancelado();
                 for(Eaa01 eaa01 : eaa01s) {
-                    Boolean documentoJaProcessado = false;
-                    for(id in listIds){
-                        if(id == eaa01.eaa01id) documentoJaProcessado = true;
-                    }
-
-                    //if(documentoJaProcessado) continue;
 
                     if(eaa01.eaa01obsFisco != null){
                         eaa01.eaa01obsFisco = eaa01.eaa01obsFisco.replace("|", "");
@@ -4976,7 +4970,9 @@ public class SGT_Leiaute20_2025_ICMS_IPI extends FormulaBase {
                 " WHERE ((eaa01esMov = 0 AND eaa01esData BETWEEN :dtInicial AND :dtFinal) " +
                 " OR (eaa01esMov = 1 AND abb01data BETWEEN :dtInicial AND :dtFinal)) " +
                 " AND aah01modelo IN (:modelos) " +
-                " AND eaa01iEfdIcms = 1 " + obterWherePadrao("eaa01");
+                " AND eaa01iEfdIcms = 1 " + obterWherePadrao("eaa01") +
+                " ORDER BY abb01num "
+                
 
         return getAcessoAoBanco().buscarListaDeRegistros(sql, true, pagina, Parametro.criar("dtInicial", dtInicial),
                 Parametro.criar("dtFinal", dtFinal),

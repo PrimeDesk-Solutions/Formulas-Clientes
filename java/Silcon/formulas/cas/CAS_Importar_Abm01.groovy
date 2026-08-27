@@ -75,3 +75,4 @@ public class CAS_Importar_Abm01 extends FormulaBase{
         return getSession().createCriteria(Aac01.class).addWhere(Criterions.eq("aac01id", 1075797 )).get()
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiMTAwIn0=

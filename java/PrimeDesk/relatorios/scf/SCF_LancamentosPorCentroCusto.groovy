@@ -62,7 +62,7 @@ public class SCF_LancamentosPorCentroCusto extends RelatorioBase {
         Parametro parametroContasCorrentes = contasCorrentes != null && contasCorrentes.size() > 0 ? Parametro.criar("contasCorrentes", contasCorrentes) : null;
         Parametro parametroEmpresa = Parametro.criar("idEmpresa", empresa.getAac10id());
 
-        String sql = "SELECT abb11codigo AS codDepto, abb11nome AS nomeDepto, dab10data AS dtLcto, " +
+        String sql = "SELECT DISTINCT dab10id, abb11codigo AS codDepto, abb11nome AS nomeDepto, dab10data AS dtLcto, " +
                 "dab01codigo AS codCC, dab01nome AS nomeCC, dab10historico AS historico,  " +
                 "CASE WHEN dab10mov = 0 THEN 'C' ELSE 'D' END AS movimentacao, dab1001valor AS valor " +
                 "FROM dab10 " +
@@ -81,5 +81,3 @@ public class SCF_LancamentosPorCentroCusto extends RelatorioBase {
 
     }
 }
-//meta-sis-eyJkZXNjciI6IlNDRiAtIExhbsOnYW1lbnRvcyBwb3IgQ2VudHJvIGRlIEN1c3RvIiwidGlwbyI6InJlbGF0b3JpbyJ9
-//meta-sis-eyJkZXNjciI6IlNDRiAtIExhbsOnYW1lbnRvcyBwb3IgQ2VudHJvIGRlIEN1c3RvIiwidGlwbyI6InJlbGF0b3JpbyJ9

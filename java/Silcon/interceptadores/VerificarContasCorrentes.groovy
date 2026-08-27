@@ -64,3 +64,4 @@ public class VerificarContasCorrentes implements ORMInterceptor<sam.model.entiti
     public void preDelete(List<Long> ids, Session s) {
     }
 }
+//meta-sis-eyJ0aXBvIjoiaW50ZXJjZXB0b3IiLCJlbnRpdHkiOiJzYW0ubW9kZWwuZW50aXRpZXMuZGEuRGFiMTAifQ==

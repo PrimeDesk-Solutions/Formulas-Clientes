@@ -106,3 +106,4 @@ public class SPV_Impressao_CX_Financeiro extends RelatorioBase {
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idDoc", daa01id));
     }
 }
+//meta-sis-eyJkZXNjciI6IlNQViAtIEltcHJlc3PDo28gQ2FpeGEgRmluYW5jZWlybyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

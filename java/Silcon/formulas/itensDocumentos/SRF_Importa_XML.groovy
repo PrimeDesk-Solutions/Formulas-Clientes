@@ -237,13 +237,13 @@ public class SRF_Importa_XML extends FormulaBase {
 
             // Total Documento
             eaa0103.eaa0103totDoc = eaa0103.eaa0103total +
-                    jsonEaa0103.getBigDecimal_Zero("ipi_sped") +
-                    jsonEaa0103.getBigDecimal_Zero("vlr_icms_fcp_") +
-                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                    jsonEaa0103.getBigDecimal_Zero("seguro") +
-                    jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
-                    jsonEaa0103.getBigDecimal_Zero("icms_st_sped") -
-                    jsonEaa0103.getBigDecimal_Zero("desconto");
+                                    jsonEaa0103.getBigDecimal_Zero("ipi_sped") +
+                                    jsonEaa0103.getBigDecimal_Zero("vlr_icms_fcp_") +
+                                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
+                                    jsonEaa0103.getBigDecimal_Zero("seguro") +
+                                    jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
+                                    jsonEaa0103.getBigDecimal_Zero("icms_st_sped") -
+                                    jsonEaa0103.getBigDecimal_Zero("desconto");
 
             eaa0103.eaa0103totDoc = round(eaa0103.eaa0103totDoc, 2);
 
@@ -285,7 +285,7 @@ public class SRF_Importa_XML extends FormulaBase {
         eaa0103.eaa0103cfop = aaj15_cfop;
 
     }
-
+   
     private void calcularSPED(){
         //*******Calculo para SPED ICMS*******
 
@@ -344,4 +344,5 @@ public class SRF_Importa_XML extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

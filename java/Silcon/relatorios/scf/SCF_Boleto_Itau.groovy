@@ -607,3 +607,4 @@ class SCF_Boleto_Itau extends RelatorioBase {
 //meta-sis-eyJkZXNjciI6IlNDRiAtIEJvbGV0byBJdGHDuiIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
 //meta-sis-eyJkZXNjciI6IlNDRiAtIEJvbGV0byBJdGHDuiIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
 //meta-sis-eyJkZXNjciI6IlNDRiAtIEJvbGV0byBJdGHDuiIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
+//meta-sis-eyJkZXNjciI6IlNDRiAtIEJvbGV0byBJdGHDuiIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

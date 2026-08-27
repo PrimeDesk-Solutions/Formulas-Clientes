@@ -177,3 +177,4 @@ public class SRF_DefinirQuantidadeCaixas implements ORMInterceptor<sam.model.ent
     public void preDelete(List<Long> ids, Session s) {
     }
 }
+//meta-sis-eyJ0aXBvIjoiaW50ZXJjZXB0b3IiLCJlbnRpdHkiOiJzYW0ubW9kZWwuZW50aXRpZXMuZWEuRWFhMDEifQ==

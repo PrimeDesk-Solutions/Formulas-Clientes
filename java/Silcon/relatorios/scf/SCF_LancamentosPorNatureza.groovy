@@ -124,3 +124,4 @@ public class SCF_LancamentosPorNatureza extends RelatorioBase {
                 .getList(ColumnType.LONG);
     }
 }
+//meta-sis-eyJkZXNjciI6IlNDRiAtIExhbsOnYW1lbnRvcyBwb3IgTmF0dXJlemEiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

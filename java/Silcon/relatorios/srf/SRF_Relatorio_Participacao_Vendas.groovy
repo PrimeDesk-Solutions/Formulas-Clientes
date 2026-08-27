@@ -373,3 +373,4 @@ public class SRF_Relatorio_Participacao_Vendas extends RelatorioBase {
         return getAcessoAoBanco().obterString(sql, criarParametroSql("nome", campo))
     }
 }
+//meta-sis-eyJkZXNjciI6IlNSRiAtIFBhcnRpY2lwYcOnw6NvIGVtIFZlbmRhcyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

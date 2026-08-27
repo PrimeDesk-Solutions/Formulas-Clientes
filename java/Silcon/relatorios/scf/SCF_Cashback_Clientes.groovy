@@ -102,3 +102,4 @@ public class SCF_Cashback_Clientes extends RelatorioBase {
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroId);
     }
 }
+//meta-sis-eyJkZXNjciI6IlNDRiAtIENhc2hiYWNrIENsaWVudGVzIiwidGlwbyI6InJlbGF0b3JpbyJ9

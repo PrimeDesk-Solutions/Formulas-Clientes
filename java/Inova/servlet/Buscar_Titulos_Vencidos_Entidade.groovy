@@ -50,3 +50,4 @@ public class Buscar_Titulos_Vencidos_Entidade extends ServletBase {
                 .getUniqueResult(ColumnType.BIG_DECIMAL);
     }
 }
+//meta-sis-eyJkZXNjciI6IkJ1c2NhciBUaXR1bG9zIFZlbmNpZG9zIEVudGlkYWRlIiwidGlwbyI6InNlcnZsZXQifQ==

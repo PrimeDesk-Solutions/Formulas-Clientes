@@ -135,3 +135,4 @@ public class SPV_Devolucao_Venda extends RelatorioBase {
         return totalDocReferenciados == null || totalDocReferenciados.compareTo(new BigDecimal(0)) == 0 ? new BigDecimal(0) : totalDocReferenciados;
     }
 }
+//meta-sis-eyJkZXNjciI6IlNQViAtIERldm9sdWNhbyBkZSBWZW5kYXMiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

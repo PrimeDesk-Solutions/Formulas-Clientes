@@ -351,12 +351,12 @@ class SCF_Boleto_Itau extends RelatorioBase {
         if(daa01ids == null || daa01ids.size() == 0) return
 
         String sqlDerivados = " SELECT DISTINCT daa01id " +
-                " FROM Daa01 " +
-                " INNER JOIN Abb0102 ON daa01central = abb0102doc " +
-                " INNER JOIN Abb01 ON daa01central = abb01id " +
-                getSamWhere().getWherePadrao(" WHERE ", Daa01.class) +
-                " AND abb0102central IN (:idDocsOrigem) " +
-                " AND daa01rp = 0 AND daa01previsao = 0 AND daa01banco IS NOT NULL ";
+                                " FROM Daa01 " +
+                                " INNER JOIN Abb0102 ON daa01central = abb0102doc " +
+                                " INNER JOIN Abb01 ON daa01central = abb01id " +
+                                getSamWhere().getWherePadrao(" WHERE ", Daa01.class) +
+                                " AND abb0102central IN (:idDocsOrigem) " +
+                                " AND daa01rp = 0 AND daa01previsao = 0 AND daa01banco IS NOT NULL ";
 
         return getAcessoAoBanco().obterListaDeLong(sqlDerivados, Parametro.criar("idDocsOrigem", daa01ids));
 
@@ -424,8 +424,6 @@ class SCF_Boleto_Itau extends RelatorioBase {
     }
 
     private String campoLivrePorBanco(String numeroBanco, String agencia, String conta, Long nossoNumero) {
-
-
         StringBuilder campoLivre = new StringBuilder("");
         campoLivre.append("7")																					//20-20 - fixo 7
         campoLivre.append(formatarCampo(agencia, 5));											                //21-25 - Agência
@@ -442,12 +440,6 @@ class SCF_Boleto_Itau extends RelatorioBase {
 
         return campo;
     }
-
-//	private Long definirFatorVencimento(LocalDate data) {
-//		LocalDate dataBase = DateUtils.parseDate("07/10/1997");
-//		Long fator = DateUtils.dateDiff(dataBase, data, ChronoUnit.DAYS);
-//		return fator;
-//	}
     private Long definirFatorVencimento(LocalDate data) {
         // Novo calculo de fator de vencimento a partir do dia 22/02/2025
         LocalDate dtRef = DateUtils.parseDate("22/02/2025");

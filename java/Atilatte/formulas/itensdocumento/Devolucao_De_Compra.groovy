@@ -533,7 +533,7 @@ public class Devolucao_De_Compra extends FormulaBase {
 //            }
 
             if(jsonEaa0103.getBigDecimal_Zero("_red_bc_icms_sped") > 0) jsonEaa0103.put("_red_bc_icms", jsonEaa0103.getBigDecimal_Zero("_red_bc_icms_sped"));
-
+            
             // Calculo da Redução
             if (jsonEaa0103.getBigDecimal_Zero("_red_bc_icms") > 0) {
                 vlrReducao = ((jsonEaa0103.getBigDecimal_Zero("bc_icms") * jsonEaa0103.getBigDecimal_Zero("_red_bc_icms")) / 100).round(2);
@@ -677,6 +677,7 @@ public class Devolucao_De_Compra extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

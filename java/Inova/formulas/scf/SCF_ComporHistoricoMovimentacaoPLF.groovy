@@ -33,3 +33,4 @@ class SCF_ComporHistoricoMovimentacaoPLF extends FormulaBase {
     }
 }
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNTMifQ==
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNTMifQ==

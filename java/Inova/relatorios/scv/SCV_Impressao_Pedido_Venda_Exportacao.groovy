@@ -112,3 +112,4 @@ public class SCV_Impressao_Pedido_Venda_Exportacao extends RelatorioBase {
         return getAcessoAoBanco().buscarUnicoTableMap(sql, Parametro.criar("idEmpresa", idEmpresa));
     }
 }
+//meta-sis-eyJkZXNjciI6IlNDViAtIFBlZGlkbyBWZW5kYSBFeHBvcnRhw6fDo28iLCJ0aXBvIjoicmVsYXRvcmlvIn0=

@@ -55,7 +55,7 @@ public class CAS_Importar_Abe0101 extends FormulaBase {
                 abe0101.setAbe0101bairro(txt.getCampo(6).isEmpty() ? null : txt.getCampo(6));
                 abe0101.setAbe0101complem(txt.getCampo(7).isEmpty() ? null : txt.getCampo(7));
                 abe0101.setAbe0101cep(txt.getCampo(8).isEmpty() ? null : txt.getCampo(8));
-                abe0101.setAbe0101cp(Integer.parseInt(txt.getCampo(9)));
+                abe0101.setAbe0101cp(txt.getCampo(9).isEmpty() ? null : Integer.parseInt(txt.getCampo(9)));
                 abe0101.setAbe0101cepCp(txt.getCampo(10).isEmpty() ? null : txt.getCampo(10));
 
                 if (!txt.getCampo(11).isEmpty()) {
@@ -72,7 +72,7 @@ public class CAS_Importar_Abe0101 extends FormulaBase {
                     abe0101.setAbe0101pais(aag01);
                 }
                 if(!txt.getCampo(13).isEmpty()){
-                    Aag03 aag03 = getSession().createCriteria(Aag03.class).addWhere(Criterions.eq("aag03nome", txt.getCampo(13))).get(ColumnType.ENTITY);
+                    Aag03 aag03 = getSession().createCriteria(Aag03.class).addWhere(Criterions.eq("aag03id", Long.parseLong(txt.getCampo(13)))).get(ColumnType.ENTITY);
                     if(aag03 == null) throw new ValidacaoException("Região " + txt.getCampo(13) + " não encontrada no sistema.");
 
                     abe0101.setAbe0101regiao(aag03);
@@ -107,7 +107,7 @@ public class CAS_Importar_Abe0101 extends FormulaBase {
 
     private Abe01 buscarEntidadePeloCodigo(String codEntidade) {
 
-        return getSession().createCriteria(Abe01.class).addWhere(Criterions.eq("abe01codigo", codEntidade)).get(ColumnType.ENTITY);
+        return getSession().createCriteria(Abe01.class).addWhere(Criterions.eq("abe01id", Long.parseLong(codEntidade))).get(ColumnType.ENTITY);
     }
 
     private Aag0201 buscarIDMunicipio(String idMunicipio) {
@@ -126,3 +126,4 @@ public class CAS_Importar_Abe0101 extends FormulaBase {
     }
 
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiMTAwIn0=

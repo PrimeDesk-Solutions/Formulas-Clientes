@@ -702,7 +702,7 @@ class NFCe extends FormulaBase {
             // Montar a URL completa
             String qrCodeURL = "${urlqrCode}?p=${chave}|2|${tpAmb}|${idCSC}|${hash}";
             eaa0102.setEaa0102pvQrCodeVenda(qrCodeURL)
-            getSession().persist(eaa0102)
+            //getSession().persist(eaa0102)
 
             // Criar o bloco infNFeSupl
             xmlInfNFeSupl = "<infNFeSupl><qrCode><![CDATA[" + qrCodeURL + "]]></qrCode><urlChave>" + urlConsulta + "</urlChave></infNFeSupl>"
@@ -2163,6 +2163,7 @@ class NFCe extends FormulaBase {
         return getAcessoAoBanco().obterBigDecimal(sql, criarParametroSql("eaa01id", eaa01id));
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjgifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjgifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjgifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjgifQ==

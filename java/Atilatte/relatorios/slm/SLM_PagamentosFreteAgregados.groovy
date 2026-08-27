@@ -433,3 +433,4 @@ public class SLM_PagamentosFreteAgregados extends RelatorioBase {
 }
 //meta-sis-eyJkZXNjciI6IlBhZ2FtZW50byBGcmV0ZSBBZ3JlZ2Fkb3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlBhZ2FtZW50byBGcmV0ZSBBZ3JlZ2Fkb3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
+//meta-sis-eyJkZXNjciI6IlBhZ2FtZW50byBGcmV0ZSBBZ3JlZ2Fkb3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

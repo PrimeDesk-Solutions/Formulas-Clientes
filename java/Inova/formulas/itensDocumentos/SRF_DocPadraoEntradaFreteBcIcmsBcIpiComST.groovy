@@ -1,5 +1,6 @@
 package Inova.formulas.itensDocumentos
 
+import br.com.multiorm.ColumnType
 import sam.model.entities.aa.Aac13;
 import sam.model.entities.ab.Abd02;
 import sam.server.samdev.utils.Parametro;
@@ -230,6 +231,8 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpiComST extends FormulaBase {
 
         if (eaa0103.eaa0103qtComl > 0) {
 
+            definirPrecoUnitario();
+
             //Define se a entidade é ou não contribuinte de ICMS
             Integer contribICMS = 0;
 
@@ -330,6 +333,31 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpiComST extends FormulaBase {
 
         }
 
+    }
+
+    private void definirPrecoUnitario(){
+        if(eaa0103.eaa0103unit == 0){
+            String sql = " SELECT COALESCE(eaa0103unit, 0.00) AS unitario " +
+                    " FROM eaa0103 " +
+                    " WHERE eaa0103doc = (" +
+                    "    SELECT MAX(eaa01id)" +
+                    "    FROM eaa01 " +
+                    "    INNER JOIN eaa0103 ON eaa0103doc = eaa01id " +
+                    "    INNER JOIN abb01 ON abb01id = eaa01central " +
+                    "    WHERE abb01ent = :idEntidade " +
+                    "    AND eaa0103item = :idItem " +
+                    "    AND eaa01esMov = 0 " +
+                    "    AND eaa01clasDoc = 0 "+
+                    " )";
+
+
+            BigDecimal ultimoUnit = getSession()
+                    .createQuery(sql)
+                    .setParameters("idEntidade", abe01.abe01id, "idItem", abm01.abm01id)
+                    .getUniqueResult(ColumnType.BIG_DECIMAL);
+
+            eaa0103.eaa0103unit = ultimoUnit == null || ultimoUnit == BigDecimal.ZERO ? BigDecimal.ZERO : ultimoUnit;
+        }
     }
 
     // Trocar CFOP (Dentro ou fora do estado)
@@ -833,6 +861,7 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpiComST extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

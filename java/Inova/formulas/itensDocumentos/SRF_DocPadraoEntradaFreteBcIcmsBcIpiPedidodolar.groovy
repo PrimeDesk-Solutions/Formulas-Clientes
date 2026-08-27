@@ -1,5 +1,6 @@
 package Inova.formulas.itensDocumentos
 
+import br.com.multiorm.ColumnType
 import sam.model.entities.aa.Aac13
 import sam.model.entities.aa.Aag1001;
 import sam.model.entities.ab.Abd02;
@@ -216,10 +217,11 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpiPedidodolar extends FormulaBase
 
         // Moeda Estrangeira
         aag10 = eaa01.eaa01moeda != null ? getSession().get(Aag10.class, eaa01.eaa01moeda.aag10id) : null;
+        if(aag10 == null) throw new ValidacaoException("Não foi informado a moeda do documento.");
 
         // Cotações
-        aag1001 = aag10 != null ? getSession().get(Aag1001.class, Criterions.where("aag1001moeda = " + aag10.aag10id + " AND aag1001data = '" + LocalDate.now() + "'")) : null;
-        if(aag10 != null && aag1001 == null) throw new ValidacaoException("Não foi informado cotação para a data " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
+        if(eaa01.eaa01json.getDate("data_cambio") != null) aag1001 = aag10 != null ? getSession().get(Aag1001.class, Criterions.where("aag1001moeda = " + aag10.aag10id + " AND aag1001data = '" + eaa01.eaa01json.getDate("data_cambio") + "'")) : null;
+        if(aag1001 == null) throw new ValidacaoException("Não foi informado cotação para a data informada.");
 
 
         //CAMPOS LIVRES
@@ -353,7 +355,28 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpiPedidodolar extends FormulaBase
     }
 
     private void definirPrecoUnitario(){
-        if(eaa0103.eaa0103unit == 0) eaa0103.eaa0103unit = jsonAbm0101.getBigDecimal_Zero("ultimo_preco");
+        if(eaa0103.eaa0103unit == 0){
+            String sql = " SELECT COALESCE(eaa0103unit, 0.00) AS unitario " +
+                    " FROM eaa0103 " +
+                    " WHERE eaa0103doc = (" +
+                    "    SELECT MAX(eaa01id)" +
+                    "    FROM eaa01 " +
+                    "    INNER JOIN eaa0103 ON eaa0103doc = eaa01id " +
+                    "    INNER JOIN abb01 ON abb01id = eaa01central " +
+                    "    WHERE abb01ent = :idEntidade " +
+                    "    AND eaa0103item = :idItem " +
+                    "    AND eaa01esMov = 0 " +
+                    "    AND eaa01clasDoc = 0 "+
+                    " )";
+
+
+            BigDecimal ultimoUnit = getSession()
+                    .createQuery(sql)
+                    .setParameters("idEntidade", abe01.abe01id, "idItem", abm01.abm01id)
+                    .getUniqueResult(ColumnType.BIG_DECIMAL);
+
+            eaa0103.eaa0103unit = ultimoUnit == null || ultimoUnit == BigDecimal.ZERO ? BigDecimal.ZERO : ultimoUnit;
+        }
     }
 
     // Trocar CFOP (Dentro ou fora do estado)
@@ -871,6 +894,7 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpiPedidodolar extends FormulaBase
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

@@ -247,16 +247,16 @@ public class SRF_Importa_XML_Revenda extends FormulaBase {
             definirCFOP(dentroEstado);
 
             if(jsonEaa0103.getBigDecimal_Zero("aliq_icms_st") == -1){
-                jsonEaa0103.put("bc_icms_st_sped", BigDecimal.ZERO);
+            	 jsonEaa0103.put("bc_icms_st_sped", BigDecimal.ZERO);
                 jsonEaa0103.put("aliq_icms_st_sped", BigDecimal.ZERO);
                 jsonEaa0103.put("icms_st_sped", BigDecimal.ZERO);
-
+                
                 jsonEaa0103.put("bc_icms_st", BigDecimal.ZERO);
                 jsonEaa0103.put("aliq_icms_st", BigDecimal.ZERO);
                 jsonEaa0103.put("icms_st", BigDecimal.ZERO);
             }
 
-            // Total Documento
+             // Total Documento
             eaa0103.eaa0103totDoc = eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("icms_st_sped");
             eaa0103.eaa0103totDoc = eaa0103.eaa0103totDoc.round(2);
 
@@ -389,4 +389,5 @@ public class SRF_Importa_XML_Revenda extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

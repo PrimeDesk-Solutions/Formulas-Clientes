@@ -214,9 +214,13 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpiPedidodolar50201 extends Formul
         aaj09 = eaa0103.eaa0103cstCbsIbs != null ? getSession().get(Aaj09.class, eaa0103.eaa0103cstCbsIbs.aaj09id) : null;
         if (aaj09 == null) interromper("Necessário informar o CST de CBS/IBS no item: " + abm01.abm01codigo + " - " + abm01.abm01na);
 
+        // Moeda Estrangeira
+        aag10 = eaa01.eaa01moeda != null ? getSession().get(Aag10.class, eaa01.eaa01moeda.aag10id) : null;
+        if(aag10 == null) throw new ValidacaoException("Não foi informado a moeda do documento.");
+
         // Cotações
-        Aag1001 aag1001 = aag10 != null ? getSession().get(Aag1001.class, Criterions.where("aag1001moeda = " + aag10.aag10id + " AND aag1001data = " + LocalDate.now())) : null;
-        if(aag10 != null && aag1001 == null) throw new ValidacaoException("Não foi informado cotação para a data " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
+        if(eaa01.eaa01json.getDate("data_cambio") != null) aag1001 = aag10 != null ? getSession().get(Aag1001.class, Criterions.where("aag1001moeda = " + aag10.aag10id + " AND aag1001data = '" + eaa01.eaa01json.getDate("data_cambio") + "'")) : null;
+        if(aag1001 == null) throw new ValidacaoException("Não foi informado cotação para a data informada.");
 
         //CAMPOS LIVRES
         jsonAac10 = aac10.aac10json != null ? aac10.aac10json : new TableMap();
@@ -867,6 +871,7 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpiPedidodolar50201 extends Formul
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

@@ -91,18 +91,19 @@ public class SCE_Resumo_Anual_Itens extends RelatorioBase {
         String whereItens = idsItens != null && idsItens.size() > 0 ? "AND abm01id IN (:idsItens) " : "";
         String whereMps = mps != null && !mps.contains(-1) ? "AND abm01tipo IN (:mps) " : "";
         String whereGC = "AND bcc01gc = :idGC ";
-        String wherePLF = idsPLE != null && idsPLE.size() > 0 ? "AND abf20id IN (:idsPLE) " : "";
+        String wherePLE = idsPLE != null && idsPLE.size() > 0 ? "AND abm20id IN (:idsPLE) " : "";
         String whereMovimentacao = movimentacao == 0 ? "AND bcc01mov = 0 " : "AND bcc01mov = 1 ";
         String whereDatas = data != null ? "AND bcc01data BETWEEN :dtInicial AND :dtFinal " : "";
 
         String sql = "SELECT abm01id, abm01tipo, abm01codigo, abm01descr, bcc01data,  SUM(bcc01qt) AS qtd " +
                 "FROM bcc01 " +
                 "INNER JOIN abm01 ON abm01id = bcc01item " +
+                "INNER JOIN abm20 ON abm20id = bcc01ple "+
                 "WHERE TRUE " +
                 whereItens +
                 whereMps +
                 whereGC +
-                wherePLF +
+                wherePLE +
                 whereMovimentacao +
                 whereDatas +
                 "GROUP BY abm01id, abm01tipo, abm01codigo, abm01descr, bcc01data " +
@@ -111,10 +112,11 @@ public class SCE_Resumo_Anual_Itens extends RelatorioBase {
         Parametro parametroItens = idsItens != null && idsItens.size() > 0 ? Parametro.criar("idsItens", idsItens) : null;
         Parametro parametroMps = mps != null && !mps.contains(-1) ? Parametro.criar("mps", mps) : null;
         Parametro parametroGC = Parametro.criar("idGC", obterEmpresaAtiva().getAac10id());
-        Parametro parametroPLF = idsPLE != null && idsPLE.size() > 0 ? Parametro.criar("idsPLE", idsPLE) : null;
+        Parametro parametroPLE = idsPLE != null && idsPLE.size() > 0 ? Parametro.criar("idsPLE", idsPLE) : null;
         Parametro dtInicial = data != null ? Parametro.criar("dtInicial", data[0]) : null;
         Parametro dtFinal = data != null ? Parametro.criar("dtFinal", data[1]) : null;
 
-        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroItens, parametroMps, parametroGC, parametroPLF, dtInicial, dtFinal)
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroItens, parametroMps, parametroGC, parametroPLE, dtInicial, dtFinal)
     }
 }
+//meta-sis-eyJkZXNjciI6IlNDRSAtIFJlc3VtbyBBbnVhbCBJdGVucyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

@@ -5,6 +5,7 @@ import br.com.multiorm.criteria.criterion.Criterion
 import br.com.multiorm.criteria.criterion.Criterions
 import sam.model.entities.ab.Abb0101
 import sam.model.entities.da.Daa0101
+import sam.model.entities.da.Daa01011
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import br.com.multitec.utils.DateUtils;
 import br.com.multitec.utils.collections.TableMap;
 import sam.dicdados.FormulaTipo;
 import sam.model.entities.da.Daa01;
+import sam.model.entities.ab.Abb01;
 import sam.model.entities.da.Daa1001;
 import sam.server.samdev.formula.FormulaBase;
 import sam.server.samdev.utils.Parametro;
@@ -121,4 +123,5 @@ public class Movimento extends FormulaBase{
         return FormulaTipo.SCF_LCTOS_DE_MOVIMENTO;
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNDgifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNDgifQ==

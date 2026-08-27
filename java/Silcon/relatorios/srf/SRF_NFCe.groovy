@@ -250,3 +250,4 @@ class SRF_NFCe extends RelatorioBase {
     }
 }
 //meta-sis-eyJkZXNjciI6IlNSRiAtIEltcHJlc3PDo28gRG9jdW1lbnRvIEludGVybm8iLCJ0aXBvIjoicmVsYXRvcmlvIn0=
+//meta-sis-eyJkZXNjciI6IlNSRiAtIE5GQ2UiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

@@ -1,4 +1,4 @@
-package PrimeDesk.relatorios.scf
+package Silcon.relatorios.scf
 
 import br.com.multitec.utils.Utils
 import br.com.multitec.utils.collections.TableMap
@@ -46,7 +46,7 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
         params.put("empresa", obterEmpresaAtiva().getAac10codigo() + " - " + obterEmpresaAtiva().getAac10na())
 
 
-        List<TableMap> dados = buscarDadosRelatorio(idsDeptos, idsNaturezas, dataLcto, agrupamento, entidades, documentos, idsContas);
+        List<TableMap> dados = buscarDadosRelatorioAnalitico(idsDeptos, idsNaturezas, dataLcto, agrupamento, entidades, documentos, idsContas);
         List<TableMap> dadosSintetico = new ArrayList<>()
 
         if(detalhamento == 1){
@@ -127,7 +127,7 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
             return gerarXLSX("SCF_Lancamentos_Por_Nat_Depto_Sintetico_Excel", dados);
         }
     }
-    private List<TableMap> buscarDadosRelatorio(List<Long> idsDeptos, List<Long> idsNaturezas,
+    private List<TableMap> buscarDadosRelatorioAnalitico(List<Long> idsDeptos, List<Long> idsNaturezas,
                                                          LocalDate[] dataLcto, Integer agrupamento, List<Long> entidades, List<Long> documentos, List<Long> idsContas){
         String whereDeptos = idsDeptos != null && idsDeptos.size() > 0 ? "AND abb11id IN (:idsDeptos) " : "";
         String whereNat = idsNaturezas != null && idsNaturezas.size() > 0 ? "AND abf10id IN (:idsNaturezas) " : "";
@@ -182,5 +182,38 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idLcto", idLcto));
     }
+    private List<TableMap> buscarDadosRelatorioSintetico(List<Long> idsDeptos, List<Long> idsNaturezas, LocalDate[] dataLcto, Integer agrupamento, Integer detalhamento){
+        String whereDeptos = idsDeptos != null && idsDeptos.size() > 0 ? "AND abb11id IN (:idsDeptos) " : "";
+        String whereNat = idsNaturezas != null && idsNaturezas.size() > 0 ? "AND abf10id IN (:idsNaturezas) " : "";
+        String whereDtLcto = dataLcto != null ? "AND dab10data between :dtInicial AND :dtFinal " : "";
+        String whereEmpresa = "WHERE dab10gc = :idEmpresa ";
+
+        Parametro parametroDeptos = idsDeptos != null && idsDeptos.size() > 0 ? Parametro.criar("idsDeptos", idsDeptos) : null;
+        Parametro parametroNat = idsDeptos != null && idsDeptos.size() > 0 ? Parametro.criar("idsDeptos", idsDeptos) : null;
+        Parametro parametroDtInicial = dataLcto != null ? Parametro.criar("dtInicial", dataLcto[0]) : null;
+        Parametro parametroDtFinal = dataLcto != null ? Parametro.criar("dtFinal", dataLcto[2]) : null;
+        Parametro parametroEmpresa = Parametro.criar("idEmpresa", obterEmpresaAtiva().getAac10id());
+
+        String orderBy = agrupamento == 0 ? "ORDER BY abb11codigo" : "ORDER BY abf10codigo"
+
+        String sql = "SELECT DISTINCT abb11codigo AS codDepto, abb11nome AS nomeDepto, " +
+                "CASE WHEN dab10mov = 0 THEN 'C' ELSE 'D' END AS movimentacao, abf10codigo AS codNatureza, abf10nome AS descrNat, " +
+                "dab10011valor AS valor " +
+                "FROM dab10 " +
+                "INNER JOIN dab1001 ON dab1001lct = dab10id " +
+                "INNER JOIN abb11 ON abb11id = dab1001depto " +
+                "INNER JOIN dab1002 ON dab1002lct = dab10id " +
+                "LEFT JOIN dab01 ON dab01id = dab1002cc " +
+                "INNER JOIN dab10011 ON dab10011depto = dab1001id "+
+                "INNER JOIN abf10 ON abf10id = dab10011nat "+
+                whereDeptos+
+                whereNat+
+                whereDtLcto+
+                whereEmpresa +
+                orderBy
+
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroDeptos, parametroNat, parametroDtInicial, parametroDtFinal, parametroEmpresa)
+    }
 }
+//meta-sis-eyJkZXNjciI6IlNDRiAtIExhbsOnYW1lbnRvcyBwb3IgQ2VudHJvIGRlIEN1c3RvcyBlIE5hdCIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
 //meta-sis-eyJkZXNjciI6IlNDRiAtIExhbsOnYW1lbnRvcyBwb3IgQ2VudHJvIGRlIEN1c3RvcyBlIE5hdCIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

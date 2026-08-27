@@ -221,3 +221,4 @@ class SRF_Resumo_Por_Cfop extends RelatorioBase {
 //meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MgcG9yIENGT1AgLSBMQ1IiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MgcG9yIENGT1AiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlNSRiAtIFJlc3VtbyBwb3IgQ0ZPUCIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
+//meta-sis-eyJkZXNjciI6IlNSRiAtIFJlc3VtbyBwb3IgQ0ZPUCIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

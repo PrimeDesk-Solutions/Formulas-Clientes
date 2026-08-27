@@ -193,8 +193,16 @@ public class SCF_Documentos extends RelatorioBase{
     private List<TableMap> obterDadosRelatorio(List<Long> Emprs, Integer classe, Integer tp,  List<Long> documento, Integer numeroInicial, Integer numeroFinal, List<Long> entidade, List<Long> rep, List<Long> departamento, List<Long> naturezas, LocalDate[] dataVenc, Integer opcVcto, LocalDate[] dataEmissao, Integer tipoData, LocalDate[] data, String agrup, List<Long> port, List<Long> oper, Integer ordem, Integer opc) {
 
         String orderSeq = ordem == 0 ? "abb01.abb01num" : ordem == 1 ? opcVcto == 0 ? "daa01.daa01dtVctoN" : "daa01.daa01dtVctoR" : ordem == 2 ? "abe01.abe01codigo" : "";
+        
+        if(ordem == 3){
+            if(agrup == "D" || agrup == "N" || agrup == "NE" || agrup == "DN"){
+                orderSeq = "daa01011.daa01011valor";
+            }else{
+                orderSeq = "daa01valor";
+            }
+        }
 
-        String orderBy = agrup == "D" ? " order by abb11.abb11codigo ASC,daa01011.daa01011valor, abf10.abf10codigo ASC, " + orderSeq :
+        String orderBy = agrup == "D" ? " order by abb11.abb11codigo ASC, " + orderSeq :
                 agrup == "N" ? " order by abf10.abf10codigo ASC, abb11.abb11codigo ASC, " + orderSeq :
                         agrup == "Nu" ? "order by "  + orderSeq :
                                 agrup == "E" ? "order by abe01.abe01nome, abe01.abe01codigo, abb01.abb01parcela ASC, "  + orderSeq :
@@ -361,3 +369,4 @@ public class SCF_Documentos extends RelatorioBase{
 }
 //meta-sis-eyJkZXNjciI6IlNDRiAtIERvY3VtZW50b3MgLSBMQ1IiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlNDRiAtIERvY3VtZW50b3MgLSBMQ1IiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
+//meta-sis-eyJkZXNjciI6IlNDRiAtIERvY3VtZW50b3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

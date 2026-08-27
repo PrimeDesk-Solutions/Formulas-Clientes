@@ -197,7 +197,7 @@ public class SRF_Danfe extends RelatorioBase {
         Eaa0102 eaa0102 = getAcessoAoBanco().buscarRegistroUnicoByCriterion("Eaa0102", Criterions.eq("eaa0102doc", eaa01.getEaa01id()));
         if(eaa0102 == null) throw new ValidacaoException("Não foi possivel localizar os dados gerais do documento.");
         TableMap Eaa01json = eaa01.eaa01json != null ? eaa01.eaa01json : new TableMap()
-
+        
         if(Eaa01json.getBigDecimal_Zero("volumes") >= 0) Eaa01json.put("volumes", (new BigDecimal(Eaa01json.getBigDecimal_Zero("volumes"))).round(2));
         if(Eaa01json.getBigDecimal_Zero("ipi") >= 0) Eaa01json.put("ipi", (new BigDecimal(Eaa01json.getBigDecimal_Zero("ipi"))).round(2));
         if(Eaa01json.getBigDecimal_Zero("bc_icms") >= 0) Eaa01json.put("bc_icms", (new BigDecimal(Eaa01json.getBigDecimal_Zero("bc_icms"))).round(2))
@@ -408,5 +408,6 @@ public class SRF_Danfe extends RelatorioBase {
 }
 //meta-sis-eyJkZXNjciI6IlNSRiAtIEltcHJlc3PDo28gRG9jdW1lbnRvIChEQU5GZSkiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlNSRiAtIEltcHJlc3PDo28gRG9jdW1lbnRvIChEQU5GZSkiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
+//meta-sis-eyJkZXNjciI6IlNSRiAtIERhbmZlIiwidGlwbyI6InJlbGF0b3JpbyJ9
 //meta-sis-eyJkZXNjciI6IlNSRiAtIERhbmZlIiwidGlwbyI6InJlbGF0b3JpbyJ9
 //meta-sis-eyJkZXNjciI6IlNSRiAtIERhbmZlIiwidGlwbyI6InJlbGF0b3JpbyJ9

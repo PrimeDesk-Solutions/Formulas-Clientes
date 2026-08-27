@@ -141,7 +141,7 @@ public class SCV_SRF_ImportacaoXML extends FormulaBase {
         //Configurações do item, por empresa
         abm0101 = abm01 != null ? getSession().get(Abm0101.class, Criterions.where("abm0101item = " + abm01.abm01id + " AND abm0101empresa = " + aac10.aac10id)) : null;
 
-        //Valores do Item
+        //Valores do Item 
         abm10 = abm0101 != null && abm0101.abm0101valores != null ? getSession().get(Abm10.class, abm0101.abm0101valores.abm10id) : null;
 
         //Valores do Item - Estados
@@ -505,3 +505,4 @@ public class SCV_SRF_ImportacaoXML extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

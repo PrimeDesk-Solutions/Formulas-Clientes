@@ -62,3 +62,4 @@ public class SCF_Impressao_Movimento extends RelatorioBase {
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idMovimento", idMovimento));
     }
 }
+//meta-sis-eyJkZXNjciI6IlNDRiAtIEltcHJlc3PDo28gTW92aW1lbnRvIEZpbmFuY2Vpcm8iLCJ0aXBvIjoicmVsYXRvcmlvIn0=

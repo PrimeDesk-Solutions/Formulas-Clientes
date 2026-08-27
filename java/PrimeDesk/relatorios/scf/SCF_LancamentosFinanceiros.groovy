@@ -39,7 +39,7 @@ public class SCF_LancamentosFinanceiros extends RelatorioBase {
         LocalDate[] dataPeriodo = getIntervaloDatas("periodo");
         boolean isSaltarPagina = get("isSaltarPagina");
         Integer impressao = getInteger("impressao")
-        List<Long> idsEmpresas = new ArrayList<>();
+        List<Long> idsEmpresas;
         Integer movimentacao = getInteger("movimentacao");
 
         List<TableMap> dados = new ArrayList<>();

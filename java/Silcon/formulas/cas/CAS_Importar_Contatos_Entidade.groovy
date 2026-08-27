@@ -48,13 +48,13 @@ public class CAS_Importar_Contatos_Entidade extends FormulaBase {
                 Abe01 abe01 = getSession().createCriteria(Abe01.class).addWhere(Criterions.eq("abe01id", Long.parseLong(txt.getCampo(1)))).get(ColumnType.ENTITY);
 
                 abe0104.setAbe0104ent(abe01);
-                abe0104.setAbe0104nome(txt.getCampo(2).isEmpty() ? null : txt.getCampo(2));
-                abe0104.setAbe0104ramal(txt.getCampo(3).isEmpty() ? null : Integer.parseInt(txt.getCampo(3)));
-                abe0104.setAbe0104ddd(txt.getCampo(4).isEmpty() ? null : txt.getCampo(4));
-                abe0104.setAbe0104fone(txt.getCampo(5).isEmpty() ? null : txt.getCampo(5) );
-                abe0104.setAbe0104eMail(txt.getCampo(6).isEmpty() ? null : txt.getCampo(6));
-                abe0104.setAbe0104data(txt.getCampo(7).isEmpty() ? null : LocalDate.parse(txt.getCampo(7)));
-                abe0104.setAbe0104obs(txt.getCampo(8).isEmpty() ? null : txt.getCampo(8));
+                abe0104.setAbe0104nome(txt.getCampo(2));
+                abe0104.setAbe0104ramal(Integer.parseInt(txt.getCampo(3)));
+                abe0104.setAbe0104ddd(txt.getCampo(4));
+                abe0104.setAbe0104fone(txt.getCampo(5));
+                abe0104.setAbe0104eMail(txt.getCampo(6));
+                abe0104.setAbe0104data(LocalDate.parse(txt.getCampo(7)));
+                abe0104.setAbe0104obs(txt.getCampo(6));
 
                 getSession().persist(abe0104);
             }catch (Exception e){
@@ -64,3 +64,4 @@ public class CAS_Importar_Contatos_Entidade extends FormulaBase {
         }
     }
 }
+//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiMTAwIn0=
