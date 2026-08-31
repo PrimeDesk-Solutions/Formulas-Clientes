@@ -1,5 +1,6 @@
-package PrimeDesk.relatorios.scf;
+package PrimeDesk.relatorios.scf
 
+import java.lang.reflect.Parameter
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -26,27 +27,24 @@ import java.util.HashMap;
 class SCF_FluxoCaixa extends RelatorioBase {
     @Override
     public String getNomeTarefa() {
-        return "SCF - Fluxo de Caixa - LCR";
+        return "SCF - Fluxo de Caixa";
     }
-
     @Override
     public Map<String, Object> criarValoresIniciais() {
         Map<String, Object> filtrosDefault = new HashMap<String, Object>();
         LocalDate[] datas = DateUtils.getStartAndEndMonth(LocalDate.now());
-        filtrosDefault.put("exportar", "0");
+        filtrosDefault.put("exportar","0");
         return Utils.map("filtros", filtrosDefault);
     }
-
     @Override
     public DadosParaDownload executar() {
         Integer exportar = getInteger("exportar");
-        def idEmps = getListLong("emps");
-        def idCcs = getListLong("ccs");
-        def tipoDoc = getListLong("tipoDoc");
-        def idEnts = getListLong("ents");
-        def periodo = getIntervaloDatas("periodo");
+        List<Long> idEmps = getListLong("emps");
+        List<Long> idCcs = getListLong("ccs");
+        List<Long> idEnts = getListLong("ents");
+        LocalDate[] periodo = getIntervaloDatas("periodo");
         def saldoIni = get("saldoIni");
-        saldoIni = !StringUtils.isNullOrEmpty(saldoIni) ? new BigDecimal(saldoIni.replace(",", ".")) : null;
+        saldoIni = saldoIni != null ? new BigDecimal(saldoIni.toString().replace(",", ".")) : null;
         boolean sintetico = get("sintetico");
 
         adicionarParametro("TITULO_RELATORIO", "Fluxo de Caixa");
@@ -58,148 +56,129 @@ class SCF_FluxoCaixa extends RelatorioBase {
             adicionarParametro("PERIODO", "Período Vencimento: " + periodo[0].format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString() + " à " + periodo[1].format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
         }
 
-        List<TableMap> dados = buscarDadosRelatorio(idEmps, idCcs, idEnts, periodo, saldoIni, tipoDoc);
+        List<TableMap> dados = buscarDadosRelatorio(idEmps, idCcs, idEnts, periodo, saldoIni);
 
-        if (exportar == 0 && !sintetico) {
+        if(exportar == 0 && !sintetico){
             return gerarPDF("SCF_FluxoCaixa", dados);
-        } else if (exportar == 0 && sintetico) {
-            return gerarPDF("SCF_FluxoCaixaSintetico", dados);
-        } else if (exportar == 1 && !sintetico) {
+        }else if(exportar == 0 && sintetico){
+            return gerarPDF("SCF_FluxoCaixaSinteticoN", dados);
+        }else if(exportar == 1 && !sintetico) {
             return gerarXLSX("SCF_FluxoCaixa", dados);
-        } else {
+        }else {
             return gerarXLSX("SCF_FluxoCaixaSintetico", dados);
         }
     }
 
-    private List<TableMap> buscarDadosRelatorio(List<Long> idEmps, List<Long> idCcs, List<Long> idEnts, LocalDate[] periodo, BigDecimal saldoIni, List<Long> tipoDoc) {
+    private List<TableMap> buscarDadosRelatorio(List<Long> idEmps, List<Long> idCcs, List<Long> idEnts, LocalDate[] periodo, BigDecimal saldoIni) {
         def dados = new ArrayList<TableMap>();
 
-        def lctos = buscarLancamentosContas(idEmps, idCcs, idEnts, periodo, tipoDoc);
+        def lctos = buscarLancamentosContas(idEmps, idCcs, idEnts, periodo);
 
-        def saldoInicial = saldoIni ?: buscarSaldoContasCorrentes(idCcs, idEmps);
+        BigDecimal saldoInicial = saldoIni ?:somarSaldoDasContasCorrentes(idCcs,idEmps);
 
-        def saldoAtual = 0;
+        BigDecimal saldoAtual = saldoInicial;
 
-        for (lcto in lctos) {
-            def tm = new TableMap();
+        for(lcto in lctos) {
 
-            Long idCentral = lcto.getLong("abb01id");
-            List<String> usersAprovacao = buscarInformacoesAprovacoes(idCentral);
+            TableMap tm = new TableMap();
 
-            String aprovadores = "";
-            if(usersAprovacao != null && usersAprovacao.size() > 0){
-                for(user in usersAprovacao){
-                    if(user == null) continue;
+            lcto.put("saldoInicial", saldoInicial);
 
-                    aprovadores = aprovadores + user + ";";
-                }
+            lcto.put("vencimento", lcto.get("daa01dtVctoR"));
+
+            String rp = lcto.getInteger("previsao") == 0 ? "R" : "P";
+            lcto.put("rp", rp);
+
+            if(lcto.getInteger("daa01rp") == 1) {
+                lcto.put("pagar", lcto.getBigDecimal_Zero("daa01valor"));
+                lcto.put("receber", 0);
+            }else {
+                lcto.put("pagar", 0);
+                lcto.put("receber", lcto.getBigDecimal_Zero("daa01valor"));
             }
 
-            tm.put("aprovadores", aprovadores);
+            saldoAtual = (saldoAtual + lcto.getBigDecimal_Zero("receber")) - lcto.getBigDecimal_Zero("pagar");
+            lcto.put("saldoAtual", saldoAtual);
 
-            tm.put("saldoInicial", saldoInicial);
-
-            tm.put("vencimento", lcto.get("daa01dtVctoR"));
-
-            def entidade = lcto.getString("abe01codigo") + '-' + lcto.getString("abe01na");
-            tm.put("entidade", entidade);
-
-            def documento = lcto.getString("aah01codigo") + " " + lcto.getString("aah01nome") + " " + lcto.getInteger("abb01num");
-            tm.put("documento", documento);
-
-            def numDoc = lcto.getInteger("abb01num");
-            tm.put("abb01num", numDoc)
-
-
-            def parcela = lcto.getString("abb01parcela");
-            tm.put("parcela", parcela);
-
-            def rp = lcto.getInteger("daa01rp") == 0 ? "R" : "P";
-            tm.put("rp", rp);
-
-            if (lcto.getInteger("daa01rp") == 1) {
-                tm.put("pagar", lcto.getBigDecimal_Zero("daa01valor"));
-                tm.put("receber", 0);
-            } else {
-                tm.put("pagar", 0);
-                tm.put("receber", lcto.getBigDecimal_Zero("daa01valor"));
-            }
-
-            saldoAtual += (saldoInicial + tm.getBigDecimal_Zero("receber")) - tm.getBigDecimal_Zero("pagar");
-            tm.put("saldoAtual", saldoAtual);
-
-            tm.put("aab10user", lcto.getString("aab10user"));
-            tm.put("codBarras", lcto.getString("codBarras") ? "SIM" : "NÃO");
-            tm.put("formaPagamento", buscarInformacaoCampoLivre(lcto.getString("formaPagamento")));
-
-            dados.add(tm);
+            dados.add(lcto);
         }
 
         return dados;
     }
 
-    private List<TableMap> buscarInformacoesAprovacoes(Long idCentral) {
-        String sql = "SELECT DISTINCT aab10user " +
-                "FROM abb0103 " +
-                "LEFT JOIN aab10 ON aab10id = abb0103user "+
-                "WHERE abb0103central = :idCentral";
+    private List<TableMap> buscarLancamentosContas(List<Long> idEmps, List<Long> idCcs, List<Long> idEnts, LocalDate[] periodo) {
+        //List<Long> idsGc = obterGCbyEmpresa(idEmps, "Da");
 
-        return getAcessoAoBanco().obterListaDeString(sql, Parametro.criar("idCentral", idCentral));
-    }
+        //def whereGcs = idsGc != null && idsGc.size() > 0 ? " AND aac01id IN (:idEmprs)" : getSamWhere().getWherePadrao(" AND ", Daa01.class);
+        String whereEG = idEmps!= null && idEmps.size() > 0 ? " AND aac10.aac10id IN (:idEmprs)" : " AND Daa01eg = " + getVariaveis().getAac10().getAac10id();
+        String whereEnt = idEnts != null && idEnts.size() > 0 ? " AND abb01ent IN (:idEnts) " : "";
+        String whereVen = periodo != null ? " AND daa01dtVctoR BETWEEN :dtIni AND :dtFin " : "";
 
-    private List<TableMap> buscarLancamentosContas(List<Long> idEmps, List<Long> idCcs, List<Long> idEnts, LocalDate[] periodo, List<Long> tipoDoc) {
-        List<Long> idsGc = obterGCbyEmpresa(idEmps, "Da");
-
-        def whereGcs = idsGc != null && idsGc.size() > 0 ? " AND aac01id in(:idEmprs)" : getSamWhere().getWherePadrao(" AND ", Daa01.class);
-        def whereEG = idEmps != null && idEmps.size() > 0 ? " AND aac10.aac10id IN (:idEmprs)" : " AND Daa01eg = " + getVariaveis().getAac10().getAac10id();
-        def whereEnt = idEnts != null && idEnts.size() > 0 ? " AND abb01ent IN (:idEnts) " : "";
-        def whereVen = periodo != null ? " AND daa01dtVctoR BETWEEN :dtIni AND :dtFin " : "";
-        def whereTipoDoc = tipoDoc != null && tipoDoc.size() > 0 ? " AND abb01tipo IN (:tipoDoc) " : "";
-
-        def sql = " SELECT daa01dtVctoR, abe01codigo, abe01na, abb01num, aah01codigo, aah01nome, daa01previsao, daa01rp, daa01valor, abb01parcela, abb01id, " +
-                "daa01codBarras AS codBarras, CAST(abe01json ->> 'forma_pagamento' AS TEXT) AS formaPagamento "+
+        String sql = " SELECT daa01dtVctoR, abe01codigo as codEntidade, abe01na as naEntidade, abb01num, aah01codigo, aah01nome, "+
+                "daa01previsao, daa01rp, daa01valor, abb01parcela as parcela, abb01data as dtEmissao, daa01previsao as previsao " +
                 " FROM Daa01 " +
                 " INNER JOIN Abb01 ON abb01id = daa01central " +
                 " INNER JOIN Aah01 ON aah01id = abb01tipo " +
-                " INNER JOIN Aac01 ON aac01id = daa01gc " +
+                " INNER JOIN Aac01 ON aac01id = daa01gc "+
                 " INNER JOIN aac10 as aac10 ON daa01eg = aac10id" +
                 " LEFT JOIN Abe01 ON abe01id = abb01ent " +
-                " WHERE TRUE " + whereGcs + whereEnt + whereVen + whereTipoDoc +
-                " AND daa01dtPgto IS NULL " +
+                " WHERE TRUE " + whereEG + whereEnt + whereVen +
+                " AND daa01dtPgto IS NULL "+
                 " ORDER BY daa01dtVctoR,daa01id";
 
 
-        def p1 = idEmps != null && idEmps.size() > 0 ? criarParametroSql("idEmprs", idEmps) : criarParametroSql("idEmprs", idsGc);
-        def p2 = idCcs != null && idCcs.size() > 0 ? criarParametroSql("idCcs", idCcs) : null;
-        def p3 = idEnts != null && idEnts.size() > 0 ? criarParametroSql("idEnts", idEnts) : null;
-        def p4 = periodo != null ? criarParametroSql("dtIni", periodo[0]) : null;
-        def p5 = periodo != null ? criarParametroSql("dtFin", periodo[1]) : null;
-        def p6 = tipoDoc != null && tipoDoc.size() > 0 ? Parametro.criar("tipoDoc", tipoDoc) : null;
+        Parametro parametroEmpresa = idEmps != null && idEmps.size() > 0 ? criarParametroSql("idEmprs", idEmps) : criarParametroSql("idEmprs", idsGc);
+        Parametro parametroCC = idCcs != null && idCcs.size() > 0 ? criarParametroSql("idCcs", idCcs) : null;
+        Parametro parametroEnt = idEnts != null && idEnts.size() > 0 ? criarParametroSql("idEnts", idEnts) : null;
+        Parametro parametroPeriodoIni = periodo != null ? criarParametroSql("dtIni", periodo[0]) : null;
+        Parametro parametroPeriodoFin = periodo != null ? criarParametroSql("dtFin", periodo[1]) : null;
 
-        return getAcessoAoBanco().buscarListaDeTableMap(sql, p1, p2, p3, p4, p5, p6);
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroEmpresa, parametroCC, parametroEnt, parametroPeriodoIni, parametroPeriodoFin);
     }
 
-    private BigDecimal buscarSaldoContasCorrentes(List<Long> idCcs, List<Long> idEmps) {
+    private BigDecimal buscarSaldoPorContaCorrentes(Long idcontaCorrente, List<Long> idEmps) {
         List<Long> idsGc = obterGCbyEmpresa(idEmps, "Da");
 
-        def whereCcs = idCcs != null && idCcs.size() > 0 ? " AND dab0101cc IN (:idCcs) " : "";
-        def whereGcs = idsGc != null && idsGc.size() > 0 ? " AND dab01gc in(:idEmprs)" : getSamWhere().getWherePadrao(" AND ", Daa01.class);
-
+        def whereCcs = " AND dab0101cc IN (:idcontaCorrente) ";
+        Integer maiorAno = buscarMaiorAnoContaCorrente(idcontaCorrente);
+        def whereGcs = idsGc != null && idsGc.size() > 0 ? " AND dab01gc in (:idEmprs)" : getSamWhere().getWherePadrao(" AND ", Daa01.class);
+        def whereAno = " AND dab0101ano = (SELECT MAX(dab0101ano) FROM Dab0101 WHERE TRUE " + whereCcs + ") ";
+        def whereMes = " AND dab0101mes = (SELECT MAX(dab0101mes) FROM Dab0101 WHERE TRUE " + whereCcs + " AND dab0101ano = :maiorAno) ";
 
         def sql = " SELECT SUM(dab0101saldo) FROM Dab0101 " +
                 " INNER JOIN Dab01 ON dab01id = dab0101cc " +
-                " WHERE dab0101ano = (SELECT MAX(dab0101ano) FROM Dab0101 WHERE TRUE " + whereCcs + ") " +
-                " AND dab0101mes = (SELECT MAX(dab0101mes) FROM Dab0101 WHERE TRUE " + whereCcs + ") " +
-                whereCcs + whereGcs;
+                " WHERE TRUE " +
+                whereAno +
+                whereMes +
+                whereCcs +
+                whereGcs;
 
-        def p1 = idCcs != null && idCcs.size() > 0 ? criarParametroSql("idCcs", idCcs) : null;
+        def p1 = idcontaCorrente != null ? criarParametroSql("idcontaCorrente", idcontaCorrente) : null;
         def p2 = idEmps != null && idEmps.size() > 0 ? criarParametroSql("idEmprs", idEmps) : criarParametroSql("idEmprs", idsGc);
+        def p3 = Parametro.criar("maiorAno", maiorAno);
 
-        return getAcessoAoBanco().obterBigDecimal(sql, p1, p2);
+        return getAcessoAoBanco().obterBigDecimal(sql, p1,p2, p3);
+    }
+    private Integer buscarMaiorAnoContaCorrente(Long idCc){
+        String sql = "SELECT MAX(dab0101ano) FROM Dab0101 WHERE dab0101cc = :idContaCorrente";
+
+        return getAcessoAoBanco().obterInteger(sql, Parametro.criar("idContaCorrente", idCc));
+    }
+
+    private BigDecimal somarSaldoDasContasCorrentes(List<Long> idsContasCorrentes, List<Long> idEmps ){
+        BigDecimal saldoTotal = 0;
+
+        for(id in idsContasCorrentes){
+            BigDecimal saldoConta = buscarSaldoPorContaCorrentes(id, idEmps);
+
+            saldoTotal = saldoTotal + saldoConta
+        }
+
+        return saldoTotal
     }
 
     public List<Long> obterGCbyEmpresa(List<Long> empresa, String tabela) {
-        Criterion whereEmpresa = empresa != null ? Criterions.in("aac1001empresa", empresa) : null;
+        Criterion whereEmpresa = empresa != null && empresa.size() > 0 ? Criterions.in("aac1001empresa", empresa) : Criterions.eq("aac1001empresa", obterEmpresaAtiva().getAac10id());
         Criterion whereTabela = tabela != null ? Criterions.eq("aac1001tabela", tabela) : null;
 
         return getSession().createCriteria(Aac1001.class)
@@ -208,12 +187,4 @@ class SCF_FluxoCaixa extends RelatorioBase {
                 .addWhere(whereTabela)
                 .getList(ColumnType.LONG);
     }
-    private String buscarInformacaoCampoLivre(String valorCampo){
-        String sql = "SELECT aah0201texto FROM aah0201 WHERE aah0201valor = :valorCampo AND aah0201campo = 83200630 "
-
-
-        return getAcessoAoBanco().obterString(sql, Parametro.criar("valorCampo", valorCampo));
-    }
 }
-//meta-sis-eyJkZXNjciI6IlNDRiAtIEZsdXhvIGRlIENhaXhhIC0gTENSIiwidGlwbyI6InJlbGF0b3JpbyJ9
-//meta-sis-eyJkZXNjciI6IlNDRiAtIEZsdXhvIGRlIENhaXhhIC0gTENSIiwidGlwbyI6InJlbGF0b3JpbyJ9
