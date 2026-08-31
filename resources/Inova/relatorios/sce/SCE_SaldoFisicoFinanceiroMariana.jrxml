@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCE_SaldoFisicoFinanceiro" language="groovy" pageWidth="425" pageHeight="595" orientation="Landscape" columnWidth="385" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1f67a61e-6a0a-4ade-8897-168f78801ff5">
+	<property name="ireport.zoom" value="1.3995221406292015"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="TITULO_RELATORIO" class="java.lang.String"/>
+	<parameter name="EMPRESA" class="java.lang.String"/>
+	<parameter name="PERIODO" class="java.lang.String"/>
+	<parameter name="CTRL0" class="java.lang.String"/>
+	<parameter name="CTRL1" class="java.lang.String"/>
+	<parameter name="CTRL2" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[]]>
+	</queryString>
+	<field name="abm01tipo" class="java.lang.Integer"/>
+	<field name="abm01codigo" class="java.lang.String"/>
+	<field name="abm01na" class="java.lang.String"/>
+	<field name="aam06codigo" class="java.lang.String"/>
+	<field name="aam04codigo" class="java.lang.String"/>
+	<field name="abm15nome0" class="java.lang.String"/>
+	<field name="abm15nome1" class="java.lang.String"/>
+	<field name="abm15nome2" class="java.lang.String"/>
+	<field name="bcc01lote" class="java.lang.String"/>
+	<field name="bcc01serie" class="java.lang.String"/>
+	<field name="abb01num" class="java.lang.Integer"/>
+	<field name="entidade" class="java.lang.String"/>
+	<field name="quantidade" class="java.math.BigDecimal"/>
+	<field name="custoMedio" class="java.math.BigDecimal"/>
+	<field name="valor" class="java.math.BigDecimal"/>
+	<field name="abg01codigo" class="java.lang.String"/>
+	<variable name="totalQuantidade" class="java.math.BigDecimal" resetType="Group" resetGroup="item" calculation="Sum">
+		<variableExpression><![CDATA[$F{quantidade}]]></variableExpression>
+	</variable>
+	<variable name="totalPrecoMedio" class="java.math.BigDecimal" resetType="Group" resetGroup="item" calculation="Sum">
+		<variableExpression><![CDATA[$F{custoMedio}]]></variableExpression>
+	</variable>
+	<variable name="totalValor" class="java.math.BigDecimal" resetType="Group" resetGroup="item" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+	</variable>
+	<group name="item" keepTogether="true">
+		<groupExpression><![CDATA[$F{abm01codigo}]]></groupExpression>
+		<groupHeader>
+			<band height="10">
+				<textField isBlankWhenNull="true">
+					<reportElement isPrintRepeatedValues="false" x="114" y="0" width="54" height="10" printWhenGroupChanges="item" uuid="d754825b-5f4c-4a87-b838-05381d1938af"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{abm01tipo} == 0 ? "M":
+$F{abm01tipo} == 1 ? "P":
+$F{abm01tipo} == 2 ? "Me":
+$F{abm01tipo} == 3 ? "S":
+null]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement isPrintRepeatedValues="false" x="0" y="0" width="54" height="10" printWhenGroupChanges="item" uuid="8fe57d1e-f91d-45b7-8150-2654941d4d5f"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{abm01codigo}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000000;(#,##0.000000)" isBlankWhenNull="true">
+					<reportElement x="54" y="0" width="60" height="10" uuid="5020efd8-7867-48c3-a7ac-01e0c4ef1b30"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{custoMedio}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band>
+				<printWhenExpression><![CDATA[$F{aam04codigo} != null]]></printWhenExpression>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="10" splitType="Stretch">
+			<staticText>
+				<reportElement x="114" y="0" width="54" height="10" uuid="6d29b063-d764-49b6-b41b-7a481dc9eb45"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[TIPO ITEM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="54" height="10" uuid="2cb8857e-0695-4e93-8851-dc8d2fe6f9d9"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[COD ITEM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="54" y="0" width="60" height="10" uuid="c808b189-11de-47f6-b97f-977f8b2b69d5"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[CUSTO MÉDIO]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band/>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+</jasperReport>

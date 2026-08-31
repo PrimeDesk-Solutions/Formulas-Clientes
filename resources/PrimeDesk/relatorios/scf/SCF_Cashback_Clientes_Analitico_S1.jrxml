@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF_Cashback_Clientes_Analitico_subreport1" language="groovy" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="b8ff7989-8bd5-4bcc-8c0c-471f2d8a89bd">
+	<property name="ireport.zoom" value="1.5394743546921197"/>
+	<property name="ireport.x" value="308"/>
+	<property name="ireport.y" value="0"/>
+	<field name="dad0101data" class="java.util.Date"/>
+	<field name="dad0101hist" class="java.lang.String"/>
+	<field name="mov" class="java.lang.String"/>
+	<field name="dad0101valor" class="java.math.BigDecimal"/>
+	<field name="abb01num" class="java.lang.Integer"/>
+	<variable name="saldoTotal" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{dad0101valor}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="31" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="54" height="31" uuid="ffe8dad1-9db2-4d44-b565-9fd272ec0686">
+					<printWhenExpression><![CDATA[$F{mov} == "0-Entrada"]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dad0101data}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="54" y="0" width="333" height="31" isPrintWhenDetailOverflows="true" uuid="61a290aa-69e1-4234-8e71-e50d24b59ec4">
+					<printWhenExpression><![CDATA[$F{mov} == "0-Entrada"]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dad0101hist}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="387" y="0" width="45" height="31" uuid="300b6cde-971e-421b-9b4c-b0350c151a03">
+					<printWhenExpression><![CDATA[$F{mov} == "0-Entrada"]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mov}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="432" y="0" width="41" height="31" uuid="8071657b-2f50-45fd-920e-c42ff020875a">
+					<printWhenExpression><![CDATA[$F{mov} == "0-Entrada"]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abb01num}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="473" y="0" width="57" height="31" uuid="61a50c93-ef8c-4c84-96cf-381d63e3d443">
+					<printWhenExpression><![CDATA[$F{mov} == "0-Entrada"]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dad0101valor}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="432" y="0" width="41" height="31" forecolor="#FF0000" uuid="c6ea4171-45b7-4bef-a953-526377719adc">
+					<printWhenExpression><![CDATA[$F{mov} == "1-Saída"]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abb01num}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="387" y="0" width="45" height="31" forecolor="#FF0000" uuid="ae3268cc-7d37-4590-98aa-e231894cbe0d">
+					<printWhenExpression><![CDATA[$F{mov} == "1-Saída"]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mov}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="54" y="0" width="333" height="31" isPrintWhenDetailOverflows="true" forecolor="#FF0000" uuid="a529fb91-7a53-4fdf-87bf-8cc3f98c2275">
+					<printWhenExpression><![CDATA[$F{mov} == "1-Saída"]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dad0101hist}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="54" height="31" forecolor="#FF0000" uuid="37e61a39-1083-4d41-ad17-7dea718f1afa">
+					<printWhenExpression><![CDATA[$F{mov} == "1-Saída"]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dad0101data}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="473" y="0" width="57" height="31" forecolor="#FF0000" uuid="ed275b8f-b26d-458b-94d4-3a138d54ebce">
+					<printWhenExpression><![CDATA[$F{mov} == "1-Saída"]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dad0101valor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="23" splitType="Stretch">
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="473" y="3" width="57" height="20" uuid="33caa916-7ce5-4bee-9e51-bc99cccf0887"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{saldoTotal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="432" y="3" width="40" height="20" uuid="c353826b-b1c1-44ec-9e97-b976c4d52846"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[SALDO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="387" y="2" width="143" height="1" uuid="7a106b19-90fe-42b9-add2-6fcdb7eb4e2b"/>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
