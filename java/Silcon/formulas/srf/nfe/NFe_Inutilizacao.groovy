@@ -42,7 +42,7 @@ class NFe_Inutilizacao extends FormulaBase {
 		ID.append(StringUtils.ajustString(empresa.aac10municipio.aag0201uf.aag02ibge, 2)); 		//Código da UF do solicitante
 		ID.append(NFeUtils.formatarData(MDate.date(), "yy"));									//Ano de inutilização
 		ID.append(StringUtils.ajustString(StringUtils.extractNumbers(empresa.getAac10ni()), 14)); 	//CNPJ do emitente
-		ID.append("55"); 																			//Modelo da NFe
+		ID.append("65"); 																			//Modelo da NFe
 		ID.append(NFeUtils.tratarSerie(central.getAbb01serie())); 									//Série da NFe
 		ID.append(StringUtils.ajustString(central.getAbb01num(), 9));								//Número inicial da NFe
 		ID.append(StringUtils.ajustString(central.getAbb01num(), 9));								//Número final da NFe
@@ -59,7 +59,7 @@ class NFe_Inutilizacao extends FormulaBase {
 		infInut.addNode("cUF", StringUtils.ajustString(empresa.aac10municipio.aag0201uf.aag02ibge, 2), true);
 		infInut.addNode("ano", NFeUtils.formatarData(MDate.date(), "yy"), true);
 		infInut.addNode("CNPJ", StringUtils.ajustString(StringUtils.extractNumbers(empresa.getAac10ni()), 14), true);
-		infInut.addNode("mod", "55", true);
+		infInut.addNode("mod", "65", true);
 		infInut.addNode("serie", central.getAbb01serie() == null ? 0 : central.getAbb01serie().length() <= 3 ? central.getAbb01serie() : central.getAbb01serie().substring(0, 3), true);
 		infInut.addNode("nNFIni", central.getAbb01num(), true);
 		infInut.addNode("nNFFin", central.getAbb01num(), true);
