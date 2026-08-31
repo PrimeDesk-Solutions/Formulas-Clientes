@@ -248,9 +248,6 @@ public class Doc_Remessa_Entre_Empresas extends FormulaBase {
             // Qtde SCE
             eaa0103.eaa0103qtUso = eaa0103.eaa0103qtComl.round(3);
 
-//            // Converte Qt.Documento para Qt.Convertida (Unidade específica da empresa)
-//            jsonEaa0103.put("qt_convertida", (eaa0103.eaa0103qtComl * jsonAbm0101.getBigDecimal_Zero("icms_orig")).round(3));
-
             // Converte Qt.Documento para Volume
             if (jsonEaa0103.getBigDecimal_Zero("volumes") >= 0){
                 jsonEaa0103.put("volumes", eaa0103.eaa0103qtComl * abm13.abm13fcVW);
@@ -265,19 +262,8 @@ public class Doc_Remessa_Entre_Empresas extends FormulaBase {
             // Peso Líquido
             jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(3));
 
-//            // Unitario = Preço de Custo
-//            if (jsonAbm0101.getBigDecimal_Zero("preco_atual") > 0){
-//                jsonEaa0103.put("unitario", jsonAbm0101.getBigDecimal_Zero("preco_atual") * 0.69);
-//
-//            }else{
-//                jsonEaa0103.put("unitario", jsonAbm0101.getBigDecimal_Zero("preco_livre"));
-//            }
-
             // Total do item = Qt.Documento * Unitário
             eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
-
-            // Calcular ICMS ST RETIDO
-            calcularIcmsSTRetido();
 
             // Total do Documento = Total do item
             eaa0103.eaa0103totDoc = (eaa0103.eaa0103total - jsonEaa0103.getBigDecimal_Zero("desconto")).round(2);
@@ -299,16 +285,44 @@ public class Doc_Remessa_Entre_Empresas extends FormulaBase {
 
             eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cstIcms));
 
-            // Calcula ICMS Itens
-            calcularICMS(contribICMS);
-
             //Total finaceiro
             eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
+
+            zerarImpostosItens();
 
             // Preenche os campos Sped
             preencherSPEDS();
 
         }
+    }
+
+    private void zerarImpostosItens(){
+        jsonEaa0103.put("aliq_icms", BigDecimal.ZERO);
+        jsonEaa0103.put("bc_icms", BigDecimal.ZERO);
+        jsonEaa0103.put("icms", BigDecimal.ZERO);
+        jsonEaa0103.put("aliq_icms_st", BigDecimal.ZERO);
+        jsonEaa0103.put("bc_icms_st", BigDecimal.ZERO);
+        jsonEaa0103.put("icms_st", BigDecimal.ZERO);
+        jsonEaa0103.put("aliq_pis", BigDecimal.ZERO);
+        jsonEaa0103.put("bc_pis", BigDecimal.ZERO);
+        jsonEaa0103.put("pis", BigDecimal.ZERO);
+        jsonEaa0103.put("aliq_cofins", BigDecimal.ZERO);
+        jsonEaa0103.put("bc_cofins", BigDecimal.ZERO);
+        jsonEaa0103.put("cofins", BigDecimal.ZERO);
+        jsonEaa0103.put("aliq_ipi", BigDecimal.ZERO);
+        jsonEaa0103.put("bc_ipi", BigDecimal.ZERO);
+        jsonEaa0103.put("ipi", BigDecimal.ZERO);
+        jsonEaa0103.put("is_bc", BigDecimal.ZERO);
+        jsonEaa0103.put("cbs_ibs_bc", BigDecimal.ZERO);
+        jsonEaa0103.put("vlr_ibs", BigDecimal.ZERO);
+        jsonEaa0103.put("vlr_cbs", BigDecimal.ZERO);
+        jsonEaa0103.put("cbs_aliq", BigDecimal.ZERO);
+        jsonEaa0103.put("vlr_ibsuf", BigDecimal.ZERO);
+        jsonEaa0103.put("ibs_uf_aliq", BigDecimal.ZERO);
+        jsonEaa0103.put("ibs_mun_aliq", BigDecimal.ZERO);
+        jsonEaa0103.put("icmsfiscal", BigDecimal.ZERO);
+        jsonEaa0103.put("vlraproxtrib", BigDecimal.ZERO);
+        jsonEaa0103.put("vlrfundpobreza", BigDecimal.ZERO);
     }
 
     // Trocar CFOP (Dentro ou fora do estado)
@@ -342,38 +356,6 @@ public class Doc_Remessa_Entre_Empresas extends FormulaBase {
         }
     }
 
-    private void calcularIcmsSTRetido() {
-        // ********  ICMS ST Retido - Regime "Substituto Tributário" ********
-
-        if (eaa0103.eaa0103cstIcms.aaj10codigo == '060' && abe01.abe01contribIcms == 1) {
-
-            BigDecimal ivaST = 0;
-
-            if (jsonEaa0103.getBigDecimal_Zero("vlr_icms_ret") == 0) {
-                jsonEaa0103.put("aliq_icms_ret", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms_ret"));
-                ivaST = jsonAbm1001_UF_Item.getBigDecimal_Zero("_iva_st_ret");
-
-                if (ivaST > 0) {
-                    jsonEaa0103.put("bc_icms_ret", eaa0103.eaa0103total +
-                                                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                                                    jsonEaa0103.getBigDecimal_Zero("seguro") +
-                                                    jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
-                                                    jsonEaa0103.getBigDecimal_Zero("ipi"));
-
-                    jsonEaa0103.put("bc_icms_ret", (jsonEaa0103.getBigDecimal_Zero("bc_icms_ret") * ((ivaST / 100)) + 1).round(2));
-
-                    jsonEaa0103.put("vlr_icms_ret", (jsonEaa0103.getBigDecimal_Zero("bc_icms_ret") *
-                                                    (jsonEaa0103.getBigDecimal_Zero("aliq_icms_ret") / 100)) - jsonEaa0103.getBigDecimal_Zero("icms_sped").round(2));
-
-                } else {
-                    jsonEaa0103.put("bc_icms_ret", new BigDecimal(0));
-                    jsonEaa0103.put("aliq_icms_ret", new BigDecimal(0));
-                    jsonEaa0103.put("vlr_icms_ret", new BigDecimal(0));
-                }
-            }
-        }
-    }
-
     private String buscarCstICMS(){
         // Busca primeiramente o CST de ICMS no cadastro do PCD, caso não econcontrado, busca no cadastro do item
         String cst = "";
@@ -392,52 +374,6 @@ public class Doc_Remessa_Entre_Empresas extends FormulaBase {
 
         return cst;
     }
-
-    private void calcularICMS (Integer contribICMS) {
-            Integer vlrReducao = 0;
-
-            if (eaa0103.eaa0103cstIcms.aaj10codigo == '000') {
-
-                if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
-                    // BC ICMS
-                    jsonEaa0103.put("bc_icms", eaa0103.eaa0103total +
-                                                jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                                                jsonEaa0103.getBigDecimal_Zero("seguro") +
-                                                jsonEaa0103.getBigDecimal_Zero("outras_despesas") -
-                                                jsonEaa0103.getBigDecimal_Zero("desconto"));
-
-                    jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms").round(2));
-
-                    if (contribICMS) jsonEaa0103.put("bc_icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") + jsonEaa0103.getBigDecimal_Zero("ipi")).round(2));
-
-                    // Calculo da Redução
-                    if (jsonAbm1001_UF_Item.getBigDecimal_Zero("_reduc_bc_icms") > 0) {
-                        jsonEaa0103.put("_reduc_bc_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("_reduc_bc_icms"));
-                        vlrReducao = (jsonEaa0103.getBigDecimal_Zero("bc_icms") * (jsonAbm1001_UF_Item.getBigDecimal_Zero("_reduc_bc_icms") / 100)).round(2);
-                        jsonEaa0103.put("bc_icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") - vlrReducao).round(2));
-                    }
-
-                    // Zerando icms outras quando estiver valor na aliq icms
-                    jsonEaa0103.put("icms_outras", new BigDecimal(0));
-
-                    // Aliquota de ICMS
-                    if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
-                        jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
-                    }
-
-                    // Calculo ICMS
-                    jsonEaa0103.put("icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") * (jsonEaa0103.getBigDecimal_Zero("aliq_icms") / 100)).round(2));
-
-            } else {
-                jsonEaa0103.put("bc_icms", new BigDecimal(0));
-                jsonEaa0103.put("aliq_icms", new BigDecimal(0));
-                jsonEaa0103.put("icms", new BigDecimal(0));
-                jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
-            }
-        }
-
-    }
-
     private void preencherSPEDS() {
 
         // ========================================================================================
@@ -448,7 +384,7 @@ public class Doc_Remessa_Entre_Empresas extends FormulaBase {
         jsonEaa0103.put("bc_cofins_sped", jsonEaa0103.getBigDecimal_Zero("bc_cofins"));
 
         //Aliq Cofins SPED = Aliq Cofins
-        jsonEaa0103.put("_cofins_sped", jsonEaa0103.getBigDecimal_Zero("aliq_cofins"));
+        jsonEaa0103.put("aliq_cofins_sped", jsonEaa0103.getBigDecimal_Zero("aliq_cofins"));
 
         // Cofins SPED = Cofins
         jsonEaa0103.put("cofins_sped", jsonEaa0103.getBigDecimal_Zero("cofins"));
@@ -457,30 +393,30 @@ public class Doc_Remessa_Entre_Empresas extends FormulaBase {
         jsonEaa0103.put("bc_pis_sped", jsonEaa0103.getBigDecimal_Zero("bc_pis"));
 
         // Aliq PIS SPED = Aliq SPED
-        jsonEaa0103.put("pis_sped", jsonEaa0103.getBigDecimal_Zero("aliq_pis"));
+        jsonEaa0103.put("aliq_pis_sped", jsonEaa0103.getBigDecimal_Zero("aliq_pis"));
 
         // PIS SPED = PIS
-        jsonEaa0103.put("pis", jsonEaa0103.getBigDecimal_Zero("pis"));
+        jsonEaa0103.put("pis_sped", jsonEaa0103.getBigDecimal_Zero("pis"));
 
         // ========================================================================================
         // 								  ICMS SPED
         // ========================================================================================
 
         //BC ICMS SPED = BC ICMS
-        jsonEaa0103.put("bcicms_sped", jsonEaa0103.getBigDecimal_Zero("bc_icms"));
+        jsonEaa0103.put("bc_icms_sped", jsonEaa0103.getBigDecimal_Zero("bc_icms"));
 
         //Aliq ICMS SPED = Aliq ICMS
         jsonEaa0103.put("aliq_icms_sped", jsonEaa0103.getBigDecimal_Zero("aliq_icms"));
 
 
         //Aliq Reduc BC ICMS SPED = Aliq Reduc BC ICMS
-        jsonEaa0103.put("redbcicms_sped", jsonEaa0103.getBigDecimal_Zero("_red_bc_icms"));
+        jsonEaa0103.put("aliq_red_bc_icms_sped", jsonEaa0103.getBigDecimal_Zero("aliq_red_bc_icms"));
 
         //ICMS Outras SPED = ICMS Outras
-        jsonEaa0103.put("icmsoutras_sped", jsonEaa0103.getBigDecimal_Zero("icms_outras"));
+        jsonEaa0103.put("icms_outras_sped", jsonEaa0103.getBigDecimal_Zero("icms_outras"));
 
         //ICMS Isento SPED = ICMS Isento
-        jsonEaa0103.put("icmsisento_sped", jsonEaa0103.getBigDecimal_Zero("icms_isento"));
+        jsonEaa0103.put("icms_isento_sped", jsonEaa0103.getBigDecimal_Zero("icms_isento"));
 
         //ICMS SPED = ICMS
         jsonEaa0103.put("icms_sped", jsonEaa0103.getBigDecimal_Zero("icms"));
@@ -494,7 +430,7 @@ public class Doc_Remessa_Entre_Empresas extends FormulaBase {
         jsonEaa0103.put("bc_icms_st_sped", jsonEaa0103.getBigDecimal_Zero("bc_icms_st"));
 
         //Aliq ICMS ST SPED = Aliq ICMS ST
-        jsonEaa0103.put("_icms_st_sped", jsonEaa0103.getBigDecimal_Zero("_icms_st"));
+        jsonEaa0103.put("aliq_icms_st_sped", jsonEaa0103.getBigDecimal_Zero("aliq_icms_st"));
 
         //ICMS ST SPED = ICMS ST
         jsonEaa0103.put("icms_st_sped", jsonEaa0103.getBigDecimal_Zero("icms_st"));
@@ -505,16 +441,16 @@ public class Doc_Remessa_Entre_Empresas extends FormulaBase {
         // ========================================================================================
 
         //BC IPI SPED = BC IPI
-        jsonEaa0103.put("bcipi_sped", jsonEaa0103.getBigDecimal_Zero("bc_ipi"));
+        jsonEaa0103.put("bc_ipi_sped", jsonEaa0103.getBigDecimal_Zero("bc_ipi"));
 
         //Aliq IPI SPED = Aliq IPI
-        jsonEaa0103.put("_ipi_sped", jsonEaa0103.getBigDecimal_Zero("aliq_ipi"));
+        jsonEaa0103.put("aliq_ipi_sped", jsonEaa0103.getBigDecimal_Zero("aliq_ipi"));
 
         //IPI Outras SPED = IPI Outras
-        jsonEaa0103.put("ipioutras_sped", jsonEaa0103.getBigDecimal_Zero("ipi_outras"));
+        jsonEaa0103.put("ipi_outras_sped", jsonEaa0103.getBigDecimal_Zero("ipi_outras"));
 
         //IPI Isento SPED = IPI Isento
-        jsonEaa0103.put("ipiisento_sped", jsonEaa0103.getBigDecimal_Zero("ipi_isento"));
+        jsonEaa0103.put("ipi_isento_sped", jsonEaa0103.getBigDecimal_Zero("ipi_isento"));
 
         //IPI SPED = IPI
         jsonEaa0103.put("ipi_sped", jsonEaa0103.getBigDecimal_Zero("ipi"));
