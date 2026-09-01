@@ -473,13 +473,13 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                     txt.print(tmAbe01.getString("agencia_banco"), 4) // 025-028
                     txt.print(StringUtils.space(1)) // 029-029
                     txt.print(0, 6) // 030-035
-                    txt.print(tmAbe01.getString("conta_corrente"), 6, '0', true) // 036-041
+                    txt.print(tmAbe01.getString("conta_corrente"), 12, '0', true) // 036-041
                     txt.print(StringUtils.space(1)) // 042-042
                     txt.print(tmAbe01.getString("digito_conta"),1) // 043-043
                 }else{
                     txt.print(tmAbe01.getString("agencia_banco"), 5) // 024-028
                     txt.print(StringUtils.space(1)) // 029-029
-                    txt.print(tmAbe01.getString("conta_corrente"), 6, '0', true) // 030-041
+                    txt.print(tmAbe01.getString("conta_corrente"), 12, '0', true) // 030-041
                     txt.print(StringUtils.space(1)) // 042-042
                     txt.print(tmAbe01.getString("digito_conta"),1) // 043-043
                 }
