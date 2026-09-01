@@ -55,10 +55,10 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
         // UF Empresa
         Aag02 ufEmpresa = getSession().get(Aag02.class, municEmpresa.aag0201uf.aag02id);
 
-        def contador = 0;
-        def numLote = 0;
-        def qtdDetalheLote = 0;
-        def totalDocsLote = 0.00;
+        Integer contador = 0;
+        Integer numLote = 0;
+        Integer qtdDetalheLote = 0;
+        BigDecimal totalDocsLote = 0.00;
 
         /*
             HEADER do Arquivo
@@ -105,7 +105,7 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
 
             // Campos Livre Entidade
             TableMap tmAbe01 = abe01.abe01json != null ? abe01.abe01json : new TableMap();
-
+            if(tmAbe01.getString("forma_pagamento") == null || tmAbe01.getString("forma_pagamento").isEmpty()) interromper("Necessário preencher o campo 'Forma de Pagamento' no cadastro da entidades " + abe01.abe01codigo + " - " + abe01.abe01nome);
             if(tmAbe01.getString("forma_pagamento") == "99") continue;
 
             Daa0102 daa0102 = scfService.buscarUltimaIntegracao(abf01.abf01id, daa01.daa01id, movimento);
@@ -240,7 +240,7 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                 txt.print(daa01.daa01dtVctoN.format(PATTERN_DDMMYYYY));                                                                                                                         //092-099
                 txt.print(daa01.daa01valor.multiply(new BigDecimal(100)).intValue(), 15);                                                                                           //100-114
 
-                BigDecimal desconto = daa01.daa01json != null ? daa01.daa01json.getBigDecimal("desconto").abs() * -1 : BigDecimal.ZERO;
+                BigDecimal desconto = daa01.daa01json != null && daa01.daa01json.getBigDecimal("desconto") != null ? daa01.daa01json.getBigDecimal("desconto").abs() * -1 : BigDecimal.ZERO;
                 txt.print((desconto.multiply(new BigDecimal(100)).intValue() * -1), 15);                                                                                                   //115-129
                 Long dias = DateUtils.dateDiff(daa01.daa01dtVctoN, daa0102.daa0102dtPgto, ChronoUnit.DAYS);
                 BigDecimal jme = daa01.daa01json != null && daa01.daa01json.getBigDecimal("encargos") != null ? daa01.daa01json.getBigDecimal("encargos") : BigDecimal.ZERO;
@@ -326,7 +326,7 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
                 txt.print(daa01.daa01dtVctoN.format(PATTERN_DDMMYYYY));                                                                                                                         //092-099
                 txt.print(daa01.daa01valor.multiply(new BigDecimal(100)).intValue(), 15);                                                                                           //100-114
 
-                BigDecimal desconto = daa01.daa01json != null ? daa01.daa01json.getBigDecimal("desconto").abs() * -1 : BigDecimal.ZERO;
+                BigDecimal desconto = daa01.daa01json != null && daa01.daa01json.getBigDecimal("desconto") != null ? daa01.daa01json.getBigDecimal("desconto").abs() * -1 : BigDecimal.ZERO;
                 txt.print((desconto.multiply(new BigDecimal(100)).intValue() * -1), 15);                                                                                                   //115-129
                 Long dias = DateUtils.dateDiff(daa01.daa01dtVctoN, daa0102.daa0102dtPgto, ChronoUnit.DAYS);
                 BigDecimal jme = daa01.daa01json != null && daa01.daa01json.getBigDecimal("encargos") != null ? daa01.daa01json.getBigDecimal("encargos") : BigDecimal.ZERO;
