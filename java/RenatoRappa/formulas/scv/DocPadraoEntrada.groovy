@@ -334,63 +334,7 @@ public class DocPadraoEntrada extends FormulaBase {
                 jsonEaa0103.put("ipi", 0);
             }
 
-
-            //================================
-            //******       ICMS         ******
-            //================================
-
-            def vlrReducao = 0;
-            def cdBCICMS = 0;
-            def cdICMSIsento = 0;
-            def cdICMS = 0;
-
-            //BC ICMS = Valor do Item + Frete + Seguro + Outras Desp. - Desconto Incondicional
-            jsonEaa0103.put("bc_icms", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                    jsonEaa0103.getBigDecimal_Zero("seguro") +
-                    jsonEaa0103.getBigDecimal_Zero("outras_despesas") +
-                    jsonEaa0103.getBigDecimal_Zero("ipi"));
-
-            // Tratar redução da base de cálculo
-            // % Reduc BC ICMS = % reduc BC ICMS do ítem
-            if (jsonEaa0103.getBigDecimal_Zero("_reduc_bc_icms") == 0) {
-                jsonEaa0103.put("_reduc_bc_icms", jsonAbm0101.getBigDecimal_Zero("_red_bc_icms"));
-                //Aliquota fixa cadastro itens
-            }
-
-            // Calculo da Redução 
-            if (jsonEaa0103.getBigDecimal_Zero("_reduc_bc_icms") >= 0) {
-                vlrReducao = ((jsonEaa0103.getBigDecimal_Zero("bc_icms") * jsonEaa0103.getBigDecimal_Zero("_reduc_bc_icms")) / 100).round(2);
-                jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms") - vlrReducao);
-                jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms").round(2));
-            }
-
-
-            // Obter a Aliquota de ICMS 
-            if (jsonEaa0103.getBigDecimal_Zero("_icms") == 0) {
-                if (jsonAag02Ent.getBigDecimal_Zero("txicmsaida") != 0) { //Taxa ICMS Estados e municípios
-                    //Alíquota padrão de ICMS para operações internas (ENTIDADE)
-                    jsonEaa0103.put("_icms", jsonAag02Ent.getBigDecimal_Zero("txicmsaida"));
-                } else {
-                    jsonEaa0103.put("_icms", 0);
-                }
-
-                if (dentroEstado) {
-                    if (jsonAbm0101.getBigDecimal_Zero("_red_bc_icms") != 0) {
-                        jsonEaa0103.put("_icms", jsonAbm0101.getBigDecimal_Zero("_red_bc_icms"));
-                    }
-                }
-            }
-
-            // Calcular valor do ICMS e Valor ICMS Isento
-            if (jsonEaa0103.getBigDecimal_Zero("_icms") < 0) { // Aliquota menor que zero = Isento
-                jsonEaa0103.put("icms", 0);
-                jsonEaa0103.put("icms_isento", jsonEaa0103.getBigDecimal_Zero("bc_icms") + vlrReducao);
-                jsonEaa0103.put("bc_icms", 0);
-                jsonEaa0103.put("_reduc_bc_icms", 0);
-                vlrReducao = 0;
-            } else {
-                jsonEaa0103.put("icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") * jsonEaa0103.getBigDecimal_Zero("_icms") / 100).round(2));
-            }
+            calcularICMS();
 
             //Outras de ICMS
             if (jsonEaa0103.getBigDecimal_Zero("icms") == 0) {
@@ -566,6 +510,33 @@ public class DocPadraoEntrada extends FormulaBase {
             jsonEaa0103.put("ipi_sped", jsonEaa0103.getBigDecimal_Zero("ipi"));
 
         }
+    }
+    private void calcularICMS(){
+
+        BigDecimal vlrReducao = BigDecimal.ZERO;
+
+        //BC ICMS
+        jsonEaa0103.put("bc_icms", eaa0103.eaa0103total +
+                                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
+                                    jsonEaa0103.getBigDecimal_Zero("seguro") +
+                                    jsonEaa0103.getBigDecimal_Zero("outras_despesas"));
+
+        if (jsonEaa0103.getBigDecimal_Zero("_red_bc_icms") == 0)
+            jsonEaa0103.put("_red_bc_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("_red_bc_icms"));
+
+        if(jsonEaa0103.getBigDecimal_Zero("_red_bc_icms") > 0){
+            vlrReducao = ((jsonEaa0103.getBigDecimal_Zero("bc_icms") * jsonEaa0103.getBigDecimal_Zero("_red_bc_icms")) / 100).round(2);
+            jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms") - vlrReducao);
+        }
+
+        // Obter a Aliquota de ICMS
+        if(jsonEaa0103.getBigDecimal_Zero("_icms") == 0){
+            if(jsonAbm1001_UF_Item.getBigDecimal_Zero("_fixa_icms") != 0){
+                jsonEaa0103.put("_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("_fixa_icms"));
+            }
+        }
+
+        jsonEaa0103.put("icms", ((jsonEaa0103.getBigDecimal_Zero("bc_icms") * jsonEaa0103.getBigDecimal_Zero("_icms")) / 100).round(2));
     }
     @Override
     public FormulaTipo obterTipoFormula() {
