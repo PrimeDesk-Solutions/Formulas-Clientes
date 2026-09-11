@@ -76,10 +76,12 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
             for (item in itensDoc) {
                 countItens++;
 
-                if(item.getInteger("eaa0103entrega") == 1){
-                    item.put("entrega", "RETIRA")
-                }else if(item.getInteger("eaa0103entrega") == 0){
+                if(item.getInteger("eaa0103entrega") == 0){
                     item.put("entrega", "ENTREGAR")
+                }else if(item.getInteger("eaa0103entrega") == 1){
+                    item.put("entrega", "RETIRA")
+                }else if(item.getInteger("eaa0103entrega") == 2){
+                    item.put("entrega", "RETIRADO")
                 }
 
                 item.put("seq", countItens.toString() + "º ")
