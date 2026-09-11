@@ -436,30 +436,26 @@ public class Doc_Padrao_Saida extends FormulaBase {
 
     // Trocar CFOP (Dentro ou fora do estado)
     private void definirCFOP(Boolean dentroEstado) {
-        if(eaa0103.eaa0103cfop == null){
-            String cfop = "";
+        String cfop = "";
 
-            // Atribui o CFOP 5102
-            if (dentroEstado) {
-                if (eaa0103.eaa0103cstIcms != null) {
-                    if (eaa0103.eaa0103cstIcms.aaj10codigo == "000" || eaa0103.eaa0103cstIcms.aaj10codigo == "040" || eaa0103.eaa0103cstIcms.aaj10codigo == "041" || eaa0103.eaa0103cstIcms.aaj10codigo == "090" || eaa0103.eaa0103cstIcms.aaj10codigo == "200" ||
-                            eaa0103.eaa0103cstIcms.aaj10codigo == "240" || eaa0103.eaa0103cstIcms.aaj10codigo == "241") {
-                        cfop = "5102";
-                    } else {
-                        cfop = "5405";
-                    }
+        // Atribui o CFOP 5102
+        if (dentroEstado) {
+            if (eaa0103.eaa0103cstIcms != null) {
+                if (eaa0103.eaa0103cstIcms.aaj10codigo == "000" || eaa0103.eaa0103cstIcms.aaj10codigo == "040" || eaa0103.eaa0103cstIcms.aaj10codigo == "041" || eaa0103.eaa0103cstIcms.aaj10codigo == "090" || eaa0103.eaa0103cstIcms.aaj10codigo == "200" ||
+                        eaa0103.eaa0103cstIcms.aaj10codigo == "240" || eaa0103.eaa0103cstIcms.aaj10codigo == "241") {
+                    cfop = "5102";
+                } else {
+                    cfop = "5405";
                 }
             }
-
-            if (!dentroEstado) {
-                cfop = "6404";
-            }
-
-            aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
-            if(aaj15_cfop == null) throw new ValidacaoException("Não foi encontrado CFOP com o código " + cfop);
-
-            eaa0103.eaa0103cfop = aaj15_cfop;
+        }else{
+            cfop = "6404";
         }
+
+        aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
+        if(aaj15_cfop == null) throw new ValidacaoException("Não foi encontrado CFOP com o código " + cfop);
+
+        eaa0103.eaa0103cfop = aaj15_cfop;
     }
 
     private void calcularIcmsSTRetido() {

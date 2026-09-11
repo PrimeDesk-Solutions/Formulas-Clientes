@@ -1,6 +1,3 @@
-/*
- * Desenvolvido por: ROGER.
- */
 package Silcon.formulas.itensDocumentos;
 
 import sam.model.entities.ab.Abd02;
@@ -292,6 +289,8 @@ public class Doc_Transferencia_Entre_Empresas_Entrada_Filial extends FormulaBase
             // Total finaceiro
             eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
 
+            zerarImpostosItens();
+
             // Preenche os campos Sped
             preencherSPEDS();
         }
@@ -389,7 +388,34 @@ public class Doc_Transferencia_Entre_Empresas_Entrada_Filial extends FormulaBase
             }
         }
     }
-
+    private void zerarImpostosItens(){
+        jsonEaa0103.put("aliq_icms", BigDecimal.ZERO);
+        jsonEaa0103.put("bc_icms", BigDecimal.ZERO);
+        jsonEaa0103.put("icms", BigDecimal.ZERO);
+        jsonEaa0103.put("aliq_icms_st", BigDecimal.ZERO);
+        jsonEaa0103.put("bc_icms_st", BigDecimal.ZERO);
+        jsonEaa0103.put("icms_st", BigDecimal.ZERO);
+        jsonEaa0103.put("aliq_pis", BigDecimal.ZERO);
+        jsonEaa0103.put("bc_pis", BigDecimal.ZERO);
+        jsonEaa0103.put("pis", BigDecimal.ZERO);
+        jsonEaa0103.put("aliq_cofins", BigDecimal.ZERO);
+        jsonEaa0103.put("bc_cofins", BigDecimal.ZERO);
+        jsonEaa0103.put("cofins", BigDecimal.ZERO);
+        jsonEaa0103.put("aliq_ipi", BigDecimal.ZERO);
+        jsonEaa0103.put("bc_ipi", BigDecimal.ZERO);
+        jsonEaa0103.put("ipi", BigDecimal.ZERO);
+        jsonEaa0103.put("is_bc", BigDecimal.ZERO);
+        jsonEaa0103.put("cbs_ibs_bc", BigDecimal.ZERO);
+        jsonEaa0103.put("vlr_ibs", BigDecimal.ZERO);
+        jsonEaa0103.put("vlr_cbs", BigDecimal.ZERO);
+        jsonEaa0103.put("cbs_aliq", BigDecimal.ZERO);
+        jsonEaa0103.put("vlr_ibsuf", BigDecimal.ZERO);
+        jsonEaa0103.put("ibs_uf_aliq", BigDecimal.ZERO);
+        jsonEaa0103.put("ibs_mun_aliq", BigDecimal.ZERO);
+        jsonEaa0103.put("icmsfiscal", BigDecimal.ZERO);
+        jsonEaa0103.put("vlraproxtrib", BigDecimal.ZERO);
+        jsonEaa0103.put("vlrfundpobreza", BigDecimal.ZERO);
+    }
     private void preencherSPEDS() {
 
         // ========================================================================================
@@ -400,7 +426,7 @@ public class Doc_Transferencia_Entre_Empresas_Entrada_Filial extends FormulaBase
         jsonEaa0103.put("bc_cofins_sped", jsonEaa0103.getBigDecimal_Zero("bc_cofins"));
 
         //Aliq Cofins SPED = Aliq Cofins
-        jsonEaa0103.put("_cofins_sped", jsonEaa0103.getBigDecimal_Zero("aliq_cofins"));
+        jsonEaa0103.put("aliq_cofins_sped", jsonEaa0103.getBigDecimal_Zero("aliq_cofins"));
 
         // Cofins SPED = Cofins
         jsonEaa0103.put("cofins_sped", jsonEaa0103.getBigDecimal_Zero("cofins"));
@@ -409,30 +435,30 @@ public class Doc_Transferencia_Entre_Empresas_Entrada_Filial extends FormulaBase
         jsonEaa0103.put("bc_pis_sped", jsonEaa0103.getBigDecimal_Zero("bc_pis"));
 
         // Aliq PIS SPED = Aliq SPED
-        jsonEaa0103.put("pis_sped", jsonEaa0103.getBigDecimal_Zero("aliq_pis"));
+        jsonEaa0103.put("aliq_pis_sped", jsonEaa0103.getBigDecimal_Zero("aliq_pis"));
 
         // PIS SPED = PIS
-        jsonEaa0103.put("pis", jsonEaa0103.getBigDecimal_Zero("pis"));
+        jsonEaa0103.put("pis_sped", jsonEaa0103.getBigDecimal_Zero("pis"));
 
         // ========================================================================================
         // 								  ICMS SPED
         // ========================================================================================
 
         //BC ICMS SPED = BC ICMS
-        jsonEaa0103.put("bcicms_sped", jsonEaa0103.getBigDecimal_Zero("bc_icms"));
+        jsonEaa0103.put("bc_icms_sped", jsonEaa0103.getBigDecimal_Zero("bc_icms"));
 
         //Aliq ICMS SPED = Aliq ICMS
         jsonEaa0103.put("aliq_icms_sped", jsonEaa0103.getBigDecimal_Zero("aliq_icms"));
 
 
         //Aliq Reduc BC ICMS SPED = Aliq Reduc BC ICMS
-        jsonEaa0103.put("redbcicms_sped", jsonEaa0103.getBigDecimal_Zero("_red_bc_icms"));
+        jsonEaa0103.put("aliq_red_bc_icms_sped", jsonEaa0103.getBigDecimal_Zero("aliq_red_bc_icms"));
 
         //ICMS Outras SPED = ICMS Outras
-        jsonEaa0103.put("icmsoutras_sped", jsonEaa0103.getBigDecimal_Zero("icms_outras"));
+        jsonEaa0103.put("icms_outras_sped", jsonEaa0103.getBigDecimal_Zero("icms_outras"));
 
         //ICMS Isento SPED = ICMS Isento
-        jsonEaa0103.put("icmsisento_sped", jsonEaa0103.getBigDecimal_Zero("icms_isento"));
+        jsonEaa0103.put("icms_isento_sped", jsonEaa0103.getBigDecimal_Zero("icms_isento"));
 
         //ICMS SPED = ICMS
         jsonEaa0103.put("icms_sped", jsonEaa0103.getBigDecimal_Zero("icms"));
@@ -446,7 +472,7 @@ public class Doc_Transferencia_Entre_Empresas_Entrada_Filial extends FormulaBase
         jsonEaa0103.put("bc_icms_st_sped", jsonEaa0103.getBigDecimal_Zero("bc_icms_st"));
 
         //Aliq ICMS ST SPED = Aliq ICMS ST
-        jsonEaa0103.put("_icms_st_sped", jsonEaa0103.getBigDecimal_Zero("_icms_st"));
+        jsonEaa0103.put("aliq_icms_st_sped", jsonEaa0103.getBigDecimal_Zero("aliq_icms_st"));
 
         //ICMS ST SPED = ICMS ST
         jsonEaa0103.put("icms_st_sped", jsonEaa0103.getBigDecimal_Zero("icms_st"));
@@ -457,16 +483,16 @@ public class Doc_Transferencia_Entre_Empresas_Entrada_Filial extends FormulaBase
         // ========================================================================================
 
         //BC IPI SPED = BC IPI
-        jsonEaa0103.put("bcipi_sped", jsonEaa0103.getBigDecimal_Zero("bc_ipi"));
+        jsonEaa0103.put("bc_ipi_sped", jsonEaa0103.getBigDecimal_Zero("bc_ipi"));
 
         //Aliq IPI SPED = Aliq IPI
-        jsonEaa0103.put("_ipi_sped", jsonEaa0103.getBigDecimal_Zero("aliq_ipi"));
+        jsonEaa0103.put("aliq_ipi_sped", jsonEaa0103.getBigDecimal_Zero("aliq_ipi"));
 
         //IPI Outras SPED = IPI Outras
-        jsonEaa0103.put("ipioutras_sped", jsonEaa0103.getBigDecimal_Zero("ipi_outras"));
+        jsonEaa0103.put("ipi_outras_sped", jsonEaa0103.getBigDecimal_Zero("ipi_outras"));
 
         //IPI Isento SPED = IPI Isento
-        jsonEaa0103.put("ipiisento_sped", jsonEaa0103.getBigDecimal_Zero("ipi_isento"));
+        jsonEaa0103.put("ipi_isento_sped", jsonEaa0103.getBigDecimal_Zero("ipi_isento"));
 
         //IPI SPED = IPI
         jsonEaa0103.put("ipi_sped", jsonEaa0103.getBigDecimal_Zero("ipi"));
