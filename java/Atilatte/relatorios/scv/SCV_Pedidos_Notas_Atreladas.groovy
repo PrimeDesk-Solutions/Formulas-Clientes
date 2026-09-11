@@ -6,14 +6,10 @@ import sam.server.samdev.relatorio.DadosParaDownload
 import sam.server.samdev.utils.Parametro;
 import java.time.LocalDate
 
-
-import java.util.Map;
-import java.util.HashMap;
-
-public class SCV_Pedidos_MarketPlace extends RelatorioBase {
+public class SCV_Pedidos_Notas_Atreladas extends RelatorioBase {
     @Override
     public String getNomeTarefa() {
-        return "SCV - Pedidos MarketPlace";
+        return "SCV - Pedidos e Notas Atreladas";
     }
 
     @Override
@@ -32,10 +28,10 @@ public class SCV_Pedidos_MarketPlace extends RelatorioBase {
 
         List<TableMap> dados = buscarDadosRelatorio(numInicial, numFinal, tiposDoc, entidades, dataEmissao);
 
-        params.put("TITULO", "SCV - Pedidos MarketPlace");
+        params.put("TITULO", "SCV - Pedidos e Notas Atreladas");
         params.put("EMPRESA", obterEmpresaAtiva().getAac10codigo() + " - " + obterEmpresaAtiva().getAac10rs())
 
-        return gerarPDF("SCV_Pedidos_MarketPlace", dados);
+        return gerarPDF("SCV_Pedidos_Notas_Atreladas", dados);
     }
 
     private List<TableMap> buscarDadosRelatorio(Integer numInicial, Integer numFinal, List<Long> tiposDoc, List<Long> entidades, LocalDate[] dataEmissao) {
