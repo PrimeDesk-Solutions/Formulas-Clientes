@@ -12,6 +12,7 @@ import sam.model.entities.aa.Aac10
 import sam.model.entities.aa.Aae11
 import sam.model.entities.ab.Abb01
 import sam.model.entities.ea.Eaa01
+import sam.model.entities.aa.Aah01
 import sam.server.samdev.formula.FormulaBase
 import sam.server.samdev.utils.NFeUtils
 
@@ -33,6 +34,8 @@ class NFe_Inutilizacao extends FormulaBase {
 		Abb01 central = getAcessoAoBanco().buscarRegistroUnicoById("Abb01", eaa01.getEaa01central().getAbb01id());
 		
 		Aac10 empresa = getAcessoAoBanco().obterEmpresa(obterEmpresaAtiva().getAac10id());
+
+        Aah01 aah01 = getAcessoAoBanco().buscarRegistroUnicoById("Aah01", central.abb01tipo.aah01id);
 			
 		LocalDate dtProdNFe = getAcessoAoBanco().buscarParametro("NFeDataProducao", "EA");
 		boolean isProducao = dtProdNFe == null ? false : DateUtils.dateDiff(dtProdNFe, central.getAbb01data(), ChronoUnit.DAYS) >= 0;
@@ -42,7 +45,7 @@ class NFe_Inutilizacao extends FormulaBase {
 		ID.append(StringUtils.ajustString(empresa.aac10municipio.aag0201uf.aag02ibge, 2)); 		//Código da UF do solicitante
 		ID.append(NFeUtils.formatarData(MDate.date(), "yy"));									//Ano de inutilização
 		ID.append(StringUtils.ajustString(StringUtils.extractNumbers(empresa.getAac10ni()), 14)); 	//CNPJ do emitente
-		ID.append("65"); 																			//Modelo da NFe
+		ID.append(aah01.aah01modelo); 																			//Modelo da NFe
 		ID.append(NFeUtils.tratarSerie(central.getAbb01serie())); 									//Série da NFe
 		ID.append(StringUtils.ajustString(central.getAbb01num(), 9));								//Número inicial da NFe
 		ID.append(StringUtils.ajustString(central.getAbb01num(), 9));								//Número final da NFe
@@ -59,7 +62,7 @@ class NFe_Inutilizacao extends FormulaBase {
 		infInut.addNode("cUF", StringUtils.ajustString(empresa.aac10municipio.aag0201uf.aag02ibge, 2), true);
 		infInut.addNode("ano", NFeUtils.formatarData(MDate.date(), "yy"), true);
 		infInut.addNode("CNPJ", StringUtils.ajustString(StringUtils.extractNumbers(empresa.getAac10ni()), 14), true);
-		infInut.addNode("mod", "65", true);
+		infInut.addNode("mod", aah01.aah01modelo, true);
 		infInut.addNode("serie", central.getAbb01serie() == null ? 0 : central.getAbb01serie().length() <= 3 ? central.getAbb01serie() : central.getAbb01serie().substring(0, 3), true);
 		infInut.addNode("nNFIni", central.getAbb01num(), true);
 		infInut.addNode("nNFFin", central.getAbb01num(), true);
