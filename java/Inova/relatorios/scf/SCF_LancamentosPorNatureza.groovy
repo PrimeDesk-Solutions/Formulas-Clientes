@@ -1,1 +1,127 @@
+package Inova.relatorios.scf
 
+import br.com.multiorm.ColumnType
+import br.com.multiorm.criteria.criterion.Criterion
+import br.com.multiorm.criteria.criterion.Criterions
+import br.com.multitec.utils.collections.TableMap
+import sam.model.entities.aa.Aac1001
+import sam.model.entities.da.Daa01
+import sam.model.entities.da.Dab10;
+import sam.server.samdev.relatorio.RelatorioBase;
+import sam.server.samdev.relatorio.DadosParaDownload
+import sam.server.samdev.utils.Parametro
+import br.com.multitec.utils.Utils
+
+
+import java.time.LocalDate;
+import java.util.Map;
+import java.util.HashMap;
+
+public class SCF_LancamentosPorNatureza extends RelatorioBase {
+    @Override
+    public String getNomeTarefa() {
+        return "SCF - Lançamentos Por Natureza";
+    }
+
+    @Override
+    public Map<String, Object> criarValoresIniciais() {
+        Map<String, Object> filtrosDefault = new HashMap()
+        filtrosDefault.put("numeroInicial", "000000001");
+        filtrosDefault.put("numeroFinal", "999999999");
+        filtrosDefault.put("impressao", "0");
+        return Utils.map("filtros", filtrosDefault);
+    }
+
+    @Override
+    public DadosParaDownload executar() {
+        Integer numDocIni = getInteger("numeroInicial");
+        Integer numDocFin = getInteger("numeroFinal");
+        List<Long> tipoDoc = getListLong("tipo");
+        List<Long> plf = getListLong("plf");
+        List<Long> contasCorrentes = getListLong("contaCorrente");
+        List<Long> naturezas = getListLong("naturezas")
+        List<Long> entidades = getListLong("entidade");
+        LocalDate[] dataEmissao = getIntervaloDatas("dataEmissao");
+        Integer impressao = getInteger("impressao");
+        List<Long> idEmpresas = getListLong("empresas")
+
+        List<TableMap> dados = buscarLancamentos(numDocIni, numDocFin, tipoDoc, plf, naturezas, entidades, dataEmissao, idEmpresas, contasCorrentes);
+
+        if (impressao == 1) return gerarXLSX("SCF_LancamentosPorNatureza_Excel", dados);
+        params.put("empresa", obterEmpresaAtiva().getAac10codigo() + "-" + obterEmpresaAtiva().getAac10na());
+        params.put("titulo", "SCF - Lançamentos Por Natureza");
+
+        return gerarPDF("SCF_LancamentosPorNatureza_PDF", dados);
+
+
+    }
+
+    private List<TableMap> buscarLancamentos(Integer numDocIni, Integer numDocFin, List<Long> tipoDoc, List<Long> plf, List<Long> naturezas, List<Long> entidades, LocalDate[] dataEmissao, List<Long> idEmpresas, List<Long> contasCorrentes) {
+
+        // Data Inicial - Final
+        LocalDate dataIni = null;
+        LocalDate dataFin = null;
+        if (dataEmissao != null) {
+            dataIni = dataEmissao[0];
+            dataFin = dataEmissao[1];
+        }
+        List<Long> idsGc = obterGCbyEmpresa(idEmpresas, "Da");
+        String whereNumDoc = "WHERE (abb01num BETWEEN :numDocIni AND :numDocFin OR abb01num IS NULL) ";
+        String whereGcs = idsGc != null && idsGc.size() > 0 ? " AND dab10gc IN (:idsGc) " : "";
+        String whereContas = contasCorrentes != null && contasCorrentes.size() > 0 ? "AND dab01id IN (:contasCorrentes)" : "";
+        String whereTipoDoc = tipoDoc != null && tipoDoc.size() > 0 ? "AND aah01id IN (:tipoDoc)" : "";
+        String wherePlf = plf != null && plf.size() > 0 ? "AND dab10plf in (:plf) " : "";
+        String whereNaturezas = naturezas != null && naturezas.size() > 0 ? "AND abf10id IN (:naturezas) " : "";
+        String whereEntidade = entidades != null && entidades.size() > 0 ? "AND abe01id IN (:entidades)" : "";
+        String whereDataEmissao = dataIni != null && dataFin != null ? "AND dab10data BETWEEN :dataIni AND :dataFin " : "";
+
+        Parametro parametroNumDocIni = Parametro.criar("numDocIni", numDocIni);
+        Parametro parametroNumDocFin = Parametro.criar("numDocFin", numDocFin);
+        Parametro parametroEmpresa = idsGc != null && idsGc.size() > 0 ? Parametro.criar("idsGc", idsGc) : null;
+        Parametro parametroContas = contasCorrentes != null && contasCorrentes.size() > 0 ? Parametro.criar("contasCorrentes", contasCorrentes) : null;
+        Parametro parametroTipoDoc = tipoDoc != null && tipoDoc.size() > 0 ? Parametro.criar("tipoDoc", tipoDoc) : null;
+        Parametro parametroPlf = plf != null && plf.size() > 0 ? Parametro.criar("plf", plf) : null;
+        Parametro parametroNatureza = naturezas != null && naturezas.size() > 0 ? Parametro.criar("naturezas", naturezas) : null;
+        Parametro parametroEntidade = entidades != null && entidades.size() > 0 ? Parametro.criar("entidades", entidades) : null;
+        Parametro parametroDataIni = dataIni != null ? Parametro.criar("dataIni", dataIni) : null;
+        Parametro parametroDataFin = dataFin != null ? Parametro.criar("dataFin", dataFin) : null;
+
+        String sql = "SELECT DISTINCT dab10id, dab01codigo AS codCC, dab01nome AS nomeCC, abf10codigo AS codNatureza,abf10nome AS nomeNatureza, " +
+                " dab10data AS dtLancamento,abe01codigo AS codEnt, abe01na AS naEnt, aah01codigo AS codTipoDoc, aah01nome AS descrTipoDoc, " +
+                " abb01num AS numDoc, abb01parcela AS parcela, abb01quita AS quita, dab10historico, " +
+                " CASE WHEN dab10mov = 0 THEN 'D' ELSE 'C' END AS movimentacao, dab10011valor AS valorDoc, dab10valor AS valorPago, abb01data " +
+                " FROM dab10 " +
+                " LEFT JOIN dab1002 ON dab1002lct = dab10id " +
+                " LEFT JOIN dab01 ON dab01id = dab1002cc " +
+                " LEFT JOIN dab1001 ON dab1001lct = dab10id " +
+                " LEFT JOIN dab10011 ON dab10011depto = dab1001id " +
+                " LEFT JOIN abf10 ON abf10id = dab10011nat " +
+                " LEFT JOIN abb01 ON abb01id = dab10central " +
+                " LEFT JOIN abe01 ON abe01id = abb01ent " +
+                " LEFT JOIN aah01 ON aah01id = abb01tipo " +
+                whereNumDoc +
+                whereTipoDoc +
+                wherePlf +
+                whereNaturezas +
+                whereEntidade +
+                whereDataEmissao +
+                whereGcs +
+                whereContas +
+                "ORDER BY abf10codigo, abb01data, abb01num,abb01parcela, aah01codigo ";
+
+
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroNumDocIni, parametroNumDocFin, parametroEmpresa, parametroContas, parametroTipoDoc, parametroPlf, parametroNatureza, parametroEntidade, parametroDataIni, parametroDataFin);
+
+    }
+    private List<Long> obterGCbyEmpresa(List<Long> empresa, String tabela) {
+        Criterion whereEmpresa = empresa != null ? Criterions.in("aac1001empresa", empresa) : null;
+        Criterion whereTabela = tabela != null ? Criterions.eq("aac1001tabela", tabela) : null;
+
+        return getSession().createCriteria(Aac1001.class)
+                .addFields("aac1001gc")
+                .addWhere(whereEmpresa)
+                .addWhere(whereTabela)
+                .getList(ColumnType.LONG);
+    }
+}
+//meta-sis-eyJkZXNjciI6IlNDRiAtIExhbsOnYW1lbnRvcyBwb3IgTmF0dXJlemEiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

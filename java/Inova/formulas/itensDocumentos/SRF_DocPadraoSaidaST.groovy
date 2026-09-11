@@ -415,7 +415,12 @@ public class SRF_DocPadraoSaidaST extends FormulaBase {
     private void calcularICMS(Integer contribICMS) {
         Integer vlrReducao = 0;
 
-        if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
+        // Aliquota de ICMS
+        if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") == 0)
+            jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
+
+
+        if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonEaa0103.getBigDecimal_Zero("aliq_icms") > 0) {
             // BC ICMS
             jsonEaa0103.put("bc_icms", eaa0103.eaa0103total +
                     jsonEaa0103.getBigDecimal_Zero("frete_dest") +
@@ -423,9 +428,9 @@ public class SRF_DocPadraoSaidaST extends FormulaBase {
                     jsonEaa0103.getBigDecimal_Zero("seguro") -
                     jsonEaa0103.getBigDecimal_Zero("desconto"));
 
-            jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms").round(2));
+            if(contribICMS) jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms") + jsonEaa0103.getBigDecimal_Zero("ipi"))
 
-            if (contribICMS) jsonEaa0103.put("bc_icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") + jsonEaa0103.getBigDecimal_Zero("ipi")).round(2));
+            jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms").round(2));
 
             // Calculo da Redução
             if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_reduc_bc_icms") > 0) {
@@ -436,11 +441,6 @@ public class SRF_DocPadraoSaidaST extends FormulaBase {
 
             // Zerando icms outras quando tiver valor na aliq icms
             jsonEaa0103.put("icms_outras", new BigDecimal(0));
-
-            // Aliquota de ICMS
-            if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
-                jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
-            }
 
             // Calculo ICMS
             jsonEaa0103.put("icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") * (jsonEaa0103.getBigDecimal_Zero("aliq_icms") / 100)).round(2));
@@ -457,7 +457,7 @@ public class SRF_DocPadraoSaidaST extends FormulaBase {
 
         if(abm12 != null){
             Integer origemItem = abm12.abm12cstA;
-            String aliqCargaTrib
+            BigDecimal aliqCargaTrib
 
             if(origemItem == 0 || origemItem == 3 || origemItem == 4 || origemItem == 5 || origemItem == 8){
                 aliqCargaTrib = abg01.abg01vatFedNac_Zero;
@@ -481,10 +481,9 @@ public class SRF_DocPadraoSaidaST extends FormulaBase {
     }
 
     private void calcularIcmsST() {
+        if(jsonEaa0103.getBigDecimal_Zero("aliq_icms_st") == 0) jsonEaa0103.put("aliq_icms_st", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms_st"));
 
-        if(jsonEaa0103.getBigDecimal_Zero("aliq_icms_st") != -1){
-
-            if(jsonEaa0103.getBigDecimal_Zero("aliq_icms_st") == 0) jsonEaa0103.put("aliq_icms_st", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms_st"));
+        if(jsonEaa0103.getBigDecimal_Zero("aliq_icms_st") != -1 && jsonEaa0103.getBigDecimal_Zero("aliq_icms_st") > 0 ){
 
             jsonEaa0103.put("bc_icms_st", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest") + jsonEaa0103.getBigDecimal_Zero("seguro") + jsonEaa0103.getBigDecimal_Zero("outras_despesas") + jsonEaa0103.getBigDecimal_Zero("ipi"))
             jsonEaa0103.put("bc_icms_st", jsonEaa0103.getBigDecimal_Zero("bc_icms_st").round(2));
@@ -495,9 +494,8 @@ public class SRF_DocPadraoSaidaST extends FormulaBase {
                 jsonEaa0103.put("bc_icms_st", jsonEaa0103.getBigDecimal_Zero("bc_icms_st").round(2));
             }
 
-            def icmsCalc = eaa0103.eaa0103total * jsonAbm0101.getBigDecimal_Zero("aliq_icms_subs") / 100
-
-            jsonEaa0103.put("icms_st", (jsonEaa0103.getBigDecimal_Zero("bc_icms_st") * jsonEaa0103.getBigDecimal_Zero("aliq_icms_st") / 100) - icmsCalc)
+            def icmsCalc = eaa0103.eaa0103total * jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms_subs") / 100
+            jsonEaa0103.put("icms_st", (jsonEaa0103.getBigDecimal_Zero("bc_icms_st") * jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms_subs") / 100) - icmsCalc)
             jsonEaa0103.put("icms_st", jsonEaa0103.getBigDecimal_Zero("icms_st").round(2));
 
         }else{
@@ -533,7 +531,7 @@ public class SRF_DocPadraoSaidaST extends FormulaBase {
 
         if (jsonAbm0101.getBigDecimal_Zero("aliq_cofins") > 0) {
             // BC PIS
-            jsonEaa0103.put("bc_cofins", eaa0103.eaa0103total);
+            jsonEaa0103.put("bc_cofins", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest") + jsonEaa0103.getBigDecimal_Zero("seguro") + jsonEaa0103.getBigDecimal_Zero("outras_despesas") - jsonEaa0103.getBigDecimal_Zero("desconto") - jsonEaa0103.getBigDecimal_Zero("icms"));
 
             // PIS
             jsonEaa0103.put("cofins", jsonEaa0103.getBigDecimal_Zero("bc_cofins") * jsonEaa0103.getBigDecimal_Zero("aliq_cofins") / 100);

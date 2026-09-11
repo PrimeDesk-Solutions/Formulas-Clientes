@@ -412,7 +412,11 @@ public class SRF_DocPadraoSaidaComIPIBcIcms extends FormulaBase {
     private void calcularICMS(Integer contribICMS) {
         Integer vlrReducao = 0;
 
-        if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
+        if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") == 0)
+            jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
+
+
+        if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonEaa0103.getBigDecimal_Zero("aliq_icms") > 0) {
             // BC ICMS
             jsonEaa0103.put("bc_icms", eaa0103.eaa0103total +
                     jsonEaa0103.getBigDecimal_Zero("frete_dest") +
@@ -423,8 +427,6 @@ public class SRF_DocPadraoSaidaComIPIBcIcms extends FormulaBase {
 
             jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms").round(2));
 
-            if (contribICMS) jsonEaa0103.put("bc_icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") + jsonEaa0103.getBigDecimal_Zero("ipi")).round(2));
-
             // Calculo da Redução
             if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_reduc_bc_icms") > 0) {
                 jsonEaa0103.put("aliq_reduc_bc_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_reduc_bc_icms"));
@@ -434,11 +436,6 @@ public class SRF_DocPadraoSaidaComIPIBcIcms extends FormulaBase {
 
             // Zerando icms outras quando tiver valor na aliq icms
             jsonEaa0103.put("icms_outras", new BigDecimal(0));
-
-            // Aliquota de ICMS
-            if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
-                jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
-            }
 
             // Calculo ICMS
             jsonEaa0103.put("icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") * (jsonEaa0103.getBigDecimal_Zero("aliq_icms") / 100)).round(2));
@@ -521,7 +518,7 @@ public class SRF_DocPadraoSaidaComIPIBcIcms extends FormulaBase {
         // Aliquota
         if(jsonEaa0103.getBigDecimal_Zero("aliq_pis") == 0)jsonEaa0103.put("aliq_pis", jsonAbm0101.getBigDecimal_Zero("aliq_pis"));
 
-        if (jsonAbm0101.getBigDecimal_Zero("aliq_pis") > 0) {
+        if (jsonEaa0103.getBigDecimal_Zero("aliq_pis") > 0) {
             // BC PIS
             jsonEaa0103.put("bc_pis", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest") + jsonEaa0103.getBigDecimal_Zero("seguro") + jsonEaa0103.getBigDecimal_Zero("outras_despesas") - jsonEaa0103.getBigDecimal_Zero("desconto") - jsonEaa0103.getBigDecimal_Zero("icms"));
 
@@ -541,9 +538,9 @@ public class SRF_DocPadraoSaidaComIPIBcIcms extends FormulaBase {
         // Aliquota
         if(jsonEaa0103.getBigDecimal_Zero("aliq_cofins") == 0)jsonEaa0103.put("aliq_cofins", jsonAbm0101.getBigDecimal_Zero("aliq_cofins"));
 
-        if (jsonAbm0101.getBigDecimal_Zero("aliq_cofins") > 0) {
+        if (jsonEaa0103.getBigDecimal_Zero("aliq_cofins") > 0) {
             // BC PIS
-            jsonEaa0103.put("bc_cofins", eaa0103.eaa0103total);
+            jsonEaa0103.put("bc_cofins", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest") + jsonEaa0103.getBigDecimal_Zero("seguro") + jsonEaa0103.getBigDecimal_Zero("outras_despesas") - jsonEaa0103.getBigDecimal_Zero("desconto") - jsonEaa0103.getBigDecimal_Zero("icms"));
 
             // PIS
             jsonEaa0103.put("cofins", jsonEaa0103.getBigDecimal_Zero("bc_cofins") * jsonEaa0103.getBigDecimal_Zero("aliq_cofins") / 100);

@@ -329,23 +329,21 @@ public class SRF_DocRemessaIsento extends FormulaBase {
 
             String primeiroDigito = cfop.substring(0, 1);
 
-            if (!dentroEstado) {
-                if (primeiroDigito == "5") {
-                    primeiroDigito = "6";
-                }
-
-                if (primeiroDigito == "1") {
-                    primeiroDigito = "2";
-                }
-
-                cfop = primeiroDigito + cfop.substring(1);
-
-                aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
-
-                if (aaj15_cfop == null) throw new ValidacaoException("Não foi encontrado CFOP com o código " + cfop);
-
-                eaa0103.eaa0103cfop = aaj15_cfop;
+            if (primeiroDigito == "6") {
+                primeiroDigito = "2";
             }
+
+            if (primeiroDigito == "5") {
+                primeiroDigito = "1";
+            }
+
+            cfop = primeiroDigito + cfop.substring(1);
+
+            aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
+
+            if (aaj15_cfop == null) throw new ValidacaoException("Não foi encontrado CFOP com o código " + cfop);
+
+            eaa0103.eaa0103cfop = aaj15_cfop;
         }
     }
     private void calcularFCP(){

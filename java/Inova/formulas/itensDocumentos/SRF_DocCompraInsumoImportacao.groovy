@@ -296,13 +296,14 @@ public class SRF_DocCompraInsumoImportacao extends FormulaBase {
             // Peso Líquido
             if(jsonEaa0103.getBigDecimal_Zero("peso_liquido") == 0) jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(3));
 
-
             // Novo Unitário
-            if(jsonEaa0103.getInteger("calculou_unitario")){
-                eaa0103.eaa0103unit = eaa0103.eaa0103unit * jsonEaa0103.getBigDecimal_Zero("cotacao_dolar")
+            if(jsonEaa0103.getBigDecimal_Zero("aplicou") == 0){
+                eaa0103.eaa0103unit = (eaa0103.eaa0103unit * jsonEaa0103.getBigDecimal_Zero("cotacao_dolar")).round(6);
+            }else{
+                eaa0103.eaa0103unit = eaa0103.eaa0103unit.round(6);
             }
 
-            jsonEaa0103.put("calculou_unitario", 1);
+            jsonEaa0103.put("aplicou", 1);
 
             // Quantidade Tributável
             jsonEaa0103.put("qtd_tributavel", eaa0103.eaa0103qtComl_Zero);
@@ -688,7 +689,7 @@ public class SRF_DocCompraInsumoImportacao extends FormulaBase {
         if (jsonEaa0103.getBigDecimal_Zero("aliq_ipi") != -1) {
 
             //BC de IPI = Total do Item + Frete + Seguro + Despesas Acessorias
-            jsonEaa0103.put("bc_ipi", jsonEaa0103.getBigDecimal_Zero("imposto_importacao") + jsonEaa0103.getBigDecimal_Zero("valor_aduaneiro") - jsonEaa0103.getBigDecimal_Zero("desconto"));
+            jsonEaa0103.put("bc_ipi", jsonEaa0103.getBigDecimal_Zero("valor_aduaneiro") + jsonEaa0103.getBigDecimal_Zero("imposto_importacao") - jsonEaa0103.getBigDecimal_Zero("desconto"));
 
             jsonEaa0103.put("bc_ipi", jsonEaa0103.getBigDecimal_Zero("bc_ipi").round(2));
 
@@ -717,7 +718,7 @@ public class SRF_DocCompraInsumoImportacao extends FormulaBase {
         // Aliquota
         if(jsonEaa0103.getBigDecimal_Zero("aliq_pis") == 0)jsonEaa0103.put("aliq_pis", jsonAbm0101.getBigDecimal_Zero("aliq_pis"));
 
-        if (jsonAbm0101.getBigDecimal_Zero("aliq_pis") > 0) {
+        if (jsonEaa0103.getBigDecimal_Zero("aliq_pis") > 0) {
             // BC PIS
             jsonEaa0103.put("bc_pis", jsonEaa0103.getBigDecimal_Zero("valor_aduaneiro"));
 
@@ -737,7 +738,7 @@ public class SRF_DocCompraInsumoImportacao extends FormulaBase {
         // Aliquota
         if(jsonEaa0103.getBigDecimal_Zero("aliq_cofins") == 0)jsonEaa0103.put("aliq_cofins", jsonAbm0101.getBigDecimal_Zero("aliq_cofins"));
 
-        if (jsonAbm0101.getBigDecimal_Zero("aliq_cofins") > 0) {
+        if (jsonEaa0103.getBigDecimal_Zero("aliq_cofins") > 0) {
             // BC PIS
             jsonEaa0103.put("bc_cofins", jsonEaa0103.getBigDecimal_Zero("valor_aduaneiro"));
 
@@ -755,9 +756,9 @@ public class SRF_DocCompraInsumoImportacao extends FormulaBase {
     private void calcularICMS(Integer contribICMS) {
         Integer vlrReducao = 0;
 
-        if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
+        if(jsonEaa0103.getBigDecimal_Zero("aliq_icms") == 0) jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
 
-            if(jsonEaa0103.getBigDecimal_Zero("aliq_icms") == 0) jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
+        if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonEaa0103.getBigDecimal_Zero("aliq_icms") > 0) {
 
             def bcICMS = (eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("ipi") + jsonEaa0103.getBigDecimal_Zero("imposto_importacao") + jsonEaa0103.getBigDecimal_Zero("desp_acess_rat")) / (1 - jsonEaa0103.getBigDecimal_Zero("aliq_icms") / 100);
 

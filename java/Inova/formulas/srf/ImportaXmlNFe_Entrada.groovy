@@ -1,5 +1,7 @@
 package Inova.formulas.srf
 
+import sam.model.entities.aa.Aaj07
+import sam.model.entities.aa.Aaj09
 import sam.model.entities.aa.Aaj11
 import sam.model.entities.aa.Aaj12
 import sam.model.entities.aa.Aaj13
@@ -170,7 +172,9 @@ class ImportaXmlNFe_Entrada extends FormulaBase {
                 //Grupo Tributação do ICMS = 40
                 ElementXml elementICMS40 = elementICMS.getChildNode("ICMS40");
                 if(elementICMS40 != null) {
-                    eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", "040" ))
+                    String orig = elementICMS40.getChildNode("orig").getValue();
+                    String cst = elementICMS40.getChildNode("CST").getValue();
+                    eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", orig + cst))
                     setarValorJson(eaa0103json, getCampo("204.01-N17","vICMS"), obterValorXml(elementICMS40, "vICMS", 2));
                 }
 
@@ -362,9 +366,16 @@ class ImportaXmlNFe_Entrada extends FormulaBase {
 
                     ElementXml elementPISAliq = elementPIS.getChildNode("PISAliq");
                     if(elementPISAliq != null) {
+                        String cstPIS = elementPISAliq.getChildValue("CST");
+                        Aaj12 aaj12 = getSession().get(Aaj12.class, Criterions.eq("aaj12codigo", cstPIS));
+                        if(aaj12 == null) interromper("Não foi encontrado CST de PIS com o código " + cstPIS);
+
                         setarValorJson(eaa0103json, getCampo("270-Q07","vBC"), obterValorXml(elementPISAliq, "vBC", 2));
                         setarValorJson(eaa0103json, getCampo("271-Q08","pPIS"), obterValorXml(elementPISAliq, "pPIS", 2));
                         setarValorJson(eaa0103json, getCampo("272-Q09","vPIS"), obterValorXml(elementPISAliq, "vPIS", 2));
+
+                        eaa0103.eaa0103cstPis = aaj12;
+
                     }
 
                     ElementXml elementPISQtde = elementPIS.getChildNode("PISQtde");
@@ -376,12 +387,12 @@ class ImportaXmlNFe_Entrada extends FormulaBase {
 
                     ElementXml elementPISOutr = elementPIS.getChildNode("PISOutr");
                     if(elementPISOutr != null) {
-                        def cstPIS = elementPISOutr.getChildValue("CST");
+                        def cstPISOutr = elementPISOutr.getChildValue("CST");
 
                         // CST PIS
-                        Aaj12 aaj12 = getSession().get(Aaj12.class, Criterions.eq("aaj12codigo", cstPIS));
+                        Aaj12 aaj12outr = getSession().get(Aaj12.class, Criterions.eq("aaj12codigo", cstPISOutr));
 
-                        if(aaj12 == null) interromper("Não foi encontrado CST de PIS com o código " + cstPIS);
+                        if(aaj12outr == null) interromper("Não foi encontrado CST de PIS com o código " + cstPISOutr);
 
                         setarValorJson(eaa0103json, getCampo("282-Q07","vBC"), obterValorXml(elementPISOutr, "vBC", 2));
                         setarValorJson(eaa0103json, getCampo("283-Q08","pPIS"), obterValorXml(elementPISOutr, "pPIS", 2));
@@ -389,7 +400,7 @@ class ImportaXmlNFe_Entrada extends FormulaBase {
                         setarValorJson(eaa0103json, getCampo("285-Q11","vAliqProd"), obterValorXml(elementPISOutr, "vAliqProd", 4));
                         setarValorJson(eaa0103json, getCampo("286-Q09","vPIS"), obterValorXml(elementPISOutr, "vPIS", 2));
 
-                        eaa0103.eaa0103cstPis = aaj12;
+                        eaa0103.eaa0103cstPis = aaj12outr;
                     }
                 }
 
@@ -409,9 +420,16 @@ class ImportaXmlNFe_Entrada extends FormulaBase {
 
                     ElementXml elementCOFINSAliq = elementCOFINS.getChildNode("COFINSAliq");
                     if(elementCOFINSAliq != null) {
+                        String cstCOFINS = elementCOFINSAliq.getChildValue("CST");
+                        Aaj13 aaj13 = getSession().get(Aaj13.class, Criterions.eq("aaj13codigo", cstCOFINS));
+                        if(aaj13 == null) interromper("Não foi encontrado CST de COFINS com o código " + cstCOFINS);
+
                         setarValorJson(eaa0103json, getCampo("296-S07","vBC"), obterValorXml(elementCOFINSAliq, "vBC", 2));
                         setarValorJson(eaa0103json, getCampo("297-S08","pCOFINS"), obterValorXml(elementCOFINSAliq, "pCOFINS", 4));
                         setarValorJson(eaa0103json, getCampo("298-S11","vCOFINS"), obterValorXml(elementCOFINSAliq, "vCOFINS", 2));
+
+                        eaa0103.eaa0103cstCofins = aaj13
+
                     }
 
                     ElementXml elementCOFINSQtde = elementCOFINS.getChildNode("COFINSQtde");
@@ -423,19 +441,19 @@ class ImportaXmlNFe_Entrada extends FormulaBase {
 
                     ElementXml elementCOFINSOutr = elementCOFINS.getChildNode("COFINSOutr");
                     if(elementCOFINSOutr != null) {
-                        def cstCOFINS = elementCOFINSOutr.getChildValue("CST");
+                        def cstCOFINSOutr = elementCOFINSOutr.getChildValue("CST");
 
                         // CST COFINS
-                        Aaj13 aaj13 = getSession().get(Aaj13.class, Criterions.eq("aaj13codigo", cstCOFINS));
+                        Aaj13 aaj13outr = getSession().get(Aaj13.class, Criterions.eq("aaj13codigo", cstCOFINSOutr));
 
-                        if(aaj13 == null) interromper("Não foi encontrado CST de PIS com o código " + cstCOFINS);
+                        if(aaj13outr == null) interromper("Não foi encontrado CST de COFINS com o código " + cstCOFINSOutr);
 
                         setarValorJson(eaa0103json, getCampo("308-S07","vBC"), obterValorXml(elementCOFINSOutr, "vBC", 2));
                         setarValorJson(eaa0103json, getCampo("309-S08","pCOFINS"), obterValorXml(elementCOFINSOutr, "pCOFINS", 2));
                         setarValorJson(eaa0103json, getCampo("310-S09","qBCProd"), obterValorXml(elementCOFINSOutr, "qBCProd", 4));
                         setarValorJson(eaa0103json, getCampo("311-S10","vAliqProd"), obterValorXml(elementCOFINSOutr, "vAliqProd", 4));
                         setarValorJson(eaa0103json, getCampo("312-S11","vCOFINS"), obterValorXml(elementCOFINSOutr, "vCOFINS", 2));
-                        eaa0103.eaa0103cstCofins = aaj13;
+                        eaa0103.eaa0103cstCofins = aaj13outr;
                     }
                 }
 
@@ -456,6 +474,8 @@ class ImportaXmlNFe_Entrada extends FormulaBase {
                     setarValorJson(eaa0103json, getCampo("321-U03","vAliq"), obterValorXml(elementISSQN, "vAliq", 2));
                     setarValorJson(eaa0103json, getCampo("322-U04","vISSQN"), obterValorXml(elementISSQN, "vISSQN", 2));
                 }
+
+                buscarIBSCBS(elementimposto, eaa0103);
             }
         }
 
@@ -553,6 +573,43 @@ class ImportaXmlNFe_Entrada extends FormulaBase {
                 String xMotivo = elementinfProt.getChildValue("xMotivo");
                 eaa01.setEaa01nfeDescr(xMotivo);
             }
+        }
+
+    }
+
+    private void buscarIBSCBS(ElementXml elementimposto, Eaa0103 eaa0103){
+
+        ElementXml elementXmlIBSCBS = elementimposto.getChildNode("IBSCBS");
+        TableMap eaa0103json = eaa0103.eaa0103json != null ? eaa0103.eaa0103json : new TableMap();
+
+        if(elementXmlIBSCBS != null){
+            String cstIBS = elementXmlIBSCBS.getChildNode("CST").getValue();
+            String classTrib = elementXmlIBSCBS.getChildNode("cClassTrib").getValue();
+
+            Aaj07 aaj07_ClasTrib_IBS =  getSession().get(Aaj07.class, Criterions.eq("aaj07codigo", classTrib));
+            Aaj09 aaj09_CST_IBS = getSession().get(Aaj09.class, Criterions.eq("aaj09codigo", cstIBS));
+
+            if("410".equals(cstIBS)){
+                aaj07_ClasTrib_IBS =  getSession().get(Aaj07.class, Criterions.eq("aaj07codigo", classTrib));
+                aaj09_CST_IBS = getSession().get(Aaj09.class, Criterions.eq("aaj09codigo", cstIBS));
+            }else{
+                ElementXml elementgIBSCBS = elementXmlIBSCBS.getChildNode("gIBSCBS");
+                ElementXml elementgIBSUF = elementgIBSCBS.getChildNode("gIBSUF");
+                ElementXml elementgIBSMun = elementgIBSCBS.getChildNode("gIBSMun");
+                ElementXml elementgCBS = elementgIBSCBS.getChildNode("gCBS");
+
+                setarValorJson(eaa0103json, getCampo("324-UB16","vBC"), obterValorXml(elementgIBSCBS, "vBC", 2));
+                setarValorJson(eaa0103json, getCampo("324-UB18","pIBSUF"), obterValorXml(elementgIBSUF, "pIBSUF", 2));
+                setarValorJson(eaa0103json, getCampo("324-UB35","vIBSUF"), obterValorXml(elementgIBSUF, "vIBSUF", 2));
+                setarValorJson(eaa0103json, getCampo("324-UB37","pIBSMun"), obterValorXml(elementgIBSMun, "pIBSMun", 2));
+                setarValorJson(eaa0103json, getCampo("324-UB54","vIBSMun"), obterValorXml(elementgIBSMun, "vIBSMun", 2));
+                setarValorJson(eaa0103json, getCampo("324-UB54a","vIBS"), obterValorXml(elementgIBSCBS, "vIBS", 2));
+                setarValorJson(eaa0103json, getCampo("324-UB56","pCBS"), obterValorXml(elementgCBS, "pCBS", 2));
+                setarValorJson(eaa0103json, getCampo("324-UB67","vCBS"), obterValorXml(elementgCBS, "vCBS", 2));
+            }
+
+            eaa0103.eaa0103cstCbsIbs = aaj09_CST_IBS;
+            eaa0103.eaa0103clasTribCbsIbs = aaj07_ClasTrib_IBS;
         }
 
     }
