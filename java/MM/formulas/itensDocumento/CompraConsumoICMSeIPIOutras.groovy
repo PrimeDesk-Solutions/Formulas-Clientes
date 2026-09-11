@@ -382,10 +382,17 @@ public class CompraConsumoICMSeIPIOutras extends FormulaBase {
 
         def vlrReducao = 0;
 
-        if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_fixa_icms") > 0) {
+        if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_fixa_icms") > 0 || jsonEaa0103.getBigDecimal_Zero("aliq_icms_manual") > 0)) {
 
             // Aliquota de ICMS
             if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") == 0) {
+                jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_fixa_icms"));
+            }
+
+            // Aliquota de ICMS Manual
+            if(jsonEaa0103.getBigDecimal_Zero("aliq_icms_manual") > 0){
+                jsonEaa0103.put("aliq_icms", jsonEaa0103.getBigDecimal_Zero("aliq_icms_manual"));
+            }else{
                 jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_fixa_icms"));
             }
 
