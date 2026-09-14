@@ -603,8 +603,3 @@ class SCF_Boleto_Itau extends RelatorioBase {
         return dv;
     }
 }
-//meta-sis-eyJkZXNjciI6IlNDRiAtIEJvbGV0byBJdGHDuiAtIEVsIFRlY2giLCJ0aXBvIjoicmVsYXRvcmlvIn0=
-//meta-sis-eyJkZXNjciI6IlNDRiAtIEJvbGV0byBJdGHDuiIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
-//meta-sis-eyJkZXNjciI6IlNDRiAtIEJvbGV0byBJdGHDuiIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
-//meta-sis-eyJkZXNjciI6IlNDRiAtIEJvbGV0byBJdGHDuiIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
-//meta-sis-eyJkZXNjciI6IlNDRiAtIEJvbGV0byBJdGHDuiIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

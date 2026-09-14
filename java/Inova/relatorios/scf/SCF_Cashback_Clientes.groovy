@@ -70,21 +70,21 @@ public class SCF_Cashback_Clientes extends RelatorioBase {
         Parametro parametroEntidades = idsEntidades != null && idsEntidades.size() > 0 ? Parametro.criar("idsEntidades", idsEntidades) : null;
 
         String sql = "SELECT abe01codigo, abe01nome, dad01saldo, dad01id, dad01obs " +
-                        "FROM dad01 " +
-                        "INNER JOIN abe01 ON abe01id = dad01ent " +
-                        whereEntidades +
-                        "ORDER BY abe01codigo";
+                "FROM dad01 " +
+                "INNER JOIN abe01 ON abe01id = dad01ent " +
+                whereEntidades +
+                "ORDER BY abe01codigo";
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroEntidades);
 
     }
     private List<TableMap> buscarLancamentosCashback(Long idCashback){
         String sql = "SELECT dad0101data, dad0101hist, dad0101es, " +
-                    "dad0101valor, abb01num " +
-                    "FROM dad0101 " +
-                    "INNER JOIN abb01 ON abb01id = dad0101central " +
-                    "WHERE dad0101cb = :idCashback " +
-                    "ORDER BY dad0101data"
+                "dad0101valor, abb01num " +
+                "FROM dad0101 " +
+                "INNER JOIN abb01 ON abb01id = dad0101central " +
+                "WHERE dad0101cb = :idCashback " +
+                "ORDER BY dad0101data"
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idCashback", idCashback));
     }

@@ -60,6 +60,7 @@ public class SCF_Documentos extends RelatorioBase{
         LocalDate[] dataVenc = getIntervaloDatas("dataVenc");
         Integer opcVcto = getInteger("opcVcto");
         LocalDate[] dataEmissao = getIntervaloDatas("dataEmissao");
+        LocalDate[] dtLcto = getIntervaloDatas("dataLancamento");
         Integer tipoData = getInteger("tipoData");
         LocalDate[] data = getIntervaloDatas("dataPagBaixa");
         List<Long> port = getListLong("portador");
@@ -85,7 +86,7 @@ public class SCF_Documentos extends RelatorioBase{
             params.put("PERIODO", "Período: " + data[0].format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString() + " à " + data[1].format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
         }
 
-        List<TableMap> dados = obterDadosRelatorio(Emprs, classe, tp, documento,  numeroInicial, numeroFinal, entidade, rep, departamento, naturezas, dataVenc, opcVcto, dataEmissao, tipoData, data, isAgrupamento, port, oper, ordem, opc);
+        List<TableMap> dados = obterDadosRelatorio(Emprs, classe, tp, documento,  numeroInicial, numeroFinal, entidade, rep, departamento, naturezas, dataVenc, opcVcto, dataEmissao, tipoData, data, isAgrupamento, port, oper, ordem, opc, dtLcto);
 
         for(TableMap tm : dados) {
             LocalDate dtAtual = LocalDate.now();
@@ -190,7 +191,8 @@ public class SCF_Documentos extends RelatorioBase{
         }
     }
 
-    private List<TableMap> obterDadosRelatorio(List<Long> Emprs, Integer classe, Integer tp,  List<Long> documento, Integer numeroInicial, Integer numeroFinal, List<Long> entidade, List<Long> rep, List<Long> departamento, List<Long> naturezas, LocalDate[] dataVenc, Integer opcVcto, LocalDate[] dataEmissao, Integer tipoData, LocalDate[] data, String agrup, List<Long> port, List<Long> oper, Integer ordem, Integer opc) {
+    private List<TableMap> obterDadosRelatorio(List<Long> Emprs, Integer classe, Integer tp,  List<Long> documento, Integer numeroInicial, Integer numeroFinal, List<Long> entidade, List<Long> rep, List<Long> departamento,
+                                               List<Long> naturezas, LocalDate[] dataVenc, Integer opcVcto, LocalDate[] dataEmissao, Integer tipoData, LocalDate[] data, String agrup, List<Long> port, List<Long> oper, Integer ordem, Integer opc, LocalDate[] dtLcto) {
 
         String orderSeq = ordem == 0 ? "abb01.abb01num" : ordem == 1 ? opcVcto == 0 ? "daa01.daa01dtVctoN" : "daa01.daa01dtVctoR" : ordem == 2 ? "abe01.abe01codigo" : "";
 
@@ -246,6 +248,7 @@ public class SCF_Documentos extends RelatorioBase{
         }else{
             whereVencimento = dataVenc != null && dataVenc[0] != null && dataVenc[1] != null ? " AND daa01.daa01dtVctoR >= '" + dataVenc[0] + "' AND daa01.daa01dtVctoR <= '" + dataVenc[1] + "'": "";
         }
+        String whereLancamento = dtLcto != null && dtLcto[0] != null && dtLcto[1] != null ? "AND daa01dtLcto >= '" + dtLcto[0] + "' AND daa01dtLcto <= '" + dtLcto[1] + "'" : "";
         String whereEmissao = dataEmissao != null && dataEmissao[0] != null && dataEmissao[1] != null ? " AND abb01.abb01data >= '" + dataEmissao[0] + "' AND abb01.abb01data <= '" + dataEmissao[1] + "'": "";
         String wherePort = port != null && port.size() != 0 ?  "AND abf15.abf15id IN (:idPort) " : "";
         String whereOper = oper != null && oper.size() != 0 ?  "AND abf16.abf16id IN (:idOper) " : "";
@@ -285,7 +288,7 @@ public class SCF_Documentos extends RelatorioBase{
         Parametro parametroOper = oper != null && oper.size() != 0 ? Parametro.criar("idOper", oper) : null;
 
 
-        String sql = " SELECT DISTINCT abb01serie, abe01.abe01nome, abb01parcela, abb01quita, daa01id,abe01.abe01codigo, abe01.abe01na, abb01.abb01num, abb01.abb01parcela, abb01.abb01data,abf01codigo, abf01nome, " +
+        String sql = " SELECT DISTINCT abb01serie, abe01.abe01nome, abb01parcela, abb01quita, daa01id,abe01.abe01codigo, abe01.abe01na, abb01.abb01num, abb01.abb01parcela, abb01.abb01data, " +
                 (agrup == "D" || agrup == "N" || agrup == "NE" || agrup == "DN" ? "abb11.abb11codigo, abb11.abb11nome, abf10.abf10codigo, abf10.abf10nome, " :
                         agrup == "DE" ? "abb11.abb11codigo, abb11.abb11nome, " :  "")+
                 "aah01.aah01codigo, aah01.aah01nome, abe01.abe01ni as cnpj, daa01.daa01dtBaixa AS dtBaixa,  "+
@@ -298,6 +301,7 @@ public class SCF_Documentos extends RelatorioBase{
                         "CASE WHEN daa01.daa01dtBaixa IS NULL THEN COALESCE(cast(daa01json ->> 'desconto' as numeric(18,6)), 0) + daa01011.daa01011valor ELSE COALESCE(cast(daa01json ->> 'descontoq' as numeric(18,6)), 0) + daa01011.daa01011valor end AS liquido " :
                         "CASE WHEN daa01.daa01dtBaixa IS NULL THEN daa01.daa01valor ELSE daa01liquido end AS liquido")+
                 " FROM Daa01 daa01 " +
+                //" INNER JOIN aac01 as aac01 ON daa01gc = aac01id" +
                 " INNER JOIN aac10 as aac10 ON daa01eg = aac10id "+
                 " LEFT JOIN daa0101 as daa0101 on daa0101.daa0101doc = daa01.daa01id "+
                 " LEFT JOIN daa01011 as daa01011 on daa01011.daa01011depto = daa0101.daa0101id "+
@@ -309,7 +313,6 @@ public class SCF_Documentos extends RelatorioBase{
                 " LEFT JOIN Abf10 abf10 on abf10.Abf10id = daa01011.daa01011nat "+
                 " LEFT JOIN Abf15 ON daa01port = abf15id "+
                 " LEFT JOIN Abf16 ON daa01oper = abf16id "+
-                " LEFT JOIN abf01 ON abf01id = daa01banco "+
                 whereIdEmpresa +
                 whereReceberRecebidos +
                 whereReceberPagar +
@@ -326,6 +329,7 @@ public class SCF_Documentos extends RelatorioBase{
                 wherePort +
                 whereOper +
                 whereOpc +
+                whereLancamento +
                 orderBy;
 
         List<TableMap> receberDadosRelatorio = getAcessoAoBanco().buscarListaDeTableMap(sql, paramEmpresa, paramDepartamento, paramDocumento, paramNaturezas, paramEntidade, paramRep, paramnumeroInicial, paramnumeroFinal, paramOpc, parametroPort, parametroOper);
@@ -347,7 +351,7 @@ public class SCF_Documentos extends RelatorioBase{
                 "Documentos Pagos";
                 break;
             case 4:
-                "Documentos a Receber e Recebidos";
+                "Docmuentos a Receber e Recebidos";
                 break;
             case 5:
                 "Documentos a Pagar e Pagos";

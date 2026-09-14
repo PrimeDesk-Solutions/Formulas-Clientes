@@ -170,15 +170,15 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
                 orderBy
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroDeptos, parametroNat,
-                                                        parametroDtInicial, parametroDtFinal, parametroEmpresa, parametroTipoDoc, parametroEntidades, parametroContas)
+                parametroDtInicial, parametroDtFinal, parametroEmpresa, parametroTipoDoc, parametroEntidades, parametroContas)
 
     }
     private List<TableMap> buscarContasCorrentesLctos(List<Long> idLcto){
         String sql = "SELECT dab1002lct, STRING_AGG(dab01codigo, ',') AS codCC, STRING_AGG(dab01nome, ',') AS nomeCC " +
-                        "FROM dab1002 "+
-                        "INNER JOIN dab01 ON dab01id = dab1002cc "+
-                        "WHERE dab1002lct IN (:idLcto) "+
-                        "GROUP BY dab1002lct"
+                "FROM dab1002 "+
+                "INNER JOIN dab01 ON dab01id = dab1002cc "+
+                "WHERE dab1002lct IN (:idLcto) "+
+                "GROUP BY dab1002lct"
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idLcto", idLcto));
     }

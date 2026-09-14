@@ -372,5 +372,3 @@ public class SCF_ResumoLancamentosNaturezas extends RelatorioBase {
         return resultado.findAll{it != null}
     }
 }
-//meta-sis-eyJkZXNjciI6IlNDRiAtIFJlc3VtbyBkb3MgTGFuw6dhbWVudG9zIFBvciBOYXR1cmV6YSIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
-//meta-sis-eyJkZXNjciI6IlNDRiAtIFJlc3VtbyBkb3MgTGFuw6dhbWVudG9zIHBvciBOYXR1cmV6YSIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

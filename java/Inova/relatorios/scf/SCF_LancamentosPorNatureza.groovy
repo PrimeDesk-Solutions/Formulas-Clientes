@@ -88,8 +88,8 @@ public class SCF_LancamentosPorNatureza extends RelatorioBase {
 
         String sql = "SELECT DISTINCT dab10id, dab01codigo AS codCC, dab01nome AS nomeCC, abf10codigo AS codNatureza,abf10nome AS nomeNatureza, " +
                 " dab10data AS dtLancamento,abe01codigo AS codEnt, abe01na AS naEnt, aah01codigo AS codTipoDoc, aah01nome AS descrTipoDoc, " +
-                " abb01num AS numDoc, abb01parcela AS parcela, abb01quita AS quita, dab10historico, " +
-                " CASE WHEN dab10mov = 0 THEN 'D' ELSE 'C' END AS movimentacao, dab10011valor AS valorDoc, dab10valor AS valorPago, abb01data " +
+                " abb01num AS numDoc, abb01parcela AS parcela, abb01quita AS quita, " +
+                " CASE WHEN dab10mov = 0 THEN '0-Entrada' ELSE '1-Saída' END AS movimentacao, dab10011valor AS valorDoc, dab10valor AS valorPago, abb01data " +
                 " FROM dab10 " +
                 " LEFT JOIN dab1002 ON dab1002lct = dab10id " +
                 " LEFT JOIN dab01 ON dab01id = dab1002cc " +
@@ -124,3 +124,4 @@ public class SCF_LancamentosPorNatureza extends RelatorioBase {
                 .getList(ColumnType.LONG);
     }
 }
+//meta-sis-eyJkZXNjciI6IlNDRiAtIExhbsOnYW1lbnRvcyBwb3IgTmF0dXJlemEiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
