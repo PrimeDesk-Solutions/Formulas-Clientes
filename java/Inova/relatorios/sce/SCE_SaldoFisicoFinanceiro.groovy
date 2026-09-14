@@ -610,3 +610,4 @@ public class SCE_SaldoFisicoFinanceiro extends RelatorioBase {
         return getAcessoAoBanco().obterBigDecimal(sql, Parametro.criar("lote", lote), Parametro.criar("idItem", idItem))
     }
 }
+//meta-sis-eyJkZXNjciI6IlNDRSAtIFNhbGRvIEbDrXNpY28gZSBGaW5hbmNlaXJvIiwidGlwbyI6InJlbGF0b3JpbyJ9

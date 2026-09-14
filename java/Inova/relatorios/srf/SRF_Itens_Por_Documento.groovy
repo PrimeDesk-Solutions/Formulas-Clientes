@@ -124,11 +124,8 @@ public class SRF_Itens_Por_Documento extends RelatorioBase {
         List<TableMap> dadosRelatorio = new ArrayList();
         List<TableMap> listDevolucoesGeral = new ArrayList();
         List<TableMap> listDevolucoesAjustado = new ArrayList<>()
-        def idControle = null;
         def idControleDevolucao = null;
-        TableMap dadosTmp = new TableMap();
         TableMap dadosTmpDev = new TableMap()
-        TableMap valoresTotais = new TableMap();
         TableMap valoresTotaisDevolucao = new TableMap()
 
 //		 Agrupa as devoluções
@@ -243,7 +240,7 @@ public class SRF_Itens_Por_Documento extends RelatorioBase {
         Parametro parametroMPS = mps.size() > 0 && !mps.contains(-1) ? Parametro.criar("mps", mps) : null;
 
         String sql = "SELECT aah01codigo, abb01num, abb01data, eaa01esdata, ent.abe01codigo as codEnt,  " +
-                "ent.abe01na as naEnt,eaa0103json, eaa0103id, " +
+                "ent.abe01na as naEnt,eaa0103json, eaa0103id, aaj15codigo, " +
                 "CASE WHEN abm01tipo = 0 THEN 'M'  " +
                 "WHEN abm01tipo = 1 THEN 'P'  " +
                 "WHEN abm01tipo = 2 THEN 'S'  " +
@@ -261,6 +258,7 @@ public class SRF_Itens_Por_Documento extends RelatorioBase {
                 "LEFT JOIN abe30 on abe30id = eaa01cp  " +
                 "LEFT JOIN abe40 on abe40id = eaa01tp  " +
                 "LEFT JOIN abg01 on abg01id = eaa0103ncm  " +
+                "LEFT JOIN aaj15 ON aaj15id = eaa0103cfop " +
                 "WHERE eaa01clasDoc = " + Eaa01.CLASDOC_SRF + " " +
                 "AND eaa01cancData IS NULL " +
                 "AND eaa01nfestat <> 5 " +
@@ -375,7 +373,4 @@ public class SRF_Itens_Por_Documento extends RelatorioBase {
 
     }
 }
-// Formula corrigida 24/10/2024
-//meta-sis-eyJkZXNjciI6IlNSRiBJdGVucyBQb3IgRG9jdW1lbnRvIiwidGlwbyI6InJlbGF0b3JpbyJ9
-//meta-sis-eyJkZXNjciI6IlNSRiAtIEl0ZW5zIFBvciBEb2N1bWVudG8iLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlNSRiAtIEl0ZW5zIFBvciBEb2N1bWVudG8iLCJ0aXBvIjoicmVsYXRvcmlvIn0=
