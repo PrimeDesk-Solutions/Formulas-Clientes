@@ -451,22 +451,23 @@ public class DocPadraoSaida extends FormulaBase {
         }
     }
     private void calcularIPI(){
-        jsonEaa0103.put("bc_ipi", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_deste") + jsonEaa0103.getBigDecimal_Zero("seguro") + jsonEaa0103.getBigDecimal_Zero("outras_despesas"));
-        jsonEaa0103.put("bc_ipi", jsonEaa0103.getBigDecimal_Zero("bc_ipi").round(2));
-
         if(jsonEaa0103.getBigDecimal_Zero("aliq_ipi") == 0 && eaa0103.eaa0103ncm != null && abg01.abg01txIpi_Zero > 0) jsonEaa0103.put("aliq_ipi", abg01.abg01txIpi_Zero);
 
-        if(jsonEaa0103.getBigDecimal_Zero("aliq_ipi") > 0){
+        if(jsonEaa0103.getBigDecimal_Zero("aliq_ipi") != -1 && jsonEaa0103.getBigDecimal_Zero("aliq_ipi") > 0){
+            jsonEaa0103.put("bc_ipi", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_deste") + jsonEaa0103.getBigDecimal_Zero("seguro") + jsonEaa0103.getBigDecimal_Zero("outras_despesas"));
+            jsonEaa0103.put("bc_ipi", jsonEaa0103.getBigDecimal_Zero("bc_ipi").round(2));
+
             jsonEaa0103.put("ipi", jsonEaa0103.getBigDecimal_Zero("bc_ipi") * jsonEaa0103.getBigDecimal_Zero("aliq_ipi") / 100);
             jsonEaa0103.put("ipi", jsonEaa0103.getBigDecimal_Zero("ipi").round(2));
+
+            jsonEaa0103.put("ipi_outras", new BigDecimal(0));
         }else{
-            jsonEaa0103.put("bc_ipi", BigDecimal.ZERO);
-            jsonEaa0103.put("aliq_ipi", BigDecimal.ZERO);
-            jsonEaa0103.put("ipi", BigDecimal.ZERO);
+            jsonEaa0103.put("bc_ipi", new BigDecimal(0));
+            jsonEaa0103.put("aliq_ipi", new BigDecimal(0));
+            jsonEaa0103.put("ipi", new BigDecimal(0));
+            jsonEaa0103.put("ipi_outras", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_deste") + jsonEaa0103.getBigDecimal_Zero("seguro") + jsonEaa0103.getBigDecimal_Zero("outras_despesas"));
+
         }
-
-        if(jsonEaa0103.getBigDecimal_Zero("aliq_ipi") == 0) jsonEaa0103.put("ipi_outras", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_deste") + jsonEaa0103.getBigDecimal_Zero("seguro") + jsonEaa0103.getBigDecimal_Zero("outras_despesas"));
-
     }
     private void calcularICMS(Integer contribICMS) {
         Integer vlrReducao = 0;

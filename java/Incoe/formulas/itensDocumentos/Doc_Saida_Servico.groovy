@@ -306,7 +306,7 @@ public class Doc_Saida_Servico extends FormulaBase {
         // Aliquota
         if(jsonEaa0103.getBigDecimal_Zero("aliq_pis") == 0) jsonEaa0103.put("aliq_pis", jsonAbm0101.getBigDecimal_Zero("aliq_pis"));
 
-        if (jsonAbm0101.getBigDecimal_Zero("aliq_pis") > 0) {
+        if (jsonEaa0103.getBigDecimal_Zero("aliq_pis") > 0) {
             // BC PIS
             jsonEaa0103.put("bc_pis", jsonEaa0103.getBigDecimal_Zero("total_servicos"));
 
@@ -326,7 +326,7 @@ public class Doc_Saida_Servico extends FormulaBase {
         // Aliquota
         if(jsonEaa0103.getBigDecimal_Zero("aliq_cofins") == 0) jsonEaa0103.put("aliq_cofins", jsonAbm0101.getBigDecimal_Zero("aliq_cofins"));
 
-        if (jsonAbm0101.getBigDecimal_Zero("aliq_cofins") > 0) {
+        if (jsonEaa0103.getBigDecimal_Zero("aliq_cofins") > 0) {
             // BC PIS
             jsonEaa0103.put("bc_cofins", jsonEaa0103.getBigDecimal_Zero("total_servicos"));
 
@@ -342,12 +342,19 @@ public class Doc_Saida_Servico extends FormulaBase {
 
     }
     private void calcularCargaTributaria(){
-        jsonEaa0103.put("bc_carga_trib", eaa0103.eaa0103totDoc);
-
         if(jsonEaa0103.getBigDecimal_Zero("aliq_carga_trib") == 0) jsonEaa0103.put("aliq_carga_trib", jsonAbm0101.getBigDecimal_Zero("aliq_carga_trib"));
 
-        jsonEaa0103.put("carga_trib", (jsonEaa0103.getBigDecimal_Zero("bc_carga_trib") * jsonEaa0103.getBigDecimal_Zero("aliq_carga_trib")) / 100);
-        jsonEaa0103.put("carga_trib", jsonEaa0103.getBigDecimal_Zero("carga_trib").round(2));
+        if(jsonEaa0103.getBigDecimal_Zero("aliq_carga_trib") > 0) {
+            jsonEaa0103.put("bc_carga_trib", eaa0103.eaa0103totDoc);
+            jsonEaa0103.put("carga_trib", (jsonEaa0103.getBigDecimal_Zero("bc_carga_trib") * jsonEaa0103.getBigDecimal_Zero("aliq_carga_trib")) / 100);
+            jsonEaa0103.put("carga_trib", jsonEaa0103.getBigDecimal_Zero("carga_trib").round(2));
+
+        } else {
+            jsonEaa0103.put("bc_carga_trib", new BigDecimal(0));
+            jsonEaa0103.put("aliq_carga_trib", new BigDecimal(0));
+            jsonEaa0103.put("carga_trib", new BigDecimal(0));
+        }
+
     }
     private void calcularCBSIBS() {
         // *********************************************
