@@ -428,7 +428,7 @@ public class SRF_DocPadraoSaidaST extends FormulaBase {
                     jsonEaa0103.getBigDecimal_Zero("seguro") -
                     jsonEaa0103.getBigDecimal_Zero("desconto"));
 
-            if(contribICMS) jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms") + jsonEaa0103.getBigDecimal_Zero("ipi"))
+            if(!contribICMS) jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms") + jsonEaa0103.getBigDecimal_Zero("ipi"))
 
             jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms").round(2));
 

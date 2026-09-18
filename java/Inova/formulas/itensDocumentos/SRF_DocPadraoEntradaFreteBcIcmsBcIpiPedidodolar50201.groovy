@@ -298,12 +298,15 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpiPedidodolar50201 extends Formul
 
 
             // Novo Unitário
-            if(jsonEaa0103.getInteger("calculou_unitario")){
+            if(jsonEaa0103.getInteger("aplicou") == 0){
                 jsonEaa0103.put("unit_convertido", eaa0103.eaa0103unit);
                 eaa0103.eaa0103unit = eaa0103.eaa0103unit * jsonEaa0103.getBigDecimal_Zero("cotacao_dolar")
+            }else{
+                eaa0103.eaa0103unit == eaa0103.eaa0103unit.round(6);
+                jsonEaa0103.put("unit_convertido", jsonEaa0103.getBigDecimal_Zero("unit_convertido").round(2));
             }
 
-            jsonEaa0103.put("calculou_unitario", 1);
+            jsonEaa0103.put("aplicou", 1);
 
             // Total do item
             eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
@@ -871,9 +874,3 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpiPedidodolar50201 extends Formul
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

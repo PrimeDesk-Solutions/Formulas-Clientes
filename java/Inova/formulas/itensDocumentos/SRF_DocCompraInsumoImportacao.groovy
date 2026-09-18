@@ -282,14 +282,6 @@ public class SRF_DocCompraInsumoImportacao extends FormulaBase {
             if (abm1301.abm1301fcCU_Zero == 0) throw new ValidacaoException("O item " + abm01.abm01codigo + " - " + abm01.abm01descr + " encontra-se sem fator de conversão de uso. ")
             eaa0103.eaa0103qtUso = (eaa0103.eaa0103qtComl * abm1301.abm1301fcCU_Zero).round(3);
 
-            // Converte Qt.Documento para Volume
-            if (jsonEaa0103.getBigDecimal_Zero("volumes") >= 0) {
-                jsonEaa0103.put("volumes", eaa0103.eaa0103qtComl * abm13.abm13fcVW);
-                BigDecimal volume = jsonEaa0103.getBigDecimal_Zero("volumes");
-                BigDecimal volumes = new BigDecimal(volume).setScale(0, BigDecimal.ROUND_UP);
-                jsonEaa0103.put("volumes", volumes);
-            }
-
             // Peso Bruto
             if(jsonEaa0103.getBigDecimal_Zero("peso_bruto") == 0) jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto).round(3));
 
@@ -327,9 +319,9 @@ public class SRF_DocCompraInsumoImportacao extends FormulaBase {
 
             calculaCOFINS();
 
-            jsonEaa0103.put("outras_despesas", jsonEaa0103.getBigDecimal_Zero("pis") + jsonEaa0103.getBigDecimal_Zero("cofins") + jsonEaa0103.getBigDecimal_Zero("valor_siscomex"));
+            jsonEaa0103.put("outras_despesas", jsonEaa0103.getBigDecimal_Zero("pis") + jsonEaa0103.getBigDecimal_Zero("cofins") + jsonEaa0103.getBigDecimal_Zero("siscomex_valor"));
 
-            jsonEaa0103.put("desp_acess_rat", jsonEaa0103.getBigDecimal_Zero("pis") + jsonEaa0103.getBigDecimal_Zero("cofins") + jsonEaa0103.getBigDecimal_Zero("valor_siscomex"));
+            jsonEaa0103.put("desp_acess_rat", jsonEaa0103.getBigDecimal_Zero("pis") + jsonEaa0103.getBigDecimal_Zero("cofins") + jsonEaa0103.getBigDecimal_Zero("siscomex_valor"));
 
             calcularICMS(contribICMS);
 
@@ -345,7 +337,7 @@ public class SRF_DocCompraInsumoImportacao extends FormulaBase {
                                         jsonEaa0103.getBigDecimal_Zero("pis") +
                                         jsonEaa0103.getBigDecimal_Zero("cofins") +
                                         jsonEaa0103.getBigDecimal_Zero("imposto_importacao") +
-                                        jsonEaa0103.getBigDecimal_Zero("valor_siscomex") -
+                                        jsonEaa0103.getBigDecimal_Zero("siscomex_valor") -
                                         jsonEaa0103.getBigDecimal_Zero("desconto");
 
             }else{
@@ -367,6 +359,8 @@ public class SRF_DocCompraInsumoImportacao extends FormulaBase {
             }
 
             eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", "100"));
+
+            eaa0103.eaa0103totFinanc = eaa0103.eaa0103total;
 
             calcularCBSIBS();
 
@@ -455,7 +449,7 @@ public class SRF_DocCompraInsumoImportacao extends FormulaBase {
                 jsonEaa0103.getBigDecimal_Zero("total_servico") +
                 jsonEaa0103.getBigDecimal_Zero("frete_dest") +
                 jsonEaa0103.getBigDecimal_Zero("seguro") +
-                jsonEaa0103.getBigDecimal_Zero("outras")) -
+                jsonEaa0103.getBigDecimal_Zero("outras_despesas")) -
                 (jsonEaa0103.getBigDecimal_Zero("desconto") -
                         jsonEaa0103.getBigDecimal_Zero("pis") -
                         jsonEaa0103.getBigDecimal_Zero("cofins") -
@@ -470,7 +464,7 @@ public class SRF_DocCompraInsumoImportacao extends FormulaBase {
                 jsonEaa0103.getBigDecimal_Zero("total_servico") +
                 jsonEaa0103.getBigDecimal_Zero("frete_dest") +
                 jsonEaa0103.getBigDecimal_Zero("seguro") +
-                jsonEaa0103.getBigDecimal_Zero("outras") -
+                jsonEaa0103.getBigDecimal_Zero("outras_despesas") -
                 jsonEaa0103.getBigDecimal_Zero("desconto") -
                 jsonEaa0103.getBigDecimal_Zero("pis") -
                 jsonEaa0103.getBigDecimal_Zero("cofins") -

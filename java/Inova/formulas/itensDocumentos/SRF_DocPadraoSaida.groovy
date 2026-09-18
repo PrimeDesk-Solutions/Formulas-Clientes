@@ -439,7 +439,9 @@ public class SRF_DocPadraoSaida extends FormulaBase {
     private void calcularICMS(Integer contribICMS) {
         Integer vlrReducao = 0;
 
-        if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
+        if(jsonEaa0103.getBigDecimal_Zero("aliq_icms") == 0) jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
+
+        if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonEaa0103.getBigDecimal_Zero("aliq_icms") > 0) {
             // BC ICMS
             jsonEaa0103.put("bc_icms", eaa0103.eaa0103total +
                     jsonEaa0103.getBigDecimal_Zero("frete_dest") +
@@ -460,11 +462,6 @@ public class SRF_DocPadraoSaida extends FormulaBase {
 
             // Zerando icms outras quando tiver valor na aliq icms
             jsonEaa0103.put("icms_outras", new BigDecimal(0));
-
-            // Aliquota de ICMS
-            if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
-                jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
-            }
 
             // Calculo ICMS
             jsonEaa0103.put("icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") * (jsonEaa0103.getBigDecimal_Zero("aliq_icms") / 100)).round(2));

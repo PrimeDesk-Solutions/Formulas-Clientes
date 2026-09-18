@@ -299,11 +299,13 @@ public class SRF_DocCompraInsumoImportacaoFrete extends FormulaBase {
 
 
             // Novo Unitário
-            if(jsonEaa0103.getInteger("calculou_unitario")){
-                eaa0103.eaa0103unit = eaa0103.eaa0103unit * jsonEaa0103.getBigDecimal_Zero("cotacao_dolar")
+            if(jsonEaa0103.getBigDecimal_Zero("aplicou") == 0){
+                eaa0103.eaa0103unit = (eaa0103.eaa0103unit * jsonEaa0103.getBigDecimal_Zero("cotacao_dolar")).round(6);
+            }else{
+                eaa0103.eaa0103unit = eaa0103.eaa0103unit.round(6);
             }
 
-            jsonEaa0103.put("calculou_unitario", 1);
+            jsonEaa0103.put("aplicou", 1);
 
             // Quantidade Tributável
             jsonEaa0103.put("qtd_tributavel", eaa0103.eaa0103qtComl_Zero);
@@ -327,9 +329,9 @@ public class SRF_DocCompraInsumoImportacaoFrete extends FormulaBase {
 
             calculaCOFINS();
 
-            jsonEaa0103.put("outras_despesas", jsonEaa0103.getBigDecimal_Zero("pis") + jsonEaa0103.getBigDecimal_Zero("cofins") + jsonEaa0103.getBigDecimal_Zero("valor_siscomex"));
+            jsonEaa0103.put("outras_despesas", jsonEaa0103.getBigDecimal_Zero("pis") + jsonEaa0103.getBigDecimal_Zero("cofins") + jsonEaa0103.getBigDecimal_Zero("siscomex_valor"));
 
-            jsonEaa0103.put("desp_acess_rat", jsonEaa0103.getBigDecimal_Zero("pis") + jsonEaa0103.getBigDecimal_Zero("cofins") + jsonEaa0103.getBigDecimal_Zero("valor_siscomex"));
+            jsonEaa0103.put("desp_acess_rat", jsonEaa0103.getBigDecimal_Zero("pis") + jsonEaa0103.getBigDecimal_Zero("cofins") + jsonEaa0103.getBigDecimal_Zero("siscomex_valor"));
 
             calcularICMS(contribICMS);
 
