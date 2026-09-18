@@ -87,7 +87,7 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
         campos.put("5", campoLivre5 != null ? campoLivre5 : campoFixo5 != null ? campoFixo5 : null);
         campos.put("6", campoLivre6 != null ? campoLivre6 : campoFixo6 != null ? campoFixo6 : null);
 
-        List<TableMap> dados = buscarDadosRelatorio(dataEmissao, idEstados, idItens, idCategoria, tipoDoc, pcd);
+        List<TableMap> dados = buscarDadosRelatorio(dataEmissao, idEstados, idItens, idCategoria, tipoDoc, pcd, analitico);
 
         if(dados == null || dados.size() == 0) interromper("Não foram encontrados registros para exibição.")
         List<TableMap> dadosRelatorio = new ArrayList<>();
@@ -110,6 +110,8 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
             dado.putAll(dado.getTableMap("eaa0103json"));
             dado.remove("eaa0103json");
 
+            if(impressaoQuilo) converterValores(dado, fatorQuilo, campos);
+
             if(idcontrole == null){
                 dadosTmp.putAll(dado);
                 idcontrole = analitico ? dado.getString("eaa01id") : dado.getString("categoria") + dado.getString("uf");
@@ -120,7 +122,7 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
                 TableMap tmp = new TableMap();
                 tmp.putAll(dadosTmp);
                 tmp.putAll(valoresTotais);
-                comporValores(tmp, campos, fatorQuilo, impressaoQuilo);
+                comporValores(tmp, campos);
                 dadosRelatorio.add(tmp);
 
                 dadosTmp = new TableMap();
@@ -134,7 +136,7 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
         TableMap tmp = new TableMap();
         tmp.putAll(dadosTmp);
         tmp.putAll(valoresTotais);
-        comporValores(tmp, campos, tmp.getBigDecimal_Zero("fatorQuilo"), impressaoQuilo);
+        comporValores(tmp, campos);
         dadosRelatorio.add(tmp);
 
         if(impressao == 0 && !analitico){
@@ -149,7 +151,7 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
 
     }
 
-    private List<TableMap> buscarDadosRelatorio(LocalDate[] dataEmissao, List<Long> idEstados, List<Long> idItens, List<Long> idCategoria, List<Long> tipoDoc, List<Long> pcd){
+    private List<TableMap> buscarDadosRelatorio(LocalDate[] dataEmissao, List<Long> idEstados, List<Long> idItens, List<Long> idCategoria, List<Long> tipoDoc, List<Long> pcd, boolean analitico){
         String whereCriterio = "WHERE aba30nome = 'SIF' ";
         String whereClasDoc = "AND eaa01clasDoc = 1 ";
         String whereEsMov = "AND eaa01esMov = 0 ";
@@ -160,7 +162,7 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
         String whereCategoria = idCategoria != null && idCategoria.size() > 0 ? "AND aba3001id IN (:idCategoria) " : "";
         String whereCancData = "AND eaa01cancData IS NULL ";
         String whereMovEst = "AND eaa01iSce = 0 AND abd01isce = 0 ";
-        String orderBy = "ORDER BY aba3001descr, aag02uf, abb01num ";
+        String orderBy = analitico ? "ORDER BY eaa01id" : "ORDER BY aba3001descr, aag02uf, abb01num ";
         String wherePcd = pcd != null && pcd.size() > 0 ? " AND abd01id IN (:pcd) " : "";
 
         Parametro parametroDtEmissaoIni = dataEmissao != null ? Parametro.criar("dtEmissaoIni", dataEmissao[0]) : null;
@@ -203,6 +205,14 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroItens, parametroEstados, parametroTipoDoc, parametroCategoria, parametroPCD);
     }
+    private void converterValores(TableMap dado, BigDecimal fatorQuilo, Map<String, String> campos){
+        for(campo in campos){
+            if(campo != null){
+                String nomeCampo = buscarNomeCampoFixo(campo.value) != null ? buscarNomeCampoFixo(campo.value) : campo.value;
+                dado.put(nomeCampo, dado.getBigDecimal_Zero(nomeCampo) * fatorQuilo);
+            }
+        }
+    }
     private void somarValores(TableMap valoresDocumento, TableMap valoresTotais, Map<String, String> campos){
         for(campo in campos){
             if(campo != null){
@@ -220,26 +230,17 @@ public class SRF_Devolucoes_Por_Categoria_Estado_SIF extends RelatorioBase {
             }
         }
     }
-    private void comporValores(TableMap dado, HashMap<String, String> campos, BigDecimal fatorQuilo, Boolean impressaoQuilo){
+    private void comporValores(TableMap dado, HashMap<String, String> campos){
         for(campo in campos){
             if(campo.value != null){
                 String nomeCampo = buscarNomeCampoFixo(campo.value);
                 if(nomeCampo != null){
                     dado.put("nomeCampo" + campo.key, campo.value);
-                    if(impressaoQuilo){
-                        dado.put("valorCampo" + campo.key, dado.getBigDecimal_Zero(nomeCampo) * fatorQuilo);
-                    }else{
-                        dado.put("valorCampo" + campo.key, dado.getBigDecimal_Zero(nomeCampo))
-                    }
+                    dado.put("valorCampo" + campo.key, dado.getBigDecimal_Zero(nomeCampo))
                 }else{
                     nomeCampo = buscarNomeCampoLivre(campo.value);
                     dado.put("nomeCampo" + campo.key, nomeCampo);
-
-                    if(impressaoQuilo){
-                        dado.put("valorCampo" + campo.key, dado.getBigDecimal_Zero(campo.value) * fatorQuilo)
-                    }else{
-                        dado.put("valorCampo" + campo.key, dado.getBigDecimal_Zero(campo.value))
-                    }
+                    dado.put("valorCampo" + campo.key, dado.getBigDecimal_Zero(campo.value));
                 }
             }
         }
