@@ -166,38 +166,38 @@ public class SRF_Documentos_Por_Transportadoras extends RelatorioBase {
         Parametro parametroRedespacho = idRedespacho != null && idRedespacho.size() > 0 ? Parametro.criar("idRedespacho", idRedespacho) : null;
         Parametro parametroEmpresa = Parametro.criar("idEmpresa", idEmpresa);
 
-        String campo1 = campoLivre1 != null ? "SUM(CAST(eaa0103json ->> '" + campoLivre1 + "'" + " as NUMERIC(18,2))) AS " + campoLivre1 + ",  " : "";
-        String campo2 = campoLivre2 != null ? "SUM(CAST(eaa0103json ->> '" + campoLivre2 + "'" + " as NUMERIC(18,2))) AS " + campoLivre2 + ", " : "";
-        String campo3 = campoLivre3 != null ? "SUM(CAST(eaa0103json ->> '" + campoLivre3 + "'" + " as NUMERIC(18,2))) AS " + campoLivre3 + ", " : "";
-        String campo4 = campoLivre4 != null ? "SUM(CAST(eaa0103json ->> '" + campoLivre4 + "'" + " as NUMERIC(18,2))) AS " + campoLivre4 + ", " : "";
-        String campo5 = campoLivre5 != null ? "SUM(CAST(eaa0103json ->> '" + campoLivre5 + "'" + " as NUMERIC(18,2))) AS " + campoLivre5 + ", " : "";
-        String campo6 = campoLivre6 != null ? "SUM(CAST(eaa0103json ->> '" + campoLivre6 + "'" + " as NUMERIC(18,2))) AS " + campoLivre6 + ", " : "";
+        String campo1 = campoLivre1 != null ? "SUM(CAST(eaa0103json ->> '" + campoLivre1 + "'" + " AS NUMERIC(18,2))) AS " + campoLivre1 + ",  " : "";
+        String campo2 = campoLivre2 != null ? "SUM(CAST(eaa0103json ->> '" + campoLivre2 + "'" + " AS NUMERIC(18,2))) AS " + campoLivre2 + ", " : "";
+        String campo3 = campoLivre3 != null ? "SUM(CAST(eaa0103json ->> '" + campoLivre3 + "'" + " AS NUMERIC(18,2))) AS " + campoLivre3 + ", " : "";
+        String campo4 = campoLivre4 != null ? "SUM(CAST(eaa0103json ->> '" + campoLivre4 + "'" + " AS NUMERIC(18,2))) AS " + campoLivre4 + ", " : "";
+        String campo5 = campoLivre5 != null ? "SUM(CAST(eaa0103json ->> '" + campoLivre5 + "'" + " AS NUMERIC(18,2))) AS " + campoLivre5 + ", " : "";
+        String campo6 = campoLivre6 != null ? "SUM(CAST(eaa0103json ->> '" + campoLivre6 + "'" + " AS NUMERIC(18,2))) AS " + campoLivre6 + ", " : "";
 
 
-        String sql = "select " + campo1 + campo2 + campo3 + campo4 + campo5 + campo6 + "aag02uf as estado, aag0201nome as municipio, aah20placa as placa, doc.abb01num, doc.abb01data, eaa01esdata, ent.abe01codigo as codEnt, ent.abe01na as naEnt, " +
-                "aah01codigo,eaa01json, desp.abe01codigo as codDespacho, desp.abe01na as nomeDespacho, redesp.abe01codigo as codRedespacho, redesp.abe01na as nomeRedespacho, " +
-                "carga.abb01num as numCarga, " +
-                "sum(eaa0103qtuso) as eaa0103qtuso, sum(eaa0103qtComl) as eaa0103qtcoml, sum(eaa0103unit) as eaa0103unit,  sum(eaa0103unit) as eaa0103unit, " +
-                "sum(eaa0103total) as eaa0103total, sum(eaa0103totdoc) as eaa0103totdoc, sum(eaa0103totfinanc) as eaa0103totfinanc " +
-                "from eaa01 " +
-                "inner join abb01 as doc on abb01id = eaa01central " +
-                "inner join abe01 as ent on ent.abe01id = abb01ent " +
-                "inner join eaa0102 on eaa0102doc = eaa01id " +
-                "inner join abe01 as desp on desp.abe01id = eaa0102despacho " +
-                "left join abe01 as redesp on redesp.abe01id = eaa0102redespacho " +
-                "inner join eaa0103 on eaa0103doc = eaa01id " +
-                "inner join aah01 on aah01id = abb01tipo " +
-                "inner join abe0101 on abe0101ent = ent.abe01id and abe0101principal = 1 " +
-                "inner join aag0201 on aag0201id = abe0101municipio  " +
-                "inner join aag02 on aag02id = aag0201uf  " +
-                "inner join abd01 on abd01id = eaa01pcd " +
-                "left join aah20 on aah20id = eaa0102veiculo " +
-                "left join bfc1002 on doc.abb01id = bfc1002central " +
-                "left join bfc10 on bfc1002carga = bfc10id " +
-                "left join abb01 as carga on bfc10central = carga.abb01id " +
-                "where eaa01clasDoc = " + Eaa01.CLASDOC_SRF +
-                " and eaa01cancData is null " +
-                " and eaa01nfestat <> 5 " +
+        String sql = "SELECT " + campo1 + campo2 + campo3 + campo4 + campo5 + campo6 + "aag02uf AS estado, aag0201nome AS municipio, aah20placa AS placa, doc.abb01num, doc.abb01data, eaa01esdata, ent.abe01codigo AS codEnt, ent.abe01na AS naEnt, " +
+                "aah01codigo,eaa01json, desp.abe01codigo AS codDespacho, desp.abe01na AS nomeDespacho, redesp.abe01codigo AS codRedespacho, redesp.abe01na AS nomeRedespacho, " +
+                "carga.abb01num AS numCarga, " +
+                "SUM(eaa0103qtuso) AS eaa0103qtuso, SUM(eaa0103qtComl) AS eaa0103qtcoml, SUM(eaa0103unit) AS eaa0103unit,  SUM(eaa0103unit) AS eaa0103unit, " +
+                "SUM(eaa0103total) AS eaa0103total, SUM(eaa0103totdoc) AS eaa0103totdoc, SUM(eaa0103totfinanc) AS eaa0103totfinanc " +
+                "FROM eaa01 " +
+                "INNER JOIN abb01 AS doc ON abb01id = eaa01central " +
+                "INNER JOIN abe01 AS ent ON ent.abe01id = abb01ent " +
+                "INNER JOIN eaa0102 ON eaa0102doc = eaa01id " +
+                "INNER JOIN abe01 AS desp ON desp.abe01id = eaa0102despacho " +
+                "LEFT JOIN abe01 AS redesp ON redesp.abe01id = eaa0102redespacho " +
+                "INNER JOIN eaa0103 ON eaa0103doc = eaa01id " +
+                "INNER JOIN aah01 ON aah01id = abb01tipo " +
+                "INNER JOIN abe0101 ON abe0101ent = ent.abe01id AND abe0101principal = 1 " +
+                "INNER JOIN aag0201 ON aag0201id = abe0101municipio  " +
+                "INNER JOIN aag02 ON aag02id = aag0201uf  " +
+                "INNER JOIN abd01 ON abd01id = eaa01pcd " +
+                "LEFT JOIN aah20 ON aah20id = eaa0102veiculo " +
+                "LEFT JOIN bfc1002 ON doc.abb01id = bfc1002central " +
+                "LEFT JOIN bfc10 ON bfc1002carga = bfc10id " +
+                "LEFT JOIN abb01 AS carga on bfc10central = carga.abb01id " +
+                "WHERE eaa01clasDoc = " + Eaa01.CLASDOC_SRF +
+                " AND eaa01cancData IS NULL " +
+                " AND eaa01nfestat <> 5 " +
                 whereEmpresa +
                 whereNumIni +
                 whereNumFin +
@@ -209,9 +209,9 @@ public class SRF_Documentos_Por_Transportadoras extends RelatorioBase {
                 whereES +
                 whereDespacho +
                 whereRedespacho +
-                " group by aag02uf,aag0201nome,aah20placa,eaa01id, doc.abb01num, doc.abb01data, eaa01esdata, ent.abe01codigo, " +
+                " GROUP BY aag02uf,aag0201nome,aah20placa,eaa01id, doc.abb01num, doc.abb01data, eaa01esdata, ent.abe01codigo, " +
                 "ent.abe01na, desp.abe01codigo, redesp.abe01codigo,desp.abe01na, redesp.abe01na, aah01codigo, carga.abb01num " +
-                "order by desp.abe01codigo, doc.abb01num";
+                "ORDER BY desp.abe01codigo, doc.abb01num";
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroEmpresa, parametroNumIni, parametroNumFin, parametroTipoDoc, parametroPcd, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroDtEntradaSaidaIni, parametroDtEntradaSaidaFin, parametroEntidade,
                 parametroDespacho, parametroRedespacho);
