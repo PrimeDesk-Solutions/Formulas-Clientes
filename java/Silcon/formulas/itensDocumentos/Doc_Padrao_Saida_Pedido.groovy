@@ -343,9 +343,9 @@ public class Doc_Padrao_Saida_Pedido extends FormulaBase {
             BigDecimal descUnit = BigDecimal.ZERO;
             if(jsonEaa0103.getBigDecimal_Zero("desconto_interno") != jsonEaa0103.getBigDecimal_Zero("desconto") || jsonEaa0103.getBigDecimal_Zero("unitario_original") != eaa0103.eaa0103unit){
                 descUnit = (jsonEaa0103.getBigDecimal_Zero("desconto") / eaa0103.eaa0103qtComl_Zero).round(6);
-                eaa0103.eaa0103unit = (eaa0103.eaa0103unit - descUnit).round(6);
+                eaa0103.eaa0103unit = (eaa0103.eaa0103unit - descUnit).round(2);
             }else{
-                eaa0103.eaa0103unit = (eaa0103.eaa0103unit - descUnit).round(6);
+                eaa0103.eaa0103unit = (eaa0103.eaa0103unit - descUnit).round(2);
             }
 
             jsonEaa0103.put("desconto_interno", jsonEaa0103.getBigDecimal_Zero("desconto"));
