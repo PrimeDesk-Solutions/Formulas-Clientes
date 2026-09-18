@@ -1,15 +1,19 @@
 package Silcon.relatorios.spv
 
 import br.com.multitec.utils.Utils
+import br.com.multitec.utils.ValidacaoException
 import br.com.multitec.utils.collections.TableMap;
 import sam.server.samdev.relatorio.RelatorioBase;
 import sam.server.samdev.relatorio.DadosParaDownload
 import sam.server.samdev.relatorio.TableMapDataSource
 import sam.server.samdev.utils.Parametro
-
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.HashMap;
+import sam.server.samdev.servlet.ApplicationContextProvider
+import br.com.multitec.core.filesystem.FileSystem
+
 
 public class SPV_Impressao_Pre_Venda extends RelatorioBase {
     @Override
@@ -79,9 +83,16 @@ public class SPV_Impressao_Pre_Venda extends RelatorioBase {
                     item.put("entrega", "RETIRADO")
                 }
 
-                if(imagem != null && imagem.contains("S:\\Imagens de Produtos Lustre\\")) imagem = imagem.replace("S:\\Imagens de Produtos Lustre\\", "C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\spv\\Imagens\\Imagens de Produtos Lustre\\")
+                InputStream novoDiretorioImg;
+                if(imagem != null){
+                    if(imagem.startsWith("sam:")){ // Validação necessária devido as imagens cadastradas antes da configuração do diretório virtual
+                        novoDiretorioImg = ApplicationContextProvider.getApplicationContext().getBean(FileSystem.class).get(imagem);
+                    } else {
+                        novoDiretorioImg = imagem.contains("S:\\Imagens de Produtos Lustre\\") ? new FileInputStream(imagem.replace("S:\\Imagens de Produtos Lustre\\", "C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\spv\\Imagens\\Imagens de Produtos Lustre\\")) : new FileInputStream(imagem);
+                    }
 
-                item.put("imagem", imagem);
+                }
+                item.put("imagemInputStream", novoDiretorioImg);
                 item.put("key", idPreVenda);
 
                 listItens.add(item);
@@ -108,7 +119,7 @@ public class SPV_Impressao_Pre_Venda extends RelatorioBase {
 
         String nomeUser = obterUsuarioLogado().getAab10user().toUpperCase();
         if( nomeUser == "NANY" || nomeUser == "DIANA" || nomeUser == "FILIPE" ||
-                nomeUser == "PRISCILA" || nomeUser == "SHIRLEI" || nomeUser == "MASTER2" || nomeUser == "RICARDO"){
+                nomeUser == "PRISCILA" || nomeUser == "SHIRLEI" || nomeUser == "MASTER2" || nomeUser == "RICARDO" || nomeUser == "LUIS"){
             dsPrincipal.addSubDataSource("dsItens", listItens, "key", "key");
             adicionarParametro("StreamSub1", carregarArquivoRelatorio("SPV_Impressao_Pre_Venda_Lustre_S1"));
 
