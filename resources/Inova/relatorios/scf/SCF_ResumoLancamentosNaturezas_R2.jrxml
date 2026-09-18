@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF_ResumoLancamentosNaturezas_R2" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1f67a61e-6a0a-4ade-8897-168f78801ff5">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="TITULO_RELATORIO" class="java.lang.String"/>
+	<parameter name="EMPRESA" class="java.lang.String"/>
+	<parameter name="SALDOINICIAL" class="java.lang.String"/>
+	<parameter name="PERIODO" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[]]>
+	</queryString>
+	<field name="dab01codigo" class="java.lang.String"/>
+	<field name="dab01nome" class="java.lang.String"/>
+	<field name="saldoAnterior" class="java.math.BigDecimal"/>
+	<field name="abf10codigo" class="java.lang.String"/>
+	<field name="abf10nome" class="java.lang.String"/>
+	<field name="valorNatureza" class="java.math.BigDecimal"/>
+	<field name="valorTotalPeri" class="java.math.BigDecimal"/>
+	<field name="valorTotalNat" class="java.math.BigDecimal"/>
+	<group name="codigoNatureza">
+		<groupExpression><![CDATA[$F{abf10codigo}]]></groupExpression>
+		<groupHeader>
+			<band height="5">
+				<printWhenExpression><![CDATA[$F{abf10codigo}.length() == 2 || $F{abf10codigo}.length() == 4 || $F{abf10codigo}.length() == 6]]></printWhenExpression>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="5">
+				<printWhenExpression><![CDATA[$F{abf10codigo}.length() < 6]]></printWhenExpression>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="11" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="170" height="10" uuid="d93a76ab-cb6e-4061-9ef6-b35935817be5"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TITULO_RELATORIO}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="10" width="555" height="1" uuid="42116109-0b3d-451c-8887-5fb1c7de80de"/>
+			</line>
+			<textField>
+				<reportElement x="312" y="0" width="191" height="10" uuid="1facad67-1617-4914-86a8-bb29316e1970"/>
+				<textElement>
+					<font fontName="Arial" size="8" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{EMPRESA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="179" y="0" width="124" height="10" uuid="96d56df6-5bff-463f-940f-370d54083248"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{PERIODO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="506" y="0" width="29" height="10" uuid="784a4188-13bf-429e-974d-2fa0ab528f72"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Página]]></text>
+			</staticText>
+			<textField pattern="000">
+				<reportElement x="535" y="0" width="20" height="10" uuid="2f657a82-8090-4bfc-b740-66063f4944cc"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="21">
+			<staticText>
+				<reportElement x="100" y="0" width="59" height="10" uuid="308a850c-ad6e-464c-96c6-7945e9fa6939"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[TOTAL GERAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="378" y="0" width="78" height="10" uuid="b9b740e8-08e3-4140-8cfc-6ce9d33befe9"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[VALOR]]></text>
+			</staticText>
+			<line>
+				<reportElement x="100" y="10" width="356" height="1" uuid="8340d93d-77f7-49b4-84db-4ad14d969ad9"/>
+			</line>
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement x="378" y="11" width="77" height="10" uuid="20fc0555-52ef-4070-8fb4-c76932ff61b7"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{saldoAnterior}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="278" y="11" width="100" height="10" uuid="c8ecbc25-2db7-495d-9a94-07cb325a867d"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Saldo Anterior:]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="10">
+			<textField isBlankWhenNull="true">
+				<reportElement x="159" y="0" width="219" height="10" uuid="f7b9ba9b-d7da-454c-ad81-3b2dd179b826"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abf10nome}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement x="378" y="0" width="77" height="10" uuid="18bb89db-9b13-41dc-814e-eff597256138"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorNatureza}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="0" width="59" height="10" uuid="8d8b2516-1eb5-4a0e-ba5d-9cd2090f0e91"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abf10codigo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="11" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="1" width="47" height="10" uuid="c7f10d6a-4bce-4a5a-b5c1-a591ce5d85dd"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Emissão]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy HH.mm.ss">
+				<reportElement x="47" y="1" width="122" height="10" uuid="fda466dc-cf27-4bfb-a52c-2938b7980922"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Date ()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" uuid="52f94754-ddb4-4789-8353-53dab10d3f3d"/>
+			</line>
+			<staticText>
+				<reportElement x="394" y="0" width="161" height="11" uuid="6d42925d-ba07-4134-9f01-eea633424f78"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[SCF_ResumoLancamentosNaturezas_R2]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="12">
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement x="169" y="2" width="62" height="10" uuid="39b90f66-02ff-4a2b-926d-dc49a4014639"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorTotalPeri}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="100" y="2" width="69" height="10" uuid="8859c752-bf06-44a2-8165-730cbe6121e5"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Saldo do Período:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="278" y="2" width="100" height="10" uuid="c7e1f20c-aba1-4304-8aac-6504f71d9d94"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Saldo Atual:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement x="378" y="2" width="77" height="10" uuid="a2aaff6f-2815-4e15-977c-b30e81f71e8f"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorTotalNat}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="100" y="1" width="355" height="1" uuid="c13c6ee1-b53f-4036-8024-4e1140f5af99"/>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

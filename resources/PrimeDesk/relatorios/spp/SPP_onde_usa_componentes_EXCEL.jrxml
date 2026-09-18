@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SPP_onde_usa_componentes_PDF" language="groovy" pageWidth="1700" pageHeight="595" orientation="Landscape" columnWidth="1660" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2d9bd6ba-0248-4bb1-83fe-446b3ce407cc">
+	<property name="ireport.zoom" value="1.610510000000001"/>
+	<property name="ireport.x" value="1457"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="titulo" class="java.lang.String"/>
+	<field name="codComponente" class="java.lang.String"/>
+	<field name="naComponente" class="java.lang.String"/>
+	<field name="MpsComponente" class="java.lang.String"/>
+	<field name="umuComponente" class="java.lang.String"/>
+	<field name="formula" class="java.lang.String"/>
+	<field name="sequencia" class="java.lang.Integer"/>
+	<field name="quantidade" class="java.lang.String"/>
+	<field name="perda" class="java.lang.String"/>
+	<field name="codPrincipal" class="java.lang.String"/>
+	<field name="naPrincipal" class="java.lang.String"/>
+	<field name="MpsPrincipal" class="java.lang.String"/>
+	<field name="umuPrincipal" class="java.lang.String"/>
+	<group name="componentes">
+		<groupExpression><![CDATA[$F{codComponente} + $F{MpsComponente}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="85" height="13" uuid="40e9836a-b362-4648-b0b6-b9133743c909"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[TIPO COMPONENTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="85" y="0" width="113" height="13" uuid="5622129b-5554-41ec-885c-de517f77e14c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CODIGO COMPONENTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="198" y="0" width="324" height="13" uuid="4c872762-f248-4f14-8b71-cd4ce3428756"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NA COMPONENTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="522" y="0" width="113" height="13" uuid="9e56753a-9835-4e77-84aa-c12fe996009b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[UNID. ITEM COMPONENTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="720" y="0" width="113" height="13" uuid="904ad280-f85f-4ffb-a6c9-f285ca534ec2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[COD. ITEM COMPOSIÇÃO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="833" y="0" width="277" height="13" uuid="db564ad1-fdf9-429a-83e6-21e2c8dfcc86"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NA ITEM COMPOSIÇÃO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1110" y="0" width="113" height="13" uuid="4c702736-0dde-48e3-a1ff-d7d9b8da991b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[UNID ITEM COMPOSIÇÃO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1223" y="0" width="89" height="13" uuid="b45399d3-f979-43ef-97c9-06b6bb60f708"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[FORMULA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1362" y="0" width="100" height="13" uuid="62948770-c2ed-48fc-b1b0-c969fa692aa6"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[QUANTIDADE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1462" y="0" width="91" height="13" uuid="9a6030a8-47d6-46a6-b74c-d68902fc2427"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[PERDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="635" y="0" width="85" height="13" uuid="64514099-2c43-4dac-9697-cb39e8d95108"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[TIPO COMPOSIÇÃO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1312" y="0" width="50" height="13" uuid="c1725624-2f67-441d-ac4e-0a1024978e05"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[SEQUENCIA]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="522" y="0" width="113" height="13" uuid="f331db32-d82d-45b4-aa2b-b9b948755a2f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{umuComponente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="85" height="13" uuid="1c52e3f4-4d03-40dc-b339-14b21a365e75"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MpsComponente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="85" y="0" width="113" height="13" uuid="0c179607-8f6d-41b8-9fcc-058535b66283"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codComponente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="198" y="0" width="324" height="13" uuid="2f1443cc-dc66-414a-884a-e01d7dfc83ad"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naComponente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="635" y="0" width="85" height="13" uuid="d4c1898d-c3c3-4093-9cc8-5f2162ab6e73"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MpsPrincipal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="720" y="0" width="113" height="13" uuid="850a46cd-b206-4a28-8820-cea94a0acfc3"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codPrincipal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="833" y="0" width="277" height="13" uuid="52a76f41-ea6a-4685-883d-03aea7e967bc"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naPrincipal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1110" y="0" width="113" height="13" uuid="5a2defc3-b14b-41f2-b0ab-c2fbe0801a8c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{umuPrincipal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1223" y="0" width="89" height="13" uuid="6b75aae4-d079-46db-8491-e2afd46c9652"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{formula}]]></textFieldExpression>
+			</textField>
+			<textField pattern="000">
+				<reportElement x="1312" y="0" width="50" height="13" uuid="998f2b6c-fc92-4bfa-9a50-8dbf63d26ddb"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sequencia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1362" y="0" width="100" height="13" uuid="3c3a0c8e-29a5-406a-b488-2c83c23506fc"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1462" y="0" width="91" height="13" uuid="93f23495-9441-4b65-ab4f-22b8b86fabef"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{perda}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

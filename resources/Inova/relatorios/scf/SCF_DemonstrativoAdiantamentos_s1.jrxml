@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF_DemonstrativoAdiantamentos_s1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="e34f9ccf-7481-4b40-8ff3-f4017bd35989">
+	<property name="ireport.zoom" value="2.1435888100000016"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="dtLcto" class="java.util.Date"/>
+	<field name="valorLcto" class="java.math.BigDecimal"/>
+	<field name="codigoConta" class="java.lang.String"/>
+	<field name="nomeConta" class="java.lang.String"/>
+	<field name="dab10historico" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="37" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="17" width="39" height="13" uuid="dbb19ff4-01c3-4b6d-8c6f-2a5993a040f9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DATA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="39" y="17" width="54" height="13" uuid="e75625bf-894a-48a4-aba9-a947636125cf"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[VALOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="93" y="17" width="143" height="13" uuid="b91252fe-0146-4491-afb4-1a4395be9156"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CONTA CORRENTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="236" y="17" width="319" height="13" uuid="2398e55c-207b-45b3-8d1e-301d1d932acb"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[HISTÓRICO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="13" uuid="c22f1aa6-7ed6-4a22-95b7-bde4e43cc7d1"/>
+				<textElement textAlignment="Center">
+					<font size="8" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[ADIANTAMENTOS]]></text>
+			</staticText>
+			<line>
+				<reportElement x="4" y="32" width="551" height="1" uuid="a248ac79-91c2-468c-abfc-35994b1d8f3c"/>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="0" y="0" width="39" height="13" uuid="1a4b3917-d1cb-4655-b910-0eab95ca6e17"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtLcto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="39" y="0" width="54" height="13" uuid="050dfea0-f84f-4e08-b44c-b3ee2ed5ab45"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorLcto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="93" y="0" width="34" height="13" uuid="97f3dc01-262e-4ede-869b-4b1123e6ac1a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codigoConta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="127" y="0" width="109" height="13" uuid="1ede2fd6-9016-490e-bf58-feb4a4b3a0b8"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeConta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="236" y="0" width="319" height="13" uuid="158736a8-85be-43e3-a442-9cff07d9dd10"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dab10historico}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
