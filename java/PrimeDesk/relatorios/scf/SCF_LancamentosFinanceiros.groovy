@@ -76,8 +76,8 @@ public class SCF_LancamentosFinanceiros extends RelatorioBase {
         }
 
 
-        if(impressao == 1 ) return gerarXLSX("SCF_LancamentosFinanceiros", dab10s)
-        return gerarPDF("SCF_LancamentosFinanceiros", dab10s, "codigoConta", isSaltarPagina)
+        if(impressao == 1 ) return gerarXLSX("SCF_Lancamentos_Financeiros_Excel", dab10s)
+        return gerarPDF("SCF_Lancamentos_Financeiros_PDF", dab10s, "codigoConta", isSaltarPagina)
     }
 
     private BigDecimal buscarSaldoAnteriorConta(List<Long> idsContas, LocalDate[] dtLancamentos, List<Long> idsEmpresas){

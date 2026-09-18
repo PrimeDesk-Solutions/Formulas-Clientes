@@ -1,4 +1,4 @@
-package Silcon.relatorios.scf
+package PrimeDesk.relatorios.scf
 
 import br.com.multitec.utils.Utils
 import br.com.multitec.utils.collections.TableMap
