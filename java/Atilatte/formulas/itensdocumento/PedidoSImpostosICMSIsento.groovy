@@ -412,44 +412,7 @@ public class PedidoSImpostosICMSIsento extends FormulaBase {
 			//TotalDocumento = TotalItem
 			eaa0103.eaa0103totDoc = eaa0103.eaa0103total;
 
-			//Aliquota dos tributos no cadastro de NCM
-		     def sql = "select abg01camposcustom from abg01 "+
-					"inner join abm0101 on abm0101ncm = abg01id "+
-					"inner join abm01 on abm01id = abm0101item "+
-					"where abm01id = :abm01id "+
-					"AND abm01tipo = :eaa0103tipo "+
-					"AND abm0101empresa = :aac10id";
-			def aliq;
-			TableMap abg01camposcustom = getAcessoAoBanco().buscarUnicoTableMap(sql, Parametro.criar("abm01id",abm01.abm01id), Parametro.criar("eaa0103tipo", eaa0103.eaa0103tipo), Parametro.criar("aac10id",aac10.aac10id)).getTableMap("abg01camposcustom");
-
-			if(abg01camposcustom != null){
-				 aliq = abg01camposcustom.getBigDecimal_Zero("_carga_trib");
-			}
-		
-		     
-		     //Alíquota Carga Tributária
-		     def consfinal = jsonAbe01.getBigDecimal_Zero("consufinal");
-		     def aliqtrib = aliq;
-		     if(aliqtrib == 0 && consfinal == 1){
-		     	throw new ValidacaoException("Informe a alíquota no NCM, para cálculo da Carga Tributária.");
-		     }else{
-		     	if(jsonEaa0103.getBigDecimal_Zero("carga_trib_") == 0){
-		     		jsonEaa0103.put("carga_trib_", aliqtrib);
-		     	}
-		     	
-		     }
-
-			//BC Carga Tributaria
-	        	jsonEaa0103.put("bc_carga_trib", eaa0103.eaa0103total);
-
-	        	//Carga Tributaria 
-			  if(jsonAbe01.getBigDecimal_Zero("consufinal") == 0){
-			  	jsonEaa0103.put("bc_carga_trib", 0);
-			  	jsonEaa0103.put("carga_trib_", 0);
-			  	jsonEaa0103.put("carga_trib", 0);
-			  }else{
-			  	jsonEaa0103.put("VlrCargaTrib", jsonEaa0103.getBigDecimal_Zero("bc_carga_trib") * jsonEaa0103.getBigDecimal_Zero("carga_trib_") / 100);
-			  }
+            calcularCargaTributaria();
 
 			//IcmsOutras(28) = TotalDocumento(10)
 			jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
@@ -542,6 +505,38 @@ public class PedidoSImpostosICMSIsento extends FormulaBase {
 			jsonEaa0103.put("ipi_sped", jsonEaa0103.getBigDecimal_Zero("ipi"));
 		}
 	}
+    private void calcularCargaTributaria(){
+        // Busca campo customizado no cadastro de NCM para encontrar aliquota da carga tributária
+        def sql = "SELECT abg01camposcustom " +
+                    "FROM abg01 "+
+                    "INNER JOIN abm0101 ON abm0101ncm = abg01id "+
+                    "INNER JOIN abm01 ON abm01id = abm0101item "+
+                    "WHERE abm01id = :abm01id "+
+                    "AND abm01tipo = :eaa0103tipo "+
+                    "AND abm0101empresa = :aac10id";
+
+        def aliqCargaTrib;
+
+        if(abm0101.abm0101ncm == null) throw new ValidacaoException("Não foi informado NCM no cadastro do item "+abm01.abm01codigo + " para calculo da carga tributária.  ")
+
+        TableMap abg01camposCustom = getAcessoAoBanco().buscarUnicoTableMap(sql, Parametro.criar("abm01id",abm01.abm01id), Parametro.criar("eaa0103tipo", eaa0103.eaa0103tipo), Parametro.criar("aac10id",aac10.aac10id)).getTableMap("abg01camposcustom");
+
+        if(abg01camposCustom == null) throw new ValidacaoException("Valor da aliquota dos tributos no cadastro do NCM " + abg01.abg01codigo + " não é válido para cálculo da carga tributária.")
+
+
+        //Alíquota Carga Tributária
+        aliqCargaTrib = abg01camposCustom.getBigDecimal_Zero("_carga_trib");
+        jsonEaa0103.put("carga_trib_", aliqCargaTrib);
+
+        //BC Carga Tributaria
+        jsonEaa0103.put("bc_carga_trib", eaa0103.eaa0103total);
+
+        // Carga Tributaria
+        if(jsonEaa0103.getBigDecimal_Zero("carga_trib_") > 0){
+            jsonEaa0103.put("VlrCargaTrib", jsonEaa0103.getBigDecimal_Zero("bc_carga_trib") * jsonEaa0103.getBigDecimal_Zero("carga_trib_") / 100);
+            jsonEaa0103.put("VlrCargaTrib", jsonEaa0103.getBigDecimal_Zero("VlrCargaTrib").round(2));
+        }
+    }
     private void calcularCBSIBS() {
         // *********************************************
         // ************ REFORMA TRIBUTÁRIA *************
