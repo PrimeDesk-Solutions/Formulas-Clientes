@@ -1,4 +1,3 @@
-// OFICIAL
 package Atilatte.relatorios.scf;
 
 import java.time.LocalDate
@@ -45,13 +44,13 @@ class SCF_NaturezasAgrupadas extends RelatorioBase {
 		// Busca as contas correntes que tiveram lançamentos, caso não informado no filtro
 		String where = getSamWhere().getWherePadrao("WHERE", Dab01.class);
 
-		String sqlCC = "select distinct dab01id "+
-				"from dab10 "+
-				" LEFT JOIN dab1002 ON dab1002lct = dab10id "+
-				" LEFT JOIN dab01 ON dab01id = dab1002cc " +
-				where +
-				" and dab10data between :dtIni and :dtFin "+
-				"order by dab01id ";
+		String sqlCC = "SELECT DISTINCT dab01id "+
+                        " FROM dab10 "+
+                        " LEFT JOIN dab1002 ON dab1002lct = dab10id "+
+                        " LEFT JOIN dab01 ON dab01id = dab1002cc " +
+                        where +
+                        " AND dab10data between :dtIni AND :dtFin "+
+                        " ORDER BY dab01id ";
 
 		def dtIni = criarParametroSql("dtIni", periodo[0]);
 		def dtFin = criarParametroSql("dtFin", periodo[1]);
