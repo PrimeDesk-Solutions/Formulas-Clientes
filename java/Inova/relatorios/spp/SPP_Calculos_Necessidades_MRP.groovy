@@ -126,10 +126,10 @@ public class SPP_Calculos_Necessidades_MRP extends RelatorioBase {
                         "INNER JOIN abp20 ON abp20id = bab01comp " +
                         "INNER JOIN abm01 AS abm01prod ON abm01prod.abm01id = abp20item " +
                         "LEFT JOIN aam06 ON aam06id = abm01prod.abm01umu  " +
-                        "INNER JOIN bab0103 ON bab0103op = bab01id " +
-                        "INNER JOIN baa0101 ON baa0101id = bab0103itemPP " +
-                        "INNER JOIN baa01 ON baa01id = baa0101plano " +
-                        "INNER JOIN abb01 AS abb01plano ON abb01plano.abb01id = baa01central " +
+                        "LEFT JOIN bab0103 ON bab0103op = bab01id " +
+                        "LEFT JOIN baa0101 ON baa0101id = bab0103itemPP " +
+                        "LEFT JOIN baa01 ON baa01id = baa0101plano " +
+                        "LEFT JOIN abb01 AS abb01plano ON abb01plano.abb01id = baa01central " +
                         whereNumOrdem +
                         whereItens +
                         whereMPS +
@@ -137,7 +137,7 @@ public class SPP_Calculos_Necessidades_MRP extends RelatorioBase {
                         whereTiposDoc +
                         whereDtCriacao +
                         whereStatus +
-                        "ORDER BY abb01ordem.abb01num, abm01codigo ";
+                        "ORDER BY abm01codigo ";
 
         Parametro parametroItens = itens != null && itens.size() > 0 ? Parametro.criar("itens", itens) : null;
         Parametro parametroMps = mps != null && !mps.contains(-1) ? Parametro.criar("mps", mps) : null;
@@ -257,13 +257,15 @@ public class SPP_Calculos_Necessidades_MRP extends RelatorioBase {
                     chkPedCompra
             );
 
-            BigDecimal necessidadeLiquida = calcularNecessidadeLiquida(qtd, saldo);
+            BigDecimal necessidadeLiquida = calcularNecessidadeLiquida(qtd, saldo, componente.getBigDecimal_Zero("pedidoCompra") );
 
             BigDecimal sugestaoCompra = calcularSugestaoCompra(
                     necessidadeLiquida,
                     estoqueMinMax,
                     optionEstMinMax,
-                    chkEstoque
+                    chkEstoque,
+                    saldo,
+                    qtd
             );
 
             LocalDate dataSugerida = calcularDataSugerida(
@@ -298,7 +300,11 @@ public class SPP_Calculos_Necessidades_MRP extends RelatorioBase {
         if (!chkEstoque)
             return BigDecimal.ZERO;
 
-        return buscarPrecoMinMax(idItem, optionEstMinMax);
+        BigDecimal estoqueMaxMin = buscarPrecoMinMax(idItem, optionEstMinMax);
+
+        if(estoqueMaxMin == null || estoqueMaxMin.compareTo(0) == 0) return BigDecimal.ZERO;
+
+        return estoqueMaxMin;
     }
     private BigDecimal obterSaldoEstoque(Long idItem, boolean chkEstoque) {
 
@@ -354,12 +360,12 @@ public class SPP_Calculos_Necessidades_MRP extends RelatorioBase {
                 mapPedidosCompra
         );
     }
-    private BigDecimal calcularNecessidadeLiquida(BigDecimal qtd, BigDecimal saldo) {
-        BigDecimal necessidade = qtd.subtract(saldo);
+    private BigDecimal calcularNecessidadeLiquida(BigDecimal qtd, BigDecimal saldo, BigDecimal pedCompra) {
+        BigDecimal necessidade = qtd.subtract(saldo.add(pedCompra));
 
-        return necessidade.compareTo(BigDecimal.ZERO) > 0 ? necessidade : BigDecimal.ZERO;
+        return necessidade//necessidade.compareTo(BigDecimal.ZERO) > 0 ? necessidade : BigDecimal.ZERO;
     }
-    private BigDecimal calcularSugestaoCompra(BigDecimal necessidadeLiquida, BigDecimal estoqueMinMax, Integer optionEstMinMax, boolean chkEstoque) {
+    private BigDecimal calcularSugestaoCompra(BigDecimal necessidadeLiquida, BigDecimal estoqueMinMax, Integer optionEstMinMax, boolean chkEstoque, BigDecimal saldo, BigDecimal qtd) {
 
         if (!chkEstoque) {
             return necessidadeLiquida;
@@ -372,7 +378,8 @@ public class SPP_Calculos_Necessidades_MRP extends RelatorioBase {
         return calcularSujestaoCompra(
                 optionEstMinMax,
                 estoqueMinMax,
-                necessidadeLiquida
+                necessidadeLiquida,
+                qtd
         );
     }
     private LocalDate calcularDataSugerida(LocalDate dtInicioProd,Integer leadTime) {
@@ -390,6 +397,7 @@ public class SPP_Calculos_Necessidades_MRP extends RelatorioBase {
         componente.put("estoqueMinMax", estoqueMinMax);
         componente.put("sugestaoCompra", sugestaoCompra);
         componente.put("dataSugerida", dataSugerida);
+        componente.put("preReserva", BigDecimal.ZERO);
     }
     private BigDecimal buscarSaldoEstoqueItem(Long idItem){
         String sql = "SELECT bcc02qt FROM bcc02 WHERE bcc02status = 4224 AND bcc02item = :idItem ";
@@ -398,18 +406,18 @@ public class SPP_Calculos_Necessidades_MRP extends RelatorioBase {
     }
     private BigDecimal comporEstoque(Long idItem, BigDecimal saldoEstoqueAtual, Map<Long, BigDecimal> mapEstoque, BigDecimal qtd) {
 
-        if(!mapEstoque.containsKey(idItem)){
-            mapEstoque.put(idItem, saldoEstoqueAtual);
+        BigDecimal saldo = mapEstoque.getOrDefault(
+                idItem,
+                saldoEstoqueAtual
+        );
 
-            return saldoEstoqueAtual;
-        }
+        BigDecimal saldoDisponivel = saldo;
 
-        BigDecimal saldo = mapEstoque.get(idItem);
         saldo = saldo.subtract(qtd);
 
         mapEstoque.put(idItem, saldo);
 
-        return saldo;
+        return saldoDisponivel;
     }
     private List<TableMap> buscarPedidosCompraItens(List<Long> idsItens, LocalDate[] dtCriacao ){
         String whereItens = idsItens != null && idsItens.size() > 0 ? "AND eaa0103item IN (:idsItens) " : "";
@@ -489,17 +497,38 @@ public class SPP_Calculos_Necessidades_MRP extends RelatorioBase {
 
         return getAcessoAoBanco().obterBigDecimal(sql, parametroItem, parametroEmpresa);
     }
-    private BigDecimal calcularSujestaoCompra(Integer optionEstMinMax, BigDecimal estoqueMinMax, BigDecimal necessidadeLiq){
-        BigDecimal sugestaoCompra = new BigDecimal(0);
+    private BigDecimal calcularSujestaoCompra(Integer optionEstMinMax, BigDecimal estoqueMinMax, BigDecimal necessidadeLiq, BigDecimal qtd) {
 
-        if(necessidadeLiq <= 0 ) return BigDecimal.ZERO;
+        if (estoqueMinMax.compareTo(BigDecimal.ZERO) > 0) {
 
-        if(optionEstMinMax == 0){
-            sugestaoCompra = BigDecimal.ZERO;
-        } else {
-            sugestaoCompra = estoqueMinMax - necessidadeLiq.abs();
+            // Não considerar estoque mínimo/máximo
+            if (optionEstMinMax == 0) {
+                return BigDecimal.ZERO;
+            }
+
+            // Necessidade já atende o estoque mínimo/máximo
+            if (necessidadeLiq.compareTo(BigDecimal.ZERO) <= 0
+                    && necessidadeLiq.abs().compareTo(estoqueMinMax) >= 0) {
+                return BigDecimal.ZERO;
+            }
+
+            return necessidadeLiq.add(estoqueMinMax);
         }
 
-        return sugestaoCompra.abs();
+        // Sem estoque mínimo/máximo configurado
+        if (necessidadeLiq.compareTo(BigDecimal.ZERO) <= 0) {
+
+            if (necessidadeLiq.abs().compareTo(qtd) > 0) {
+                return BigDecimal.ZERO;
+            }
+
+            return necessidadeLiq.add(qtd);
+        }
+
+        if (necessidadeLiq.compareTo(qtd) > 0) {
+            return necessidadeLiq.subtract(qtd);
+        }
+
+        return necessidadeLiq;
     }
 }
