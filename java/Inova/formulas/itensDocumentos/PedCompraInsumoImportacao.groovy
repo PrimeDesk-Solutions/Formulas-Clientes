@@ -327,8 +327,15 @@ public class PedCompraInsumoImportacao extends FormulaBase {
             jsonEaa0103.put("total_convertido", (eaa0103.eaa0103qtComl_Zero * jsonEaa0103.getBigDecimal_Zero("unit_convertido")) + (jsonEaa0103.getBigDecimal_Zero("tx_financ")  * jsonEaa0103.getBigDecimal_Zero("cotacao_dolar")) );
             jsonEaa0103.put("total_convertido", jsonEaa0103.getBigDecimal_Zero("total_convertido").round(2));
 
+            // Total doc = Tot item convertido
+            eaa0103.eaa0103totDoc = jsonEaa0103.getBigDecimal_Zero("total_convertido") +
+                                    jsonEaa0103.getBigDecimal_Zero("imposto_importacao") +
+                                    jsonEaa0103.getBigDecimal_Zero("ipi") +
+                                    jsonEaa0103.getBigDecimal_Zero("pis") +
+                                    jsonEaa0103.getBigDecimal_Zero("cofins") +
+                                    jsonEaa0103.getBigDecimal_Zero("siscomex_valor") +
+                                    jsonEaa0103.getBigDecimal_Zero("icms");
 
-            eaa0103.eaa0103totDoc = jsonEaa0103.getBigDecimal_Zero("bc_icms") + jsonEaa0103.getBigDecimal_Zero("frete_dolar") + jsonEaa0103.getBigDecimal_Zero("tx_finan");
             eaa0103.eaa0103totDoc = eaa0103.eaa0103totDoc.round(2);
 
 

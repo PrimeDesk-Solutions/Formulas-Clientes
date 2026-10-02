@@ -385,12 +385,16 @@ public class SRF_DocPadraoSaidaST extends FormulaBase {
     }
 
     private void calcularFCP(){
-        if(jsonEaa0103.getBigDecimal_Zero("aliq_fcp") != -1){
+        if(jsonEaa0103.getBigDecimal_Zero("aliq_fcp") != -1 && jsonEaa0103.getBigDecimal_Zero("aliq_fcp") > 0){
             jsonEaa0103.put("aliq_fcp", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_fpc"));
 
             jsonEaa0103.put("bc_fcp", jsonEaa0103.getBigDecimal_Zero("bc_icms"));
             jsonEaa0103.put("fcp", jsonEaa0103.getBigDecimal_Zero("bc_fcp") * jsonEaa0103.getBigDecimal_Zero("aliq_fcp") / 100);
             jsonEaa0103.put("fcp", jsonEaa0103.getBigDecimal_Zero("fcp").round(2));
+        }else{
+            jsonEaa0103.put("bc_fcp", BigDecimal.ZERO);
+            jsonEaa0103.put("aliq_fcp", BigDecimal.ZERO);
+            jsonEaa0103.put("fcp", BigDecimal.ZERO);
         }
     }
     private String buscarCstICMS() {
@@ -494,8 +498,8 @@ public class SRF_DocPadraoSaidaST extends FormulaBase {
                 jsonEaa0103.put("bc_icms_st", jsonEaa0103.getBigDecimal_Zero("bc_icms_st").round(2));
             }
 
-            def icmsCalc = eaa0103.eaa0103total * jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms_subs") / 100
-            jsonEaa0103.put("icms_st", (jsonEaa0103.getBigDecimal_Zero("bc_icms_st") * jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms_subs") / 100) - icmsCalc)
+            def icmsCalc = eaa0103.eaa0103total * jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms_st") / 100
+            jsonEaa0103.put("icms_st", (jsonEaa0103.getBigDecimal_Zero("bc_icms_st") * jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms_st") / 100) - icmsCalc)
             jsonEaa0103.put("icms_st", jsonEaa0103.getBigDecimal_Zero("icms_st").round(2));
 
         }else{

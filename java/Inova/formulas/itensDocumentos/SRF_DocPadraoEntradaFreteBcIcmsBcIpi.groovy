@@ -346,7 +346,8 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpi extends FormulaBase {
                             "    AND eaa0103item = :idItem " +
                             "    AND eaa01esMov = 0 " +
                             "    AND eaa01clasDoc = 0 "+
-                            " )";
+                            " ) " +
+                            "AND eaa0103item = :idItem";
 
 
             BigDecimal ultimoUnit = getSession()
@@ -873,9 +874,3 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpi extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==

@@ -495,7 +495,7 @@ public class SRF_DocPadraoSaidaSTSemICMS extends FormulaBase {
                 jsonEaa0103.put("bc_icms_st", jsonEaa0103.getBigDecimal_Zero("bc_icms_st").round(2));
             }
 
-            def icmsCalc = (eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest")) * jsonAbm0101.getBigDecimal_Zero("aliq_icms_subs") / 100
+            def icmsCalc = (eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest")) * jsonAbm0101.getBigDecimal_Zero("aliq_icms_st") / 100
 
             jsonEaa0103.put("icms_st", (jsonEaa0103.getBigDecimal_Zero("bc_icms_st") * jsonEaa0103.getBigDecimal_Zero("aliq_icms_st") / 100) - icmsCalc)
             jsonEaa0103.put("icms_st", jsonEaa0103.getBigDecimal_Zero("icms_st").round(2));

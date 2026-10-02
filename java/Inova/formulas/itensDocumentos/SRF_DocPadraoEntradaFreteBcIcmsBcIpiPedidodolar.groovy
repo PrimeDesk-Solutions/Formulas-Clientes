@@ -353,7 +353,6 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpiPedidodolar extends FormulaBase
         }
 
     }
-
     private void definirPrecoUnitario(){
         if(eaa0103.eaa0103unit == 0){
             String sql = " SELECT COALESCE(eaa0103unit, 0.00) AS unitario " +
@@ -367,7 +366,8 @@ public class SRF_DocPadraoEntradaFreteBcIcmsBcIpiPedidodolar extends FormulaBase
                     "    AND eaa0103item = :idItem " +
                     "    AND eaa01esMov = 0 " +
                     "    AND eaa01clasDoc = 0 "+
-                    " )";
+                    " ) " +
+                    "AND eaa0103item = :idItem";
 
 
             BigDecimal ultimoUnit = getSession()

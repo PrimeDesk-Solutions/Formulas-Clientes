@@ -316,7 +316,8 @@ public class DocComplementoDoComplemento extends FormulaBase {
                     "    AND eaa0103item = :idItem " +
                     "    AND eaa01esMov = 0 " +
                     "    AND eaa01clasDoc = 0 "+
-                    " )";
+                    " ) " +
+                    "AND eaa0103item = :idItem";
 
 
             BigDecimal ultimoUnit = getSession()
