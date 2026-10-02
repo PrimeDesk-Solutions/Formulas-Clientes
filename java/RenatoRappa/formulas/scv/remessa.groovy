@@ -251,8 +251,7 @@ public class remessa extends FormulaBase {
                 eaa0103.eaa0103cfop = aaj15_cfop;
             }
 
-            // Volumes
-            jsonEaa0103.put("volumes", eaa0103.eaa0103qtComl)
+            calcularVolumes();
 
             //Define o Campo de Unitário para Estoque
             jsonEaa0103.put("unitario_estoque", eaa0103.eaa0103unit);
@@ -381,6 +380,13 @@ public class remessa extends FormulaBase {
             jsonEaa0103.put("ipi_sped", jsonEaa0103.getBigDecimal_Zero("ipi"));
 
 
+        }
+    }
+    private void calcularVolumes(){
+        if(jsonAbm0101 != null && jsonAbm0101.getInteger("cvdnf") > 0 ){
+            jsonEaa0103.put("volumes", eaa0103.eaa0103qtComl / jsonAbm0101.getInteger("cvdnf"));
+        }else{
+            jsonEaa0103.put("volumes", eaa0103.eaa0103qtComl)
         }
     }
     private void calcularCBSIBS() {
@@ -609,8 +615,3 @@ public class remessa extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
