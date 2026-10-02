@@ -57,7 +57,7 @@ public class SCV_Impressao_Pedido_Compra_Importacao extends RelatorioBase {
                 "aag0201nome AS municipioEntidade, aag02uf AS ufEntidade, ent.abe01ni AS cnpjEntidade, eaa0102pcObs AS obsContato, eaa0101cep AS cepEntidade, " +
                 "eaa0101bairro AS bairroEntidade, eaa0101ddd AS ddEntidade, eaa0101fone AS foneEntidade, ent.abe01ie AS ieEntidade, abe30codigo AS codCondPgto, abe30nome AS condPgto, " +
                 "eaa01totItens AS totItens, CAST(eaa01json ->> 'ipi' AS NUMERIC(18,6)) AS totIPI, CAST(eaa01json ->> 'icms' AS NUMERIC(18,6)) AS totICMS, " +
-                "CAST(eaa01json ->> 'icms_st' AS NUMERIC(18,6)) AS totICMSST, CAST(eaa01json ->> 'frete_dest' AS NUMERIC(18,6)) AS totFrete, CAST(eaa01json ->> 'desconto' AS NUMERIC(18,6)) AS totDesconto, " +
+                "CAST(eaa01json ->> 'icms_st' AS NUMERIC(18,6)) AS totICMSST, CAST(eaa01json ->> 'frete_dolar' AS NUMERIC(18,6)) AS totFrete, CAST(eaa01json ->> 'desconto' AS NUMERIC(18,6)) AS totDesconto, " +
                 "eaa01totDoc AS totalDocumento, eaa01obsContrib, eaa01obsUsoInt, desp.abe01na AS nomeDespacho, aab10user AS usuario, abb01data, eaa0102frete, eaa01esMov, abb0103data AS dtAprovacao " +
                 "FROM eaa01 " +
                 "INNER JOIN abb01 ON abb01id = eaa01central " +
