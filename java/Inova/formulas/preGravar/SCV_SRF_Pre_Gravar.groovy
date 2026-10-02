@@ -151,51 +151,6 @@ public class SCV_SRF_Pre_Gravar extends FormulaBase {
 
     }
 
-    private void bloquearDocumento(Eaa01 eaa01, String msg, String identificador) {
-        if (eaa01.eaa0107s.size() > 0) {
-            Boolean jaContemInconsistencia = false;
-
-            for (Eaa0107 eaa0107 in eaa01.eaa0107s) {
-                if (eaa0107.eaa0107ident.contains(identificador) && eaa0107.eaa0107justificativa == null) {
-                    jaContemInconsistencia = true;
-                }
-            }
-
-            if (jaContemInconsistencia) return;
-        }
-
-        Eaa0107 eaa0107 = new Eaa0107();
-        eaa0107.eaa0107msg = msg;
-        eaa0107.eaa0107user = obterUsuarioLogado();
-        eaa0107.eaa0107data = LocalDate.now();
-        eaa0107.eaa0107hora = LocalTime.now();
-        eaa0107.eaa0107ident = identificador;
-        eaa01.addToEaa0107s(eaa0107);
-        eaa01.eaa01bloqueado = 1;
-    }
-
-    private void gravarInconsitencia(Eaa01 eaa01, String inconsistencia, String identificador) {
-        if (eaa01.eaa0107s.size() > 0) {
-            Boolean jaContemInconsistencia = false;
-
-            for (Eaa0107 eaa0107 in eaa01.eaa0107s) {
-                if (eaa0107.eaa0107ident.contains(identificador) && eaa0107.eaa0107justificativa == null) {
-                    jaContemInconsistencia = true;
-                }
-            }
-
-            if (jaContemInconsistencia) return;
-        }
-
-        Eaa0107 eaa0107 = new Eaa0107();
-        eaa0107.eaa0107msg = inconsistencia;
-        eaa0107.eaa0107user = obterUsuarioLogado();
-        eaa0107.eaa0107data = LocalDate.now();
-        eaa0107.eaa0107hora = LocalTime.now();
-        eaa0107.eaa0107ident = identificador;
-        eaa01.addToEaa0107s(eaa0107);
-    }
-
 }
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiOTcifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiOTcifQ==
