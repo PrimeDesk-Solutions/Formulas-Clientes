@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SPP_Calculos_Necessidades_MRP_PDF" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9f9c86d7-b292-4b01-8a37-722201890cfa">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="TITULO" class="java.lang.String"/>
+	<parameter name="EMPRESA" class="java.lang.String"/>
+	<parameter name="DATA" class="java.util.Date"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\SAM-Servidor\\Formulas\\src\\main\\resources\\Inova\\relatorios\\spp\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="StreamSub1" class="java.lang.Object"/>
+	<parameter name="StreamSub2" class="java.lang.Object"/>
+	<parameter name="IMPRIMIR_PROD" class="java.lang.Boolean"/>
+	<field name="numOrdem" class="java.lang.Integer"/>
+	<field name="codProcesso" class="java.lang.String"/>
+	<field name="descrProcesso" class="java.lang.String"/>
+	<field name="codItem" class="java.lang.String"/>
+	<field name="descrItem" class="java.lang.String"/>
+	<field name="umu" class="java.lang.String"/>
+	<field name="bab01qt" class="java.math.BigDecimal"/>
+	<field name="numPlano" class="java.lang.Integer"/>
+	<field name="nomePlano" class="java.lang.String"/>
+	<field name="dtInicio" class="java.util.Date"/>
+	<field name="tipo" class="java.lang.String"/>
+	<field name="field12" class="java.lang.String"/>
+	<field name="dsProdutos" class="java.lang.Object"/>
+	<field name="dsComponentes" class="java.lang.Object"/>
+	<group name="PRODUTOS_ORDEM">
+		<groupHeader>
+			<band height="23">
+				<subreport>
+					<reportElement x="0" y="0" width="802" height="23" uuid="93eaf634-dcfa-48a7-871f-319eb2a78308">
+						<printWhenExpression><![CDATA[$P{IMPRIMIR_PROD}]]></printWhenExpression>
+					</reportElement>
+					<dataSourceExpression><![CDATA[$F{dsProdutos}]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{StreamSub1}]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="COMPONENTES">
+		<groupHeader>
+			<band height="28">
+				<subreport>
+					<reportElement x="0" y="0" width="802" height="28" uuid="af6ddd61-fcbb-4dde-bd62-31d2cb8b7499"/>
+					<dataSourceExpression><![CDATA[$F{dsComponentes}]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{StreamSub2}]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="287" height="13" uuid="a2adfc87-bb27-43d6-99e6-e56db825a32d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TITULO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="684" y="0" width="118" height="13" uuid="db3774cc-f807-4c21-8e23-8e7b36549698"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{EMPRESA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="380" y="0" width="100" height="13" uuid="b3fee659-8a6e-4fa6-a74d-9ed902baed47"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{DATA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="341" y="0" width="39" height="13" uuid="bc78c7f5-a934-4d65-b9cf-0adc0db9720d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DATA:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+		<band/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

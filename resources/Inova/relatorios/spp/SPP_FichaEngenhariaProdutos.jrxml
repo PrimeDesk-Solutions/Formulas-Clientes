@@ -24,8 +24,10 @@
 	<field name="dsAtividades" class="java.lang.Object"/>
 	<field name="dsRecursos" class="java.lang.Object"/>
 	<field name="dsProcessos" class="java.lang.Object"/>
-	<group name="item" isStartNewPage="true">
-		<groupExpression><![CDATA[$F{abm01id} + $F{formula}]]></groupExpression>
+	<field name="abp20id" class="java.lang.Long"/>
+	<field name="abp20det" class="java.lang.String"/>
+	<group name="COMPOSICAO" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{abp20id}]]></groupExpression>
 		<groupHeader>
 			<band height="71">
 				<staticText>
@@ -167,7 +169,7 @@
 			<band/>
 		</groupFooter>
 	</group>
-	<group name="processos">
+	<group name="PROCESSOS">
 		<groupHeader>
 			<band height="31">
 				<subreport>
@@ -181,7 +183,7 @@
 			<band/>
 		</groupFooter>
 	</group>
-	<group name="componentes">
+	<group name="COMPONENTES">
 		<groupHeader>
 			<band height="26">
 				<subreport>
@@ -192,10 +194,28 @@
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band/>
+			<band height="72">
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="14" width="554" height="58" uuid="6419758b-7d6e-446c-8968-6ef72373fa7c"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{abp20det}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="1" y="0" width="100" height="13" uuid="d5824e85-f182-461c-b84f-6f5f5e94bc14"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[PROCEDIMENTOS:]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="13" width="555" height="1" uuid="a2985a86-57a3-48d0-abd5-05d49c29c465"/>
+				</line>
+			</band>
 		</groupFooter>
 	</group>
-	<group name="atividades">
+	<group name="ATIVIDADES">
 		<groupHeader>
 			<band height="24">
 				<subreport>
@@ -209,7 +229,7 @@
 			<band/>
 		</groupFooter>
 	</group>
-	<group name="recursos">
+	<group name="RECURSOS">
 		<groupHeader>
 			<band height="19">
 				<subreport>

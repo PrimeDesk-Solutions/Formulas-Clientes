@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_ItensPorDocumentos" language="groovy" pageWidth="1417" pageHeight="595" orientation="Landscape" columnWidth="1377" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="37434244-bddd-478e-877a-f9a0b7c7ea31">
+	<property name="ireport.zoom" value="1.610510000000007"/>
+	<property name="ireport.x" value="1616"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="title" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="periodo" class="java.lang.String"/>
+	<field name="abm01codigo" class="java.lang.String"/>
+	<field name="abm01descr" class="java.lang.String"/>
+	<field name="abg01codigo" class="java.lang.String"/>
+	<field name="abg01descr" class="java.lang.String"/>
+	<field name="aah01codigo" class="java.lang.String"/>
+	<field name="aah01nome" class="java.lang.String"/>
+	<field name="abb01num" class="java.lang.Integer"/>
+	<field name="abd01codigo" class="java.lang.String"/>
+	<field name="abd01descr" class="java.lang.String"/>
+	<field name="eaa01esData" class="java.util.Date"/>
+	<field name="abb01data" class="java.util.Date"/>
+	<field name="abe01codigo" class="java.lang.String"/>
+	<field name="abe01na" class="java.lang.String"/>
+	<field name="aam06codigo" class="java.lang.String"/>
+	<field name="eaa0103qtUso" class="java.math.BigDecimal"/>
+	<field name="eaa0103qtComl" class="java.math.BigDecimal"/>
+	<field name="eaa0103totDoc" class="java.math.BigDecimal"/>
+	<field name="abf10codigo" class="java.lang.String"/>
+	<field name="abf10nome" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch">
+			<staticText>
+				<reportElement x="220" y="0" width="66" height="13" uuid="7708e348-1c72-41ba-9455-2f8cbf88b871"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NCM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="286" y="0" width="25" height="13" uuid="95f481f3-bff6-461e-9bc1-6c657da74948"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[TIPO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="365" y="0" width="77" height="13" uuid="af0af070-cb58-4559-8f90-2fb2bb5611e8"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DATA EMISSÃO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="596" y="0" width="72" height="13" uuid="569042ba-a63c-421f-b8ba-b5487fd385f0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[COD ENTIDADE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="802" y="0" width="64" height="13" uuid="e6a0a21a-c310-4307-a7b0-5fa976811f71"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[COD NAT.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1010" y="0" width="100" height="13" uuid="ec7769d6-3d36-4f0b-a2e7-7bc838fb0900"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[QT. USO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="48" height="13" uuid="4504e664-f450-4b87-bfe5-87f5264a8792"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CODIGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="48" y="0" width="172" height="13" uuid="18d3659f-414b-44d1-b07a-3cee619363e1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DESCRIÇÃO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="311" y="0" width="54" height="13" uuid="8f468d65-7de7-4ed1-85e8-b69898b34e15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NOME TIPO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="442" y="0" width="77" height="13" uuid="4c1cc665-d1e8-4b11-9c6c-4c1105afee6e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DATA E/S]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="519" y="0" width="77" height="13" uuid="24778b0b-4706-49cc-86bd-e06f7919a44c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NUM DOC.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="668" y="0" width="134" height="13" uuid="6c96d6ee-e6ec-4848-9ed8-bf6986ab1e07"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NOME ENTIDADE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="866" y="0" width="144" height="13" uuid="934200eb-97a4-4414-b3cf-20648bfc7245"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DESCR. NAT.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1110" y="0" width="100" height="13" uuid="eeb643f5-219c-4cbd-808f-17b35b881f17"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[QT. COMERCIAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1210" y="0" width="167" height="13" uuid="a97eb8b8-c86e-4738-a3d8-e3ba5a33a952"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[TOT DOC.]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField>
+				<reportElement x="-1" y="0" width="49" height="14" uuid="f501997e-9d6a-40f5-8fa8-13e271b49276"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abm01codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="48" y="0" width="172" height="14" uuid="dcdcce4e-5746-4598-8cbb-09d8538c75dd"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abm01descr}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="220" y="0" width="66" height="14" uuid="88e7f846-dc6c-4d8f-a8f0-9e1af2e1f44a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abg01codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="286" y="0" width="25" height="14" uuid="bdd76fdb-de67-476b-8006-eec8d62b538f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{aah01codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="311" y="0" width="54" height="14" uuid="fdc37eee-57d3-459c-8bda-358c7e0418d7"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{aah01nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="668" y="0" width="134" height="14" uuid="4b0e2e0e-498b-4da4-b74f-047d3af270f6"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abe01na}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="1210" y="0" width="167" height="14" uuid="e0dcc3be-903c-4d06-9580-5589a8ca3919"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{eaa0103totDoc}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="365" y="0" width="77" height="14" uuid="5eca0dda-4d2e-4680-a8f9-83e56de48258"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abb01data}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="596" y="0" width="72" height="14" uuid="c661c1d7-21ad-4a27-aa86-e7575581e73f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abe01codigo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="442" y="0" width="77" height="14" uuid="5c7d4443-e38e-44eb-838e-71ef5cb05283"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{eaa01esData}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="802" y="0" width="64" height="14" uuid="63c5d6b4-f017-4123-b2b9-c1e7c0b90f52"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abf10codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="866" y="0" width="144" height="14" uuid="3730b553-889b-4c11-97b2-cb5786c17aef"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abf10nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="519" y="0" width="77" height="14" uuid="2c5d2eed-cbde-4ccd-9239-5fca0e690ff7"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abb01num}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="1010" y="0" width="100" height="14" uuid="b3772468-76b7-4069-b2d8-c04928fc426e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{eaa0103qtUso}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="1110" y="0" width="100" height="14" uuid="870899ce-f5c7-44b2-9fc3-82b879bd3dbf"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{eaa0103qtComl}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_DocumentosPorItens" language="groovy" pageWidth="1133" pageHeight="595" orientation="Landscape" columnWidth="1093" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="096b9e1f-9fbf-40a7-b3ae-a6b790a9cdd1">
-	<property name="ireport.zoom" value="2.8531167061100082"/>
-	<property name="ireport.x" value="1002"/>
-	<property name="ireport.y" value="22"/>
+	<property name="ireport.zoom" value="1.1000000000000025"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.Object" isForPrompting="false">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -38,13 +38,15 @@
 	<field name="nomeCampo4" class="java.lang.String"/>
 	<field name="nomeCampo5" class="java.lang.String"/>
 	<field name="nomeCampo6" class="java.lang.String"/>
-	<variable name="total1" class="java.math.BigDecimal" resetType="Group" resetGroup="abm01codigo" calculation="Sum">
+	<field name="eaa01id" class="java.lang.String"/>
+	<field name="abm01id" class="java.lang.String"/>
+	<variable name="total1" class="java.math.BigDecimal" resetType="Group" resetGroup="ABM01" calculation="Sum">
 		<variableExpression><![CDATA[$F{valorCampo1}]]></variableExpression>
 	</variable>
-	<variable name="total2" class="java.math.BigDecimal" resetType="Group" resetGroup="abm01codigo" calculation="Sum">
+	<variable name="total2" class="java.math.BigDecimal" resetType="Group" resetGroup="ABM01" calculation="Sum">
 		<variableExpression><![CDATA[$F{valorCampo2}]]></variableExpression>
 	</variable>
-	<variable name="total3" class="java.math.BigDecimal" resetType="Group" resetGroup="abm01codigo" calculation="Sum">
+	<variable name="total3" class="java.math.BigDecimal" resetType="Group" resetGroup="ABM01" calculation="Sum">
 		<variableExpression><![CDATA[$F{valorCampo3}]]></variableExpression>
 	</variable>
 	<variable name="totalGeral1" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
@@ -56,13 +58,13 @@
 	<variable name="totalGeral3" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
 		<variableExpression><![CDATA[$F{valorCampo3}]]></variableExpression>
 	</variable>
-	<variable name="total4" class="java.math.BigDecimal" resetType="Group" resetGroup="abm01codigo" calculation="Sum">
+	<variable name="total4" class="java.math.BigDecimal" resetType="Group" resetGroup="ABM01" calculation="Sum">
 		<variableExpression><![CDATA[$F{valorCampo4}]]></variableExpression>
 	</variable>
-	<variable name="total5" class="java.math.BigDecimal" resetType="Group" resetGroup="abm01codigo" calculation="Sum">
+	<variable name="total5" class="java.math.BigDecimal" resetType="Group" resetGroup="ABM01" calculation="Sum">
 		<variableExpression><![CDATA[$F{valorCampo5}]]></variableExpression>
 	</variable>
-	<variable name="total6" class="java.math.BigDecimal" resetType="Group" resetGroup="abm01codigo" calculation="Sum">
+	<variable name="total6" class="java.math.BigDecimal" resetType="Group" resetGroup="ABM01" calculation="Sum">
 		<variableExpression><![CDATA[$F{valorCampo6}]]></variableExpression>
 	</variable>
 	<variable name="totalGeral4" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
@@ -147,8 +149,8 @@
 			</band>
 		</groupFooter>
 	</group>
-	<group name="abm01codigo">
-		<groupExpression><![CDATA[$F{abm01codigo}]]></groupExpression>
+	<group name="ABM01">
+		<groupExpression><![CDATA[$F{abm01id}]]></groupExpression>
 		<groupHeader>
 			<band height="15">
 				<textField>
@@ -234,6 +236,15 @@
 					<textFieldExpression><![CDATA[$V{total6}]]></textFieldExpression>
 				</textField>
 			</band>
+		</groupFooter>
+	</group>
+	<group name="EAA01">
+		<groupExpression><![CDATA[$F{eaa01id}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
 		</groupFooter>
 	</group>
 	<background>
@@ -420,33 +431,19 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{naEnt}]]></textFieldExpression>
 			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="1001" y="0" width="92" height="13" uuid="0446df23-8e7c-4c62-8fd1-860c81fcb2df"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorCampo6}]]></textFieldExpression>
+			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="539" y="0" width="92" height="13" uuid="f303841a-6701-4d48-99a4-b947ebc0d91c"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{valorCampo1}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
-				<reportElement x="631" y="0" width="92" height="13" uuid="8a95c95d-eb0d-4d56-bf87-0acdd463613c"/>
-				<textElement textAlignment="Center">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{valorCampo2}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
-				<reportElement x="725" y="0" width="92" height="13" uuid="d53e1e5e-13d1-4e84-a6b0-f111afc5f7e9"/>
-				<textElement textAlignment="Center">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{valorCampo3}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
-				<reportElement x="817" y="0" width="92" height="13" uuid="dd6bc544-fd52-4216-a9c4-b38629ab5216"/>
-				<textElement textAlignment="Center">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{valorCampo4}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
 				<reportElement x="909" y="0" width="92" height="13" uuid="067f2ffb-fc4c-4d65-986c-6ce563bee964"/>
@@ -456,11 +453,25 @@
 				<textFieldExpression><![CDATA[$F{valorCampo5}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
-				<reportElement x="1001" y="0" width="92" height="13" uuid="0446df23-8e7c-4c62-8fd1-860c81fcb2df"/>
+				<reportElement x="817" y="0" width="92" height="13" uuid="dd6bc544-fd52-4216-a9c4-b38629ab5216"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{valorCampo6}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{valorCampo4}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="725" y="0" width="92" height="13" uuid="d53e1e5e-13d1-4e84-a6b0-f111afc5f7e9"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorCampo3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="631" y="0" width="92" height="13" uuid="8a95c95d-eb0d-4d56-bf87-0acdd463613c"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorCampo2}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

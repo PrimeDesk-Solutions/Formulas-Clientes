@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SPP_Calculos_Necessidades_MRP_PDF_S2" language="groovy" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8517a376-598b-466e-ade9-72f054b3bfdd">
+	<property name="ireport.zoom" value="1.7715610000000015"/>
+	<property name="ireport.x" value="306"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\SAM-Servidor\\Formulas\\src\\main\\resources\\Inova\\relatorios\\spp\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="StreamSub3" class="java.lang.Object"/>
+	<parameter name="DETALHAMENTO_OP" class="java.lang.Boolean"/>
+	<field name="codItem" class="java.lang.String"/>
+	<field name="descrItem" class="java.lang.String"/>
+	<field name="mps" class="java.lang.String"/>
+	<field name="umu" class="java.lang.String"/>
+	<field name="dtInicio" class="java.util.Date"/>
+	<field name="qtd" class="java.math.BigDecimal"/>
+	<field name="estoque" class="java.math.BigDecimal"/>
+	<field name="preReserva" class="java.math.BigDecimal"/>
+	<field name="pedidoCompra" class="java.math.BigDecimal"/>
+	<field name="necessidadeLiquida" class="java.math.BigDecimal"/>
+	<field name="estoqueMinMax" class="java.math.BigDecimal"/>
+	<field name="sugestaoCompra" class="java.math.BigDecimal"/>
+	<field name="dataSugerida" class="java.util.Date"/>
+	<field name="pedCompraAposInicioProd" class="java.math.BigDecimal"/>
+	<field name="key" class="java.lang.String"/>
+	<field name="dsComponentesOP" class="java.lang.Object"/>
+	<field name="idItem" class="java.lang.Long"/>
+	<field name="numOrdem" class="java.lang.Integer"/>
+	<field name="qtdOrdem" class="java.math.BigDecimal"/>
+	<field name="chaveComponente" class="java.lang.String"/>
+	<field name="chkDetalhamentoOP" class="java.lang.Boolean"/>
+	<group name="COMPONENTES">
+		<groupExpression><![CDATA[$F{chaveComponente}]]></groupExpression>
+		<groupHeader>
+			<band height="13">
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="0" width="18" height="13" uuid="4a721eb5-38c6-46e0-9627-6caa9e0f9550"/>
+					<textElement>
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{mps}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="74" y="0" width="193" height="13" uuid="7e1fa196-c516-4ce8-82ca-2bb0842b04c1"/>
+					<textElement>
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{descrItem}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="18" y="0" width="56" height="13" uuid="cca378f3-b820-4ba2-a799-c6e2a2fcc40a"/>
+					<textElement>
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{codItem}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="267" y="0" width="23" height="13" uuid="0c850a5f-61a0-4767-b3f1-d8ca798d83ed"/>
+					<textElement>
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{umu}]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement x="290" y="0" width="53" height="13" uuid="bac3127f-aed1-4b1b-9c4d-64a9ccdbe45e"/>
+					<textElement textAlignment="Center">
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dtInicio}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000000;-#,##0.000000" isBlankWhenNull="true">
+					<reportElement x="343" y="0" width="50" height="13" uuid="27ebacdd-41d1-458b-a880-1e55aa0ed2e8"/>
+					<textElement textAlignment="Right">
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{qtd}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000000;-#,##0.000000" isBlankWhenNull="true">
+					<reportElement x="393" y="0" width="55" height="13" uuid="433af03b-1a34-4713-9a8e-322ce1ca681e"/>
+					<textElement textAlignment="Right">
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{estoque}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000000;-#,##0.000000" isBlankWhenNull="true">
+					<reportElement x="448" y="0" width="47" height="13" uuid="556ef1ab-a772-4bc7-9673-372e99408459"/>
+					<textElement textAlignment="Right">
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{preReserva}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000000;-#,##0.000000" isBlankWhenNull="true">
+					<reportElement x="495" y="0" width="58" height="13" uuid="b888bda1-734b-4fce-80f2-f204f14ee3fe"/>
+					<textElement textAlignment="Right">
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{pedidoCompra}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000000;(#,##0.000000)" isBlankWhenNull="true">
+					<reportElement x="553" y="0" width="64" height="13" uuid="a689858e-d587-4a8c-b58f-7d9b0f43f2e1"/>
+					<textElement textAlignment="Right">
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{necessidadeLiquida}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000000;-#,##0.000000" isBlankWhenNull="true">
+					<reportElement x="617" y="0" width="44" height="13" uuid="e2df565f-b5e2-4dd7-b4af-5de773663f05"/>
+					<textElement textAlignment="Right">
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{estoqueMinMax}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000000;-#,##0.000000" isBlankWhenNull="true">
+					<reportElement x="661" y="0" width="48" height="13" uuid="48509c88-ab9a-400f-a717-bae61c6e162b"/>
+					<textElement textAlignment="Right">
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{sugestaoCompra}]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement x="709" y="0" width="38" height="13" uuid="b71bc7b2-434c-44b5-ab24-3f8aa29e3e3a"/>
+					<textElement textAlignment="Center">
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dataSugerida}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000000;-#,##0.000000" isBlankWhenNull="true">
+					<reportElement x="747" y="0" width="55" height="13" uuid="3949d5b8-616e-49d7-bb4d-c35824fbffc5"/>
+					<textElement textAlignment="Right">
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{pedCompraAposInicioProd}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="DOCUMENTOS">
+		<groupExpression><![CDATA[$F{chaveComponente} + $F{numOrdem}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="42" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="24" width="86" height="17" uuid="68ca39ec-9ff8-4a54-a5d3-4509e8efac92"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[ITEM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="87" y="24" width="67" height="17" uuid="025f6850-efc9-4bad-beaf-6dfd5c222772"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[DESCRIÇÃO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="267" y="24" width="23" height="17" uuid="023df7ac-cc6b-4993-95b9-1be7e3965ca9"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[UMU]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="290" y="24" width="53" height="17" uuid="3955e5fe-ebdb-42bb-8a1b-e94eee66f57a"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[DT. INÍCIO PRODUÇÃO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="343" y="24" width="50" height="17" uuid="498ec04a-6538-46d9-b0d1-9b98886f2ee8"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[NECESSIDADE BRUTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="393" y="24" width="55" height="17" uuid="8e98d3eb-cc05-43dc-9ee1-5ee0d11c7021"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[ESTOQUE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="448" y="24" width="47" height="17" uuid="8b5988d3-4975-4e3a-bcd8-2610628bb663"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[PRÉ-RESERVA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="495" y="24" width="58" height="17" uuid="f4f06a70-e079-48bb-843f-103042df9d83"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[PEDIDO COMPRA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="553" y="24" width="64" height="17" uuid="efef879a-3fe2-4485-b9b8-cdd597a6f2ca"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[NECESSIDADE LÍQUIDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="617" y="24" width="44" height="17" uuid="ed648446-0f44-4e82-88d1-a4fafa4aa603"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[ESTOQUE MIN/MAX]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="661" y="24" width="48" height="17" uuid="f99521ee-b852-419d-a9ef-8f02d964aae0"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[SUGESTÃO COMPRA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="709" y="24" width="38" height="17" uuid="1308b651-2b11-4f8b-8b76-ff448f7868b2"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[DATA SUGERIDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="747" y="24" width="55" height="17" uuid="3e0a59ae-cb8e-45f8-82db-962d1047dd61"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[PED. COMPRA APÓS INI PROD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="0" width="86" height="13" uuid="9c5e0c9e-5703-4715-bd61-1db166e329c5"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[COMPONENTES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="154" y="24" width="113" height="17" uuid="e4b5b815-c3d8-46bf-8332-61ae461b986f"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[O.P]]></text>
+			</staticText>
+			<line>
+				<reportElement x="1" y="41" width="801" height="1" uuid="c7823103-76a3-42a0-8201-38b5bf07685f"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="154" y="0" width="38" height="13" isRemoveLineWhenBlank="true" uuid="da52058e-8894-409f-9939-d1fc87d65ba9">
+					<printWhenExpression><![CDATA[$F{chkDetalhamentoOP}]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numOrdem}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.000000;-#,##0.000000">
+				<reportElement x="343" y="0" width="50" height="13" isRemoveLineWhenBlank="true" uuid="05b77d67-a4dd-47c8-8ac8-91e9b64b1b35">
+					<printWhenExpression><![CDATA[$F{chkDetalhamentoOP}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtdOrdem}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
