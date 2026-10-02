@@ -111,15 +111,13 @@ public class SCF_Documentos extends RelatorioBase{
             return gerarPDF("SCF_Documentos_R1(PDF)", dados);
         }
         if (isAgrupamento == "D" && exportar == 1) {
-            params.put("TITULO_RELATORIO", "Documentos por Departamentos e Naturezas");
             return gerarXLSX("SCF_Documentos_R1(Excel)", dados);
         }
         if (isAgrupamento == "N" && exportar == 0) {
-            params.put("TITULO_RELATORIO", "Documentos por Naturezas e Departamentos");
+            params.put("TITULO_RELATORIO", "Documentos por Naturezas");
             return gerarPDF("SCF_Documentos_R2(PDF)", dados);
         }
         if (isAgrupamento == "N" && exportar == 1) {
-            params.put("TITULO_RELATORIO", "Documentos por Naturezas e Departamentos");
             return gerarXLSX("SCF_Documentos_R2(Excel)", dados);
         }
         if (isAgrupamento == "Nu" && exportar == 0) {
@@ -127,7 +125,6 @@ public class SCF_Documentos extends RelatorioBase{
             return gerarPDF("SCF_Documentos_R3(PDF)", dados);
         }
         if (isAgrupamento == "Nu" && exportar == 1) {
-            params.put("TITULO_RELATORIO", "Documentos por Número");
             return gerarXLSX("SCF_Documentos_R3(Excel)", dados);
         }
         if (isAgrupamento == "E" && exportar == 0) {
@@ -135,7 +132,6 @@ public class SCF_Documentos extends RelatorioBase{
             return gerarPDF("SCF_Documentos_R4(PDF)", dados);
         }
         if (isAgrupamento == "E" && exportar == 1) {
-            params.put("TITULO_RELATORIO", "Documentos por Entidades");
             return gerarXLSX("SCF_Documentos_R4(Excel)", dados);
         }
         if (isAgrupamento == "T" && exportar == 0) {
@@ -143,7 +139,6 @@ public class SCF_Documentos extends RelatorioBase{
             return gerarPDF("SCF_Documentos_R5(PDF)", dados);
         }
         if (isAgrupamento == "T" && exportar == 1) {
-            params.put("TITULO_RELATORIO", "Documentos por Tipos de Documentos");
             return gerarXLSX("SCF_Documentos_R5(Excel)", dados);
         }
         if (isAgrupamento == "V" && exportar == 0) {
@@ -151,7 +146,6 @@ public class SCF_Documentos extends RelatorioBase{
             return gerarPDF("SCF_Documentos_R6(PDF)", dados);
         }
         if (isAgrupamento == "V" && exportar == 1) {
-            params.put("TITULO_RELATORIO", "Documentos por Vencimento Nominal");
             return gerarXLSX("SCF_Documentos_R6(Excel)", dados);
         }
         if (isAgrupamento == "R" && exportar == 0) {
@@ -159,7 +153,6 @@ public class SCF_Documentos extends RelatorioBase{
             return gerarPDF("SCF_Documentos_R7(PDF)", dados);
         }
         if (isAgrupamento == "R" && exportar == 1) {
-            params.put("TITULO_RELATORIO", "Documentos por Representantes");
             return gerarXLSX("SCF_Documentos_R7(Excel)", dados);
         }
 
