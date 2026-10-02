@@ -118,7 +118,7 @@ public class SPP_Calculos_Necessidades_MRP extends RelatorioBase {
                                  numInicial != null && numFinal == null ? "WHERE abb01ordem.abb01num >= :numInicial " :
                                  numInicial == null && numFinal != null ? "WHERE abb01ordem.abb01num <= :numInicial " : "";
         
-        String sql = "SELECT bab01id, abb01ordem.abb01num AS numOrdem, abp10codigo AS codProcesso, abp10descr AS descrProcesso, abm01prod.abm01codigo AS codItem, abm01prod.abm01descr AS descrItem, " +
+        String sql = "SELECT bab01ultProc AS ultimoProc, bab01id, abb01ordem.abb01num AS numOrdem, abp10codigo AS codProcesso, abp10descr AS descrProcesso, abm01prod.abm01codigo AS codItem, abm01prod.abm01descr AS descrItem, " +
                         "aam06codigo AS umu, bab01qt, abb01plano.abb01num AS numPlano, baa01descr AS nomePlano, CAST(bab01json ->> 'data_inicio' AS DATE) AS dtInicio, 'ORDEM_PRODUCAO' AS tipo, '1' AS key " +
                         "FROM bab01 " +
                         "INNER JOIN abb01 AS abb01ordem ON abb01ordem.abb01id = bab01central " +
@@ -157,6 +157,7 @@ public class SPP_Calculos_Necessidades_MRP extends RelatorioBase {
         String field1 = optionDtNecessidades == 0 ? " :dtCalculo AS dtInicio, CONCAT(abm01id, :dtCalculo ) AS chaveComponente, " : "CAST(bab01json ->> 'data_inicio' AS DATE) AS dtInicio,CONCAT(abm01id, CAST(bab01json ->> 'data_inicio' AS DATE)) AS chaveComponente,  "
         String field2 = optionQtdNecessidades == 0 ? " SUM(bab0101qtP) AS qtd, " : "SUM(bab0101qtA) AS qtd, ";
         String groupBy = optionDtNecessidades == 0 ?  " GROUP BY abm01id, abm01codigo, abm01descr, mps, umu, dtInicio, key, abm13leadTime " : " GROUP BY abm01id, abm01codigo, abm01descr, mps, umu, dtInicio, key, chaveComponente, abm13leadTime ";
+        String whereMovEst = "AND abm11movEst = 1";
 
         String sql = "SELECT " + field1 + field2 + " abm01id AS idItem, abm01codigo AS codItem, abm01descr AS descrItem, " +
             " CASE WHEN abm01tipo = 0 THEN 'M' ELSE 'P' END AS mps, abm13leadTime,  " +
@@ -169,7 +170,10 @@ public class SPP_Calculos_Necessidades_MRP extends RelatorioBase {
             " LEFT JOIN aam06 ON aam06id = abm01umu " +
             " INNER JOIN abm0101 ON abm0101item = abm01id "+
             " LEFT JOIN abm13 ON abm13id = abm0101comercial " +
+            " LEFT JOIN abm11 ON abm11id = abm0101estoque "+
             " WHERE bab01id IN (:idsOrdens) "+
+            " AND abm01tipo = 0 "+
+            whereMovEst +
             obterWherePadrao("Abm01", "AND") +
             groupBy +
             " ORDER BY abm01codigo, dtInicio"
@@ -182,6 +186,7 @@ public class SPP_Calculos_Necessidades_MRP extends RelatorioBase {
     private List<TableMap> buscarComponentesOP(List<Long> idsOrdens, Integer optionDtNecessidades, Integer optionQtdNecessidades, LocalDate dtCalculo){
         String field1 = optionDtNecessidades == 0 ? " :dtCalculo AS dtInicio, CONCAT(abm01id, :dtCalculo ) AS chaveComponente, " : "CAST(bab01json ->> 'data_inicio' AS DATE) AS dtInicio,CONCAT(abm01id, CAST(bab01json ->> 'data_inicio' AS DATE)) AS chaveComponente,  "
         String field2 = optionQtdNecessidades == 0 ? " bab0101qtP AS qtd, " : "bab0101qtA AS qtd, ";
+        String whereMovEst = "AND abm11movEst = 1";
 
         String sql = "SELECT " + field1 + field2 + "abm01id AS idItem, abb01ordem.abb01num AS numOrdem, bab0101qtP AS qtdOrdem " +
                     " FROM bab01  " +
@@ -192,8 +197,11 @@ public class SPP_Calculos_Necessidades_MRP extends RelatorioBase {
                     " LEFT JOIN aam06 ON aam06id = abm01umu " +
                     " INNER JOIN abm0101 ON abm0101item = abm01id "+
                     " LEFT JOIN abm13 ON abm13id = abm0101comercial " +
-                    obterWherePadrao("Abm01", "AND") +
+                    " LEFT JOIN abm11 ON abm11id = abm0101estoque "+
                     "WHERE bab01id IN (:idsOrdens) "+
+                    "AND abm01tipo = 0 "+
+                    whereMovEst +
+                    obterWherePadrao("Abm01", "AND") +
                     "ORDER BY abm01codigo, dtInicio, abb01ordem.abb01num"
 
         Parametro parametroOrdens = Parametro.criar("idsOrdens", idsOrdens);
@@ -270,7 +278,8 @@ public class SPP_Calculos_Necessidades_MRP extends RelatorioBase {
 
             LocalDate dataSugerida = calcularDataSugerida(
                     componente.getDate("dtInicio"),
-                    componente.getInteger("abm13leadTime")
+                    componente.getInteger("abm13leadTime"),
+                    sugestaoCompra
             );
 
             preencherResultado(
@@ -382,9 +391,9 @@ public class SPP_Calculos_Necessidades_MRP extends RelatorioBase {
                 qtd
         );
     }
-    private LocalDate calcularDataSugerida(LocalDate dtInicioProd,Integer leadTime) {
+    private LocalDate calcularDataSugerida(LocalDate dtInicioProd,Integer leadTime, BigDecimal sugestaoCompra) {
 
-        if (leadTime == null) {
+        if (leadTime == null || sugestaoCompra.compareTo(0) == 0) {
             return null;
         }
 
