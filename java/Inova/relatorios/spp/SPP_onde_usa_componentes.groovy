@@ -55,6 +55,7 @@ public class SPP_onde_usa_componentes extends RelatorioBase {
                 "WHERE TRUE "+
                 whereItens +
                 whereMps +
+                "AND abp20di IS NULL " +
                 "ORDER BY MpsComponente, codComponente, MpsPrincipal, codPrincipal  "
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroItemFin,parametroItemIni, parametroMps);
