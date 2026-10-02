@@ -727,10 +727,16 @@ class SRF_NFe extends FormulaBase {
             dest = infNfe.addNode("dest");
             Aag02 aag02 = getAcessoAoBanco().buscarRegistroUnicoById("Aag02", endPrincipal.eaa0101municipio.aag0201uf.aag02id);
             if(aag02.aag02uf.equalsIgnoreCase("EX")) {
-                dest.addNode("idEstrangeiro");
-                dest.addNode("xNome", eaa0102.eaa0102nome, true);
+                if(!isProducao){
+                    dest.addNode("idEstrangeiro");
+                    dest.addNode("xNome", "NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL", true);
+                }else{
+                    dest.addNode("idEstrangeiro");
+                    dest.addNode("xNome", eaa0102.eaa0102nome, true);
+                }
+
             }else {
-                if (isProducao != false) {
+                if (isProducao) {
                     if(eaa0102.eaa0102ti == 0) {
                         dest.addNode("CNPJ", StringUtils.ajustString(StringUtils.extractNumbers(eaa0102.eaa0102ni), 14), true);
                     }else {
@@ -738,7 +744,11 @@ class SRF_NFe extends FormulaBase {
                     }
                     dest.addNode("xNome", eaa0102.eaa0102nome, true);
                 }else {
-                    dest.addNode("CNPJ", "99999999000191", true);
+                    if(eaa0102.eaa0102ti == 0) {
+                        dest.addNode("CNPJ", StringUtils.ajustString(StringUtils.extractNumbers(eaa0102.eaa0102ni), 14), true);
+                    }else {
+                        dest.addNode("CPF", StringUtils.ajustString(StringUtils.extractNumbers(eaa0102.eaa0102ni), 11), true);
+                    }
                     dest.addNode("xNome", "NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL", true);
                 }
             }
@@ -775,7 +785,6 @@ class SRF_NFe extends FormulaBase {
                     indIEDest = 2;
                 }
             }
-            if(!isProducao) indIEDest = 9;
 
             dest.addNode("indIEDest", indIEDest, true);
             dest.addNode("IE", indIEDest == 9 ? null : IE, false);
@@ -930,7 +939,7 @@ class SRF_NFe extends FormulaBase {
                 prod.addNode("indEscala", eaa0103.eaa0103prodRelev == 0 ? null : eaa0103.eaa0103prodRelev == 1 ? "N" : "S", false);
                 prod.addNode("CNPJFab", StringUtils.extractNumbers(eaa0103.eaa0103cnpjFabr), false);
             }
-            prod.addNode("cBenef", null, false);
+            prod.addNode("cBenef", eaa0103.eaa0103codBenef, false);
             if(eaa0103.eaa0103credPresIbsZFM != null && eaa0103.eaa0103credPresIbsZFM != 0) prod.addNode("tpCredPresIBSZFM", eaa0103.eaa0103credPresIbsZFM, false);
             if(abm01.abm01tipo != 2) {
                 prod.addNode("EXTIPI", ncm == null ? null : abg01.abg01codigo.indexOf("/") == -1 ? null : abg01.abg01codigo.substring(abg01.abg01codigo.indexOf("/") + 1,abg01.abg01codigo.length()), false);
