@@ -64,8 +64,6 @@ public class SCV_SRF_Pre_Gravar extends FormulaBase {
 
                 if (eaa0103.eaa0103unit == 0) throw new ValidacaoException("O unitário do item " + abm01.abm01codigo + " - " + abm01.abm01descr + " deve ser maior que zero.")
                 if (eaa0103.eaa0103qtComl == 0) throw new ValidacaoException("A quantidade do item " + abm01.abm01codigo + " - " + abm01.abm01descr + " deve ser maior que zero.")
-                if (jsonEaa01.getBigDecimal_Zero("volumes") == BigDecimal.ZERO && abd01.abd01aplic == 1 && abd01.abd01es == 1 ) throw new ValidacaoException("Documento sem volume informado.");
-                if (jsonEaa01.getBigDecimal_Zero("peso_bruto") == BigDecimal.ZERO && abd01.abd01aplic == 1 && abd01.abd01es == 1) throw new ValidacaoException("Documento sem peso bruto informado.");
             }
         } catch (Exception e) {
             throw new ValidacaoException(e.getMessage())
