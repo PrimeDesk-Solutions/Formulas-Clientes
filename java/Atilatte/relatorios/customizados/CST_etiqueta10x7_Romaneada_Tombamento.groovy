@@ -159,9 +159,9 @@ public class CST_etiqueta10x7_Romaneada_Tombamento extends RelatorioBase {
 		for(int i = 0; i < registros.size();i++){
 
 			umv = registros.get(i).getString("UMV");
-			cxs = umv == 'CX' || umv == 'KG'  ?  registros.get(i).getInteger("caixa") : registros.get(i).getInteger("eaa0103qtComl") / registros.get(i).getInteger("cvdnf");
+			cxs = umv == 'CX' || umv == 'KG' || umv == "L" ?  registros.get(i).getInteger("caixa") : registros.get(i).getInteger("eaa0103qtComl") / registros.get(i).getInteger("cvdnf");
 
-			if(umv == 'CX' || umv == 'KG'){
+			if(umv == 'CX' || umv == 'KG' || umv == "L"){
 				for(int cx = 0; cx < cxs; cx++){
 					TableMap itens = new TableMap()
 					String codbarsam = registros.get(i).getInteger("abb01num");
