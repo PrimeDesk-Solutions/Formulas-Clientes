@@ -201,11 +201,11 @@ public class SRF_DocPadraoSaidaPernambucoComIPI extends FormulaBase {
 
         // Class. Trib CBS/IBS
         aaj07 = eaa0103.eaa0103clasTribCbsIbs != null ? getSession().get(Aaj07.class, eaa0103.eaa0103clasTribCbsIbs.aaj07id) : null;
-        if (aaj07 == null) throw new ValidacaoException("É nescessário informar a Classificação tribtária de CBS/IBS do item: " + abm01.abm01codigo + " - " + abm01.abm01na);
+        if (aaj07 == null) definirClasTribCST();//throw new ValidacaoException("É nescessário informar a Classificação tribtária de CBS/IBS do item: " + abm01.abm01codigo + " - " + abm01.abm01na);
 
         // CST IBS/CBS
         aaj09 = eaa0103.eaa0103cstCbsIbs != null ? getSession().get(Aaj09.class, eaa0103.eaa0103cstCbsIbs.aaj09id) : null;
-        if (aaj09 == null) interromper("Necessário informar o CST de CBS/IBS no item: " + abm01.abm01codigo + " - " + abm01.abm01na);
+        if (aaj09 == null) definirClasTribCST() //interromper("Necessário informar o CST de CBS/IBS no item: " + abm01.abm01codigo + " - " + abm01.abm01na);
 
         //CAMPOS LIVRES
         jsonAac10 = aac10.aac10json != null ? aac10.aac10json : new TableMap();
@@ -766,6 +766,24 @@ public class SRF_DocPadraoSaidaPernambucoComIPI extends FormulaBase {
             jsonEaa0103.put("vlr_ibs", new BigDecimal(0));
             jsonEaa0103.put("cbs_ibs_bc", new BigDecimal(0));
         }
+    }
+
+    private void definirClasTribCST(){
+        if(abd01.abd01codigo == "60029" || abd01.abd01codigo == "60013" || abd01.abd01codigo == "60031" ||
+                abd01.abd01codigo == "60007" || abd01.abd01codigo == "60023" || abd01.abd01codigo == "60003" ||
+                abd01.abd01codigo == "60026" || abd01.abd01codigo == "60006" || abd01.abd01codigo == "60044" ||
+                abd01.abd01codigo == "60004" || abd01.abd01codigo == "60058" || eaa0103.eaa0103retInd == 1){
+
+            eaa0103.eaa0103cstCbsIbs = getSession().get(Aaj09.class, Criterions.eq("aaj09codigo", "410"));
+            eaa0103.eaa0103clasTribCbsIbs = getSession().get(Aaj07.class, Criterions.eq("aaj07codigo", "410999"));
+
+        } else {
+            eaa0103.eaa0103cstCbsIbs = getSession().get(Aaj09.class, Criterions.eq("aaj09codigo", "000"));
+            eaa0103.eaa0103clasTribCbsIbs = getSession().get(Aaj07.class, Criterions.eq("aaj07codigo", "000001"));
+        }
+
+        aaj09 = eaa0103.eaa0103cstCbsIbs != null ? eaa0103.eaa0103cstCbsIbs : null;
+        aaj07 = eaa0103.eaa0103clasTribCbsIbs != null ? eaa0103.eaa0103clasTribCbsIbs : null;
     }
 
     private void definirCodigoBeneficioFiscal() {
