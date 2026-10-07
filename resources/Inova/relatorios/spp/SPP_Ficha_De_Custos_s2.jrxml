@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SPP_FichaEngenhariaProdutos_s2" language="groovy" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="7ef26877-aa1a-46df-8c8b-bf47ffe4997f">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="38"/>
+	<property name="ireport.y" value="0"/>
+	<field name="abp1001seq" class="java.math.BigDecimal"/>
+	<field name="abp01codigo" class="java.lang.String"/>
+	<field name="abp01descr" class="java.lang.String"/>
+	<field name="abp10codigo" class="java.lang.String"/>
+	<field name="abp10descr" class="java.lang.String"/>
+	<field name="tempo" class="java.math.BigDecimal"/>
+	<field name="tempoSetup" class="java.math.BigDecimal"/>
+	<variable name="totalTempo " class="java.math.BigDecimal" resetType="Group" resetGroup="processo" calculation="Sum">
+		<variableExpression><![CDATA[$F{tempo}]]></variableExpression>
+	</variable>
+	<variable name="totalSetup" class="java.math.BigDecimal" resetType="Group" resetGroup="processo" calculation="Sum">
+		<variableExpression><![CDATA[$F{tempoSetup}]]></variableExpression>
+	</variable>
+	<group name="processo">
+		<groupExpression><![CDATA[$F{abp10codigo}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement x="0" y="0" width="51" height="20" uuid="d1515385-f2eb-4c32-86c8-63effae39bfa"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{abp10codigo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="51" y="0" width="298" height="20" uuid="1e9de392-d3f1-46d4-97d9-2387a1225b82"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{abp10descr}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="31">
+				<textField>
+					<reportElement x="617" y="11" width="80" height="20" uuid="a1e584a1-6480-44b8-9b77-d0e17518c6e6"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalTempo }]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="697" y="11" width="100" height="20" uuid="3e875be4-7c45-49be-bb5d-03beed95826f"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalSetup}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="529" y="8" width="273" height="1" uuid="1d7f3c5a-b37c-4411-96df-7a72455600a1"/>
+				</line>
+				<staticText>
+					<reportElement x="537" y="11" width="80" height="20" uuid="ea840d4e-0c84-4761-b63b-09e6e457ba40"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[TOTAL GERAL]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="13" uuid="5bc3d284-dc89-4863-a7e5-74a4f0ad3dc5"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Processo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="60" height="13" uuid="48aa026d-f057-4009-9395-68d9e4e71703"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Seq]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="0" width="315" height="13" uuid="e267c2e8-878f-4c30-b08b-3dbce66e4329"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Atividades]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="617" y="0" width="80" height="13" uuid="c71ac019-783f-46eb-afec-64c49c0ccf93"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Tempo ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="697" y="0" width="80" height="13" uuid="0d90c743-c0f0-446c-8a0a-2ddbf44b986c"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Setup]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="14" width="797" height="1" uuid="13e4ce98-0bba-4c75-8dd8-b620f817e885"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="000">
+				<reportElement x="100" y="0" width="31" height="20" uuid="62ebae21-76a8-48d6-8fba-c8ab966e2080"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abp1001seq}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="131" y="0" width="46" height="20" uuid="aa21e9a2-cadd-42b4-ab49-e3af0fc7c421"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abp01codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="177" y="0" width="204" height="20" uuid="cf275825-df22-49bc-85c3-4f798c1e8c6b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abp01descr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00">
+				<reportElement x="617" y="0" width="80" height="20" uuid="3f4f3f58-8b63-43b1-a4c1-6066c2098c45"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tempo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00">
+				<reportElement x="697" y="0" width="100" height="20" uuid="55cdc2dc-fbe1-40ff-83a2-89e21ffe8de1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tempoSetup}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

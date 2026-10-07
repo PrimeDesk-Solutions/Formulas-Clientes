@@ -1,0 +1,70 @@
+<html>
+	<template>
+		<div class="row">
+			<div class = "col-md-6 col-12">
+				<fieldset>
+					<legend>&nbsp; Itens &nbsp;</legend>
+					<m-select :multiple="true" :request="requestItens" v-model="filtros.itens" :required="true"/>
+				</fieldset>
+			</div>
+			<div class="col-md-6 col-12">
+				<fieldset>
+					<legend>&nbsp; BOM (Separar por ponto e virgula Ex: 1;2;3) &nbsp;</legend>
+					<m-input type="text" v-model="filtros.bom" :required="false" />
+				</fieldset>
+			</div>
+		</div>
+		<div class="row">
+			<div class = "col-md-2 col-12">
+				<fieldset class = "h-100">
+					<legend>&nbsp; Quantidade &nbsp;</legend>
+					<m-input v-model="filtros.quantidade" />
+				</fieldset>
+			</div>
+			<div class = "col-md-4 col-12">
+				<fieldset>
+					<legend>&nbsp; Preço dos Componentes &nbsp;</legend>
+					<m-select  :multiple="false" :options="requestPrecoItem" v-model="filtros.precoItem" />
+					<div class = "col-1">
+						<m-check v-model="filtros.chkPrecoItem" label="Considerar Preço"  />
+					</div>
+				</fieldset>
+			</div>
+			<div class="col-md-1 col-12">
+				<fieldset>
+					<legend>Imprimir</legend>
+					<m-radio label=" PDF" option="0" v-model="filtros.impressao" />
+					<m-radio label=" XLS" option="1" v-model="filtros.impressao" />
+				</fieldset>
+			</div>
+		</div>
+		
+	</template>
+	<script>
+		const classe = {
+			data: {
+				requestItens : {
+					table : 'Abm01',
+					columns : 'abm01codigo, abm01na',
+					data:{
+						customWhere: "abm01tipo = 1"
+					}
+				},
+				requestPrecoItem:[
+						{value: 0, label: "Custo"},
+						{value: 1, label: "Médio"},
+						{value: 2, label: "Maior"},
+						{value: 3, label: "Menor"},
+						{value: 4, label: "Ultimo"}
+				]
+			},
+			onLoad: function () {},
+			methods: {}
+		}
+	</script>
+	<style>
+		fieldset{
+			height:100%;
+		}
+	</style>
+</html>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCV_Pedidos" language="groovy" pageWidth="1133" pageHeight="595" orientation="Landscape" columnWidth="1093" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d153533c-d360-429a-ad97-20c705da01d0">
 	<property name="ireport.zoom" value="1.5394743546921197"/>
-	<property name="ireport.x" value="600"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="titulo" class="java.lang.String"/>
 	<parameter name="dataIni" class="java.lang.Object"/>
@@ -108,28 +108,28 @@
 				<text><![CDATA[PED. CLI]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="748" y="0" width="36" height="13" uuid="137397a6-2128-401d-a86a-8063d1c97bb4"/>
+				<reportElement x="748" y="0" width="59" height="13" uuid="137397a6-2128-401d-a86a-8063d1c97bb4"/>
 				<textElement>
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<text><![CDATA[QT]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="826" y="0" width="45" height="13" uuid="0df47ed5-4f82-4e4e-81ce-8b11716dd771"/>
+				<reportElement x="849" y="0" width="68" height="13" uuid="0df47ed5-4f82-4e4e-81ce-8b11716dd771"/>
 				<textElement>
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<text><![CDATA[TOT ITEM]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="871" y="0" width="40" height="13" uuid="7ae6307c-3d57-435d-8453-40e9db962bc7"/>
+				<reportElement x="917" y="0" width="50" height="13" uuid="7ae6307c-3d57-435d-8453-40e9db962bc7"/>
 				<textElement>
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<text><![CDATA[TOT DOC]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="784" y="0" width="42" height="13" uuid="85043638-d669-47e6-9f96-7f294ce6ff9e"/>
+				<reportElement x="807" y="0" width="42" height="13" uuid="85043638-d669-47e6-9f96-7f294ce6ff9e"/>
 				<textElement>
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
@@ -143,14 +143,14 @@
 				<text><![CDATA[UNID.]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="911" y="0" width="33" height="13" uuid="8d5ce42c-65ee-46d5-9242-5bd73dba364d"/>
+				<reportElement x="967" y="0" width="59" height="13" uuid="8d5ce42c-65ee-46d5-9242-5bd73dba364d"/>
 				<textElement>
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nomeCampo1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="944" y="0" width="27" height="13" uuid="8ae033e4-a673-4a01-8af2-3bcbd1a74218"/>
+				<reportElement x="1026" y="0" width="67" height="13" uuid="8ae033e4-a673-4a01-8af2-3bcbd1a74218"/>
 				<textElement>
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
@@ -230,28 +230,28 @@
 				<textFieldExpression><![CDATA[$F{eaa0103pcnum}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
-				<reportElement x="748" y="0" width="36" height="13" uuid="68dac12e-4b0c-4101-b64a-a72507133225"/>
+				<reportElement x="748" y="0" width="59" height="13" uuid="68dac12e-4b0c-4101-b64a-a72507133225"/>
 				<textElement>
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{eaa0103qtcoml}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
-				<reportElement x="784" y="0" width="42" height="13" uuid="0a60765d-b1ac-491e-bd42-c5dd1f1626a2"/>
+				<reportElement x="807" y="0" width="42" height="13" uuid="0a60765d-b1ac-491e-bd42-c5dd1f1626a2"/>
 				<textElement>
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{eaa0103unit}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
-				<reportElement x="871" y="0" width="38" height="13" uuid="9fceff19-82f2-47e5-a9d7-25a9c715ea75"/>
+				<reportElement x="917" y="0" width="50" height="13" uuid="9fceff19-82f2-47e5-a9d7-25a9c715ea75"/>
 				<textElement>
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{eaa0103qtcoml} * $F{eaa0103unit}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
-				<reportElement x="826" y="0" width="45" height="13" uuid="9a8659cd-4a45-4738-ad85-deb29941d8d7"/>
+				<reportElement x="849" y="0" width="68" height="13" uuid="9a8659cd-4a45-4738-ad85-deb29941d8d7"/>
 				<textElement>
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
@@ -265,7 +265,7 @@
 				<textFieldExpression><![CDATA[$F{aam06descr_uso}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="909" y="0" width="35" height="13" uuid="99e398a3-d995-4fad-9382-e533effb7e6b">
+				<reportElement x="967" y="0" width="59" height="13" uuid="99e398a3-d995-4fad-9382-e533effb7e6b">
 					<printWhenExpression><![CDATA[$F{nomeCampo1} != null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
@@ -274,7 +274,7 @@
 				<textFieldExpression><![CDATA[$F{valorCampo1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="944" y="0" width="27" height="13" uuid="b313ebec-a1d3-4101-a36b-72b45314d9ab">
+				<reportElement x="1026" y="0" width="67" height="13" uuid="b313ebec-a1d3-4101-a36b-72b45314d9ab">
 					<printWhenExpression><![CDATA[$F{nomeCampo2} != null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
@@ -324,7 +324,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nomeEntidade}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="0" y="0" width="157" height="13" uuid="1e2abad6-1b45-4ece-a2ae-b40760fee374"/>
 				<textElement>
 					<font fontName="SansSerif" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
