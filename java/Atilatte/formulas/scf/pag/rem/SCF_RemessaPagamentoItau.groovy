@@ -105,6 +105,7 @@ public class SCF_RemessaPagamentoItau extends FormulaBase {
 
             // Campos Livre Entidade
             TableMap tmAbe01 = abe01.abe01json != null ? abe01.abe01json : new TableMap();
+            if(daa01.daa01codBarras != null && (tmAbe01.getString("forma_pagamento") == "30" || tmAbe01.getString("forma_pagamento") == "31")) interromper("Forma de pagamento preenchido indevidamente no cadastro da entidade " + abe01.abe01codigo + " - " + abe01.abe01nome);
             if(tmAbe01.getString("forma_pagamento") == null || tmAbe01.getString("forma_pagamento").isEmpty()) interromper("Necessário preencher o campo 'Forma de Pagamento' no cadastro da entidades " + abe01.abe01codigo + " - " + abe01.abe01nome);
             if(tmAbe01.getString("forma_pagamento") == "99") continue;
 
