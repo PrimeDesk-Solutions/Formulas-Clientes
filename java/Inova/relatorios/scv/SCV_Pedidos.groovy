@@ -26,21 +26,23 @@ public class SCV_Pedidos extends RelatorioBase {
         filtrosDefault.put("atendimento", true);
         filtrosDefault.put("atendimento2", true);
         filtrosDefault.put("liquido", true)
+        filtrosDefault.put("agrupamento", "0");
         return Utils.map("filtros", filtrosDefault);
     }
     @Override
     public DadosParaDownload executar() {
-        def tipos = getListLong("tipos");
-        def numeroInicial = getInteger("numeroInicial");
-        def numeroFinal = getInteger("numeroFinal");
-        def entidades = getListLong("entidades");
-        def emissao = getIntervaloDatas("emissao");
-        def pedEntSai = getInteger("pedEntSai");
-        def impressao = getInteger("impressao")
-        def entrega = getIntervaloDatas("entrega")
+        List<Long> tipos = getListLong("tipos");
+        Integer numeroInicial = getInteger("numeroInicial");
+        Integer numeroFinal = getInteger("numeroFinal");
+        List<Long> entidades = getListLong("entidades");
+        LocalDate[] emissao = getIntervaloDatas("emissao");
+        Integer pedEntSai = getInteger("pedEntSai");
+        Integer impressao = getInteger("impressao")
+        LocalDate[] entrega = getIntervaloDatas("entrega")
         def atendimento = [get("atendimento") ? 0 : null, get("atendimento2") ? 1 : null, get("atendimento3") ? 2 : null]
         atendimento.removeAll(Collections.singleton(null))
-        def numeroCliente = getString("numeroCliente");
+        String numeroCliente = getString("numeroCliente");
+        Integer agrupamento = getInteger("agrupamento");
         List<Long> idsPcd = getListLong("pcds");
         List<Long> redespacho = getListLong("redespacho");
         String campoLivre1 = getString("campoLivre1");
@@ -67,7 +69,7 @@ public class SCV_Pedidos extends RelatorioBase {
         adicionarParametro("total3", total3);
         adicionarParametro("total4", total4);
 
-        List<TableMap> dados = buscarDocumentos(tipos, numeroInicial, numeroFinal, entidades, pedEntSai, emissao, entrega, atendimento, numeroCliente, redespacho,idsPcd, campoLivre1, campoLivre2, campoLivre3, campoLivre4);
+        List<TableMap> dados = buscarDocumentos(tipos, numeroInicial, numeroFinal, entidades, pedEntSai, emissao, entrega, atendimento, numeroCliente, redespacho,idsPcd, agrupamento, campoLivre1, campoLivre2, campoLivre3, campoLivre4);
 
         for(dado in dados){
             comporCamposLivres(dado, campos);
@@ -75,22 +77,26 @@ public class SCV_Pedidos extends RelatorioBase {
 
         if(impressao == 1) return gerarXLSX("SCV_Pedidos_Excel", dados);
 
-        return gerarPDF("SCV_Pedidos_PDF", dados);
+        if(impressao == 0 && agrupamento == 0) {
+            return gerarPDF("SCV_Pedidos_Agrup_Data_Entrega_PDF", dados)
+        } else {
+            return gerarPDF("SCV_Pedidos_Agrup_Documento_PDF", dados)
+        }
 
     }
-    private List<TableMap> buscarDocumentos(List<Long> tipos, Integer numeroInicial, Integer numeroFinal, List<Long> entidades, Integer pedEntSai, LocalDate[] emissao, LocalDate[] entrega, List<Integer> atendimento, String numeroCliente, List<Long> redespacho,List<Long>idsPcd, String campoLivre1,String campoLivre2,String campoLivre3,String campoLivre4) {
-        def whereTipos = tipos != null && tipos.size() > 0 ? " AND abb01tipo IN (:tipos) " : ""
-        def whereEntidades = entidades != null && entidades.size() > 0 ? " AND abb01ent IN (:entidades) " : ""
-        def whereCompVenda = pedEntSai == 0 ? " AND eaa01esmov = 0 " : " AND eaa01esmov = 1 "
-        def whereEmissao = emissao != null && emissao.size() > 0 ? " AND abb01data BETWEEN :dataIni AND :dataFim " : ""
-        def whereNumIni = " AND abb01num >= :numIni "
-        def whereNumFim = " AND abb01num <= :numFim "
-        def whereEntrega = entrega != null && entrega.size() > 0 ? " AND eaa0103pedido.eaa0103dtEntrega BETWEEN :dtIni AND :dtFim " : ""
-        def whereAtendimento  = atendimento != null && atendimento.size() > 0 ? " AND eaa01scvAtend IN (:atendimento) " : ""
-        def whereNumCliente = numeroCliente != null && numeroCliente.length() > 0 ? " AND eaa0103pcnum = :numCli ": "";
-        def whereRedespacho = redespacho != null && redespacho.size() > 0 ? " AND redespacho.abe01id IN (:redespacho) ": "";
-        def wherePcd = idsPcd != null && idsPcd.size() > 0 ? "AND abd01id IN (:idsPcd) " : "";
-
+    private List<TableMap> buscarDocumentos(List<Long> tipos, Integer numeroInicial, Integer numeroFinal, List<Long> entidades, Integer pedEntSai, LocalDate[] emissao, LocalDate[] entrega, List<Integer> atendimento, String numeroCliente, List<Long> redespacho,List<Long>idsPcd, Integer agrupamento, String campoLivre1,String campoLivre2,String campoLivre3,String campoLivre4) {
+        String whereTipos = tipos != null && tipos.size() > 0 ? " AND abb01tipo IN (:tipos) " : ""
+        String whereEntidades = entidades != null && entidades.size() > 0 ? " AND abb01ent IN (:entidades) " : ""
+        String whereCompVenda = pedEntSai == 0 ? " AND eaa01esmov = 0 " : " AND eaa01esmov = 1 "
+        String whereEmissao = emissao != null && emissao.size() > 0 ? " AND abb01data BETWEEN :dataIni AND :dataFim " : ""
+        String whereNumIni = " AND abb01num >= :numIni "
+        String whereNumFim = " AND abb01num <= :numFim "
+        String whereEntrega = entrega != null && entrega.size() > 0 ? " AND eaa0103pedido.eaa0103dtEntrega BETWEEN :dtIni AND :dtFim " : ""
+        String whereAtendimento  = atendimento != null && atendimento.size() > 0 ? " AND eaa01scvAtend IN (:atendimento) " : ""
+        String whereNumCliente = numeroCliente != null && numeroCliente.length() > 0 ? " AND eaa0103pcnum = :numCli ": "";
+        String whereRedespacho = redespacho != null && redespacho.size() > 0 ? " AND redespacho.abe01id IN (:redespacho) ": "";
+        String wherePcd = idsPcd != null && idsPcd.size() > 0 ? "AND abd01id IN (:idsPcd) " : "";
+        String orderBy = agrupamento == 0 ? "ORDER BY eaa0103dtEntrega, abb01num " : "ORDER BY abb01num, eaa0103dtEntrega";
         String campo1 = campoLivre1 != null ? "CAST(eaa0103pedido.eaa0103json ->> '"+campoLivre1+"'"+" as NUMERIC(18,2)) AS " + campoLivre1 + ",  " : "";
         String campo2 = campoLivre2 != null ? "CAST(eaa0103pedido.eaa0103json ->> '"+campoLivre2+"'"+" as NUMERIC(18,2)) AS " + campoLivre2 + ", " : "";
         String campo3 = campoLivre3 != null ? "CAST(eaa0103pedido.eaa0103json ->> '"+campoLivre3+"'"+" as NUMERIC(18,2)) AS " + campoLivre3 + ", "  : "";
@@ -101,7 +107,7 @@ public class SCV_Pedidos extends RelatorioBase {
                 "entidade.abe01codigo AS codEntidade, entidade.abe01na AS nomeEntidade, abm01codigo, abm01descr, " +
                 "CASE WHEN abm01tipo = 0 THEN 'M' WHEN abm01tipo = 1 THEN 'P' WHEN abm01tipo = 2 THEN 'S' ELSE 'MER' END AS mps,  "+
                 "eaa0103pedido.eaa0103dtentrega, eaa0103pedido.eaa0103pcnum, uso.aam06codigo AS aam06descr_uso, eaa0103pedido.eaa0103qtComl AS eaa0103qtcoml," +
-                "eaa0103pedido.eaa0103unit, eaa0103pedido.eaa0103total, eaa0103pedido.eaa0103totdoc, eaa0102doc, aah01codigo " +
+                "eaa0103pedido.eaa0103unit, eaa0103pedido.eaa0103total, eaa0103pedido.eaa0103totdoc, eaa0102doc, aah01codigo, eaa0103pedido.eaa0103qtUso AS eaa0103qtUso " +
                 "FROM eaa01 " +
                 "INNER JOIN abb01 ON abb01id = eaa01central " +
                 "INNER JOIN aah01 ON aah01id = abb01tipo "+
@@ -121,21 +127,22 @@ public class SCV_Pedidos extends RelatorioBase {
                 whereTipos + whereEntidades + whereCompVenda + whereEmissao +
                 whereNumIni + whereNumFim + whereEntrega + whereAtendimento +
                 whereNumCliente + whereRedespacho + wherePcd +
-                "ORDER BY eaa0103dtEntrega, abb01num ";
+                orderBy;
 
-        def p1 = tipos != null && tipos.size() > 0 ? criarParametroSql("tipos", tipos) : null
-        def p2 = entidades != null && entidades.size() > 0 ? criarParametroSql("entidades", entidades) : null
-        def p3 = emissao != null && emissao.size() > 0 ? criarParametroSql("dataIni", emissao[0]) : null
-        def p4 = emissao != null && emissao.size() > 0 ? criarParametroSql("dataFim", emissao[1]) : null
-        def p5 = criarParametroSql("numIni",numeroInicial)
-        def p6 = criarParametroSql("numFim",numeroFinal)
-        def p7 = entrega != null && entrega.size() > 0 ? criarParametroSql("dtIni", entrega[0]) : null;
-        def p8 = entrega != null && entrega.size() > 0 ? criarParametroSql("dtFim", entrega[1]) : null;
-        def p9 = atendimento != null && atendimento.size() > 0 ? criarParametroSql("atendimento", atendimento) : null;
-        def p10 = numeroCliente != null && numeroCliente.length() > 0 ? criarParametroSql("numCli", numeroCliente) : null;
-        def p11 = redespacho != null && redespacho.size() > 0 ? criarParametroSql("redespacho", redespacho) : null;
-        def p12 = idsPcd != null && idsPcd.size() > 0 ? criarParametroSql("idsPcd", idsPcd) : null;
-        return getAcessoAoBanco().buscarListaDeTableMap(sql,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11, p12);
+        Parametro parametroTipos = tipos != null && tipos.size() > 0 ? criarParametroSql("tipos", tipos) : null
+        Parametro parametroEntidades = entidades != null && entidades.size() > 0 ? criarParametroSql("entidades", entidades) : null
+        Parametro parametroEmissaoIni = emissao != null ? criarParametroSql("dataIni", emissao[0]) : null
+        Parametro parametroEmissaoFin = emissao != null ? criarParametroSql("dataFim", emissao[1]) : null
+        Parametro parametroNumIni = criarParametroSql("numIni",numeroInicial)
+        Parametro parametroNumFin = criarParametroSql("numFim",numeroFinal)
+        Parametro parametroDeEntregaIni = entrega != null ? criarParametroSql("dtIni", entrega[0]) : null;
+        Parametro parametroDeEntregaFin = entrega != null ? criarParametroSql("dtFim", entrega[1]) : null;
+        Parametro parametroAtendimentos = atendimento != null && atendimento.size() > 0 ? criarParametroSql("atendimento", atendimento) : null;
+        Parametro parametroNumPedCli = numeroCliente != null && numeroCliente.length() > 0 ? criarParametroSql("numCli", numeroCliente) : null;
+        Parametro parametroRedesp = redespacho != null && redespacho.size() > 0 ? criarParametroSql("redespacho", redespacho) : null;
+        Parametro parametroPcds = idsPcd != null && idsPcd.size() > 0 ? criarParametroSql("idsPcd", idsPcd) : null;
+
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroTipos, parametroEntidades, parametroEmissaoIni, parametroEmissaoFin, parametroNumIni, parametroNumFin, parametroDeEntregaIni, parametroDeEntregaFin, parametroAtendimentos, parametroNumPedCli, parametroRedesp, parametroPcds);
     }
 
     private void comporCamposLivres(TableMap dado, Map<String, String> campos){
