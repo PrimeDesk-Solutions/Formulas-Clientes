@@ -117,19 +117,20 @@ public class SRF_Documentos_Por_Itens extends RelatorioBase {
 
         if (dados.size() == 0) interromper("Não foram encontrado dados com os filtros selecionados.");
 
-        List<Long> idsItensDoc = obterIdsItensDoc(numDocIni, numDocFin, idsTipoDoc, idsPcd, resumoOperacao, dtEmissao, dtEntradaSaida, idsEntidades, idsItens, idEmpresa, mps);
-        List<TableMap> dadosRelatorio = new ArrayList();
+        List<Long> idsItensDoc = new ArrayList<>();
         List<TableMap> listDevolucoesGeral = new ArrayList();
         List<TableMap> listDevolucoesAjustado = new ArrayList<>()
-        def idControle = null;
         def idControleDevolucao = null;
-        TableMap dadosTmp = new TableMap();
         TableMap dadosTmpDev = new TableMap()
-        TableMap valoresTotais = new TableMap();
         TableMap valoresTotaisDevolucao = new TableMap()
 
 //		 Agrupa as devoluções
         if (devolucoes) {
+            for(dado in dados){
+                Long idItemDoc = dado.getLong("eaa0103id");
+                idsItensDoc.add(idItemDoc)
+            }
+
             listDevolucoesGeral = obterDevolucao(idsItensDoc);
             if (listDevolucoesGeral != null && listDevolucoesGeral.size() > 0) {
                 for (devolucao in listDevolucoesGeral) {
@@ -174,36 +175,11 @@ public class SRF_Documentos_Por_Itens extends RelatorioBase {
                 }
             }
 
-            if (idControle == null) {
-                dadosTmp.putAll(dado);
-                idControle = dado.getLong("eaa01id");
-                somarValores(dado, valoresTotais, campos);
-            } else if (idControle == dado.getLong("eaa01id")) {
-                somarValores(dado, valoresTotais, campos);
-            } else {
-                TableMap tmp = new TableMap();
-                tmp.putAll(dadosTmp);
-                tmp.putAll(valoresTotais);
-                comporValores(tmp, campos);
-                dadosRelatorio.add(tmp);
-
-                dadosTmp = new TableMap();
-                dadosTmp.putAll(dado);
-                valoresTotais = new TableMap()
-                idControle = dado.getLong("eaa01id");
-                somarValores(dado, valoresTotais, campos);
-            }
+            comporValores(dado, campos);
         }
 
-        TableMap tmp = new TableMap();
-        tmp.putAll(dadosTmp);
-        tmp.putAll(valoresTotais);
-        comporValores(tmp, campos);
-
-        dadosRelatorio.add(tmp)
-
-        if (impressao == 0) return gerarPDF("SRF_Documentos_Por_Itens_PDF", dadosRelatorio);
-        return gerarXLSX("SRF_Documentos_Por_Itens_Excel", dadosRelatorio);
+        if (impressao == 0) return gerarPDF("SRF_Documentos_Por_Itens_PDF", dados);
+        return gerarXLSX("SRF_Documentos_Por_Itens_Excel", dados);
     }
 
 
@@ -224,16 +200,16 @@ public class SRF_Documentos_Por_Itens extends RelatorioBase {
             dtEntradaSaidaFin = dtEntradaSaida[1];
         }
 
-        String whereNumIni = numDocIni != null ? "AND abb01nota.abb01num >= :numDocIni " : "";
-        String whereNumFin = numDocFin != null ? "AND abb01nota.abb01num <= :numDocFin " : "";
+        String whereNumIni = numDocIni != null ? "AND abb01num >= :numDocIni " : "";
+        String whereNumFin = numDocFin != null ? "AND abb01num <= :numDocFin " : "";
         String whereTipoDoc = idsTipoDoc != null && idsTipoDoc.size() > 0 ? "AND aah01id IN (:idsTipoDoc) " : "";
         String wherePcd = idsPcd != null && idsPcd.size() > 0 ? "AND abd01id in (:idsPcd) " : "";
-        String whereDtEmissao = dtEmissIni != null && dtEmissFin != null ? "AND  abb01nota.abb01data BETWEEN :dtEmissIni and :dtEmissFin " : "";
-        String whereDtEntradaSaida = dtEntradaSaidaIni != null && dtEntradaSaidaFin != null ? "AND  eaa01nota.eaa01esdata BETWEEN :dtEntradaSaidaIni AND :dtEntradaSaidaFin " : "";
+        String whereDtEmissao = dtEmissIni != null && dtEmissFin != null ? "AND  abb01data BETWEEN :dtEmissIni and :dtEmissFin " : "";
+        String whereDtEntradaSaida = dtEntradaSaidaIni != null && dtEntradaSaidaFin != null ? "AND  eaa01esdata BETWEEN :dtEntradaSaidaIni AND :dtEntradaSaidaFin " : "";
         String whereEntidade = idsEntidades != null && idsEntidades.size() > 0 ? "AND ent.abe01id in (:idsEntidades) " : "";
-        String whereES = resumoOperacao == 1 ? " AND  eaa01nota.eaa01esMov = 1 " : " AND  eaa01nota.eaa01esMov = 0 ";
+        String whereES = resumoOperacao == 1 ? " AND  eaa01esMov = 1 " : " AND  eaa01esMov = 0 ";
         String whereItens = idsItens != null && idsItens.size() > 0 ? "AND abm01id IN (:idsItens) " : "";
-        String whereEmpresa = "AND  eaa01nota.eaa01gc = :idEmpresa ";
+        String whereEmpresa = "AND  eaa01gc = :idEmpresa ";
         String whereMps = mps != null && !mps.contains(-1) ? "AND abm01tipo IN (:mps) " : "";
 
         Parametro parametroNumIni = numDocIni != null ? Parametro.criar("numDocIni", numDocIni) : null;
@@ -249,27 +225,23 @@ public class SRF_Documentos_Por_Itens extends RelatorioBase {
         Parametro parametroEmpresa = Parametro.criar("idEmpresa", idEmpresa);
         Parametro parametroMps = mps != null && !mps.contains(-1) ? Parametro.criar("mps", mps) : null;
         
-        String sql = "SELECT abm01id, abm01codigo, abm01descr,abm01tipo,aah01codigo, abb01nota.abb01num as numNota, abb01nota.abb01data as dataNota, " +
-                "eaa01nota.eaa01esdata AS esDataNota, eaa0103nota.eaa0103id, eaa01nota.eaa01id, eaa0103nota.eaa0103json, " +
-                "ent.abe01codigo AS codEnt, ent.abe01na AS naEnt, abb01pedido.abb01num AS numPed, " +
-                "eaa0103nota.eaa0103qtuso,eaa0103nota.eaa0103qtcoml, eaa0103nota.eaa0103unit, eaa0103nota.eaa0103unit, eaa0103nota.eaa0103total, eaa0103nota.eaa0103totdoc, eaa0103nota.eaa0103totfinanc   " +
-                "FROM eaa01 AS eaa01nota    " +
-                "INNER JOIN abb01 AS abb01nota ON abb01nota.abb01id =  eaa01nota.eaa01central    " +
-                "INNER JOIN abd01 ON abd01id =  eaa01nota.eaa01pcd " +
-                "INNER JOIN abe01 AS ent ON ent.abe01id =  abb01nota.abb01ent    " +
-                "INNER JOIN eaa0102 ON eaa0102doc =  eaa01nota.eaa01id    " +
-                "INNER JOIN eaa0103 AS eaa0103nota on  eaa0103nota.eaa0103doc =  eaa01nota.eaa01id    " +
-                "INNER JOIN abm01 ON abm01id =  eaa0103nota.eaa0103item   " +
+        String sql = "SELECT abm01tipo, abm01id, abm01codigo, abm01descr,abm01tipo,aah01codigo, abb01num as numNota, abb01data as dataNota, " +
+                "eaa01esdata AS esDataNota, eaa0103id, eaa01id AS eaa01id, eaa0103json, " +
+                "ent.abe01codigo AS codEnt, ent.abe01na AS naEnt, " +
+                "eaa0103qtuso,eaa0103qtcoml, eaa0103unit, eaa0103unit, eaa0103total, eaa0103totdoc, eaa0103totfinanc   " +
+                "FROM eaa01 " +
+                "INNER JOIN abb01 ON abb01id =  eaa01central " +
+                "INNER JOIN abd01 ON abd01id =  eaa01pcd " +
+                "INNER JOIN abe01 AS ent ON ent.abe01id =  abb01ent " +
+                "INNER JOIN eaa0102 ON eaa0102doc =  eaa01id " +
+                "INNER JOIN eaa0103 on  eaa0103doc =  eaa01id " +
+                "INNER JOIN abm01 ON abm01id =  eaa0103item " +
                 "LEFT JOIN aam06 ON aam06id = abm01umu   " +
-                "LEFT JOIN aah01 ON aah01id =  abb01nota.abb01tipo    " +
+                "LEFT JOIN aah01 ON aah01id =  abb01tipo    " +
                 "LEFT JOIN abe0101 ON abe0101ent = ent.abe01id and abe0101principal = 1    " +
-                "LEFT JOIN eaa01032 ON eaa01032itemsrf =  eaa0103nota.eaa0103id   " +
-                "LEFT JOIN eaa0103 AS eaa0103pedido ON eaa0103pedido.eaa0103id = eaa01032itemScv "+
-                "LEFT JOIN eaa01 AS eaa01pedido ON eaa01pedido.eaa01id = eaa0103pedido.eaa0103doc "+
-                "LEFT JOIN abb01 AS abb01pedido ON abb01pedido.abb01id = eaa01pedido.eaa01central "+
-                "WHERE eaa01nota.eaa01clasDoc = " + Eaa01.CLASDOC_SRF + " " +
-                "AND eaa01nota.eaa01cancData IS NULL " +
-                "AND eaa01nota.eaa01nfestat <> 5 " +
+                "WHERE eaa01clasDoc = " + Eaa01.CLASDOC_SRF + " " +
+                "AND eaa01cancData IS NULL " +
+                "AND eaa01nfestat <> 5 " +
                 whereEmpresa +
                 whereNumIni +
                 whereNumFin +
@@ -281,7 +253,7 @@ public class SRF_Documentos_Por_Itens extends RelatorioBase {
                 whereES +
                 whereItens +
                 whereMps +
-                "ORDER BY abm01codigo,  abb01nota.abb01num"
+                "ORDER BY abm01codigo, abm01tipo, abb01num"
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroEmpresa, parametroNumIni, parametroNumFin, parametroTipoDoc, parametroPcd, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroDtEntradaSaidaIni, parametroDtEntradaSaidaFin, parametroEntidade,
                 parametroItens, parametroMps);
