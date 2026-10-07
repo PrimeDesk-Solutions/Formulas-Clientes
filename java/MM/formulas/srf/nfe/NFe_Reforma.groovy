@@ -98,6 +98,7 @@ class NFe_Reforma extends FormulaBase {
     private ElementXml COFINSNT;
     private ElementXml COFINSOutr;
     private ElementXml COFINSST;
+    private ElementXml DFeReferenciado;
     private ElementXml ICMSUFDest;
     private ElementXml IBSCBS;
     private ElementXml impostoDevol;
@@ -881,6 +882,8 @@ class NFe_Reforma extends FormulaBase {
 
         gerarISSQNTot = false;
 
+        List<TableMap> itensDocsRef = buscarItensDocumentosReferenciados(eaa01.eaa01id)
+
         int item = 1;
         for(Eaa0103 eaa0103 : eaa0103sOrdem) {
             TableMap jsonEaa0103 = eaa0103.eaa0103json;
@@ -1656,6 +1659,8 @@ class NFe_Reforma extends FormulaBase {
                 IS.addNode("vIS", getDecimalReq(jsonEaa0103, "324-UB11", "vIS"));
             }
 
+            gerarInformacoesDevolucoes(det,eaa0103, itensDocsRef);
+
             Aaj07 aaj07 = eaa0103.eaa0103clasTribCbsIbs
             if(aaj07 != null && aaj07.getAaj07json() != null) {
                 algumItemComCbsIbs = true;
@@ -1778,8 +1783,8 @@ class NFe_Reforma extends FormulaBase {
         }
         def vDevTrib = getDecimal(jsonEaa0103, "324.25-UB25", "vDevTrib");
         //if (vDevTrib != null) {
-            //def gDevTrib = gIBSUF.addNode("gDevTrib");
-          //  gDevTrib.addNode("vDevTrib", vDevTrib);
+        //def gDevTrib = gIBSUF.addNode("gDevTrib");
+        //  gDevTrib.addNode("vDevTrib", vDevTrib);
         //}
         if (aaj07json.getBoolean("red_bc")) {
             def gRed = gIBSUF.addNode("gRed");
@@ -1801,8 +1806,8 @@ class NFe_Reforma extends FormulaBase {
 
         def vDevTrib = getDecimal(jsonEaa0103, "324.44-UB44", "vDevTrib");
         //if (vDevTrib != null) {
-            //def gDevTrib = gIBSMun.addNode("gDevTrib");
-          //  gDevTrib.addNode("vDevTrib", vDevTrib);
+        //def gDevTrib = gIBSMun.addNode("gDevTrib");
+        //  gDevTrib.addNode("vDevTrib", vDevTrib);
         //}
         if (aaj07json.getBoolean("red_bc") && aaj07json.getBigDecimal_Zero("perc_red_ibs_mun") > 0) {
             def gRed = gIBSMun.addNode("gRed");
@@ -1823,8 +1828,8 @@ class NFe_Reforma extends FormulaBase {
         }
         def vDevTrib = getDecimal(jsonEaa0103, "324.63-UB63", "vDevTrib");
         //if (vDevTrib != null) {
-            //def gDevTrib = gCBS.addNode("gDevTrib");
-          //  gDevTrib.addNode("vDevTrib", vDevTrib);
+        //def gDevTrib = gCBS.addNode("gDevTrib");
+        //  gDevTrib.addNode("vDevTrib", vDevTrib);
         //}
         if (aaj07json.getBoolean("red_bc")) {
             def gRed = gCBS.addNode("gRed");
@@ -2157,6 +2162,19 @@ class NFe_Reforma extends FormulaBase {
                 .getList(ColumnType.LONG);
     }
 
+    private List<TableMap> buscarItensDocumentosReferenciados(Long eaa01id) {
+        return getSession().createQuery("SELECT eaa01nfeChave, eaa01033itemDoc, eaa01033item, eaa0103Ref.eaa0103seq AS seq " +
+                " FROM Eaa01033" +
+                " INNER JOIN Eaa0103 eaa0103Ref ON eaa01033itemDoc = eaa0103Ref.eaa0103id" +
+                " INNER JOIN Eaa01 ON eaa0103Ref.eaa0103doc = eaa01id" +
+                " INNER JOIN Abb01 ON abb01id = eaa01central" +
+                " INNER JOIN Aah01 ON aah01id = abb01tipo" +
+                " INNER JOIN Eaa0103 eaa0103item ON eaa01033item = eaa0103item.eaa0103id" +
+                " WHERE eaa0103item.eaa0103doc = :eaa01id")
+                .setParameter("eaa01id", eaa01id)
+                .getListTableMap();
+    }
+
     private List<Eaa0103> buscarItensDoDocumento(Long eaa01id) {
         return getSession().createCriteria(Eaa0103.class)
                 .addJoin(Joins.fetch("eaa0103item"))
@@ -2267,6 +2285,17 @@ class NFe_Reforma extends FormulaBase {
             return "0.0000"
         }
         return NFeUtils.formatarDecimal(valor, 4, true);
+    }
+    private void gerarInformacoesDevolucoes(ElementXml det, Eaa0103 eaa0103, List<TableMap> itensDocRef){
+        if(itensDocRef == null || itensDocRef.size() == 0) return;
+
+        for(itemDev in itensDocRef){
+            if(eaa0103.eaa0103id == itemDev.getLong("eaa01033item")){
+                DFeReferenciado = det.addNode("DFeReferenciado");
+                DFeReferenciado.addNode("chaveAcesso", itemDev.getString("eaa01nfeChave"))
+                DFeReferenciado.addNode("nItem", itemDev.getInteger("seq"));
+            }
+        }
     }
 }
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjgifQ==
