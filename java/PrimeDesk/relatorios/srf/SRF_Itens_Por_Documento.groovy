@@ -131,7 +131,8 @@ public class SRF_Itens_Por_Documento extends RelatorioBase {
 //		 Agrupa as devoluções
         if (devolucoes) {
             for(dado in dados){
-                idsItensDoc.add(dado.getLong("eaa0103id"));
+                Long idItemDoc = dado.getLong("eaa0103id");
+                idsItensDoc.add(idItemDoc);
             }
 
             listDevolucoesGeral = obterDevolucao(idsItensDoc);
