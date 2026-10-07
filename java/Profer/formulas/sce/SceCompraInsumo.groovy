@@ -33,8 +33,8 @@ public class SceCompraInsumo extends FormulaBase{
         abm0101 = (Abm0101)get("abm0101");
 
         // Campos Livres Lançamento
-        jsonBcc01 = bcc01.bcc01json;
-        jsonAbm0101 = abm0101.abm0101json;
+        jsonBcc01 = bcc01.bcc01json != null ? bcc01.bcc01json : new TableMap();
+        jsonAbm0101 = abm0101.abm0101json != null ? abm0101.abm0101json : new TableMap();
 
         // Define se irá recuperar os impostos
         boolean recuperaICMS = true
