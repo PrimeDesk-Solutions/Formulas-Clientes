@@ -1,15 +1,24 @@
 package Silcon.formulas.spv
+
+import br.com.multiorm.criteria.criterion.Criterion
 import br.com.multiorm.criteria.criterion.Criterions
 import br.com.multitec.utils.ValidacaoException
 import br.com.multitec.utils.collections.TableMap
 import sam.core.variaveis.MDate
 import sam.dicdados.FormulaTipo
 import sam.model.entities.aa.Aab10
+import sam.model.entities.aa.Aac10
+import sam.model.entities.aa.Aag02
+import sam.model.entities.aa.Aag0201
 import sam.model.entities.ab.Abe01
+import sam.model.entities.ab.Abe0101
 import sam.model.entities.ab.Abe30
 import sam.model.entities.ab.Abe40
 import sam.model.entities.ab.Abe4001
 import sam.model.entities.ab.Abm01
+import sam.model.entities.ab.Abm0101
+import sam.model.entities.ab.Abm10
+import sam.model.entities.ab.Abm1001
 import sam.model.entities.cc.Ccb01
 import sam.model.entities.cc.Ccb0101
 import sam.server.samdev.formula.FormulaBase
@@ -21,11 +30,23 @@ class SPV_PreVendaItem extends FormulaBase {
     private String procInvoc;
     private Integer campoDigitado; // 0: Nenhum, 1: Quantidade, 2: Unitário, 3: % Desconto, 4: Valor Desconto
 
+
+    private Aac10 aac10;
     private Ccb01 ccb01;
+    private Aag02 ufEnt;
+    private Aag0201 municipioEnt;
     private Abe01 abe01;
+    private Abe0101 abe0101Principal;
     private Abe40 abe40;
     private Abe30 abe30;
     private Abm01 abm01;
+    private Abm0101 abm0101;
+    private Abm10 abm10;
+    private Abm1001 abm1001;
+
+
+    private TableMap jsonAbm1001_UF_Item;
+    private TableMap jsonCcb0101;
 
     @Override
     public void executar() {
@@ -39,6 +60,33 @@ class SPV_PreVendaItem extends FormulaBase {
         abe40 = ccb01.ccb01tp;
         abe30 = ccb01.ccb01cp;
         abm01 = ccb0101.ccb0101item;
+
+        // Endereço Entidade (Principal)
+        abe0101Principal = abe01 != null ? getSession().get(Abe0101.class, Criterions.where("abe0101ent = " + abe01.abe01id + " AND abe0101principal = 1")) : null;
+
+        // Municipio Entidade
+        municipioEnt = abe0101Principal != null && abe0101Principal.abe0101municipio != null ? getSession().get(Aag0201.class, Criterions.eq("aag0201id", abe0101Principal.abe0101municipio.aag0201id)) : null;
+
+        // UF Entidade
+        ufEnt = municipioEnt != null ? getSession().get(Aag02.class, municipioEnt.aag0201uf.aag02id) : null;
+
+        // Empresa
+        aac10 = getSession().get(Aac10.class, obterEmpresaAtiva().aac10id);
+
+        // Itens Configurações
+        abm0101 = abm01 != null ? getSession().get(Abm0101.class, Criterions.where("abm0101item = " + abm01.abm01id + " AND abm0101empresa = " + aac10.aac10id)) : null;
+
+        //Valores do Item
+        abm10 = abm0101 != null && abm0101.abm0101valores != null ? getSession().get(Abm10.class, abm0101.abm0101valores.abm10id) : null;
+
+        //Valores do Item - Estados
+        abm1001 = ufEnt != null && ufEnt.aag02id != null && abm10 != null && abm10.abm10id != null ? getSession().get(Abm1001.class, Criterions.where("abm1001uf = " + ufEnt.aag02id + " AND abm1001cv = " + abm10.abm10id)) : null;
+
+        // Campos Livres
+        jsonAbm1001_UF_Item = abm1001 != null && abm1001.abm1001json != null ? abm1001.abm1001json : new TableMap();
+        jsonCcb0101 = ccb0101.ccb0101json != null ? ccb0101.ccb0101json : new TableMap();
+
+        preencherCamposLivres();
 
         //Calcula somente o % Desconto e TotalDoc caso tenha sido digitado o Valor Desconto
         if(campoDigitado == 4) {
@@ -157,14 +205,15 @@ class SPV_PreVendaItem extends FormulaBase {
         ccb0101.ccb0101unit = unit;
     }
 
+    private void preencherCamposLivres(){
+        jsonCcb0101.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
+
+        ccb0101.ccb0101json = jsonCcb0101;
+    }
+
     @Override
     public FormulaTipo obterTipoFormula() {
         return FormulaTipo.SPV_PREVENDA;
     }
 
 }
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiODgifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiODgifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiODgifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiODgifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiODgifQ==
