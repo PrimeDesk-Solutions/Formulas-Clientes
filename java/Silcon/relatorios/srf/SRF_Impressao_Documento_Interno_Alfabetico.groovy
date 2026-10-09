@@ -12,7 +12,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
-class SRF_Impressao_Documento_Interno extends RelatorioBase {
+class SRF_Impressao_Documento_Interno_Alfabetico extends RelatorioBase {
 
     @Override
     public String getNomeTarefa() {
@@ -120,9 +120,9 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
         // Cria os sub-relatórios
         TableMapDataSource dsPrincipal = new TableMapDataSource(dados);
         dsPrincipal.addSubDataSource("dsItens", listItens, "key", "key");
-        adicionarParametro("StreamSub1", carregarArquivoRelatorio("SRF_Impressao_Documento_Interno_S1"));
+        adicionarParametro("StreamSub1", carregarArquivoRelatorio("SRF_Impressao_Documento_Interno_Alfabetico_S1"));
 
-        return gerarPDF("SRF_Impressao_Documento_Interno", dsPrincipal);
+        return gerarPDF("SRF_Impressao_Documento_Interno_Alfabetico", dsPrincipal);
     }
 
     private List<TableMap> buscarDocumentos(List<Long> tipos, Integer numeroInicial, Integer numeroFinal, List<Long> entidades, LocalDate[] dtEmissao, LocalDate[] dtEntradaSaida) {
@@ -229,7 +229,7 @@ class SRF_Impressao_Documento_Interno extends RelatorioBase {
                 " LEFT JOIN aam06 on aam06id = eaa0103umComl " +
                 " LEFT JOIN abg01 ON abg01id = eaa0103ncm "+
                 " WHERE eaa0103doc = :id " +
-                " ORDER BY eaa0103seq").setParameters("id", id)
+                " ORDER BY abm01descr").setParameters("id", id)
                 .getListTableMap();
     }
     private List<TableMap> buscarParcelamentosDocumentos(Long idDoc) {
