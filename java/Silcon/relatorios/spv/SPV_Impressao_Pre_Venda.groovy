@@ -119,7 +119,7 @@ public class SPV_Impressao_Pre_Venda extends RelatorioBase {
 
         String nomeUser = obterUsuarioLogado().getAab10user().toUpperCase();
         if( nomeUser == "NANY" || nomeUser == "DIANA" || nomeUser == "FILIPE" ||
-                nomeUser == "PRISCILA" || nomeUser == "SHIRLEI" || nomeUser == "MASTER2" || nomeUser == "RICARDO" || nomeUser == "LUIS"){
+                nomeUser == "PRISCILA" || nomeUser == "SHIRLEI" || nomeUser == "RICARDO" || nomeUser == "LUIS"){
             dsPrincipal.addSubDataSource("dsItens", listItens, "key", "key");
             adicionarParametro("StreamSub1", carregarArquivoRelatorio("SPV_Impressao_Pre_Venda_Lustre_S1"));
 
@@ -206,7 +206,8 @@ public class SPV_Impressao_Pre_Venda extends RelatorioBase {
 
         String sql = "SELECT DISTINCT ccb0101seq, aam06codigo AS umu, abm01codigo AS codItem, abm01descr AS naItem, ccb0101unit AS unit, " +
                 "ccb0101desc AS desconto, ccb0101totDoc AS totDoc, ccb0101qtComl AS qtd, ccb0101entregar AS entrega, abg01codigo AS codNcm, " +
-                "abg01descr AS descrNcm, abg01codigo AS codNcm, CAST(ccb0101json ->> 'ambiente' AS text) AS ambiente, abm01arqFig AS imagem " +
+                "abg01descr AS descrNcm, abg01codigo AS codNcm, CAST(ccb0101json ->> 'ambiente' AS text) AS ambiente, abm01arqFig AS imagem, " +
+                "CAST(ccb0101json ->> 'aliq_icms' AS NUMERIC(18,2)) AS aliqIcms " +
                 "FROM ccb0101 " +
                 "INNER JOIN abm01 ON abm01id = ccb0101item " +
                 "INNER JOIN abm0101 ON abm0101item = abm01id "+
