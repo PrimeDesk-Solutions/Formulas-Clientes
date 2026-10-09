@@ -98,6 +98,7 @@ class NFe_Reforma extends FormulaBase {
     private ElementXml COFINSNT;
     private ElementXml COFINSOutr;
     private ElementXml COFINSST;
+    private ElementXml DFeReferenciado;
     private ElementXml ICMSUFDest;
     private ElementXml IBSCBS;
     private ElementXml impostoDevol;
@@ -888,6 +889,8 @@ class NFe_Reforma extends FormulaBase {
 
         gerarISSQNTot = false;
 
+        List<TableMap> itensDocsRef = buscarItensDocumentosReferenciados(eaa01.eaa01id)
+
         int item = 1;
         for(Eaa0103 eaa0103 : eaa0103sOrdem) {
             TableMap jsonEaa0103 = eaa0103.eaa0103json;
@@ -1666,6 +1669,8 @@ class NFe_Reforma extends FormulaBase {
                 IS.addNode("vIS", getDecimalReq(jsonEaa0103, "324-UB11", "vIS"));
             }
 
+            gerarInformacoesDevolucoes(det,eaa0103, itensDocsRef);
+
             Aaj07 aaj07 = eaa0103.eaa0103clasTribCbsIbs
             if(aaj07 != null && aaj07.getAaj07json() != null) {
                 if(eaa0103.eaa0103cstCbsIbs == null) interromper("Não foi informado CST de IBS/CBS no item " + eaa0103.eaa0103seq + " do documento.");
@@ -1769,12 +1774,12 @@ class NFe_Reforma extends FormulaBase {
                 }
                 det.addNode("vItem", eaa0103.eaa0103total);
 
-                List<Long> docsRef = buscarDocumentosReferenciados(eaa01.eaa01id, 2);
-                if(docsRef != null && docsRef.size() > 0) {
-                    ElementXml DFeReferenciado = ide.addNode("DFeReferenciado");
-                    String chaveNotaRef = getAcessoAoBanco().obterString("SELECT eaa01nfeChave FROM Eaa01 WHERE eaa01id = " + docsRef.first());
-                    DFeReferenciado.addNode("chaveAcesso", chaveNotaRef)
-                }
+//                List<Long> docsRef = buscarDocumentosReferenciados(eaa01.eaa01id, 2);
+//                if(docsRef != null && docsRef.size() > 0) {
+//                    ElementXml DFeReferenciado = ide.addNode("DFeReferenciado");
+//                    String chaveNotaRef = getAcessoAoBanco().obterString("SELECT eaa01nfeChave FROM Eaa01 WHERE eaa01id = " + docsRef.first());
+//                    DFeReferenciado.addNode("chaveAcesso", chaveNotaRef)
+//                }
             }
         }
     }
@@ -2280,6 +2285,17 @@ class NFe_Reforma extends FormulaBase {
             return "0.0000"
         }
         return NFeUtils.formatarDecimal(valor, 4, true);
+    }
+    private void gerarInformacoesDevolucoes(ElementXml det, Eaa0103 eaa0103, List<TableMap> itensDocRef){
+        if(itensDocRef == null || itensDocRef.size() == 0) return;
+
+        for(itemDev in itensDocRef){
+            if(eaa0103.eaa0103id == itemDev.getLong("eaa01033item")){
+                DFeReferenciado = det.addNode("DFeReferenciado");
+                DFeReferenciado.addNode("chaveAcesso", itemDev.getString("eaa01nfeChave"))
+                DFeReferenciado.addNode("nItem", itemDev.getInteger("seq"));
+            }
+        }
     }
 }
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjgifQ==

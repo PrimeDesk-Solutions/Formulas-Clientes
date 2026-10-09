@@ -1783,12 +1783,12 @@ class SRF_NFe extends FormulaBase {
                 }
                 det.addNode("vItem", eaa0103.eaa0103totDoc);
 
-                List<Long> docsRef = buscarDocumentosReferenciados(eaa01.eaa01id, 2);
-                if(docsRef != null && docsRef.size() > 0) {
-                    ElementXml DFeReferenciado = ide.addNode("DFeReferenciado");
-                    String chaveNotaRef = getAcessoAoBanco().obterString("SELECT eaa01nfeChave FROM Eaa01 WHERE eaa01id = " + docsRef.first());
-                    DFeReferenciado.addNode("chaveAcesso", chaveNotaRef)
-                }
+//                List<Long> docsRef = buscarDocumentosReferenciados(eaa01.eaa01id, 2);
+//                if(docsRef != null && docsRef.size() > 0) {
+//                    ElementXml DFeReferenciado = ide.addNode("DFeReferenciado");
+//                    String chaveNotaRef = getAcessoAoBanco().obterString("SELECT eaa01nfeChave FROM Eaa01 WHERE eaa01id = " + docsRef.first());
+//                    DFeReferenciado.addNode("chaveAcesso", chaveNotaRef)
+//                }
             }
         }
     }

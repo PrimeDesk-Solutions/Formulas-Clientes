@@ -288,6 +288,9 @@ public class DocPadraoSaida_Sist_Bucha extends FormulaBase {
                 jsonEaa0103.put("total_servicos", jsonEaa0103.getBigDecimal_Zero("total_servicos").round(2));
             }
 
+            jsonEaa0103.put("qtd_tributavel", eaa0103.eaa0103qtComl);
+            jsonEaa0103.put("unit_tributavel", eaa0103.eaa0103unit);
+
             calcularCargaTributaria();
 
             jsonEaa0103.put("iss", (jsonEaa0103.getBigDecimal_Zero("total_servico") * 2) / 100);
@@ -341,7 +344,7 @@ public class DocPadraoSaida_Sist_Bucha extends FormulaBase {
             if(!isNacional){
                 if(dentroEstado){
                     aaj10_cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj15codigo", "000"));
-                    if(jsonEaa0103.getBigDecimal_Zero("aliq_reduc_bc_icms") > 0 ) aaj10_cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj15codigo", "020"));
+                    if(jsonEaa0103.getBigDecimal_Zero("aliq_reduc_bc_icms") > 0 ) aaj10_cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj15codigo", "520"));
                     eaa0103.eaa0103cstIcms = aaj10_cstIcms;
                 }
             }
