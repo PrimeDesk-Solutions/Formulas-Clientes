@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_Impressao_Documento_Interno" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="445d9ec7-a679-4b63-89db-9c84506eab2f">
 	<property name="ireport.zoom" value="1.771561000000002"/>
-	<property name="ireport.x" value="65"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="48"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="telefoneEmpresa" class="java.lang.String"/>
 	<parameter name="parameter3" class="java.lang.String"/>
@@ -386,6 +386,13 @@
 					</textElement>
 					<text><![CDATA[NCM]]></text>
 				</staticText>
+				<staticText>
+					<reportElement x="457" y="176" width="45" height="12" uuid="7528cbd5-8245-453e-b245-a7775f723de4"/>
+					<textElement>
+						<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[% ICMS]]></text>
+				</staticText>
 			</band>
 		</groupHeader>
 		<groupFooter>
@@ -510,7 +517,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="15" splitType="Stretch"/>
+		<band splitType="Stretch"/>
 	</title>
 	<pageHeader>
 		<band splitType="Stretch"/>
