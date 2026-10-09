@@ -217,71 +217,71 @@ class NFe_Reforma extends FormulaBase {
         }
 
         /** Documentos referenciadas */
-        List<Long> docsRef = buscarDocumentosReferenciados(eaa01.eaa01id, 0);
-        if(docsRef != null && docsRef.size() > 0) {
-            for(Long eaa01Ref : docsRef) {
-                Eaa01 notaRef = getAcessoAoBanco().buscarRegistroUnicoById("Eaa01", eaa01Ref);
-                if(notaRef != null) {
-                    Eaa0102 dadosGeraisRef = notaRef.eaa0102DadosGerais;
-                    Abb01 centralRef = getAcessoAoBanco().buscarRegistroUnicoById("Abb01", notaRef.eaa01central.abb01id);
-                    Aah01 tipoRef = getAcessoAoBanco().buscarRegistroUnicoById("Aah01", eaa01.eaa01central.abb01tipo.aah01id);
-                    Eaa0101 endPrincipalRef = getAcessoAoBanco().buscarRegistroUnicoByCriterion("Eaa0101", Criterions.eq("eaa0101doc", notaRef.eaa01id), Criterions.eq("eaa0101principal", 1));
-                    String modeloRef = tipoRef.aah01modelo;
-
-                    /** Modelo 55 - NFe ou 65-NFCe */
-                    if(modeloRef.equals("55") || modeloRef.equals("65") || modeloRef.equals("59")) {
-                        NFref = ide.addNode("NFref");
-                        NFref.addNode("refNFe", notaRef.eaa01nfeChave, true);
-
-                        /** Modelo 01, 1A e 02 - Notas normais */
-                    }else if((modeloRef.equals("01") || modeloRef.equals("02")) && dadosGeraisRef.eaa0102ti == 0) {
-                        NFref = ide.addNode("NFref");
-                        refNF = NFref.addNode("refNF");
-
-                        refNF.addNode("cUF", endPrincipalRef.eaa0101municipio.aag0201ibge, true);
-                        refNF.addNode("AAMM", NFeUtils.formatarData(centralRef.abb01data, "yyMM"), true);
-                        refNF.addNode("CNPJ", centralRef.abb01ent.abe01ni == null ? null : StringUtils.extractNumbers(centralRef.abb01ent.abe01ni), true);
-                        refNF.addNode("mod", modeloRef, true);
-                        refNF.addNode("serie", centralRef.abb01serie == null ? 0 : centralRef.abb01serie.length() <= 3 ? centralRef.abb01serie : centralRef.abb01serie.substring(0, 3), true);
-                        refNF.addNode("nNF", centralRef.abb01num, true);
-
-                        /** Modelo 04 - Produtor rural */
-                    }else if(modeloRef.equals("04") || (modeloRef.equals("01") && dadosGeraisRef.eaa0102ti == 1)) {
-                        ElementXml NFref = ide.addNode("NFref");
-                        ElementXml refNFP = NFref.addNode("refNFP");
-
-                        refNFP.addNode("cUF", endPrincipalRef.eaa0101municipio.aag0201ibge, true);
-                        refNFP.addNode("AAMM", NFeUtils.formatarData(centralRef.abb01data, "yyMM"), true);
-
-                        String ni = StringUtils.extractNumbers(centralRef.abb01ent.abe01ni);
-                        if(dadosGeraisRef.eaa0102ti == 0) {
-                            refNFP.addNode("CNPJ", StringUtils.ajustString(ni, 14), true);
-                        }else {
-                            refNFP.addNode("CPF", StringUtils.ajustString(ni, 11), true);
-                        }
-
-                        refNFP.addNode("IE", NFeUtils.formatarIE(dadosGeraisRef.eaa0102ie), true);
-                        refNFP.addNode("mod", modeloRef, true);
-                        refNFP.addNode("serie", centralRef.abb01serie == null ? 0 : centralRef.abb01serie.length() <= 3 ? centralRef.abb01serie : centralRef.abb01serie.substring(0, 3), true);
-                        refNFP.addNode("nNF", centralRef.abb01num, true);
-
-                        /** Modelo 57 - CTe */
-                    }else if(modeloRef.equals("57")) {
-                        ElementXml NFref = ide.addNode("NFref");
-                        NFref.addNode("refCTe", notaRef.eaa01nfeChave, true);
-
-                        /** Modelo 2B, 2C ou 2D - Cupom Fiscal */
-                    }else if(modeloRef.equals("2B") || modeloRef.equals("2C") || modeloRef.equals("2D")) {
-                        ElementXml NFref = ide.addNode("NFref");
-                        ElementXml refECF = NFref.addNode("refECF");
-
-                        refECF.addNode("mod", modeloRef, true);
-                        refECF.addNode("nECF", notaRef.eaa01cfEF.abd10caixa, true);
-                        refECF.addNode("nCOO", centralRef.abb01num, true);
-                    }
-                }
-            }
-        }
+//        List<Long> docsRef = buscarDocumentosReferenciados(eaa01.eaa01id, 0);
+//        if(docsRef != null && docsRef.size() > 0) {
+//            for(Long eaa01Ref : docsRef) {
+//                Eaa01 notaRef = getAcessoAoBanco().buscarRegistroUnicoById("Eaa01", eaa01Ref);
+//                if(notaRef != null) {
+//                    Eaa0102 dadosGeraisRef = notaRef.eaa0102DadosGerais;
+//                    Abb01 centralRef = getAcessoAoBanco().buscarRegistroUnicoById("Abb01", notaRef.eaa01central.abb01id);
+//                    Aah01 tipoRef = getAcessoAoBanco().buscarRegistroUnicoById("Aah01", eaa01.eaa01central.abb01tipo.aah01id);
+//                    Eaa0101 endPrincipalRef = getAcessoAoBanco().buscarRegistroUnicoByCriterion("Eaa0101", Criterions.eq("eaa0101doc", notaRef.eaa01id), Criterions.eq("eaa0101principal", 1));
+//                    String modeloRef = tipoRef.aah01modelo;
+//
+//                    /** Modelo 55 - NFe ou 65-NFCe */
+//                    if(modeloRef.equals("55") || modeloRef.equals("65") || modeloRef.equals("59")) {
+//                        NFref = ide.addNode("NFref");
+//                        NFref.addNode("refNFe", notaRef.eaa01nfeChave, true);
+//
+//                        /** Modelo 01, 1A e 02 - Notas normais */
+//                    }else if((modeloRef.equals("01") || modeloRef.equals("02")) && dadosGeraisRef.eaa0102ti == 0) {
+//                        NFref = ide.addNode("NFref");
+//                        refNF = NFref.addNode("refNF");
+//
+//                        refNF.addNode("cUF", endPrincipalRef.eaa0101municipio.aag0201ibge, true);
+//                        refNF.addNode("AAMM", NFeUtils.formatarData(centralRef.abb01data, "yyMM"), true);
+//                        refNF.addNode("CNPJ", centralRef.abb01ent.abe01ni == null ? null : StringUtils.extractNumbers(centralRef.abb01ent.abe01ni), true);
+//                        refNF.addNode("mod", modeloRef, true);
+//                        refNF.addNode("serie", centralRef.abb01serie == null ? 0 : centralRef.abb01serie.length() <= 3 ? centralRef.abb01serie : centralRef.abb01serie.substring(0, 3), true);
+//                        refNF.addNode("nNF", centralRef.abb01num, true);
+//
+//                        /** Modelo 04 - Produtor rural */
+//                    }else if(modeloRef.equals("04") || (modeloRef.equals("01") && dadosGeraisRef.eaa0102ti == 1)) {
+//                        ElementXml NFref = ide.addNode("NFref");
+//                        ElementXml refNFP = NFref.addNode("refNFP");
+//
+//                        refNFP.addNode("cUF", endPrincipalRef.eaa0101municipio.aag0201ibge, true);
+//                        refNFP.addNode("AAMM", NFeUtils.formatarData(centralRef.abb01data, "yyMM"), true);
+//
+//                        String ni = StringUtils.extractNumbers(centralRef.abb01ent.abe01ni);
+//                        if(dadosGeraisRef.eaa0102ti == 0) {
+//                            refNFP.addNode("CNPJ", StringUtils.ajustString(ni, 14), true);
+//                        }else {
+//                            refNFP.addNode("CPF", StringUtils.ajustString(ni, 11), true);
+//                        }
+//
+//                        refNFP.addNode("IE", NFeUtils.formatarIE(dadosGeraisRef.eaa0102ie), true);
+//                        refNFP.addNode("mod", modeloRef, true);
+//                        refNFP.addNode("serie", centralRef.abb01serie == null ? 0 : centralRef.abb01serie.length() <= 3 ? centralRef.abb01serie : centralRef.abb01serie.substring(0, 3), true);
+//                        refNFP.addNode("nNF", centralRef.abb01num, true);
+//
+//                        /** Modelo 57 - CTe */
+//                    }else if(modeloRef.equals("57")) {
+//                        ElementXml NFref = ide.addNode("NFref");
+//                        NFref.addNode("refCTe", notaRef.eaa01nfeChave, true);
+//
+//                        /** Modelo 2B, 2C ou 2D - Cupom Fiscal */
+//                    }else if(modeloRef.equals("2B") || modeloRef.equals("2C") || modeloRef.equals("2D")) {
+//                        ElementXml NFref = ide.addNode("NFref");
+//                        ElementXml refECF = NFref.addNode("refECF");
+//
+//                        refECF.addNode("mod", modeloRef, true);
+//                        refECF.addNode("nECF", notaRef.eaa01cfEF.abd10caixa, true);
+//                        refECF.addNode("nCOO", centralRef.abb01num, true);
+//                    }
+//                }
+//            }
+//        }
 
         if(eaa0102.eaa0102govTipo != null && eaa0102.eaa0102govTipo != 0){
             ElementXml gCompraGov = ide.addNode("gCompraGov");
@@ -1760,7 +1760,7 @@ class NFe_Reforma extends FormulaBase {
                         }
                     }
                 }
-                det.addNode("vItem", eaa0103.eaa0103total);
+//                det.addNode("vItem", eaa0103.eaa0103total);
 
 //                List<Long> docsRef = buscarDocumentosReferenciados(eaa01.eaa01id, 2);
 //                if(docsRef != null && docsRef.size() > 0) {
