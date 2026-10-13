@@ -23,8 +23,9 @@ public class SPP_Ordem_Producao extends RelatorioBase {
     public DadosParaDownload executar() {
         List<Long> idsTiposDoc = getListLong("tipos");
         List<Long> planos = getListLong("planos");
+        Integer numOpPrincipal = getInteger("opPrincipal")
 
-        List<TableMap> dados = buscarOrdensProducao(idsTiposDoc, planos);
+        List<TableMap> dados = buscarOrdensProducao(idsTiposDoc, planos, numOpPrincipal);
         List<TableMap> listComponentes = new ArrayList<>();
 
         for(dado in dados){
@@ -49,12 +50,14 @@ public class SPP_Ordem_Producao extends RelatorioBase {
 
         return gerarPDF("SPP_Ordem_Producao", dsPrincipal);
     }
-    private List<TableMap> buscarOrdensProducao(List<Long> idsTiposDoc,  List<Long> planos){
+    private List<TableMap> buscarOrdensProducao(List<Long> idsTiposDoc,  List<Long> planos, Integer numOpPrincipal){
         String whereTiposDoc = idsTiposDoc != null && idsTiposDoc.size() > 0 ? "AND abb01tipo IN (:idsTiposDoc) " : "";
         String wherePlanos = planos != null && planos.size() > 0 ? "AND baa01id IN (:planos) " : "";
+        String whereOpPrincipal = numOpPrincipal != null ? "AND bab01opp = :numOpPrincipal " : ""
 
         Parametro parametroTipoDoc = idsTiposDoc != null && idsTiposDoc.size() > 0 ? Parametro.criar("idsTiposDoc", idsTiposDoc) : null;
         Parametro parametroPlanos = planos != null && planos.size() > 0 ? Parametro.criar("planos", planos) : null;
+        Parametro parametroOpPrincipal = numOpPrincipal != null ? Parametro.criar("numOpPrincipal", numOpPrincipal) : null;
 
         String sql = "SELECT baa01descr,abb01plano.abb01num AS numPlano, abb01plano.abb01data AS dataPlano, abb01ordem.abb01num AS numOrdem, bab01id AS idOrdem, " +
                     "acabado.abm01codigo AS codAcab, acabado.abm01descr AS descrAcab, abb01ordem.abb01data, " +
@@ -73,9 +76,10 @@ public class SPP_Ordem_Producao extends RelatorioBase {
                     "INNER JOIN abb01 AS abb01Plano ON abb01Plano.abb01id = baa01central " +
                     whereTiposDoc +
                     wherePlanos +
+                    whereOpPrincipal +
                     "ORDER BY abb01plano.abb01num, descrItemPrincipal, acabado.abm01codigo, abp10codigo"
 
-        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroTipoDoc, parametroPlanos);
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroTipoDoc, parametroPlanos, parametroOpPrincipal);
     }
     private List<TableMap> buscarComponentesOrdem(Long idOrdem){
         String sql = "SELECT abm01tipo AS tipoComponente, abm01codigo AS codComponente, " +
