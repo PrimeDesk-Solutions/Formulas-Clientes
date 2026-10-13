@@ -72,7 +72,7 @@ class SPP1001 extends FormulaBase {
         String sqlCount = " SELECT count(*) as qtdTotal " + baseDaSql;
 
         String sqlDados =
-                        "SELECT bab01id AS id, aah01codigo AS Doc, abb01num, abb01data, bab01opp, bab01status, abp10codigo, abp10descr, abm01codigo, abm01na, abp20bomcodigo " +
+                        "SELECT bab01id AS id, aah01codigo, abb01num, abb01data, bab01opp, bab01status, abp10codigo, abp10descr, abm01codigo, abm01na, abp20bomcodigo " +
                         baseDaSql;
 
         Long qtdTotalDeRegistros = getAcessoAoBanco().obterLong(sqlCount, parametrosArray);
