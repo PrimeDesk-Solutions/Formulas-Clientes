@@ -246,18 +246,18 @@ public class complementodeimposto extends FormulaBase {
             eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
 
             // Unitario Estoque
-		  jsonEaa0103.put("unitario_estoque", eaa0103.eaa0103unit);
+            jsonEaa0103.put("unitario_estoque", eaa0103.eaa0103unit);
 
-		  // Total Item Estoque 
-		  jsonEaa0103.put("total_item_estoque", eaa0103.eaa0103total);
+            // Total Item Estoque
+            jsonEaa0103.put("total_item_estoque", eaa0103.eaa0103total);
 
             // Total Documento
             eaa0103.eaa0103totDoc = eaa0103.eaa0103total +
-				                    jsonEaa0103.getBigDecimal_Zero("ipi") +
-				                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-				                    jsonEaa0103.getBigDecimal_Zero("seguro") +
-				                    jsonEaa0103.getBigDecimal_Zero("outras_despesas")-
-				                    jsonEaa0103.getBigDecimal_Zero("desconto");
+                    jsonEaa0103.getBigDecimal_Zero("ipi") +
+                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
+                    jsonEaa0103.getBigDecimal_Zero("seguro") +
+                    jsonEaa0103.getBigDecimal_Zero("outras_despesas")-
+                    jsonEaa0103.getBigDecimal_Zero("desconto");
 
             eaa0103.eaa0103totDoc = eaa0103.eaa0103totDoc.round(2);
 
@@ -276,14 +276,12 @@ public class complementodeimposto extends FormulaBase {
 
             def primeiroDigito = aaj15_cfop.aaj15codigo.substring(0,1);
 
-            if(!dentroEstado){
-                if(primeiroDigito == "1"){
-                    primeiroDigito = "2";
-                }
-                if(primeiroDigito == "5"){
-                    primeiroDigito = "6";
-                }
+
+            if(primeiroDigito == "5"){
+                primeiroDigito = "1";
             }
+
+
             cfop = primeiroDigito + cfop;
             aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
             eaa0103.eaa0103cfop = aaj15_cfop;
@@ -378,6 +376,5 @@ public class complementodeimposto extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
