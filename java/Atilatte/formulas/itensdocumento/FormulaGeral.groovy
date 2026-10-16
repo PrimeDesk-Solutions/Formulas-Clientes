@@ -930,6 +930,8 @@ public class FormulaGeral extends FormulaBase {
         //Define Quantidade Comercial como Quantidade Convertida
         jsonEaa0103.put("qt_convertida", eaa0103.eaa0103qtComl);
 
+        if(abd01.abd01codigo == "60006") return // PCD Fracionado
+
         if(jsonAbm0101.getBigDecimal_Zero("cvdnf") == 0) throw new ValidacaoException("Quantidade de produto por caixa no cadastro do item "+abm01.abm01codigo+ " é inválido! Necessário um valor maior que Zero!");
 
         if(jsonEaa0103.getString("umv") != 'KG' && grupo != "LEITE"){
@@ -945,6 +947,11 @@ public class FormulaGeral extends FormulaBase {
     }
 
     private void converterUnitarioItem(String grupo){
+
+        jsonEaa0103.put("unitario_conv", eaa0103.eaa0103unit);
+
+        if(abd01.abd01codigo == "60006") return // PCD Fracionado
+
         if(jsonEaa0103.getString("umv") == 'CX' && grupo != "LEITE"){
             def valrUnit = eaa0103.eaa0103unit;
             def fatorUM = jsonAbm0101.getBigDecimal_Zero("cvdnf");
@@ -955,6 +962,10 @@ public class FormulaGeral extends FormulaBase {
     }
 
     private void converterTotalItem(){
+        jsonEaa0103.put("total_conv", (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2))
+
+        if(abd01.abd01codigo == "60006") return // PCD Fracionado
+
         //Total Item Convertido
         jsonEaa0103.put("total_conv", (jsonEaa0103.getBigDecimal_Zero("unitario_conv") * jsonEaa0103.getBigDecimal_Zero("qt_convertida")).round(2))
     }
