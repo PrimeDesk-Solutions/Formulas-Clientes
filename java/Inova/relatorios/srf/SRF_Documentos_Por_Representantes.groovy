@@ -54,8 +54,8 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
 
     @Override
     public DadosParaDownload executar() {
-        Integer numDocIni = getInteger("numeroInicial") == null || getInteger("numeroInicial") == "" ? 000000001 : getInteger("numeroInicial");
-        Integer numDocFin = getInteger("numeroFinal") == null || getInteger("numeroFinal") == "" ? 999999999 : getInteger("numeroFinal");
+        Integer numDocIni = getInteger("numeroInicial");
+        Integer numDocFin = getInteger("numeroFinal");
         List<Long> idsTipoDoc = getListLong("tipo");
         List<Long> idsPcd = getListLong("pcd");
         Integer resumoOperacao = getInteger("resumoOperacao");
@@ -104,6 +104,8 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
         params.put("LOGO_EMPRESA", "C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\srf\\Logo Silcon.png");
         params.put("LOGO_REVENDA", "C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\srf\\logoPrimeDesk.png");
 
+
+
         if (campoLivre1 != null && campoFixo1 != null) interromper("Selecione apenas 1 valor por campo!");
         if (campoLivre2 != null && campoFixo2 != null) interromper("Selecione apenas 1 valor por campo!");
         if (campoLivre3 != null && campoFixo3 != null) interromper("Selecione apenas 1 valor por campo!");
@@ -120,7 +122,15 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
         campos.put("5", campoLivre5 != null ? campoLivre5 : campoFixo5 != null ? campoFixo5 : null);
         campos.put("6", campoLivre6 != null ? campoLivre6 : campoFixo6 != null ? campoFixo6 : null);
 
+        Long idUser = obterUsuarioLogado().getAab10id();
+        Integer setorUser = buscarCamposCustomUser(idUser) == null ? null : buscarCamposCustomUser(idUser);
+        if(setorUser == null) interromper("Necessário preencher o campo de setor no cadastro do usuário logado.")
+        Abe01 abe01user = buscarEntidadeUsuarioLogado(idUser);
+
+        if((idsReps == null || idsReps.size() == 0) &&  setorUser == 2) idsReps = [abe01user.abe01id];
+
         List<TableMap> representantes = buscarRepresentantes(idsReps);
+        List<TableMap> documentos = new ArrayList<>();
         List<TableMap> dadosRelatorio = new ArrayList();
         List<TableMap> dados = buscarDadosDocumentos(idsReps, numDocIni, numDocFin, idsTipoDoc, idsPcd, resumoOperacao, dtEmissao, dtEntradaSaida);
         if (dados == null || dados.size() == 0) interromper("Não foram encontrados registros com os filtros informados.");
@@ -173,9 +183,6 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
             String codRep = representante.getString("abe01codigo");
             String nomeRep = representante.getString("abe01na");
             def txComissao = representante.getBigDecimal_Zero("abe05taxa");
-            def idControle = null;
-            TableMap dadosTmp = new TableMap();
-            TableMap valoresTotais = new TableMap();
 
             for (dado in dados) {
                 Long idRep0 = dado.getLong("eaa01rep0");
@@ -197,40 +204,12 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
                         comporDevolucoes(dado, devolucao, campos);
                     }
                 }
-
-                if (idControle == null) {
-                    dadosTmp.putAll(dado);
-                    idControle = dado.getLong("eaa01id")
-                    somarValores(dado, valoresTotais, campos);
-                } else if (idControle == dado.getLong("eaa01id")) {
-                    somarValores(dado, valoresTotais, campos);
-                } else {
-                    TableMap tmp = new TableMap();
-                    tmp.putAll(dadosTmp);
-                    tmp.putAll(valoresTotais);
-                    comporValores(tmp, campos);
-                    dadosRelatorio.add(tmp);
-
-                    dadosTmp = new TableMap();
-                    dadosTmp.putAll(dado);
-                    valoresTotais = new TableMap()
-                    idControle = dado.getLong("eaa01id");
-                    somarValores(dado, valoresTotais, campos);
-                }
-            }
-
-            if(dadosTmp.size() > 0){
-                TableMap tmp = new TableMap();
-                tmp.putAll(dadosTmp);
-                tmp.putAll(valoresTotais);
-                comporValores(tmp, campos);
-
-                dadosRelatorio.add(tmp)
+                comporValores(dado, campos);
             }
         }
 
-        if (impressao == 0) return gerarPDF("SRF_Documentos_Por_Representantes_PDF", dadosRelatorio);
-        return gerarXLSX("SRF_Documentos_Por_Representantes_Excel", dadosRelatorio);
+        if (impressao == 0) return gerarPDF("SRF_Documentos_Por_Representantes_PDF", dados);
+        return gerarXLSX("SRF_Documentos_Por_Representantes_Excel", dados);
     }
 
     private List<TableMap> buscarDadosDocumentos(List<Long> idsReps, Integer numDocIni, Integer numDocFin, List<Long> idsTipoDoc, List<Long> idsPcd, Integer resumoOperacao, LocalDate[] dtEmissao, LocalDate[] dtEntradaSaida) {
@@ -277,34 +256,33 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
 
 
         String sql = " SELECT eaa01nota.eaa01rep0, eaa01nota.eaa01rep1, eaa01nota.eaa01rep2, eaa01nota.eaa01rep3, eaa01nota.eaa01rep4, eaa01nota.eaa01id AS eaa01id, eaa0103nota.eaa0103id AS eaa0103id, aah01nota.aah01codigo AS tipoDocNota, abb01nota.abb01num AS numNota, abb01nota.abb01data AS dtEmissaoNota, eaa01nota.eaa01esdata AS esDataNota, " +
-                        " aah01pedido.aah01codigo AS tipoDocPedido,abb01pedido.abb01num AS numPedido, abe01codigo AS codEnt,abe01na AS naEnt, abe30codigo AS codCondPgto, abe30nome AS nomeCondPgto, " +
-                        " abe40nome AS tabelaPreco, eaa0103nota.eaa0103qtuso AS eaa0103qtuso,eaa0103nota.eaa0103qtcoml AS eaa0103qtcoml, eaa0103nota.eaa0103unit AS eaa0103unit,eaa0103nota.eaa0103total AS eaa0103total,eaa0103nota.eaa0103totdoc AS eaa0103totdoc, eaa0103nota.eaa0103totfinanc AS eaa0103totfinanc, eaa0103nota.eaa0103json AS eaa0103json " +
-                        " FROM eaa01 AS eaa01nota " +
-                        " INNER JOIN abb01 AS abb01nota ON eaa01central = abb01nota.abb01id " +
-                        " INNER JOIN aah01 AS aah01nota ON abb01nota.abb01tipo = aah01nota.aah01id " +
-                        " INNER JOIN eaa0103 AS eaa0103nota ON eaa0103nota.eaa0103doc = eaa01id " +
-                        " LEFT JOIN eaa01032 ON eaa01032itemsrf = eaa0103id " +
-                        " LEFT JOIN eaa0103 AS eaa0103pedido on eaa01032itemscv = eaa0103pedido.eaa0103id " +
-                        " LEFT JOIN eaa01 AS eaa01pedido ON eaa01pedido.eaa01id = eaa0103pedido.eaa0103doc " +
-                        " LEFT JOIN abb01 AS abb01pedido ON abb01pedido.abb01id = eaa01pedido.eaa01central " +
-                        " LEFT JOIN aah01 AS aah01pedido ON aah01pedido.aah01id = abb01pedido.abb01tipo " +
-                        " INNER JOIN abe01 ON abb01nota.abb01ent = abe01id " +
-                        " LEFT JOIN abe30 ON eaa01nota.eaa01cp = abe30id " +
-                        " LEFT JOIN abe40 ON eaa01nota.eaa01tp = abe40id " +
-                        " WHERE eaa01nota.eaa01clasDoc = " + Eaa01.CLASDOC_SRF +
-                        " AND eaa01nota.eaa01cancData IS NULL " +
-                        " AND eaa01nota.eaa01nfestat <> 5 " +
-                        " WHERE TRUE "+
-                        whereNumDoc +
-                        whereMov +
-                        whereTipoDoc +
-                        wherePCD +
-                        whereDataEmissao +
-                        whereDataEntradaSaida +
-                        whereRepresentantes +
-                        whereClasDoc +
-                        whereEmpresa +
-                        "ORDER BY abb01nota.abb01num ";
+                " aah01pedido.aah01codigo AS tipoDocPedido,abb01pedido.abb01num AS numPedido, abe01codigo AS codEnt,abe01na AS naEnt, abe30codigo AS codCondPgto, abe30nome AS nomeCondPgto, " +
+                " abe40nome AS tabelaPreco, eaa0103nota.eaa0103qtuso AS eaa0103qtuso,eaa0103nota.eaa0103qtcoml AS eaa0103qtcoml, eaa0103nota.eaa0103unit AS eaa0103unit,eaa0103nota.eaa0103total AS eaa0103total,eaa0103nota.eaa0103totdoc AS eaa0103totdoc, eaa0103nota.eaa0103totfinanc AS eaa0103totfinanc, eaa0103nota.eaa0103json AS eaa0103json " +
+                " FROM eaa01 AS eaa01nota " +
+                " INNER JOIN abb01 AS abb01nota ON eaa01central = abb01nota.abb01id " +
+                " INNER JOIN aah01 AS aah01nota ON abb01nota.abb01tipo = aah01nota.aah01id " +
+                " INNER JOIN eaa0103 AS eaa0103nota ON eaa0103nota.eaa0103doc = eaa01id " +
+                " LEFT JOIN eaa01032 ON eaa01032itemsrf = eaa0103id " +
+                " LEFT JOIN eaa0103 AS eaa0103pedido on eaa01032itemscv = eaa0103pedido.eaa0103id " +
+                " LEFT JOIN eaa01 AS eaa01pedido ON eaa01pedido.eaa01id = eaa0103pedido.eaa0103doc " +
+                " LEFT JOIN abb01 AS abb01pedido ON abb01pedido.abb01id = eaa01pedido.eaa01central " +
+                " LEFT JOIN aah01 AS aah01pedido ON aah01pedido.aah01id = abb01pedido.abb01tipo " +
+                " INNER JOIN abe01 ON abb01nota.abb01ent = abe01id " +
+                " LEFT JOIN abe30 ON eaa01nota.eaa01cp = abe30id " +
+                " LEFT JOIN abe40 ON eaa01nota.eaa01tp = abe40id " +
+                " WHERE eaa01nota.eaa01clasDoc = " + Eaa01.CLASDOC_SRF +
+                " AND eaa01nota.eaa01cancData IS NULL " +
+                " AND eaa01nota.eaa01nfestat <> 5 " +
+                whereNumDoc +
+                whereMov +
+                whereTipoDoc +
+                wherePCD +
+                whereDataEmissao +
+                whereDataEntradaSaida +
+                whereRepresentantes +
+                whereClasDoc +
+                whereEmpresa +
+                "ORDER BY abb01nota.abb01num ";
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroNumDocIni, parametroNumDocFin, parametroTipoDoc, parametroPCD, parametroDataEmissaoIni, parametroDataEmissaoFin,
                 parametroDataEntradaSaidaIni, parametroDataEntradaSaidaFin, parametroRepresentantes, parametroEmpresa);
@@ -355,24 +333,24 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
 
 
         String sql = "SELECT DISTINCT eaa0103id " +
-                    " FROM eaa01 " +
-                    " INNER JOIN abb01 ON eaa01central = abb01id " +
-                    " INNER JOIN aah01 ON abb01tipo = aah01id " +
-                    " INNER JOIN eaa0103 ON eaa0103doc = eaa01id " +
-                    " LEFT JOIN abe30 ON eaa01cp = abe30id " +
-                    " LEFT JOIN abe40 ON eaa01tp = abe40id " +
-                    " WHERE eaa01clasDoc = " + Eaa01.CLASDOC_SRF +
-                    " AND eaa01cancData IS NULL " +
-                    " AND eaa01nfestat <> 5 " +
-                    whereNumDoc +
-                    whereMov +
-                    whereTipoDoc +
-                    wherePCD +
-                    whereDataEmissao +
-                    whereDataEntradaSaida +
-                    whereRepresentantes +
-                    whereClasDoc+
-                    whereEmpresa;
+                " FROM eaa01 " +
+                " INNER JOIN abb01 ON eaa01central = abb01id " +
+                " INNER JOIN aah01 ON abb01tipo = aah01id " +
+                " INNER JOIN eaa0103 ON eaa0103doc = eaa01id " +
+                " LEFT JOIN abe30 ON eaa01cp = abe30id " +
+                " LEFT JOIN abe40 ON eaa01tp = abe40id " +
+                " WHERE eaa01clasDoc = " + Eaa01.CLASDOC_SRF +
+                " AND eaa01cancData IS NULL " +
+                " AND eaa01nfestat <> 5 " +
+                whereNumDoc +
+                whereMov +
+                whereTipoDoc +
+                wherePCD +
+                whereDataEmissao +
+                whereDataEntradaSaida +
+                whereRepresentantes +
+                whereClasDoc+
+                whereEmpresa;
 
         return getAcessoAoBanco().obterListaDeLong(sql, parametroNumDocIni, parametroNumDocFin, parametroTipoDoc, parametroPCD, parametroDataEmissaoIni, parametroDataEmissaoFin,
                 parametroDataEntradaSaidaIni, parametroDataEntradaSaidaFin, parametroRepresentantes, parametroEmpresa);
@@ -483,11 +461,15 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
     private void preencherDadosIniciaisRepresentante(Map<String, Object> filtrosDefault){
         Long idUser = obterUsuarioLogado().getAab10id();
 
-        Abe01 abe01user = buscarEntidadeUsuarioLogado(idUser);
+        Integer setorUser = buscarCamposCustomUser(idUser) == null ? null : buscarCamposCustomUser(idUser);
 
-        if(abe01user == null) interromper("Não foi encontrado entidade cadastrada para o usuário logado.")
+        if(setorUser == 2){
+            Abe01 abe01user = buscarEntidadeUsuarioLogado(idUser);
 
-        filtrosDefault.put("idRepresentantes", abe01user.abe01id);
+            if(abe01user == null) interromper("Não foi encontrado entidade cadastrada para o usuário logado.")
+
+            filtrosDefault.put("idRepresentantes", abe01user.abe01id);
+        }
 
     }
     private Integer buscarCamposCustomUser(idUser){
@@ -514,6 +496,7 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
                 .addWhere(whereEmpresa)
                 .addWhere(whereTabela)
                 .getList(ColumnType.LONG);
+
     }
 
     public String buscarNomeCampoLivre(String campo) {
@@ -522,6 +505,4 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
 
     }
 }
-//meta-sis-eyJkZXNjciI6IlNSRiBEb2N1bWVudG9zIFBvciBSZXByZXNlbnRhbnRlcyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
-//meta-sis-eyJkZXNjciI6IlNSRiBEb2N1bWVudG9zIFBvciBSZXByZXNlbnRhbnRlcyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
 //meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MgUG9yIFJlcHJlc2VudGFudGVzIiwidGlwbyI6InJlbGF0b3JpbyJ9

@@ -101,6 +101,7 @@ public class SRF_Documentos_Por_Estados extends RelatorioBase {
         if (campoLivre5 != null && campoFixo5 != null) interromper("Selecione apenas 1 valor por campo!");
         if (campoLivre6 != null && campoFixo6 != null) interromper("Selecione apenas 1 valor por campo!");
 
+
         Map<String, String> campos = new HashMap();
 
         campos.put("1", campoLivre1 != null ? campoLivre1 : campoFixo1 != null ? campoFixo1 : null);
@@ -110,10 +111,12 @@ public class SRF_Documentos_Por_Estados extends RelatorioBase {
         campos.put("5", campoLivre5 != null ? campoLivre5 : campoFixo5 != null ? campoFixo5 : null);
         campos.put("6", campoLivre6 != null ? campoLivre6 : campoFixo6 != null ? campoFixo6 : null);
 
+
         List<TableMap> dados = buscarDocumentos(numDocIni, numDocFin, idsTipoDoc, idsPcd, resumoOperacao, dtEmissao, dtEntradaSaida, idsEntidades, idEmpresa, estados);
 
         if (dados.size() == 0) interromper("Não foram encontrado dados com os filtros selecionados.");
 
+        List<Long> idsItensDoc = obterIdsItensDoc(numDocIni, numDocFin, idsTipoDoc, idsPcd, resumoOperacao, dtEmissao, dtEntradaSaida, idsEntidades, idEmpresa, estados);
         List<TableMap> dadosRelatorio = new ArrayList();
         List<TableMap> listDevolucoesGeral = new ArrayList();
         List<TableMap> listDevolucoesAjustado = new ArrayList<>()
@@ -124,15 +127,8 @@ public class SRF_Documentos_Por_Estados extends RelatorioBase {
         TableMap valoresTotais = new TableMap();
         TableMap valoresTotaisDevolucao = new TableMap();
 
-        List<Long> idsItensDoc = new ArrayList<>();
-        if(devolucoes){
-            for(dado in dados){
-                Long idItem = dado.getLong("eaa0103id");
-                idsItensDoc.add(idItem)
-            }
-        }
 
-        //Agrupa as devoluções
+        //		 Agrupa as devoluções
         if (devolucoes) {
             listDevolucoesGeral = obterDevolucao(idsItensDoc);
             if (listDevolucoesGeral != null && listDevolucoesGeral.size() > 0) {
@@ -166,6 +162,8 @@ public class SRF_Documentos_Por_Estados extends RelatorioBase {
                 if (!tmpDev.isEmpty()) listDevolucoesAjustado.add(tmpDev);
             }
         }
+
+
 
         for (dado in dados) {
             Long idItem = dado.getLong("eaa0103id");
@@ -245,17 +243,17 @@ public class SRF_Documentos_Por_Estados extends RelatorioBase {
         Parametro parametroNumFin = numDocFin != null ? Parametro.criar("numDocFin", numDocFin) : null;
         Parametro parametroTipoDoc = idsTipoDoc != null && idsTipoDoc.size() > 0 ? Parametro.criar("idsTipoDoc", idsTipoDoc) : null;
         Parametro parametroPcd = idsPcd != null && idsPcd.size() > 0 ? Parametro.criar("idsPcd", idsPcd) : null;
-        Parametro parametroDtEmissaoIni = dtEmissao != null ? Parametro.criar("dtEmissIni", dtEmissao[0]) : null;
-        Parametro parametroDtEmissaoFin = dtEmissao != null  ? Parametro.criar("dtEmissFin", dtEmissao[1]) : null;
-        Parametro parametroDtEntradaSaidaIni = dtEntradaSaida != null ? Parametro.criar("dtEntradaSaidaIni", dtEntradaSaida[0]) : null;
-        Parametro parametroDtEntradaSaidaFin = dtEntradaSaida != null ? Parametro.criar("dtEntradaSaidaFin", dtEntradaSaida[1]) : null;
+        Parametro parametroDtEmissaoIni = dtEmissao != null && dtEmissao.size() > 0 ? Parametro.criar("dtEmissIni", dtEmissao[0]) : null;
+        Parametro parametroDtEmissaoFin = dtEmissao != null && dtEmissao.size() > 0 ? Parametro.criar("dtEmissFin", dtEmissao[1]) : null;
+        Parametro parametroDtEntradaSaidaIni = dtEntradaSaida != null && dtEntradaSaida.size() > 0 ? Parametro.criar("dtEntradaSaidaIni", dtEntradaSaida[0]) : null;
+        Parametro parametroDtEntradaSaidaFin = dtEntradaSaida != null && dtEntradaSaida.size() > 0 ? Parametro.criar("dtEntradaSaidaFin", dtEntradaSaida[1]) : null;
         Parametro parametroEntidade = idsEntidades != null && idsEntidades.size() > 0 ? Parametro.criar("idsEntidades", idsEntidades) : null;
         Parametro parametroEmpresa = Parametro.criar("idEmpresa", idEmpresa);
         Parametro parametroEstados = estados != null && estados.size() > 0 ? Parametro.criar("estados", estados) : null;
 
         String sql = "SELECT abb01num,abb01data, eaa01esdata, eaa0103id, eaa01id, aag02uf, aag02nome, " +
-                " ent.abe01codigo AS codEnt, ent.abe01nome AS naEnt,aah01codigo,aah01nome, abe30nome,abe40nome, " +
-                " eaa0103qtuso,eaa0103qtcoml, eaa0103unit, eaa0103unit,eaa0103total,eaa0103totdoc, eaa0103totfinanc, eaa0103json " +
+                "ent.abe01codigo AS codEnt, ent.abe01nome AS naEnt,aah01codigo,aah01nome, abe30nome,abe40nome, " +
+                "eaa0103qtuso,eaa0103qtcoml, eaa0103unit, eaa0103unit,eaa0103total,eaa0103totdoc, eaa0103totfinanc, eaa0103json " +
                 " FROM eaa01  " +
                 " INNER JOIN abb01 ON abb01id = eaa01central  " +
                 " INNER JOIN abd01 ON abd01id = eaa01pcd  " +
@@ -282,11 +280,86 @@ public class SRF_Documentos_Por_Estados extends RelatorioBase {
                 whereEntidade +
                 whereES +
                 whereEstados +
-                "ORDER BY aag02uf, eaa01id"
+                "ORDER BY aag02uf"
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroEmpresa, parametroNumIni, parametroNumFin, parametroTipoDoc, parametroPcd, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroDtEntradaSaidaIni, parametroDtEntradaSaidaFin, parametroEntidade, parametroEstados);
 
     }
+
+    private List<Long> obterIdsItensDoc(Integer numDocIni, Integer numDocFin, List<Long> idsTipoDoc, List<Long> idsPcd, Integer resumoOperacao, LocalDate[] dtEmissao, LocalDate[] dtEntradaSaida, List<Long> idsEntidades, Long idEmpresa, List<Long> estados) {
+        // Data Emissao
+        LocalDate dtEmissIni = null;
+        LocalDate dtEmissFin = null;
+        if (dtEmissao != null) {
+            dtEmissIni = dtEmissao[0];
+            dtEmissFin = dtEmissao[1];
+        }
+
+        // Data Entrada/Saida
+        LocalDate dtEntradaSaidaIni = null;
+        LocalDate dtEntradaSaidaFin = null;
+        if (dtEntradaSaida != null) {
+            dtEntradaSaidaIni = dtEntradaSaida[0];
+            dtEntradaSaidaFin = dtEntradaSaida[1];
+        }
+
+        String whereNumIni = numDocIni != null ? "AND abb01num >= :numDocIni " : "";
+        String whereNumFin = numDocFin != null ? "AND abb01num <= :numDocFin " : "";
+        String whereTipoDoc = idsTipoDoc != null && idsTipoDoc.size() > 0 ? "AND aah01id IN (:idsTipoDoc) " : "";
+        String wherePcd = idsPcd != null && idsPcd.size() > 0 ? "AND abd01id IN (:idsPcd) " : "";
+        String whereDtEmissao = dtEmissIni != null && dtEmissFin != null ? "AND abb01data BETWEEN :dtEmissIni AND :dtEmissFin " : "";
+        String whereDtEntradaSaida = dtEntradaSaidaIni != null && dtEntradaSaidaFin != null ? "AND eaa01esdata between :dtEntradaSaidaIni AND :dtEntradaSaidaFin " : "";
+        String whereEntidade = idsEntidades != null && idsEntidades.size() > 0 ? "AND ent.abe01id IN (:idsEntidades) " : "";
+        String whereES = resumoOperacao == 1 ? " AND eaa01esMov = 1 " : " AND eaa01esMov = 0 ";
+        String whereEmpresa = "AND eaa01gc = :idEmpresa ";
+        String whereEstados = estados != null && estados.size() > 0 ? " AND aag02id IN (:estados) " : "";
+
+
+        Parametro parametroNumIni = numDocIni != null ? Parametro.criar("numDocIni", numDocIni) : null;
+        Parametro parametroNumFin = numDocFin != null ? Parametro.criar("numDocFin", numDocFin) : null;
+        Parametro parametroTipoDoc = idsTipoDoc != null && idsTipoDoc.size() > 0 ? Parametro.criar("idsTipoDoc", idsTipoDoc) : null;
+        Parametro parametroPcd = idsPcd != null && idsPcd.size() > 0 ? Parametro.criar("idsPcd", idsPcd) : null;
+        Parametro parametroDtEmissaoIni = dtEmissao != null && dtEmissao.size() > 0 ? Parametro.criar("dtEmissIni", dtEmissao[0]) : null;
+        Parametro parametroDtEmissaoFin = dtEmissao != null && dtEmissao.size() > 0 ? Parametro.criar("dtEmissFin", dtEmissao[1]) : null;
+        Parametro parametroDtEntradaSaidaIni = dtEntradaSaida != null && dtEntradaSaida.size() > 0 ? Parametro.criar("dtEntradaSaidaIni", dtEntradaSaida[0]) : null;
+        Parametro parametroDtEntradaSaidaFin = dtEntradaSaida != null && dtEntradaSaida.size() > 0 ? Parametro.criar("dtEntradaSaidaFin", dtEntradaSaida[1]) : null;
+        Parametro parametroEntidade = idsEntidades != null && idsEntidades.size() > 0 ? Parametro.criar("idsEntidades", idsEntidades) : null;
+        Parametro parametroEmpresa = Parametro.criar("idEmpresa", idEmpresa);
+        Parametro parametroEstados = estados != null && estados.size() > 0 ? Parametro.criar("estados", estados) : null;
+
+
+        String sql = "SELECT DISTINCT eaa0103id" +
+                " FROM eaa01  " +
+                " INNER JOIN abb01 ON abb01id = eaa01central  " +
+                " INNER JOIN abd01 ON abd01id = eaa01pcd  " +
+                " INNER JOIN abe01 AS ent on ent.abe01id = abb01ent  " +
+                " INNER JOIN eaa0102 ON eaa0102doc = eaa01id  " +
+                " LEFT JOIN eaa0101 ON eaa0101doc = eaa01id AND eaa0101principal = 1 "+
+                " LEFT JOIN aag0201 ON aag0201id = eaa0101municipio " +
+                " LEFT JOIN aag02 ON aag02id = aag0201uf " +
+                " INNER JOIN eaa0103 AS eaa0103doc on eaa0103doc = eaa01id  " +
+                " INNER JOIN aah01 ON aah01id = abb01tipo  " +
+                " INNER JOIN abe30 ON abe30id = eaa01cp  " +
+                " LEFT JOIN abe40 ON abe40id = eaa01tp  " +
+                " INNER JOIN abe0101 ON abe0101ent = ent.abe01id and abe0101principal = 1  " +
+                " WHERE eaa01clasDoc = " + Eaa01.CLASDOC_SRF +
+                " AND eaa01cancData IS NULL " +
+                " AND eaa01nfestat <> 5 " +
+                whereEmpresa +
+                whereNumIni +
+                whereNumFin +
+                whereTipoDoc +
+                wherePcd +
+                whereDtEmissao +
+                whereDtEntradaSaida +
+                whereEntidade +
+                whereEstados +
+                whereES;
+
+        return getAcessoAoBanco().obterListaDeLong(sql, parametroEmpresa, parametroNumIni, parametroNumFin, parametroTipoDoc, parametroPcd, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroDtEntradaSaidaIni, parametroDtEntradaSaidaFin, parametroEntidade, parametroEstados);
+
+    }
+
 
     private List<TableMap> obterDevolucao(List<Long> idsItem) {
         def whereItem = " WHERE eaa01033itemdoc IN (:item) "

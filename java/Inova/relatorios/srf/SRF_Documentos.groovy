@@ -31,31 +31,31 @@ class SRF_Documentos extends RelatorioBase {
 
     @Override
     public DadosParaDownload executar() {
-        List<Long> idEntidade = getListLong("entidade");
-        List<Long> idTipoDocumento = getListLong("tipo");
-        Integer numeroInicial = getInteger("numeroInicial") == null || getInteger("numeroInicial") == "" ? 000000001 : getInteger("numeroInicial");
-        Integer numeroFinal = get("numeroFinal") == null || get("numeroFinal") == "" ? 999999999 : getInteger("numeroFinal");
-        LocalDate[] dataEmissao = getIntervaloDatas("dataEmissao");
-        LocalDate[] dataEntSai = getIntervaloDatas("dataEntSai");
-        Integer resumoOperacao = getInteger("resumoOperacao");
-        List<Long> criteriosPcd = getListLong("pcd");
-        List<Long> estados = getListLong("estados");
-        List<Long> municipios = getListLong("municipios");
-        Integer nomeEntidade = getInteger("nomeEntidade");
-        Integer imprimir = getInteger("impressao")
-        String camposLivre1 = getString("campoLivre1")
-        String camposFixo1 = getString("campoFixo1")
-        String camposLivre2 = getString("campoLivre2")
-        String camposFixo2 = getString("campoFixo2")
-        String camposLivre3 = getString("campoLivre3")
-        String camposFixo3 = getString("campoFixo3")
-        String camposLivre4 = getString("campoLivre4")
-        String camposFixo4 = getString("campoFixo4")
-        Boolean totalizar1 = getBoolean("total1")
-        Boolean totalizar2 = getBoolean("total2")
-        Boolean totalizar3 = getBoolean("total3")
-        Boolean totalizar4 = getBoolean("total4")
-        Boolean devolucoes = getBoolean("devolucao")
+        def idEntidade = getListLong("entidade");
+        def idTipoDocumento = getListLong("tipo");
+        def numeroInicial = getInteger("numeroInicial") == null || getInteger("numeroInicial") == "" ? 000000001 : getInteger("numeroInicial");
+        def numeroFinal = get("numeroFinal") == null || get("numeroFinal") == "" ? 999999999 : getInteger("numeroFinal");
+        def dataEmissao = getIntervaloDatas("dataEmissao");
+        def dataEntSai = getIntervaloDatas("dataEntSai");
+        def resumoOperacao = getInteger("resumoOperacao");
+        def criteriosPcd = getListLong("pcd");
+        def estados = getListLong("estados");
+        def municipios = getListLong("municipios");
+        def nomeEntidade = getInteger("nomeEntidade");
+        def imprimir = getInteger("impressao")
+        def camposLivre1 = getString("campoLivre1")
+        def camposFixo1 = getString("campoFixo1")
+        def camposLivre2 = getString("campoLivre2")
+        def camposFixo2 = getString("campoFixo2")
+        def camposLivre3 = getString("campoLivre3")
+        def camposFixo3 = getString("campoFixo3")
+        def camposLivre4 = getString("campoLivre4")
+        def camposFixo4 = getString("campoFixo4")
+        def totalizar1 = getBoolean("total1")
+        def totalizar2 = getBoolean("total2")
+        def totalizar3 = getBoolean("total3")
+        def totalizar4 = getBoolean("total4")
+        def devolucoes = getBoolean("devolucao")
 
         if (camposLivre1 != null && camposFixo1 != null) interromper("Selecione apenas 1 valor por campo!")
         if (camposLivre2 != null && camposFixo2 != null) interromper("Selecione apenas 1 valor por campo!")
@@ -211,21 +211,21 @@ class SRF_Documentos extends RelatorioBase {
             whereResumoOperacao = " AND eaa01esMov = " + Eaa01.ESMOV_SAIDA;
         }
 
-        String whereNumero = numeroInicial != null && numeroFinal != null ? " AND abb01num >= '" + numeroInicial + "' AND abb01num <= '" + numeroFinal + "' " : "";
-        String whereTipoDocumento = idTipoDocumento != null && idTipoDocumento.size() > 0 ? " AND aah01id IN (:idTipoDocumento) " : "";
-        String whereIdEntidade = idEntidade != null && idEntidade.size() > 0 ? " AND abe01id IN (:idEntidade) " : "";
-        String orderBy = " ORDER BY eaa01id, abb01num DESC "
-        String whereCriterioPcd = pcd != null && pcd.size() > 0 ? " AND eaa01.eaa01pcd IN (:pcd) " : "";
-        String whereEstados = estados != null && estados.size() > 0 ? "AND aag02id IN (:estados) " : "";
-        String whereMunicipios = municipios != null && municipios.size() > 0 ? "AND aag0201id IN (:municipios) " : "";
-        String whereEmpresa = "AND eaa01gc = :idEmpresa ";
+        def whereNumero = numeroInicial != null && numeroFinal != null ? " AND abb01num >= '" + numeroInicial + "' AND abb01num <= '" + numeroFinal + "' " : "";
+        def whereTipoDocumento = idTipoDocumento != null && idTipoDocumento.size() > 0 ? " AND aah01id IN (:idTipoDocumento) " : "";
+        def whereIdEntidade = idEntidade != null && idEntidade.size() > 0 ? " AND abe01id IN (:idEntidade) " : "";
+        def orderBy = " ORDER BY eaa01id, abb01num DESC "
+        def whereCriterioPcd = pcd != null && pcd.size() > 0 ? " AND eaa01.eaa01pcd IN (:pcd) " : "";
+        def whereEstados = estados != null && estados.size() > 0 ? "AND aag02id IN (:estados) " : "";
+        def whereMunicipios = municipios != null && municipios.size() > 0 ? "AND aag0201id IN (:municipios) " : "";
+        def whereEmpresa = "AND eaa01gc = :idEmpresa ";
 
-        Parametro parametroEntidade = idEntidade != null && idEntidade.size() > 0 ? criarParametroSql("idEntidade", idEntidade) : null;
-        Parametro parametroTipoDocumento = idTipoDocumento != null && idTipoDocumento.size() > 0 ? criarParametroSql("idTipoDocumento", idTipoDocumento) : null;
-        Parametro parametroCriteriosPcd = pcd != null && pcd.size() > 0 ? criarParametroSql("pcd", pcd) : null;
-        Parametro parametroEstados = estados != null && estados.size() > 0 ? Parametro.criar("estados", estados) : null;
-        Parametro parametroMunicipios = municipios != null && municipios.size() > 0 ? Parametro.criar("municipios", municipios) : null;
-        Parametro parametroEmpresa = Parametro.criar("idEmpresa", obterEmpresaAtiva().getAac10id());
+        def parametroEntidade = idEntidade != null && idEntidade.size() > 0 ? criarParametroSql("idEntidade", idEntidade) : null;
+        def parametroTipoDocumento = idTipoDocumento != null && idTipoDocumento.size() > 0 ? criarParametroSql("idTipoDocumento", idTipoDocumento) : null;
+        def parametroCriteriosPcd = pcd != null && pcd.size() > 0 ? criarParametroSql("pcd", pcd) : null;
+        def parametroEstados = estados != null && estados.size() > 0 ? Parametro.criar("estados", estados) : null;
+        def parametroMunicipios = municipios != null && municipios.size() > 0 ? Parametro.criar("municipios", municipios) : null;
+        def parametroEmpresa = Parametro.criar("idEmpresa", obterEmpresaAtiva().getAac10id());
 
 
         def sql = " SELECT eaa01id, eaa0103id, abd01codigo, abd01descr,abb01num, abb01data,eaa01id, eaa01esdata, aah01codigo, abe01codigo, abe30nome, abe40nome, abe01ni, " +
@@ -257,7 +257,7 @@ class SRF_Documentos extends RelatorioBase {
                     whereMunicipios +
                     orderBy;
 
-        List<TableMap> dadosRelatorio = getAcessoAoBanco().buscarListaDeTableMap(sql, parametroEntidade, parametroTipoDocumento, parametroCriteriosPcd, parametroEstados, parametroMunicipios, parametroEmpresa);
+        def dadosRelatorio = getAcessoAoBanco().buscarListaDeTableMap(sql, parametroEntidade, parametroTipoDocumento, parametroCriteriosPcd, parametroEstados, parametroMunicipios, parametroEmpresa);
 
         for (dados in dadosRelatorio) {
             dados.putAll(dados.getTableMap("eaa0103json"))
@@ -287,20 +287,20 @@ class SRF_Documentos extends RelatorioBase {
             whereResumoOperacao = " AND eaa01esMov = " + Eaa01.ESMOV_SAIDA;
         }
 
-        String whereNumero = numeroInicial != null && numeroFinal != null ? " AND abb01num >= '" + numeroInicial + "' AND abb01num <= '" + numeroFinal + "'" : "";
-        String whereTipoDocumento = idTipoDocumento != null && idTipoDocumento.size() > 0 ? " AND aah01id IN (:idTipoDocumento) " : "";
-        String whereIdEntidade = idEntidade != null && idEntidade.size() > 0 ? " AND abe01id IN (:idEntidade) " : "";
-        String whereCriterioPcd = pcd != null && pcd.size() > 0 ? " AND eaa01.eaa01pcd IN (:pcd) " : "";
-        String whereEstados = estados != null && estados.size() > 0 ? "AND aag02id IN (:estados) " : "";
-        String whereMunicipios = municipios != null && municipios.size() > 0 ? "AND aag0201id IN (:municipios) " : "";
-        String whereEmpresa = "AND eaa01gc = :idEmpresa ";
+        def whereNumero = numeroInicial != null && numeroFinal != null ? " AND abb01num >= '" + numeroInicial + "' AND abb01num <= '" + numeroFinal + "'" : "";
+        def whereTipoDocumento = idTipoDocumento != null && idTipoDocumento.size() > 0 ? " AND aah01id IN (:idTipoDocumento) " : "";
+        def whereIdEntidade = idEntidade != null && idEntidade.size() > 0 ? " AND abe01id IN (:idEntidade) " : "";
+        def whereCriterioPcd = pcd != null && pcd.size() > 0 ? " AND eaa01.eaa01pcd IN (:pcd) " : "";
+        def whereEstados = estados != null && estados.size() > 0 ? "AND aag02id IN (:estados) " : "";
+        def whereMunicipios = municipios != null && municipios.size() > 0 ? "AND aag0201id IN (:municipios) " : "";
+        def whereEmpresa = "AND eaa01gc = :idEmpresa ";
 
-        Parametro parametroEntidade = idEntidade != null && idEntidade.size() > 0 ? criarParametroSql("idEntidade", idEntidade) : null;
-        Parametro parametroTipoDocumento = idTipoDocumento != null && idTipoDocumento.size() > 0 ? criarParametroSql("idTipoDocumento", idTipoDocumento) : null;
-        Parametro parametroCriteriosPcd = pcd != null && pcd.size() > 0 ? criarParametroSql("pcd", pcd) : null;
-        Parametro parametroEstados = estados != null && estados.size() > 0 ? Parametro.criar("estados", estados) : null;
-        Parametro parametroMunicipios = municipios != null && municipios.size() > 0 ? Parametro.criar("municipios", municipios) : null;
-        Parametro parametroEmpresa = Parametro.criar("idEmpresa", obterEmpresaAtiva().getAac10id());
+        def parametroEntidade = idEntidade != null && idEntidade.size() > 0 ? criarParametroSql("idEntidade", idEntidade) : null;
+        def parametroTipoDocumento = idTipoDocumento != null && idTipoDocumento.size() > 0 ? criarParametroSql("idTipoDocumento", idTipoDocumento) : null;
+        def parametroCriteriosPcd = pcd != null && pcd.size() > 0 ? criarParametroSql("pcd", pcd) : null;
+        def parametroEstados = estados != null && estados.size() > 0 ? Parametro.criar("estados", estados) : null;
+        def parametroMunicipios = municipios != null && municipios.size() > 0 ? Parametro.criar("municipios", municipios) : null;
+        def parametroEmpresa = Parametro.criar("idEmpresa", obterEmpresaAtiva().getAac10id());
 
 
         def sql = "SELECT DISTINCT eaa0103id " +
@@ -355,11 +355,11 @@ class SRF_Documentos extends RelatorioBase {
         def whereItem = " WHERE eaa01033itemdoc IN (:item) "
 
         def sql = " SELECT eaa01033itemdoc, eaa01033qtComl, eaa01033qtUso, eaa0103qtuso, eaa0103qtcoml, eaa0103unit, eaa0103totfinanc, eaa0103total, eaa0103totdoc, eaa0103totdoc, eaa0103json " +
-                    " FROM eaa01033 " +
-                    " INNER JOIN eaa0103 on eaa0103id = eaa01033item  " +
-                    whereItem +
-                    " AND (eaa01033qtComl > 0 OR eaa01033qtUso > 0) " +
-                    " ORDER BY eaa01033itemdoc ";
+                " FROM eaa01033 " +
+                " INNER JOIN eaa0103 on eaa0103id = eaa01033item  " +
+                whereItem +
+                " AND (eaa01033qtComl > 0 OR eaa01033qtUso > 0) " +
+                " ORDER BY eaa01033itemdoc ";
 
         def p1 = criarParametroSql("item", idsItem)
         return getAcessoAoBanco().buscarListaDeTableMap(sql, p1)
@@ -420,6 +420,7 @@ class SRF_Documentos extends RelatorioBase {
     public String buscarNomeCampoLivre(String campo) {
         def sql = " SELECT aah02descr FROM aah02 WHERE aah02nome = :nome "
         return getAcessoAoBanco().obterString(sql, criarParametroSql("nome", campo))
+
     }
 
     @Override
@@ -427,7 +428,6 @@ class SRF_Documentos extends RelatorioBase {
         return "SRF - Documentos";
     }
 }
-//meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
