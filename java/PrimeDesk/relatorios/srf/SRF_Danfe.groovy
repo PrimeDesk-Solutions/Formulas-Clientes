@@ -5,8 +5,11 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 import br.com.multiorm.ColumnType;
+import br.com.multiorm.Query
+import br.com.multitec.utils.Utils;
 import br.com.multiorm.criteria.criterion.Criterion
 import br.com.multiorm.criteria.criterion.Criterions;
+import br.com.multiorm.criteria.fields.Fields
 import br.com.multiorm.criteria.join.Joins
 import br.com.multitec.utils.Utils;
 import br.com.multitec.utils.ValidacaoException
@@ -20,6 +23,7 @@ import sam.model.entities.ab.Abe0101
 import sam.model.entities.ea.Eaa01
 import sam.model.entities.ea.Eaa0101
 import sam.model.entities.ea.Eaa0102
+import sam.model.entities.ea.Eaa0103
 import sam.model.entities.ea.Eaa0113
 import sam.server.samdev.relatorio.DadosParaDownload;
 import sam.server.samdev.relatorio.RelatorioBase;
@@ -46,8 +50,8 @@ public class SRF_Danfe extends RelatorioBase {
     @Override
     public DadosParaDownload executar() {
         List<Long> tipo = getListLong("tipo");
-        Integer numeroInicial = getInteger("numeroInicial") == null || getInteger("numeroInicial") == "" ? 000000001 : getInteger("numeroInicial");
-        Integer numeroFinal = getInteger("numeroFinal") == null || getInteger("numeroFinal") == "" ? 999999999 : getInteger("numeroFinal") ;
+        Integer numeroInicial = getInteger("numeroInicial");
+        Integer numeroFinal = getInteger("numeroFinal");
         List<Long> entidade = getListLong("entidade");
         LocalDate[] emissao = getIntervaloDatas("emissao");
         LocalDate[] entraSai = getIntervaloDatas("entraSai");
@@ -76,6 +80,7 @@ public class SRF_Danfe extends RelatorioBase {
             comporDadosEndereco(dadosNfe, eaa01);
             comporDadosGerais(dadosNfe, eaa01);
             comporDuplicatas(dadosNfe, eaa01.getEaa01central(), eaa01);
+//            comporDuplicatas2(dadosNfe, eaa01.getEaa01central(), eaa01);
             comporValores(dadosNfe, eaa01);
             buscarPedidoCliente(dadosNfe,eaa01id);
             buscarMensagemItem(dadosNfe,eaa01id);
@@ -115,6 +120,7 @@ public class SRF_Danfe extends RelatorioBase {
                 .addWhere(abb01num).addWhere(aah01id)
                 .addWhere(abe01id).setOrder("abb01num")
                 .addWhere(Criterions.eq("eaa01clasDoc", 1))
+        //.addWhere(Criterions.eq(Fields.length("eaa01nfeChave"), 44))
                 .addWhere(getSamWhere().getCritPadrao(Eaa01.class))
                 .getList(ColumnType.LONG);
     }
@@ -191,7 +197,7 @@ public class SRF_Danfe extends RelatorioBase {
         Eaa0102 eaa0102 = getAcessoAoBanco().buscarRegistroUnicoByCriterion("Eaa0102", Criterions.eq("eaa0102doc", eaa01.getEaa01id()));
         if(eaa0102 == null) throw new ValidacaoException("Não foi possivel localizar os dados gerais do documento.");
         TableMap Eaa01json = eaa01.eaa01json != null ? eaa01.eaa01json : new TableMap()
-
+        
         if(Eaa01json.getBigDecimal_Zero("volumes") >= 0) Eaa01json.put("volumes", (new BigDecimal(Eaa01json.getBigDecimal_Zero("volumes"))).round(2));
         if(Eaa01json.getBigDecimal_Zero("ipi") >= 0) Eaa01json.put("ipi", (new BigDecimal(Eaa01json.getBigDecimal_Zero("ipi"))).round(2));
         if(Eaa01json.getBigDecimal_Zero("bc_icms") >= 0) Eaa01json.put("bc_icms", (new BigDecimal(Eaa01json.getBigDecimal_Zero("bc_icms"))).round(2))
@@ -209,6 +215,9 @@ public class SRF_Danfe extends RelatorioBase {
         dadosNfe.put("eaa0102nome", eaa0102.getEaa0102nome());
         dadosNfe.put("desconto",Eaa01json.getBigDecimal_Zero("desconto"));
         dadosNfe.putAll(Eaa01json)
+
+
+
 
         if(eaa0102.getEaa0102despacho() != null) comporDadosDespacho(dadosNfe, eaa0102.getEaa0102despacho().getAbe01id());
         if(eaa0102.getEaa0102redespacho() != null) comporDadosRedespacho(dadosNfe, eaa0102.getEaa0102redespacho().getAbe01id());
@@ -241,6 +250,7 @@ public class SRF_Danfe extends RelatorioBase {
         Abe0101 abe0101 = getAcessoAoBanco().buscarRegistroUnicoByCriterion("Abe0101", Criterions.eq("abe01id", abe01id), Criterions.eq("abe0101entrega", 1));
         if(abe0101 == null) throw new ValidacaoException("A Entidade informada no redespacho não possui um endereço principal.")
 
+        if(abe0101.getAbe0101municipio() == null) throw new ValidacaoException("Não foi encontrado município no cadastro da entidade redespacho.")
         Aag02 uf = getSession().get(Aag02.class, abe0101.getAbe0101municipio().getAag0201uf().getAag02id());
         if(uf == null) throw new ValidacaoException("Necessário informar a Unidade Federativa do municipio no endereço principal do despacho.")
 
@@ -343,6 +353,30 @@ public class SRF_Danfe extends RelatorioBase {
             }
         }
     }
+    private void comporDuplicatas2(TableMap dadosNfe, Abb01 abb01, Eaa01 eaa01){
+        abb01 = getSession().get(Abb01.class, abb01.getAbb01id());
+        String sql = "SELECT abb01num, abb01parcela, daa01dtVctoR, daa01valor " +
+                "FROM abb0102 " +
+                "INNER JOIN abb01 ON abb01id = abb0102doc " +
+                "INNER JOIN daa01 ON daa01central = abb01id " +
+                "WHERE abb0102central = :idDoc " +
+                "AND daa01dtPgto IS NULL "+
+                "AND daa01dtBaixa IS NULL "+
+                "ORDER BY daa01dtVcton"
+
+        List<TableMap> duplicatas = getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idDoc", abb01.abb01id));
+
+        if(duplicatas != null && duplicatas.size() > 0){
+            Integer i = 0;
+            for(duplicata in duplicatas){
+                dadosNfe.put("abb01num", abb01.getAbb01num());
+                dadosNfe.put("parcela" + i, i+1)
+                dadosNfe.put("data" + i, duplicata.getDate("daa01dtVctoR"));
+                dadosNfe.put("valor" + i, duplicata.getBigDecimal_Zero("daa01valor"));
+                i++
+            }
+        }
+    }
 
     private String buscarUfEntidade(Long abe01id) {
         return getSession().createCriteria(Abe01.class).addFields("aag02uf")
@@ -377,3 +411,5 @@ public class SRF_Danfe extends RelatorioBase {
 //meta-sis-eyJkZXNjciI6IlNSRiAtIEltcHJlc3PDo28gRG9jdW1lbnRvIChEQU5GZSkiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlNSRiAtIERhbmZlIiwidGlwbyI6InJlbGF0b3JpbyJ9
 //meta-sis-eyJkZXNjciI6IlNSRiAtIERhbmZlIiwidGlwbyI6InJlbGF0b3JpbyJ9
+//meta-sis-eyJkZXNjciI6IlNSRiAtIERhbmZlIiwidGlwbyI6InJlbGF0b3JpbyJ9
+//meta-sis-eyJkZXNjciI6IlNSRiAtIEltcHJlc3PDo28gRG9jdW1lbnRvIChEQU5GZSkiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

@@ -54,8 +54,8 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
 
     @Override
     public DadosParaDownload executar() {
-        Integer numDocIni = getInteger("numeroInicial") == null || getInteger("numeroInicial") == "" ? 000000001 : getInteger("numeroInicial");
-        Integer numDocFin = getInteger("numeroFinal") == null || getInteger("numeroFinal") == "" ? 999999999 : getInteger("numeroFinal");
+        Integer numDocIni = getInteger("numeroInicial");
+        Integer numDocFin = getInteger("numeroFinal");
         List<Long> idsTipoDoc = getListLong("tipo");
         List<Long> idsPcd = getListLong("pcd");
         Integer resumoOperacao = getInteger("resumoOperacao");
@@ -104,6 +104,8 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
         params.put("LOGO_EMPRESA", "C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\srf\\Logo Silcon.png");
         params.put("LOGO_REVENDA", "C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\srf\\logoPrimeDesk.png");
 
+
+
         if (campoLivre1 != null && campoFixo1 != null) interromper("Selecione apenas 1 valor por campo!");
         if (campoLivre2 != null && campoFixo2 != null) interromper("Selecione apenas 1 valor por campo!");
         if (campoLivre3 != null && campoFixo3 != null) interromper("Selecione apenas 1 valor por campo!");
@@ -120,12 +122,20 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
         campos.put("5", campoLivre5 != null ? campoLivre5 : campoFixo5 != null ? campoFixo5 : null);
         campos.put("6", campoLivre6 != null ? campoLivre6 : campoFixo6 != null ? campoFixo6 : null);
 
+        Long idUser = obterUsuarioLogado().getAab10id();
+        Integer setorUser = buscarCamposCustomUser(idUser) == null ? null : buscarCamposCustomUser(idUser);
+        if(setorUser == null) interromper("Necessário preencher o campo de setor no cadastro do usuário logado.")
+        Abe01 abe01user = buscarEntidadeUsuarioLogado(idUser);
+
+        if((idsReps == null || idsReps.size() == 0) &&  setorUser == 2) idsReps = [abe01user.abe01id];
+
         List<TableMap> representantes = buscarRepresentantes(idsReps);
+        List<TableMap> documentos = new ArrayList<>();
         List<TableMap> dadosRelatorio = new ArrayList();
         List<TableMap> dados = buscarDadosDocumentos(idsReps, numDocIni, numDocFin, idsTipoDoc, idsPcd, resumoOperacao, dtEmissao, dtEntradaSaida);
         if (dados == null || dados.size() == 0) interromper("Não foram encontrados registros com os filtros informados.");
 
-        List<Long> idsItensDoc = new ArrayList<>();
+        List<Long> idsItensDoc = obterIdsItensDoc(idsReps, numDocIni, numDocFin, idsTipoDoc, idsPcd, resumoOperacao, dtEmissao, dtEntradaSaida);
 
         List<TableMap> listDevolucoesGeral = new ArrayList();
         def idControleDevolucao = null;
@@ -135,10 +145,6 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
 
         //Agrupa as devoluções
         if (devolucoes) {
-            for(dado in dados){
-                Long idItemDoc = dado.getLong("eaa0103id");
-                idsItensDoc.add(idItemDoc);
-            }
             listDevolucoesGeral = obterDevolucao(idsItensDoc);
             if (listDevolucoesGeral != null && listDevolucoesGeral.size() > 0) {
                 for (devolucao in listDevolucoesGeral) {
@@ -177,9 +183,6 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
             String codRep = representante.getString("abe01codigo");
             String nomeRep = representante.getString("abe01na");
             def txComissao = representante.getBigDecimal_Zero("abe05taxa");
-            def idControle = null;
-            TableMap dadosTmp = new TableMap();
-            TableMap valoresTotais = new TableMap();
 
             for (dado in dados) {
                 Long idRep0 = dado.getLong("eaa01rep0");
@@ -201,8 +204,7 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
                         comporDevolucoes(dado, devolucao, campos);
                     }
                 }
-
-                comporValores(dado, campos)
+                comporValores(dado, campos);
             }
         }
 
@@ -271,7 +273,6 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
                 " WHERE eaa01nota.eaa01clasDoc = " + Eaa01.CLASDOC_SRF +
                 " AND eaa01nota.eaa01cancData IS NULL " +
                 " AND eaa01nota.eaa01nfestat <> 5 " +
-                " WHERE TRUE "+
                 whereNumDoc +
                 whereMov +
                 whereTipoDoc +
@@ -460,11 +461,15 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
     private void preencherDadosIniciaisRepresentante(Map<String, Object> filtrosDefault){
         Long idUser = obterUsuarioLogado().getAab10id();
 
-        Abe01 abe01user = buscarEntidadeUsuarioLogado(idUser);
+        Integer setorUser = buscarCamposCustomUser(idUser) == null ? null : buscarCamposCustomUser(idUser);
 
-        if(abe01user == null) interromper("Não foi encontrado entidade cadastrada para o usuário logado.")
+        if(setorUser == 2){
+            Abe01 abe01user = buscarEntidadeUsuarioLogado(idUser);
 
-        filtrosDefault.put("idRepresentantes", abe01user.abe01id);
+            if(abe01user == null) interromper("Não foi encontrado entidade cadastrada para o usuário logado.")
+
+            filtrosDefault.put("idRepresentantes", abe01user.abe01id);
+        }
 
     }
     private Integer buscarCamposCustomUser(idUser){
@@ -491,6 +496,7 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
                 .addWhere(whereEmpresa)
                 .addWhere(whereTabela)
                 .getList(ColumnType.LONG);
+
     }
 
     public String buscarNomeCampoLivre(String campo) {
@@ -499,5 +505,4 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
 
     }
 }
-//meta-sis-eyJkZXNjciI6IlNSRiBEb2N1bWVudG9zIFBvciBSZXByZXNlbnRhbnRlcyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
-//meta-sis-eyJkZXNjciI6IlNSRiBEb2N1bWVudG9zIFBvciBSZXByZXNlbnRhbnRlcyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
+//meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MgUG9yIFJlcHJlc2VudGFudGVzIiwidGlwbyI6InJlbGF0b3JpbyJ9

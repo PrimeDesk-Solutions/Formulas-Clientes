@@ -31,31 +31,31 @@ class SRF_Documentos extends RelatorioBase {
 
     @Override
     public DadosParaDownload executar() {
-        List<Long> idEntidade = getListLong("entidade");
-        List<Long> idTipoDocumento = getListLong("tipo");
-        Integer numeroInicial = getInteger("numeroInicial") == null || getInteger("numeroInicial") == "" ? 000000001 : getInteger("numeroInicial");
-        Integer numeroFinal = get("numeroFinal") == null || get("numeroFinal") == "" ? 999999999 : getInteger("numeroFinal");
-        LocalDate[] dataEmissao = getIntervaloDatas("dataEmissao");
-        LocalDate[] dataEntSai = getIntervaloDatas("dataEntSai");
-        Integer resumoOperacao = getInteger("resumoOperacao");
-        List<Long> criteriosPcd = getListLong("pcd");
-        List<Long> estados = getListLong("estados");
-        List<Long> municipios = getListLong("municipios");
-        Integer nomeEntidade = getInteger("nomeEntidade");
-        Integer imprimir = getInteger("impressao")
-        String camposLivre1 = getString("campoLivre1")
-        String camposFixo1 = getString("campoFixo1")
-        String camposLivre2 = getString("campoLivre2")
-        String camposFixo2 = getString("campoFixo2")
-        String camposLivre3 = getString("campoLivre3")
-        String camposFixo3 = getString("campoFixo3")
-        String camposLivre4 = getString("campoLivre4")
-        String camposFixo4 = getString("campoFixo4")
-        Boolean totalizar1 = getBoolean("total1")
-        Boolean totalizar2 = getBoolean("total2")
-        Boolean totalizar3 = getBoolean("total3")
-        Boolean totalizar4 = getBoolean("total4")
-        Boolean devolucoes = getBoolean("devolucao")
+        def idEntidade = getListLong("entidade");
+        def idTipoDocumento = getListLong("tipo");
+        def numeroInicial = getInteger("numeroInicial") == null || getInteger("numeroInicial") == "" ? 000000001 : getInteger("numeroInicial");
+        def numeroFinal = get("numeroFinal") == null || get("numeroFinal") == "" ? 999999999 : getInteger("numeroFinal");
+        def dataEmissao = getIntervaloDatas("dataEmissao");
+        def dataEntSai = getIntervaloDatas("dataEntSai");
+        def resumoOperacao = getInteger("resumoOperacao");
+        def criteriosPcd = getListLong("pcd");
+        def estados = getListLong("estados");
+        def municipios = getListLong("municipios");
+        def nomeEntidade = getInteger("nomeEntidade");
+        def imprimir = getInteger("impressao")
+        def camposLivre1 = getString("campoLivre1")
+        def camposFixo1 = getString("campoFixo1")
+        def camposLivre2 = getString("campoLivre2")
+        def camposFixo2 = getString("campoFixo2")
+        def camposLivre3 = getString("campoLivre3")
+        def camposFixo3 = getString("campoFixo3")
+        def camposLivre4 = getString("campoLivre4")
+        def camposFixo4 = getString("campoFixo4")
+        def totalizar1 = getBoolean("total1")
+        def totalizar2 = getBoolean("total2")
+        def totalizar3 = getBoolean("total3")
+        def totalizar4 = getBoolean("total4")
+        def devolucoes = getBoolean("devolucao")
 
         if (camposLivre1 != null && camposFixo1 != null) interromper("Selecione apenas 1 valor por campo!")
         if (camposLivre2 != null && camposFixo2 != null) interromper("Selecione apenas 1 valor por campo!")
@@ -94,7 +94,7 @@ class SRF_Documentos extends RelatorioBase {
 
         if (dados.size() == 0) interromper("Não foram encontrado dados com os filtros selecionados.");
 
-        List<Long> idsItensDoc = new ArrayList<>();
+        List<Long> idsItensDoc = obterIdsItensDoc(idEntidade, idTipoDocumento, dataEmissao, dataEntSai, numeroInicial, numeroFinal, resumoOperacao, nomeEntidade, criteriosPcd, estados, municipios, camposLivre1, camposLivre2, camposLivre3, camposLivre4);
         List<TableMap> dadosRelatorio = new ArrayList();
         List<TableMap> listDevolucoesGeral = new ArrayList();
         List<TableMap> listDevolucoesAjustado = new ArrayList<>()
@@ -107,12 +107,6 @@ class SRF_Documentos extends RelatorioBase {
 
 //		 Agrupa as devoluções
         if (devolucoes) {
-
-            for(dado in dados){
-                Long idItemDoc = dado.getLong("eaa0103id")
-                idsItensDoc.add(idItemDoc);
-            }
-
             listDevolucoesGeral = obterDevolucao(idsItensDoc);
             if (listDevolucoesGeral != null && listDevolucoesGeral.size() > 0) {
                 for (devolucao in listDevolucoesGeral) {
@@ -217,53 +211,53 @@ class SRF_Documentos extends RelatorioBase {
             whereResumoOperacao = " AND eaa01esMov = " + Eaa01.ESMOV_SAIDA;
         }
 
-        String whereNumero = numeroInicial != null && numeroFinal != null ? " AND abb01num >= '" + numeroInicial + "' AND abb01num <= '" + numeroFinal + "' " : "";
-        String whereTipoDocumento = idTipoDocumento != null && idTipoDocumento.size() > 0 ? " AND aah01id IN (:idTipoDocumento) " : "";
-        String whereIdEntidade = idEntidade != null && idEntidade.size() > 0 ? " AND abe01id IN (:idEntidade) " : "";
-        String orderBy = " ORDER BY eaa01id, abb01num DESC "
-        String whereCriterioPcd = pcd != null && pcd.size() > 0 ? " AND eaa01.eaa01pcd IN (:pcd) " : "";
-        String whereEstados = estados != null && estados.size() > 0 ? "AND aag02id IN (:estados) " : "";
-        String whereMunicipios = municipios != null && municipios.size() > 0 ? "AND aag0201id IN (:municipios) " : "";
-        String whereEmpresa = "AND eaa01gc = :idEmpresa ";
+        def whereNumero = numeroInicial != null && numeroFinal != null ? " AND abb01num >= '" + numeroInicial + "' AND abb01num <= '" + numeroFinal + "' " : "";
+        def whereTipoDocumento = idTipoDocumento != null && idTipoDocumento.size() > 0 ? " AND aah01id IN (:idTipoDocumento) " : "";
+        def whereIdEntidade = idEntidade != null && idEntidade.size() > 0 ? " AND abe01id IN (:idEntidade) " : "";
+        def orderBy = " ORDER BY eaa01id, abb01num DESC "
+        def whereCriterioPcd = pcd != null && pcd.size() > 0 ? " AND eaa01.eaa01pcd IN (:pcd) " : "";
+        def whereEstados = estados != null && estados.size() > 0 ? "AND aag02id IN (:estados) " : "";
+        def whereMunicipios = municipios != null && municipios.size() > 0 ? "AND aag0201id IN (:municipios) " : "";
+        def whereEmpresa = "AND eaa01gc = :idEmpresa ";
 
-        Parametro parametroEntidade = idEntidade != null && idEntidade.size() > 0 ? criarParametroSql("idEntidade", idEntidade) : null;
-        Parametro parametroTipoDocumento = idTipoDocumento != null && idTipoDocumento.size() > 0 ? criarParametroSql("idTipoDocumento", idTipoDocumento) : null;
-        Parametro parametroCriteriosPcd = pcd != null && pcd.size() > 0 ? criarParametroSql("pcd", pcd) : null;
-        Parametro parametroEstados = estados != null && estados.size() > 0 ? Parametro.criar("estados", estados) : null;
-        Parametro parametroMunicipios = municipios != null && municipios.size() > 0 ? Parametro.criar("municipios", municipios) : null;
-        Parametro parametroEmpresa = Parametro.criar("idEmpresa", obterEmpresaAtiva().getAac10id());
+        def parametroEntidade = idEntidade != null && idEntidade.size() > 0 ? criarParametroSql("idEntidade", idEntidade) : null;
+        def parametroTipoDocumento = idTipoDocumento != null && idTipoDocumento.size() > 0 ? criarParametroSql("idTipoDocumento", idTipoDocumento) : null;
+        def parametroCriteriosPcd = pcd != null && pcd.size() > 0 ? criarParametroSql("pcd", pcd) : null;
+        def parametroEstados = estados != null && estados.size() > 0 ? Parametro.criar("estados", estados) : null;
+        def parametroMunicipios = municipios != null && municipios.size() > 0 ? Parametro.criar("municipios", municipios) : null;
+        def parametroEmpresa = Parametro.criar("idEmpresa", obterEmpresaAtiva().getAac10id());
 
 
-        def sql = " SELECT eaa0103id, eaa01id, eaa0103id, abd01codigo, abd01descr,abb01num, abb01data,eaa01id, eaa01esdata, aah01codigo, abe01codigo, abe30nome, abe40nome, abe01ni, " +
-                "eaa0103qtUso as eaa0103qtuso, eaa0103qtComl as eaa0103qtcoml,  eaa0103unit as eaa0103unit," +
-                "eaa0103total as eaa0103total, eaa0103totDoc as eaa0103totdoc, eaa0103totFinanc as eaa0103totfinanc, eaa0103json,  " + entidade +
-                "FROM eaa0103 " +
-                "INNER JOIN eaa01 ON eaa01id = eaa0103doc " +
-                "INNER JOIN abd01 ON abd01id = eaa01pcd " +
-                "INNER JOIN abb01 ON abb01id = eaa01central " +
-                "INNER JOIN aah01 ON aah01id = abb01tipo " +
-                "INNER JOIN abe01 ON abe01id = abb01ent " +
-                "LEFT JOIN abe30 ON abe30id = eaa01cp  " +
-                "LEFT JOIN abe40 ON abe40id = eaa01tp  " +
-                "INNER JOIN abm01 ON abm01id = eaa0103item " +
-                "LEFT JOIN abe0101 ON abe0101ent = abe01id AND abe0101principal = 1 " +
-                "LEFT JOIN aag0201 ON aag0201id = abe0101municipio " +
-                "LEFT JOIN aag02 ON aag02id = aag0201uf " +
-                "WHERE eaa01clasDoc = " + Eaa01.CLASDOC_SRF + " " +
-                "AND eaa01cancData IS NULL " +
-                "AND eaa01nfestat <> 5 " +
-                whereEmpresa +
-                whereNumero +
-                whereTipoDocumento +
-                whereIdEntidade +
-                whereData +
-                whereResumoOperacao +
-                whereCriterioPcd +
-                whereEstados +
-                whereMunicipios +
-                orderBy;
+        def sql = " SELECT eaa01id, eaa0103id, abd01codigo, abd01descr,abb01num, abb01data,eaa01id, eaa01esdata, aah01codigo, abe01codigo, abe30nome, abe40nome, abe01ni, " +
+                    "eaa0103qtUso as eaa0103qtuso, eaa0103qtComl as eaa0103qtcoml,  eaa0103unit as eaa0103unit," +
+                    "eaa0103total as eaa0103total, eaa0103totDoc as eaa0103totdoc, eaa0103totFinanc as eaa0103totfinanc, eaa0103json,  " + entidade +
+                    "FROM eaa0103 " +
+                    "INNER JOIN eaa01 ON eaa01id = eaa0103doc " +
+                    "INNER JOIN abd01 ON abd01id = eaa01pcd " +
+                    "INNER JOIN abb01 ON abb01id = eaa01central " +
+                    "INNER JOIN aah01 ON aah01id = abb01tipo " +
+                    "INNER JOIN abe01 ON abe01id = abb01ent " +
+                    "LEFT JOIN abe30 ON abe30id = eaa01cp  " +
+                    "LEFT JOIN abe40 ON abe40id = eaa01tp  " +
+                    "INNER JOIN abm01 ON abm01id = eaa0103item " +
+                    "LEFT JOIN abe0101 ON abe0101ent = abe01id AND abe0101principal = 1 " +
+                    "LEFT JOIN aag0201 ON aag0201id = abe0101municipio " +
+                    "LEFT JOIN aag02 ON aag02id = aag0201uf " +
+                    "WHERE eaa01clasDoc = " + Eaa01.CLASDOC_SRF + " " +
+                    "AND eaa01cancData IS NULL " +
+                    "AND eaa01nfestat <> 5 " +
+                    whereEmpresa +
+                    whereNumero +
+                    whereTipoDocumento +
+                    whereIdEntidade +
+                    whereData +
+                    whereResumoOperacao +
+                    whereCriterioPcd +
+                    whereEstados +
+                    whereMunicipios +
+                    orderBy;
 
-        List<TableMap> dadosRelatorio = getAcessoAoBanco().buscarListaDeTableMap(sql, parametroEntidade, parametroTipoDocumento, parametroCriteriosPcd, parametroEstados, parametroMunicipios, parametroEmpresa);
+        def dadosRelatorio = getAcessoAoBanco().buscarListaDeTableMap(sql, parametroEntidade, parametroTipoDocumento, parametroCriteriosPcd, parametroEstados, parametroMunicipios, parametroEmpresa);
 
         for (dados in dadosRelatorio) {
             dados.putAll(dados.getTableMap("eaa0103json"))
@@ -272,6 +266,72 @@ class SRF_Documentos extends RelatorioBase {
 
         return dadosRelatorio;
     }
+
+    private List<Long> obterIdsItensDoc(List<Long> idEntidade, List<Long> idTipoDocumento, LocalDate[] dataEmissao, LocalDate[] dataEntSai, Integer numeroInicial,
+                                        Integer numeroFinal, Integer resumoOperacao, Integer nomeEntidade, List<Long> pcd, List<Long> estados, List<Long> municipios, String camposLivre1, String camposLivre2, String camposLivre3, String camposLivre4) {
+
+        def whereData = ""
+        if (dataEmissao != null) {
+            whereData = dataEmissao[0] != null && dataEmissao[1] != null ? " AND abb01data >= '" + dataEmissao[0] + "' AND abb01data <= '" + dataEmissao[1] + "'" : "";
+        } else {
+            if (dataEntSai != null) {
+                whereData = dataEntSai[0] != null && dataEntSai[1] != null ? " AND eaa01esData >= '" + dataEntSai[0] + "' AND eaa01esData <= '" + dataEntSai[1] + "'" : "";
+            }
+        }
+
+
+        def whereResumoOperacao = null;
+        if (resumoOperacao.equals(0)) {
+            whereResumoOperacao = " AND eaa01esMov = " + Eaa01.ESMOV_ENTRADA;
+        } else {
+            whereResumoOperacao = " AND eaa01esMov = " + Eaa01.ESMOV_SAIDA;
+        }
+
+        def whereNumero = numeroInicial != null && numeroFinal != null ? " AND abb01num >= '" + numeroInicial + "' AND abb01num <= '" + numeroFinal + "'" : "";
+        def whereTipoDocumento = idTipoDocumento != null && idTipoDocumento.size() > 0 ? " AND aah01id IN (:idTipoDocumento) " : "";
+        def whereIdEntidade = idEntidade != null && idEntidade.size() > 0 ? " AND abe01id IN (:idEntidade) " : "";
+        def whereCriterioPcd = pcd != null && pcd.size() > 0 ? " AND eaa01.eaa01pcd IN (:pcd) " : "";
+        def whereEstados = estados != null && estados.size() > 0 ? "AND aag02id IN (:estados) " : "";
+        def whereMunicipios = municipios != null && municipios.size() > 0 ? "AND aag0201id IN (:municipios) " : "";
+        def whereEmpresa = "AND eaa01gc = :idEmpresa ";
+
+        def parametroEntidade = idEntidade != null && idEntidade.size() > 0 ? criarParametroSql("idEntidade", idEntidade) : null;
+        def parametroTipoDocumento = idTipoDocumento != null && idTipoDocumento.size() > 0 ? criarParametroSql("idTipoDocumento", idTipoDocumento) : null;
+        def parametroCriteriosPcd = pcd != null && pcd.size() > 0 ? criarParametroSql("pcd", pcd) : null;
+        def parametroEstados = estados != null && estados.size() > 0 ? Parametro.criar("estados", estados) : null;
+        def parametroMunicipios = municipios != null && municipios.size() > 0 ? Parametro.criar("municipios", municipios) : null;
+        def parametroEmpresa = Parametro.criar("idEmpresa", obterEmpresaAtiva().getAac10id());
+
+
+        def sql = "SELECT DISTINCT eaa0103id " +
+                    "FROM eaa0103  " +
+                    "INNER JOIN eaa01 ON eaa01id = eaa0103doc " +
+                    "INNER JOIN abd01 ON abd01id = eaa01pcd  " +
+                    "INNER JOIN abb01 ON abb01id = eaa01central " +
+                    "INNER JOIN aah01 ON aah01id = abb01tipo " +
+                    "INNER JOIN abe01 ON abe01id = abb01ent " +
+                    "LEFT JOIN abe30 ON abe30id = eaa01cp  " +
+                    "LEFT JOIN abe40 ON abe40id = eaa01tp  " +
+                    "INNER JOIN abm01 ON abm01id = eaa0103item " +
+                    "LEFT JOIN abe0101 ON abe0101ent = abe01id AND abe0101principal = 1 " +
+                    "LEFT JOIN aag0201 ON aag0201id = abe0101municipio " +
+                    "LEFT JOIN aag02 on aag02id = aag0201uf " +
+                    "WHERE eaa01clasDoc = " + Eaa01.CLASDOC_SRF + " "+
+                    "AND eaa01cancData IS NULL " +
+                    "AND eaa01nfestat <> 5 " +
+                    whereEmpresa +
+                    whereNumero +
+                    whereTipoDocumento +
+                    whereIdEntidade +
+                    whereData +
+                    whereResumoOperacao +
+                    whereCriterioPcd +
+                    whereEstados +
+                    whereMunicipios
+
+        return getAcessoAoBanco().obterListaDeLong(sql, parametroEntidade, parametroTipoDocumento, parametroCriteriosPcd, parametroEstados, parametroMunicipios, parametroEmpresa);
+    }
+
     private void somarValores(TableMap valoresDocumento, TableMap valoresTotais, Map<String, String> campos) {
         for (campo in campos) {
             if (campo != null) {
@@ -360,6 +420,7 @@ class SRF_Documentos extends RelatorioBase {
     public String buscarNomeCampoLivre(String campo) {
         def sql = " SELECT aah02descr FROM aah02 WHERE aah02nome = :nome "
         return getAcessoAoBanco().obterString(sql, criarParametroSql("nome", campo))
+
     }
 
     @Override

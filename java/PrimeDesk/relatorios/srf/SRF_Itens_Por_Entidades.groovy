@@ -10,10 +10,10 @@ import sam.server.samdev.relatorio.DadosParaDownload
 import sam.server.samdev.relatorio.RelatorioBase
 import sam.model.entities.aa.Aac10;
 
-class SRF_Itens_Por_Transportadoras extends RelatorioBase {
+class SRF_Itens_Por_Entidades extends RelatorioBase {
     @Override
     public String getNomeTarefa() {
-        return "SRF - Itens Por Transportadora";
+        return "SRF - Itens Por Entidades";
     }
 
     @Override
@@ -22,9 +22,10 @@ class SRF_Itens_Por_Transportadoras extends RelatorioBase {
         filtrosDefault.put("total1", true)
         filtrosDefault.put("total2", true)
         filtrosDefault.put("total3", true)
-        filtrosDefault.put("optionTransp", "0")
+        filtrosDefault.put("total4", true)
+        filtrosDefault.put("total5", true)
+        filtrosDefault.put("total6", true)
         filtrosDefault.put("chkDevolucao", true)
-        filtrosDefault.put("devolucao", true)
         filtrosDefault.put("numeroInicial", "000000001");
         filtrosDefault.put("numeroFinal", "999999999");
         filtrosDefault.put("resumoOperacao", "0");
@@ -44,8 +45,6 @@ class SRF_Itens_Por_Transportadoras extends RelatorioBase {
         List<Long> idsEntidades = getListLong("entidade");
         List<Long> idsTransps = getListLong("transportadora");
         List<Long> idsItens = getListLong("itens")
-        Integer optionTransp = getInteger("optionTransp");
-        Integer optionResumo = getInteger("resumo");
         boolean totalizar1 = getBoolean("total1");
         boolean totalizar2 = getBoolean("total2");
         boolean totalizar3 = getBoolean("total3");
@@ -65,11 +64,9 @@ class SRF_Itens_Por_Transportadoras extends RelatorioBase {
         String campoLivre5 = getString("campoLivre5");
         String campoLivre6 = getString("campoLivre6");
         Integer impressao = getInteger("impressao");
-        List<Integer> mps = getListInteger("mps");
         Aac10 empresa = obterEmpresaAtiva();
         Long idEmpresa = empresa.aac10id;
         boolean devolucoes = getBoolean("chkDevolucao");
-
 
         if (campoLivre1 != null && campoFixo1 != null) interromper("Selecione apenas 1 valor por campo!")
         if (campoLivre2 != null && campoFixo2 != null) interromper("Selecione apenas 1 valor por campo!")
@@ -94,16 +91,20 @@ class SRF_Itens_Por_Transportadoras extends RelatorioBase {
         }
 
         params.put("empresa", obterEmpresaAtiva().getAac10codigo() + "-" + obterEmpresaAtiva().getAac10na())
-        params.put("title", "SRF - Itens Por Transportadoras")
+        params.put("title", "SRF - Itens Por Entidades")
         params.put("periodo", periodo)
         params.put("totalizar1", totalizar1)
         params.put("totalizar2", totalizar2)
         params.put("totalizar3", totalizar3)
+        params.put("totalizar4", totalizar4)
+        params.put("totalizar5", totalizar5)
+        params.put("totalizar6", totalizar6)
 
-        List<TableMap> dados = buscarDocumentos(numDocIni, numDocFin, idsTipoDoc, idsPcd, resumoOperacao, dtEmissao, dtEntradaSaida, idsEntidades, idsItens, idEmpresa, idsTransps, optionTransp, mps);
+        List<TableMap> dados = buscarDocumentos(numDocIni, numDocFin, idsTipoDoc, idsPcd, resumoOperacao, dtEmissao, dtEntradaSaida, idsEntidades, idsItens, idEmpresa, idsTransps);
+
         if (dados.size() == 0) interromper("Não foram encontrado dados com os filtros selecionados.");
 
-        List<Long> idsItensDoc = new ArrayList<>();
+        List<Long> idsItensDoc = obterIdsItensDoc(numDocIni, numDocFin, idsTipoDoc, idsPcd, resumoOperacao, dtEmissao, dtEntradaSaida, idsEntidades, idsItens, idEmpresa, idsTransps);
 
         List<TableMap> dadosRelatorio = new ArrayList();
         List<TableMap> listDevolucoesGeral = new ArrayList();
@@ -117,11 +118,6 @@ class SRF_Itens_Por_Transportadoras extends RelatorioBase {
 
 //		 Agrupa as devoluções
         if (devolucoes) {
-            for(dado in dados){
-                Long idItemDoc = dado.getLong("eaa0103id")
-                idsItensDoc.add(idItemDoc);
-            }
-
             listDevolucoesGeral = obterDevolucao(idsItensDoc);
             if (listDevolucoesGeral != null && listDevolucoesGeral.size() > 0) {
                 for (devolucao in listDevolucoesGeral) {
@@ -194,25 +190,26 @@ class SRF_Itens_Por_Transportadoras extends RelatorioBase {
 
         dadosRelatorio.add(tmp)
 
-        if (impressao == 0) return gerarPDF("SRF_Itens_Por_Transportadora_PDF", dadosRelatorio);
-        return gerarXLSX("SRF_Itens_Por_Transportadora_Excel", dadosRelatorio);
+
+        if (impressao == 0) return gerarPDF("SRF_Itens_Por_Entidades_PDF", dadosRelatorio);
+        return gerarXLSX("SRF_Itens_Por_Entidades_Excel", dadosRelatorio);
 
     }
 
-    private List<TableMap> buscarDocumentos(Integer numDocIni, Integer numDocFin, List<Long> idsTipoDoc, List<Long> idsPcd, Integer resumoOperacao, LocalDate[] dtEmissao, LocalDate[] dtEntradaSaida, List<Long> idsEntidades, List<Long> idsItens, Long idEmpresa, List<Long> idsTransps, Integer optionTransp, List<Integer> mps) {
+    private List<TableMap> buscarDocumentos(Integer numDocIni, Integer numDocFin, List<Long> idsTipoDoc, List<Long> idsPcd, Integer resumoOperacao, LocalDate[] dtEmissao, LocalDate[] dtEntradaSaida, List<Long> idsEntidades, List<Long> idsItens, Long idEmpresa, List<Long> idsTransps) {
 
         String whereNumIni = numDocIni != null ? "AND abb01num >= :numDocIni " : "";
         String whereNumFin = numDocFin != null ? "AND abb01num <= :numDocFin " : "";
         String whereTipoDoc = idsTipoDoc != null && idsTipoDoc.size() > 0 ? "AND aah01id IN (:idsTipoDoc) " : "";
         String wherePcd = idsPcd != null && idsPcd.size() > 0 ? "AND abd01id IN (:idsPcd) " : "";
-        String whereDtEmissao = dtEmissao != null && dtEmissao.size() > 0 ? "AND abb01data BETWEEN :dtEmissIni AND :dtEmissFin " : "";
-        String whereDtEntradaSaida = dtEntradaSaida != null && dtEntradaSaida.size() > 0 ? "AND eaa01esdata BETWEEN :dtEntradaSaidaIni AND :dtEntradaSaidaFin " : "";
+        String whereDtEmissao = dtEmissao != null && dtEmissao.size() > 0 ? "AND abb01data between :dtEmissIni AND :dtEmissFin " : "";
+        String whereDtEntradaSaida = dtEntradaSaida != null && dtEntradaSaida != null ? "AND eaa01esdata BETWEEN :dtEntradaSaidaIni AND :dtEntradaSaidaFin " : "";
         String whereEntidade = idsEntidades != null && idsEntidades.size() > 0 ? "AND ent.abe01id IN (:idsEntidades) " : "";
-        String whereTransp = (idsTransps != null && idsTransps.size() > 0) && optionTransp == 0 ? "AND desp.abe01id IN (:idsTransps) " : (idsTransps != null && idsTransps.size() > 0) && optionTransp == 1 ? "AND redesp.abe01id IN (:idsTransps) " : "";
+        String whereTransp = idsTransps != null && idsTransps.size() > 0 ? "AND redep.abe01id IN (:idsTransps) " : "";
         String whereES = resumoOperacao == 1 ? " AND eaa01esMov = 1 " : " AND eaa01esMov = 0";
-        String whereItens = idsItens != null && idsItens.size() > 0 ? "AND abm01id IN (:idsItens) " : "";
-        String whereMps = mps != null && !mps.contains(-1) ? "AND abm01tipo IN (:mps) " : "";
+        String whereItens = idsItens != null && idsItens.size() > 0 ? "AND abm01id in (:idsItens) " : "";
         String whereEmpresa = "AND eaa01gc = :idEmpresa ";
+
 
         Parametro parametroNumIni = numDocIni != null ? Parametro.criar("numDocIni", numDocIni) : null;
         Parametro parametroNumFin = numDocFin != null ? Parametro.criar("numDocFin", numDocFin) : null;
@@ -225,26 +222,23 @@ class SRF_Itens_Por_Transportadoras extends RelatorioBase {
         Parametro parametroEntidade = idsEntidades != null && idsEntidades.size() > 0 ? Parametro.criar("idsEntidades", idsEntidades) : null;
         Parametro parametroTransp = idsTransps != null && idsTransps.size() > 0 ? Parametro.criar("idsTransps", idsTransps) : null;
         Parametro parametroItens = idsItens != null && idsItens.size() > 0 ? Parametro.criar("idsItens", idsItens) : null;
-        Parametro parametroMps = mps!= null && !mps.contains(-1) ? Parametro.criar("mps", mps) : null;
         Parametro parametroEmpresa = Parametro.criar("idEmpresa", idEmpresa);
 
 
-        String campoTransp = optionTransp == 0 ? "desp.abe01id AS idDesp,desp.abe01codigo AS codDesp, desp.abe01na AS naDesp, " : "redesp.abe01id AS idDesp,redesp.abe01codigo AS codDesp, redesp.abe01na AS naDesp, ";
-        String orderBy = optionTransp == 0 ? "ORDER BY desp.abe01codigo, abm01codigo " : "ORDER BY redesp.abe01codigo, abm01codigo ";
 
-        String sql = "SELECT " + campoTransp +
-                "abm01id,aam06codigo,abm01codigo, eaa0103id, abm01na,CASE WHEN abm01tipo = 0 THEN 'M' when abm01tipo = 1 THEN 'P' WHEN abm01tipo = 2 THEN 'S' ELSE 'MER' END AS mps, " +
-                "eaa0103qtuso,eaa0103qtcoml,eaa0103unit,eaa0103total,eaa0103totdoc,eaa0103totfinanc, eaa0103id, eaa0103json, eaa01id " +
+        String sql = "SELECT ent.abe01codigo AS codEnt, ent.abe01na AS naEnt,ent.abe01id AS idEnt,aam06codigo,abm01codigo,abm01id, abm01na, " +
+                "CASE WHEN abm01tipo = 0 THEN 'M' when abm01tipo = 1 THEN 'P' when abm01tipo = 2 then 'S' ELSE 'MER' END AS mps, " +
+                "eaa0103qtuso,eaa0103qtcoml,eaa0103unit,eaa0103total,eaa0103totdoc,eaa0103totfinanc, eaa0103id, eaa01id, eaa0103json " +
                 "FROM eaa01 " +
-                "INNER JOIN abb01 ON abb01id = eaa01central " +
-                "INNER JOIN eaa0103 ON eaa0103doc = eaa01id " +
-                "INNER JOIN abm01 ON abm01id = eaa0103item " +
-                "INNER JOIN aam06 ON aam06id = abm01umu " +
+                "INNER JOIN abb01 on abb01id = eaa01central " +
+                "INNER JOIN eaa0103 on eaa0103doc = eaa01id " +
+                "INNER JOIN abm01 on abm01id = eaa0103item " +
+                "INNER JOIN aam06 on aam06id = abm01umu " +
+                "INNER JOIN abe01 as ent on ent.abe01id = abb01ent " +
+                "INNER JOIN aah01 on aah01id = abb01tipo " +
+                "INNER JOIN abd01 on abd01id = eaa01pcd  " +
                 "INNER JOIN eaa0102 ON eaa0102doc = eaa01id " +
-                (optionTransp == 0 ? "INNER JOIN abe01 AS desp ON desp.abe01id = eaa0102despacho " : "INNER JOIN abe01 AS redesp ON redesp.abe01id = eaa0102redespacho ") +
-                "INNER JOIN abe01 AS ent ON ent.abe01id = abb01ent " +
-                "INNER JOIN aah01 ON aah01id = abb01tipo " +
-                "INNER JOIN abd01 ON abd01id = eaa01pcd  " +
+                "LEFT JOIN abe01 AS redesp ON redesp.abe01id = eaa0102redespacho " +
                 "WHERE eaa01clasDoc = 1 " +
                 "AND eaa01cancData IS NULL " +
                 "AND eaa01nfestat <> 5 " +
@@ -258,12 +252,72 @@ class SRF_Itens_Por_Transportadoras extends RelatorioBase {
                 whereEntidade +
                 whereES +
                 whereItens +
-                whereMps +
                 whereTransp +
-                orderBy;
+                "ORDER BY ent.abe01codigo, abm01codigo "
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroEmpresa, parametroNumIni, parametroNumFin, parametroTipoDoc, parametroPcd, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroDtEntradaSaidaIni, parametroDtEntradaSaidaFin,
-                parametroEntidade, parametroItens, parametroTransp, parametroMps);
+                parametroEntidade, parametroItens, parametroTransp);
+    }
+
+    private List<Long> obterIdsItensDoc(Integer numDocIni, Integer numDocFin, List<Long> idsTipoDoc, List<Long> idsPcd, Integer resumoOperacao, LocalDate[] dtEmissao, LocalDate[] dtEntradaSaida, List<Long> idsEntidades, List<Long> idsItens, Long idEmpresa, List<Long> idsTransps) {
+
+        String whereNumIni = numDocIni != null ? "AND abb01num >= :numDocIni " : "";
+        String whereNumFin = numDocFin != null ? "AND abb01num <= :numDocFin " : "";
+        String whereTipoDoc = idsTipoDoc != null && idsTipoDoc.size() > 0 ? "AND aah01id IN (:idsTipoDoc) " : "";
+        String wherePcd = idsPcd != null && idsPcd.size() > 0 ? "AND abd01id IN (:idsPcd) " : "";
+        String whereDtEmissao = dtEmissao != null && dtEmissao.size() > 0 ? "AND abb01data between :dtEmissIni AND :dtEmissFin " : "";
+        String whereDtEntradaSaida = dtEntradaSaida != null && dtEntradaSaida != null ? "AND eaa01esdata BETWEEN :dtEntradaSaidaIni AND :dtEntradaSaidaFin " : "";
+        String whereEntidade = idsEntidades != null && idsEntidades.size() > 0 ? "AND ent.abe01id IN (:idsEntidades) " : "";
+        String whereTransp = idsTransps != null && idsTransps.size() > 0 ? "AND desp.abe01id IN (:idsTransps) " : "";
+        String whereES = resumoOperacao == 1 ? " AND eaa01esMov = 1 " : " AND eaa01esMov = 0";
+        String whereItens = idsItens != null && idsItens.size() > 0 ? "AND abm01id in (:idsItens) " : "";
+        String whereEmpresa = "AND eaa01gc = :idEmpresa ";
+
+
+        Parametro parametroNumIni = numDocIni != null ? Parametro.criar("numDocIni", numDocIni) : null;
+        Parametro parametroNumFin = numDocFin != null ? Parametro.criar("numDocFin", numDocFin) : null;
+        Parametro parametroTipoDoc = idsTipoDoc != null && idsTipoDoc.size() > 0 ? Parametro.criar("idsTipoDoc", idsTipoDoc) : null;
+        Parametro parametroPcd = idsPcd != null && idsPcd.size() > 0 ? Parametro.criar("idsPcd", idsPcd) : null;
+        Parametro parametroDtEmissaoIni = dtEmissao != null && dtEmissao.size() > 0 ? Parametro.criar("dtEmissIni", dtEmissao[0]) : null;
+        Parametro parametroDtEmissaoFin = dtEmissao != null && dtEmissao.size() > 0 ? Parametro.criar("dtEmissFin", dtEmissao[1]) : null;
+        Parametro parametroDtEntradaSaidaIni = dtEntradaSaida != null && dtEntradaSaida.size() > 0 ? Parametro.criar("dtEntradaSaidaIni", dtEntradaSaida[0]) : null;
+        Parametro parametroDtEntradaSaidaFin = dtEntradaSaida != null && dtEntradaSaida.size() > 0 ? Parametro.criar("dtEntradaSaidaFin", dtEntradaSaida[1]) : null;
+        Parametro parametroEntidade = idsEntidades != null && idsEntidades.size() > 0 ? Parametro.criar("idsEntidades", idsEntidades) : null;
+        Parametro parametroTransp = idsTransps != null && idsTransps.size() > 0 ? Parametro.criar("idsTransps", idsTransps) : null;
+        Parametro parametroItens = idsItens != null && idsItens.size() > 0 ? Parametro.criar("idsItens", idsItens) : null;
+        Parametro parametroEmpresa = Parametro.criar("idEmpresa", idEmpresa);
+
+
+
+        String sql = "SELECT eaa0103id " +
+                "FROM eaa01 " +
+                "INNER JOIN abb01 on abb01id = eaa01central " +
+                "INNER JOIN eaa0103 on eaa0103doc = eaa01id " +
+                "INNER JOIN abm01 on abm01id = eaa0103item " +
+                "INNER JOIN aam06 on aam06id = abm01umu " +
+                "INNER JOIN abe01 as ent on ent.abe01id = abb01ent " +
+                "INNER JOIN aah01 on aah01id = abb01tipo " +
+                "INNER JOIN abd01 on abd01id = eaa01pcd  " +
+                "INNER JOIN eaa0102 ON eaa0102doc = eaa01id " +
+                "LEFT JOIN abe01 AS redesp ON redesp.abe01id = eaa0102redespacho " +
+                "WHERE eaa01clasDoc = 1 " +
+                "AND eaa01cancData IS NULL " +
+                "AND eaa01nfestat <> 5 " +
+                whereEmpresa +
+                whereNumIni +
+                whereNumFin +
+                whereTipoDoc +
+                wherePcd +
+                whereDtEmissao +
+                whereDtEntradaSaida +
+                whereEntidade +
+                whereES +
+                whereItens +
+                whereTransp +
+                "ORDER BY ent.abe01codigo, abm01codigo "
+
+        return getAcessoAoBanco().obterListaDeLong(sql, parametroEmpresa, parametroNumIni, parametroNumFin, parametroTipoDoc, parametroPcd, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroDtEntradaSaidaIni, parametroDtEntradaSaidaFin,
+                parametroEntidade, parametroItens, parametroTransp);
     }
 
     private void somarValores(TableMap valoresDocumento, TableMap valoresTotais, Map<String, String> campos) {
@@ -358,5 +412,5 @@ class SRF_Itens_Por_Transportadoras extends RelatorioBase {
     }
 }
 //meta-sis-eyJkZXNjciI6IlNSRiAtIFJlc3VtbyBQb3IgSXRlbSAtIExDUiIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
-//meta-sis-eyJkZXNjciI6IlNSRiBJdGVucyBQb3IgVHJhbnNwb3J0YWRvcmFzIiwidGlwbyI6InJlbGF0b3JpbyJ9
-//meta-sis-eyJkZXNjciI6IlNSRiAtIEl0ZW5zIFBvciBUcmFuc3BvcnRhZG9yYSIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
+//meta-sis-eyJkZXNjciI6IlNSRiBJdGVucyBQb3IgRW50aWRhZGVzIiwidGlwbyI6InJlbGF0b3JpbyJ9
+//meta-sis-eyJkZXNjciI6IlNSRiAtIEl0ZW5zIFBvciBFbnRpZGFkZXMiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

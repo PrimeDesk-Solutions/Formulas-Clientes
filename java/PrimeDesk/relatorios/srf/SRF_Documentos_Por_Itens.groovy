@@ -182,7 +182,6 @@ public class SRF_Documentos_Por_Itens extends RelatorioBase {
         return gerarXLSX("SRF_Documentos_Por_Itens_Excel", dados);
     }
 
-
     private List<TableMap> buscarDocumentos(Integer numDocIni, Integer numDocFin, List<Long> idsTipoDoc, List<Long> idsPcd, Integer resumoOperacao, LocalDate[] dtEmissao, LocalDate[] dtEntradaSaida, List<Long> idsEntidades, List<Long> idsItens, Long idEmpresa, List<Integer> mps) {
         //Data Emissao
         LocalDate dtEmissIni = null;
@@ -257,82 +256,6 @@ public class SRF_Documentos_Por_Itens extends RelatorioBase {
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, parametroEmpresa, parametroNumIni, parametroNumFin, parametroTipoDoc, parametroPcd, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroDtEntradaSaidaIni, parametroDtEntradaSaidaFin, parametroEntidade,
                 parametroItens, parametroMps);
-
-    }
-
-    private List<Long> obterIdsItensDoc(Integer numDocIni, Integer numDocFin, List<Long> idsTipoDoc, List<Long> idsPcd, Integer resumoOperacao, LocalDate[] dtEmissao, LocalDate[] dtEntradaSaida, List<Long> idsEntidades, List<Long> idsItens, Long idEmpresa, List<Integer> mps) {
-        //Data Emissao
-        LocalDate dtEmissIni = null;
-        LocalDate dtEmissFin = null;
-        if (dtEmissao != null) {
-            dtEmissIni = dtEmissao[0];
-            dtEmissFin = dtEmissao[1];
-        }
-
-        //Data Entrada/Saida
-        LocalDate dtEntradaSaidaIni = null;
-        LocalDate dtEntradaSaidaFin = null;
-        if (dtEntradaSaida != null) {
-            dtEntradaSaidaIni = dtEntradaSaida[0];
-            dtEntradaSaidaFin = dtEntradaSaida[1];
-        }
-
-        String whereNumIni = numDocIni != null ? "AND abb01num >= :numDocIni " : "";
-        String whereNumFin = numDocFin != null ? "AND abb01num <= :numDocFin " : "";
-        String whereTipoDoc = idsTipoDoc != null && idsTipoDoc.size() > 0 ? "AND aah01id IN (:idsTipoDoc) " : "";
-        String wherePcd = idsPcd != null && idsPcd.size() > 0 ? "AND abd01id in (:idsPcd) " : "";
-        String whereDtEmissao = dtEmissIni != null && dtEmissFin != null ? "AND  abb01data BETWEEN :dtEmissIni and :dtEmissFin " : "";
-        String whereDtEntradaSaida = dtEntradaSaidaIni != null && dtEntradaSaidaFin != null ? "AND  eaa01esdata BETWEEN :dtEntradaSaidaIni AND :dtEntradaSaidaFin " : "";
-        String whereEntidade = idsEntidades != null && idsEntidades.size() > 0 ? "AND ent.abe01id in (:idsEntidades) " : "";
-        String whereES = resumoOperacao == 1 ? " AND  eaa01esMov = 1 " : " AND  eaa01esMov = 0 ";
-        String whereItens = idsItens != null && idsItens.size() > 0 ? "AND abm01id IN (:idsItens) " : "";
-        String whereEmpresa = "AND  eaa01gc = :idEmpresa ";
-        String whereMps = mps != null && !mps.contains(-1) ? "AND abm01tipo IN (:mps) " : "";
-
-        Parametro parametroNumIni = numDocIni != null ? Parametro.criar("numDocIni", numDocIni) : null;
-        Parametro parametroNumFin = numDocFin != null ? Parametro.criar("numDocFin", numDocFin) : null;
-        Parametro parametroTipoDoc = idsTipoDoc != null && idsTipoDoc.size() > 0 ? Parametro.criar("idsTipoDoc", idsTipoDoc) : null;
-        Parametro parametroPcd = idsPcd != null && idsPcd.size() > 0 ? Parametro.criar("idsPcd", idsPcd) : null;
-        Parametro parametroDtEmissaoIni = dtEmissao != null && dtEmissao.size() > 0 ? Parametro.criar("dtEmissIni", dtEmissao[0]) : null;
-        Parametro parametroDtEmissaoFin = dtEmissao != null && dtEmissao.size() > 0 ? Parametro.criar("dtEmissFin", dtEmissao[1]) : null;
-        Parametro parametroDtEntradaSaidaIni = dtEntradaSaida != null && dtEntradaSaida.size() > 0 ? Parametro.criar("dtEntradaSaidaIni", dtEntradaSaida[0]) : null;
-        Parametro parametroDtEntradaSaidaFin = dtEntradaSaida != null && dtEntradaSaida.size() > 0 ? Parametro.criar("dtEntradaSaidaFin", dtEntradaSaida[1]) : null;
-        Parametro parametroEntidade = idsEntidades != null && idsEntidades.size() > 0 ? Parametro.criar("idsEntidades", idsEntidades) : null;
-        Parametro parametroItens = idsItens != null && idsItens.size() > 0 ? Parametro.criar("idsItens", idsItens) : null;
-        Parametro parametroEmpresa = Parametro.criar("idEmpresa", idEmpresa);
-        Parametro parametroMps = mps != null && !mps.contains(-1) ? Parametro.criar("mps", mps) : null;
-
-
-
-        String sql = "SELECT eaa0103id " +
-                "FROM eaa01 " +
-                "INNER JOIN abb01 ON abb01id =  eaa01central    " +
-                "INNER JOIN abd01 ON abd01id =  eaa01pcd " +
-                "INNER JOIN abe01 AS ent ON ent.abe01id =  abb01ent    " +
-                "INNER JOIN eaa0102 ON eaa0102doc =  eaa01id    " +
-                "INNER JOIN eaa0103 AS eaa0103doc on  eaa0103doc =  eaa01id    " +
-                "INNER JOIN abm01 ON abm01id =  eaa0103item   " +
-                "LEFT JOIN aam06 ON aam06id = abm01umu   " +
-                "LEFT JOIN aah01 ON aah01id =  abb01tipo    " +
-                "LEFT JOIN abe0101 ON abe0101ent = ent.abe01id and abe0101principal = 1    " +
-                "LEFT JOIN eaa01032 ON eaa01032itemsrf =  eaa0103id   " +
-                "WHERE eaa01clasDoc = " + Eaa01.CLASDOC_SRF + " " +
-                "AND eaa01cancData IS NULL " +
-                "AND eaa01nfestat <> 5 " +
-                whereEmpresa +
-                whereNumIni +
-                whereNumFin +
-                whereTipoDoc +
-                wherePcd +
-                whereDtEmissao +
-                whereDtEntradaSaida +
-                whereEntidade +
-                whereES +
-                whereItens +
-                whereMps +
-                "ORDER BY abm01codigo,  abb01num"
-
-        return getAcessoAoBanco().obterListaDeLong(sql, parametroEmpresa, parametroNumIni, parametroNumFin, parametroTipoDoc, parametroPcd, parametroDtEmissaoIni, parametroDtEmissaoFin, parametroDtEntradaSaidaIni, parametroDtEntradaSaidaFin, parametroEntidade, parametroItens, parametroMps);
 
     }
 
@@ -429,5 +352,4 @@ public class SRF_Documentos_Por_Itens extends RelatorioBase {
 
     }
 }
-//meta-sis-eyJkZXNjciI6IlNSRiBEb2N1bWVudG9zIFBvciBJdGVucyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
 //meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MgUG9yIEl0ZW5zIiwidGlwbyI6InJlbGF0b3JpbyJ9

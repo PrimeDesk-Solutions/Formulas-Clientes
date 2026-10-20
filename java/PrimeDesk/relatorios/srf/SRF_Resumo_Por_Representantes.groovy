@@ -57,8 +57,8 @@ public class SRF_Resumo_Por_Representantes extends RelatorioBase {
 
     @Override
     public DadosParaDownload executar() {
-        Integer numDocIni = getInteger("numeroInicial") == null || getInteger("numeroInicial") == "" ? 000000001 : getInteger("numeroInicial");
-        Integer numDocFin = getInteger("numeroFinal") == null || getInteger("numeroFinal") == "" ? 999999999 : getInteger("numeroFinal");
+        Integer numDocIni = getInteger("numeroInicial");
+        Integer numDocFin = getInteger("numeroFinal");
         List<Long> idsTipoDoc = getListLong("tipo");
         List<Long> idsPcd = getListLong("pcd");
         Integer resumoOperacao = getInteger("resumoOperacao");
@@ -104,8 +104,8 @@ public class SRF_Resumo_Por_Representantes extends RelatorioBase {
         params.put("title", "SRF - Resumo por Representantes");
         params.put("empresa", empresa.aac10codigo + "-" + empresa.aac10na);
         params.put("periodo", periodo);
-//        params.put("LOGO_EMPRESA", "C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\srf\\Logo Silcon.png");
-//        params.put("LOGO_REVENDA", "C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\srf\\logoPrimeDesk.png");
+        params.put("LOGO_EMPRESA", "C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\srf\\Logo Silcon.png");
+        params.put("LOGO_REVENDA", "C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\srf\\logoPrimeDesk.png");
 
 
         if (campoLivre1 != null && campoFixo1 != null) interromper("Selecione apenas 1 valor por campo!");
@@ -124,6 +124,13 @@ public class SRF_Resumo_Por_Representantes extends RelatorioBase {
         campos.put("4", campoLivre4 != null ? campoLivre4 : campoFixo4 != null ? campoFixo4 : null);
         campos.put("5", campoLivre5 != null ? campoLivre5 : campoFixo5 != null ? campoFixo5 : null);
         campos.put("6", campoLivre6 != null ? campoLivre6 : campoFixo6 != null ? campoFixo6 : null);
+
+        Long idUser = obterUsuarioLogado().getAab10id();
+        Integer setorUser = buscarCamposCustomUser(idUser) == null ? null : buscarCamposCustomUser(idUser);
+        if(setorUser == null) interromper("Necessário preencher o campo de setor no cadastro do usuário logado.")
+        Abe01 abe01user = buscarEntidadeUsuarioLogado(idUser);
+
+        if((idsReps == null || idsReps.size() == 0) &&  setorUser == 2) idsReps = [abe01user.abe01id];
 
 
         List<TableMap> representantes = buscarRepresentantes(idsReps);
@@ -476,11 +483,16 @@ public class SRF_Resumo_Por_Representantes extends RelatorioBase {
     private void preencherDadosIniciaisRepresentante(Map<String, Object> filtrosDefault){
         Long idUser = obterUsuarioLogado().getAab10id();
 
-        Abe01 abe01user = buscarEntidadeUsuarioLogado(idUser);
+        Integer setorUser = buscarCamposCustomUser(idUser) == null ? null : buscarCamposCustomUser(idUser);
 
-        if(abe01user == null) interromper("Não foi encontrado entidade cadastrada para o usuário logado.")
+        if(setorUser == 2){
+            Abe01 abe01user = buscarEntidadeUsuarioLogado(idUser);
 
-        filtrosDefault.put("idRepresentantes", abe01user.abe01id);
+            if(abe01user == null) interromper("Não foi encontrado entidade cadastrada para o usuário logado.")
+
+            filtrosDefault.put("idRepresentantes", abe01user.abe01id);
+        }
+
     }
     private Integer buscarCamposCustomUser(idUser){
         String sql = "SELECT CAST(aab10camposCustom ->> 'setor' AS INTEGER) AS setor FROM aab10 WHERE aab10id = :idUser";
@@ -495,6 +507,7 @@ public class SRF_Resumo_Por_Representantes extends RelatorioBase {
                 .addJoin(Joins.join("Aab10", "aab10id = abe05user"))
                 .addWhere(Criterions.eq("aab10id", idUser)).setMaxResults(1)
                 .get(ColumnType.ENTITY);
+
     }
 
     public String buscarNomeCampoLivre(String campo) {
@@ -517,3 +530,4 @@ public class SRF_Resumo_Por_Representantes extends RelatorioBase {
 }
 //meta-sis-eyJkZXNjciI6IlNSRiBEb2N1bWVudG9zIFBvciBSZXByZXNlbnRhbnRlcyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
 //meta-sis-eyJkZXNjciI6IlNSRiBSZXN1bW8gUG9yIFJlcHJlc2VudGFudGVzIiwidGlwbyI6InJlbGF0b3JpbyJ9
+//meta-sis-eyJkZXNjciI6IlNSRiAtIFJlc3VtbyBwb3IgUmVwcmVzZW50YW50ZXMiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
