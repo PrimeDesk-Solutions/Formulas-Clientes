@@ -264,7 +264,7 @@ public class SRF_Documentos_Por_Estados extends RelatorioBase {
                 " LEFT JOIN aag02 ON aag02id = aag0201uf " +
                 " INNER JOIN eaa0103 on eaa0103doc = eaa01id  " +
                 " INNER JOIN aah01 ON aah01id = abb01tipo  " +
-                " INNER JOIN abe30 ON abe30id = eaa01cp  " +
+                " LEFT JOIN abe30 ON abe30id = eaa01cp  " +
                 " LEFT JOIN abe40 ON abe40id = eaa01tp  " +
                 " INNER JOIN abe0101 ON abe0101ent = ent.abe01id and abe0101principal = 1  " +
                 " WHERE eaa01clasDoc = " + Eaa01.CLASDOC_SRF +
@@ -452,4 +452,3 @@ public class SRF_Documentos_Por_Estados extends RelatorioBase {
 
     }
 }
-//meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MgUG9yIEVzdGFkb3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=

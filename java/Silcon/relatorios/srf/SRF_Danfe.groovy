@@ -250,6 +250,7 @@ public class SRF_Danfe extends RelatorioBase {
         Abe0101 abe0101 = getAcessoAoBanco().buscarRegistroUnicoByCriterion("Abe0101", Criterions.eq("abe01id", abe01id), Criterions.eq("abe0101entrega", 1));
         if(abe0101 == null) throw new ValidacaoException("A Entidade informada no redespacho não possui um endereço principal.")
 
+        if(abe0101.getAbe0101municipio() == null) throw new ValidacaoException("Não foi encontrado município no cadastro da entidade redespacho.")
         Aag02 uf = getSession().get(Aag02.class, abe0101.getAbe0101municipio().getAag0201uf().getAag02id());
         if(uf == null) throw new ValidacaoException("Necessário informar a Unidade Federativa do municipio no endereço principal do despacho.")
 

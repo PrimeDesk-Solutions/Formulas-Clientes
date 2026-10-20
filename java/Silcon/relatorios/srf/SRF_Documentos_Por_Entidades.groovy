@@ -248,9 +248,6 @@ public class SRF_Documentos_Por_Entidades extends RelatorioBase {
         Parametro parametroEntidade = idsEntidades != null && idsEntidades.size() > 0 ? Parametro.criar("idsEntidades", idsEntidades) : null;
         Parametro parametroEmpresa = Parametro.criar("idEmpresa", idEmpresa);
 
-
-
-
         String sql = "SELECT abb01num,abb01data, eaa01esdata, eaa0103id, eaa01id, " +
                 "ent.abe01codigo AS codEnt, ent.abe01na AS naEnt,aah01codigo,abe30nome,abe40nome, " +
                 "eaa0103qtuso,eaa0103qtcoml, eaa0103unit, eaa0103unit,eaa0103total,eaa0103totdoc, eaa0103totfinanc, eaa0103json " +
@@ -261,7 +258,7 @@ public class SRF_Documentos_Por_Entidades extends RelatorioBase {
                 " INNER JOIN eaa0102 ON eaa0102doc = eaa01id  " +
                 " INNER JOIN eaa0103 on eaa0103doc = eaa01id  " +
                 " INNER JOIN aah01 ON aah01id = abb01tipo  " +
-                " INNER JOIN abe30 ON abe30id = eaa01cp  " +
+                " LEFT JOIN abe30 ON abe30id = eaa01cp  " +
                 " LEFT JOIN abe40 ON abe40id = eaa01tp  " +
                 " INNER JOIN abe0101 ON abe0101ent = ent.abe01id and abe0101principal = 1  " +
                 " WHERE eaa01clasDoc = " + Eaa01.CLASDOC_SRF +
@@ -440,7 +437,3 @@ public class SRF_Documentos_Por_Entidades extends RelatorioBase {
 
     }
 }
-// Relatório Alterado 24/10/2024
-//meta-sis-eyJkZXNjciI6IlNSRiBEb2N1bWVudG9zIFBvciBFbnRpZGFkZXMiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
-//meta-sis-eyJkZXNjciI6IlNSRiBEb2N1bWVudG9zIFBvciBFbnRpZGFkZXMiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
-//meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MgUG9yIEVudGlkYWRlcyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==

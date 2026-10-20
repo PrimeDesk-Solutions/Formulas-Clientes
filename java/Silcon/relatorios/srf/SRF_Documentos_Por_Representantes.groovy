@@ -183,9 +183,6 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
             String codRep = representante.getString("abe01codigo");
             String nomeRep = representante.getString("abe01na");
             def txComissao = representante.getBigDecimal_Zero("abe05taxa");
-            def idControle = null;
-            TableMap dadosTmp = new TableMap();
-            TableMap valoresTotais = new TableMap();
 
             for (dado in dados) {
                 Long idRep0 = dado.getLong("eaa01rep0");
@@ -207,40 +204,12 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
                         comporDevolucoes(dado, devolucao, campos);
                     }
                 }
-
-                if (idControle == null) {
-                    dadosTmp.putAll(dado);
-                    idControle = dado.getLong("eaa01id")
-                    somarValores(dado, valoresTotais, campos);
-                } else if (idControle == dado.getLong("eaa01id")) {
-                    somarValores(dado, valoresTotais, campos);
-                } else {
-                    TableMap tmp = new TableMap();
-                    tmp.putAll(dadosTmp);
-                    tmp.putAll(valoresTotais);
-                    comporValores(tmp, campos);
-                    dadosRelatorio.add(tmp);
-
-                    dadosTmp = new TableMap();
-                    dadosTmp.putAll(dado);
-                    valoresTotais = new TableMap()
-                    idControle = dado.getLong("eaa01id");
-                    somarValores(dado, valoresTotais, campos);
-                }
-            }
-
-            if(dadosTmp.size() > 0){
-                TableMap tmp = new TableMap();
-                tmp.putAll(dadosTmp);
-                tmp.putAll(valoresTotais);
-                comporValores(tmp, campos);
-
-                dadosRelatorio.add(tmp)
+                comporValores(dado, campos);
             }
         }
 
-        if (impressao == 0) return gerarPDF("SRF_Documentos_Por_Representantes_PDF", dadosRelatorio);
-        return gerarXLSX("SRF_Documentos_Por_Representantes_Excel", dadosRelatorio);
+        if (impressao == 0) return gerarPDF("SRF_Documentos_Por_Representantes_PDF", dados);
+        return gerarXLSX("SRF_Documentos_Por_Representantes_Excel", dados);
     }
 
     private List<TableMap> buscarDadosDocumentos(List<Long> idsReps, Integer numDocIni, Integer numDocFin, List<Long> idsTipoDoc, List<Long> idsPcd, Integer resumoOperacao, LocalDate[] dtEmissao, LocalDate[] dtEntradaSaida) {
@@ -536,6 +505,3 @@ public class SRF_Documentos_Por_Representantes extends RelatorioBase {
 
     }
 }
-//meta-sis-eyJkZXNjciI6IlNSRiBEb2N1bWVudG9zIFBvciBSZXByZXNlbnRhbnRlcyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
-//meta-sis-eyJkZXNjciI6IlNSRiBEb2N1bWVudG9zIFBvciBSZXByZXNlbnRhbnRlcyIsInRpcG8iOiJyZWxhdG9yaW8ifQ==
-//meta-sis-eyJkZXNjciI6IlNSRiAtIERvY3VtZW50b3MgUG9yIFJlcHJlc2VudGFudGVzIiwidGlwbyI6InJlbGF0b3JpbyJ9
