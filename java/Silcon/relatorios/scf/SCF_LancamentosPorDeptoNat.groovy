@@ -59,7 +59,7 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
                 String departamento = dado.getString("codDepto");
                 String key = agrupamento == 0 ? departamento + "|" + natureza : natureza + "|" + departamento  ;
                 if (depto == dado.getString("codDepto")){
-                    BigDecimal vlrNatureza = dado.getBigDecimal_Zero("valor");
+                    BigDecimal vlrNatureza = dado.getBigDecimal_Zero("valor") ;
                     BigDecimal totNatureza = totaisNatureza.containsKey(key) ? totaisNatureza.get(key) : new BigDecimal(0);
                     BigDecimal soma = totNatureza + vlrNatureza
                     totaisNatureza.put(key, soma);
@@ -152,7 +152,7 @@ public class SCF_LancamentosPorDeptoNat extends RelatorioBase {
         String sql = "SELECT DISTINCT dab10id, abb11codigo AS codDepto, abb11nome AS nomeDepto, dab10data AS dtLcto, " +
                 "dab10historico AS historico,  " +
                 "CASE WHEN dab10mov = 0 THEN 'C' ELSE 'D' END AS movimentacao, abf10codigo AS codNatureza, abf10nome AS descrNat, " +
-                "dab10011valor AS valor " +
+                "CASE WHEN dab10mov = 0 THEN dab10011valor ELSE ABS(dab10011valor) * -1 END AS valor " +
                 "FROM dab10 " +
                 "LEFT JOIN abb01 ON abb01id = dab10central "+
                 "INNER JOIN dab1001 ON dab1001lct = dab10id " +
