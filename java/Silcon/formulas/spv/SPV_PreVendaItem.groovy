@@ -1,7 +1,9 @@
 package Silcon.formulas.spv
 
+import br.com.multiorm.ColumnType
 import br.com.multiorm.criteria.criterion.Criterion
 import br.com.multiorm.criteria.criterion.Criterions
+import br.com.multiorm.criteria.join.Joins
 import br.com.multitec.utils.ValidacaoException
 import br.com.multitec.utils.collections.TableMap
 import sam.core.variaveis.MDate
@@ -206,9 +208,22 @@ class SPV_PreVendaItem extends FormulaBase {
     }
 
     private void preencherCamposLivres(){
+        Long idUser = obterUsuarioLogado().getAab10id();
+        Abe01 abe01rep = buscarIdEntidadeRepresentante(idUser);
         jsonCcb0101.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
+        jsonCcb0101.put("cod_representante", abe01rep != null ? abe01rep.abe01codigo : null);
+        jsonCcb0101.put("nome_representante", abe01rep != null ? abe01rep.abe01nome : null);
+        jsonCcb0101.put("id_representante", abe01rep != null ? abe01rep.abe01id : null);
 
         ccb0101.ccb0101json = jsonCcb0101;
+    }
+    private Abe01 buscarIdEntidadeRepresentante(Long userLogado){
+        return getSession().createCriteria(Abe01.class)
+                .addFields("abe01id, abe01codigo, abe01nome")
+                .addJoin(Joins.join("Abe05", "abe05ent = abe01id"))
+                .addJoin(Joins.join("Aab10", "aab10id = abe05user"))
+                .addWhere(Criterions.eq("aab10id", userLogado)).setMaxResults(1)
+                .get(ColumnType.ENTITY);
     }
 
     @Override
