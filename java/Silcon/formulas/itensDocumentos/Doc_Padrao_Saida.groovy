@@ -1,4 +1,8 @@
 package Silcon.formulas.itensDocumentos
+
+import br.com.multiorm.ColumnType
+import br.com.multiorm.criteria.join.Joins
+
 import java.math.RoundingMode;
 import sam.model.entities.aa.Aac13
 import sam.model.entities.aa.Aaj01;
@@ -296,6 +300,8 @@ public class Doc_Padrao_Saida extends FormulaBase {
 
         if (eaa0103.eaa0103qtComl > 0) {
 
+            definirRepresentanteItens();
+
             eaa0102.eaa0102modFrete = 9;
 
             //Define se a entidade é ou não contribuinte de ICMS
@@ -409,6 +415,23 @@ public class Doc_Padrao_Saida extends FormulaBase {
 
         }
 
+    }
+
+    private void definirRepresentanteItens(){
+        Long idUser = obterUsuarioLogado().getAab10id();
+        Abe01 abe01rep = buscarIdEntidadeRepresentante(idUser);
+        
+        jsonEaa0103.put("cod_representante", abe01rep != null ? abe01rep.abe01codigo : null);
+        jsonEaa0103.put("nome_representante", abe01rep != null ? abe01rep.abe01nome : null);
+        jsonEaa0103.put("id_representante", abe01rep != null ? abe01rep.abe01id : null);
+    }
+    private Abe01 buscarIdEntidadeRepresentante(Long userLogado){
+        return getSession().createCriteria(Abe01.class)
+                .addFields("abe01id, abe01codigo, abe01nome")
+                .addJoin(Joins.join("Abe05", "abe05ent = abe01id"))
+                .addJoin(Joins.join("Aab10", "aab10id = abe05user"))
+                .addWhere(Criterions.eq("aab10id", userLogado)).setMaxResults(1)
+                .get(ColumnType.ENTITY);
     }
 
     private void definirPrecoUnitarioItem(){
