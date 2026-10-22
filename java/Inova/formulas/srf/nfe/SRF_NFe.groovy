@@ -221,7 +221,7 @@ class SRF_NFe extends FormulaBase {
 
         /** Documentos referenciadas */
         List<Long> docsRef = buscarDocumentosReferenciados(eaa01.eaa01id, 0);
-        if(docsRef != null && docsRef.size() > 0) {
+        if(docsRef != null && docsRef.size() > 0 && eaa01.eaa01sitDoc.aaj03nfe != "4") {
             for(Long eaa01Ref : docsRef) {
                 Eaa01 notaRef = getAcessoAoBanco().buscarRegistroUnicoById("Eaa01", eaa01Ref);
                 if(notaRef != null) {
@@ -1678,7 +1678,7 @@ class SRF_NFe extends FormulaBase {
                 IS.addNode("vIS", getDecimalReq(jsonEaa0103, "324-UB11", "vIS"));
             }
 
-            gerarInformacoesDevolucoes(det,eaa0103, itensDocsRef);
+            if(eaa01.eaa01sitDoc.aaj03nfe == "4") gerarInformacoesDevolucoes(det,eaa0103, itensDocsRef);
 
             Aaj07 aaj07 = eaa0103.eaa0103clasTribCbsIbs
             if(aaj07 != null && aaj07.getAaj07json() != null) {
