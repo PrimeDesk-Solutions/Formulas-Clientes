@@ -1,6 +1,8 @@
 package Atilatte.formulas.itensdocumento
 
-import br.com.multiorm.Query;
+import br.com.multiorm.Query
+import br.com.multiorm.criteria.criterion.Criterion
+import sam.model.entities.ab.Abm1002;
 import sam.server.samdev.utils.Parametro;
 import br.com.multiorm.criteria.criterion.Criterions
 import br.com.multitec.utils.ValidacaoException
@@ -78,6 +80,7 @@ public class SCV_SRF_FormulaLoja extends FormulaBase {
     private Abm0101 abm0101;
     private Abm10 abm10;
     private Abm1001 abm1001;
+    private Abm1002 abm1002;
     private Abm1003 abm1003;
     private Abm12 abm12;
     private Abm13 abm13;
@@ -90,6 +93,7 @@ public class SCV_SRF_FormulaLoja extends FormulaBase {
 
     private TableMap jsonEaa0103;
     private TableMap jsonAbm1001_UF_Item;
+    private TableMap jsonAbm1002_Municipio_Item;
     private TableMap jsonAbm1003_Ent_Item;
     private TableMap jsonAbe01;
     private TableMap jsonAbe02;
@@ -160,6 +164,9 @@ public class SCV_SRF_FormulaLoja extends FormulaBase {
 
         //Valores do Item - Estados
         abm1001 = ufEnt != null && ufEnt.aag02id != null && abm10 != null && abm10.abm10id != null ? getSession().get(Abm1001.class, Criterions.where("abm1001uf = " + ufEnt.aag02id + " AND abm1001cv = " + abm10.abm10id)) : null;
+
+        // Valores do item - Municípios
+        abm1002 = municipioEnt != null && municipioEnt != null && abm10 != null && abm10.abm10id != null ? getSession().get(Abm1002.class, Criterions.where("abm1002municipio = "+ municipioEnt.aag0201id + " AND abm1002cv = "+ abm10.abm10id)) : null;
 
         //Valores do Item - Entidade
         abm1003 = abm10 != null && abm10.abm10id != null ? getSession().get(Abm1003.class, Criterions.where("abm1003ent = " + abe01.abe01id + " AND abm1003cv = " + abm10.abm10id)) : null;
@@ -235,6 +242,7 @@ public class SCV_SRF_FormulaLoja extends FormulaBase {
         jsonAbe01 = abe01.abe01json != null ? abe01.abe01json : new TableMap();
         jsonAbm0101 = abm0101 != null && abm0101.abm0101json != null ? abm0101.abm0101json : new TableMap();
         jsonAbm1001_UF_Item = abm1001 != null && abm1001.abm1001json != null ? abm1001.abm1001json : new TableMap();
+        jsonAbm1002_Municipio_Item = abm1002 != null && abm1002.abm1002json != null ? abm1002.abm1002json : new TableMap();
         jsonAbm1003_Ent_Item = abm1003 != null && abm1003.abm1003json != null ? abm1003.abm1003json : new TableMap();
         jsonEaa0103 = eaa0103.eaa0103json != null ? eaa0103.eaa0103json : new TableMap();
         jsonAbe4001 = abe4001 != null ? abe4001.abe4001json : new TableMap();
@@ -255,6 +263,8 @@ public class SCV_SRF_FormulaLoja extends FormulaBase {
         // ******     Valores do Item     ******
         //=====================================
         if (eaa0103.eaa0103qtComl > 0) {
+
+            String grupo = buscarCategoriaItem(abm01.abm01codigo);
 
             if (jsonAbm0101.getBigDecimal_Zero("cvdnf") == 0) throw new ValidacaoException("Não foi informado quantidade de produto por caixa no cadastro do item " + abm01.abm01codigo)
 
@@ -328,7 +338,8 @@ public class SCV_SRF_FormulaLoja extends FormulaBase {
 
             definirCSTICMS();
 
-
+            eaa0103.eaa0103cstPis = getSession().get(Aaj12.class, Criterions.eq("aaj12codigo", "49"));
+            eaa0103.eaa0103cstCofins = getSession().get(Aaj13.class, Criterions.eq("aaj13codigo", "49"));
         }
     }
     private void calcularCBSIBS() {
@@ -549,20 +560,53 @@ public class SCV_SRF_FormulaLoja extends FormulaBase {
     }
 
     private definirCSTICMS() {
-
         // Busca primeiramente o CST de ICMS no cadastro do PCD, caso não econcontrado, busca no cadastro do item
         String cst = "";
         if (abd02.abd02cstIcmsB != null) {
             aaj10_cstIcms = getSession().get(Aaj10.class, abd02.abd02cstIcmsB.aaj10id);
             cst = aaj10_cstIcms.aaj10codigo;
-
         } else if (abm12.abm12cstIcms != null) {
             aaj10_cstIcms = getSession().get(Aaj10.class, abm12.abm12cstIcms.aaj10id);
             cst = aaj10_cstIcms.aaj10codigo;
-
-        } else {
-            throw new ValidacaoException("Necessário preencher o CST de ICMS no cadastro do item " + abm01.abm01codigo + " ou no cadastro do PCD " + abd01.abd01codigo);
         }
+
+        if(aaj10_cstIcms == null) throw new ValidacaoException("Necessário informar o CST de ICMS no cadastro do PCD ou do item.");
+
+        eaa0103.eaa0103cstIcms = aaj10_cstIcms;
+    }
+    private String buscarCategoriaItem(codItem){
+
+        Query descrCriterios = getSession().createQuery("select aba3001descr from aba3001 "+
+                "inner join abm0102 on abm0102criterio = aba3001id and aba3001criterio = 542858 " +
+                "inner join abm01 on abm0102item = abm01id "+
+                "where abm01codigo = '"+codItem+"'"+
+                "and abm01tipo = 1 ");
+
+        List<TableMap> listCriterios = descrCriterios.getListTableMap();
+
+        if (listCriterios == null && listCriterios.size() == 0) throw new ValidacaoException("Não foi encontrado critério de seleção de grupo para o item " + codItem);
+
+        String grupo = "";
+
+        for(TableMap criterio : listCriterios){
+            if(criterio.getString("aba3001descr").toUpperCase().contains("QUEIJO")){
+                grupo = "QUEIJO"
+            }
+            if(criterio.getString("aba3001descr").toUpperCase().contains("LEITE")){
+                grupo = "LEITE"
+            }
+
+            if(criterio.getString("aba3001descr").toUpperCase().contains("IOGURTE") || criterio.getString("aba3001descr").toUpperCase().contains("BAUNILHA")){
+                grupo = "IOGURTE"
+            }
+
+            if(criterio.getString("aba3001descr").toUpperCase().contains("REQUEIJÃO")){
+                grupo = "REQUEIJÃO"
+            }
+        }
+
+        return grupo;
+
     }
 
 
