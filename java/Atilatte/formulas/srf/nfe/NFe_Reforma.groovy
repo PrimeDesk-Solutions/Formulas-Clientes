@@ -1413,7 +1413,7 @@ class NFe_Reforma extends FormulaBase {
                             ICMS90 = ICMS.addNode("ICMS90");
                             ICMS90.addNode("orig", orig, true);
                             ICMS90.addNode("CST", cst, true);
-                            ICMS90.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcmsST, true);
+                            ICMS90.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, true);
                             ICMS90.addNode("vBC", getCampo("236-N15","vBC") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("236-N15","vBC")), 2, false), true);
                             ICMS90.addNode("pRedBC", getCampo("237-N14","pRedBC") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("237-N14","pRedBC")), 2, true), false);
                             ICMS90.addNode("pICMS", getCampo("238-N16","pICMS") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("238-N16","pICMS")), 2, false), true);
