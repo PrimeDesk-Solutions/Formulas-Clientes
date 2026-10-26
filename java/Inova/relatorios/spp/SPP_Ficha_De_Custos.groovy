@@ -288,18 +288,16 @@ public class SPP_Ficha_De_Custos extends RelatorioBase {
         switch(nomeCampoPreco){
             case "Custo Unitário":
                 return "preco_diverso_custo";
-                break;
             case "Médio":
                 return "abm0101pmu";
-                break;
             case "Maior":
                 return "preco_diverso_maior";
-                break;
             case "Menor":
                 return "preco_diverso_menor";
-                break;
-            default:
+            case "Último":
                 return "preco_diverso_ultimo";
+            default:
+                return "custo_presumido";
                 break;
         }
     }
