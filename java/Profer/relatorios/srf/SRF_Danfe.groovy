@@ -218,6 +218,7 @@ public class SRF_Danfe extends RelatorioBase {
 		dadosNfe.put("eaa0102ni", eaa0102.getEaa0102ni());
 		dadosNfe.put("eaa0102nome", eaa0102.getEaa0102nome());
 		dadosNfe.put("desconto",Eaa01json.getBigDecimal_Zero("desconto"));
+        dadosNfe.put("vlr_frete", Eaa01json.getBigDecimal_Zero("frete_dest"))
 		dadosNfe.putAll(Eaa01json)
 
 
