@@ -86,6 +86,7 @@ public class Aprovar_Documentos extends ServletBase {
                 abb0103.abb0103user = aab10;
                 abb0103.abb0103data = LocalDate.now();
                 abb0103.abb0103hora = LocalTime.now();
+                abb0103.abb0103ps = "4413144"
 
                 abb01.addToAbb0103s(abb0103);
                 getSession().persist(abb01)
