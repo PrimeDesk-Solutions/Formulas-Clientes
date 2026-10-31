@@ -41,6 +41,9 @@ class SRF_Impressao_Documento_Interno_Alfabetico extends RelatorioBase {
 
         List<TableMap> dados = new ArrayList<>();
 
+        List<TableMap> listItensEntregar = buscarItensAEntregar(id);
+        if(listItensEntregar == null || listItensEntregar.size() == 0) return
+
         if (id == null) {
             dados = buscarDocumentos(tipos, numeroInicial, numeroFinal, entidades, dtEmissao, dtEntradaSaida);
         } else {
@@ -281,7 +284,8 @@ class SRF_Impressao_Documento_Interno_Alfabetico extends RelatorioBase {
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("idDocumento", idDocumento));
     }
+    private List<TableMap> buscarItensAEntregar(Long id){
+        String sql = "SELECT eaa0103id, eaa0103entrega FROM eaa0103 WHERE eaa0103doc = :id AND eaa0103entrega IN (0, 1)";
+        return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("id", id));
+    }
 }
-//meta-sis-eyJkZXNjciI6IlNSRiAtIEltcHJlc3PDo28gRG9jdW1lbnRvIEludGVybm8iLCJ0aXBvIjoicmVsYXRvcmlvIn0=
-//meta-sis-eyJkZXNjciI6IlNSRiAtIEltcHJlc3PDo28gRG9jdW1lbnRvIEludGVybm8iLCJ0aXBvIjoicmVsYXRvcmlvIn0=
-//meta-sis-eyJkZXNjciI6IlNSRiAtIEltcHJlc3PDo28gRG9jdW1lbnRvIEludGVybm8iLCJ0aXBvIjoicmVsYXRvcmlvIn0=
