@@ -1,6 +1,8 @@
 package Atilatte.formulas.itensdocumento;
 
 import br.com.multiorm.Query
+import sam.model.entities.ab.Abm1002
+
 import java.lang.Math;
 import sam.server.samdev.utils.Parametro;
 import br.com.multiorm.criteria.criterion.Criterions
@@ -85,6 +87,7 @@ public class PedidoDeBonificacaoGeral extends FormulaBase {
     private Abm0101 abm0101;
     private Abm10 abm10;
     private Abm1001 abm1001;
+    private Abm1002 abm1002;
     private Abm1003 abm1003;
     private Abm12 abm12;
     private Abm13 abm13;
@@ -98,6 +101,7 @@ public class PedidoDeBonificacaoGeral extends FormulaBase {
 
     private TableMap jsonEaa0103;
     private TableMap jsonAbm1001_UF_Item;
+    private TableMap jsonAbm1002_Municipio_Item;
     private TableMap jsonAbm1003_Ent_Item;
     private TableMap jsonAbe01;
     private TableMap jsonAbe02;
@@ -177,6 +181,9 @@ public class PedidoDeBonificacaoGeral extends FormulaBase {
         //Valores do Item - Estados
         abm1001 = ufEnt != null && ufEnt.aag02id != null && abm10 != null && abm10.abm10id != null ? getSession().get(Abm1001.class, Criterions.where("abm1001uf = " + ufEnt.aag02id + " AND abm1001cv = " + abm10.abm10id)) : null;
 
+        // Valores do item - Municípios
+        abm1002 = municipioEnt != null && municipioEnt != null && abm10 != null && abm10.abm10id != null ? getSession().get(Abm1002.class, Criterions.where("abm1002municipio = "+ municipioEnt.aag0201id + " AND abm1002cv = "+ abm10.abm10id)) : null;
+
         //Valores do Item - Entidade
         abm1003 = abm10 != null && abm10.abm10id != null ? getSession().get(Abm1003.class, Criterions.where("abm1003ent = " + abe01.abe01id + " AND abm1003cv = " + abm10.abm10id)) : null;
 
@@ -241,13 +248,12 @@ public class PedidoDeBonificacaoGeral extends FormulaBase {
         jsonAbe01 = abe01.abe01json != null ? abe01.abe01json : new TableMap();
         jsonAbm0101 = abm0101 != null && abm0101.abm0101json != null ? abm0101.abm0101json : new TableMap();
         jsonAbm1001_UF_Item = abm1001 != null && abm1001.abm1001json != null ? abm1001.abm1001json : new TableMap();
+        jsonAbm1002_Municipio_Item = abm1002 != null && abm1002.abm1002json != null ? abm1002.abm1002json : new TableMap();
         jsonAbm1003_Ent_Item = abm1003 != null && abm1003.abm1003json != null ? abm1003.abm1003json : new TableMap();
         jsonEaa0103 = eaa0103.eaa0103json != null ? eaa0103.eaa0103json : new TableMap();
         jsonAbe4001 = abe4001 != null ? abe4001.abe4001json : new TableMap();
         jsonAbe02 = abe02.abe02json != null ? abe02.abe02json : new TableMap();
         jsonAaj07clasTrib = aaj07.aaj07json != null ? aaj07.aaj07json : new TableMap();
-
-
 
         calcularItem();
 
@@ -352,7 +358,6 @@ public class PedidoDeBonificacaoGeral extends FormulaBase {
 
                 // Converte Qt.Documento para Qtde SCE
                 eaa0103.eaa0103qtUso = eaa0103.eaa0103qtComl
-//jsonEaa0103.getBigDecimal_Zero("qt_convertida") * jsonAbm0101.getBigDecimal_Zero("cvdnf");
 
 
                 // Peso Bruto
@@ -2049,27 +2054,31 @@ public class PedidoDeBonificacaoGeral extends FormulaBase {
         }
     }
     private void preencherCBenefItem(String grupo){
-        if(aaj10_cstIcms.aaj10codigo == "000" || aaj10_cstIcms.aaj10codigo == "010" || aaj10_cstIcms == null) return;
+        if(eaa0103.eaa0103cstIcms.aaj10codigo == "000" || eaa0103.eaa0103cstIcms.aaj10codigo == "010" || eaa0103.eaa0103cstIcms == null) eaa0103.eaa0103codBenef == null;
 
-        if(grupo == "LEITE"){
-            if(aaj10_cstIcms.aaj10codigo == "051"){
-                eaa0103.eaa0103codBenef = "SP053890";
-            }else if(aaj10_cstIcms.aaj10codigo == "040"){
-                eaa0103.eaa0103codBenef = "SP010840";
-            }
-        }else if(grupo.contains("IOGURTE") || grupo.contains("BAUNILHA") ){
-            if(aaj10_cstIcms.aaj10codigo == "040"){
-                eaa0103.eaa0103codBenef = "SP010840"
-            }else if(aaj10_cstIcms.aaj10codigo == "070"){
-                eaa0103.eaa0103codBenef = "SP020390"
-            }
-        }else{
-            if(aaj10_cstIcms.aaj10codigo == "040"){
-                eaa0103.eaa0103codBenef = "SP010840";
-            }else if(aaj10_cstIcms.aaj10codigo == "020"){
-                eaa0103.eaa0103codBenef = "SP020390"
-            }else if(aaj10_cstIcms.aaj10codigo == "070"){
-                eaa0103.eaa0103codBenef = "SP020390"
+        if(jsonAbm1002_Municipio_Item != null && jsonAbm1002_Municipio_Item.getString("cod_benef_fiscal") != null){
+            eaa0103.eaa0103codBenef = jsonAbm1002_Municipio_Item.getString("cod_benef_fiscal");
+        } else {
+            if(grupo == "LEITE"){
+                if(eaa0103.eaa0103cstIcms.aaj10codigo == "051"){
+                    eaa0103.eaa0103codBenef = "SP053890";
+                }else if(eaa0103.eaa0103cstIcms.aaj10codigo == "040"){
+                    eaa0103.eaa0103codBenef = "SP011030";
+                }
+            }else if(grupo.contains("IOGURTE") || grupo.contains("BAUNILHA") ){
+                if(eaa0103.eaa0103cstIcms.aaj10codigo == "040"){
+                    eaa0103.eaa0103codBenef = "SP010840"
+                }else if(eaa0103.eaa0103cstIcms.aaj10codigo == "070"){
+                    eaa0103.eaa0103codBenef = "SP020390"
+                }
+            }else{
+                if(eaa0103.eaa0103cstIcms.aaj10codigo == "040"){
+                    eaa0103.eaa0103codBenef = "SP010840";
+                }else if(eaa0103.eaa0103cstIcms.aaj10codigo == "020"){
+                    eaa0103.eaa0103codBenef = "SP020390"
+                }else if(eaa0103.eaa0103cstIcms.aaj10codigo == "070"){
+                    eaa0103.eaa0103codBenef = "SP020390"
+                }
             }
         }
     }

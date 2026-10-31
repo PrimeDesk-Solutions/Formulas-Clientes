@@ -659,29 +659,29 @@ public class FormulaGeral extends FormulaBase {
         }
     }
     private void preencherCBenefItem(String grupo){
-        if(eaa0103.eaa0103cstIcms.aaj10codigo == "000" || eaa0103.eaa0103cstIcms.aaj10codigo == "010" || eaa0103.eaa0103cstIcms == null) return;
+        if(eaa0103.eaa0103cstIcms.aaj10codigo == "000" || eaa0103.eaa0103cstIcms.aaj10codigo == "010" || eaa0103.eaa0103cstIcms == null) eaa0103.eaa0103codBenef == null;
 
         if(jsonAbm1002_Municipio_Item != null && jsonAbm1002_Municipio_Item.getString("cod_benef_fiscal") != null){
             eaa0103.eaa0103codBenef = jsonAbm1002_Municipio_Item.getString("cod_benef_fiscal");
         } else {
             if(grupo == "LEITE"){
-                if(aaj10_cstIcms.aaj10codigo == "051"){
+                if(eaa0103.eaa0103cstIcms.aaj10codigo == "051"){
                     eaa0103.eaa0103codBenef = "SP053890";
-                }else if(aaj10_cstIcms.aaj10codigo == "040"){
+                }else if(eaa0103.eaa0103cstIcms.aaj10codigo == "040"){
                     eaa0103.eaa0103codBenef = "SP011030";
                 }
             }else if(grupo.contains("IOGURTE") || grupo.contains("BAUNILHA") ){
-                if(aaj10_cstIcms.aaj10codigo == "040"){
+                if(eaa0103.eaa0103cstIcms.aaj10codigo == "040"){
                     eaa0103.eaa0103codBenef = "SP010840"
-                }else if(aaj10_cstIcms.aaj10codigo == "070"){
+                }else if(eaa0103.eaa0103cstIcms.aaj10codigo == "070"){
                     eaa0103.eaa0103codBenef = "SP020390"
                 }
             }else{
-                if(aaj10_cstIcms.aaj10codigo == "040"){
+                if(eaa0103.eaa0103cstIcms.aaj10codigo == "040"){
                     eaa0103.eaa0103codBenef = "SP010840";
-                }else if(aaj10_cstIcms.aaj10codigo == "020"){
+                }else if(eaa0103.eaa0103cstIcms.aaj10codigo == "020"){
                     eaa0103.eaa0103codBenef = "SP020390"
-                }else if(aaj10_cstIcms.aaj10codigo == "070"){
+                }else if(eaa0103.eaa0103cstIcms.aaj10codigo == "070"){
                     eaa0103.eaa0103codBenef = "SP020390"
                 }
             }
