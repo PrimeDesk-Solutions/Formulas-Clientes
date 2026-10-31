@@ -256,7 +256,7 @@ public class DocPadraoSaida extends FormulaBase {
             // Busca CST ICMS
             String cst = buscarCstICMS();
 
-            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cst));
+            if(eaa0103.eaa0103cstIcms == null) eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cst));
 
             // Quantidade Original
             if (jsonEaa0103.getBigDecimal_Zero("qt_original") == 0) {
@@ -290,11 +290,6 @@ public class DocPadraoSaida extends FormulaBase {
 
             // Calcula ICMS Itens
             calcularICMS(contribICMS);
-
-            // Preenche o CST de ICMS do Item
-            String cstIcms = buscarCstICMS();
-
-            eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cstIcms));
 
             // Calcula PIS
             calcularPIS();
@@ -516,16 +511,17 @@ public class DocPadraoSaida extends FormulaBase {
         if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1) {
             // BC ICMS
             jsonEaa0103.put("bc_icms", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest") + jsonEaa0103.getBigDecimal_Zero("seguro") + jsonEaa0103.getBigDecimal_Zero("outras_despesas"));
-            jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms"));
 
-            //if(contribICMS) jsonEaa0103.put("bc_icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") + jsonEaa0103.getBigDecimal_Zero("ipi")).round(2));
+            if(contribICMS) jsonEaa0103.put("bc_icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") + jsonEaa0103.getBigDecimal_Zero("ipi")).round(2));
+
+            jsonEaa0103.put("bc_icms", jsonEaa0103.getBigDecimal_Zero("bc_icms").round(2));
 
             // Calculo da Redução
-            if (jsonAbm1001_UF_Item.getBigDecimal_Zero("_reduc_bc_icms") > 0) {
-                jsonEaa0103.put("_reduc_bc_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("_reduc_bc_icms"));
-                vlrReducao = (jsonEaa0103.getBigDecimal_Zero("bc_icms") * (jsonAbm1001_UF_Item.getBigDecimal_Zero("_reduc_bc_icms") / 100)).round(2);
-                jsonEaa0103.put("bc_icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") - vlrReducao).round(2));
-            }
+            def aliqReducao = jsonEaa0103.getBigDecimal_Zero("_red_bc_icms_sped") > 0 ? jsonEaa0103.getBigDecimal_Zero("_red_bc_icms_sped") : jsonAbm1001_UF_Item.getBigDecimal_Zero("_red_bc_icms_sped") > 0 ? jsonAbm1001_UF_Item.getBigDecimal_Zero("_red_bc_icms_sped") : BigDecimal.ZERO;
+            jsonEaa0103.put("_red_bc_icms_sped", aliqReducao);
+            vlrReducao = (jsonEaa0103.getBigDecimal_Zero("bc_icms") * (aliqReducao / 100)).round(2);
+            jsonEaa0103.put("bc_icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") - vlrReducao).round(2));
+
 
             // Aliquota de ICMS
             if (jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms") > 0) {
@@ -536,7 +532,7 @@ public class DocPadraoSaida extends FormulaBase {
             jsonEaa0103.put("icms", (jsonEaa0103.getBigDecimal_Zero("bc_icms") * (jsonEaa0103.getBigDecimal_Zero("aliq_icms") / 100)).round(2))
 
             // ICMS Isento
-            if (jsonEaa0103.getBigDecimal_Zero("_reduc_bc_icms") <= 0) {
+            if (jsonEaa0103.getBigDecimal_Zero("_red_bc_icms_sped") <= 0) {
                 jsonEaa0103.put("icms_isento", new BigDecimal(0));
 
             } else {
