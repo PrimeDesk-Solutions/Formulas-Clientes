@@ -245,7 +245,7 @@ public class Doc_Saida_Servico extends FormulaBase {
             eaa0103.eaa0103qtComl = new BigDecimal(1);
 
             // % PIS/COFINS/CSLL retido do cadastro do item (antigo ab50vlr3)
-            jsonEaa0103.put("pis_cofins_csll", jsonAbm0101.getBigDecimal_Zero("pis_cofins_csll"));
+            jsonEaa0103.put("aliq_pis_cofins_csll", jsonAbm0101.getBigDecimal_Zero("aliq_pis_cofins_csll"));
 
             calcularServico();
 
