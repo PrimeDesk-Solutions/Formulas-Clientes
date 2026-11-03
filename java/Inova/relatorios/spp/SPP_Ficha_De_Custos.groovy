@@ -34,7 +34,7 @@ public class SPP_Ficha_De_Custos extends RelatorioBase {
     @Override
     public DadosParaDownload executar() {
         List<Long> idsItens = getListLong("itens");
-        Integer quantidade = getBigDecimal("quantidade");
+        BigDecimal quantidade = getBigDecimal("quantidade");
         String nomeCampoPreco = getString("precoItem");
         boolean chkPrecoItem = getBoolean("chkPrecoItem");
         Integer impressao = getInteger("impressao");
@@ -42,33 +42,35 @@ public class SPP_Ficha_De_Custos extends RelatorioBase {
         Integer formulaFin = getInteger("formulaFin");
         Integer optionPrecoItem = getInteger("optionPrecoItem");
         LocalDate dtPrecoItem = getLocalDate("dataPreco");
-        List<TableMap> dados = new ArrayList();
         List<TableMap> listProcessos = new ArrayList();
         List<TableMap> tmComponentes = new ArrayList();
         List<TableMap> tmAtividades = new ArrayList();
         List<TableMap> tmRecurso = new ArrayList();
         String campoPrecoItem = ""
 
-        List<TableMap> listComposicoes = buscarComposicoes(idsItens, formulaIni.toString(), formulaFin.toString());
+        Map<Long, BigDecimal> mapValorItem = new HashMap<>();
 
         if(chkPrecoItem) campoPrecoItem = buscarCampoPrecoItem(nomeCampoPreco);
 
         if(impressao == 1) {
-            List<TableMap> listRegistrosGeral = buscarDadosGerais(idsItens, formulaIni.toString(), formulaFin.toString());
+            List<TableMap> listRegistrosGeral = buscarDadosGerais(idsItens, formulaIni?.toString(), formulaFin?.toString());
 
             for(registro in listRegistrosGeral){
                 Long idItem = registro.getLong("idComponente")
-                BigDecimal valorItem = buscarValorItem(idItem, optionPrecoItem,dtPrecoItem, campoPrecoItem);
+                BigDecimal valorItem = buscarValorItem(idItem, optionPrecoItem,dtPrecoItem, campoPrecoItem, mapValorItem);
 
                 registro.put("valorItem", valorItem);
                 registro.put("qtdFinal",registro.getBigDecimal_Zero("qtd") * quantidade );
                 registro.put("totalItem",registro.getBigDecimal_Zero("valorItem") * registro.getBigDecimal_Zero("qtdFinal") )
             }
-            return gerarXLSX("SPP_FichaEngenhariaProdutos_Excel",listRegistrosGeral)
+            return gerarXLSX("SPP_Ficha_De_Custos_Excel",listRegistrosGeral)
         }
+
+        List<TableMap> listComposicoes = buscarComposicoes(idsItens, formulaIni?.toString(), formulaFin?.toString());
 
         for(tmComposicao in listComposicoes ){
             BigDecimal totComponentes = BigDecimal.ZERO;
+            Map<String, BigDecimal> mapTotalProcesso = new HashMap<>();
             Long idComposicao = tmComposicao.getLong("abp20id");
             tmComposicao.put("key",idComposicao);
             tmComposicao.put("quantidade",quantidade)
@@ -90,9 +92,10 @@ public class SPP_Ficha_De_Custos extends RelatorioBase {
             if(componentes != null && componentes.size() > 0){
                 for(componente in componentes){
                     String codProcesso = componente.getString("abp10codigo");
-                    def total = obterTotalGeralPorProcesso(idComposicao,codProcesso);
+                    if(!mapTotalProcesso.containsKey(codProcesso)) mapTotalProcesso.put(codProcesso, obterTotalGeralPorProcesso(idComposicao,codProcesso));
+                    def total = mapTotalProcesso.get(codProcesso);
                     Long idItem = componente.getLong("abm01id")
-                    BigDecimal valorItem = buscarValorItem(idItem, optionPrecoItem,dtPrecoItem, campoPrecoItem);
+                    BigDecimal valorItem = buscarValorItem(idItem, optionPrecoItem,dtPrecoItem, campoPrecoItem, mapValorItem);
                     componente.put("valorItem", valorItem)
                     componente.put("key",idComposicao);
                     componente.put("qtdFinal",componente.getBigDecimal_Zero("qtd") * quantidade );
@@ -130,7 +133,10 @@ public class SPP_Ficha_De_Custos extends RelatorioBase {
 
         }
 
-        params.put("empresa",obterEmpresaAtiva().aac10codigo+"-"+obterEmpresaAtiva().aac10na)
+        mapValorItem.clear();
+
+        def empresa = obterEmpresaAtiva();
+        params.put("empresa",empresa.aac10codigo+"-"+empresa.aac10na)
 
 
         def sub1 = chkPrecoItem ? carregarArquivoRelatorio("SPP_Ficha_De_Custos_s1_Unitario") : carregarArquivoRelatorio("SPP_Ficha_De_Custos_s1")
@@ -150,10 +156,10 @@ public class SPP_Ficha_De_Custos extends RelatorioBase {
     }
 
     private List<TableMap> buscarComposicoes(List<Long>idsItens, String formulaIni, String formulaFin){
-        String whereItens = idsItens != null && idsItens.size() > 0 ? " WHERE abp20item in (:idsItens) " : "";
+        String whereItens = idsItens != null && idsItens.size() > 0 ? " AND abp20item in (:idsItens) " : "";
         String whereFormula = formulaIni != null && formulaFin != null ? " AND abp20bomCodigo BETWEEN :formulaIni AND :formulaFin " :
-                              formulaIni != null && formulaIni == null ? "AND abp20bomCodigo >= :formulaIni " :
-                              formulaIni == null && formulaIni != null ? "AND abp20bomCodigo <= :formulaIni " : "";
+                              formulaIni != null && formulaFin == null ? " AND abp20bomCodigo >= :formulaIni " :
+                              formulaIni == null && formulaFin != null ? " AND abp20bomCodigo <= :formulaFin " : "";
         String whereDI = " AND abp20di IS NULL";
         Parametro parametroItens = idsItens != null && idsItens.size() > 0 ? Parametro.criar("idsItens",idsItens) : null;
         Parametro parametroFormulaIni = formulaIni != null ? Parametro.criar("formulaIni",formulaIni) : null;
@@ -168,6 +174,7 @@ public class SPP_Ficha_De_Custos extends RelatorioBase {
                 " INNER JOIN abm0101 ON abm0101item = abm01id "+
                 " LEFT JOIN abm13 ON abm13id = abm0101comercial "+
                 " LEFT JOIN aam06 AS umv ON umv.aam06id = abm13umv "+
+                " WHERE TRUE " +
                 whereItens +
                 whereFormula +
                 whereDI +
@@ -226,10 +233,10 @@ public class SPP_Ficha_De_Custos extends RelatorioBase {
     }
 
     private List<TableMap> buscarDadosGerais(List<Long> idsItens, String formulaIni, String formulaFin){
-        String whereItens = idsItens != null && idsItens.size() > 0 ? "WHERE abp20item IN (:idsItens) " : "";
+        String whereItens = idsItens != null && idsItens.size() > 0 ? " AND abp20item IN (:idsItens) " : "";
         String whereFormula = formulaIni != null && formulaFin != null ? " AND abp20bomCodigo BETWEEN :formulaIni AND :formulaFin " :
-                                formulaIni != null && formulaIni == null ? "AND abp20bomCodigo >= :formulaIni " :
-                                formulaIni == null && formulaIni != null ? "AND abp20bomCodigo <= :formulaIni " : "";
+                                formulaIni != null && formulaFin == null ? " AND abp20bomCodigo >= :formulaIni " :
+                                formulaIni == null && formulaFin != null ? " AND abp20bomCodigo <= :formulaFin " : "";
 
         Parametro parametroItens = idsItens != null && idsItens.size() > 0 ? Parametro.criar("idsItens",idsItens) : null;
         Parametro parametroFormulaIni = formulaIni != null ? Parametro.criar("formulaIni",formulaIni) : null;
@@ -258,6 +265,7 @@ public class SPP_Ficha_De_Custos extends RelatorioBase {
                 " INNER JOIN abp1001 ON abp1001proc = abp10id "+
                 " LEFT JOIN abp01 ON abp01id = abp1001ativ "+
                 " LEFT JOIN abb20 ON abb20id = abp01bem "+
+                " WHERE TRUE " +
                 whereItens +
                 whereFormula +
                 " ORDER BY  itemComp.abm01codigo,abp20bomcodigo, abp20011seq,abp10codigo,abp1001seq ";
@@ -301,7 +309,9 @@ public class SPP_Ficha_De_Custos extends RelatorioBase {
                 break;
         }
     }
-    private BigDecimal buscarValorItem(Long idItem, optionPrecoItem, LocalDate dtPrecoItem, String campoPrecoItem){
+    private BigDecimal buscarValorItem(Long idItem, optionPrecoItem, LocalDate dtPrecoItem, String campoPrecoItem, Map<Long, BigDecimal> mapValorItem){
+        if(mapValorItem.containsKey(idItem)) return mapValorItem.get(idItem);
+
         BigDecimal precoItem = BigDecimal.ZERO;
 
         if(optionPrecoItem == 0){
@@ -309,6 +319,8 @@ public class SPP_Ficha_De_Custos extends RelatorioBase {
         } else {
             precoItem = buscarPrecoItemNaData(idItem, campoPrecoItem, dtPrecoItem);
         }
+
+        mapValorItem.put(idItem, precoItem);
 
         return precoItem;
     }
@@ -318,11 +330,12 @@ public class SPP_Ficha_De_Custos extends RelatorioBase {
         return getAcessoAoBanco().obterBigDecimal(sql, Parametro.criar("idItem", idItem));
     }
     private BigDecimal buscarPrecoItemNaData(Long idItem, String campoPrecoItem, LocalDate dtPrecoItem){
-        String sql = "SELECT bcc01id, bcc01data, CAST(bcc01json ->> '" + campoPrecoItem + "' AS NUMERIC(18,6)) AS valorItem " +
+        String sql = "SELECT CAST(bcc01json ->> '" + campoPrecoItem + "' AS NUMERIC(18,6)) AS valorItem " +
                         " FROM bcc01 " +
                         " WHERE bcc01item = :idItem " +
                         " AND bcc01data <= :dtPrecoItem " +
-                        " ORDER BY bcc01id DESC, bcc01data DESC "
+                        " ORDER BY bcc01id DESC, bcc01data DESC " +
+                        " LIMIT 1 "
 
         TableMap tmEstoque = getSession().createQuery(sql)
                                 .setParameter("idItem", idItem)
