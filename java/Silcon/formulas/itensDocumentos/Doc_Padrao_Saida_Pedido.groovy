@@ -399,14 +399,16 @@ public class Doc_Padrao_Saida_Pedido extends FormulaBase {
         }
     }
     private void definirRepresentanteItens(){
-        Long idUser = obterUsuarioLogado().getAab10id();
+        def user = obterUsuarioLogado();
+        String nomeUser = user.getAab10user();
+        if(nomeUser != "RICARDO" && nomeUser != "JOAO") return;
+        Long idUser = user.getAab10id();
         Abe01 abe01rep = buscarIdEntidadeRepresentante(idUser);
 
         jsonEaa0103.put("cod_representante", abe01rep != null ? abe01rep.abe01codigo : null);
         jsonEaa0103.put("nome_representante", abe01rep != null ? abe01rep.abe01nome : null);
         jsonEaa0103.put("id_representante", abe01rep != null ? abe01rep.abe01id : null);
     }
-
     private Abe01 buscarIdEntidadeRepresentante(Long userLogado){
         return getSession().createCriteria(Abe01.class)
                 .addFields("abe01id, abe01codigo, abe01nome")

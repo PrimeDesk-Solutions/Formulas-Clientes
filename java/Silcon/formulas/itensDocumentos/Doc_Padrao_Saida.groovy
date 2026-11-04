@@ -300,6 +300,8 @@ public class Doc_Padrao_Saida extends FormulaBase {
 
         if (eaa0103.eaa0103qtComl > 0) {
 
+            definirRepresentanteItens();
+
             eaa0102.eaa0102modFrete = 9;
 
             //Define se a entidade é ou não contribuinte de ICMS
@@ -366,9 +368,9 @@ public class Doc_Padrao_Saida extends FormulaBase {
 
             // Total do Documento = Total do item
             eaa0103.eaa0103totDoc = (eaa0103.eaa0103total +
-                                    jsonEaa0103.getBigDecimal_Zero("acrescimo_inc_") +
-                                    jsonEaa0103.getBigDecimal_Zero("frete_dest") -
-                                    jsonEaa0103.getBigDecimal_Zero("desconto")).round(2);
+                    jsonEaa0103.getBigDecimal_Zero("acrescimo_inc_") +
+                    jsonEaa0103.getBigDecimal_Zero("frete_dest") -
+                    jsonEaa0103.getBigDecimal_Zero("desconto")).round(2);
 
             // Calcula ICMS Itens
             calcularICMS(contribICMS);
@@ -412,8 +414,27 @@ public class Doc_Padrao_Saida extends FormulaBase {
             preencherSPEDS();
 
         }
-
     }
+    private void definirRepresentanteItens(){
+        def user = obterUsuarioLogado();
+        String nomeUser = user.getAab10user();
+        if(nomeUser != "RICARDO" && nomeUser != "JOAO") return;
+        Long idUser = user.getAab10id();
+        Abe01 abe01rep = buscarIdEntidadeRepresentante(idUser);
+
+        jsonEaa0103.put("cod_representante", abe01rep != null ? abe01rep.abe01codigo : null);
+        jsonEaa0103.put("nome_representante", abe01rep != null ? abe01rep.abe01nome : null);
+        jsonEaa0103.put("id_representante", abe01rep != null ? abe01rep.abe01id : null);
+    }
+    private Abe01 buscarIdEntidadeRepresentante(Long userLogado){
+        return getSession().createCriteria(Abe01.class)
+                .addFields("abe01id, abe01codigo, abe01nome")
+                .addJoin(Joins.join("Abe05", "abe05ent = abe01id"))
+                .addJoin(Joins.join("Aab10", "aab10id = abe05user"))
+                .addWhere(Criterions.eq("aab10id", userLogado)).setMaxResults(1)
+                .get(ColumnType.ENTITY);
+    }
+
     private void definirPrecoUnitarioItem(){
         if(eaa01.eaa01tp != null){
             if(jsonAbe4001 != null){
@@ -972,6 +993,3 @@ public class Doc_Padrao_Saida extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
