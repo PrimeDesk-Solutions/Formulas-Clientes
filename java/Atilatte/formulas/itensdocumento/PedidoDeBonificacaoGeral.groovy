@@ -1547,6 +1547,21 @@ public class PedidoDeBonificacaoGeral extends FormulaBase {
                 jsonEaa0103.put("bc_comissao", eaa0103.eaa0103total - vlrtxdesc);
 
 
+                if(dentroEstado){
+                    jsonEaa0103.put("bc_icms",new BigDecimal(0));
+                    jsonEaa0103.put("_red_bc_icms",new BigDecimal(0));
+                    jsonEaa0103.put("_icms",new BigDecimal(0));
+                    jsonEaa0103.put("icms", new BigDecimal(0));
+                    jsonEaa0103.put("icms_outras",new BigDecimal(0));
+                    jsonEaa0103.put("bc_icms", new BigDecimal(0) );
+                    jsonEaa0103.put("bc_icms_st", new BigDecimal(0) );
+                    jsonEaa0103.put("_icms_st", new BigDecimal(0));
+                    jsonEaa0103.put("icms_st", new BigDecimal(0) );
+                    jsonEaa0103.put("_red_bc_icms", new BigDecimal(0));
+                    jsonEaa0103.put("icms_isento", new BigDecimal(0));
+                }
+
+
                 //*******Calculo para SPED ICMS*******
 
                 //BC ICMS SPED = BC ICMS
