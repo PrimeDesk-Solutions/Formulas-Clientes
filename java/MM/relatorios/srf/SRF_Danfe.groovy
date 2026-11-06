@@ -92,12 +92,14 @@ public class SRF_Danfe extends RelatorioBase {
 
 		params.put("empresaAtiva", obterEmpresaAtiva().getAac10id());
 		
+		String user = obterUsuarioLogado().getAab10user();
+
 		// Cria os sub-relatórios
 		TableMapDataSource dsPrincipal = new TableMapDataSource(dados);
 		dsPrincipal.addSubDataSource("dsItens", itens, "key", "key");
-		adicionarParametro("StreamSub1", carregarArquivoRelatorio("SRF_Danfe_S1"));
+		adicionarParametro("StreamSub1", user != "MASTER2" ? carregarArquivoRelatorio("SRF_Danfe_S1") : carregarArquivoRelatorio("SRF_Danfe_S1_Reforma") );
 		
-		return gerarPDF("SRF_Danfe", dsPrincipal);
+		return user != "MASTER2" ? gerarPDF("SRF_Danfe", dsPrincipal) : gerarPDF("SRF_Danfe_Reforma", dsPrincipal) ;
 	}
 	
 	private List<Long> buscarIdsDocumentos(List<Long> tipo, Integer numeroInicial, Integer numeroFinal, List<Long> entidade, LocalDate[] emissao, LocalDate[] entraSai) {
@@ -292,6 +294,11 @@ public class SRF_Danfe extends RelatorioBase {
 		return getSession().createQuery(" SELECT distinct COALESCE(SUM(eaa01038qt), eaa0103qtComl) as eaa0103qtComl,eaa0103unit, ROUND(COALESCE(SUM(eaa01038qt), eaa0103qtComl) * eaa0103unit,6) as eaa0103total, eaa0103seq as seq, eaa0103codigo, eaa0103descr, abg01codigo AS eaa0103ncm_codigo, aaj10codigo AS eaa0103cstIcms_codigo, aam06codigo as eaa0103umComl_codigo, aaj15codigo AS eaa0103cfop_codigo,  ",
 				" CAST(eaa0103json ->>'bc_icms' AS numeric(18,6)) AS bc_icms, CAST(eaa0103json ->>'icms' AS numeric(18,6)) AS vlr_icms, CAST(eaa0103json ->>'ipi' AS numeric(18,6)) AS vlr_ipi,CAST(eaa0103json ->>'aliq_icms' AS numeric(18,2)) AS aliq_icms, CAST(eaa0103json ->>'ipi' AS numeric(18,2)) AS vlr_ipi,CAST(eaa0103json ->>'aliq_ipi' AS numeric(18,2)) AS aliq_ipi, ",
 				" CAST(eaa0103json ->>'qt_convertida' AS numeric(18,2)) AS qtConvertida,CAST(eaa0103json ->>'umv' AS character varying(3)) AS umv,CAST(eaa0103json ->>'unitario_conv' AS numeric(18,2)) AS unitConv,CAST(eaa0103json ->>'peso_liquido' AS numeric(18,2)) AS pesoLiq,CAST(eaa0103json ->>'desconto' AS numeric(18,6)) AS desconto, eaa0103pcNum as pedCliente, ",
+				" CAST(eaa0103json ->>'vlr_cbs' AS numeric(18,2)) AS vlr_cbs, CAST(eaa0103json ->>'vlr_ibsuf' AS numeric(18,2)) AS vlr_ibsuf, CAST(eaa0103json ->>'vlr_ibsmun' AS numeric(18,2)) AS vlr_ibsmun, ",
+				" CAST(eaa0103json ->>'imposto_seletivo' AS numeric(18,2)) AS imposto_seletivo, CAST(eaa0103json ->>'cbs_ibs_bc' AS numeric(18,2)) AS cbs_ibs_bc, ",
+				" CAST(eaa0103json ->>'bc_imposto_seletivo' AS numeric(18,2)) AS bc_imposto_seletivo, CAST(eaa0103json ->>'bc_ipi' AS numeric(18,2)) AS bc_ipi, ",
+				" CAST(eaa0103json ->>'ibs_uf_aliq' AS numeric(18,2)) AS ibs_uf_aliq, CAST(eaa0103json ->>'ibs_mun_aliq' AS numeric(18,2)) AS ibs_mun_aliq, CAST(eaa0103json ->>'cbs_aliq' AS numeric(18,2)) AS cbs_aliq, ",
+				" CAST(eaa0103json ->>'aliq_imposto_seletivo' AS numeric(18,2)) AS aliq_imposto_seletivo, ",
 				" abb01num as numDocRemessa "+
 						" FROM eaa0103 ",
 				" LEFT JOIN abg01 ON abg01id = eaa0103ncm ",
@@ -303,7 +310,12 @@ public class SRF_Danfe extends RelatorioBase {
 						" WHERE eaa0103doc = :id ",
 				"GROUP BY eaa0103qtComl, eaa0103unit, eaa0103total, eaa0103seq, eaa0103codigo, eaa0103descr, abg01codigo, aaj10codigo, aam06codigo, aaj15codigo, ",
 				"CAST(eaa0103json ->>'bc_icms' AS numeric(18,6)), CAST(eaa0103json ->>'icms' AS numeric(18,6)), CAST(eaa0103json ->>'ipi' AS numeric(18,6)),CAST(eaa0103json ->>'aliq_icms' AS numeric(18,2)), CAST(eaa0103json ->>'ipi' AS numeric(18,2)),CAST(eaa0103json ->>'aliq_ipi' AS numeric(18,2)), ", 
-				"CAST(eaa0103json ->>'qt_convertida' AS numeric(18,2)),CAST(eaa0103json ->>'umv' AS character varying(3)),CAST(eaa0103json ->>'unitario_conv' AS numeric(18,2)),CAST(eaa0103json ->>'peso_liquido' AS numeric(18,2)),CAST(eaa0103json ->>'desconto' AS numeric(18,6)), eaa0103pcNum, abb01num ",
+				"CAST(eaa0103json ->>'qt_convertida' AS numeric(18,2)),CAST(eaa0103json ->>'umv' AS character varying(3)),CAST(eaa0103json ->>'unitario_conv' AS numeric(18,2)),CAST(eaa0103json ->>'peso_liquido' AS numeric(18,2)),CAST(eaa0103json ->>'desconto' AS numeric(18,6)), eaa0103pcNum, abb01num, ",
+				" CAST(eaa0103json ->>'vlr_cbs' AS numeric(18,2)), CAST(eaa0103json ->>'vlr_ibsuf' AS numeric(18,2)), CAST(eaa0103json ->>'vlr_ibsmun' AS numeric(18,2)), ",
+				" CAST(eaa0103json ->>'imposto_seletivo' AS numeric(18,2)), CAST(eaa0103json ->>'cbs_ibs_bc' AS numeric(18,2)), ",
+				" CAST(eaa0103json ->>'bc_imposto_seletivo' AS numeric(18,2)), CAST(eaa0103json ->>'bc_ipi' AS numeric(18,2)), ",
+				" CAST(eaa0103json ->>'ibs_uf_aliq' AS numeric(18,2)), CAST(eaa0103json ->>'ibs_mun_aliq' AS numeric(18,2)), CAST(eaa0103json ->>'cbs_aliq' AS numeric(18,2)), ",
+				" CAST(eaa0103json ->>'aliq_imposto_seletivo' AS numeric(18,2)) ",
 				" ORDER BY eaa0103seq").setParameters("id",id)
 				.getListTableMap();
 
