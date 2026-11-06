@@ -163,7 +163,8 @@ class NFe_Reforma extends FormulaBase {
         ide.addNode("serie", eaa01.eaa01central.abb01serie == null ? 0 : eaa01.eaa01central.abb01serie.length() <= 3 ? eaa01.eaa01central.abb01serie : eaa01.eaa01central.abb01serie.substring(0, 3), true);
         ide.addNode("nNF", eaa01.eaa01central.abb01num, true);
         ide.addNode("dhEmi", NFeUtils.dataFormatoUTC(eaa01.eaa01central.abb01data, eaa01.eaa01central.abb01operHora, empresa.aac10fusoHorario), true);
-        ide.addNode("dhSaiEnt", eaa01.eaa01esData == null ? null : NFeUtils.dataFormatoUTC(eaa01.eaa01esData, eaa01.eaa01esHora != null ? eaa01.eaa01esHora : eaa01.eaa01central.abb01operHora, empresa.aac10fusoHorario), false);
+        ide.addNode("dhSaiEnt", NFeUtils.dataFormatoUTC(eaa01.eaa01central.abb01data, eaa01.eaa01central.abb01operHora, empresa.aac10fusoHorario), true);
+        //ide.addNode("dhSaiEnt", eaa01.eaa01esData == null ? null : NFeUtils.dataFormatoUTC(eaa01.eaa01esData, eaa01.eaa01esHora != null ? eaa01.eaa01esHora : eaa01.eaa01central.abb01operHora, empresa.aac10fusoHorario), false);
         if(eaa01.eaa01dtEntregaPrev != null) ide.addNode("dPrevEntrega", eaa01.eaa01dtEntregaPrev  == null ? null : DateUtils.formatDate(eaa01.eaa01dtEntregaPrev, "yyyy-MM-dd"));
         ide.addNode("tpNF", eaa01.eaa01esMov, true);
 
@@ -177,6 +178,7 @@ class NFe_Reforma extends FormulaBase {
         }else {																//Exterior
             idDest = 3;
         }
+
 //		if(eaa0102.eaa0102consPres != 1){
 //			Eaa0103 primeiroItem = getAcessoAoBanco().buscarRegistroUnicoByCriterion("Eaa0103", Criterions.eq("eaa0103doc", eaa01.eaa01id), Criterions.eq("eaa0103seq", 1));
 //			Aag02 uf = getAcessoAoBanco().buscarRegistroUnicoById("Aag02", endPrincipal.eaa0101municipio.aag0201uf.aag02id);
@@ -188,9 +190,10 @@ class NFe_Reforma extends FormulaBase {
 //			}
 //		}
 
+        Aag0201 aag0201 = eaa01.eaa01municConsumo == null ? null : getAcessoAoBanco().buscarRegistroUnicoById("Aag0201", eaa01.eaa01municConsumo.aag0201id);
         ide.addNode("idDest", idDest, true);
         ide.addNode("cMunFG", empresa.aac10municipio.aag0201ibge, true);
-        ide.addNode("cMunFGIBS", eaa01.eaa01municConsumo == null ? null : eaa01.eaa01municConsumo.aag0201ibge, false);
+        ide.addNode("cMunFGIBS", aag0201 == null ? null : aag0201.aag0201ibge, false);
         ide.addNode("tpImp", 0, true);
         ide.addNode("tpEmis", formaEmissao, true);
         ide.addNode("cDV", chaveNfe.substring(43), true);
@@ -532,13 +535,15 @@ class NFe_Reforma extends FormulaBase {
             /** dup - Duplicata (Y07) */
             Integer nDup = 1;
             for(Eaa0113 eaa0113 : eaa0113s) {
-                if(!eaa0113.eaa0113clasParc.equals(0)) continue;
-                if(eaa0113.eaa0113valor.compareTo(new BigDecimal(0)) < 0) continue;
-                ElementXml dup = cobr.addNode("dup");
-                dup.addNode("nDup", StringUtils.ajustString(nDup, 3, '0', true), false);
-                dup.addNode("dVenc", NFeUtils.formatarData(eaa0113.eaa0113dtVctoN, "yyyy-MM-dd"), false);
-                dup.addNode("vDup", NFeUtils.formatarDecimal(eaa0113.eaa0113valor, 2, false), true);
-                nDup++;
+                if (eaa0113.eaa0113dtVctoN != eaa01.eaa01central.abb01data || (eaa0113.eaa0113dtVctoN == eaa01.eaa01central.abb01data && eaa0113s.size() > 1)) {
+                    if(!eaa0113.eaa0113clasParc.equals(0)) continue;
+                    if(eaa0113.eaa0113valor.compareTo(new BigDecimal(0)) < 0) continue;
+                    ElementXml dup = cobr.addNode("dup");
+                    dup.addNode("nDup", StringUtils.ajustString(nDup, 3, '0', true), false);
+                    dup.addNode("dVenc", NFeUtils.formatarData(eaa0113.eaa0113dtVctoN, "yyyy-MM-dd"), false);
+                    dup.addNode("vDup", NFeUtils.formatarDecimal(eaa0113.eaa0113valor, 2, false), true);
+                    nDup++;
+                }
             }
         }
 
@@ -771,10 +776,10 @@ class NFe_Reforma extends FormulaBase {
                     indIEDest = 2;
                 }
             }
-            if(!isProducao) indIEDest = 2;
+            if(!isProducao) indIEDest = 9;
 
             dest.addNode("indIEDest", indIEDest, true);
-            dest.addNode("IE", indIEDest == 2 ? null : IE, false);
+            dest.addNode("IE", indIEDest == 9 ? null : IE, false);
 
             dest.addNode("ISUF", eaa0102.eaa0102suframa == null ? null : StringUtils.extractNumbers(eaa0102.eaa0102suframa), false);
             dest.addNode("IM", eaa0102.eaa0102im == null ? null : NFeUtils.formatarIE(eaa0102.eaa0102im), false);
@@ -820,48 +825,50 @@ class NFe_Reforma extends FormulaBase {
             retirada.addNode("IE", endSaida.eaa0101ie == null ? null : StringUtils.extractNumbers(endSaida.eaa0101ie), false);
         }
 
-        /** entrega - Identificação do local de entrega (G01) */
-        if(endEntrega != null) {
-            Aag02 aag02 = getAcessoAoBanco().buscarRegistroUnicoById("Aag02", endEntrega.eaa0101municipio.aag0201uf.aag02id);
-            entrega = infNfe.addNode("entrega");
-            if(endEntrega.eaa0101ni != null) {
-                if(endEntrega.eaa0101ti == 0) {
-                    entrega.addNode("CNPJ", StringUtils.ajustString(StringUtils.extractNumbers(endEntrega.eaa0101ni), 14), true);
+        if(isProducao){
+            /** entrega - Identificação do local de entrega (G01) */
+            if(endEntrega != null) {
+                Aag02 aag02 = getAcessoAoBanco().buscarRegistroUnicoById("Aag02", endEntrega.eaa0101municipio.aag0201uf.aag02id);
+                entrega = infNfe.addNode("entrega");
+                if(endEntrega.eaa0101ni != null) {
+                    if(endEntrega.eaa0101ti == 0) {
+                        entrega.addNode("CNPJ", StringUtils.ajustString(StringUtils.extractNumbers(endEntrega.eaa0101ni), 14), true);
+                    }else {
+                        entrega.addNode("CPF", StringUtils.ajustString(StringUtils.extractNumbers(endEntrega.eaa0101ni), 11), true);
+                    }
                 }else {
-                    entrega.addNode("CPF", StringUtils.ajustString(StringUtils.extractNumbers(endEntrega.eaa0101ni), 11), true);
+                    entrega.addNode("CNPJ");
                 }
-            }else {
-                entrega.addNode("CNPJ");
+
+                entrega.addNode("xNome", endEntrega.eaa0101rs, false, 60);
+                entrega.addNode("xLgr", endEntrega.eaa0101endereco, true, 60);
+                entrega.addNode("nro", endEntrega.eaa0101numero, true);
+                entrega.addNode("xCpl", endEntrega.eaa0101complem, false, 60);
+                entrega.addNode("xBairro", endEntrega.eaa0101bairro, true, 60);
+
+                if(aag02.aag02uf.equalsIgnoreCase("EX")) {
+                    entrega.addNode("cMun", 9999999, true);
+                    entrega.addNode("xMun", "EXTERIOR", true);
+                    entrega.addNode("UF", "EX", true);
+                }else {
+                    entrega.addNode("cMun", endEntrega.eaa0101municipio.aag0201ibge, true);
+                    entrega.addNode("xMun", endEntrega.eaa0101municipio.aag0201nome, true, 60);
+                    entrega.addNode("UF", aag02.aag02uf, true);
+                }
+
+                entrega.addNode("CEP", endEntrega.eaa0101cep, false);
+                entrega.addNode("fone", NFeUtils.ajustarFone(endEntrega.eaa0101ddd, endEntrega.eaa0101fone), false);
+                entrega.addNode("email", endEntrega.eaa0101eMail, false, 60);
+
+                entrega.addNode("IE", endEntrega.eaa0101ie == null ? null : NFeUtils.formatarIE(endEntrega.eaa0101ie), false);
             }
-
-            entrega.addNode("xNome", endEntrega.eaa0101rs, false, 60);
-            entrega.addNode("xLgr", endEntrega.eaa0101endereco, true, 60);
-            entrega.addNode("nro", endEntrega.eaa0101numero, true);
-            entrega.addNode("xCpl", endEntrega.eaa0101complem, false, 60);
-            entrega.addNode("xBairro", endEntrega.eaa0101bairro, true, 60);
-
-            if(aag02.aag02uf.equalsIgnoreCase("EX")) {
-                entrega.addNode("cMun", 9999999, true);
-                entrega.addNode("xMun", "EXTERIOR", true);
-                entrega.addNode("UF", "EX", true);
-            }else {
-                entrega.addNode("cMun", endEntrega.eaa0101municipio.aag0201ibge, true);
-                entrega.addNode("xMun", endEntrega.eaa0101municipio.aag0201nome, true, 60);
-                entrega.addNode("UF", aag02.aag02uf, true);
-            }
-
-            entrega.addNode("CEP", endEntrega.eaa0101cep, false);
-            entrega.addNode("fone", NFeUtils.ajustarFone(endEntrega.eaa0101ddd, endEntrega.eaa0101fone), false);
-            entrega.addNode("email", endEntrega.eaa0101eMail, false, 60);
-
-            entrega.addNode("IE", endEntrega.eaa0101ie == null ? null : NFeUtils.formatarIE(endEntrega.eaa0101ie), false);
         }
     }
 
 
     private void item() {
         /** autXML - Autorização para obter XML (GA) */
-        String niDest = StringUtils.extractNumbers(endPrincipal.eaa0101ni);
+        String niDest = StringUtils.extractNumbers(eaa0102.eaa0102ni);
         if(empresa.aac10cCnpj != null && !niDest.equals(StringUtils.extractNumbers(empresa.aac10cCnpj))) {
             autXML = infNfe.addNode("autXML");
             autXML.addNode("CNPJ", StringUtils.ajustString(StringUtils.extractNumbers(empresa.aac10cCnpj), 14), true);
@@ -927,7 +934,7 @@ class NFe_Reforma extends FormulaBase {
                 prod.addNode("CNPJFab", StringUtils.extractNumbers(eaa0103.eaa0103cnpjFabr), false);
             }
             prod.addNode("cBenef", eaa0103.eaa0103codBenef, false);
-            if(eaa0103.eaa0103credPresIbsZFM != 0) prod.addNode("tpCredPresIBSZFM", eaa0103.eaa0103credPresIbsZFM, false);
+            if(eaa0103.eaa0103credPresIbsZFM != null && eaa0103.eaa0103credPresIbsZFM != 0) prod.addNode("tpCredPresIBSZFM", eaa0103.eaa0103credPresIbsZFM, false);
             if(abm01.abm01tipo != 2) {
                 prod.addNode("EXTIPI", ncm == null ? null : abg01.abg01codigo.indexOf("/") == -1 ? null : abg01.abg01codigo.substring(abg01.abg01codigo.indexOf("/") + 1,abg01.abg01codigo.length()), false);
             }
@@ -1205,7 +1212,7 @@ class NFe_Reforma extends FormulaBase {
                         String orig = cstIcms.substring(0, 1);
                         String cst = cstIcms.substring(1);
 
-                        if((cst.equals("41") || cst.equals("60")) && getCampo("245.20-N26","vBCSTRet") != null && !jsonEaa0103.getBigDecimal(getCampo("245.20-N26","vBCSTRet")).equals(0)) {
+                        if((cst.equals("41")) && getCampo("245.20-N26","vBCSTRet") != null && jsonEaa0103.getBigDecimal(getCampo("245.20-N26","vBCSTRet")) > 0) {
                             /** ICMSST - CST = 41 e base de cálculo diferente de zero */
 
                             ICMSST = ICMS.addNode("ICMSST");
@@ -1226,8 +1233,8 @@ class NFe_Reforma extends FormulaBase {
                                 ICMSST.addNode("vFCPSTRet", getCampo("245.21d-N27d","vFCPSTRet") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.21d-N27d","vFCPSTRet")), 2, false), true);
                             }
 
-                            ICMSST.addNode("vBCSTDest", getCampo("245.22-N31","vBCSTDest") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.22-N31","vBCSTDest")), 2, false), true);
-                            ICMSST.addNode("vICMSSTDest", getCampo("245.23-N32","vICMSSTDest") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.23-N32","vICMSSTDest")), 2, false), true);
+//                            ICMSST.addNode("vBCSTDest", getCampo("245.22-N31","vBCSTDest") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.22-N31","vBCSTDest")), 2, false), true);
+//                            ICMSST.addNode("vICMSSTDest", getCampo("245.23-N32","vICMSSTDest") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("245.23-N32","vICMSSTDest")), 2, false), true);
 
                             if(getCampo("245.23c-N35","vBCEfet") != null && !jsonEaa0103.getBigDecimal(getCampo("245.23c-N35","vBCEfet")).equals(0) ||
                                     getCampo("245.23e-N37","vICMSEfet") != null && !jsonEaa0103.getBigDecimal(getCampo("245.23e-N37","vICMSEfet")).equals(0)) {
@@ -1242,8 +1249,7 @@ class NFe_Reforma extends FormulaBase {
                             ICMS00 = ICMS.addNode("ICMS00");
                             ICMS00.addNode("orig", orig, true);
                             ICMS00.addNode("CST", cst, true);
-//                            ICMS00.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, true);
-                            ICMS00.addNode("modBC", 0, true)
+                            ICMS00.addNode("modBC", configItem.abm0101fiscal.abm12modBcIcms, true);
                             ICMS00.addNode("vBC", getCampo("169-N15","vBC") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("169-N15","vBC")), 2, false), true);
                             ICMS00.addNode("pICMS", getCampo("170-N16","pICMS") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("170-N16","pICMS")), 2, false), true);
                             ICMS00.addNode("vICMS", getCampo("171-N17","vICMS") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("171-N17","vICMS")), 2, false), true);
@@ -1350,7 +1356,11 @@ class NFe_Reforma extends FormulaBase {
 
                             if(getCampo("216-N26","vBCSTRet") != null) {
                                 ICMS60.addNode("vBCSTRet", getCampo("216-N26","vBCSTRet") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("216-N26","vBCSTRet")), 2, false), true);
-                                ICMS60.addNode("pST", getCampo("216.1-N26a","pST") == null ? "0.00" : jsonEaa0103.getBigDecimal(getCampo("216.1-N26a","pST")).equals(0) ? "0.00" : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("216.1-N26a","pST")), 4, false), true);
+                                ICMS60.addNode("pST", (getCampo("216.1-N26a","pST") == null || jsonEaa0103.getBigDecimal(getCampo("216.1-N26a","pST")) == null
+                                        || jsonEaa0103.getBigDecimal(getCampo("216.1-N26a","pST")).compareTo(BigDecimal.ZERO) == 0)
+                                        ? "0.00" : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("216.1-N26a","pST")), 4, false),
+                                        true);
+//                                ICMS60.addNode("pST", getCampo("216.1-N26a","pST") == null ? "0.00" : jsonEaa0103.getBigDecimal(getCampo("216.1-N26a","pST")).equals(0) ? "0.00" : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("216.1-N26a","pST")), 4, false), true);
                                 ICMS60.addNode("vICMSSubstituto", getCampo("216.2-N26b","vICMSSubstituto") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("216.2-N26b","vICMSSubstituto")), 2, false), true);
                                 ICMS60.addNode("vICMSSTRet", getCampo("217-N27","vICMSSTRet") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("217-N27","vICMSSTRet")), 2, false), true);
                             }
@@ -1663,9 +1673,11 @@ class NFe_Reforma extends FormulaBase {
 
             Aaj07 aaj07 = eaa0103.eaa0103clasTribCbsIbs
             if(aaj07 != null && aaj07.getAaj07json() != null) {
+                if(eaa0103.eaa0103cstCbsIbs == null) interromper("Não foi informado CST de IBS/CBS no item " + eaa0103.eaa0103seq + " do documento.");
+                Aaj09 aaj09 = getSession().createCriteria(Aaj09.class).addFields("aaj09id, aaj09codigo").addWhere(Criterions.eq("aaj09id", eaa0103.eaa0103cstCbsIbs.aaj09id)).get(ColumnType.ENTITY) //aqui
                 algumItemComCbsIbs = true;
                 IBSCBS = imposto.addNode("IBSCBS");
-                IBSCBS.addNode("CST", aaj07.aaj07codigo.substring(0, 3) , true);
+                IBSCBS.addNode("CST", aaj09.aaj09codigo.substring(0, 3) , true);
                 IBSCBS.addNode("cClassTrib", aaj07.aaj07codigo, true);
 
                 def doacao = jsonEaa0103.getBoolean(getCampo("324.14a-UB14a", "indDoacao"));
@@ -1782,10 +1794,10 @@ class NFe_Reforma extends FormulaBase {
             gDif.addNode("vDif", getDecimalReq4Dig(jsonEaa0103, "324.23-UB23", "vDif"));
         }
         def vDevTrib = getDecimal(jsonEaa0103, "324.25-UB25", "vDevTrib");
-        //if (vDevTrib != null) {
-        //def gDevTrib = gIBSUF.addNode("gDevTrib");
-        //  gDevTrib.addNode("vDevTrib", vDevTrib);
-        //}
+//        if (vDevTrib != null) {
+//            def gDevTrib = gIBSUF.addNode("gDevTrib");
+//            gDevTrib.addNode("vDevTrib", vDevTrib);
+//        }
         if (aaj07json.getBoolean("red_bc")) {
             def gRed = gIBSUF.addNode("gRed");
             gRed.addNode("pRedAliq", getDecimalReq4Dig(jsonEaa0103, "324.27-UB27", "pRedAliq"));
@@ -1805,10 +1817,10 @@ class NFe_Reforma extends FormulaBase {
         }
 
         def vDevTrib = getDecimal(jsonEaa0103, "324.44-UB44", "vDevTrib");
-        //if (vDevTrib != null) {
-        //def gDevTrib = gIBSMun.addNode("gDevTrib");
-        //  gDevTrib.addNode("vDevTrib", vDevTrib);
-        //}
+//        if (vDevTrib != null) {
+//            def gDevTrib = gIBSMun.addNode("gDevTrib");
+//            gDevTrib.addNode("vDevTrib", vDevTrib);
+//        }
         if (aaj07json.getBoolean("red_bc") && aaj07json.getBigDecimal_Zero("perc_red_ibs_mun") > 0) {
             def gRed = gIBSMun.addNode("gRed");
             gRed.addNode("pRedAliq", getDecimalReq4Dig(jsonEaa0103, "324.46-UB46", "pRedAliq"));
@@ -1827,10 +1839,10 @@ class NFe_Reforma extends FormulaBase {
             gDif.addNode("vDif", getDecimalReq4Dig(jsonEaa0103, "324.61-UB61", "vDif"));
         }
         def vDevTrib = getDecimal(jsonEaa0103, "324.63-UB63", "vDevTrib");
-        //if (vDevTrib != null) {
-        //def gDevTrib = gCBS.addNode("gDevTrib");
-        //  gDevTrib.addNode("vDevTrib", vDevTrib);
-        //}
+//        if (vDevTrib != null) {
+//            def gDevTrib = gCBS.addNode("gDevTrib");
+//            gDevTrib.addNode("vDevTrib", vDevTrib);
+//        }
         if (aaj07json.getBoolean("red_bc")) {
             def gRed = gCBS.addNode("gRed");
             gRed.addNode("pRedAliq", getDecimalReq4Dig(jsonEaa0103, "324.65-UB65", "pRedAliq"));
@@ -1989,6 +2001,7 @@ class NFe_Reforma extends FormulaBase {
                     if(endEntrega.eaa0101bairro == null) validations.addToValidations(new ValidationMessage("Necessário informar o bairro do local de entrega no " + documento + "."));
                     if(endEntrega.eaa0101municipio == null) validations.addToValidations(new ValidationMessage("Necessário informar o município do local de entrega no " + documento + "."));
 
+                    if(endEntrega.eaa0101municipio == null) interromper("Não foi informado o municipio no endereço de entrega do documento");
                     Aag02 aag02 = getAcessoAoBanco().buscarRegistroUnicoById("Aag02", endEntrega.eaa0101municipio.aag0201uf.aag02id);
                     if(aag02 != null && !aag02.aag02uf.equalsIgnoreCase("EX")) {
                         if(endEntrega != null && endEntrega.eaa0101municipio != null && endEntrega.eaa0101municipio.aag0201ibge == null) validations.addToValidations(new ValidationMessage("Necessário informar o código IBGE do município do local de entrega no " + documento + "."));
@@ -2161,7 +2174,6 @@ class NFe_Reforma extends FormulaBase {
                 .setParameter("eaa01033clasRef", eaa01033clasRef)
                 .getList(ColumnType.LONG);
     }
-
     private List<TableMap> buscarItensDocumentosReferenciados(Long eaa01id) {
         return getSession().createQuery("SELECT eaa01nfeChave, eaa01033itemDoc, eaa01033item, eaa0103Ref.eaa0103seq AS seq " +
                 " FROM Eaa01033" +
@@ -2174,7 +2186,6 @@ class NFe_Reforma extends FormulaBase {
                 .setParameter("eaa01id", eaa01id)
                 .getListTableMap();
     }
-
     private List<Eaa0103> buscarItensDoDocumento(Long eaa01id) {
         return getSession().createCriteria(Eaa0103.class)
                 .addJoin(Joins.fetch("eaa0103item"))
