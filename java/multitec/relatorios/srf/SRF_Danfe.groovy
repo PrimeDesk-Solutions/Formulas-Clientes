@@ -87,12 +87,14 @@ public class SRF_Danfe extends RelatorioBase {
 			}
 		}
 			
+		String user = obterUsuarioLogado().getAab10user();
+
 		// Cria os sub-relatórios
 		TableMapDataSource dsPrincipal = new TableMapDataSource(dados);
 		dsPrincipal.addSubDataSource("dsItens", itens, "key", "key");
-		adicionarParametro("StreamSub1", carregarArquivoRelatorio("SRF_Danfe_S1"))
+		adicionarParametro("StreamSub1", user != "MASTER2" ? carregarArquivoRelatorio("SRF_Danfe_S1") : carregarArquivoRelatorio("SRF_Danfe_S1_Reforma") )
 						
-		return gerarPDF("SRF_Danfe", dsPrincipal);
+		return user != "MASTER2" ? gerarPDF("SRF_Danfe", dsPrincipal) : gerarPDF("SRF_Danfe_Reforma", dsPrincipal) ;
 	}
 	
 	private List<Long> buscarIdsDocumentos(List<Long> tipo, Integer numeroInicial, Integer numeroFinal, List<Long> entidade, LocalDate[] emissao, LocalDate[] entraSai) {

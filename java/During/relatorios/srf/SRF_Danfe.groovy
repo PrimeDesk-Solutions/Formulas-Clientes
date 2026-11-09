@@ -90,8 +90,8 @@ public class SRF_Danfe extends RelatorioBase {
         // Cria os sub-relatórios
         TableMapDataSource dsPrincipal = new TableMapDataSource(dados);
         dsPrincipal.addSubDataSource("dsItens", itens, "key", "key");
-        adicionarParametro("StreamSub1", carregarArquivoRelatorio("SRF_Danfe_S1"));
-        return gerarPDF("SRF_Danfe", dsPrincipal);
+        adicionarParametro("StreamSub1", carregarArquivoRelatorio("SRF_Danfe_S1_Reforma"));
+        return gerarPDF("SRF_Danfe_Reforma", dsPrincipal) ;
     }
 
     private List<Long> buscarIdsDocumentos(List<Long> tipo, Integer numeroInicial, Integer numeroFinal, List<Long> entidade, LocalDate[] emissao, LocalDate[] entraSai) {
@@ -248,12 +248,18 @@ public class SRF_Danfe extends RelatorioBase {
 
     private List<TableMap> buscarItensdaNfe(Long id){
         return getSession().createQuery(" SELECT eaa0103qtComl,eaa0103unit, eaa0103total, eaa0103seq as seq, eaa0103codigo, eaa0103descr, abg01codigo AS eaa0103ncm_codigo, aaj10codigo AS eaa0103cstIcms_codigo, aaj15codigo AS eaa0103cfop_codigo, aam06codigo as eaa0103umComl_codigo, abg01codigo as codNcm,  ",
-                " CAST(eaa0103json ->>'bc_icms' AS numeric(18,6)) AS bc_icms, CAST(eaa0103json ->>'icms' AS numeric(18,6)) AS vlr_icms, CAST(eaa0103json ->>'ipi' AS numeric(18,6)) AS vlr_ipi,CAST(eaa0103json ->>'aliq_icms' AS numeric(18,6)) AS aliq_icms, CAST(eaa0103json ->>'ipi' AS numeric(18,6)) AS vlr_ipi,CAST(eaa0103json ->>'aliq_ipi' AS numeric(18,6)) AS aliq_ipi, cast(eaa0103json ->> 'desconto' as numeric(18,6)) as desconto ",
+                " CAST(eaa0103json ->>'bc_icms' AS numeric(18,6)) AS bc_icms, CAST(eaa0103json ->>'icms' AS numeric(18,6)) AS vlr_icms, CAST(eaa0103json ->>'ipi' AS numeric(18,6)) AS vlr_ipi,CAST(eaa0103json ->>'aliq_icms' AS numeric(18,6)) AS aliq_icms, CAST(eaa0103json ->>'ipi' AS numeric(18,6)) AS vlr_ipi,CAST(eaa0103json ->>'aliq_ipi' AS numeric(18,6)) AS aliq_ipi, cast(eaa0103json ->> 'desconto' as numeric(18,6)) as desconto, ",
+                " CAST(eaa0103json ->>'vlr_cbs' AS numeric(18,2)) AS vlr_cbs, CAST(eaa0103json ->>'vlr_ibsuf' AS numeric(18,2)) AS vlr_ibsuf, CAST(eaa0103json ->>'vlr_ibsmun' AS numeric(18,2)) AS vlr_ibsmun, ",
+                " CAST(eaa0103json ->>'imposto_seletivo' AS numeric(18,2)) AS imposto_seletivo, CAST(eaa0103json ->>'cbs_ibs_bc' AS numeric(18,2)) AS cbs_ibs_bc, ",
+                " CAST(eaa0103json ->>'bc_imposto_seletivo' AS numeric(18,2)) AS bc_imposto_seletivo, CAST(eaa0103json ->>'bc_ipi' AS numeric(18,2)) AS bc_ipi, ",
+                " CAST(eaa0103json ->>'ibs_uf_aliq' AS numeric(18,2)) AS ibs_uf_aliq, CAST(eaa0103json ->>'ibs_mun_aliq' AS numeric(18,2)) AS ibs_mun_aliq, CAST(eaa0103json ->>'cbs_aliq' AS numeric(18,2)) AS cbs_aliq, ",
+                " CAST(eaa0103json ->>'aliq_imposto_seletivo' AS numeric(18,2)) AS aliq_imposto_seletivo, aaj07codigo AS eaa0103cClassTrib ",
                 " FROM eaa0103 ",
                 " LEFT JOIN abg01 ON abg01id = eaa0103ncm ",
                 " LEFT JOIN aaj10 on aaj10id = eaa0103cstIcms ",
                 " LEFT JOIN aaj15 on aaj15id = eaa0103cfop ",
                 " LEFT JOIN aam06 on aam06id = eaa0103umComl ",
+                " LEFT JOIN aaj07 on aaj07id = eaa0103clasTribCbsIbs ",
                 " WHERE eaa0103doc = :id ",
                 " ORDER BY eaa0103seq").setParameters("id",id)
                 .getListTableMap();
