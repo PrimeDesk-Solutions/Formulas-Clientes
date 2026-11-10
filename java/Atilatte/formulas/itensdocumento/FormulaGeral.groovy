@@ -659,7 +659,7 @@ public class FormulaGeral extends FormulaBase {
         }
     }
     private void preencherCBenefItem(String grupo){
-        if(eaa0103.eaa0103cstIcms.aaj10codigo == "000" || eaa0103.eaa0103cstIcms.aaj10codigo == "010" || eaa0103.eaa0103cstIcms == null) eaa0103.eaa0103codBenef == null;
+        if(eaa0103.eaa0103cstIcms.aaj10codigo == "000" || eaa0103.eaa0103cstIcms.aaj10codigo == "010" || eaa0103.eaa0103cstIcms == null) eaa0103.eaa0103codBenef = null;
 
         if(jsonAbm1002_Municipio_Item != null && jsonAbm1002_Municipio_Item.getString("cod_benef_fiscal") != null){
             eaa0103.eaa0103codBenef = jsonAbm1002_Municipio_Item.getString("cod_benef_fiscal");
