@@ -323,7 +323,7 @@ public class PedCompraInsumoImportacao extends FormulaBase {
 
             calculaCOFINS();
 
-            jsonEaa0103.put("outras_despesas", jsonEaa0103.getBigDecimal_Zero("pis") + jsonEaa0103.getBigDecimal_Zero("cofins") + jsonEaa0103.getBigDecimal_Zero("desp_aces_rat") )
+            jsonEaa0103.put("outras_despesas", jsonEaa0103.getBigDecimal_Zero("pis") + jsonEaa0103.getBigDecimal_Zero("cofins") + jsonEaa0103.getBigDecimal_Zero("siscomex_valor") )
 
             calcularICMS(contribICMS);
 
