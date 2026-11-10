@@ -308,12 +308,16 @@ public class PedCompraInsumoImportacao extends FormulaBase {
             // Total do item
             eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
 
+            // Total do item em dolar
+            jsonEaa0103.put("total_convertido", (eaa0103.eaa0103qtComl_Zero * jsonEaa0103.getBigDecimal_Zero("unit_convertido")) + (jsonEaa0103.getBigDecimal_Zero("tx_financ")  * jsonEaa0103.getBigDecimal_Zero("cotacao_dolar")) );
+            jsonEaa0103.put("total_convertido", jsonEaa0103.getBigDecimal_Zero("total_convertido").round(2));
+
             // Frete Real
             jsonEaa0103.put("frete_dest", jsonEaa0103.getBigDecimal_Zero("frete_dolar") * jsonEaa0103.getBigDecimal_Zero("cotacao_dolar"))
 
-            calcularIPI();
-
             calcularImpostoImportacao();
+
+            calcularIPI();
 
             calculaPIS();
 
@@ -323,21 +327,10 @@ public class PedCompraInsumoImportacao extends FormulaBase {
 
             calcularICMS(contribICMS);
 
-            // Total do item em dolar
-            jsonEaa0103.put("total_convertido", (eaa0103.eaa0103qtComl_Zero * jsonEaa0103.getBigDecimal_Zero("unit_convertido")) + (jsonEaa0103.getBigDecimal_Zero("tx_financ")  * jsonEaa0103.getBigDecimal_Zero("cotacao_dolar")) );
-            jsonEaa0103.put("total_convertido", jsonEaa0103.getBigDecimal_Zero("total_convertido").round(2));
-
             // Total doc = Tot item convertido
-            eaa0103.eaa0103totDoc = jsonEaa0103.getBigDecimal_Zero("total_convertido") +
-                                    jsonEaa0103.getBigDecimal_Zero("imposto_importacao") +
-                                    jsonEaa0103.getBigDecimal_Zero("ipi") +
-                                    jsonEaa0103.getBigDecimal_Zero("pis") +
-                                    jsonEaa0103.getBigDecimal_Zero("cofins") +
-                                    jsonEaa0103.getBigDecimal_Zero("siscomex_valor") +
-                                    jsonEaa0103.getBigDecimal_Zero("icms");
+            eaa0103.eaa0103totDoc = jsonEaa0103.getBigDecimal_Zero("bc_icms")
 
             eaa0103.eaa0103totDoc = eaa0103.eaa0103totDoc.round(2);
-
 
             if(jsonEaa0103.getBigDecimal_Zero("aliq_icms") == 0){
                 jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc - jsonEaa0103.getBigDecimal_Zero("ipi"));
@@ -688,7 +681,7 @@ public class PedCompraInsumoImportacao extends FormulaBase {
 
         if(jsonEaa0103.getBigDecimal_Zero("aliq_importacao") > 0){
             // BC Importação
-            jsonEaa0103.put("bc_importacao", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest"));
+            jsonEaa0103.put("bc_importacao", jsonEaa0103.getBigDecimal("total_convertido") + jsonEaa0103.getBigDecimal_Zero("frete_dest"));
 
             jsonEaa0103.put("imposto_importacao", jsonEaa0103.getBigDecimal_Zero("bc_importacao") * jsonEaa0103.getBigDecimal_Zero("aliq_importacao") / 100);
             jsonEaa0103.put("imposto_importacao", jsonEaa0103.getBigDecimal_Zero("imposto_importacao").round(2));
@@ -752,7 +745,7 @@ public class PedCompraInsumoImportacao extends FormulaBase {
         if (jsonEaa0103.getBigDecimal_Zero("aliq_ipi") != -1) {
 
             //BC de IPI = Total do Item + Frete + Seguro + Despesas Acessorias
-            jsonEaa0103.put("bc_ipi", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest") + jsonEaa0103.getBigDecimal_Zero("imposto_importacao") - jsonEaa0103.getBigDecimal_Zero("desconto"));
+            jsonEaa0103.put("bc_ipi", jsonEaa0103.getBigDecimal_Zero("total_convertido") + jsonEaa0103.getBigDecimal_Zero("frete_dest") + jsonEaa0103.getBigDecimal_Zero("imposto_importacao") - jsonEaa0103.getBigDecimal_Zero("desconto"));
 
             jsonEaa0103.put("bc_ipi", jsonEaa0103.getBigDecimal_Zero("bc_ipi").round(2));
 
@@ -783,11 +776,13 @@ public class PedCompraInsumoImportacao extends FormulaBase {
 
         if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonEaa0103.getBigDecimal_Zero("aliq_icms") > 0) {
 
-            def bcICMS = (eaa0103.eaa0103total +
-                        jsonEaa0103.getBigDecimal_Zero("ipi") +
-                        jsonEaa0103.getBigDecimal_Zero("imposto_importacao") +
+            def bcICMS = (jsonEaa0103.getBigDecimal_Zero("total_convertido") +
                         jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                        jsonEaa0103.getBigDecimal_Zero("outras_despesas")) / (1 - jsonEaa0103.getBigDecimal_Zero("aliq_icms") / 100);
+                        jsonEaa0103.getBigDecimal_Zero("imposto_importacao") +
+                        jsonEaa0103.getBigDecimal_Zero("ipi") +
+                        jsonEaa0103.getBigDecimal_Zero("pis") +
+                        jsonEaa0103.getBigDecimal_Zero("cofins") +
+                        jsonEaa0103.getBigDecimal_Zero("siscomex_valor")) / (1 - jsonEaa0103.getBigDecimal_Zero("aliq_icms") / 100);
 
             // BC ICMS
             jsonEaa0103.put("bc_icms", bcICMS.round(2));
