@@ -698,11 +698,10 @@ public class PedCompraInsumoImportacao extends FormulaBase {
 
         if (jsonAbm0101.getBigDecimal_Zero("aliq_pis") > 0) {
             // BC PIS
-            jsonEaa0103.put("bc_pis", eaa0103.eaa0103total +
-                    jsonEaa0103.getBigDecimal_Zero("imposto_importacao") +
-                    jsonEaa0103.getBigDecimal_Zero("frete_dest") +
-                    jsonEaa0103.getBigDecimal_Zero("ipi") -
-                    jsonEaa0103.getBigDecimal_Zero("desconto") );
+            jsonEaa0103.put("bc_pis", jsonEaa0103.getBigDecimal("total_convertido") +
+                                        jsonEaa0103.getBigDecimal_Zero("frete_dest"));
+
+            jsonEaa0103.put("bc_pis", jsonEaa0103.getBigDecimal("bc_pis").round(2))
 
             // PIS
             jsonEaa0103.put("pis", jsonEaa0103.getBigDecimal_Zero("bc_pis") * jsonEaa0103.getBigDecimal_Zero("aliq_pis") / 100);
