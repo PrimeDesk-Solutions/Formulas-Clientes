@@ -296,12 +296,12 @@ public class docpadraoindustrializacao extends FormulaBase {
 
             // Peso Bruto
             if (jsonEaa0103.getBigDecimal_Zero("peso_bruto") == 0) {
-                jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto).round(2))
+                jsonEaa0103.put("peso_bruto", (eaa0103.eaa0103qtUso * abm01.abm01pesoBruto_Zero).round(2))
             }
 
             // Peso Liquido
             if (jsonEaa0103.getBigDecimal_Zero("peso_liquido") == 0) {
-                jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq).round(2))
+                jsonEaa0103.put("peso_liquido", (eaa0103.eaa0103qtUso * abm01.abm01pesoLiq_Zero).round(2))
             }
 
             // DefinirPrecoUnitarioItem
@@ -944,4 +944,3 @@ public class docpadraoindustrializacao extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
