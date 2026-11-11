@@ -196,19 +196,7 @@ public class SRF_Danfe extends RelatorioBase {
 		if(eaa0102 == null) throw new ValidacaoException("Não foi possivel localizar os dados gerais do documento.");
 		TableMap Eaa01json = eaa01.eaa01json != null ? eaa01.eaa01json : new TableMap()
 
-//		if(Eaa01json.getBigDecimal_Zero("volumes") >= 0) Eaa01json.put("volumes", new BigDecimal(Eaa01json.getInteger("volumes")));
-//		if(Eaa01json.getBigDecimal_Zero("ipi") >= 0) Eaa01json.put("ipi", new BigDecimal(Eaa01json.getInteger("ipi")))
-//		if(Eaa01json.getBigDecimal_Zero("bc_icms") >= 0) Eaa01json.put("bc_icms", (new BigDecimal(Eaa01json.get("bc_icms"))).round(2))
-//		if(Eaa01json.getBigDecimal_Zero("icms") >= 0) Eaa01json.put("icms", new BigDecimal(Eaa01json.getInteger("icms")))
-//		if(Eaa01json.getBigDecimal_Zero("bc_icms_st") >= 0) Eaa01json.put("bc_icms_st", new BigDecimal(Eaa01json.getInteger("bc_icms_st")))
-//		if(Eaa01json.getBigDecimal_Zero("icms_st") >= 0) Eaa01json.put("icms_st", new BigDecimal(Eaa01json.getInteger("icms_st")))
-
-		if(Eaa01json.getBigDecimal_Zero("volumes") >= 0) Eaa01json.put("volumes", (new BigDecimal(Eaa01json.getBigDecimal_Zero("volumes"))).round(2));
-		if(Eaa01json.getBigDecimal_Zero("ipi") >= 0) Eaa01json.put("ipi", (new BigDecimal(Eaa01json.getBigDecimal_Zero("ipi"))).round(2));
-		if(Eaa01json.getBigDecimal_Zero("bc_icms") >= 0) Eaa01json.put("bc_icms", (new BigDecimal(Eaa01json.getBigDecimal_Zero("bc_icms"))).round(2))
-		if(Eaa01json.getBigDecimal_Zero("icms") >= 0) Eaa01json.put("icms", (new BigDecimal(Eaa01json.getBigDecimal_Zero("icms"))).round(2))
-		if(Eaa01json.getBigDecimal_Zero("bc_icms_st") >= 0) Eaa01json.put("bc_icms_st", (new BigDecimal(Eaa01json.getBigDecimal_Zero("bc_icms_st"))).round(2))
-		if(Eaa01json.getBigDecimal_Zero("icms_st") >= 0) Eaa01json.put("icms_st", (new BigDecimal(Eaa01json.getBigDecimal_Zero("icms_st"))).round(2))
+		converterCamposZero(Eaa01json);
 
 		dadosNfe.put("eaa0102especie", eaa0102.getEaa0102especie());
 		String frete = buscarTipoFrete(eaa0102.getEaa0102frete());
@@ -231,6 +219,21 @@ public class SRF_Danfe extends RelatorioBase {
 		if(eaa0102.getEaa0102despacho() != null) comporDadosDespacho(dadosNfe, eaa0102.getEaa0102despacho().getAbe01id());
 		if(eaa0102.getEaa0102redespacho() != null) comporDadosRedespacho(dadosNfe, eaa0102.getEaa0102redespacho().getAbe01id());
 		if(eaa0102.getEaa0102veiculo() != null) comporDadosVeiculo(dadosNfe, eaa0102.getEaa0102veiculo().getAah20id());
+	}
+
+	private void converterCamposZero(TableMap Eaa01json){
+		if(Eaa01json.getBigDecimal_Zero("volumes") >= 0) Eaa01json.put("volumes", (new BigDecimal(Eaa01json.getBigDecimal_Zero("volumes"))).round(2));
+		if(Eaa01json.getBigDecimal_Zero("ipi") >= 0) Eaa01json.put("ipi", (new BigDecimal(Eaa01json.getBigDecimal_Zero("ipi"))).round(2));
+		if(Eaa01json.getBigDecimal_Zero("bc_icms") >= 0) Eaa01json.put("bc_icms", (new BigDecimal(Eaa01json.getBigDecimal_Zero("bc_icms"))).round(2))
+		if(Eaa01json.getBigDecimal_Zero("icms") >= 0) Eaa01json.put("icms", (new BigDecimal(Eaa01json.getBigDecimal_Zero("icms"))).round(2))
+		if(Eaa01json.getBigDecimal_Zero("bc_icms_st") >= 0) Eaa01json.put("bc_icms_st", (new BigDecimal(Eaa01json.getBigDecimal_Zero("bc_icms_st"))).round(2))
+		if(Eaa01json.getBigDecimal_Zero("icms_st") >= 0) Eaa01json.put("icms_st", (new BigDecimal(Eaa01json.getBigDecimal_Zero("icms_st"))).round(2))
+
+		if(Eaa01json.getBigDecimal_Zero("vlr_cbs") == 0) Eaa01json.put("vlr_cbs", (new BigDecimal(Eaa01json.getBigDecimal_Zero("vlr_cbs"))).round(2))
+		if(Eaa01json.getBigDecimal_Zero("vlr_ibsuf") == 0) Eaa01json.put("vlr_ibsuf", (new BigDecimal(Eaa01json.getBigDecimal_Zero("vlr_ibsuf"))).round(2))
+		if(Eaa01json.getBigDecimal_Zero("vlr_ibsmun") == 0) Eaa01json.put("vlr_ibsmun", (new BigDecimal(Eaa01json.getBigDecimal_Zero("vlr_ibsmun"))).round(2))
+		if(Eaa01json.getBigDecimal_Zero("imposto_seletivo") == 0) Eaa01json.put("imposto_seletivo", (new BigDecimal(Eaa01json.getBigDecimal_Zero("imposto_seletivo"))).round(2))
+
 	}
 
 	private void comporDadosDespacho(TableMap dadosNfe, Long abe01id) {
