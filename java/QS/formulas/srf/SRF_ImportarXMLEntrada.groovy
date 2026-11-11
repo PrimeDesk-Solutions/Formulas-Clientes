@@ -21,7 +21,7 @@ import sam.model.entities.aa.Aaj10;
 import sam.model.entities.aa.Aaj15;
 import br.com.multiorm.criteria.criterion.Criterions
 
-class ImportaXmlNFe_Entrada extends FormulaBase {
+class SRF_ImportarXMLEntrada extends FormulaBase {
 
     private Eaa01 eaa01;
     private ElementXml elementXmlNfe;
