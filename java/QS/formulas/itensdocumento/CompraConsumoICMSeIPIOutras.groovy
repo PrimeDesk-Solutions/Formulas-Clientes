@@ -3,7 +3,8 @@
  */
 package QS.formulas.itensDocumento
 
-import sam.model.entities.ab.Abd02;
+import sam.model.entities.ab.Abd02
+import sam.model.entities.ab.Abd05;
 import sam.server.samdev.utils.Parametro;
 import br.com.multiorm.criteria.criterion.Criterions
 import br.com.multitec.utils.ValidacaoException
@@ -64,6 +65,8 @@ public class CompraConsumoICMSeIPIOutras extends FormulaBase {
     private Abb10 abb10;
     private Abd01 abd01;
     private Abd02 abd02;
+    private Abd02 abd02retInd;
+    private Abd05 abd05
     private Abe01 abe01;
     private Abe02 abe02;
     private Abg01 abg01;
@@ -114,9 +117,16 @@ public class CompraConsumoICMSeIPIOutras extends FormulaBase {
         abd01 = getSession().get(Abd01.class, eaa01.eaa01pcd.abd01id);
 
         //PCD Fiscais
-        if(abd01.abd01ceFiscais == null) throw new ValidacaoException("Não foi econtrado PCD fiscal no cadastro do PCD " + abd01.abd01codigo);
-
+        if (abd01.abd01ceFiscais == null) throw new ValidacaoException("Não foi econtrado PCD fiscal no cadastro do PCD " + abd01.abd01codigo);
         abd02 = getSession().get(Abd02.class, abd01.abd01ceFiscais.abd02id);
+
+        // PCD Industrialização
+        if(abd01.abd01ceIndustr == null) throw new ValidacaoException("Não foi encontrado configurações de retorno de industrialização no PCD " + abd01.abd01codigo);
+        abd05 = getSession().get(Abd05.class, abd01.abd01ceIndustr.abd05id);
+
+        // PCD Fiscal - Retorno
+        if(abd05.abd05pcdFiscal1 == null) throw new ValidacaoException("Não foi informado PCD de retorno no parametro do PCD de Industrialização  " + abd05.abd05codigo + " - " + abd05.abd05descr);
+        abd02retInd = getSession().get(Abd02.class, abd05.abd05pcdFiscal1.abd02id);
 
         //Dados da Entidade
         abe01 = getSession().get(Abe01.class, abb01.abb01ent.abe01id);
@@ -247,10 +257,12 @@ public class CompraConsumoICMSeIPIOutras extends FormulaBase {
             eaa0103.eaa0103total = (eaa0103.eaa0103qtComl * eaa0103.eaa0103unit).round(2);
 
             // Unitario Estoque
-		  jsonEaa0103.put("unitario_estoque", eaa0103.eaa0103unit);
+            jsonEaa0103.put("unitario_estoque", eaa0103.eaa0103unit);
 
-		  // Total Item Estoque 
-		  jsonEaa0103.put("total_item_estoque", eaa0103.eaa0103total);
+            // Total Item Estoque
+            jsonEaa0103.put("total_item_estoque", eaa0103.eaa0103total);
+
+            definirCSTICMS();
 
             // Calcula IPI dos itens
             calcularIPI();
@@ -288,10 +300,17 @@ public class CompraConsumoICMSeIPIOutras extends FormulaBase {
             // Financeiro
             eaa0103.eaa0103totFinanc = eaa0103.eaa0103totDoc;
 
+            alterarCSTEntradas();
+
             // Calcula SPEDs
             preencherSPEDS();
 
         }
+    }
+    private alterarCSTEntradas(){
+        eaa0103.eaa0103cstPis = abm12 != null && abm12.abm12cstPisEnt != null ? getSession().get(Aaj12.class, abm12.abm12cstPisEnt.aaj12id) : null;
+        eaa0103.eaa0103cstCofins = abm12 != null && abm12.abm12cstCofinsEnt != null ? getSession().get(Aaj13.class, abm12.abm12cstCofinsEnt.aaj13id) : null;
+        eaa0103.eaa0103cstIpi = abm12 != null && abm12.abm12cstIpiEnt != null ? getSession().get(Aaj11.class, abm12.abm12cstIpiEnt.aaj11id) : null;
     }
 
     private trocaCFOPDentroOuForaEstado(Boolean dentroEstado){
@@ -304,14 +323,48 @@ public class CompraConsumoICMSeIPIOutras extends FormulaBase {
                 if(primeiroDigito == "1"){
                     primeiroDigito = "2";
                 }
+            } else {
                 if(primeiroDigito == "5"){
-                    primeiroDigito = "6";
+                    primeiroDigito = "1";
                 }
             }
             cfop = primeiroDigito + cfop;
             aaj15_cfop = getSession().get(Aaj15.class, Criterions.eq("aaj15codigo", cfop));
             eaa0103.eaa0103cfop = aaj15_cfop;
         }
+
+    }
+    private definirCSTICMS() {
+        /*
+                Função para buscar o CST de ICMS dos itens:
+                Para itens que são mão de obra, considerar o CST do cadastro do item nas informações fiscais.
+                Se não for informado o CST no cadastro fiscal do item, significa que é um item de retorno ou um item que tem tributação diferente da mão de obra.
+                Caso o item do documento não seja um retorno de industrialização, será buscado o CST de ICMS no cadastro do parametro fiscal do PCD principal.
+                Caso o item do documento seja um retorno de industrialização, será buscado o CST de ICMS dentro do parametro de industrialização do PCD Principal,
+                cadastrado no PCD fiscal atrelado ao PCD de Industrialização.
+         */
+        String cst = "";
+        if(abm12.abm12cstIcms != null){
+            // Obtém as informações do cadastro do item
+            aaj10_cstIcms = getSession().get(Aaj10.class, abm12.abm12cstIcms.aaj10id);
+            if(aaj10_cstIcms == null) throw new ValidacaoException("Não foi informado CST de ICMS no parametro fiscal do item " + abm01.abm01codigo + " - " + abm01.abm01na);
+            cst = aaj10_cstIcms.aaj10codigo;
+        }else{
+            if(eaa0103.eaa0103retInd == 0){
+                // Obtém as informações do cadastro de PCD (aba fiscal)
+                aaj10_cstIcms = getSession().get(Aaj10.class, abd02.abd02cstIcmsB.aaj10id);
+                if(aaj10_cstIcms == null) throw new ValidacaoException("Não foi informado CST de ICMS no parametro fiscal do PCD " + abd02.abd02codigo + " - " + abd02.abd02descr);
+                cst = aaj10_cstIcms.aaj10codigo;
+
+            }else{
+                // Obtém as informações de CST do PCD (Aba Industrialização)
+                aaj10_cstIcms = getSession().get(Aaj10.class, abd02retInd.abd02cstIcmsB.aaj10id);
+                if(aaj10_cstIcms == null) throw new ValidacaoException("Não foi informado CST de ICMS no cadastro do PCD Fiscal " + abd02retInd.abd02codigo + " - " + abd02retInd.abd02descr)
+                cst = aaj10_cstIcms.aaj10codigo;
+            }
+        }
+
+        eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cst));
 
     }
 
@@ -433,5 +486,4 @@ public class CompraConsumoICMSeIPIOutras extends FormulaBase {
         return FormulaTipo.SCV_SRF_ITEM_DO_DOCUMENTO;
     }
 }
-//meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
 //meta-sis-eyJ0aXBvIjoiZm9ybXVsYSIsImZvcm11bGF0aXBvIjoiNjIifQ==
