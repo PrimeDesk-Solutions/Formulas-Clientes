@@ -120,14 +120,6 @@ public class CompraConsumoICMSeIPIOutras extends FormulaBase {
         if (abd01.abd01ceFiscais == null) throw new ValidacaoException("Não foi econtrado PCD fiscal no cadastro do PCD " + abd01.abd01codigo);
         abd02 = getSession().get(Abd02.class, abd01.abd01ceFiscais.abd02id);
 
-        // PCD Industrialização
-        if(abd01.abd01ceIndustr == null) throw new ValidacaoException("Não foi encontrado configurações de retorno de industrialização no PCD " + abd01.abd01codigo);
-        abd05 = getSession().get(Abd05.class, abd01.abd01ceIndustr.abd05id);
-
-        // PCD Fiscal - Retorno
-        if(abd05.abd05pcdFiscal1 == null) throw new ValidacaoException("Não foi informado PCD de retorno no parametro do PCD de Industrialização  " + abd05.abd05codigo + " - " + abd05.abd05descr);
-        abd02retInd = getSession().get(Abd02.class, abd05.abd05pcdFiscal1.abd02id);
-
         //Dados da Entidade
         abe01 = getSession().get(Abe01.class, abb01.abb01ent.abe01id);
 
@@ -350,18 +342,10 @@ public class CompraConsumoICMSeIPIOutras extends FormulaBase {
             if(aaj10_cstIcms == null) throw new ValidacaoException("Não foi informado CST de ICMS no parametro fiscal do item " + abm01.abm01codigo + " - " + abm01.abm01na);
             cst = aaj10_cstIcms.aaj10codigo;
         }else{
-            if(eaa0103.eaa0103retInd == 0){
-                // Obtém as informações do cadastro de PCD (aba fiscal)
-                aaj10_cstIcms = getSession().get(Aaj10.class, abd02.abd02cstIcmsB.aaj10id);
-                if(aaj10_cstIcms == null) throw new ValidacaoException("Não foi informado CST de ICMS no parametro fiscal do PCD " + abd02.abd02codigo + " - " + abd02.abd02descr);
-                cst = aaj10_cstIcms.aaj10codigo;
-
-            }else{
-                // Obtém as informações de CST do PCD (Aba Industrialização)
-                aaj10_cstIcms = getSession().get(Aaj10.class, abd02retInd.abd02cstIcmsB.aaj10id);
-                if(aaj10_cstIcms == null) throw new ValidacaoException("Não foi informado CST de ICMS no cadastro do PCD Fiscal " + abd02retInd.abd02codigo + " - " + abd02retInd.abd02descr)
-                cst = aaj10_cstIcms.aaj10codigo;
-            }
+            // Obtém as informações do cadastro de PCD (aba fiscal)
+            aaj10_cstIcms = abd02 != null && abd02.abd02cstIcmsB != null ? getSession().get(Aaj10.class, abd02.abd02cstIcmsB.aaj10id) : null;
+            if(aaj10_cstIcms == null) throw new ValidacaoException("Não foi informado CST de ICMS no parametro fiscal do PCD " + abd02.abd02codigo + " - " + abd02.abd02descr);
+            cst = aaj10_cstIcms.aaj10codigo;
         }
 
         eaa0103.eaa0103cstIcms = getSession().get(Aaj10.class, Criterions.eq("aaj10codigo", cst));
