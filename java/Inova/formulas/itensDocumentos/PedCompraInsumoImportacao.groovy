@@ -464,7 +464,7 @@ public class PedCompraInsumoImportacao extends FormulaBase {
 
         //vProd + vServ + vFrete + vSeg + vOutro
         //VBC (CBS e IBS) - Base de Caculo CBS/IBS
-        jsonEaa0103.put("cbs_ibs_bc", eaa0103.eaa0103total +
+        jsonEaa0103.put("cbs_ibs_bc", jsonEaa0103.getBigDecimal("total_convertido") +
                 jsonEaa0103.getBigDecimal_Zero("total_servico") +
                 jsonEaa0103.getBigDecimal_Zero("frete_dest") +
                 jsonEaa0103.getBigDecimal_Zero("seguro") +
