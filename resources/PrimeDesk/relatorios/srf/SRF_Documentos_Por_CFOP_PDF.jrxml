@@ -154,7 +154,7 @@
 					<textFieldExpression><![CDATA[$F{codCFOP}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="38" y="0" width="659" height="13" uuid="f5aa4784-172b-49af-8e7e-ce42fb1890c8"/>
+					<reportElement x="38" y="0" width="385" height="13" uuid="f5aa4784-172b-49af-8e7e-ce42fb1890c8"/>
 					<textElement>
 						<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
 					</textElement>
@@ -297,7 +297,7 @@
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
-				<text><![CDATA[EMISSÃO]]></text>
+				<text><![CDATA[EMISSÃOs]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="134" y="0" width="49" height="13" uuid="dd9d224b-bfbe-484a-88da-729930a8ac03"/>

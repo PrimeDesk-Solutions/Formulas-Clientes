@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_DocumentosPorItens" language="groovy" pageWidth="1133" pageHeight="595" orientation="Landscape" columnWidth="1093" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="096b9e1f-9fbf-40a7-b3ae-a6b790a9cdd1">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="1282"/>
-	<property name="ireport.y" value="116"/>
+	<property name="ireport.x" value="1277"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.Object" isForPrompting="false">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -72,7 +72,7 @@
 					<textFieldExpression><![CDATA[$F{codRep}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="62" y="0" width="404" height="13" uuid="3c795dbd-7db2-42f4-a681-3f8979e19cc0"/>
+					<reportElement x="62" y="0" width="100" height="13" uuid="3c795dbd-7db2-42f4-a681-3f8979e19cc0"/>
 					<textElement>
 						<font size="8"/>
 					</textElement>

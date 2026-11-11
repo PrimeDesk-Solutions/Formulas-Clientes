@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SCF_ResumoSaldosPorContaCorrente" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1f67a61e-6a0a-4ade-8897-168f78801ff5">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="451"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="TITULO_RELATORIO" class="java.lang.String"/>
+	<parameter name="EMPRESA" class="java.lang.String"/>
+	<parameter name="SALDOINICIAL" class="java.lang.String"/>
+	<parameter name="PERIODO" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[]]>
+	</queryString>
+	<field name="dab01codigo" class="java.lang.String"/>
+	<field name="dab01nome" class="java.lang.String"/>
+	<field name="anterior" class="java.math.BigDecimal"/>
+	<field name="entrada" class="java.math.BigDecimal"/>
+	<field name="saida" class="java.math.BigDecimal"/>
+	<field name="atual" class="java.math.BigDecimal"/>
+	<variable name="saldoanterior_1" class="java.math.BigDecimal" resetType="Group" resetGroup="codigoConta" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="anterior_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{anterior}]]></variableExpression>
+	</variable>
+	<variable name="debito_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{entrada}]]></variableExpression>
+	</variable>
+	<variable name="credito_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{saida}]]></variableExpression>
+	</variable>
+	<variable name="atual_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{atual}]]></variableExpression>
+	</variable>
+	<group name="codigoConta">
+		<groupExpression><![CDATA[$F{dab01codigo}]]></groupExpression>
+		<groupHeader>
+			<band height="10">
+				<textField>
+					<reportElement x="0" y="0" width="57" height="10" uuid="6ecb2c8a-09ed-40cd-8e32-313902f53038"/>
+					<textElement>
+						<font fontName="Arial" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dab01codigo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="57" y="0" width="199" height="10" uuid="952c52c9-0789-4d07-8aab-24af8094c85e"/>
+					<textElement>
+						<font fontName="Arial" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dab01nome}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+					<reportElement x="256" y="0" width="74" height="10" uuid="0747b446-dc57-4a06-9af4-0581b603528d"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{anterior} == null ? 0.00 : $F{anterior}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+					<reportElement x="330" y="0" width="74" height="10" uuid="fb32d962-f41e-4840-a714-2b33b24fa3cd"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{entrada} == null ? 0.00: $F{entrada}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+					<reportElement x="404" y="0" width="74" height="10" uuid="c24a08c8-f5b8-4ef9-ba43-fd342a78830e"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{saida} == null ? 0.00 : $F{saida}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+					<reportElement x="478" y="0" width="77" height="10" uuid="8f20a9af-84ac-45c8-8551-2fdb5ce9d4c9"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{atual} == null ? 0.00 : $F{atual}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="12" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="11" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="155" height="10" uuid="d93a76ab-cb6e-4061-9ef6-b35935817be5"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TITULO_RELATORIO}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="10" width="555" height="1" uuid="42116109-0b3d-451c-8887-5fb1c7de80de"/>
+			</line>
+			<textField>
+				<reportElement x="295" y="0" width="198" height="10" uuid="1facad67-1617-4914-86a8-bb29316e1970"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{EMPRESA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="155" y="0" width="140" height="10" uuid="dbd800f3-f540-41d9-8762-8eb5cea2feec"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{PERIODO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="493" y="0" width="37" height="10" uuid="26b961cd-c075-43c6-8613-e16b2d43da2d"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Página]]></text>
+			</staticText>
+			<textField pattern="00000">
+				<reportElement x="530" y="0" width="25" height="10" uuid="05bfd45b-c36a-4168-b942-d18fef56c7d2"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="11" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="10" width="555" height="1" uuid="ed0d464f-55bb-4b7d-8a61-54a863588cec"/>
+			</line>
+			<staticText>
+				<reportElement x="478" y="0" width="77" height="10" uuid="0a254c09-7170-4fbb-9d1d-e689671d1618"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[ATUAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="256" y="0" width="74" height="10" uuid="cba0d9b9-f234-4275-b5e2-5ed14aeeb7df"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[ANTERIOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="330" y="0" width="74" height="10" uuid="8bb7dff6-8369-4c78-8f70-8fb8060f9dd3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[ENTRADA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="404" y="0" width="74" height="10" uuid="dd5e51bf-63b1-4d5b-9971-bfd367acfcd9"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[SAÍDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="256" height="10" uuid="8c7f2833-7f2a-40bc-ac48-897535ceecd9"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[CONTA CORRENTE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<pageFooter>
+		<band height="11" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="37" height="10" uuid="c7f10d6a-4bce-4a5a-b5c1-a591ce5d85dd"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Emissão]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy HH.mm.ss">
+				<reportElement x="37" y="0" width="118" height="10" uuid="fda466dc-cf27-4bfb-a52c-2938b7980922"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Date ()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" uuid="52f94754-ddb4-4789-8353-53dab10d3f3d"/>
+			</line>
+			<staticText>
+				<reportElement x="404" y="1" width="151" height="10" uuid="ae893ff0-82ab-4fb6-8ac5-c3566413b58a"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[SCF_ResumoSaldosContaCorrente]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="11" splitType="Stretch">
+			<staticText>
+				<reportElement x="182" y="1" width="74" height="10" uuid="2fe29f78-db00-440c-afc8-bf7a1c3d830d"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[TOTAL:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement x="256" y="1" width="74" height="10" uuid="31cd60be-2766-40a0-b30d-9c651bbc0409"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{anterior_1} == null ? 0.00 : $V{anterior_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement x="330" y="1" width="74" height="10" uuid="43775079-a203-4216-8db1-fb41723ff238"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{debito_1} == null ? 0.00 : $V{debito_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement x="404" y="1" width="74" height="10" uuid="c65aae6d-7a15-4c6d-b438-7a77651445eb"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{credito_1} == null ? 0.00 : $V{credito_1}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" uuid="6bd5636f-814a-4623-afbf-2ec1b2cc29dd"/>
+			</line>
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
+				<reportElement x="478" y="1" width="77" height="10" uuid="b8f5c21a-327a-4c15-b89b-c49acfa683b7"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{atual_1} == null ? 0.00 : $V{atual_1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

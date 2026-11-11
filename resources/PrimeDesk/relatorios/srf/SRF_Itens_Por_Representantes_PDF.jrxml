@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SRF_ItensPorRepresentantes(PDF)" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5e978d6c-8e30-4e1e-b0ed-58ea006d3ba4">
 	<property name="ireport.zoom" value="1.4641000000000013"/>
-	<property name="ireport.x" value="238"/>
-	<property name="ireport.y" value="31"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="87"/>
 	<parameter name="title" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="periodo" class="java.lang.String"/>
@@ -62,7 +62,7 @@
 					<textFieldExpression><![CDATA[$F{codRep}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="62" y="0" width="540" height="13" uuid="c86bc46b-01df-4818-9e6e-748e363ed1e1"/>
+					<reportElement x="62" y="0" width="77" height="13" uuid="c86bc46b-01df-4818-9e6e-748e363ed1e1"/>
 					<textElement>
 						<font size="8"/>
 					</textElement>

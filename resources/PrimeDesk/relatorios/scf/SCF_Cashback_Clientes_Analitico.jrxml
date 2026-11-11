@@ -6,7 +6,7 @@
 	<parameter name="EMPRESA" class="java.lang.String"/>
 	<parameter name="TITULO" class="java.lang.String"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["C:\\SAM-Servidor\\Formulas\\src\\main\\resources\\Silcon\\relatorios\\scf\\"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["C:\\SAM-Servidor\\Formulas\\src\\main\\resources\\PrimeDesk\\relatorios\\scf\\"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="StreamSub1" class="java.lang.Object"/>
 	<field name="abe01codigo" class="java.lang.String"/>

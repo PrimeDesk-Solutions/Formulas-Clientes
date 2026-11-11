@@ -237,7 +237,7 @@ BANCÁRIO.]]></text>
 				</textField>
 				<image>
 					<reportElement x="2" y="2" width="39" height="42" uuid="0b8076bc-db37-4ae2-bb81-6c8891b84e6b"/>
-					<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\scf\\LogoItau.png"]]></imageExpression>
+					<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\PrimeDesk\\relatorios\\scf\\LogoItau.png"]]></imageExpression>
 				</image>
 			</band>
 		</groupHeader>
@@ -650,7 +650,7 @@ BANCÁRIO.]]></text>
 			</textField>
 			<image>
 				<reportElement x="0" y="4" width="39" height="42" uuid="faa1b1f1-2fa3-45ed-aefd-296c04d4e440"/>
-				<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\scf\\LogoItau.png"]]></imageExpression>
+				<imageExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\PrimeDesk\\relatorios\\scf\\LogoItau.png"]]></imageExpression>
 			</image>
 			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="425" y="163" width="128" height="12" uuid="8b89342b-3649-4701-8f24-4f5da9ffd450"/>
