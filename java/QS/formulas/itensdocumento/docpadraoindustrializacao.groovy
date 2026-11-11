@@ -344,6 +344,8 @@ public class docpadraoindustrializacao extends FormulaBase {
                     jsonEaa0103.getBigDecimal_Zero("seguro") +
                     jsonEaa0103.getBigDecimal_Zero("icms_st");
 
+            if(jsonEaa0103.getBigDecimal_Zero("icms") == 0) jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
+
             jsonEaa0103.getBigDecimal_Zero("outras_despesas") - jsonEaa0103.getBigDecimal_Zero("desconto");
 
             eaa0103.eaa0103totDoc = eaa0103.eaa0103totDoc.round(2);
@@ -672,12 +674,13 @@ public class docpadraoindustrializacao extends FormulaBase {
                 jsonEaa0103.put("icms_isento", eaa0103.eaa0103total - jsonEaa0103.getBigDecimal_Zero("bc_icms"));
             }
 
+            jsonEaa0103.put("icms_outras", new BigDecimal(0));
+
         } else {
             // Zera todos os outros campos caso a aliquota de ICMS for zero (para ser possível utilizar a seta para baixo para atribuir o mesmo valor a todos os itens)
             jsonEaa0103.put("bc_icms", new BigDecimal(0));
             jsonEaa0103.put("aliq_icms", new BigDecimal(0));
             jsonEaa0103.put("icms", new BigDecimal(0));
-            jsonEaa0103.put("icms_outras", eaa0103.eaa0103totDoc);
         }
     }
 
