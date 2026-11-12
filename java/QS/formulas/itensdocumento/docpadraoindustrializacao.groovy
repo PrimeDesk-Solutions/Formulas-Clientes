@@ -616,7 +616,7 @@ public class docpadraoindustrializacao extends FormulaBase {
     }
 
     private void calcularIPI() {
-        if(jsonEaa0103.getBigDecimal_Zero("aliq_ipi") == 0) jsonEaa0103.put("aliq_ipi", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_ipi"));
+        if(jsonEaa0103.getBigDecimal_Zero("aliq_ipi") == 0) jsonEaa0103.put("aliq_ipi", abg01.abg01txIpi);
 
         if (jsonEaa0103.getBigDecimal_Zero("aliq_ipi") != -1 && jsonEaa0103.getBigDecimal_Zero("aliq_ipi") > 0) {
             jsonEaa0103.put("ipi", jsonEaa0103.getBigDecimal_Zero("bc_ipi") * jsonEaa0103.getBigDecimal_Zero("aliq_ipi") / 100);
@@ -625,6 +625,12 @@ public class docpadraoindustrializacao extends FormulaBase {
             // BC IPI
             jsonEaa0103.put("bc_ipi", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest"));
         } else {
+            jsonEaa0103.put("bc_ipi", new BigDecimal(0));
+            jsonEaa0103.put("aliq_ipi", new BigDecimal(0));
+            jsonEaa0103.put("ipi", new BigDecimal(0));
+        }
+
+        if(eaa0103.eaa0103retInd == 1){
             jsonEaa0103.put("bc_ipi", new BigDecimal(0));
             jsonEaa0103.put("aliq_ipi", new BigDecimal(0));
             jsonEaa0103.put("ipi", new BigDecimal(0));
