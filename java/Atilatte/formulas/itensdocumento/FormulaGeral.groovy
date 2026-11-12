@@ -447,6 +447,8 @@ public class FormulaGeral extends FormulaBase {
                     eaa0103.eaa0103cstIcms = aaj10_cstIcms;
                 }
 
+                calcularTotalLiquido();
+
                 // Preenche os SPEDs dos Itens
                 preencherSPED();
             }
@@ -540,6 +542,8 @@ public class FormulaGeral extends FormulaBase {
                 }
 
                 preencherCBenefItem(grupo);
+
+                calcularTotalLiquido();
 
                 // Preenche os SPEDs dos Itens
                 preencherSPED();
@@ -651,6 +655,8 @@ public class FormulaGeral extends FormulaBase {
                 preencherCBenefItem(grupo);
 
                 calcularCBSIBS();
+
+                calcularTotalLiquido();
 
                 // Preenche os SPEDs dos Itens
                 preencherSPED();
@@ -895,24 +901,32 @@ public class FormulaGeral extends FormulaBase {
         return grupo;
 
     }
-    private void definirPrecoUnitarioItem(){
-        if(procInvoc == "SRF1003" || procInvoc == "SLM1001") return;
-        if(eaa01.eaa01tp == null) return;
 
-        eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
+    private void definirPrecoUnitarioItem() {
+        if (procInvoc != "SCV2002" && procInvoc != "SAMPALM4001") return;
+        if (eaa01.eaa01tp == null) return;
 
-        if(jsonAbe4001 == null) return;
+        BigDecimal precoUnitario = abe4001.abe4001preco;
 
-        if(jsonAbe4001.getString("data_promo_ini") != null && jsonAbe4001.getString("data_promo_fin") != null && jsonAbe4001.getBigDecimal_Zero("preco_promocao") > 0){
-            DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("yyyyMMdd");
-            LocalDate dataIniPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_ini"), formatoData);
-            LocalDate dataFinPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_fin"), formatoData);
-            LocalDate dataAtual = LocalDate.now();
-            def precoPromocao = jsonAbe4001.getBigDecimal_Zero("preco_promocao");
-            if(dataAtual >= dataIniPromo && dataAtual <= dataFinPromo){
-                eaa0103.eaa0103unit = precoPromocao.round(4);
+        if(jsonAbe4001 != null){
+            String dataIniPromo = jsonAbe4001.getString("data_promo_ini");
+            String dataFinPromo = jsonAbe4001.getString("data_promo_fin");
+            BigDecimal precoPromocao = jsonAbe4001.getBigDecimal_Zero("preco_promocao");
+
+            if (dataIniPromo != null && dataFinPromo != null && precoPromocao > 0) {
+                DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+                LocalDate dataAtual = LocalDate.now();
+                LocalDate dataInicial = LocalDate.parse(dataIniPromo, formatoData);
+                LocalDate dataFinal = LocalDate.parse(dataFinPromo, formatoData);
+
+                if (!dataAtual.isBefore(dataInicial) && !dataAtual.isAfter(dataFinal)) {
+                    precoUnitario = precoPromocao;
+                }
             }
         }
+
+        eaa0103.eaa0103unit = precoUnitario.round(4);
     }
     private void calcularPesoBrutoeLiquido(){
         if(jsonEaa0103.getString("umv") == "KG"){
@@ -1650,6 +1664,22 @@ public class FormulaGeral extends FormulaBase {
             eaa0103.eaa0103dtEntrega = dataEntrega;
         }
 
+    }
+
+    private void calcularTotalLiquido() {
+        BigDecimal icm_aliq_liq = jsonEaa0103.getBigDecimal_Zero("_icms")
+
+        if (jsonEaa0103.getBigDecimal_Zero("_red_bc_icms") > 0) {
+            icm_aliq_liq = (jsonEaa0103.getBigDecimal_Zero("_icms") * ( (100 - jsonEaa0103.getBigDecimal_Zero("_red_bc_icms"))/100));
+        }
+
+        // Calcula a aliquota liquida do PIS e COFINS
+        BigDecimal pis_aliq_liq = (jsonEaa0103.getBigDecimal_Zero("_pis") * (100 - icm_aliq_liq)/100);
+        BigDecimal cofins_aliq_liq = (jsonEaa0103.getBigDecimal_Zero("_cofins") * (100 - icm_aliq_liq)/100);
+
+        jsonEaa0103.put("unit_liq", eaa0103.eaa0103unit  * ((100 - (icm_aliq_liq + pis_aliq_liq + cofins_aliq_liq ))/100).round(2));
+        jsonEaa0103.put("tot_liq", (eaa0103.eaa0103qtComl * jsonEaa0103.getBigDecimal_Zero("unit_liq")).round(2));
+        jsonEaa0103.put("prod_liq_total", ( jsonEaa0103.getBigDecimal_Zero("tot_liq") +  jsonEaa0103.getBigDecimal_Zero("frete_dest") + jsonEaa0103.getBigDecimal_Zero("outras_despesas") - jsonEaa0103.getBigDecimal_Zero("desconto")).round(2));
     }
 
     private void preencherSPED(){
