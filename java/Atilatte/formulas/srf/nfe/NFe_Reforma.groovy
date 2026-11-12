@@ -326,6 +326,7 @@ class NFe_Reforma extends FormulaBase {
         ICMSTot.addNode("vFCPST", getCampo("331.01-W06a","vFCPST") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("331.01-W06a","vFCPST")), 2, false), true);
         ICMSTot.addNode("vFCPSTRet", getCampo("331.02-W06b","vFCPSTRet") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("331.02-W06b","vFCPSTRet")), 2, false), true);
         ICMSTot.addNode("vProd", NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal_Zero("total_conv"), 2, false), true);
+        //ICMSTot.addNode("vProdLiqTot", getCampo("326a W01a","vProdLiqTot") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("326a W01a","vProdLiqTot")), 2, false), true);
         ICMSTot.addNode("vFrete", getCampo("333-W08","vFrete") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("333-W08","vFrete")), 2, false), true);
         ICMSTot.addNode("vSeg", getCampo("334-W09","vSeg") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("334-W09","vSeg")), 2, false), true);
         ICMSTot.addNode("vDesc", getCampo("335-W10","vDesc") == null ? 0 : NFeUtils.formatarDecimal(jsonEaa01.getBigDecimal(getCampo("335-W10","vDesc")), 2, false), true);
@@ -945,6 +946,9 @@ class NFe_Reforma extends FormulaBase {
             prod.addNode("vUnCom",  NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal("unitario_conv"),5, false), true);
             //prod.addNode("vUnCom",  NFeUtils.formatarDecimal(eaa0103.eaa0103unit,7, false), true)
             prod.addNode("vProd", jsonEaa0103.getBigDecimal_Zero("total_conv") == 0 ? 0 : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal("total_conv"), 2, false), true);
+//            prod.addNode("vUnComLiq", getCampo("110.02 I11b","vUnComLiq") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("110.02 I11b","vUnComLiq")), 2, true), false);
+//            prod.addNode("vProdLiq", getCampo("110.03 I11c","vProdLiq") == null ? null : NFeUtils.formatarDecimal(jsonEaa0103.getBigDecimal(getCampo("110.03 I11c","vProdLiq")), 2, true), false);
+
             prod.addNode("cEANTrib", eaa0103.eaa0103gtinTrib == null ? "SEM GTIN" : eaa0103.eaa0103gtinTrib, true);
 
             Aam06 aam06UMT = eaa0103.eaa0103umt == null ? null : getAcessoAoBanco().buscarRegistroUnicoById("Aam06", eaa0103.eaa0103umt.aam06id);
