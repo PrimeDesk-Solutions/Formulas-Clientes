@@ -1,5 +1,6 @@
 package Atilatte.relatorios.scv
 
+import br.com.multitec.utils.Utils
 import br.com.multitec.utils.collections.TableMap;
 import sam.server.samdev.relatorio.RelatorioBase;
 import sam.server.samdev.relatorio.DadosParaDownload
@@ -14,8 +15,11 @@ public class SCV_Pedidos_Notas_Atreladas extends RelatorioBase {
 
     @Override
     public Map<String, Object> criarValoresIniciais() {
-        Map<String, Object> filtrosDefault = new HashMap<>();
-        return filtrosDefault;
+        Map<String, Object> filtrosDefault = new HashMap();
+        filtrosDefault.put("numeroInicial", "000000001");
+        filtrosDefault.put("numeroFinal", "999999999");
+        filtrosDefault.put("impressao", "1");
+        return Utils.map("filtros", filtrosDefault);
     }
 
     @Override
@@ -25,20 +29,23 @@ public class SCV_Pedidos_Notas_Atreladas extends RelatorioBase {
         List<Long> tiposDoc = getListLong("tipos");
         List<Long> entidades = getListLong("entidades");
         LocalDate[] dataEmissao = getIntervaloDatas("emissao");
+        Integer impressao = getInteger("impressao")
 
         List<TableMap> dados = buscarDadosRelatorio(numInicial, numFinal, tiposDoc, entidades, dataEmissao);
 
         params.put("TITULO", "SCV - Pedidos e Notas Atreladas");
         params.put("EMPRESA", obterEmpresaAtiva().getAac10codigo() + " - " + obterEmpresaAtiva().getAac10rs())
 
-        return gerarPDF("SCV_Pedidos_Notas_Atreladas", dados);
+        if(impressao == 1) return gerarXLSX("SCV_Pedidos_Notas_Atreladas_Excel", dados);
+
+        return gerarPDF("SCV_Pedidos_Notas_Atreladas_PDF", dados);
     }
 
     private List<TableMap> buscarDadosRelatorio(Integer numInicial, Integer numFinal, List<Long> tiposDoc, List<Long> entidades, LocalDate[] dataEmissao) {
         String whereNumero = numInicial != null && numFinal != null ? " WHERE abb01pedido.abb01num BETWEEN " + numInicial + " AND " + numFinal + " " : "";
         String whereDatas = dataEmissao != null ? " AND abb01pedido.abb01data BETWEEN '" + dataEmissao[0] + "' AND '" + dataEmissao[1] + "' " : "";
         String whereTipos = tiposDoc != null && tiposDoc.size() > 0 ? "AND abb01pedido.abb01tipo IN (:tiposDoc) " : "";
-        String whereEntidades = entidades != null && entidades.size() > 0 ? "AND abe01nota.abe01id IN (:entidades) " : "";
+        String whereEntidades = entidades != null && entidades.size() > 0 ? "AND abe01pedido.abe01id IN (:entidades) " : "";
         String whereEmpresa = "AND eaa01pedido.eaa01eg = :empresa ";
 
         Parametro parametroTipos = tiposDoc != null && tiposDoc.size() > 0 ? Parametro.criar("tiposDoc", tiposDoc) : null;
