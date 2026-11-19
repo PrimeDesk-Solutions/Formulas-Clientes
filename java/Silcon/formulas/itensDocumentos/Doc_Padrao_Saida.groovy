@@ -300,6 +300,8 @@ public class Doc_Padrao_Saida extends FormulaBase {
 
         if (eaa0103.eaa0103qtComl > 0) {
 
+            eaa0103.eaa0103descr = abm01.abm01descr
+
             definirRepresentanteItens();
 
             eaa0102.eaa0102modFrete = 9;

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CST_Etiqueta_Silcon_Modelo2" pageWidth="283" pageHeight="283" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="283" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="7c2e8b3f-4d2e-4b9f-8a72-2b3c4d5e6f01">
+	<property name="ireport.zoom" value="1.0263162364614136"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="caminhoLogo" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\customizados\\Logo Silcon.png"]]></defaultValueExpression>
+	</parameter>
+	<field name="abm70num" class="java.lang.Long"/>
+	<field name="abm01descr" class="java.lang.String"/>
+	<field name="abm01codigo" class="java.lang.String"/>
+	<field name="abm70qt" class="java.math.BigDecimal"/>
+	<field name="aam06codigo" class="java.lang.String"/>
+	<field name="abm70data" class="java.util.Date"/>
+	<group name="abm70num" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{abm70num}]]></groupExpression>
+		<groupHeader>
+			<band height="192" splitType="Prevent">
+				<image scaleImage="RetainShape" hAlign="Center" vAlign="Middle" onErrorType="Blank">
+					<reportElement x="0" y="0" width="120" height="40" uuid="7c2e8b3f-4d2e-4b9f-8a72-2b3c4d5e6f02"/>
+					<imageExpression><![CDATA[$P{caminhoLogo}]]></imageExpression>
+				</image>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement x="213" y="16" width="70" height="16" uuid="7c2e8b3f-4d2e-4b9f-8a72-2b3c4d5e6f03"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="10" isBold="false" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{abm70data}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="0" y="40" width="283" height="52" uuid="7c2e8b3f-4d2e-4b9f-8a72-2b3c4d5e6f04"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="13" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{abm01descr}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="92" width="283" height="14" uuid="7c2e8b3f-4d2e-4b9f-8a72-2b3c4d5e6f05"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[PART NUMBER]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement positionType="Float" x="0" y="106" width="283" height="22" uuid="7c2e8b3f-4d2e-4b9f-8a72-2b3c4d5e6f06"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="13" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{abm01codigo}]]></textFieldExpression>
+				</textField>
+				<componentElement>
+					<reportElement positionType="Float" x="51" y="128" width="162" height="28" uuid="7c2e8b3f-4d2e-4b9f-8a72-2b3c4d5e6f07">
+						<printWhenExpression><![CDATA[$F{abm01codigo} != null && $F{abm01codigo}.trim().length() > 0]]></printWhenExpression>
+					</reportElement>
+					<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="4" barHeight="70">
+						<jr:codeExpression><![CDATA[$F{abm01codigo}.trim()]]></jr:codeExpression>
+					</jr:barbecue>
+				</componentElement>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="155" width="283" height="13" uuid="7c2e8b3f-4d2e-4b9f-8a72-2b3c4d5e6f08"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[QUANTIDADE]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement positionType="Float" x="0" y="168" width="283" height="24" uuid="7c2e8b3f-4d2e-4b9f-8a72-2b3c4d5e6f09"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{abm70qt} == null ? "" : new java.text.DecimalFormat("#,##0.###", new java.text.DecimalFormatSymbols(new java.util.Locale("pt", "BR"))).format($F{abm70qt})) + ($F{aam06codigo} == null ? "" : " " + $F{aam06codigo})]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="213" y="0" width="70" height="16" uuid="489cc19c-660a-484a-89b8-026823a89933"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{abm70num}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+</jasperReport>

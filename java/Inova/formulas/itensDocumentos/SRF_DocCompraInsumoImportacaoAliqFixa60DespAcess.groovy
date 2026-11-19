@@ -1,4 +1,4 @@
-//package Inova.formulas.itensDocumentos
+package Inova.formulas.itensDocumentos
 
 import br.com.multiorm.criteria.criterion.Criterion
 import sam.model.entities.aa.Aac13
@@ -679,7 +679,7 @@ public class SRF_DocCompraInsumoImportacaoAliqFixa60DespAcess extends FormulaBas
 
         if(jsonEaa0103.getBigDecimal_Zero("aliq_importacao") > 0){
             // BC Importação
-            jsonEaa0103.put("bc_importacao", eaa0103.eaa0103total * jsonEaa0103.getBigDecimal_Zero("frete_dest"));
+            jsonEaa0103.put("bc_importacao", eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("frete_dest"));
 
             jsonEaa0103.put("imposto_importacao", jsonEaa0103.getBigDecimal_Zero("bc_importacao") * jsonEaa0103.getBigDecimal_Zero("aliq_importacao") / 100);
             jsonEaa0103.put("imposto_importacao", jsonEaa0103.getBigDecimal_Zero("imposto_importacao").round(2));
@@ -771,7 +771,7 @@ public class SRF_DocCompraInsumoImportacaoAliqFixa60DespAcess extends FormulaBas
 
             if(jsonEaa0103.getBigDecimal_Zero("aliq_icms") == 0) jsonEaa0103.put("aliq_icms", jsonAbm1001_UF_Item.getBigDecimal_Zero("aliq_icms"));
 
-            def bcICMS = ((eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("ipi") + jsonEaa0103.getBigDecimal_Zero("imposto_importacao") + jsonEaa0103.getBigDecimal_Zero("frete_dest")) / 0.83) * 0.94;
+            def bcICMS = ((eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("ipi") + jsonEaa0103.getBigDecimal_Zero("imposto_importacao") + jsonEaa0103.getBigDecimal_Zero("frete_dest")) / 0.83) * 0.944444;
 
             // BC ICMS
             jsonEaa0103.put("bc_icms", bcICMS.round(2));

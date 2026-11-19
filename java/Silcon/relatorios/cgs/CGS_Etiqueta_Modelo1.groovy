@@ -55,7 +55,7 @@ public class CGS_Etiqueta_Modelo1 extends RelatorioBase {
 
         gravarStatusImpressaoEtiquetas(abm70ids);
 
-        params.put("caminhoLogo", "C:\\SAM-Servidor\\Formulas-Clientes\\src\\main\\resources\\Silcon\\relatorios\\cgs\\Logo Silcon.png")
+        params.put("caminhoLogo", "C:\\SAM-Servidor\\samdev\\resources\\Silcon\\relatorios\\cgs\\Logo Silcon.png")
 
         return gerarPDF("CGS_Etiqueta_Modelo1", dados);
     }
@@ -66,7 +66,7 @@ public class CGS_Etiqueta_Modelo1 extends RelatorioBase {
                 " INNER JOIN aam05 ON aam05id = abm70modelo "+
                 " LEFT JOIN aam06 ON aam06id = abm01umu " +
                 " WHERE abm70id IN (:ids) " +
-                " AND aam05codigo = '001' " +
+                " AND aam05codigo = '00002' " +
                 " ORDER BY abm70num ";
 
         return getAcessoAoBanco().buscarListaDeTableMap(sql, Parametro.criar("ids", ids));
@@ -97,7 +97,7 @@ public class CGS_Etiqueta_Modelo1 extends RelatorioBase {
                 " INNER JOIN aam05 ON aam05id = abm70modelo "+
                 " LEFT JOIN aam06 ON aam06id = abm01umu " +
                 " WHERE TRUE " +
-                " AND aam05codigo = '001' " +
+                " AND aam05codigo = '00002' " +
                 whereNumInicial +
                 whereData +
                 whereImpressao +
