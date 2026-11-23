@@ -447,7 +447,7 @@ public class FormulaGeral extends FormulaBase {
                     eaa0103.eaa0103cstIcms = aaj10_cstIcms;
                 }
 
-                calcularTotalLiquido();
+                //calcularTotalLiquido();
 
                 // Preenche os SPEDs dos Itens
                 preencherSPED();
@@ -543,7 +543,7 @@ public class FormulaGeral extends FormulaBase {
 
                 preencherCBenefItem(grupo);
 
-                calcularTotalLiquido();
+               //calcularTotalLiquido();
 
                 // Preenche os SPEDs dos Itens
                 preencherSPED();
@@ -656,7 +656,7 @@ public class FormulaGeral extends FormulaBase {
 
                 calcularCBSIBS();
 
-                calcularTotalLiquido();
+                //calcularTotalLiquido();
 
                 // Preenche os SPEDs dos Itens
                 preencherSPED();
@@ -903,7 +903,7 @@ public class FormulaGeral extends FormulaBase {
     }
 
     private void definirPrecoUnitarioItem() {
-        if (procInvoc != "SCV2002" && procInvoc != "SAMPALM4001") return;
+        if (procInvoc != "SCV2002" && procInvoc != "SAMPALM4001" && procInvoc != "SCV3002") return;
         if (eaa01.eaa01tp == null) return;
 
         BigDecimal precoUnitario = abe4001.abe4001preco;

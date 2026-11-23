@@ -625,24 +625,31 @@ public class PedidoDeAmostraGratisGeral extends FormulaBase {
         return grupo;
 
     }
-    private void definirPrecoUnitarioItem(){
-        if(procInvoc == "SRF1003" || procInvoc == "SLM1001") return;
-        if(eaa01.eaa01tp == null) return;
+    private void definirPrecoUnitarioItem() {
+        if (procInvoc != "SCV2002" && procInvoc != "SAMPALM4001" && procInvoc != "SCV3002") return;
+        if (eaa01.eaa01tp == null) return;
 
-        eaa0103.eaa0103unit = abe4001.abe4001preco.round(4)
+        BigDecimal precoUnitario = abe4001.abe4001preco;
 
-        if(jsonAbe4001 == null) return;
+        if(jsonAbe4001 != null){
+            String dataIniPromo = jsonAbe4001.getString("data_promo_ini");
+            String dataFinPromo = jsonAbe4001.getString("data_promo_fin");
+            BigDecimal precoPromocao = jsonAbe4001.getBigDecimal_Zero("preco_promocao");
 
-        if(jsonAbe4001.getString("data_promo_ini") != null && jsonAbe4001.getString("data_promo_fin") != null && jsonAbe4001.getBigDecimal_Zero("preco_promocao") > 0){
-            DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("yyyyMMdd");
-            LocalDate dataIniPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_ini"), formatoData);
-            LocalDate dataFinPromo = LocalDate.parse(jsonAbe4001.getString("data_promo_fin"), formatoData);
-            LocalDate dataAtual = LocalDate.now();
-            def precoPromocao = jsonAbe4001.getBigDecimal_Zero("preco_promocao");
-            if(dataAtual >= dataIniPromo && dataAtual <= dataFinPromo){
-                eaa0103.eaa0103unit = precoPromocao.round(4);
+            if (dataIniPromo != null && dataFinPromo != null && precoPromocao > 0) {
+                DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+                LocalDate dataAtual = LocalDate.now();
+                LocalDate dataInicial = LocalDate.parse(dataIniPromo, formatoData);
+                LocalDate dataFinal = LocalDate.parse(dataFinPromo, formatoData);
+
+                if (!dataAtual.isBefore(dataInicial) && !dataAtual.isAfter(dataFinal)) {
+                    precoUnitario = precoPromocao;
+                }
             }
         }
+
+        eaa0103.eaa0103unit = precoUnitario.round(4);
     }
 
     private void calcularCBSIBS() {
