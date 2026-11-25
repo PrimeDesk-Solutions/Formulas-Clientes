@@ -14,7 +14,7 @@ import br.com.multitec.utils.Utils;
 public class SLM_PagamentosFreteAgregados extends RelatorioBase {
     @Override
     public String getNomeTarefa() {
-        return "Pagamento Frete Agregados";
+        return "SLM - Pagamento Frete Agregados";
     }
 
     @Override
@@ -29,12 +29,10 @@ public class SLM_PagamentosFreteAgregados extends RelatorioBase {
         List<Long> idsMotoristas = getListLong("motorista");
         List<Long> idsVeiculos = getListLong("veiculo");
         LocalDate[] datas = getIntervaloDatas("data");
-        List<Long> motoristas = buscarMotoristas();
         Integer impressao = getInteger("impressao");
 
-        if (idsMotoristas == null || idsMotoristas == []) {
-            idsMotoristas = motoristas;
-        }
+        if (idsMotoristas == null || idsMotoristas == [])
+            idsMotoristas = buscarMotoristas();
 
         String periodo = "";
         if (datas != null) {
@@ -50,9 +48,9 @@ public class SLM_PagamentosFreteAgregados extends RelatorioBase {
             documentos = buscarRegistrosMotoristas(idsMotoristas, datas);
         }
 
-        if (impressao == 1) return gerarPDF("freteAgregadoMotorista", documentos);
+        if (impressao == 1) return gerarPDF("SLM_Pagamento_Frete_Agregado_Motorista", documentos);
 
-        return gerarPDF("freteAgregado", documentos);
+        return gerarPDF("SLM_Pagamento_Frete_Agregado_Geral", documentos);
 
     }
 
@@ -60,12 +58,9 @@ public class SLM_PagamentosFreteAgregados extends RelatorioBase {
         List<TableMap> documentos = new ArrayList();
 
         for (motorista in idsMotoristas) {
-            List<TableMap> ocorrencias = new ArrayList();
-            List<TableMap> docsMotoristas = new ArrayList();
             List<TableMap> cargas = buscarCargas(motorista, datas);
-            TableMap freteDespacho = new TableMap();
             Integer numSemanaAux = 0;
-            String orientacao;
+            String orientacao = "";
 
             for (carga in cargas) {
                 Long idCarga = carga.getLong("idCarga");
@@ -75,22 +70,20 @@ public class SLM_PagamentosFreteAgregados extends RelatorioBase {
                 Integer capacidade = carga.getInteger("capacidade");
                 BigDecimal vlrFrete = buscarValorOcorrencias(idCarga, "FRETE");
                 BigDecimal vlrDiaria = buscarValorOcorrencias(idCarga, "DIARIA");
-                BigDecimal vlrPedagio = buscarValorOcorrencias(idCarga, "PEDAGIO");
+                BigDecimal vlrPedagio = buscarValorOcorrencias(idCarga, "PEDAGIO ENTREGA");
+                BigDecimal valePedagio = buscarValorOcorrencias(idCarga, "VALE PEDAGIO")
                 BigDecimal vlrDescarga = buscarValorOcorrencias(idCarga, "DESCARGA");
                 BigDecimal vlrColeta = buscarValorOcorrencias(idCarga, "COLETA");
                 BigDecimal vlrDesconto = buscarValorOcorrencias(idCarga, "DESCONTO");
                 vlrDesconto = vlrDesconto.abs() * -1;
-                BigDecimal vlrFreteTotal = vlrFrete + vlrPedagio + vlrDescarga + vlrColeta + vlrDiaria;
-                BigDecimal percentNota = vlrFreteTotal / totDoc;
+                BigDecimal vlrFreteBruto = vlrFrete + vlrPedagio + vlrDescarga + vlrColeta + vlrDiaria + valePedagio;
+                BigDecimal vlrFreteLiquido = vlrFrete + vlrPedagio + vlrDescarga + vlrColeta + vlrDiaria;
+                BigDecimal percentNota = vlrFreteBruto / totDoc;
                 if(totalBruto == 0) interromper("Total do Peso Bruto na carga " + numCarga + " é zero, verifique a carga e tente novamente.")
-                BigDecimal vlrFretePorQuilo = vlrFreteTotal / totalBruto;
+                BigDecimal vlrFretePorQuilo = vlrFreteBruto / totalBruto;
                 BigDecimal percentCapacidade = totalBruto / capacidade;
                 Integer numSemana = carga.getInteger("semana");
                 Integer qtdCarga = buscarQuantidadesDeCargasSemana(motorista, datas,numSemana);
-
-
-
-                def totalGeral = vlrFrete + vlrPedagio + vlrDescarga;
                 String nomeSemana = buscarNomeSemana(numSemana);
 
                 if (numSemana != numSemanaAux) {
@@ -108,17 +101,18 @@ public class SLM_PagamentosFreteAgregados extends RelatorioBase {
                 carga.put("vlrDescarga", vlrDescarga);
                 carga.put("vlrColeta", vlrColeta);
                 carga.put("vlrDesconto", vlrDesconto);
-                carga.put("vlrFreteTotal", vlrFreteTotal);
+                carga.put("vlrFreteBruto", vlrFreteBruto);
+                carga.put("vlrFreteLiquido", vlrFreteLiquido);
                 carga.put("orientacao", orientacao);
                 carga.put("qtdCarga", qtdCarga);
-
+                carga.put("valePedagio", valePedagio);
             }
-
             documentos.addAll(cargas);
         }
 
         return documentos;
     }
+
 
     private List<TableMap> buscarRegistrosMotoristas(List<Long> idsMotoristas, LocalDate[] datas) {
         List<TableMap> documentos = new ArrayList();
@@ -139,19 +133,14 @@ public class SLM_PagamentosFreteAgregados extends RelatorioBase {
 
                 BigDecimal totDoc = cargasMotorista != null ? cargasMotorista.getBigDecimal_Zero("totDoc") : null;
                 BigDecimal totQuilo = cargasMotorista != null ? cargasMotorista.getBigDecimal_Zero("totBruto") : null;
-                Integer capacidade = cargasMotorista != null ? cargasMotorista.getInteger("capacidade") : null;
 
                 BigDecimal vlrFrete = buscarValorOcorrenciasSemanaMotorista("FRETE", i, motorista, datas);
                 BigDecimal vlrDiaria = buscarValorOcorrenciasSemanaMotorista("DIARIA", i, motorista, datas);
-                BigDecimal vlrPedagio = buscarValorOcorrenciasSemanaMotorista("PEDAGIO", i, motorista, datas);
+                BigDecimal vlrPedagio = buscarValorOcorrenciasSemanaMotorista("PEDAGIO ENTREGA", i, motorista, datas);
                 BigDecimal vlrDescarga = buscarValorOcorrenciasSemanaMotorista("DESCARGA", i, motorista, datas);
                 BigDecimal vlrColeta = buscarValorOcorrenciasSemanaMotorista("COLETA", i, motorista, datas);
-                BigDecimal vlrDesconto = buscarValorOcorrenciasSemanaMotorista("DESCONTO", i, motorista, datas);
-                vlrDesconto = vlrDesconto.abs() * -1;
                 BigDecimal vlrFreteTotal = vlrFrete + vlrPedagio + vlrDescarga + vlrColeta + vlrDiaria;
-                BigDecimal percentNota = totDoc == null ? 0 : vlrFreteTotal / totDoc;
                 BigDecimal vlrFretePorQuilo = totQuilo == null ? 0 : vlrFreteTotal / totQuilo;
-                BigDecimal percentCapacidade = capacidade == null ? 0 : totQuilo / capacidade;
                 String nomeSemana = buscarNomeSemana(i);
 
                 tmDocumento.put("totDoc", totDoc);
@@ -345,9 +334,7 @@ public class SLM_PagamentosFreteAgregados extends RelatorioBase {
     }
 
     private List<Long> buscarMotoristas() {
-        String sql = "select distinct aah21id from aah21 " +
-                "inner join bfc10 on aah21id = bfc10motorista ";
-
+        String sql = "SELECT DISTINCT aah21id FROM aah21 WHERE aah21di IS NULL ORDER BY aah21nome";
         return getAcessoAoBanco().obterListaDeLong(sql);
     }
 
@@ -431,6 +418,5 @@ public class SLM_PagamentosFreteAgregados extends RelatorioBase {
 
     }
 }
-//meta-sis-eyJkZXNjciI6IlBhZ2FtZW50byBGcmV0ZSBBZ3JlZ2Fkb3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlBhZ2FtZW50byBGcmV0ZSBBZ3JlZ2Fkb3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
 //meta-sis-eyJkZXNjciI6IlBhZ2FtZW50byBGcmV0ZSBBZ3JlZ2Fkb3MiLCJ0aXBvIjoicmVsYXRvcmlvIn0=
