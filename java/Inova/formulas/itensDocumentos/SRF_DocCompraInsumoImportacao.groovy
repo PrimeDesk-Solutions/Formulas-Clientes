@@ -321,7 +321,7 @@ public class SRF_DocCompraInsumoImportacao extends FormulaBase {
 
             jsonEaa0103.put("outras_despesas", jsonEaa0103.getBigDecimal_Zero("pis") + jsonEaa0103.getBigDecimal_Zero("cofins") + jsonEaa0103.getBigDecimal_Zero("siscomex_valor"));
 
-            jsonEaa0103.put("desp_acess_rat", jsonEaa0103.getBigDecimal_Zero("pis") + jsonEaa0103.getBigDecimal_Zero("cofins") + jsonEaa0103.getBigDecimal_Zero("siscomex_valor"));
+            jsonEaa0103.put("desp_aces_rat", jsonEaa0103.getBigDecimal_Zero("pis") + jsonEaa0103.getBigDecimal_Zero("cofins") + jsonEaa0103.getBigDecimal_Zero("siscomex_valor"));
 
             calcularICMS(contribICMS);
 
@@ -769,7 +769,7 @@ public class SRF_DocCompraInsumoImportacao extends FormulaBase {
 
         if (jsonEaa0103.getBigDecimal_Zero("aliq_icms") != -1 && jsonEaa0103.getBigDecimal_Zero("aliq_icms") > 0) {
 
-            def bcICMS = (eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("ipi") + jsonEaa0103.getBigDecimal_Zero("imposto_importacao") + jsonEaa0103.getBigDecimal_Zero("desp_acess_rat")) / (1 - jsonEaa0103.getBigDecimal_Zero("aliq_icms") / 100);
+            def bcICMS = (eaa0103.eaa0103total + jsonEaa0103.getBigDecimal_Zero("ipi") + jsonEaa0103.getBigDecimal_Zero("imposto_importacao") + jsonEaa0103.getBigDecimal_Zero("desp_aces_rat")) / (1 - jsonEaa0103.getBigDecimal_Zero("aliq_icms") / 100);
 
             // BC ICMS
             jsonEaa0103.put("bc_icms", bcICMS.round(2));

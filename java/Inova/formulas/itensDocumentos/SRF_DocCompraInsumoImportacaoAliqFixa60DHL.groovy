@@ -327,7 +327,7 @@ public class SRF_DocCompraInsumoImportacaoAliqFixa60DHL extends FormulaBase {
 
             calcularImpostoImportacao();
 
-            jsonEaa0103.put("outras_despesas", jsonEaa0103.getBigDecimal_Zero("desp_acess_rat"));
+            jsonEaa0103.put("outras_despesas", jsonEaa0103.getBigDecimal_Zero("desp_aces_rat"));
 
             calculaPIS();
 
@@ -343,7 +343,7 @@ public class SRF_DocCompraInsumoImportacaoAliqFixa60DHL extends FormulaBase {
                     jsonEaa0103.getBigDecimal_Zero("cofins") +
                     jsonEaa0103.getBigDecimal_Zero("imposto_importacao") +
                     jsonEaa0103.getBigDecimal_Zero("icms") +
-                    jsonEaa0103.getBigDecimal_Zero("desp_acess_rat") +
+                    jsonEaa0103.getBigDecimal_Zero("desp_aces_rat") +
                     jsonEaa0103.getBigDecimal_Zero("frete_dest") -
                     jsonEaa0103.getBigDecimal_Zero("desconto");
 

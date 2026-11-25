@@ -330,7 +330,7 @@ public class SRF_DocCompraInsumoImportacaoAliqFixa60DespAcess extends FormulaBas
 
             calculaCOFINS();
 
-            calcularIPI();
+            //calcularIPI();
 
             calcularICMS(contribICMS);
 
@@ -338,7 +338,7 @@ public class SRF_DocCompraInsumoImportacaoAliqFixa60DespAcess extends FormulaBas
                     jsonEaa0103.getBigDecimal_Zero("ipi") +
                     jsonEaa0103.getBigDecimal_Zero("imposto_importacao") +
                     jsonEaa0103.getBigDecimal_Zero("icms") +
-                    jsonEaa0103.getBigDecimal_Zero("desp_acess_rat") +
+                    jsonEaa0103.getBigDecimal_Zero("desp_aces_rat") +
                     jsonEaa0103.getBigDecimal_Zero("frete_dest") -
                     jsonEaa0103.getBigDecimal_Zero("desconto");
 
