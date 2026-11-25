@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="freteAgregadoMensal" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e6fefead-ff02-4ebc-acc1-6c8b4371a730">
-	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="621"/>
+	<property name="ireport.zoom" value="1.8150000000000004"/>
+	<property name="ireport.x" value="275"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="periodo" class="java.lang.String"/>
 	<field name="semanaDia" class="java.lang.String"/>
@@ -24,8 +24,10 @@
 	<field name="vlrColeta" class="java.math.BigDecimal"/>
 	<field name="vlrDesconto" class="java.math.BigDecimal"/>
 	<field name="orientacao" class="java.lang.String"/>
-	<field name="vlrFreteTotal" class="java.math.BigDecimal"/>
+	<field name="vlrFreteLiquido" class="java.math.BigDecimal"/>
 	<field name="qtdCarga" class="java.lang.Integer"/>
+	<field name="valePedagio" class="java.math.BigDecimal"/>
+	<field name="vlrFreteBruto" class="java.math.BigDecimal"/>
 	<variable name="somaTotDocMot" class="java.math.BigDecimal" resetType="Group" resetGroup="motoristas" calculation="Sum">
 		<variableExpression><![CDATA[$F{totDoc}]]></variableExpression>
 	</variable>
@@ -94,10 +96,10 @@
 	</variable>
 	<variable name="vlrFreteTotal" class="java.lang.String"/>
 	<variable name="vlrFreteTotalMotorista" class="java.math.BigDecimal" resetType="Group" resetGroup="motoristas" calculation="Sum">
-		<variableExpression><![CDATA[$F{vlrFreteTotal}]]></variableExpression>
+		<variableExpression><![CDATA[$F{vlrFreteLiquido}]]></variableExpression>
 	</variable>
 	<variable name="vlrFreteTotalGeral" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
-		<variableExpression><![CDATA[$F{vlrFreteTotal}]]></variableExpression>
+		<variableExpression><![CDATA[$F{vlrFreteLiquido}]]></variableExpression>
 	</variable>
 	<variable name="somaTotDocSem" class="java.math.BigDecimal" resetType="Group" resetGroup="semana" calculation="Sum">
 		<variableExpression><![CDATA[$F{totDoc}]]></variableExpression>
@@ -118,7 +120,7 @@
 		<variableExpression><![CDATA[$F{vlrColeta}]]></variableExpression>
 	</variable>
 	<variable name="vlrFreteTotalSem" class="java.math.BigDecimal" resetType="Group" resetGroup="semana" calculation="Sum">
-		<variableExpression><![CDATA[$F{vlrFreteTotal}]]></variableExpression>
+		<variableExpression><![CDATA[$F{vlrFreteLiquido}]]></variableExpression>
 	</variable>
 	<variable name="somaPercentCapSem" class="java.math.BigDecimal" resetType="Group" resetGroup="semana" calculation="Sum">
 		<variableExpression><![CDATA[$F{percentCapacidade}]]></variableExpression>
@@ -153,6 +155,24 @@
 	<variable name="countNotas" class="java.lang.Integer" resetType="Group" resetGroup="semana">
 		<variableExpression><![CDATA[$F{qtdCarga}]]></variableExpression>
 	</variable>
+	<variable name="somaValePedagioSem" class="java.math.BigDecimal" resetType="Group" resetGroup="semana" calculation="Sum">
+		<variableExpression><![CDATA[$F{valePedagio}]]></variableExpression>
+	</variable>
+	<variable name="somaValePedagioMotorista" class="java.math.BigDecimal" resetType="Group" resetGroup="motoristas" calculation="Sum">
+		<variableExpression><![CDATA[$F{valePedagio}]]></variableExpression>
+	</variable>
+	<variable name="somaValePedagioGeral" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{valePedagio}]]></variableExpression>
+	</variable>
+	<variable name="somaTotDocValePedagioSem" class="java.math.BigDecimal" resetType="Group" resetGroup="semana" calculation="Sum">
+		<variableExpression><![CDATA[$F{vlrFreteBruto}]]></variableExpression>
+	</variable>
+	<variable name="somaTotDocValePedagioMotorista" class="java.math.BigDecimal" resetType="Group" resetGroup="motoristas" calculation="Sum">
+		<variableExpression><![CDATA[$F{vlrFreteBruto}]]></variableExpression>
+	</variable>
+	<variable name="somaTotDocValePedagioGeral" class="java.math.BigDecimal" resetType="Group" resetGroup="geral" calculation="Sum">
+		<variableExpression><![CDATA[$F{vlrFreteBruto}]]></variableExpression>
+	</variable>
 	<group name="geral">
 		<groupHeader>
 			<band/>
@@ -181,21 +201,21 @@
 					<textFieldExpression><![CDATA[$V{somaPesoBrutoGeral}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00 %">
-					<reportElement x="581" y="15" width="68" height="13" uuid="fe33d75c-c5bd-41de-9933-3729d202325d"/>
+					<reportElement x="651" y="15" width="44" height="13" uuid="fe33d75c-c5bd-41de-9933-3729d202325d"/>
 					<textElement textAlignment="Right">
 						<font size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{somaPercentNotaGeralAjustado}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00;-#,##0.00">
-					<reportElement x="649" y="15" width="83" height="13" uuid="c4ece11d-07d1-4fc2-9b13-786c79d17ae9"/>
+					<reportElement x="695" y="16" width="55" height="13" uuid="c4ece11d-07d1-4fc2-9b13-786c79d17ae9"/>
 					<textElement textAlignment="Right">
 						<font size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{somaFreteKgGeralAjustado}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00 %">
-					<reportElement x="732" y="15" width="70" height="13" uuid="4effeb3c-f799-46cc-90ad-c1ae81a358d5"/>
+					<reportElement x="750" y="15" width="52" height="13" uuid="4effeb3c-f799-46cc-90ad-c1ae81a358d5"/>
 					<textElement textAlignment="Right">
 						<font size="8"/>
 					</textElement>
@@ -233,11 +253,25 @@
 					<reportElement x="2" y="15" width="800" height="1" uuid="9a001112-cfd2-45a1-8110-3478adb2ab31"/>
 				</line>
 				<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="false">
-					<reportElement x="498" y="16" width="83" height="13" uuid="659eed17-af25-479a-b4e2-cc06cbddcfd1"/>
+					<reportElement x="498" y="16" width="47" height="13" uuid="659eed17-af25-479a-b4e2-cc06cbddcfd1"/>
 					<textElement textAlignment="Right">
 						<font size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{vlrFreteTotalGeral}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="546" y="16" width="41" height="13" uuid="f9c56276-3b52-425d-816a-8727cca1456c"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{somaValePedagioGeral}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="587" y="16" width="64" height="13" uuid="df9c4669-781f-42cf-9859-17515c5e784f"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{somaTotDocValePedagioGeral}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -307,21 +341,21 @@
 					<textFieldExpression><![CDATA[$V{somaPesoBrutoMot}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00 %">
-					<reportElement x="581" y="5" width="68" height="12" uuid="eb0c3bd8-b27d-496f-91e1-08f0918c624a"/>
+					<reportElement x="651" y="5" width="44" height="12" uuid="eb0c3bd8-b27d-496f-91e1-08f0918c624a"/>
 					<textElement textAlignment="Right">
 						<font size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{somaPercentNotaMotAjustado}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00 %">
-					<reportElement x="732" y="5" width="70" height="12" uuid="66357ea6-c04b-472f-939c-8613ed309c13"/>
+					<reportElement x="750" y="5" width="52" height="12" uuid="66357ea6-c04b-472f-939c-8613ed309c13"/>
 					<textElement textAlignment="Right">
 						<font size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{somaPercentCapMot}]]></textFieldExpression>
 				</textField>
 				<textField pattern="">
-					<reportElement x="498" y="5" width="83" height="13" uuid="547bc49c-8057-4395-a646-a19ff5fb2262"/>
+					<reportElement x="498" y="5" width="47" height="13" uuid="547bc49c-8057-4395-a646-a19ff5fb2262"/>
 					<textElement textAlignment="Right">
 						<font size="8"/>
 					</textElement>
@@ -338,7 +372,7 @@
 					<reportElement x="2" y="4" width="800" height="1" uuid="e82be6d2-d56e-4c0b-8c14-d4e013ffc32d"/>
 				</line>
 				<textField pattern="#,##0.00;-#,##0.00">
-					<reportElement x="649" y="4" width="83" height="12" uuid="0cbaf34e-8510-48cb-9866-a9d201236e4e"/>
+					<reportElement x="695" y="5" width="55" height="12" uuid="0cbaf34e-8510-48cb-9866-a9d201236e4e"/>
 					<textElement textAlignment="Right">
 						<font size="8"/>
 					</textElement>
@@ -371,6 +405,20 @@
 						<font size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{valorTotPedagioMot}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="546" y="5" width="41" height="13" uuid="5ec76b1d-c17c-41a6-93a4-08814eaf6698"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{somaValePedagioMotorista}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="587" y="5" width="64" height="13" uuid="9ed557e0-e02b-4fb2-8b0c-f9f5a39bb576"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{somaTotDocValePedagioMotorista}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -433,7 +481,7 @@
 					<textFieldExpression><![CDATA[$V{somaDescargaSem}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00;-#,##0.00">
-					<reportElement x="649" y="4" width="83" height="13" uuid="c780436a-4212-4835-ba71-6ce54efb05a9"/>
+					<reportElement x="695" y="4" width="55" height="13" uuid="c780436a-4212-4835-ba71-6ce54efb05a9"/>
 					<textElement textAlignment="Right">
 						<font size="8"/>
 					</textElement>
@@ -450,7 +498,7 @@
 					<reportElement x="0" y="3" width="800" height="1" uuid="e44d34c8-a93d-4125-a88a-2ebf2fb5ad53"/>
 				</line>
 				<textField pattern="#,##0.00;-#,##0.00">
-					<reportElement x="498" y="4" width="83" height="13" uuid="e48c6372-8ecf-4748-ba1b-57a42ddbce9e"/>
+					<reportElement x="498" y="4" width="47" height="13" uuid="e48c6372-8ecf-4748-ba1b-57a42ddbce9e"/>
 					<textElement textAlignment="Right">
 						<font size="8"/>
 					</textElement>
@@ -464,7 +512,7 @@
 					<text><![CDATA[Total Semana]]></text>
 				</staticText>
 				<textField pattern="#,##0.00 %">
-					<reportElement x="581" y="4" width="68" height="13" uuid="145c51a7-5a6d-42ff-8ecc-2498ae620f65"/>
+					<reportElement x="651" y="4" width="44" height="13" uuid="145c51a7-5a6d-42ff-8ecc-2498ae620f65"/>
 					<textElement textAlignment="Right">
 						<font size="8"/>
 					</textElement>
@@ -487,11 +535,25 @@
 					<text><![CDATA[Orientação]]></text>
 				</staticText>
 				<textField pattern="#,##0.00 %">
-					<reportElement x="732" y="3" width="68" height="14" uuid="8d74b730-d90d-4d58-8a92-201eeed7894a"/>
+					<reportElement x="750" y="3" width="50" height="14" uuid="8d74b730-d90d-4d58-8a92-201eeed7894a"/>
 					<textElement textAlignment="Right">
 						<font size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{somaPercentCapSemAjustado}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="546" y="4" width="41" height="13" uuid="4c47233e-08c0-47ee-9c75-054a5808a3fa"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{somaValePedagioSem}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="587" y="4" width="64" height="13" uuid="0e2674d9-637e-4127-a083-3808277f1308"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{somaTotDocValePedagioSem}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -518,7 +580,7 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="14" splitType="Stretch">
+		<band height="40" splitType="Stretch">
 			<staticText>
 				<reportElement x="220" y="0" width="57" height="13" uuid="154ffbbb-6fc5-4b4c-8587-0de6916d5752"/>
 				<textElement textAlignment="Right">
@@ -527,21 +589,21 @@
 				<text><![CDATA[Peso Bruto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="581" y="0" width="68" height="13" uuid="f0f766a0-6d7c-4dcd-ade8-dee3dec006df"/>
+				<reportElement x="651" y="0" width="44" height="23" uuid="f0f766a0-6d7c-4dcd-ade8-dee3dec006df"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[% Valor Nota]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="649" y="0" width="73" height="13" uuid="bcf9829d-ea97-4c8a-81a5-01811c4935ee"/>
+				<reportElement x="695" y="0" width="55" height="13" uuid="bcf9829d-ea97-4c8a-81a5-01811c4935ee"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[R$/KG]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="13" width="802" height="1" uuid="c7b1504b-ae7d-436b-9239-7e2b524b6ba7"/>
+				<reportElement x="0" y="23" width="802" height="1" uuid="c7b1504b-ae7d-436b-9239-7e2b524b6ba7"/>
 			</line>
 			<staticText>
 				<reportElement x="68" y="0" width="89" height="13" uuid="07dc1f4b-0255-4b60-801a-902db3029cf4"/>
@@ -551,11 +613,11 @@
 				<text><![CDATA[Data Entrega Real]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="722" y="0" width="80" height="13" uuid="92b399d5-d880-4c87-9e46-fa066acb802a"/>
+				<reportElement x="750" y="0" width="52" height="13" uuid="92b399d5-d880-4c87-9e46-fa066acb802a"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
-				<text><![CDATA[% Capacidade]]></text>
+				<text><![CDATA[Capacidade]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="2" y="0" width="66" height="13" uuid="75f5dfd6-9c5e-4f22-89b8-95df041b2ffc"/>
@@ -600,11 +662,25 @@
 				<text><![CDATA[Pedagio]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="488" y="0" width="93" height="13" uuid="69af673c-bad3-4f8a-aa9c-8b472d7af176"/>
+				<reportElement x="488" y="0" width="57" height="13" uuid="69af673c-bad3-4f8a-aa9c-8b472d7af176"/>
 				<textElement textAlignment="Right">
 					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
-				<text><![CDATA[Total a Pagar]]></text>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="546" y="0" width="41" height="23" uuid="00ae207e-ab3c-47d8-ac3e-75eb7f90dcc4"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Vale Pedágio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="587" y="0" width="64" height="23" uuid="26888526-fffc-4369-b1e8-46a290ec9000"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Total + Vale Pedágio]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
@@ -612,7 +688,7 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="13" splitType="Stretch">
+		<band height="14" splitType="Stretch">
 			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="157" y="0" width="63" height="13" uuid="c474953d-338d-4380-aca7-a6f1359791ef"/>
 				<textElement textAlignment="Right">
@@ -642,21 +718,21 @@
 				<textFieldExpression><![CDATA[$F{dtRealEntrega}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00 %">
-				<reportElement x="581" y="0" width="68" height="13" uuid="4967dbd9-503c-4c00-aa9b-023027e82a28"/>
+				<reportElement x="651" y="0" width="44" height="13" uuid="4967dbd9-503c-4c00-aa9b-023027e82a28"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{percentNota}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="649" y="0" width="83" height="13" uuid="0b5cde92-bd4c-416b-8802-38bb179bc61c"/>
+				<reportElement x="695" y="0" width="55" height="13" uuid="0b5cde92-bd4c-416b-8802-38bb179bc61c"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{freteKG}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00 %">
-				<reportElement x="732" y="0" width="70" height="13" uuid="bb60e851-7a78-4fb0-8ef9-fa7c2b7e3450"/>
+				<reportElement x="750" y="0" width="52" height="13" uuid="bb60e851-7a78-4fb0-8ef9-fa7c2b7e3450"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
@@ -691,11 +767,25 @@
 				<textFieldExpression><![CDATA[$F{vlrColeta}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="498" y="0" width="83" height="13" uuid="667bacb5-6375-47f8-b9a8-4bc06b45700f"/>
+				<reportElement x="498" y="0" width="47" height="13" uuid="667bacb5-6375-47f8-b9a8-4bc06b45700f"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{vlrFreteTotal}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{vlrFreteLiquido}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="546" y="0" width="41" height="13" uuid="6c86846a-4c17-457e-b630-a630d31d2ac4"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valePedagio}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="587" y="0" width="64" height="13" uuid="3716ae38-c747-47e9-85dd-b220cf5d10e1"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vlrFreteBruto}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
